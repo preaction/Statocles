@@ -15,6 +15,7 @@ sub modules {
         'File::Spec::Functions' => [qw( catdir catfile )],
         'Dir::Self' => [qw( __DIR__ )],
         'File::Basename' => [qw( dirname )],
+        'File::Slurp' => [qw( read_file write_file )],
     );
 }
 

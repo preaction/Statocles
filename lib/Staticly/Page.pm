@@ -1,12 +1,19 @@
 package Staticly::Page;
 
 use Staticly::Class;
+use File::Spec::Functions qw( catfile );
+use File::Slurp qw( write_file );
 use Text::Markdown;
 use Text::Template;
 
 has document => (
     is => 'ro',
     isa => InstanceOf['Staticly::Document'],
+);
+
+has path => (
+    is => 'ro',
+    isa => Str,
 );
 
 has markdown => (
@@ -40,6 +47,13 @@ sub render {
         %{$self->document},
         content => $self->content,
     } );
+}
+
+sub write {
+    my ( $self, $root ) = @_;
+    my $path = catfile( $root, $self->path );
+    write_file( $path, $self->render );
+    return;
 }
 
 1;
