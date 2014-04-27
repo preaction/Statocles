@@ -19,7 +19,7 @@ has documents => (
 sub read {
     my ( $self ) = @_;
     my @yaml_docs = YAML::LoadFile( $self->path );
-    my @docs = map { Staticly::Document->new( %$_ ) } @yaml_docs;
+    my @docs = map { Staticly::Document->new( file => $self, %$_ ) } @yaml_docs;
     $self->documents( \@docs );
     return;
 }
@@ -32,6 +32,7 @@ sub write {
 
 sub add_document {
     my ( $self, @docs ) = @_;
+    $_->file( $self ) for @docs;
     push @{ $self->documents }, @docs;
     return;
 }

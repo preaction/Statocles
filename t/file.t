@@ -28,7 +28,11 @@ subtest 'new file' => sub {
             content => 'more body content',
         ),
     );
-    $file->add_document( $_ ) for @docs;;
+    $file->add_document( @docs );
+
+    subtest 'file get attached to documents' => sub {
+        is $_->file, $file for @docs;
+    };
 
     ok !-f $file->path, 'path does exist until write()';
     $file->write;
@@ -66,11 +70,13 @@ subtest 'read file' => sub {
     lives_ok { $file->read };
     cmp_deeply $file->documents, [
         Staticly::Document->new(
+            file => $file,
             title => 'Document 1',
             author => 'preaction',
             content => 'body content',
         ),
         Staticly::Document->new(
+            file => $file,
             title => 'Document 2',
             author => 'postaction',
             content => 'more body content',

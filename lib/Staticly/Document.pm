@@ -3,6 +3,11 @@ package Staticly::Document;
 
 use Staticly::Class;
 
+has file => (
+    is => 'rw',
+    isa => InstanceOf['Staticly::File'],
+);
+
 has title => (
     is => 'rw',
     isa => Str,
@@ -20,7 +25,9 @@ has content => (
 
 sub dump {
     my ( $self ) = @_;
-    return { %$self };
+    return {
+        map { $_ => $self->$_ } qw( title author content )
+    };
 }
 
 1;
