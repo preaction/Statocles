@@ -1,4 +1,5 @@
 package Statocles::Page;
+# ABSTRACT: Render documents into HTML
 
 use Statocles::Class;
 use File::Spec::Functions qw( catfile );
@@ -57,3 +58,9 @@ sub write {
 }
 
 1;
+__END__
+
+=head1 DESCRIPTION
+
+A Statocles::Page takes one or more documents and renders them into one or more
+HTML pages.
