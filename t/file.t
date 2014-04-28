@@ -1,28 +1,28 @@
 
-use Staticly::Test;
+use Statocles::Test;
 my $SHARE_DIR = catdir( __DIR__, 'share' );
 
-use Staticly::File;
-use Staticly::Document;
+use Statocles::File;
+use Statocles::Document;
 
 subtest 'new file' => sub {
     subtest 'path is required' => sub {
         dies_ok {
-            Staticly::File->new;
+            Statocles::File->new;
         };
     };
 
     my $tmp = File::Temp->newdir;
-    my $file = Staticly::File->new(
+    my $file = Statocles::File->new(
         path => catfile( $tmp->dirname, 'file.yml' ),
     );
     my @docs = (
-        Staticly::Document->new(
+        Statocles::Document->new(
             title => 'Document 1',
             author => 'preaction',
             content => 'body content',
         ),
-        Staticly::Document->new(
+        Statocles::Document->new(
             title => 'Document 2',
             author => 'postaction',
             content => 'more body content',
@@ -57,25 +57,25 @@ subtest 'read file' => sub {
     subtest 'path not found' => sub {
         my $file;
         lives_ok { 
-            $file = Staticly::File->new(
+            $file = Statocles::File->new(
                 path => catfile( $SHARE_DIR, 'not_found.yml' ),
             );
         };
         dies_ok { $file->read };
     };
 
-    my $file = Staticly::File->new(
+    my $file = Statocles::File->new(
         path => catfile( $SHARE_DIR, 'multi.yml' ),
     );
     lives_ok { $file->read };
     cmp_deeply $file->documents, [
-        Staticly::Document->new(
+        Statocles::Document->new(
             file => $file,
             title => 'Document 1',
             author => 'preaction',
             content => 'body content',
         ),
-        Staticly::Document->new(
+        Statocles::Document->new(
             file => $file,
             title => 'Document 2',
             author => 'postaction',

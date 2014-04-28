@@ -1,11 +1,11 @@
-package Staticly::Document;
-# ABSTRACT: Base class for all Staticly documents
+package Statocles::Document;
+# ABSTRACT: Base class for all Statocles documents
 
-use Staticly::Class;
+use Statocles::Class;
 
 has file => (
     is => 'rw',
-    isa => InstanceOf['Staticly::File'],
+    isa => InstanceOf['Statocles::File'],
 );
 
 has title => (
@@ -35,7 +35,7 @@ __END__
 
 =head1 DESCRIPTION
 
-A Statically::Document is the base unit of content in Staticly. Applications
+A Statically::Document is the base unit of content in Statocles. Applications
 take Documents to build Pages.
 
 This is the Model class in the Model-View-Controller pattern.

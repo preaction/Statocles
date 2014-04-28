@@ -1,7 +1,7 @@
-package Staticly::File;
-# ABSTRACT: A file containing Staticly documents
+package Statocles::File;
+# ABSTRACT: A file containing Statocles documents
 
-use Staticly::Class;
+use Statocles::Class;
 use YAML;
 
 has path => (
@@ -12,14 +12,14 @@ has path => (
 
 has documents => (
     is => 'rw',
-    isa => ArrayRef[InstanceOf['Staticly::Document']],
+    isa => ArrayRef[InstanceOf['Statocles::Document']],
     default => sub { [] },
 );
 
 sub read {
     my ( $self ) = @_;
     my @yaml_docs = YAML::LoadFile( $self->path );
-    my @docs = map { Staticly::Document->new( file => $self, %$_ ) } @yaml_docs;
+    my @docs = map { Statocles::Document->new( file => $self, %$_ ) } @yaml_docs;
     $self->documents( \@docs );
     return;
 }
@@ -42,6 +42,6 @@ __END__
 
 =head1 DESCRIPTION
 
-A Staticly::File contains one or more Staticly::Documents. This class
+A Statocles::File contains one or more Statocles::Documents. This class
 handles the parsing and inflating of Document objects.
 

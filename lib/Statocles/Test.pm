@@ -1,10 +1,10 @@
-package Staticly::Test;
-# ABSTRACT: Base set of imports for all Staticly tests
+package Statocles::Test;
+# ABSTRACT: Base set of imports for all Statocles tests
 
 use strict;
 use warnings;
 
-use base 'Staticly::Base';
+use base 'Statocles::Base';
 
 sub modules {
     my ( $class, %args ) = @_;
@@ -26,13 +26,13 @@ __END__
 =head1 SYNOPSIS
 
     # t/mytest.t
-    use Staticly::Test;
+    use Statocles::Test;
 
 =head1 DESCRIPTION
 
-This is the base module that all Staticly test scripts should use.
+This is the base module that all Statocles test scripts should use.
 
-In addition to all the imports from L<Staticly::Base>, this module imports:
+In addition to all the imports from L<Statocles::Base>, this module imports:
 
 =over
 
@@ -61,6 +61,6 @@ Provides the __DIR__ keyword.
 
 =over
 
-=item L<Staticly::Base>
+=item L<Statocles::Base>
 
 =back

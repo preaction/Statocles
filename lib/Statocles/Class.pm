@@ -1,9 +1,9 @@
-package Staticly::Class;
-# ABSTRACT: Base module for all Staticly classes
+package Statocles::Class;
+# ABSTRACT: Base module for all Statocles classes
 
 use strict;
 use warnings;
-use base 'Staticly::Base';
+use base 'Statocles::Base';
 
 sub modules {
     my ( $class, %args ) = @_;
@@ -21,13 +21,13 @@ __END__
 =head1 SYNOPSIS
 
     package MyClass;
-    use Staticly::Class;
+    use Statocles::Class;
 
 =head1 DESCRIPTION
 
-This is the base module that all Staticly classes should use.
+This is the base module that all Statocles classes should use.
 
-In addition to all the imports from L<Staticly::Base>, this module imports:
+In addition to all the imports from L<Statocles::Base>, this module imports:
 
 =over
 
@@ -45,6 +45,6 @@ To get all the Moose-y type constraints.
 
 =over
 
-=item L<Staticly::Base>
+=item L<Statocles::Base>
 
 =back

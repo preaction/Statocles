@@ -1,6 +1,6 @@
-package Staticly::Page;
+package Statocles::Page;
 
-use Staticly::Class;
+use Statocles::Class;
 use File::Spec::Functions qw( catfile );
 use File::Slurp qw( write_file );
 use Text::Markdown;
@@ -8,7 +8,7 @@ use Text::Template;
 
 has document => (
     is => 'ro',
-    isa => InstanceOf['Staticly::Document'],
+    isa => InstanceOf['Statocles::Document'],
 );
 
 has path => (

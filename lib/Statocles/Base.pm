@@ -1,5 +1,5 @@
-package Staticly::Base;
-# ABSTRACT: Base module for Staticly modules
+package Statocles::Base;
+# ABSTRACT: Base module for Statocles modules
 
 use strict;
 use warnings;
@@ -19,11 +19,11 @@ __END__
 =head1 SYNOPSIS
 
     package MyModule;
-    use Staticly::Module;
+    use Statocles::Module;
 
 =head1 DESCRIPTION
 
-This is the base module that all Staticly modules should use (unless they're
+This is the base module that all Statocles modules should use (unless they're
 using a more-specific base).
 
 This module imports the following into your namespace:

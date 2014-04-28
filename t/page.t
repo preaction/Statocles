@@ -1,12 +1,12 @@
 
-use Staticly::Test;
+use Statocles::Test;
 my $SHARE_DIR = catdir( __DIR__, 'share' );
 
-use Staticly::Document;
-use Staticly::Page;
+use Statocles::Document;
+use Statocles::Page;
 use Text::Markdown;
 
-my $doc = Staticly::Document->new(
+my $doc = Statocles::Document->new(
     title => 'Page Title',
     author => 'preaction',
     content => <<'MARKDOWN',
@@ -22,7 +22,7 @@ MARKDOWN
 my $md = Text::Markdown->new;
 
 subtest 'simple page (default template)' => sub {
-    my $page = Staticly::Page->new(
+    my $page = Statocles::Page->new(
         document => $doc,
     );
 
@@ -31,7 +31,7 @@ subtest 'simple page (default template)' => sub {
 };
 
 subtest 'template string' => sub {
-    my $page = Staticly::Page->new(
+    my $page = Statocles::Page->new(
         document => $doc,
         template => '{$title} {$author} {$content}',
     );
@@ -42,7 +42,7 @@ subtest 'template string' => sub {
 };
 
 subtest 'template file' => sub {
-    my $page = Staticly::Page->new(
+    my $page = Statocles::Page->new(
         document => $doc,
         template => Text::Template->new(
             type => 'FILE',
@@ -57,7 +57,7 @@ subtest 'template file' => sub {
 
 subtest 'write to disk (default template)' => sub {
     my $tmp = File::Temp->newdir;
-    my $page = Staticly::Page->new(
+    my $page = Statocles::Page->new(
         document => $doc,
         path => 'document.html',
     );
