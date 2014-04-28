@@ -31,3 +31,11 @@ sub dump {
 }
 
 1;
+__END__
+
+=head1 DESCRIPTION
+
+A Statically::Document is the base unit of content in Staticly. Applications
+take Documents to build Pages.
+
+This is the Model class in the Model-View-Controller pattern.

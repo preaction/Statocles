@@ -38,3 +38,10 @@ sub add_document {
 }
 
 1;
+__END__
+
+=head1 DESCRIPTION
+
+A Staticly::File contains one or more Staticly::Documents. This class
+handles the parsing and inflating of Document objects.
+
