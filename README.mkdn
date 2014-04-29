@@ -1,0 +1,23 @@
+# NAME
+
+Statocles::App - Base class for Statocles applications
+
+# VERSION
+
+version 0.001
+
+# DESCRIPTION
+
+A Statocles App turns Statocles::Files containing Statocles::Documents into a set of Statocles::Pages
+that can then be written to the filesystem (or served directly, if desired).
+
+# AUTHOR
+
+Doug Bell <preaction@cpan.org>
+
+# COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2014 by Doug Bell.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
