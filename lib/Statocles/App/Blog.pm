@@ -1,0 +1,68 @@
+package Statocles::App::Blog;
+# ABSTRACT: A blog application
+
+use Statocles::Class;
+use Statocles::Page;
+
+extends 'Statocles::App';
+
+has source_dir => (
+    is => 'ro',
+    isa => Str,
+);
+
+has url_root => (
+    is => 'ro',
+    isa => Str,
+);
+
+has files => (
+    is => 'rw',
+    isa => ArrayRef[InstanceOf['Statocles::File']],
+    lazy => 1,
+    builder => 'read_files',
+);
+
+has documents => (
+    is => 'rw',
+    isa => ArrayRef[InstanceOf['Statocles::Document']],
+    lazy => 1,
+    builder => 'read',
+);
+
+sub read_files {
+    my ( $self ) = @_;
+
+}
+
+sub read {
+    my ( $self ) = @_;
+
+}
+
+sub path_to_url {
+    my ( $self, $path ) = @_;
+    my ( $volume, $dirs, $file ) = splitpath( $path );
+    my ( $source_volume, $source_dir, undef ) = splitpath( $self->source_dir, 'no_file' );
+    $dirs =~ s/$source_dir//;
+    # $dirs may have empty parts (especially at the ends), so
+    # remove them to make a nicer URL
+    my @dir_parts = grep { $_ ne '' } splitdir( $dirs );
+    $file =~ s/[.][^.]+$/.html/;
+    return join( "/", $self->url_root, @dir_parts, $file ),
+}
+
+sub blog_pages {
+    my ( $self ) = @_;
+    my $source_dir = $self->source_dir;
+    my @pages;
+    for my $doc ( @{ $self->documents } ) {
+        push @pages, Statocles::Page->new(
+            document => $doc,
+            path => $self->path_to_url( $doc->file->path ),
+        );
+    }
+    return @pages;
+}
+
+1;

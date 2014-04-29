@@ -13,7 +13,6 @@ sub modules {
         @modules,
         'Test::Most',
         'File::Temp',
-        'File::Spec::Functions' => [qw( catdir catfile )],
         'Dir::Self' => [qw( __DIR__ )],
         'File::Basename' => [qw( dirname )],
         'File::Slurp' => [qw( read_file write_file )],
@@ -44,8 +43,6 @@ Which includes Test::More, Test::Deep, Test::Differences, and Test::Exception.
 
 Which should be used in the object-oriented interface, to ensure easy and
 correct cleanup.
-
-=item File::Spec::Functions qw( catdir catfile )
 
 =item Dir::Self
 
