@@ -48,6 +48,13 @@ subtest 'blog post' => sub {
 
     my $html = $pages[0]->render;
     eq_or_diff $html, join( " ", $doc->title, $doc->author, $md->markdown( $doc->content ) );
+
+    my $tmpdir = File::Temp->newdir;
+    $app->write( $tmpdir->dirname );
+
+    my $path = catfile( $tmpdir->dirname, 'blog', '2014', '01', '01', 'slug.html' );
+    ok -e $path;
+    eq_or_diff read_file( $path ), $html;
 };
 
 done_testing;

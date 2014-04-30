@@ -73,4 +73,11 @@ sub blog_pages {
     return @pages;
 }
 
+sub write {
+    my ( $self, $root_dir ) = @_;
+    for my $page ( $self->blog_pages ) {
+        $page->write( $root_dir );
+    }
+}
+
 1;
