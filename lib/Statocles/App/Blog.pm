@@ -3,6 +3,7 @@ package Statocles::App::Blog;
 
 use Statocles::Class;
 use Statocles::Page;
+use File::Find qw( find );
 
 extends 'Statocles::App';
 
@@ -39,12 +40,28 @@ has documents => (
 
 sub read_files {
     my ( $self ) = @_;
-
+    my @files;
+    find(
+        sub {
+            if ( /[.]ya?ml$/ ) {
+                push @files, Statocles::File->new(
+                    path => $File::Find::name,
+                );
+            }
+        },
+        $self->source_dir,
+    );
+    return \@files;
 }
 
 sub read {
     my ( $self ) = @_;
-
+    my @docs;
+    for my $file ( @{ $self->files } ) {
+        $file->read;
+        push @docs, @{ $file->documents };
+    }
+    return \@docs;
 }
 
 sub path_to_url {
