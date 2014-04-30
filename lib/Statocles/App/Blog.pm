@@ -14,6 +14,13 @@ has source_dir => (
 has url_root => (
     is => 'ro',
     isa => Str,
+    required => 1,
+);
+
+has theme => (
+    is => 'ro',
+    isa => InstanceOf['Statocles::Theme'],
+    required => 1,
 );
 
 has files => (
@@ -58,6 +65,7 @@ sub blog_pages {
     my @pages;
     for my $doc ( @{ $self->documents } ) {
         push @pages, Statocles::Page->new(
+            template => $self->theme->templates->{blog}{post},
             document => $doc,
             path => $self->path_to_url( $doc->file->path ),
         );
