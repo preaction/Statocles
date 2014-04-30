@@ -13,6 +13,12 @@ subtest 'blog post' => sub {
 
     my $theme = Statocles::Theme->new(
         templates => {
+            site => {
+                layout => Text::Template->new(
+                    TYPE => 'STRING',
+                    SOURCE => 'HEAD { $content } FOOT',
+                ),
+            },
             blog => {
                 post => Text::Template->new(
                     TYPE => 'STRING',
@@ -32,7 +38,7 @@ subtest 'blog post' => sub {
     $app->write( $tmpdir->dirname );
 
     my $path = catfile( $tmpdir->dirname, 'blog', '2014', '04', '23', 'slug.html' );
-    my $html = join( " ", 'First Post', 'preaction', $md->markdown( 'Body content' ) );
+    my $html = join( " ", 'HEAD', 'First Post', 'preaction', $md->markdown( 'Body content' ), 'FOOT' );
     ok -e $path;
     eq_or_diff read_file( $path ), $html;
 };

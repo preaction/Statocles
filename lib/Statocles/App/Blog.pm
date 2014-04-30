@@ -82,6 +82,7 @@ sub blog_pages {
     my @pages;
     for my $doc ( @{ $self->documents } ) {
         push @pages, Statocles::Page->new(
+            layout => $self->theme->templates->{site}{layout},
             template => $self->theme->templates->{blog}{post},
             document => $doc,
             path => $self->path_to_url( $doc->file->path ),
