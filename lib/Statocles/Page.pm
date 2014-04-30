@@ -3,6 +3,8 @@ package Statocles::Page;
 
 use Statocles::Class;
 use File::Spec::Functions qw( catfile );
+use File::Basename qw( dirname );
+use File::Path qw( make_path );
 use File::Slurp qw( write_file );
 use Text::Markdown;
 use Text::Template;
@@ -53,6 +55,11 @@ sub render {
 sub write {
     my ( $self, $root ) = @_;
     my $path = catfile( $root, $self->path );
+    my $dir = dirname( $path );
+    make_path( $dir, { error => \(my $errors) } );
+    if ( @$errors ) {
+        die "Could not make directory '$dir': @$errors";
+    }
     write_file( $path, $self->render );
     return;
 }
