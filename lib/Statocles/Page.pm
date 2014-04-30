@@ -25,7 +25,7 @@ has markdown => (
     default => sub { Text::Markdown->new },
 );
 
-has template => (
+has [qw( template layout )] => (
     is => 'ro',
     isa => InstanceOf['Text::Template'],
     default => sub {
@@ -46,9 +46,12 @@ sub content {
 
 sub render {
     my ( $self ) = @_;
-    return $self->template->fill_in( HASH => {
+    my $content = $self->template->fill_in( HASH => {
         %{$self->document},
         content => $self->content,
+    } );
+    return $self->layout->fill_in( HASH => {
+        content => $content,
     } );
 }
 

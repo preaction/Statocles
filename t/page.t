@@ -55,6 +55,18 @@ subtest 'template file' => sub {
     eq_or_diff $output, $expect;
 };
 
+subtest 'layout' => sub {
+    my $page = Statocles::Page->new(
+        document => $doc,
+        template => '{$title} {$author} {$content}',
+        layout => 'HEAD { $content } FOOT',
+    );
+
+    my $output = $page->render;
+    my $expect = join " ", 'HEAD', $doc->title, $doc->author, $md->markdown( $doc->content ), 'FOOT';
+    eq_or_diff $output, $expect;
+};
+
 subtest 'write to disk (default template)' => sub {
     my $tmp = File::Temp->newdir;
     my $page = Statocles::Page->new(
