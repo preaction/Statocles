@@ -1,8 +1,5 @@
 
 use Statocles::Test;
-use Statocles::Document;
-use Statocles::File;
-use Statocles::Page;
 use Statocles::Theme;
 use Statocles::App::Blog;
 use Text::Template;
