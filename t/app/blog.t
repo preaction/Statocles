@@ -37,7 +37,7 @@ subtest 'blog post' => sub {
     my $path = catfile( $tmpdir->dirname, 'blog', '2014', '04', '23', 'slug.html' );
     my $html = join( " ", 'HEAD', 'First Post', 'preaction', $md->markdown( 'Body content' ), 'FOOT' );
     ok -e $path;
-    eq_or_diff read_file( $path ), $html;
+    eq_or_diff scalar read_file( $path ), $html;
 };
 
 done_testing;

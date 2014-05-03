@@ -3,6 +3,7 @@ package Statocles::App::Blog;
 
 use Statocles::Class;
 use Statocles::Page;
+use Statocles::File;
 use File::Find qw( find );
 
 extends 'Statocles::App';

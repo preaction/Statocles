@@ -2,6 +2,7 @@ package Statocles::File;
 # ABSTRACT: A file containing Statocles documents
 
 use Statocles::Class;
+use Statocles::Document;
 use YAML;
 
 has path => (
