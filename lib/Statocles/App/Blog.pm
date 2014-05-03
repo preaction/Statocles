@@ -92,9 +92,14 @@ sub blog_pages {
     return @pages;
 }
 
+sub pages {
+    my ( $self ) = @_;
+    return ( $self->blog_pages );
+}
+
 sub write {
     my ( $self, $root_dir ) = @_;
-    for my $page ( $self->blog_pages ) {
+    for my $page ( $self->pages ) {
         $page->write( $root_dir );
     }
 }
