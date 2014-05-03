@@ -91,4 +91,13 @@ subtest 'write and create directories' => sub {
     eq_or_diff scalar read_file( $path ), $md->markdown( $doc->content ), 'content is correct';
 };
 
+subtest 'invalid template coercions' => sub {
+    throws_ok {
+        Statocles::Page->new(
+            document => $doc,
+            template => undef,
+        );
+    } qr{Template is undef};
+};
+
 done_testing;

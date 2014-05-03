@@ -32,6 +32,7 @@ has [qw( template layout )] => (
         Text::Template->new( TYPE => 'STRING', SOURCE => '{$content}' );
     },
     coerce => sub {
+        die "Template is undef" unless defined $_[0];
         return !ref $_[0] 
             ? Text::Template->new( TYPE => 'STRING', SOURCE => $_[0] )
             : $_[0]
