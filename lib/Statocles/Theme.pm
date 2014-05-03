@@ -25,11 +25,12 @@ sub read {
                 my ( $vol, $dirs, $name ) = splitpath( $File::Find::name );
                 $name =~ s/[.]tmpl$//;
                 my @dirs = splitdir( $dirs );
-                my $group = $dirs[-1];
+                # $dirs will end with a slash, so the last item in @dirs is ''
+                my $group = $dirs[-2];
                 $tmpl{ $group }{ $name } = Text::Template->new(
                     TYPE => 'FILE',
                     SOURCE => $File::Find::name,
-                );
+                ) or die "Could not make template: $Text::Template::ERROR";
             }
         },
         $self->source_dir,
