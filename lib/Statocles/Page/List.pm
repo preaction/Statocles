@@ -4,6 +4,18 @@ package Statocles::Page::List;
 use Statocles::Class;
 use Text::Template;
 
+=attr path
+
+The path for this page.
+
+=cut
+
+has path => (
+    is => 'ro',
+    isa => Str,
+    required => 1,
+);
+
 =attr pages
 
 The pages that should be shown in this list.

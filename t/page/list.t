@@ -27,6 +27,7 @@ my @pages = (
 
 subtest 'simple list (default templates)' => sub {
     my $list = Statocles::Page::List->new(
+        path => '/blog/index.html',
         pages => \@pages,
     );
 
