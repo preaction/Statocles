@@ -16,6 +16,12 @@ subtest 'read documents' => sub {
             author => 'preaction',
             content => "Body content\n",
         ),
+        Statocles::Document->new(
+            path => '/2014/04/30/plug.yml',
+            title => 'Second Post',
+            author => 'preaction',
+            content => "Better body content\n",
+        ),
     ];
 };
 

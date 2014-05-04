@@ -23,38 +23,53 @@ my $theme = Statocles::Theme->new(
     },
 );
 
+my $md = Text::Markdown->new;
+my $tmpdir = File::Temp->newdir;
+
+my $app = Statocles::App::Blog->new(
+    source => Statocles::Store->new( path => catdir( $SHARE_DIR, 'blog' ) ),
+    destination => Statocles::Store->new( path => catdir( $tmpdir->dirname ) ),
+    url_root => '/blog',
+    theme => $theme,
+);
+
 subtest 'blog post' => sub {
-    my $md = Text::Markdown->new;
-    my $tmpdir = File::Temp->newdir;
-
-    my $app = Statocles::App::Blog->new(
-        source => Statocles::Store->new( path => catdir( $SHARE_DIR, 'blog' ) ),
-        destination => Statocles::Store->new( path => catdir( $tmpdir->dirname ) ),
-        url_root => '/blog',
-        theme => $theme,
+    my @doc_paths = (
+        catfile( '', '2014', '04', '23', 'slug.yml' ),
+        catfile( '', '2014', '04', '30', 'plug.yml' ),
     );
+    my @pages;
+    for my $doc_path ( @doc_paths ) {
+        my $doc = Statocles::Document->new(
+            path => $doc_path,
+            %{ YAML::LoadFile( catfile( $SHARE_DIR, 'blog', $doc_path ) ) },
+        );
 
-    my $doc_rel_path = '/' . catfile( '2014', '04', '23', 'slug.yml' );
-    my $doc_path = catfile( $SHARE_DIR, 'blog', $doc_rel_path );
-    my $doc = YAML::LoadFile( $doc_path );
+        my $page_path = catfile( '/', 'blog', $doc_path );
+        $page_path =~ s{/{2,}}{/}g;
+        $page_path =~ s/[.]yml$/.html/;
+
+        my $page = Statocles::Page->new(
+            template => $theme->template( blog => 'post' ),
+            layout => $theme->template( site => 'layout' ),
+            path => $page_path,
+            document => $doc,
+        );
+
+        push @pages, $page;
+    }
 
     cmp_deeply
         [ $app->post_pages ],
-        [
-            Statocles::Page->new(
-                template => $theme->template( blog => 'post' ),
-                layout => $theme->template( site => 'layout' ),
-                path => '/blog/2014/04/23/slug.html',
-                document => Statocles::Document->new( path => $doc_rel_path, %$doc ),
-            ),
-        ];
+        \@pages;
 
     $app->write;
 
-    my $path = catfile( $tmpdir->dirname, 'blog', '2014', '04', '23', 'slug.html' );
-    my $html = join( " ", 'HEAD', 'First Post', 'preaction', $md->markdown( 'Body content' ), 'FOOT' );
-    ok -e $path;
-    eq_or_diff scalar read_file( $path ), $html;
+    for my $page ( @pages ) {
+        my $path = catfile( $tmpdir->dirname, $page->path );
+        ok -e $path;
+        eq_or_diff scalar read_file( $path ), $page->render;
+    }
 };
 
 done_testing;
