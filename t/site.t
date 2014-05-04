@@ -6,25 +6,29 @@ use Statocles::Store;
 use Statocles::App::Blog;
 my $SHARE_DIR = catdir( __DIR__, 'share' );
 
-subtest 'site' => sub {
+my $theme = Statocles::Theme->new(
+    source_dir => catdir( $SHARE_DIR, 'theme' ),
+);
+
+my %blog_args = (
+    source => Statocles::Store->new(
+        path => catdir( $SHARE_DIR, 'blog' ),
+    ),
+    url_root => '/blog',
+    theme => $theme,
+);
+
+subtest 'site writes application' => sub {
     my $tmpdir = File::Temp->newdir;
-    my $theme = Statocles::Theme->new(
-        source_dir => catdir( $SHARE_DIR, 'theme' ),
+    my $blog = Statocles::App::Blog->new(
+        %blog_args,
+        destination => Statocles::Store->new(
+            path => $tmpdir->dirname,
+        ),
     );
 
     my $site = Statocles::Site->new(
-        apps => {
-            blog => Statocles::App::Blog->new(
-                source => Statocles::Store->new(
-                    path => catdir( $SHARE_DIR, 'blog' ),
-                ),
-                destination => Statocles::Store->new(
-                    path => $tmpdir->dirname,
-                ),
-                url_root => '/blog',
-                theme => $theme,
-            ),
-        },
+        apps => { blog => $blog },
     );
 
     $site->deploy;
@@ -34,6 +38,30 @@ subtest 'site' => sub {
         ok -f $file;
         eq_or_diff scalar read_file( $file ), $page->render;
     }
+};
+
+subtest 'site index' => sub {
+    my $tmpdir = File::Temp->newdir;
+    my $blog = Statocles::App::Blog->new(
+        %blog_args,
+        destination => Statocles::Store->new(
+            path => $tmpdir->dirname,
+        ),
+    );
+
+    my $site = Statocles::Site->new(
+        index => 'blog',
+        apps => { blog => $blog },
+        destination => Statocles::Store->new(
+            path => $tmpdir->dirname,
+        ),
+    );
+
+    $site->deploy;
+
+    eq_or_diff
+        scalar read_file( catfile( $tmpdir->dirname, 'index.html' ) ),
+        $blog->index->render;
 };
 
 done_testing;

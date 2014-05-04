@@ -1,0 +1,5 @@
+{
+    join "\n", map {
+        join( " ", $_->{title}, $_->{author}, $_->{content} )
+    } @pages
+}

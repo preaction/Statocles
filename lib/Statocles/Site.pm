@@ -15,6 +15,29 @@ has apps => (
     isa => HashRef[InstanceOf['Statocles::App']],
 );
 
+=attr index
+
+The application to use as the site index. The application's individual index()
+method will be called to get the index page.
+
+=cut
+
+has index => (
+    is => 'ro',
+    isa => Str,
+);
+
+=attr destination
+
+The destination of the index page.
+
+=cut
+
+has destination => (
+    is => 'ro',
+    isa => InstanceOf['Statocles::Store'],
+);
+
 =method app( name )
 
 Get the app with the given C<name>.
@@ -36,6 +59,13 @@ sub deploy {
     my ( $self ) = @_;
     for my $app ( values %{ $self->apps } ) {
         $app->write();
+    }
+    if ( $self->index ) {
+        my $index = Statocles::Page::List->new(
+            %{ $self->app( $self->index )->index },
+            path => '/index.html',
+        );
+        $self->destination->write_page( $index );
     }
 }
 
