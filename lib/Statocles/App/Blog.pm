@@ -3,6 +3,7 @@ package Statocles::App::Blog;
 
 use Statocles::Class;
 use Statocles::Page;
+use Statocles::Page::List;
 
 extends 'Statocles::App';
 
@@ -45,9 +46,19 @@ sub post_pages {
     return @pages;
 }
 
+sub index {
+    my ( $self ) = @_;
+    return Statocles::Page::List->new(
+        path => join( "/", $self->url_root, 'index.html' ),
+        template => $self->theme->template( blog => 'index' ),
+        layout => $self->theme->template( site => 'layout' ),
+        pages => [ $self->post_pages ],
+    );
+}
+
 sub pages {
     my ( $self ) = @_;
-    return ( $self->post_pages );
+    return ( $self->post_pages, $self->index );
 }
 
 sub write {

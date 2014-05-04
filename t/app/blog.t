@@ -15,6 +15,13 @@ my $theme = Statocles::Theme->new(
             ),
         },
         blog => {
+            index => Text::Template->new(
+                TYPE => 'STRING',
+                SOURCE => '{ join "\n",
+                    map { join " ", $_->{title}, $_->{author}, $_->{content} }
+                    @pages
+                }',
+            ),
             post => Text::Template->new(
                 TYPE => 'STRING',
                 SOURCE => '{ $title } { $author } { $content }',
@@ -33,7 +40,9 @@ my $app = Statocles::App::Blog->new(
     theme => $theme,
 );
 
-subtest 'blog post' => sub {
+$app->write;
+
+subtest 'blog post pages' => sub {
     my @doc_paths = (
         catfile( '', '2014', '04', '23', 'slug.yml' ),
         catfile( '', '2014', '04', '30', 'plug.yml' ),
@@ -63,13 +72,25 @@ subtest 'blog post' => sub {
         [ $app->post_pages ],
         \@pages;
 
-    $app->write;
-
     for my $page ( @pages ) {
         my $path = catfile( $tmpdir->dirname, $page->path );
         ok -e $path;
         eq_or_diff scalar read_file( $path ), $page->render;
     }
+};
+
+subtest 'index page' => sub {
+    my $page = Statocles::Page::List->new(
+        path => '/blog/index.html',
+        template => $theme->template( blog => 'index' ),
+        layout => $theme->template( site => 'layout' ),
+        pages => [ $app->post_pages ],
+    );
+
+    cmp_deeply $app->index, $page;
+
+    my $index_path = catfile( $tmpdir->dirname, $page->path );
+    eq_or_diff scalar read_file( $index_path ), $page->render;
 };
 
 done_testing;
