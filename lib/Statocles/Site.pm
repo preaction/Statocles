@@ -3,17 +3,6 @@ package Statocles::Site;
 
 use Statocles::Class;
 
-=attr deploy_dir
-
-The directory path to deploy the site into.
-
-=cut
-
-has deploy_dir => (
-    is => 'ro',
-    isa => Str,
-);
-
 =attr apps
 
 The applications in this site. Each application has a name
@@ -39,14 +28,14 @@ sub app {
 
 =method deploy
 
-Deploy the site to the L<deploy_dir>.
+Write each application to its destination.
 
 =cut
 
 sub deploy {
     my ( $self ) = @_;
     for my $app ( values %{ $self->apps } ) {
-        $app->write( $self->deploy_dir );
+        $app->write();
     }
 }
 
@@ -56,7 +45,6 @@ __END__
 =head1 SYNOPSIS
 
     my $site = Statocles::Site->new(
-        deploy_dir => 'deploy directory',
         apps => {
             blog => Statocles::App::Blog->new( ... ),
         },

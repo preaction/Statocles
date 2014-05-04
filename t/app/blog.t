@@ -1,6 +1,7 @@
 
 use Statocles::Test;
 use Statocles::Theme;
+use Statocles::Store;
 use Statocles::App::Blog;
 use Text::Template;
 my $SHARE_DIR = catdir( __DIR__, '..', 'share' );
@@ -24,17 +25,19 @@ my $theme = Statocles::Theme->new(
 
 subtest 'blog post' => sub {
     my $md = Text::Markdown->new;
+    my $tmpdir = File::Temp->newdir;
 
     my $app = Statocles::App::Blog->new(
-        source_dir => catdir( $SHARE_DIR, 'blog' ),
+        source => Statocles::Store->new( path => catdir( $SHARE_DIR, 'blog' ) ),
+        destination => Statocles::Store->new( path => catdir( $tmpdir->dirname ) ),
         url_root => '/blog',
         theme => $theme,
     );
 
-    my $exp_file = Statocles::File->new(
-        path => catfile( $SHARE_DIR, 'blog', '2014', '04', '23', 'slug.yml' ),
-    );
-    $exp_file->read;
+    my $doc_rel_path = '/' . catfile( '2014', '04', '23', 'slug.yml' );
+    my $doc_path = catfile( $SHARE_DIR, 'blog', $doc_rel_path );
+    my $doc = YAML::LoadFile( $doc_path );
+
     cmp_deeply
         [ $app->pages ],
         [
@@ -42,12 +45,11 @@ subtest 'blog post' => sub {
                 template => $theme->template( blog => 'post' ),
                 layout => $theme->template( site => 'layout' ),
                 path => '/blog/2014/04/23/slug.html',
-                document => $exp_file->documents->[0],
+                document => Statocles::Document->new( path => $doc_rel_path, %$doc ),
             ),
         ];
 
-    my $tmpdir = File::Temp->newdir;
-    $app->write( $tmpdir->dirname );
+    $app->write;
 
     my $path = catfile( $tmpdir->dirname, 'blog', '2014', '04', '23', 'slug.html' );
     my $html = join( " ", 'HEAD', 'First Post', 'preaction', $md->markdown( 'Body content' ), 'FOOT' );

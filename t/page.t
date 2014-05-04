@@ -67,30 +67,6 @@ subtest 'layout' => sub {
     eq_or_diff $output, $expect;
 };
 
-subtest 'write to disk (default template)' => sub {
-    my $tmp = File::Temp->newdir;
-    my $page = Statocles::Page->new(
-        document => $doc,
-        path => 'document.html',
-    );
-    $page->write( $tmp->dirname );
-    my $path = catfile( $tmp->dirname, 'document.html' );
-    ok -f $path, 'file exists';
-    eq_or_diff scalar read_file( $path ), $md->markdown( $doc->content ), 'content is correct';
-};
-
-subtest 'write and create directories' => sub {
-    my $tmp = File::Temp->newdir;
-    my $page = Statocles::Page->new(
-        document => $doc,
-        path => '/deep/url/path/document.html',
-    );
-    $page->write( $tmp->dirname );
-    my $path = catfile( $tmp->dirname, 'deep', 'url', 'path', 'document.html' );
-    ok -f $path, 'file exists';
-    eq_or_diff scalar read_file( $path ), $md->markdown( $doc->content ), 'content is correct';
-};
-
 subtest 'invalid template coercions' => sub {
     throws_ok {
         Statocles::Page->new(

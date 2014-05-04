@@ -3,14 +3,17 @@ package Statocles::App::Blog;
 
 use Statocles::Class;
 use Statocles::Page;
-use Statocles::File;
-use File::Find qw( find );
 
 extends 'Statocles::App';
 
-has source_dir => (
+has source => (
     is => 'ro',
-    isa => Str,
+    isa => InstanceOf['Statocles::Store'],
+);
+
+has destination => (
+    is => 'rw',
+    isa => InstanceOf['Statocles::Store'],
 );
 
 has url_root => (
@@ -25,68 +28,18 @@ has theme => (
     required => 1,
 );
 
-has files => (
-    is => 'rw',
-    isa => ArrayRef[InstanceOf['Statocles::File']],
-    lazy => 1,
-    builder => 'read_files',
-);
-
-has documents => (
-    is => 'rw',
-    isa => ArrayRef[InstanceOf['Statocles::Document']],
-    lazy => 1,
-    builder => 'read',
-);
-
-sub read_files {
-    my ( $self ) = @_;
-    my @files;
-    find(
-        sub {
-            if ( /[.]ya?ml$/ ) {
-                push @files, Statocles::File->new(
-                    path => $File::Find::name,
-                );
-            }
-        },
-        $self->source_dir,
-    );
-    return \@files;
-}
-
-sub read {
-    my ( $self ) = @_;
-    my @docs;
-    for my $file ( @{ $self->files } ) {
-        $file->read;
-        push @docs, @{ $file->documents };
-    }
-    return \@docs;
-}
-
-sub path_to_url {
-    my ( $self, $path ) = @_;
-    my ( $volume, $dirs, $file ) = splitpath( $path );
-    my ( $source_volume, $source_dir, undef ) = splitpath( $self->source_dir, 'no_file' );
-    $dirs =~ s/$source_dir//;
-    # $dirs may have empty parts (especially at the ends), so
-    # remove them to make a nicer URL
-    my @dir_parts = grep { $_ ne '' } splitdir( $dirs );
-    $file =~ s/[.][^.]+$/.html/;
-    return join( "/", $self->url_root, @dir_parts, $file ),
-}
-
 sub blog_pages {
     my ( $self ) = @_;
-    my $source_dir = $self->source_dir;
     my @pages;
-    for my $doc ( @{ $self->documents } ) {
+    for my $doc ( @{ $self->source->documents } ) {
+        my $path = join "/", $self->url_root, $doc->path;
+        $path =~ s{/{2,}}{/}g;
+        $path =~ s{[.]\w+$}{.html};
         push @pages, Statocles::Page->new(
             layout => $self->theme->templates->{site}{layout},
             template => $self->theme->templates->{blog}{post},
             document => $doc,
-            path => $self->path_to_url( $doc->file->path ),
+            path => $path,
         );
     }
     return @pages;
@@ -98,9 +51,9 @@ sub pages {
 }
 
 sub write {
-    my ( $self, $root_dir ) = @_;
+    my ( $self ) = @_;
     for my $page ( $self->pages ) {
-        $page->write( $root_dir );
+        $self->destination->write_page( $page );
     }
 }
 

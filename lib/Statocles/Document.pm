@@ -3,9 +3,9 @@ package Statocles::Document;
 
 use Statocles::Class;
 
-has file => (
+has path => (
     is => 'rw',
-    isa => InstanceOf['Statocles::File'],
+    isa => Str,
 );
 
 has title => (
