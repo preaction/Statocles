@@ -39,7 +39,7 @@ subtest 'blog post' => sub {
     my $doc = YAML::LoadFile( $doc_path );
 
     cmp_deeply
-        [ $app->pages ],
+        [ $app->post_pages ],
         [
             Statocles::Page->new(
                 template => $theme->template( blog => 'post' ),

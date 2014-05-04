@@ -28,7 +28,7 @@ has theme => (
     required => 1,
 );
 
-sub blog_pages {
+sub post_pages {
     my ( $self ) = @_;
     my @pages;
     for my $doc ( @{ $self->source->documents } ) {
@@ -47,7 +47,7 @@ sub blog_pages {
 
 sub pages {
     my ( $self ) = @_;
-    return ( $self->blog_pages );
+    return ( $self->post_pages );
 }
 
 sub write {
