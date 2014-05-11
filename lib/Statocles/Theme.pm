@@ -29,7 +29,7 @@ sub read {
                 my $group = $dirs[-2];
                 $tmpl{ $group }{ $name } = Text::Template->new(
                     TYPE => 'FILE',
-                    SOURCE => $File::Find::name,
+                    SOURCE => $_,
                 ) or die "Could not make template: $Text::Template::ERROR";
             }
         },

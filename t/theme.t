@@ -2,6 +2,7 @@
 use Statocles::Test;
 use Statocles::Theme;
 use Text::Template;
+use Cwd qw( getcwd );
 my $SHARE_DIR = catdir( __DIR__, 'share' );
 
 subtest 'getting templates' => sub {
@@ -24,24 +25,25 @@ subtest 'getting templates' => sub {
 };
 
 subtest 'templates from directory' => sub {
-    my $theme = Statocles::Theme->new(
-        source_dir => catdir( $SHARE_DIR, 'theme' ),
-    );
+    my $cwd = getcwd();
 
+    chdir catdir( $SHARE_DIR, 'theme', 'blog' );
     my $tmpl = Text::Template->new(
         TYPE => 'FILE',
-        SOURCE => catfile( $SHARE_DIR, 'theme', 'blog', 'post.tmpl' ),
+        SOURCE => 'post.tmpl',
     ) or die "Could not make template: $Text::Template::ERROR";
     my $blog_index = Text::Template->new(
         TYPE => 'FILE',
-        SOURCE => catfile( $SHARE_DIR, 'theme', 'blog', 'index.tmpl' ),
+        SOURCE => 'index.tmpl',
     ) or die "Could not make template: $Text::Template::ERROR";
+    chdir catdir( $SHARE_DIR, 'theme', 'site' );
     my $layout = Text::Template->new(
         TYPE => 'FILE',
-        SOURCE => catfile( $SHARE_DIR, 'theme', 'site', 'layout.tmpl' ),
+        SOURCE => 'layout.tmpl',
     ) or die "Could not make template: $Text::Template::ERROR";
+    chdir $cwd;
 
-    cmp_deeply $theme->templates, {
+    my %exp_templates = (
         blog => {
             post => $tmpl,
             index => $blog_index,
@@ -49,9 +51,27 @@ subtest 'templates from directory' => sub {
         site => {
             layout => $layout,
         },
+    );
+
+    subtest 'absolute directory' => sub {
+        my $theme = Statocles::Theme->new(
+            source_dir => catdir( $SHARE_DIR, 'theme' ),
+        );
+        cmp_deeply $theme->templates, \%exp_templates;
+        cmp_deeply $theme->template( blog => 'post' ), $tmpl;
     };
 
-    cmp_deeply $theme->template( blog => 'post' ), $tmpl;
+    subtest 'relative directory' => sub {
+        chdir $SHARE_DIR;
+
+        my $theme = Statocles::Theme->new(
+            source_dir => 'theme',
+        );
+        cmp_deeply $theme->templates, \%exp_templates;
+        cmp_deeply $theme->template( blog => 'post' ), $tmpl;
+
+        chdir $cwd;
+    };
 };
 
 done_testing;
