@@ -10,8 +10,7 @@ Statocles is a tool for building static HTML pages from documents.
 
 =head2 DOCUMENTS
 
-A document is a data structure. The default L<STORES|Store> reads documents in
-YAML.
+A document is a data structure. The default store reads documents in YAML.
 
 =head2 PAGES
 

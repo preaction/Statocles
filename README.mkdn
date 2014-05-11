@@ -12,8 +12,7 @@ Statocles is a tool for building static HTML pages from documents.
 
 ## DOCUMENTS
 
-A document is a data structure. The default [STORES](http://search.cpan.org/perldoc?Store) reads documents in
-YAML.
+A document is a data structure. The default store reads documents in YAML.
 
 ## PAGES
 
