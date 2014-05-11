@@ -1,0 +1,42 @@
+#!/usr/bin/env perl
+# ABSTRACT: Run Statocles commands
+package statocles;
+
+use Statocles::Command;
+exit Statocles::Command->main( @ARGV );
+
+__END__
+
+=head1 SYNOPSIS
+
+    statocles [--config <file>] [--site <site>] <command>
+    statocles -h|--help
+
+=head1 DESCRIPTION
+
+=head1 ARGUMENTS
+
+=head2 <command>
+
+The command to run. Available commands:
+
+    build - Build the site
+    deploy - Deploy the site
+
+=head1 OPTIONS
+
+=head2 config <file>
+
+The configuration file to read for Sites. Defaults to C<site.yml>.
+
+The configuration file is a L<Beam::Wire> container file.
+
+=head2 site <name>
+
+The site to use, which is the name of an object in the config file. Defaults to
+C<site>.
+
+=head2 -h | --help
+
+Display this help file
+
