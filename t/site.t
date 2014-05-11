@@ -22,13 +22,13 @@ subtest 'site writes application' => sub {
     my $tmpdir = File::Temp->newdir;
     my $blog = Statocles::App::Blog->new(
         %blog_args,
-        destination => Statocles::Store->new(
-            path => $tmpdir->dirname,
-        ),
     );
 
     my $site = Statocles::Site->new(
         apps => { blog => $blog },
+        destination => Statocles::Store->new(
+            path => $tmpdir->dirname,
+        ),
     );
 
     $site->deploy;
@@ -44,9 +44,6 @@ subtest 'site index' => sub {
     my $tmpdir = File::Temp->newdir;
     my $blog = Statocles::App::Blog->new(
         %blog_args,
-        destination => Statocles::Store->new(
-            path => $tmpdir->dirname,
-        ),
     );
 
     my $site = Statocles::Site->new(

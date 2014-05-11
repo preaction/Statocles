@@ -35,12 +35,11 @@ my $tmpdir = File::Temp->newdir;
 
 my $app = Statocles::App::Blog->new(
     source => Statocles::Store->new( path => catdir( $SHARE_DIR, 'blog' ) ),
-    destination => Statocles::Store->new( path => catdir( $tmpdir->dirname ) ),
     url_root => '/blog',
     theme => $theme,
 );
 
-$app->write;
+my @got_pages = $app->pages;
 
 subtest 'blog post pages' => sub {
     my @doc_paths = (
@@ -71,12 +70,6 @@ subtest 'blog post pages' => sub {
     cmp_deeply
         [ $app->post_pages ],
         \@pages;
-
-    for my $page ( @pages ) {
-        my $path = catfile( $tmpdir->dirname, $page->path );
-        ok -e $path;
-        eq_or_diff scalar read_file( $path ), $page->render;
-    }
 };
 
 subtest 'index page' => sub {
@@ -88,9 +81,6 @@ subtest 'index page' => sub {
     );
 
     cmp_deeply $app->index, $page;
-
-    my $index_path = catfile( $tmpdir->dirname, $page->path );
-    eq_or_diff scalar read_file( $index_path ), $page->render;
 };
 
 done_testing;

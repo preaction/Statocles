@@ -58,7 +58,9 @@ Write each application to its destination.
 sub deploy {
     my ( $self ) = @_;
     for my $app ( values %{ $self->apps } ) {
-        $app->write();
+        for my $page ( $app->pages ) {
+            $self->destination->write_page( $page );
+        }
     }
     if ( $self->index ) {
         my $index = Statocles::Page::List->new(

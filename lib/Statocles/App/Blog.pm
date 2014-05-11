@@ -12,11 +12,6 @@ has source => (
     isa => InstanceOf['Statocles::Store'],
 );
 
-has destination => (
-    is => 'rw',
-    isa => InstanceOf['Statocles::Store'],
-);
-
 has url_root => (
     is => 'ro',
     isa => Str,
@@ -59,13 +54,6 @@ sub index {
 sub pages {
     my ( $self ) = @_;
     return ( $self->post_pages, $self->index );
-}
-
-sub write {
-    my ( $self ) = @_;
-    for my $page ( $self->pages ) {
-        $self->destination->write_page( $page );
-    }
 }
 
 1;
