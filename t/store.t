@@ -1,28 +1,41 @@
 
 use Statocles::Test;
+use Cwd qw( getcwd );
 my $SHARE_DIR = catdir( __DIR__, 'share' );
 
 use Statocles::Store;
 use Statocles::Page;
 
+my @exp_docs = (
+    Statocles::Document->new(
+        path => '/2014/04/23/slug.yml',
+        title => 'First Post',
+        author => 'preaction',
+        content => "Body content\n",
+    ),
+    Statocles::Document->new(
+        path => '/2014/04/30/plug.yml',
+        title => 'Second Post',
+        author => 'preaction',
+        content => "Better body content\n",
+    ),
+);
+
 subtest 'read documents' => sub {
     my $store = Statocles::Store->new(
         path => catdir( $SHARE_DIR, 'blog' ),
     );
-    cmp_deeply $store->documents, [
-        Statocles::Document->new(
-            path => '/2014/04/23/slug.yml',
-            title => 'First Post',
-            author => 'preaction',
-            content => "Body content\n",
-        ),
-        Statocles::Document->new(
-            path => '/2014/04/30/plug.yml',
-            title => 'Second Post',
-            author => 'preaction',
-            content => "Better body content\n",
-        ),
-    ];
+    cmp_deeply $store->documents, \@exp_docs;
+};
+
+subtest 'read with relative directory' => sub {
+    my $cwd = getcwd();
+    chdir $SHARE_DIR;
+    my $store = Statocles::Store->new(
+        path => 'blog',
+    );
+    cmp_deeply $store->documents, \@exp_docs;
+    chdir $cwd;
 };
 
 subtest 'write pages' => sub {

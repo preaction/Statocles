@@ -28,7 +28,7 @@ sub read_documents {
     find(
         sub {
             if ( /[.]ya?ml$/ ) {
-                my @yaml_docs = YAML::LoadFile( $File::Find::name );
+                my @yaml_docs = YAML::LoadFile( $_ );
                 my $rel_path = $File::Find::name;
                 $rel_path =~ s/$root_path//;
                 push @docs, map { Statocles::Document->new( path => $rel_path, %$_ ) } @yaml_docs;
