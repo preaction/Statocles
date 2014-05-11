@@ -11,9 +11,10 @@ my %module_build_args = (
   },
   "configure_requires" => {
     "ExtUtils::MakeMaker" => "6.30",
+    "File::ShareDir::Install" => "0.03",
     "Module::Build" => "0.3601"
   },
-  "dist_abstract" => "Base class for Statocles applications",
+  "dist_abstract" => "A static site generator",
   "dist_author" => [
     "Doug Bell <preaction\@cpan.org>"
   ],
@@ -24,6 +25,10 @@ my %module_build_args = (
   "recommends" => {},
   "recursive_test_files" => 1,
   "requires" => {
+    "Beam::Wire" => 0,
+    "File::Basename" => 0,
+    "File::Find" => 0,
+    "File::Path" => 0,
     "File::Slurp" => 0,
     "File::Spec::Functions" => 0,
     "Import::Base" => 0,
@@ -34,8 +39,14 @@ my %module_build_args = (
     "strict" => 0,
     "warnings" => 0
   },
-  "script_files" => [],
+  "script_files" => [
+    "bin/statocles"
+  ],
+  "share_dir" => {
+    "dist" => "share"
+  },
   "test_requires" => {
+    "Cwd" => 0,
     "Dir::Self" => 0,
     "File::Temp" => 0,
     "Test::Compile" => 0,

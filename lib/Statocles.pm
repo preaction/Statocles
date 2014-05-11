@@ -1,33 +1,35 @@
-# NAME
+package Statocles;
+# ABSTRACT: A static site generator
 
-Statocles - A static site generator
+1;
+__END__
 
-# VERSION
-
-version 0.001
-
-# DESCRIPTION
+=head1 DESCRIPTION
 
 Statocles is a tool for building static HTML pages from documents.
 
-## DOCUMENTS
+=head2 DOCUMENTS
 
-A document is a data structure. The default [STORES](http://search.cpan.org/perldoc?Store) reads documents in
+A document is a data structure. The default L<STORES|Store> reads documents in
 YAML.
 
-## PAGES
+=head2 PAGES
 
 A page is rendered HTML ready to be sent to a user.
 
-# APPLICATIONS
+=head1 APPLICATIONS
 
 An application takes a bunch of documents and turns them into HTML pages.
 
-- [Statocles::App::Blog](http://search.cpan.org/perldoc?Statocles::App::Blog)
+=over 4
 
-    A simple blogging application.
+=item L<Statocles::App::Blog>
 
-# SITES
+A simple blogging application.
+
+=back
+
+=head1 SITES
 
 A site manages a bunch of applications, writing and deploying the resulting
 pages.
@@ -35,19 +37,8 @@ pages.
 Deploying the site may involve a simple file copy, but it could also involve a
 Git repository, an FTP site, or a database.
 
-# STORES
+=head1 STORES
 
 A store reads and writes documents and pages. The default store reads documents
 in YAML and writes pages to a file, but stores could read documents as JSON, or
 from a Mongo database, and write pages to a database, or whereever you want!
-
-# AUTHOR
-
-Doug Bell <preaction@cpan.org>
-
-# COPYRIGHT AND LICENSE
-
-This software is copyright (c) 2014 by Doug Bell.
-
-This is free software; you can redistribute it and/or modify it under
-the same terms as the Perl 5 programming language system itself.
