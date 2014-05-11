@@ -25,6 +25,7 @@ method will be called to get the index page.
 has index => (
     is => 'ro',
     isa => Str,
+    default => '',
 );
 
 =attr build_store
@@ -93,17 +94,20 @@ Write the application to the given C<store>, a Statocles::Store object
 
 sub write {
     my ( $self, $store ) = @_;
-    for my $app ( values %{ $self->apps } ) {
+    my $apps = $self->apps;
+    for my $app_name ( keys %{ $apps } ) {
+        my $app = $apps->{$app_name};
         for my $page ( $app->pages ) {
+            if ( $self->index eq $app_name && $page->path eq $app->index->path ) {
+                # Rename the app's page so that we don't get two pages with identical
+                # content
+                $page = Statocles::Page::List->new(
+                    %{ $page },
+                    path => '/index.html',
+                );
+            }
             $store->write_page( $page );
         }
-    }
-    if ( $self->index ) {
-        my $index = Statocles::Page::List->new(
-            %{ $self->app( $self->index )->index },
-            path => '/index.html',
-        );
-        $store->write_page( $index );
     }
 }
 

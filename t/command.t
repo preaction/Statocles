@@ -96,7 +96,6 @@ sub test_site {
         ok !$err, 'no errors/warnings' or diag $err;
         ok -d $root, 'root dir exists';
         ok -f catfile( $root, 'index.html' ), 'index file exists';
-        ok -f catfile( $root, 'blog', 'index.html' );
         ok -f catfile( $root, 'blog', '2014', '04', '23', 'slug.html' );
         ok -f catfile( $root, 'blog', '2014', '04', '30', 'plug.html' );
     };

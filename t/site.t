@@ -74,6 +74,8 @@ subtest 'site index' => sub {
     eq_or_diff
         scalar read_file( catfile( $tmpdir->dirname, 'build', 'index.html' ) ),
         $blog->index->render;
+    ok !-f catfile( $tmpdir->dirname, 'build', 'blog', 'index.html' ),
+        'site index renames app page';
     ok !-f catfile( $tmpdir->dirname, 'deploy', 'index.html' ), 'not deployed yet';
 
     $site->deploy;
@@ -81,6 +83,8 @@ subtest 'site index' => sub {
     eq_or_diff
         scalar read_file( catfile( $tmpdir->dirname, 'deploy', 'index.html' ) ),
         $blog->index->render;
+    ok !-f catfile( $tmpdir->dirname, 'deploy', 'blog', 'index.html' ),
+        'site index renames app page';
 };
 
 done_testing;
