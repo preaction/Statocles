@@ -26,15 +26,27 @@ subtest 'site writes application' => sub {
 
     my $site = Statocles::Site->new(
         apps => { blog => $blog },
-        destination => Statocles::Store->new(
-            path => $tmpdir->dirname,
+        build_store => Statocles::Store->new(
+            path => catdir( $tmpdir->dirname, 'build' ),
+        ),
+        deploy_store => Statocles::Store->new(
+            path => catdir( $tmpdir->dirname, 'deploy' ),
         ),
     );
+
+    $site->build;
+
+    for my $page ( $site->app( 'blog' )->pages ) {
+        my $file = catfile( $tmpdir->dirname, 'build', $page->path );
+        ok -f $file;
+        eq_or_diff scalar read_file( $file ), $page->render;
+        ok !-f catfile( $tmpdir->dirname, 'deploy', $page->path ), 'not deployed yet';
+    }
 
     $site->deploy;
 
     for my $page ( $site->app( 'blog' )->pages ) {
-        my $file = catfile( $tmpdir->dirname, $page->path );
+        my $file = catfile( $tmpdir->dirname, 'deploy', $page->path );
         ok -f $file;
         eq_or_diff scalar read_file( $file ), $page->render;
     }
@@ -49,15 +61,25 @@ subtest 'site index' => sub {
     my $site = Statocles::Site->new(
         index => 'blog',
         apps => { blog => $blog },
-        destination => Statocles::Store->new(
-            path => $tmpdir->dirname,
+        build_store => Statocles::Store->new(
+            path => catdir( $tmpdir->dirname, 'build' ),
+        ),
+        deploy_store => Statocles::Store->new(
+            path => catdir( $tmpdir->dirname, 'deploy' ),
         ),
     );
+
+    $site->build;
+
+    eq_or_diff
+        scalar read_file( catfile( $tmpdir->dirname, 'build', 'index.html' ) ),
+        $blog->index->render;
+    ok !-f catfile( $tmpdir->dirname, 'deploy', 'index.html' ), 'not deployed yet';
 
     $site->deploy;
 
     eq_or_diff
-        scalar read_file( catfile( $tmpdir->dirname, 'index.html' ) ),
+        scalar read_file( catfile( $tmpdir->dirname, 'deploy', 'index.html' ) ),
         $blog->index->render;
 };
 

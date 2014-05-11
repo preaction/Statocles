@@ -27,15 +27,29 @@ has index => (
     isa => Str,
 );
 
-=attr destination
+=attr build_store
 
-The destination of the index page.
+The Statocles::Store object to use for C<build()>.
 
 =cut
 
-has destination => (
+has build_store => (
     is => 'ro',
     isa => InstanceOf['Statocles::Store'],
+    required => 1,
+);
+
+=attr deploy_store
+
+The Statocles::Store object to use for C<deploy()>. Defaults to L<build_store>.
+
+=cut
+
+has deploy_store => (
+    is => 'ro',
+    isa => InstanceOf['Statocles::Store'],
+    lazy => 1,
+    default => sub { $_[0]->build_store },
 );
 
 =method app( name )
@@ -49,6 +63,17 @@ sub app {
     return $self->apps->{ $name };
 }
 
+=method build
+
+Build the site in its build location
+
+=cut
+
+sub build {
+    my ( $self ) = @_;
+    $self->write( $self->build_store );
+}
+
 =method deploy
 
 Write each application to its destination.
@@ -57,9 +82,20 @@ Write each application to its destination.
 
 sub deploy {
     my ( $self ) = @_;
+    $self->write( $self->deploy_store );
+}
+
+=method write( store )
+
+Write the application to the given C<store>, a Statocles::Store object
+
+=cut
+
+sub write {
+    my ( $self, $store ) = @_;
     for my $app ( values %{ $self->apps } ) {
         for my $page ( $app->pages ) {
-            $self->destination->write_page( $page );
+            $store->write_page( $page );
         }
     }
     if ( $self->index ) {
@@ -67,7 +103,7 @@ sub deploy {
             %{ $self->app( $self->index )->index },
             path => '/index.html',
         );
-        $self->destination->write_page( $index );
+        $store->write_page( $index );
     }
 }
 
