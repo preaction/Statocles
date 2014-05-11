@@ -32,6 +32,10 @@ subtest 'templates from directory' => sub {
         TYPE => 'FILE',
         SOURCE => catfile( $SHARE_DIR, 'theme', 'blog', 'post.tmpl' ),
     ) or die "Could not make template: $Text::Template::ERROR";
+    my $blog_index = Text::Template->new(
+        TYPE => 'FILE',
+        SOURCE => catfile( $SHARE_DIR, 'theme', 'blog', 'index.tmpl' ),
+    ) or die "Could not make template: $Text::Template::ERROR";
     my $layout = Text::Template->new(
         TYPE => 'FILE',
         SOURCE => catfile( $SHARE_DIR, 'theme', 'site', 'layout.tmpl' ),
@@ -40,6 +44,7 @@ subtest 'templates from directory' => sub {
     cmp_deeply $theme->templates, {
         blog => {
             post => $tmpl,
+            index => $blog_index,
         },
         site => {
             layout => $layout,
