@@ -1,0 +1,9 @@
+{
+    for my $p ( @pages ) {
+        $OUT .= "<section>"
+                . '<div class="author">' . $p->{author} . "</div>"
+                . $p->{content}
+                . "</section>"
+                ;
+    }
+}
