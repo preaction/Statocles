@@ -38,22 +38,14 @@ subtest 'site writes application' => sub {
     $site->build;
 
     for my $page ( $site->app( 'blog' )->pages ) {
-        my $file = catfile( $tmpdir->dirname, 'build', $page->path );
-        ok -f $file;
-        my $html = read_file( $file );
-        eq_or_diff $html, $page->render( site => { title => $site->title } );
-        like $html, qr{@{[$site->title]}}, 'page contains site title';
+        subtest 'page content' => test_content( $tmpdir, $site, $page, build => $page->path );
         ok !-f catfile( $tmpdir->dirname, 'deploy', $page->path ), 'not deployed yet';
     }
 
     $site->deploy;
 
     for my $page ( $site->app( 'blog' )->pages ) {
-        my $file = catfile( $tmpdir->dirname, 'deploy', $page->path );
-        ok -f $file;
-        my $html = read_file( $file );
-        eq_or_diff $html, $page->render( site => { title => $site->title } );
-        like $html, qr{@{[$site->title]}}, 'page contains site title';
+        subtest 'page content' => test_content( $tmpdir, $site, $page, deploy => $page->path );
     }
 };
 
@@ -78,28 +70,29 @@ subtest 'site index' => sub {
 
     subtest 'build' => sub {
         $site->build;
-
-        my $file = catfile( $tmpdir->dirname, 'build', 'index.html' );
-        my $html = read_file( $file );
-        eq_or_diff $html, $blog->index->render( site => { title => $site->title } );
-        like $html, qr{@{[$site->title]}}, 'page contains site title';
-
+        subtest 'site index content' => test_content( $tmpdir, $site, $blog->index, build => 'index.html' );
+        ok !-f catfile( $tmpdir->dirname, 'deploy', 'index.html' ), 'not deployed yet';
         ok !-f catfile( $tmpdir->dirname, 'build', 'blog', 'index.html' ),
             'site index renames app page';
-        ok !-f catfile( $tmpdir->dirname, 'deploy', 'index.html' ), 'not deployed yet';
     };
 
     subtest 'deploy' => sub {
         $site->deploy;
-
-        my $file = catfile( $tmpdir->dirname, 'deploy', 'index.html' );
-        my $html = read_file( $file );
-        eq_or_diff $html, $blog->index->render( site => { title => $site->title } );
-        like $html, qr{@{[$site->title]}}, 'page contains site title';
-
+        subtest 'site index content' => test_content( $tmpdir, $site, $blog->index, deploy => 'index.html' );
         ok !-f catfile( $tmpdir->dirname, 'deploy', 'blog', 'index.html' ),
             'site index renames app page';
     };
 };
 
 done_testing;
+
+sub test_content {
+    my ( $tmpdir, $site, $page, $dir, $file ) = @_;
+    return sub {
+        my $path = catfile( $tmpdir->dirname, $dir, $file );
+        my $html = read_file( $path );
+        eq_or_diff $html, $page->render( site => { title => $site->title } );
+
+        like $html, qr{@{[$site->title]}}, 'page contains site title';
+    };
+}
