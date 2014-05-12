@@ -46,10 +46,10 @@ sub render {
     my $content = $self->template->fill_in( HASH => {
         %{$self->document},
         content => $self->content,
-    } );
+    } ) || die "Could not fill in template: $Text::Template::ERROR";
     return $self->layout->fill_in( HASH => {
         content => $content,
-    } );
+    } ) || die "Could not fill in layout: $Text::Template::ERROR";
 }
 
 1;

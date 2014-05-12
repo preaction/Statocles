@@ -76,4 +76,29 @@ subtest 'invalid template coercions' => sub {
     } qr{Template is undef};
 };
 
+subtest 'template errors' => sub {
+    subtest 'main template error' => sub {
+        dies_ok {
+            Statocles::Page->new(
+                document => $doc,
+                template => Text::Template->new(
+                    type => 'STRING',
+                    source => '}',
+                ),
+            )->render;
+        };
+    };
+    subtest 'layout template error' => sub {
+        dies_ok {
+            Statocles::Page->new(
+                document => $doc,
+                layout => Text::Template->new(
+                    type => 'STRING',
+                    source => '}',
+                ),
+            )->render;
+        };
+    };
+};
+
 done_testing;
