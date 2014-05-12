@@ -51,7 +51,7 @@ subtest 'write pages' => sub {
             content => 'Body content',
         ),
     );
-    $store->write_page( $page );
+    $store->write_page( $page->path, $page->render );
     my $path = catfile( $tmpdir->dirname, '2014', '04', '23', 'slug.html' );
     cmp_deeply scalar read_file( $path ), $page->render;
 };

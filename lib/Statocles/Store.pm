@@ -40,11 +40,11 @@ sub read_documents {
 }
 
 sub write_page {
-    my ( $self, $page ) = @_;
-    my $full_path = catfile( $self->path, $page->path );
+    my ( $self, $path, $html ) = @_;
+    my $full_path = catfile( $self->path, $path );
     my ( $volume, $dirs, $file ) = splitpath( $full_path );
     make_path( catpath( $volume, $dirs, '' ) );
-    write_file( $full_path, $page->render );
+    write_file( $full_path, $html );
     return;
 }
 
