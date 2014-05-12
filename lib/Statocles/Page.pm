@@ -42,12 +42,14 @@ sub content {
 }
 
 sub render {
-    my ( $self ) = @_;
+    my ( $self, %args ) = @_;
     my $content = $self->template->fill_in( HASH => {
+        %args,
         %{$self->document},
         content => $self->content,
     } ) || die "Could not fill in template: $Text::Template::ERROR";
     return $self->layout->fill_in( HASH => {
+        %args,
         content => $content,
     } ) || die "Could not fill in layout: $Text::Template::ERROR";
 }

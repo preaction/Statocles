@@ -81,14 +81,16 @@ Render this page. Returns the full content of the page.
 =cut
 
 sub render {
-    my ( $self ) = @_;
+    my ( $self, %args ) = @_;
     my $content = $self->template->fill_in( HASH => {
+        %args,
         pages => [
             map { +{ %{ $_->document }, content => $_->content } }
             @{ $self->pages }
         ],
     } ) or die "Could not fill in template: $Text::Template::ERROR";
     return $self->layout->fill_in( HASH => {
+        %args,
         content => $content,
     } ) or die "Could not fill in layout: $Text::Template::ERROR";
 }

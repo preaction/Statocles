@@ -67,6 +67,18 @@ subtest 'layout' => sub {
     eq_or_diff $output, $expect;
 };
 
+subtest 'extra args' => sub {
+    my $page = Statocles::Page->new(
+        document => $doc,
+        template => '{ $site } {$title} {$author} {$content}',
+        layout => '{ $site } HEAD { $content } FOOT',
+    );
+
+    my $output = $page->render( site => 'hello', title => 'DOES NOT OVERRIDE', );
+    my $expect = join " ", 'hello', 'HEAD', 'hello', $doc->title, $doc->author, $md->markdown( $doc->content ), 'FOOT';
+    eq_or_diff $output, $expect;
+};
+
 subtest 'invalid template coercions' => sub {
     throws_ok {
         Statocles::Page->new(

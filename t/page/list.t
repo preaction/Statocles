@@ -40,4 +40,21 @@ subtest 'simple list (default templates)' => sub {
     eq_or_diff $list->render, $html;
 };
 
+subtest 'extra args' => sub {
+    my $list = Statocles::Page::List->new(
+        path => '/blog/index.html',
+        pages => \@pages,
+        layout => '{ $site } { $content }',
+        template => '{ $site } { join "\n", map { join " ", $_->{title}, $_->{author}, $_->{content } } @pages }',
+    );
+
+    my $html    = "hello hello "
+                . join "\n",
+                    map { join( " ", $_->document->title, $_->document->author, $_->content ), }
+                    @pages;
+
+    my $output = $list->render( site => 'hello', title => 'DOES NOT OVERRIDE' );
+    eq_or_diff $output, $html;
+};
+
 done_testing;
