@@ -25,6 +25,7 @@ subtest 'site writes application' => sub {
     );
 
     my $site = Statocles::Site->new(
+        title => 'Test Site',
         apps => { blog => $blog },
         build_store => Statocles::Store->new(
             path => catdir( $tmpdir->dirname, 'build' ),
@@ -39,7 +40,9 @@ subtest 'site writes application' => sub {
     for my $page ( $site->app( 'blog' )->pages ) {
         my $file = catfile( $tmpdir->dirname, 'build', $page->path );
         ok -f $file;
-        eq_or_diff scalar read_file( $file ), $page->render;
+        my $html = read_file( $file );
+        eq_or_diff $html, $page->render( site => { title => $site->title } );
+        like $html, qr{@{[$site->title]}}, 'page contains site title';
         ok !-f catfile( $tmpdir->dirname, 'deploy', $page->path ), 'not deployed yet';
     }
 
@@ -48,7 +51,9 @@ subtest 'site writes application' => sub {
     for my $page ( $site->app( 'blog' )->pages ) {
         my $file = catfile( $tmpdir->dirname, 'deploy', $page->path );
         ok -f $file;
-        eq_or_diff scalar read_file( $file ), $page->render;
+        my $html = read_file( $file );
+        eq_or_diff $html, $page->render( site => { title => $site->title } );
+        like $html, qr{@{[$site->title]}}, 'page contains site title';
     }
 };
 
@@ -59,6 +64,7 @@ subtest 'site index' => sub {
     );
 
     my $site = Statocles::Site->new(
+        title => 'Test Site',
         index => 'blog',
         apps => { blog => $blog },
         build_store => Statocles::Store->new(
@@ -69,22 +75,31 @@ subtest 'site index' => sub {
         ),
     );
 
-    $site->build;
 
-    eq_or_diff
-        scalar read_file( catfile( $tmpdir->dirname, 'build', 'index.html' ) ),
-        $blog->index->render;
-    ok !-f catfile( $tmpdir->dirname, 'build', 'blog', 'index.html' ),
-        'site index renames app page';
-    ok !-f catfile( $tmpdir->dirname, 'deploy', 'index.html' ), 'not deployed yet';
+    subtest 'build' => sub {
+        $site->build;
 
-    $site->deploy;
+        my $file = catfile( $tmpdir->dirname, 'build', 'index.html' );
+        my $html = read_file( $file );
+        eq_or_diff $html, $blog->index->render( site => { title => $site->title } );
+        like $html, qr{@{[$site->title]}}, 'page contains site title';
 
-    eq_or_diff
-        scalar read_file( catfile( $tmpdir->dirname, 'deploy', 'index.html' ) ),
-        $blog->index->render;
-    ok !-f catfile( $tmpdir->dirname, 'deploy', 'blog', 'index.html' ),
-        'site index renames app page';
+        ok !-f catfile( $tmpdir->dirname, 'build', 'blog', 'index.html' ),
+            'site index renames app page';
+        ok !-f catfile( $tmpdir->dirname, 'deploy', 'index.html' ), 'not deployed yet';
+    };
+
+    subtest 'deploy' => sub {
+        $site->deploy;
+
+        my $file = catfile( $tmpdir->dirname, 'deploy', 'index.html' );
+        my $html = read_file( $file );
+        eq_or_diff $html, $blog->index->render( site => { title => $site->title } );
+        like $html, qr{@{[$site->title]}}, 'page contains site title';
+
+        ok !-f catfile( $tmpdir->dirname, 'deploy', 'blog', 'index.html' ),
+            'site index renames app page';
+    };
 };
 
 done_testing;

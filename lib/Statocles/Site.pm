@@ -3,6 +3,17 @@ package Statocles::Site;
 
 use Statocles::Class;
 
+=attr title
+
+The site title, used in templates.
+
+=cut
+
+has title => (
+    is => 'ro',
+    isa => Str,
+);
+
 =attr apps
 
 The applications in this site. Each application has a name
@@ -95,6 +106,11 @@ Write the application to the given C<store>, a Statocles::Store object
 sub write {
     my ( $self, $store ) = @_;
     my $apps = $self->apps;
+    my %args = (
+        site => {
+            title => $self->title,
+        },
+    );
     for my $app_name ( keys %{ $apps } ) {
         my $app = $apps->{$app_name};
         for my $page ( $app->pages ) {
@@ -106,7 +122,7 @@ sub write {
                     path => '/index.html',
                 );
             }
-            $store->write_page( $page );
+            $store->write_page( $page->path, $page->render( %args ) );
         }
     }
 }
