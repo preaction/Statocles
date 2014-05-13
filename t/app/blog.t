@@ -57,7 +57,7 @@ subtest 'blog post pages' => sub {
         $page_path =~ s{/{2,}}{/}g;
         $page_path =~ s/[.]yml$/.html/;
 
-        my $page = Statocles::Page->new(
+        my $page = Statocles::Page::Document->new(
             template => $theme->template( blog => 'post' ),
             layout => $theme->template( site => 'layout' ),
             path => $page_path,

@@ -10,7 +10,7 @@ sub modules {
     my @modules = grep { !/^Moo::Lax$/ } $class->SUPER::modules( %args );
     return (
         @modules,
-        'Moo::Role::Lax' => [],
+        'Moo::Role::Lax',
     );
 }
 

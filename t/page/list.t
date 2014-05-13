@@ -1,11 +1,11 @@
 
 use Statocles::Test;
-use Statocles::Page;
+use Statocles::Page::Document;
 use Statocles::Document;
 use Statocles::Page::List;
 
 my @pages = (
-    Statocles::Page->new(
+    Statocles::Page::Document->new(
         path => '/blog/2014/04/30/page.html',
         document => Statocles::Document->new(
             path => '/2014/04/30/page.yml',
@@ -14,7 +14,7 @@ my @pages = (
             content => 'Better body content',
         ),
     ),
-    Statocles::Page->new(
+    Statocles::Page::Document->new(
         path => '/blog/2014/04/23/slug.html',
         document => Statocles::Document->new(
             path => '/2014/04/23/slug.yml',

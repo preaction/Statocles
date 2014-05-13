@@ -4,7 +4,7 @@ use Cwd qw( getcwd );
 my $SHARE_DIR = catdir( __DIR__, 'share' );
 
 use Statocles::Store;
-use Statocles::Page;
+use Statocles::Page::Document;
 
 my @exp_docs = (
     Statocles::Document->new(
@@ -43,7 +43,7 @@ subtest 'write pages' => sub {
     my $store = Statocles::Store->new(
         path => $tmpdir->dirname,
     );
-    my $page = Statocles::Page->new(
+    my $page = Statocles::Page::Document->new(
         path => '/2014/04/23/slug.html',
         document => Statocles::Document->new(
             title => 'First Post',

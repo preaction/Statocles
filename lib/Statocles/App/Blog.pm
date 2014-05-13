@@ -2,7 +2,7 @@ package Statocles::App::Blog;
 # ABSTRACT: A blog application
 
 use Statocles::Class;
-use Statocles::Page;
+use Statocles::Page::Document;
 use Statocles::Page::List;
 
 extends 'Statocles::App';
@@ -31,7 +31,7 @@ sub post_pages {
         my $path = join "/", $self->url_root, $doc->path;
         $path =~ s{/{2,}}{/}g;
         $path =~ s{[.]\w+$}{.html};
-        push @pages, Statocles::Page->new(
+        push @pages, Statocles::Page::Document->new(
             layout => $self->theme->templates->{site}{layout},
             template => $self->theme->templates->{blog}{post},
             document => $doc,

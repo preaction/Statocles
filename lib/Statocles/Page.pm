@@ -1,14 +1,11 @@
 package Statocles::Page;
 # ABSTRACT: Render documents into HTML
 
-use Statocles::Class;
+use Statocles::Role;
 use Text::Markdown;
 use Text::Template;
 
-has document => (
-    is => 'ro',
-    isa => InstanceOf['Statocles::Document'],
-);
+requires 'render';
 
 has path => (
     is => 'ro',
@@ -21,12 +18,9 @@ has markdown => (
     default => sub { Text::Markdown->new },
 );
 
-has [qw( template layout )] => (
+my @template_attrs = (
     is => 'ro',
     isa => InstanceOf['Text::Template'],
-    default => sub {
-        Text::Template->new( TYPE => 'STRING', SOURCE => '{$content}' );
-    },
     coerce => sub {
         die "Template is undef" unless defined $_[0];
         return !ref $_[0] 
@@ -36,23 +30,13 @@ has [qw( template layout )] => (
     },
 );
 
-sub content {
-    my ( $self ) = @_;
-    return $self->markdown->markdown( $self->document->content );
-}
-
-sub render {
-    my ( $self, %args ) = @_;
-    my $content = $self->template->fill_in( HASH => {
-        %args,
-        %{$self->document},
-        content => $self->content,
-    } ) || die "Could not fill in template: $Text::Template::ERROR";
-    return $self->layout->fill_in( HASH => {
-        %args,
-        content => $content,
-    } ) || die "Could not fill in layout: $Text::Template::ERROR";
-}
+has template => @template_attrs;
+has layout => (
+    @template_attrs,
+    default => sub {
+        Text::Template->new( type => 'STRING', source => '{$content}' ),
+    },
+);
 
 1;
 __END__
@@ -61,3 +45,18 @@ __END__
 
 A Statocles::Page takes one or more documents and renders them into one or more
 HTML pages.
+
+=head1 SEE ALSO
+
+=over
+
+=item L<Statocles::Page::Document>
+
+A page that renders a single document.
+
+=item L<Statocles::Page::List>
+
+A page that renders a list of other pages.
+
+=back
+

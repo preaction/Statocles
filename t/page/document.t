@@ -1,9 +1,9 @@
 
 use Statocles::Test;
-my $SHARE_DIR = catdir( __DIR__, 'share' );
+my $SHARE_DIR = catdir( __DIR__, '..', 'share' );
 
 use Statocles::Document;
-use Statocles::Page;
+use Statocles::Page::Document;
 use Text::Markdown;
 
 my $doc = Statocles::Document->new(
@@ -22,7 +22,7 @@ MARKDOWN
 my $md = Text::Markdown->new;
 
 subtest 'simple page (default template)' => sub {
-    my $page = Statocles::Page->new(
+    my $page = Statocles::Page::Document->new(
         document => $doc,
     );
 
@@ -31,7 +31,7 @@ subtest 'simple page (default template)' => sub {
 };
 
 subtest 'template string' => sub {
-    my $page = Statocles::Page->new(
+    my $page = Statocles::Page::Document->new(
         document => $doc,
         template => '{$title} {$author} {$content}',
     );
@@ -42,7 +42,7 @@ subtest 'template string' => sub {
 };
 
 subtest 'template file' => sub {
-    my $page = Statocles::Page->new(
+    my $page = Statocles::Page::Document->new(
         document => $doc,
         template => Text::Template->new(
             type => 'FILE',
@@ -56,7 +56,7 @@ subtest 'template file' => sub {
 };
 
 subtest 'layout' => sub {
-    my $page = Statocles::Page->new(
+    my $page = Statocles::Page::Document->new(
         document => $doc,
         template => '{$title} {$author} {$content}',
         layout => 'HEAD { $content } FOOT',
@@ -68,7 +68,7 @@ subtest 'layout' => sub {
 };
 
 subtest 'extra args' => sub {
-    my $page = Statocles::Page->new(
+    my $page = Statocles::Page::Document->new(
         document => $doc,
         template => '{ $site } {$title} {$author} {$content}',
         layout => '{ $site } HEAD { $content } FOOT',
@@ -81,7 +81,7 @@ subtest 'extra args' => sub {
 
 subtest 'invalid template coercions' => sub {
     throws_ok {
-        Statocles::Page->new(
+        Statocles::Page::Document->new(
             document => $doc,
             template => undef,
         );
@@ -91,7 +91,7 @@ subtest 'invalid template coercions' => sub {
 subtest 'template errors' => sub {
     subtest 'main template error' => sub {
         dies_ok {
-            Statocles::Page->new(
+            Statocles::Page::Document->new(
                 document => $doc,
                 template => Text::Template->new(
                     type => 'STRING',
@@ -102,7 +102,7 @@ subtest 'template errors' => sub {
     };
     subtest 'layout template error' => sub {
         dies_ok {
-            Statocles::Page->new(
+            Statocles::Page::Document->new(
                 document => $doc,
                 layout => Text::Template->new(
                     type => 'STRING',

@@ -2,19 +2,8 @@ package Statocles::Page::List;
 # ABSTRACT: A page presenting a list of other pages
 
 use Statocles::Class;
+with 'Statocles::Page';
 use Text::Template;
-
-=attr path
-
-The path for this page.
-
-=cut
-
-has path => (
-    is => 'ro',
-    isa => Str,
-    required => 1,
-);
 
 =attr pages
 
@@ -24,16 +13,8 @@ The pages that should be shown in this list.
 
 has pages => (
     is => 'ro',
-    isa => ArrayRef[InstanceOf['Statocles::Page']],
+    isa => ArrayRef[ConsumerOf['Statocles::Page']],
 );
-
-my $coerce_template = sub {
-    die "Template is undef" unless defined $_[0];
-    return !ref $_[0] 
-        ? Text::Template->new( TYPE => 'STRING', SOURCE => $_[0] )
-        : $_[0]
-        ;
-};
 
 =attr template
 
@@ -42,9 +23,7 @@ object.
 
 =cut
 
-has template => (
-    is => 'ro',
-    isa => InstanceOf['Text::Template'],
+has '+template' => (
     default => sub {
         Text::Template->new(
             TYPE => 'STRING',
@@ -55,23 +34,6 @@ has template => (
             }',
         );
     },
-    coerce => $coerce_template,
-);
-
-=attr layout
-
-The layout template for this list. Should be a string or a Text::Template
-object.
-
-=cut
-
-has layout => (
-    is => 'ro',
-    isa => InstanceOf['Text::Template'],
-    default => sub {
-        Text::Template->new( TYPE => 'STRING', SOURCE => '{$content}' );
-    },
-    coerce => $coerce_template,
 );
 
 =method render
