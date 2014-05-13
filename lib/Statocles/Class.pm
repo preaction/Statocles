@@ -10,7 +10,7 @@ sub modules {
     my @modules = $class->SUPER::modules( %args );
     return (
         @modules,
-        'Moo::Lax' => [],
+        'Moo::Lax',
         'MooX::Types::MooseLike::Base' => [qw( :all )],
     );
 }
