@@ -6,10 +6,22 @@ with 'Statocles::Page';
 use Text::Markdown;
 use Text::Template;
 
+=attr document
+
+The document this page will render.
+
+=cut
+
 has document => (
     is => 'ro',
     isa => InstanceOf['Statocles::Document'],
 );
+
+=attr template
+
+The template to render the document.
+
+=cut
 
 has '+template' => (
     default => sub {
@@ -17,10 +29,22 @@ has '+template' => (
     },
 );
 
+=method content
+
+Generate the document HTML by converting Markdown.
+
+=cut
+
 sub content {
     my ( $self ) = @_;
     return $self->markdown->markdown( $self->document->content );
 }
+
+=method render
+
+Render the page, using the C<template> and wrapping with the C<layout>.
+
+=cut
 
 sub render {
     my ( $self, %args ) = @_;
