@@ -1,9 +1,7 @@
-{
-    for my $p ( @pages ) {
-        $OUT .= "<section>"
-                . '<div class="author">' . $p->{author} . "</div>"
-                . $p->{content}
-                . "</section>"
-                ;
-    }
-}
+% for my $p ( @$pages ) {
+<section>
+    <h1><%= $p->{title} %></h1>
+    <div class="author"><%= $p->{author} %></div>
+    <%= $p->{content} %>
+</section>
+% }

@@ -22,7 +22,9 @@ has path => (
 
 sub render {
     my ( $self, %args ) = @_;
-    my $t = Mojo::Template->new;
+    my $t = Mojo::Template->new(
+        name => $self->path,
+    );
     $t->prepend( $self->_vars( keys %args ) );
     return $t->render( $self->content, \%args );
 }

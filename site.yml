@@ -16,6 +16,7 @@ deploy:
 site:
     class: Statocles::Site
     args:
+        title: Statocles
         build_store:
             $ref: build
         deploy_store:
