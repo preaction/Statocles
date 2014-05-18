@@ -90,6 +90,15 @@ subtest 'get help' => sub {
         'reports pod from bin/statocles, not Statocles::Command';
 };
 
+subtest 'get version' => sub {
+    local $Statocles::Command::VERSION = '1.00';
+    my ( $output, $stderr, $exit ) = capture { Statocles::Command->main( '--version' ) };
+    is $exit, 0;
+    ok !$stderr, 'stderr is empty' or diag "STDERR: $stderr";
+    is $output, "Statocles version 1.00 (Perl $^V)\n";
+};
+
+
 sub test_site {
     my ( $root, @args ) = @_;
     return sub {

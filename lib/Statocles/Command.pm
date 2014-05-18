@@ -35,8 +35,14 @@ sub main {
         'config:s',
         'site:s',
         'help|h',
+        'version',
     );
     return pod2usage(0) if $opt{help};
+
+    if ( $opt{version} ) {
+        print "Statocles version $Statocles::Command::VERSION (Perl $^V)\n";
+        return 0;
+    }
 
     my $wire = Beam::Wire->new( file => $opt{config} );
 
