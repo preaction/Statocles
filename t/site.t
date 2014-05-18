@@ -6,67 +6,34 @@ use Statocles::Store;
 use Statocles::App::Blog;
 my $SHARE_DIR = catdir( __DIR__, 'share' );
 
-my $theme = Statocles::Theme->new(
-    source_dir => catdir( $SHARE_DIR, 'theme' ),
-);
-
-my %blog_args = (
-    source => Statocles::Store->new(
-        path => catdir( $SHARE_DIR, 'blog' ),
-    ),
-    url_root => '/blog',
-    theme => $theme,
-);
-
 subtest 'site writes application' => sub {
     my $tmpdir = File::Temp->newdir;
-    my $blog = Statocles::App::Blog->new(
-        %blog_args,
-    );
+    my $site = site( $tmpdir );
 
-    my $site = Statocles::Site->new(
-        title => 'Test Site',
-        apps => { blog => $blog },
-        build_store => Statocles::Store->new(
-            path => catdir( $tmpdir->dirname, 'build' ),
-        ),
-        deploy_store => Statocles::Store->new(
-            path => catdir( $tmpdir->dirname, 'deploy' ),
-        ),
-    );
+    subtest 'build' => sub {
+        $site->build;
 
-    $site->build;
+        for my $page ( $site->app( 'blog' )->pages ) {
+            subtest 'page content' => test_content( $tmpdir, $site, $page, build => $page->path );
+            ok !-f catfile( $tmpdir->dirname, 'deploy', $page->path ), 'not deployed yet';
+        }
+    };
 
-    for my $page ( $site->app( 'blog' )->pages ) {
-        subtest 'page content' => test_content( $tmpdir, $site, $page, build => $page->path );
-        ok !-f catfile( $tmpdir->dirname, 'deploy', $page->path ), 'not deployed yet';
-    }
+    subtest 'deploy' => sub {
+        $site->deploy;
 
-    $site->deploy;
-
-    for my $page ( $site->app( 'blog' )->pages ) {
-        subtest 'page content' => test_content( $tmpdir, $site, $page, deploy => $page->path );
-    }
+        for my $page ( $site->app( 'blog' )->pages ) {
+            subtest 'page content' => test_content( $tmpdir, $site, $page, deploy => $page->path );
+        }
+    };
 };
 
 subtest 'site index' => sub {
     my $tmpdir = File::Temp->newdir;
-    my $blog = Statocles::App::Blog->new(
-        %blog_args,
-    );
-
-    my $site = Statocles::Site->new(
-        title => 'Test Site',
+    my $site = site( $tmpdir,
         index => 'blog',
-        apps => { blog => $blog },
-        build_store => Statocles::Store->new(
-            path => catdir( $tmpdir->dirname, 'build' ),
-        ),
-        deploy_store => Statocles::Store->new(
-            path => catdir( $tmpdir->dirname, 'deploy' ),
-        ),
     );
-
+    my $blog = $site->app( 'blog' );
 
     subtest 'build' => sub {
         $site->build;
@@ -85,6 +52,36 @@ subtest 'site index' => sub {
 };
 
 done_testing;
+
+sub site {
+    my ( $tmpdir, %site_args ) = @_;
+
+    my $theme = Statocles::Theme->new(
+        source_dir => catdir( $SHARE_DIR, 'theme' ),
+    );
+
+    my $blog = Statocles::App::Blog->new(
+        source => Statocles::Store->new(
+            path => catdir( $SHARE_DIR, 'blog' ),
+        ),
+        url_root => '/blog',
+        theme => $theme,
+    );
+
+    my $site = Statocles::Site->new(
+        title => 'Test Site',
+        apps => { blog => $blog },
+        build_store => Statocles::Store->new(
+            path => catdir( $tmpdir->dirname, 'build' ),
+        ),
+        deploy_store => Statocles::Store->new(
+            path => catdir( $tmpdir->dirname, 'deploy' ),
+        ),
+        %site_args,
+    );
+
+    return $site;
+}
 
 sub test_content {
     my ( $tmpdir, $site, $page, $dir, $file ) = @_;
