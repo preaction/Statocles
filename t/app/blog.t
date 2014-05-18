@@ -3,28 +3,26 @@ use Statocles::Test;
 use Statocles::Theme;
 use Statocles::Store;
 use Statocles::App::Blog;
-use Text::Template;
+use Statocles::Template;
 my $SHARE_DIR = catdir( __DIR__, '..', 'share' );
 
 my $theme = Statocles::Theme->new(
     templates => {
         site => {
-            layout => Text::Template->new(
-                TYPE => 'STRING',
-                SOURCE => 'HEAD { $content } FOOT',
+            layout => Statocles::Template->new(
+                content => 'HEAD <%= $content %> FOOT',
             ),
         },
         blog => {
-            index => Text::Template->new(
-                TYPE => 'STRING',
-                SOURCE => '{ join "\n",
-                    map { join " ", $_->{title}, $_->{author}, $_->{content} }
-                    @pages
-                }',
+            index => Statocles::Template->new(
+                content => <<'ENDTEMPLATE'
+% for my $page ( @$pages ) {
+<% $page->{title} %> <% $page->{author} %> <% $page->{content} %>
+% }
+ENDTEMPLATE
             ),
-            post => Text::Template->new(
-                TYPE => 'STRING',
-                SOURCE => '{ $title } { $author } { $content }',
+            post => Statocles::Template->new(
+                content => '<%= $title %> <%= $author %> <%= $content %>',
             ),
         },
     },

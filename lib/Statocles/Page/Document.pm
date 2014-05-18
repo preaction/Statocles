@@ -4,7 +4,7 @@ package Statocles::Page::Document;
 use Statocles::Class;
 with 'Statocles::Page';
 use Text::Markdown;
-use Text::Template;
+use Statocles::Template;
 
 =attr document
 
@@ -25,7 +25,7 @@ The template to render the document.
 
 has '+template' => (
     default => sub {
-        Text::Template->new( TYPE => 'STRING', SOURCE => '{$content}' );
+        Statocles::Template->new( content => '<%= $content %>' );
     },
 );
 
@@ -48,15 +48,15 @@ Render the page, using the C<template> and wrapping with the C<layout>.
 
 sub render {
     my ( $self, %args ) = @_;
-    my $content = $self->template->fill_in( HASH => {
+    my $content = $self->template->render(
         %args,
         %{$self->document},
         content => $self->content,
-    } ) || die "Could not fill in template: $Text::Template::ERROR";
-    return $self->layout->fill_in( HASH => {
+    );
+    return $self->layout->render(
         %args,
         content => $content,
-    } ) || die "Could not fill in layout: $Text::Template::ERROR";
+    );
 }
 
 1;

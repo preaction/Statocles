@@ -45,6 +45,7 @@ my $config = {
     site => {
         class => 'Statocles::Site',
         args => {
+            title => 'Site Title',
             index => 'blog',
             build_store => { '$ref' => 'build' },
             deploy_store => { '$ref' => 'deploy' },
@@ -68,6 +69,7 @@ my $config = {
     site_foo => {
         class => 'Statocles::Site',
         args => {
+            title => 'Site Foo',
             index => 'blog',
             build_store => { '$ref' => 'build_foo' },
             deploy_store => { '$ref' => 'deploy_foo' },

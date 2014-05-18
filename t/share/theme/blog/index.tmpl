@@ -1,5 +1,3 @@
-{
-    join "\n", map {
-        join( " ", $_->{title}, $_->{author}, $_->{content} )
-    } @pages
-}
+% for my $page ( @$pages ) {
+<%= $page->{title} %> <%= $page->{author} %> <%= $page->{content} %>
+% }

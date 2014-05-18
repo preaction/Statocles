@@ -107,9 +107,7 @@ sub write {
     my ( $self, $store ) = @_;
     my $apps = $self->apps;
     my %args = (
-        site => {
-            title => $self->title,
-        },
+        site => $self,
     );
     for my $app_name ( keys %{ $apps } ) {
         my $app = $apps->{$app_name};

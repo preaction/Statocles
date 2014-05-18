@@ -3,6 +3,7 @@ package Statocles::Theme;
 
 use Statocles::Class;
 use File::Find qw( find );
+use File::Slurp qw( read_file );
 
 has source_dir => (
     is => 'ro',
@@ -11,7 +12,7 @@ has source_dir => (
 
 has templates => (
     is => 'ro',
-    isa => HashRef[HashRef[InstanceOf['Text::Template']]],
+    isa => HashRef[HashRef[InstanceOf['Statocles::Template']]],
     lazy => 1,
     builder => 'read',
 );
@@ -27,10 +28,9 @@ sub read {
                 my @dirs = splitdir( $dirs );
                 # $dirs will end with a slash, so the last item in @dirs is ''
                 my $group = $dirs[-2];
-                $tmpl{ $group }{ $name } = Text::Template->new(
-                    TYPE => 'FILE',
-                    SOURCE => $_,
-                ) or die "Could not make template: $Text::Template::ERROR";
+                $tmpl{ $group }{ $name } = Statocles::Template->new(
+                    path => $File::Find::name,
+                );
             }
         },
         $self->source_dir,

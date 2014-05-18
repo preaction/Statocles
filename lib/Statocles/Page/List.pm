@@ -3,7 +3,7 @@ package Statocles::Page::List;
 
 use Statocles::Class;
 with 'Statocles::Page';
-use Text::Template;
+use Statocles::Template;
 
 =attr pages
 
@@ -18,20 +18,19 @@ has pages => (
 
 =attr template
 
-The body template for this list. Should be a string or a Text::Template
+The body template for this list. Should be a string or a Statocles::Template
 object.
 
 =cut
 
 has '+template' => (
     default => sub {
-        Text::Template->new(
-            TYPE => 'STRING',
-            SOURCE => '{
-                join "\n", map {
-                    join( " ", $_->{title}, $_->{author}, $_->{content} )
-                } @pages
-            }',
+        Statocles::Template->new(
+            content => <<'ENDTEMPLATE'
+% for my $page ( @$pages ) {
+<%= $page->{title} %> <%= $page->{author} %> <%= $page->{content} %>
+% }
+ENDTEMPLATE
         );
     },
 );
@@ -44,17 +43,17 @@ Render this page. Returns the full content of the page.
 
 sub render {
     my ( $self, %args ) = @_;
-    my $content = $self->template->fill_in( HASH => {
+    my $content = $self->template->render(
         %args,
         pages => [
             map { +{ %{ $_->document }, content => $_->content } }
             @{ $self->pages }
         ],
-    } ) or die "Could not fill in template: $Text::Template::ERROR";
-    return $self->layout->fill_in( HASH => {
+    );
+    return $self->layout->render(
         %args,
         content => $content,
-    } ) or die "Could not fill in layout: $Text::Template::ERROR";
+    );
 }
 
 1;

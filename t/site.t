@@ -91,7 +91,7 @@ sub test_content {
     return sub {
         my $path = catfile( $tmpdir->dirname, $dir, $file );
         my $html = read_file( $path );
-        eq_or_diff $html, $page->render( site => { title => $site->title } );
+        eq_or_diff $html, $page->render( site => $site );
 
         like $html, qr{@{[$site->title]}}, 'page contains site title';
     };

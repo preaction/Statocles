@@ -27,55 +27,41 @@ subtest 'simple page (default template)' => sub {
     );
 
     my $output = $page->render;
-    eq_or_diff $output, $md->markdown( $doc->content );
+    eq_or_diff $output, $md->markdown( $doc->content ) . "\n\n";
 };
 
 subtest 'template string' => sub {
     my $page = Statocles::Page::Document->new(
         document => $doc,
-        template => '{$title} {$author} {$content}',
+        template => '<%= $title %> <%= $author %> <%= $content %>',
     );
 
     my $output = $page->render;
-    my $expect = join " ", $doc->title, $doc->author, $md->markdown( $doc->content );
-    eq_or_diff $output, $expect;
-};
-
-subtest 'template file' => sub {
-    my $page = Statocles::Page::Document->new(
-        document => $doc,
-        template => Text::Template->new(
-            type => 'FILE',
-            source => catfile( $SHARE_DIR, 'tmpl', 'page.tmpl' ),
-        ),
-    );
-
-    my $output = $page->render;
-    my $expect = join "\n", $doc->title, $doc->author, $md->markdown( $doc->content ), '';
+    my $expect = join " ", $doc->title, $doc->author, $md->markdown( $doc->content ) . "\n\n";
     eq_or_diff $output, $expect;
 };
 
 subtest 'layout' => sub {
     my $page = Statocles::Page::Document->new(
         document => $doc,
-        template => '{$title} {$author} {$content}',
-        layout => 'HEAD { $content } FOOT',
+        template => '<%= $title %> <%= $author %> <%= $content %>',
+        layout => 'HEAD <%= $content %> FOOT',
     );
 
     my $output = $page->render;
-    my $expect = join " ", 'HEAD', $doc->title, $doc->author, $md->markdown( $doc->content ), 'FOOT';
+    my $expect = join " ", 'HEAD', $doc->title, $doc->author, $md->markdown( $doc->content ) . "\n", 'FOOT' . "\n";
     eq_or_diff $output, $expect;
 };
 
 subtest 'extra args' => sub {
     my $page = Statocles::Page::Document->new(
         document => $doc,
-        template => '{ $site } {$title} {$author} {$content}',
-        layout => '{ $site } HEAD { $content } FOOT',
+        template => '<%= $site %> <%= $title %> <%= $author %> <%= $content %>',
+        layout => '<%= $site %> HEAD <%= $content %> FOOT',
     );
 
     my $output = $page->render( site => 'hello', title => 'DOES NOT OVERRIDE', );
-    my $expect = join " ", 'hello', 'HEAD', 'hello', $doc->title, $doc->author, $md->markdown( $doc->content ), 'FOOT';
+    my $expect = join " ", 'hello', 'HEAD', 'hello', $doc->title, $doc->author, $md->markdown( $doc->content ) . "\n", 'FOOT' . "\n";
     eq_or_diff $output, $expect;
 };
 
@@ -86,31 +72,6 @@ subtest 'invalid template coercions' => sub {
             template => undef,
         );
     } qr{Template is undef};
-};
-
-subtest 'template errors' => sub {
-    subtest 'main template error' => sub {
-        dies_ok {
-            Statocles::Page::Document->new(
-                document => $doc,
-                template => Text::Template->new(
-                    type => 'STRING',
-                    source => '}',
-                ),
-            )->render;
-        };
-    };
-    subtest 'layout template error' => sub {
-        dies_ok {
-            Statocles::Page::Document->new(
-                document => $doc,
-                layout => Text::Template->new(
-                    type => 'STRING',
-                    source => '}',
-                ),
-            )->render;
-        };
-    };
 };
 
 done_testing;

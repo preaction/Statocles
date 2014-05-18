@@ -31,11 +31,12 @@ subtest 'simple list (default templates)' => sub {
         pages => \@pages,
     );
 
-    my $html =  join "\n",
+    my $html =  join( "\n",
                 map {
                     join( " ", $_->document->title, $_->document->author, $_->content ),
                 }
-                @pages;
+                @pages
+            ) . "\n\n";
 
     eq_or_diff $list->render, $html;
 };
@@ -44,14 +45,20 @@ subtest 'extra args' => sub {
     my $list = Statocles::Page::List->new(
         path => '/blog/index.html',
         pages => \@pages,
-        layout => '{ $site } { $content }',
-        template => '{ $site } { join "\n", map { join " ", $_->{title}, $_->{author}, $_->{content } } @pages }',
+        layout => '<%= $site %> <%= $content %>',
+        template => <<'ENDTEMPLATE',
+<%= $site %>
+% for my $page ( @$pages ) {
+<%= $page->{title} %> <%= $page->{author} %> <%= $page->{content} %>
+% }
+ENDTEMPLATE
     );
 
-    my $html    = "hello hello "
-                . join "\n",
+    my $html    = "hello hello\n"
+                . join( "\n",
                     map { join( " ", $_->document->title, $_->document->author, $_->content ), }
-                    @pages;
+                    @pages
+                ) . "\n\n";
 
     my $output = $list->render( site => 'hello', title => 'DOES NOT OVERRIDE' );
     eq_or_diff $output, $html;

@@ -2,8 +2,8 @@ package Statocles::Page;
 # ABSTRACT: Render documents into HTML
 
 use Statocles::Role;
+use Statocles::Template;
 use Text::Markdown;
-use Text::Template;
 
 requires 'render';
 
@@ -32,11 +32,11 @@ has markdown => (
 
 my @template_attrs = (
     is => 'ro',
-    isa => InstanceOf['Text::Template'],
+    isa => InstanceOf['Statocles::Template'],
     coerce => sub {
         die "Template is undef" unless defined $_[0];
-        return !ref $_[0] 
-            ? Text::Template->new( TYPE => 'STRING', SOURCE => $_[0] )
+        return !ref $_[0]
+            ? Statocles::Template->new( content => $_[0] )
             : $_[0]
             ;
     },
@@ -61,7 +61,7 @@ C<template>.
 has layout => (
     @template_attrs,
     default => sub {
-        Text::Template->new( type => 'STRING', source => '{$content}' ),
+        Statocles::Template->new( content => '<%= $content %>' ),
     },
 );
 
