@@ -8,6 +8,13 @@
     </head>
     <body>
         <div class="container">
+            % if ( @{ $site->nav } ) {
+            <ul>
+                % for my $nav ( @{ $site->nav } ) {
+                <li><a href="<%= $nav->{href} %>"><%= $nav->{title} %></a></li>
+                % }
+            </ul>
+            % }
             <%= $content %>
         </div>
     </body>

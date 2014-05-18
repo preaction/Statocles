@@ -28,10 +28,20 @@ subtest 'site writes application' => sub {
     };
 };
 
-subtest 'site index' => sub {
+subtest 'site index and navigation' => sub {
     my $tmpdir = File::Temp->newdir;
     my $site = site( $tmpdir,
         index => 'blog',
+        nav => [
+            {
+                title => 'Blog',
+                href => '/index.html',
+            },
+            {
+                title => 'About',
+                href => '/about.html',
+            },
+        ],
     );
     my $blog = $site->app( 'blog' );
 
@@ -90,6 +100,12 @@ sub test_content {
         my $html = read_file( $path );
         eq_or_diff $html, $page->render( site => $site );
 
-        like $html, qr{@{[$site->title]}}, 'page contains site title';
+        like $html, qr{@{[$site->title]}}, 'page contains site title ' . $site->title;
+        for my $nav ( @{ $site->nav } ) {
+            my $title = $nav->{title};
+            my $url = $nav->{href};
+            like $html, qr{$title}, 'page contains nav title ' . $title;
+            like $html, qr{$url}, 'page contains nav url ' . $url;
+        }
     };
 }

@@ -17,6 +17,9 @@ site:
     class: Statocles::Site
     args:
         title: Statocles
+        nav:
+            - title: Blog
+              href: /index.html
         build_store:
             $ref: build
         deploy_store:

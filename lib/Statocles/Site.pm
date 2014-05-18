@@ -39,6 +39,21 @@ has index => (
     default => '',
 );
 
+=attr nav
+
+The main site navigation. An array of hashes with the following keys:
+
+    title - The title of the link
+    href - The href of the link
+
+=cut
+
+has nav => (
+    is => 'ro',
+    isa => ArrayRef[HashRef[Str]],
+    default => sub { [] },
+);
+
 =attr build_store
 
 The Statocles::Store object to use for C<build()>.
