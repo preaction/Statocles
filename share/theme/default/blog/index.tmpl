@@ -1,7 +1,11 @@
 % for my $p ( @$pages ) {
 <section>
-    <h1><%= $p->{title} %></h1>
-    <div class="author"><%= $p->{author} %></div>
+    <hgroup>
+        <h1><a href="<%= $p->{path} %>"><%= $p->{title} %></a></h1>
+        <h2><%= $p->{author} %></h2>
+    </hgroup>
+    <article>
     <%= $p->{content} %>
+    </article>
 </section>
 % }

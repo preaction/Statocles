@@ -5,17 +5,49 @@
         <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap-theme.min.css" />
         <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script>
         <title><%= $site->title %></title>
+        <style type="text/css">
+            section > hgroup > h1 {
+                border-bottom: 4px solid #045578;
+            }
+            section > hgroup > h2 {
+                float: right;
+                font-size: 12pt;
+            }
+        </style>
     </head>
     <body>
-        <div class="container">
+        <header>
             % if ( @{ $site->nav } ) {
-            <ul>
-                % for my $nav ( @{ $site->nav } ) {
-                <li><a href="<%= $nav->{href} %>"><%= $nav->{title} %></a></li>
-                % }
-            </ul>
+            <nav class="navbar navbar-default navbar-static-top" role="navigation">
+                <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#top-navbar-collapse-1">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="/"><%= $site->title %></a>
+                    </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="top-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            % for my $nav ( @{ $site->nav } ) {
+                            <li><a href="<%= $nav->{href} %>"><%= $nav->{title} %></a></li>
+                            % }
+                        </ul>
+                    </div>
+                </div>
             % }
+            </nav>
+        </header>
+        <div class="main container">
             <%= $content %>
+            <ul class="pager">
+                <li class="previous"><a href="#">&larr; Older</a></li>
+                <li class="next disabled"><a href="#">Newer &rarr;</a></li>
+            </ul>
         </div>
     </body>
 </html>
