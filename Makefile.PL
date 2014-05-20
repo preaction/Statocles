@@ -30,14 +30,15 @@ my %WriteMakefileArgs = (
   "PREREQ_PM" => {
     "Beam::Wire" => 0,
     "File::Basename" => 0,
+    "File::Copy::Recursive" => 0,
     "File::Find" => 0,
     "File::Path" => 0,
     "File::Slurp" => 0,
     "File::Spec::Functions" => 0,
     "Import::Base" => 0,
+    "Mojolicious" => 0,
     "Moo::Lax" => 0,
     "Text::Markdown" => 0,
-    "Text::Template" => 0,
     "YAML" => 0,
     "strict" => 0,
     "warnings" => 0
@@ -51,7 +52,7 @@ my %WriteMakefileArgs = (
   },
   "VERSION" => "0.001",
   "test" => {
-    "TESTS" => "t/*.t t/app/*.t t/page/*.t"
+    "TESTS" => "t/*.t t/app/*.t t/page/*.t t/site/*.t"
   }
 );
 
