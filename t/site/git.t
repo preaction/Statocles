@@ -33,6 +33,9 @@ subtest 'site writes application' => sub {
     };
 
     subtest 'deploy' => sub {
+        # Changed/added files not in the build directory do not get added
+        write_file( catfile( $tmpdir->dirname, 'NEWFILE' ), 'test' );
+
         $site->deploy;
 
         is current_branch( $git ), 'master', 'deploy leaves us on the branch we came from';
@@ -43,8 +46,9 @@ subtest 'site writes application' => sub {
 
         $git->run( checkout => $site->deploy_branch );
 
-        my $log = $git->run( log => -n => 1 );
+        my $log = $git->run( log => -u => -n => 1 );
         like $log, qr{Site update};
+        unlike $log, qr{NEWFILE};
 
         for my $page ( $site->app( 'blog' )->pages ) {
             subtest 'page content' => test_content( $tmpdir, $site, $page, '.' => $page->path );

@@ -3,6 +3,7 @@ package Statocles::Site::Git;
 use Statocles::Class;
 extends 'Statocles::Site';
 
+use File::Find qw( find );
 use File::Copy::Recursive qw( dircopy );
 use Git::Repository;
 
@@ -39,11 +40,22 @@ Deploy the site.
 sub deploy {
     my ( $self ) = @_;
 
-    my $git = Git::Repository->new( work_tree => $self->deploy_store->path );
+    my $build_dir = $self->build_store->path;
+    my $deploy_dir = $self->deploy_store->path;
+
+    my $git = Git::Repository->new( work_tree => $deploy_dir );
 
     my $current_branch = _current_branch( $git );
 
     $self->write( $self->build_store );
+    my @files;
+    find( sub {
+        if ( -f ) {
+            my $name = $File::Find::name;
+            $name =~ s/$build_dir/$deploy_dir/;
+            push @files, $name;
+        }
+    }, $build_dir );
 
     if ( !_has_branch( $git, $self->deploy_branch ) ) {
         $git->run( checkout => -b => $self->deploy_branch );
@@ -52,8 +64,8 @@ sub deploy {
         $git->run( checkout => $self->deploy_branch );
     }
 
-    dircopy( $self->build_store->path, $self->deploy_store->path );
-    $git->run( add => $self->deploy_store->path );
+    dircopy( $build_dir, $deploy_dir );
+    $git->run( add => @files );
     $git->run( commit => -m => 'Site update' );
 
     $git->run( checkout => $current_branch );
