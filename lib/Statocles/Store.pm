@@ -8,11 +8,23 @@ use File::Path qw( make_path );
 use File::Slurp qw( write_file );
 use YAML;
 
+=attr path
+
+The path to the directory containing the documents.
+
+=cut
+
 has path => (
     is => 'ro',
     isa => Str,
     required => 1,
 );
+
+=attr documents
+
+All the documents currently read by this store.
+
+=cut
 
 has documents => (
     is => 'rw',
@@ -20,6 +32,12 @@ has documents => (
     lazy => 1,
     builder => 'read_documents',
 );
+
+=method read_documents()
+
+Read the directory C<path> and create the Statocles::Document objects inside.
+
+=cut
 
 sub read_documents {
     my ( $self ) = @_;
@@ -38,6 +56,12 @@ sub read_documents {
     );
     return \@docs;
 }
+
+=method write_page( $path, $html )
+
+Write the page C<html> to the given C<path>.
+
+=cut
 
 sub write_page {
     my ( $self, $path, $html ) = @_;

@@ -3,25 +3,55 @@ package Statocles::Document;
 
 use Statocles::Class;
 
+=attr path
+
+The path to this document.
+
+=cut
+
 has path => (
     is => 'rw',
     isa => Str,
 );
+
+=attr title
+
+The title from this document.
+
+=cut
 
 has title => (
     is => 'rw',
     isa => Str,
 );
 
+=attr author
+
+The author of this document.
+
+=cut
+
 has author => (
     is => 'rw',
     isa => Str,
 );
 
+=attr content
+
+The raw content of this document, in markdown.
+
+=cut
+
 has content => (
     is => 'rw',
     isa => Str,
 );
+
+=method dump
+
+Get this document as a hash reference.
+
+=cut
 
 sub dump {
     my ( $self ) = @_;
