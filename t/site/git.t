@@ -1,5 +1,11 @@
 
 use Statocles::Test;
+BEGIN {
+    my $git_version = `git --version`;
+    plan skip_all => 'Git not installed' unless $git_version;
+    diag "Git version: $git_version";
+};
+
 use Statocles::Site::Git;
 use Statocles::Theme;
 use Statocles::Store;
@@ -12,10 +18,6 @@ my @temp_args;
 if ( $ENV{ KEEP_TEMP } ) {
     @temp_args = ( CLEANUP => 0 );
 }
-
-my $git_version = `git --version`;
-plan skip_all => 'Git not installed' unless $git_version;
-diag "Git version: $git_version";
 
 subtest 'site writes application' => sub {
     my $tmpdir = File::Temp->newdir( @temp_args );
