@@ -4,6 +4,7 @@ package Statocles::Store;
 use Statocles::Class;
 use Statocles::Document;
 use File::Find qw( find );
+use File::Spec::Functions qw( splitdir );
 use File::Path qw( make_path );
 use File::Slurp qw( write_file );
 use YAML;
@@ -49,6 +50,7 @@ sub read_documents {
                 my @yaml_docs = YAML::LoadFile( $_ );
                 my $rel_path = $File::Find::name;
                 $rel_path =~ s/$root_path//;
+                my $doc_path = join "/", splitdir( $rel_path );
                 push @docs, map { Statocles::Document->new( path => $rel_path, %$_ ) } @yaml_docs;
             }
         },
