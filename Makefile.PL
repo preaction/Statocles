@@ -35,9 +35,11 @@ my %WriteMakefileArgs = (
     "File::Path" => 0,
     "File::Slurp" => 0,
     "File::Spec::Functions" => 0,
+    "Git::Repository" => 0,
     "Import::Base" => 0,
     "Mojolicious" => 0,
     "Moo::Lax" => 0,
+    "Pod::Usage::Return" => 0,
     "Text::Markdown" => 0,
     "YAML" => 0,
     "strict" => 0,
@@ -50,7 +52,7 @@ my %WriteMakefileArgs = (
     "Test::Compile" => 0,
     "Test::Most" => 0
   },
-  "VERSION" => "0.001",
+  "VERSION" => "0.002",
   "test" => {
     "TESTS" => "t/*.t t/app/*.t t/page/*.t t/site/*.t"
   }
