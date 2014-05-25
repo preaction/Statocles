@@ -33,6 +33,7 @@ my %WriteMakefileArgs = (
     "File::Copy::Recursive" => 0,
     "File::Find" => 0,
     "File::Path" => 0,
+    "File::Share" => 0,
     "File::Slurp" => 0,
     "File::Spec::Functions" => 0,
     "Git::Repository" => 0,
@@ -52,7 +53,7 @@ my %WriteMakefileArgs = (
     "Test::Compile" => 0,
     "Test::Most" => 0
   },
-  "VERSION" => "0.003",
+  "VERSION" => "0.004",
   "test" => {
     "TESTS" => "t/*.t t/app/*.t t/page/*.t t/site/*.t"
   }

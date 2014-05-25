@@ -19,7 +19,7 @@ my %module_build_args = (
     "Doug Bell <preaction\@cpan.org>"
   ],
   "dist_name" => "Statocles",
-  "dist_version" => "0.003",
+  "dist_version" => "0.004",
   "license" => "perl",
   "module_name" => "Statocles",
   "recommends" => {},
@@ -30,6 +30,7 @@ my %module_build_args = (
     "File::Copy::Recursive" => 0,
     "File::Find" => 0,
     "File::Path" => 0,
+    "File::Share" => 0,
     "File::Slurp" => 0,
     "File::Spec::Functions" => 0,
     "Git::Repository" => 0,
