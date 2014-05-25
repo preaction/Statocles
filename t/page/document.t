@@ -7,6 +7,7 @@ use Statocles::Page::Document;
 use Text::Markdown;
 
 my $doc = Statocles::Document->new(
+    path => '/path/to/document.yml',
     title => 'Page Title',
     author => 'preaction',
     content => <<'MARKDOWN',
@@ -33,35 +34,41 @@ subtest 'simple page (default template)' => sub {
 subtest 'template string' => sub {
     my $page = Statocles::Page::Document->new(
         document => $doc,
-        template => '<%= $title %> <%= $author %> <%= $content %>',
+        path => '/path/to/page.html',
+        template => '<%= $path %> <%= $title %> <%= $author %> <%= $content %>',
     );
 
     my $output = $page->render;
-    my $expect = join " ", $doc->title, $doc->author, $md->markdown( $doc->content ) . "\n\n";
+    my $expect = join " ", $page->path, $doc->title, $doc->author,
+        $md->markdown( $doc->content ) . "\n\n";
     eq_or_diff $output, $expect;
 };
 
 subtest 'layout' => sub {
     my $page = Statocles::Page::Document->new(
         document => $doc,
-        template => '<%= $title %> <%= $author %> <%= $content %>',
+        path => '/path/to/page.html',
+        template => '<%= $path %> <%= $title %> <%= $author %> <%= $content %>',
         layout => 'HEAD <%= $content %> FOOT',
     );
 
     my $output = $page->render;
-    my $expect = join " ", 'HEAD', $doc->title, $doc->author, $md->markdown( $doc->content ) . "\n", 'FOOT' . "\n";
+    my $expect = join " ", 'HEAD', $page->path, $doc->title, $doc->author,
+        $md->markdown( $doc->content ) . "\n", 'FOOT' . "\n";
     eq_or_diff $output, $expect;
 };
 
 subtest 'extra args' => sub {
     my $page = Statocles::Page::Document->new(
         document => $doc,
-        template => '<%= $site %> <%= $title %> <%= $author %> <%= $content %>',
+        path => '/path/to/page.html',
+        template => '<%= $site %> <%= $path %> <%= $title %> <%= $author %> <%= $content %>',
         layout => '<%= $site %> HEAD <%= $content %> FOOT',
     );
 
     my $output = $page->render( site => 'hello', title => 'DOES NOT OVERRIDE', );
-    my $expect = join " ", 'hello', 'HEAD', 'hello', $doc->title, $doc->author, $md->markdown( $doc->content ) . "\n", 'FOOT' . "\n";
+    my $expect = join " ", 'hello', 'HEAD', 'hello', $page->path, $doc->title,
+        $doc->author, $md->markdown( $doc->content ) . "\n", 'FOOT' . "\n";
     eq_or_diff $output, $expect;
 };
 

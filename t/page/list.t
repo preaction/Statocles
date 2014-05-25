@@ -33,7 +33,7 @@ subtest 'simple list (default templates)' => sub {
 
     my $html =  join( "\n",
                 map {
-                    join( " ", $_->document->title, $_->document->author, $_->content ),
+                    join( " ", $_->path, $_->document->title, $_->document->author, $_->content ),
                 }
                 @pages
             ) . "\n\n";
@@ -49,14 +49,14 @@ subtest 'extra args' => sub {
         template => <<'ENDTEMPLATE',
 <%= $site %>
 % for my $page ( @$pages ) {
-<%= $page->{title} %> <%= $page->{author} %> <%= $page->{content} %>
+<%= $page->{path} %> <%= $page->{title} %> <%= $page->{author} %> <%= $page->{content} %>
 % }
 ENDTEMPLATE
     );
 
     my $html    = "hello hello\n"
                 . join( "\n",
-                    map { join( " ", $_->document->title, $_->document->author, $_->content ), }
+                    map { join( " ", $_->path, $_->document->title, $_->document->author, $_->content ), }
                     @pages
                 ) . "\n\n";
 

@@ -52,10 +52,12 @@ sub render {
         %args,
         %{$self->document},
         content => $self->content,
+        path => $self->path,
     );
     return $self->layout->render(
         %args,
         content => $content,
+        path => $self->path,
     );
 }
 

@@ -28,7 +28,7 @@ has '+template' => (
         Statocles::Template->new(
             content => <<'ENDTEMPLATE'
 % for my $page ( @$pages ) {
-<%= $page->{title} %> <%= $page->{author} %> <%= $page->{content} %>
+<%= $page->{path} %> <%= $page->{title} %> <%= $page->{author} %> <%= $page->{content} %>
 % }
 ENDTEMPLATE
         );
@@ -46,7 +46,7 @@ sub render {
     my $content = $self->template->render(
         %args,
         pages => [
-            map { +{ %{ $_->document }, content => $_->content } }
+            map { +{ %{ $_->document }, content => $_->content, path => $_->path } }
             @{ $self->pages }
         ],
     );
