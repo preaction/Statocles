@@ -6,6 +6,7 @@ use Cwd qw( getcwd );
 my $SHARE_DIR = catdir( __DIR__, 'share' );
 
 subtest 'getting templates' => sub {
+    my $line = __LINE__ + 1;
     my $theme = Statocles::Theme->new(
         templates => {
             blog => {
@@ -18,6 +19,7 @@ subtest 'getting templates' => sub {
 
     cmp_deeply $theme->template( blog => 'post' ),
         Statocles::Template->new(
+            path => 't/theme.t line ' . $line,
             content => '<% $content %>',
         );
 };

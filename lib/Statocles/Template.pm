@@ -33,6 +33,26 @@ has path => (
     isa => Str,
 );
 
+=method BUILDARGS( )
+
+Set the default path to something useful for in-memory templates.
+
+=cut
+
+around BUILDARGS => sub {
+    my ( $orig, $self, @args ) = @_;
+    my $args = $self->$orig( @args );
+    if ( !$args->{path} ) {
+        my ( $i, $caller_class ) = ( 0, (caller 0)[0] );
+        while ( $caller_class->isa( 'Statocles::Template' ) || $caller_class->isa( 'Sub::Quote' ) ) {
+            $i++;
+            $caller_class = (caller $i)[0];
+        }
+        $args->{path} = join " line ", (caller($i))[1,2];
+    }
+    return $args;
+};
+
 =method render( %args )
 
 Render this template, passing in %args. Each key in %args will be available as
