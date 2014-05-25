@@ -1,4 +1,5 @@
 package Statocles::Site::Git;
+# ABSTRACT: A git-based site
 
 use Statocles::Class;
 extends 'Statocles::Site';
