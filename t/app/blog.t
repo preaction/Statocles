@@ -43,6 +43,7 @@ subtest 'blog post pages' => sub {
     my @doc_paths = (
         catfile( '', '2014', '04', '23', 'slug.yml' ),
         catfile( '', '2014', '04', '30', 'plug.yml' ),
+        catfile( '', '2014', '05', '22', '(regex)[name].file.yml' ),
     );
     my @pages;
     for my $doc_path ( @doc_paths ) {

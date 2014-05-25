@@ -49,7 +49,7 @@ sub read_documents {
             if ( /[.]ya?ml$/ ) {
                 my @yaml_docs = YAML::LoadFile( $_ );
                 my $rel_path = $File::Find::name;
-                $rel_path =~ s/$root_path//;
+                $rel_path =~ s/\Q$root_path//;
                 my $doc_path = join "/", splitdir( $rel_path );
                 push @docs, map { Statocles::Document->new( path => $rel_path, %$_ ) } @yaml_docs;
             }
