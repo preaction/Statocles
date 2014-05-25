@@ -1,6 +1,9 @@
 package Statocles;
 # ABSTRACT: A static site generator
 
+# This module exists for both documentation and to help File::Share
+# find the right share dir
+
 1;
 __END__
 

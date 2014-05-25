@@ -74,6 +74,14 @@ subtest 'templates from directory' => sub {
 
         chdir $cwd;
     };
+
+    subtest 'default Statocles theme' => sub {
+        my $theme = Statocles::Theme->new(
+            source_dir => '::default',
+        );
+        my $theme_path = catdir(qw( theme default ));
+        like $theme->source_dir, qr{$theme_path$}
+    };
 };
 
 done_testing;

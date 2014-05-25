@@ -4,10 +4,14 @@ package Statocles::Theme;
 use Statocles::Class;
 use File::Find qw( find );
 use File::Slurp qw( read_file );
+use File::Share qw( dist_dir );
 
 =attr source_dir
 
 The source directory for this theme.
+
+If the source_dir begins with ::, will pull one of the Statocles default
+themes from the Statocles share directory.
 
 =cut
 
@@ -28,6 +32,22 @@ has templates => (
     lazy => 1,
     builder => 'read',
 );
+
+=method BUILDARGS
+
+Handle the source_dir :: share theme.
+
+=cut
+
+around BUILDARGS => sub {
+    my ( $orig, $self, @args ) = @_;
+    my $args = $self->$orig( @args );
+    if ( $args->{source_dir} =~ /^::/ ) {
+        my $name = substr $args->{source_dir}, 2;
+        $args->{source_dir} = catdir( dist_dir( 'Statocles' ), 'theme', $name );
+    }
+    return $args;
+};
 
 =method read()
 

@@ -7,6 +7,7 @@ use base 'Import::Base';
 
 sub modules {
     return (
+        Statocles => [],
         strict => [],
         warnings => [],
         feature => [qw( :5.10 )],
