@@ -58,19 +58,30 @@ sub deploy {
     }, $build_dir );
 
     if ( !_has_branch( $git, $self->deploy_branch ) ) {
-        $git->run( checkout => -b => $self->deploy_branch );
+        _git_run( $git, checkout => -b => $self->deploy_branch );
     }
     else {
-        $git->run( checkout => $self->deploy_branch );
+        _git_run( $git, checkout => $self->deploy_branch );
     }
 
     dircopy( $build_dir, $deploy_dir );
-    $git->run( add => @files );
-    $git->run( commit => -m => 'Site update' );
-
-    $git->run( checkout => $current_branch );
+    _git_run( $git, add => @files );
+    _git_run( $git, commit => -m => 'Site update' );
+    _git_run( $git, checkout => $current_branch );
 
     return;
+}
+
+sub _git_run {
+    my ( $git, @args ) = @_;
+    my $cmd = $git->command( @args );
+    my $stdout = readline $cmd->stdout;
+    my $stderr = readline $cmd->stderr;
+    $cmd->close;
+    if ( my $exit = $cmd->exit ) {
+        warn "git $args[0] exited with $exit\n-- STDOUT --\n$stdout\n-- STDERR --\n$stderr\n";
+    }
+    return $cmd->exit;
 }
 
 sub _current_branch {

@@ -19,6 +19,8 @@ if ( $ENV{ KEEP_TEMP } ) {
     @temp_args = ( CLEANUP => 0 );
 }
 
+*_git_run = \&Statocles::Site::Git::_git_run;
+
 subtest 'site writes application' => sub {
     my $tmpdir = File::Temp->newdir( @temp_args );
     diag "TMP: " . $tmpdir->dirname if @temp_args;
@@ -46,7 +48,7 @@ subtest 'site writes application' => sub {
             ok !-f catfile( $tmpdir, $page->path ), 'file is not in master branch';
         }
 
-        $git->run( checkout => $site->deploy_branch );
+        _git_run( $git, checkout => $site->deploy_branch );
 
         my $log = $git->run( log => -u => -n => 1 );
         like $log, qr{Site update};
@@ -55,7 +57,7 @@ subtest 'site writes application' => sub {
         for my $page ( $site->app( 'blog' )->pages ) {
             subtest 'page content' => test_content( $tmpdir, $site, $page, '.' => $page->path );
         }
-        $git->run( checkout => 'master' );
+        _git_run( $git, checkout => 'master' );
     };
 };
 
