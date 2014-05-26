@@ -32,7 +32,7 @@ subtest 'read documents' => sub {
     my $store = Statocles::Store->new(
         path => catdir( $SHARE_DIR, 'blog' ),
     );
-    cmp_deeply $store->documents, \@exp_docs;
+    cmp_deeply $store->documents, bag( @exp_docs );
 };
 
 subtest 'read with relative directory' => sub {
@@ -41,7 +41,7 @@ subtest 'read with relative directory' => sub {
     my $store = Statocles::Store->new(
         path => 'blog',
     );
-    cmp_deeply $store->documents, \@exp_docs;
+    cmp_deeply $store->documents, bag( @exp_docs );
     chdir $cwd;
 };
 
@@ -71,7 +71,7 @@ subtest 'path that has regex-special characters inside' => sub {
     my $store = Statocles::Store->new(
         path => $baddir,
     );
-    cmp_deeply $store->documents, \@exp_docs;
+    cmp_deeply $store->documents, bag( @exp_docs );
 };
 
 done_testing;

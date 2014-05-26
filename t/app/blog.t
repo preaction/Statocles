@@ -67,7 +67,7 @@ subtest 'blog post pages' => sub {
 
     cmp_deeply
         [ $app->post_pages ],
-        \@pages;
+        bag( @pages );
 };
 
 subtest 'index page' => sub {
