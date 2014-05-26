@@ -17,7 +17,7 @@ The directory of the Git repository to deploy to.
 has deploy_dir => (
     is => 'ro',
     isa => Str,
-    default => '.',
+    default => sub { '.' },
 );
 
 =attr deploy_branch
@@ -29,7 +29,7 @@ The Git branch to deploy to.
 has deploy_branch => (
     is => 'ro',
     isa => Str,
-    default => 'master',
+    default => sub { 'master' },
 );
 
 =method deploy()

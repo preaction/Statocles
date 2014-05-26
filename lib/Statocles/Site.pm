@@ -36,7 +36,7 @@ method will be called to get the index page.
 has index => (
     is => 'ro',
     isa => Str,
-    default => '',
+    default => sub { '' },
 );
 
 =attr nav
