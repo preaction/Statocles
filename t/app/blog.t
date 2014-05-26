@@ -41,19 +41,18 @@ my @got_pages = $app->pages;
 
 subtest 'blog post pages' => sub {
     my @doc_paths = (
-        catfile( '', '2014', '04', '23', 'slug.yml' ),
-        catfile( '', '2014', '04', '30', 'plug.yml' ),
-        catfile( '', '2014', '05', '22', '(regex)[name].file.yml' ),
+        [ '2014', '04', '23', 'slug.yml' ],
+        [ '2014', '04', '30', 'plug.yml' ],
+        [ '2014', '05', '22', '(regex)[name].file.yml' ],
     );
     my @pages;
     for my $doc_path ( @doc_paths ) {
         my $doc = Statocles::Document->new(
-            path => $doc_path,
-            %{ YAML::LoadFile( catfile( $SHARE_DIR, 'blog', $doc_path ) ) },
+            path => catfile( '', @$doc_path ),
+            %{ YAML::LoadFile( catfile( $SHARE_DIR, 'blog', @$doc_path ) ) },
         );
 
-        my $page_path = catfile( '/', 'blog', $doc_path );
-        $page_path =~ s{/{2,}}{/}g;
+        my $page_path = join '/', '', 'blog', @$doc_path;
         $page_path =~ s/[.]yml$/.html/;
 
         my $page = Statocles::Page::Document->new(
