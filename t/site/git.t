@@ -14,8 +14,11 @@ use File::Copy::Recursive qw( dircopy );
 
 my $SHARE_DIR = catdir( __DIR__, '..', 'share' );
 
+$ENV{GIT_AUTHOR_NAME} = 'preaction';
+$ENV{GIT_AUTHOR_EMAIL} = 'preaction@example.com';
+
 my @temp_args;
-if ( $ENV{ KEEP_TEMP } ) {
+if ( $ENV{ NO_CLEANUP } ) {
     @temp_args = ( CLEANUP => 0 );
 }
 
