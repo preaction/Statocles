@@ -42,7 +42,7 @@ Handle the source_dir :: share theme.
 around BUILDARGS => sub {
     my ( $orig, $self, @args ) = @_;
     my $args = $self->$orig( @args );
-    if ( $args->{source_dir} =~ /^::/ ) {
+    if ( $args->{source_dir} && $args->{source_dir} =~ /^::/ ) {
         my $name = substr $args->{source_dir}, 2;
         $args->{source_dir} = catdir( dist_dir( 'Statocles' ), 'theme', $name );
     }
