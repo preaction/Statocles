@@ -80,7 +80,7 @@ subtest 'templates from directory' => sub {
             source_dir => '::default',
         );
         my $theme_path = catdir(qw( theme default ));
-        like $theme->source_dir, qr{$theme_path$}
+        like $theme->source_dir, qr{\Q$theme_path\E$}
     };
 };
 
