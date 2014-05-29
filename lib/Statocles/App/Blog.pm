@@ -84,6 +84,9 @@ ENDHELP
         );
         my $full_path = $self->source->write_document( $path => \%doc );
         print "New post at: $full_path\n";
+        if ( $ENV{EDITOR} ) {
+            system $ENV{EDITOR}, $full_path;
+        }
     }
     return 0;
 }
