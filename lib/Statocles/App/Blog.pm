@@ -51,13 +51,39 @@ users get exactly what they need to run.
 
 =cut
 
+our $default_post = {
+    author => '',
+    content => <<'ENDCONTENT',
+Markdown content goes here. Don't forget to maintain the indentation.
+ENDCONTENT
+};
+
 sub command {
     my ( $self, $name, @argv ) = @_;
     if ( $argv[0] eq 'help' ) {
         print <<ENDHELP;
 $name help -- This help file
-$name post -- Create a new blog post
+$name post <title> -- Create a new blog post with the given title
 ENDHELP
+    }
+    elsif ( $argv[0] eq 'post' ) {
+        my $title = join " ", @argv[1..$#argv];
+        my $slug = lc $title;
+        $slug =~ s/\s+/-/g;
+        my ( undef, undef, undef, $day, $mon, $year ) = localtime;
+        my @parts = (
+            sprintf( '%04i', $year + 1900 ),
+            sprintf( '%02i', $mon + 1 ),
+            sprintf( '%02i', $day ),
+            "$slug.yml",
+        );
+        my $path = catfile( @parts );
+        my %doc = (
+            %$default_post,
+            title => $title,
+        );
+        my $full_path = $self->source->write_document( $path => \%doc );
+        print "New post at: $full_path\n";
     }
     return 0;
 }

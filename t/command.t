@@ -164,7 +164,7 @@ subtest 'delegate to app command' => sub {
     my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
     ok !$err, 'blog help is on stdout';
     is $exit, 0;
-    like $out, qr{blog post -- Create a new blog post},
+    like $out, qr{blog post <title> -- Create a new blog post},
         'contains blog help information';
 };
 

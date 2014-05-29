@@ -83,13 +83,56 @@ subtest 'index page' => sub {
 };
 
 subtest 'commands' => sub {
+    # We need an app we can edit
+    my $tmpdir = File::Temp->newdir;
+    my $app = Statocles::App::Blog->new(
+        source => Statocles::Store->new( path => catdir( $tmpdir->dirname, 'blog' ) ),
+        url_root => '/blog',
+        theme => $theme,
+    );
+
     subtest 'help' => sub {
         my @args = qw( blog help );
         my ( $out, $err, $exit ) = capture { $app->command( @args ) };
         ok !$err, 'blog help is on stdout';
         is $exit, 0;
-        like $out, qr{blog post -- Create a new blog post},
+        like $out, qr{blog post <title> -- Create a new blog post},
             'contains blog help information';
+    };
+
+    subtest 'post' => sub {
+        subtest 'create new post' => sub {
+            local $ENV{EDITOR}; # We can't very well open vim...
+            my ( undef, undef, undef, $day, $mon, $year ) = localtime;
+            my $doc_path = catfile(
+                $tmpdir->dirname,
+                'blog',
+                sprintf( '%04i', $year + 1900 ),
+                sprintf( '%02i', $mon + 1 ),
+                sprintf( '%02i', $day ),
+                'this-is-a-title.yml',
+            );
+
+            subtest 'run the command' => sub {
+                my @args = qw( blog post This is a Title );
+                my ( $out, $err, $exit ) = capture { $app->command( @args ) };
+                ok !$err, 'nothing on stdout';
+                is $exit, 0;
+                like $out, qr{New post at: \Q$doc_path},
+                    'contains blog post document path';
+            };
+
+            subtest 'check the generated document' => sub {
+                my $doc = YAML::LoadFile( $doc_path );
+                cmp_deeply $doc, {
+                    title => 'This is a Title',
+                    author => '',
+                    content => <<'ENDMARKDOWN',
+Markdown content goes here. Don't forget to maintain the indentation.
+ENDMARKDOWN
+                };
+            };
+        };
     };
 };
 
