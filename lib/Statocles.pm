@@ -27,7 +27,7 @@ on the bottom, like so:
     
     This is a paragraph
 
-This is the same format that L<http://jekyllrb.com|Jekyll> uses.
+This is the same format that L<Jekyll|http://jekyllrb.com> uses.
 
 =head2 PAGES
 
