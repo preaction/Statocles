@@ -126,7 +126,7 @@ sub index {
         path => join( "/", $self->url_root, 'index.html' ),
         template => $self->theme->template( blog => 'index' ),
         layout => $self->theme->template( site => 'layout' ),
-        pages => [ $self->post_pages ],
+        pages => [ sort { $b->path cmp $a->path } $self->post_pages ],
     );
 }
 

@@ -76,7 +76,8 @@ subtest 'index page' => sub {
         path => '/blog/index.html',
         template => $theme->template( blog => 'index' ),
         layout => $theme->template( site => 'layout' ),
-        pages => [ $app->post_pages ],
+        # Sorting by path just happens to also sort by date
+        pages => [ sort { $b->path cmp $a->path } $app->post_pages ],
     );
 
     cmp_deeply $app->index, $page;
