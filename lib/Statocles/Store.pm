@@ -61,7 +61,8 @@ sub read_documents {
 
 =method write_document( $path, $doc )
 
-Write a document to the store.
+Write a document to the store. Returns the full path to the newly-updated
+document.
 
 =cut
 
@@ -74,7 +75,7 @@ sub write_document {
     my ( $vol, $dirs, $file ) = splitpath( $full_path );
     make_path( catpath( $vol, $dirs ) );
     YAML::DumpFile( $full_path => $doc );
-    return;
+    return $full_path;
 }
 
 =method write_page( $path, $html )

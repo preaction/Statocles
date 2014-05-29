@@ -59,13 +59,15 @@ subtest 'write document' => sub {
             qr{Cannot write document '$path': Path must not be absolute};
     };
     subtest 'simple path' => sub {
-        $store->write_document( 'example.yml' => $doc  );
-        cmp_deeply YAML::LoadFile( catfile( $tmpdir->dirname, 'example.yml' ) ), $doc;
+        my $full_path = $store->write_document( 'example.yml' => $doc  );
+        is $full_path, catfile( $store->path, 'example.yml' );
+        cmp_deeply YAML::LoadFile( $full_path ), $doc;
     };
     subtest 'make the directories if necessary' => sub {
         my $path = catfile(qw( blog 2014 05 28 example.yml ));
-        $store->write_document( $path => $doc );
-        cmp_deeply YAML::LoadFile( catfile( $tmpdir->dirname, $path ) ), $doc;
+        my $full_path = $store->write_document( $path => $doc );
+        is $full_path, catfile( $tmpdir->dirname, $path );
+        cmp_deeply YAML::LoadFile( $full_path ), $doc;
     };
 };
 
