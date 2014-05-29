@@ -52,7 +52,18 @@ sub main {
 
     if ( @argv == 1 ) {
         my $method = $argv[0];
-        $cmd->site->$method;
+        if ( grep { $_ eq $method } qw( build deploy ) ) {
+            $cmd->site->$method;
+        }
+        elsif ( $method eq 'apps' ) {
+            my $apps = $cmd->site->apps;
+            for my $app_name ( keys %{ $apps } ) {
+                my $app = $apps->{$app_name};
+                my $root = $app->url_root;
+                my $class = ref $app;
+                print "$app_name ($root -- $class)\n";
+            }
+        }
     }
 
     return 0;

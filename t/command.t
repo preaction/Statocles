@@ -144,4 +144,16 @@ subtest 'deploy site' => sub {
     );
 };
 
+subtest 'get the app list' => sub {
+    my @args = (
+        '--config' => $config_fn,
+        'apps',
+    );
+    my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+    ok !$err, 'app list is on stdout';
+    is $exit, 0;
+    is $out, "blog (/blog -- Statocles::App::Blog)\n",
+        'contains app name, url root, and app class';
+};
+
 done_testing;

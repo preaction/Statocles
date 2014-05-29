@@ -20,8 +20,9 @@ __END__
 
 The command to run. Available commands:
 
-    build - Build the site
-    deploy - Deploy the site
+    build       - Build the site
+    deploy      - Deploy the site
+    apps        - List the applications in this site
 
 =head1 OPTIONS
 
