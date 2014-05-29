@@ -4,7 +4,7 @@ package Statocles::Store;
 use Statocles::Class;
 use Statocles::Document;
 use File::Find qw( find );
-use File::Spec::Functions qw( splitdir );
+use File::Spec::Functions qw( file_name_is_absolute splitdir );
 use File::Path qw( make_path );
 use File::Slurp qw( write_file );
 use YAML;
@@ -57,6 +57,24 @@ sub read_documents {
         $root_path,
     );
     return \@docs;
+}
+
+=method write_document( $path, $doc )
+
+Write a document to the store.
+
+=cut
+
+sub write_document {
+    my ( $self, $path, $doc ) = @_;
+    if ( file_name_is_absolute( $path ) ) {
+        die "Cannot write document '$path': Path must not be absolute";
+    }
+    my $full_path = catfile( $self->path, $path );
+    my ( $vol, $dirs, $file ) = splitpath( $full_path );
+    make_path( catpath( $vol, $dirs ) );
+    YAML::DumpFile( $full_path => $doc );
+    return;
 }
 
 =method write_page( $path, $html )

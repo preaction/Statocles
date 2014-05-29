@@ -45,6 +45,30 @@ subtest 'read with relative directory' => sub {
     chdir $cwd;
 };
 
+subtest 'write document' => sub {
+    my $tmpdir = File::Temp->newdir;
+    my $store = Statocles::Store->new(
+        path => $tmpdir->dirname,
+    );
+    my $doc = {
+        foo => 'bar',
+    };
+    subtest 'disallow absolute paths' => sub {
+        my $path = catfile( rootdir(), 'example.yml' );
+        throws_ok { $store->write_document( $path => $doc ) }
+            qr{Cannot write document '$path': Path must not be absolute};
+    };
+    subtest 'simple path' => sub {
+        $store->write_document( 'example.yml' => $doc  );
+        cmp_deeply YAML::LoadFile( catfile( $tmpdir->dirname, 'example.yml' ) ), $doc;
+    };
+    subtest 'make the directories if necessary' => sub {
+        my $path = catfile(qw( blog 2014 05 28 example.yml ));
+        $store->write_document( $path => $doc );
+        cmp_deeply YAML::LoadFile( catfile( $tmpdir->dirname, $path ) ), $doc;
+    };
+};
+
 subtest 'write pages' => sub {
     my $tmpdir = File::Temp->newdir;
     my $store = Statocles::Store->new(
