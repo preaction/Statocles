@@ -44,6 +44,24 @@ has theme => (
     required => 1,
 );
 
+=method command( app_name, args )
+
+Run a command on this app. The app name is used to build the help, so
+users get exactly what they need to run.
+
+=cut
+
+sub command {
+    my ( $self, $name, @argv ) = @_;
+    if ( $argv[0] eq 'help' ) {
+        print <<ENDHELP;
+$name help -- This help file
+$name post -- Create a new blog post
+ENDHELP
+    }
+    return 0;
+}
+
 =method post_pages()
 
 Get the individual post Statocles::Page objects.

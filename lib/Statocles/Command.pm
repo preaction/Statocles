@@ -65,6 +65,10 @@ sub main {
             }
         }
     }
+    else {
+        my $app_name = $argv[0];
+        $cmd->site->apps->{ $app_name }->command( @argv );
+    }
 
     return 0;
 }

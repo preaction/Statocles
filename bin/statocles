@@ -23,6 +23,7 @@ The command to run. Available commands:
     build       - Build the site
     deploy      - Deploy the site
     apps        - List the applications in this site
+    <app> help  - Get help for a specific application
 
 =head1 OPTIONS
 

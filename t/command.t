@@ -156,4 +156,16 @@ subtest 'get the app list' => sub {
         'contains app name, url root, and app class';
 };
 
+subtest 'delegate to app command' => sub {
+    my @args = (
+        '--config' => $config_fn,
+        'blog' => 'help',
+    );
+    my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+    ok !$err, 'blog help is on stdout';
+    is $exit, 0;
+    like $out, qr{blog post -- Create a new blog post},
+        'contains blog help information';
+};
+
 done_testing;

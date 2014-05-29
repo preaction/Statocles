@@ -1,5 +1,6 @@
 
 use Statocles::Test;
+use Capture::Tiny qw( capture );
 use Statocles::Theme;
 use Statocles::Store;
 use Statocles::App::Blog;
@@ -79,6 +80,17 @@ subtest 'index page' => sub {
     );
 
     cmp_deeply $app->index, $page;
+};
+
+subtest 'commands' => sub {
+    subtest 'help' => sub {
+        my @args = qw( blog help );
+        my ( $out, $err, $exit ) = capture { $app->command( @args ) };
+        ok !$err, 'blog help is on stdout';
+        is $exit, 0;
+        like $out, qr{blog post -- Create a new blog post},
+            'contains blog help information';
+    };
 };
 
 done_testing;
