@@ -47,11 +47,11 @@ sub read_documents {
     find(
         sub {
             if ( /[.]ya?ml$/ ) {
-                my @yaml_docs = YAML::LoadFile( $_ );
+                my $data = $self->read_document( $_ );
                 my $rel_path = $File::Find::name;
                 $rel_path =~ s/\Q$root_path//;
                 my $doc_path = join "/", splitdir( $rel_path );
-                push @docs, map { Statocles::Document->new( path => $rel_path, %$_ ) } @yaml_docs;
+                push @docs, Statocles::Document->new( path => $rel_path, %$data );
             }
         },
         $root_path,
@@ -59,11 +59,52 @@ sub read_documents {
     return \@docs;
 }
 
+=method read_document( path )
+
+Read a single document in either pure YAML or combined YAML/Markdown
+(Frontmatter) format and return a datastructure suitable to be given to
+C<Statocles::Document::new>.
+
+=cut
+
+sub read_document {
+    my ( $self, $path ) = @_;
+    open my $fh, '<', $path or die "Could not open '$path' for reading: $!\n";
+    my $doc;
+    my $buffer = '';
+    while ( my $line = <$fh> ) {
+        if ( !$doc ) { # Building YAML
+            if ( $line =~ /^---/ && $buffer ) {
+                $doc = YAML::Load( $buffer );
+                $buffer = '';
+            }
+            else {
+                $buffer .= $line;
+            }
+        }
+        else { # Building Markdown
+            $buffer .= $line;
+        }
+    }
+    close $fh;
+
+    # Clear the remaining buffer
+    if ( !$doc && $buffer ) { # Must be only YAML
+        $doc = YAML::Load( $buffer );
+    }
+    elsif ( !$doc->{content} && $buffer ) {
+        $doc->{content} = $buffer;
+    }
+
+    return $doc;
+}
+
 =method write_document( $path, $doc )
 
 Write a document to the store. Returns the full path to the newly-updated
 document.
 
+The document is written in Frontmatter format.
 =cut
 
 sub write_document {
@@ -74,7 +115,16 @@ sub write_document {
     my $full_path = catfile( $self->path, $path );
     my ( $vol, $dirs, $file ) = splitpath( $full_path );
     make_path( catpath( $vol, $dirs ) );
-    YAML::DumpFile( $full_path => $doc );
+
+    $doc = { %{ $doc } }; # Shallow copy for safety
+    my $content = delete $doc->{content};
+    my $header = YAML::Dump( $doc );
+    chomp $header;
+
+    open my $fh, '>', $full_path or die "Could not open '$full_path' for writing: $!";
+    print $fh join "\n", $header, '---', $content;
+    close $fh;
+
     return $full_path;
 }
 
@@ -101,4 +151,17 @@ __END__
 A Statocles::Store reads and writes Documents and Pages.
 
 This class handles the parsing and inflating of Document objects.
+
+=head2 Frontmatter Document Format
+
+Documents are formatted with a YAML document on top, and Markdown content
+on the bottom, like so:
+
+    ---
+    title: This is a title
+    author: preaction
+    ---
+    # This is the markdown content
+    
+    This is a paragraph
 

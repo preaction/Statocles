@@ -50,7 +50,7 @@ subtest 'blog post pages' => sub {
     for my $doc_path ( @doc_paths ) {
         my $doc = Statocles::Document->new(
             path => catfile( '', @$doc_path ),
-            %{ YAML::LoadFile( catfile( $SHARE_DIR, 'blog', @$doc_path ) ) },
+            %{ $app->source->read_document( catfile( $SHARE_DIR, 'blog', @$doc_path ) ) },
         );
 
         my $page_path = join '/', '', 'blog', @$doc_path;
@@ -123,14 +123,21 @@ subtest 'commands' => sub {
             };
 
             subtest 'check the generated document' => sub {
-                my $doc = YAML::LoadFile( $doc_path );
+                my $doc = $app->source->read_document( $doc_path );
                 cmp_deeply $doc, {
                     title => 'This is a Title',
                     author => '',
                     content => <<'ENDMARKDOWN',
-Markdown content goes here. Don't forget to maintain the indentation.
+Markdown content goes here.
 ENDMARKDOWN
                 };
+                eq_or_diff scalar read_file( $doc_path ), <<'ENDCONTENT';
+---
+author: ''
+title: This is a Title
+---
+Markdown content goes here.
+ENDCONTENT
             };
         };
     };

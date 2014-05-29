@@ -54,7 +54,7 @@ users get exactly what they need to run.
 our $default_post = {
     author => '',
     content => <<'ENDCONTENT',
-Markdown content goes here. Don't forget to maintain the indentation.
+Markdown content goes here.
 ENDCONTENT
 };
 
