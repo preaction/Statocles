@@ -11,7 +11,7 @@ sub modules {
     return (
         @modules,
         'Moo::Lax',
-        'MooX::Types::MooseLike::Base' => [qw( :all )],
+        'Types::Standard' => [qw( :all )],
     );
 }
 
