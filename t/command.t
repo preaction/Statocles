@@ -1,6 +1,6 @@
 
 use Statocles::Test;
-my $SHARE_DIR = catdir( __DIR__, 'share' );
+my $SHARE_DIR = path( __DIR__, 'share' );
 use FindBin;
 use Capture::Tiny qw( capture );
 use Statocles::Command;
@@ -9,24 +9,24 @@ use YAML;
 
 # Build a config file so we can test config loading and still use
 # temporary directories
-my $tmp = File::Temp->newdir;
+my $tmp = tempdir;
 my $config = {
     theme => {
         class => 'Statocles::Theme',
         args => {
-            source_dir => catdir( $SHARE_DIR, 'theme' ),
+            source_dir => $SHARE_DIR->child( 'theme' ),
         },
     },
     build => {
         class => 'Statocles::Store',
         args => {
-            path => catdir( $tmp->dirname, 'build_site' ),
+            path => $tmp->child( 'build_site' ),
         },
     },
     deploy => {
         class => 'Statocles::Store',
         args => {
-            path => catdir( $tmp->dirname, 'deploy_site' ),
+            path => $tmp->child( 'deploy_site' ),
         },
     },
     blog => {
@@ -35,7 +35,7 @@ my $config = {
             source => {
                 '$class' => 'Statocles::Store',
                 '$args' => {
-                    path => catdir( $SHARE_DIR, 'blog' ),
+                    path => $SHARE_DIR->child( 'blog' ),
                 },
             },
             url_root => '/blog',
@@ -57,13 +57,13 @@ my $config = {
     build_foo => {
         class => 'Statocles::Store',
         args => {
-            path => catdir( $tmp->dirname, 'build_foo' ),
+            path => $tmp->child( 'build_foo' ),
         },
     },
     deploy_foo => {
         class => 'Statocles::Store',
         args => {
-            path => catdir( $tmp->dirname, 'deploy_foo' ),
+            path => $tmp->child( 'deploy_foo' ),
         },
     },
     site_foo => {
@@ -79,11 +79,11 @@ my $config = {
         },
     },
 };
-my $config_fn = catfile( $tmp->dirname, 'site.yml' );
+my $config_fn = $tmp->child( 'site.yml' );
 YAML::DumpFile( $config_fn, $config );
 
 subtest 'get help' => sub {
-    $0 = "$FindBin::Bin/../bin/statocles";
+    $0 = path( $FindBin::Bin )->parent->child( 'bin', 'statocles' )->stringify;
     my ( $out, $err, $exit ) = capture { Statocles::Command->main( '-h' ) };
     ok !$err, 'help output is on stdout';
     like $out, qr{statocles -h},
@@ -105,16 +105,15 @@ sub test_site {
         my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
         is $exit, 0, 'exit code';
         ok !$err, 'no errors/warnings' or diag $err;
-        ok -d $root, 'root dir exists';
-        ok -f catfile( $root, 'index.html' ), 'index file exists';
-        ok -f catfile( $root, 'blog', '2014', '04', '23', 'slug.html' );
-        ok -f catfile( $root, 'blog', '2014', '04', '30', 'plug.html' );
+        ok $root->child( 'index.html' )->exists, 'index file exists';
+        ok $root->child( 'blog', '2014', '04', '23', 'slug.html' )->exists;
+        ok $root->child( 'blog', '2014', '04', '30', 'plug.html' )->exists;
     };
 }
 
 subtest 'build site' => sub {
     my @args = (
-        '--config' => $config_fn,
+        '--config' => "$config_fn",
         'build',
     );
     subtest 'default site' => test_site(
@@ -130,7 +129,7 @@ subtest 'build site' => sub {
 
 subtest 'deploy site' => sub {
     my @args = (
-        '--config' => $config_fn,
+        '--config' => "$config_fn",
         'deploy',
     );
     subtest 'default site' => test_site(
@@ -146,7 +145,7 @@ subtest 'deploy site' => sub {
 
 subtest 'get the app list' => sub {
     my @args = (
-        '--config' => $config_fn,
+        '--config' => "$config_fn",
         'apps',
     );
     my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
@@ -158,7 +157,7 @@ subtest 'get the app list' => sub {
 
 subtest 'delegate to app command' => sub {
     my @args = (
-        '--config' => $config_fn,
+        '--config' => "$config_fn",
         'blog' => 'help',
     );
     my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };

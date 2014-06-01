@@ -11,7 +11,8 @@ The path to this document.
 
 has path => (
     is => 'rw',
-    isa => Str,
+    isa => Path,
+    coerce => Path->coercion,
 );
 
 =attr title

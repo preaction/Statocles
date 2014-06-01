@@ -5,7 +5,7 @@ use Statocles::Theme;
 use Statocles::Store;
 use Statocles::App::Blog;
 use Statocles::Template;
-my $SHARE_DIR = catdir( __DIR__, '..', 'share' );
+my $SHARE_DIR = path( __DIR__ )->parent->child( 'share' );
 
 my $theme = Statocles::Theme->new(
     templates => {
@@ -30,10 +30,10 @@ ENDTEMPLATE
 );
 
 my $md = Text::Markdown->new;
-my $tmpdir = File::Temp->newdir;
+my $tmpdir = tempdir;
 
 my $app = Statocles::App::Blog->new(
-    source => Statocles::Store->new( path => catdir( $SHARE_DIR, 'blog' ) ),
+    source => Statocles::Store->new( path => $SHARE_DIR->child( 'blog' ) ),
     url_root => '/blog',
     theme => $theme,
 );
@@ -49,8 +49,8 @@ subtest 'blog post pages' => sub {
     my @pages;
     for my $doc_path ( @doc_paths ) {
         my $doc = Statocles::Document->new(
-            path => catfile( '', @$doc_path ),
-            %{ $app->source->read_document( catfile( $SHARE_DIR, 'blog', @$doc_path ) ) },
+            path => rootdir->child( @$doc_path ),
+            %{ $app->source->read_document( $SHARE_DIR->child( 'blog', @$doc_path ) ) },
         );
 
         my $page_path = join '/', '', 'blog', @$doc_path;
@@ -68,7 +68,8 @@ subtest 'blog post pages' => sub {
 
     cmp_deeply
         [ $app->post_pages ],
-        bag( @pages );
+        bag( @pages )
+            or diag explain [ $app->post_pages ], \@pages;
 };
 
 subtest 'index page' => sub {
@@ -85,9 +86,9 @@ subtest 'index page' => sub {
 
 subtest 'commands' => sub {
     # We need an app we can edit
-    my $tmpdir = File::Temp->newdir;
+    my $tmpdir = tempdir;
     my $app = Statocles::App::Blog->new(
-        source => Statocles::Store->new( path => catdir( $tmpdir->dirname, 'blog' ) ),
+        source => Statocles::Store->new( path => $tmpdir->child( 'blog' ) ),
         url_root => '/blog',
         theme => $theme,
     );
@@ -105,8 +106,7 @@ subtest 'commands' => sub {
         subtest 'create new post' => sub {
             local $ENV{EDITOR}; # We can't very well open vim...
             my ( undef, undef, undef, $day, $mon, $year ) = localtime;
-            my $doc_path = catfile(
-                $tmpdir->dirname,
+            my $doc_path = $tmpdir->child(
                 'blog',
                 sprintf( '%04i', $year + 1900 ),
                 sprintf( '%02i', $mon + 1 ),
@@ -132,7 +132,7 @@ subtest 'commands' => sub {
 Markdown content goes here.
 ENDMARKDOWN
                 };
-                eq_or_diff scalar read_file( $doc_path ), <<'ENDCONTENT';
+                eq_or_diff $doc_path->slurp, <<'ENDCONTENT';
 ---
 author: ''
 title: This is a Title

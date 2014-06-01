@@ -4,10 +4,10 @@ use Statocles::Site;
 use Statocles::Theme;
 use Statocles::Store;
 use Statocles::App::Blog;
-my $SHARE_DIR = catdir( __DIR__, 'share' );
+my $SHARE_DIR = path( __DIR__, 'share' );
 
 subtest 'site writes application' => sub {
-    my $tmpdir = File::Temp->newdir;
+    my $tmpdir = tempdir;
     my $site = site( $tmpdir );
 
     subtest 'build' => sub {
@@ -15,7 +15,7 @@ subtest 'site writes application' => sub {
 
         for my $page ( $site->app( 'blog' )->pages ) {
             subtest 'page content' => test_content( $tmpdir, $site, $page, build => $page->path );
-            ok !-f catfile( $tmpdir->dirname, 'deploy', $page->path ), 'not deployed yet';
+            ok !$tmpdir->child( 'deploy', $page->path )->exists, 'not deployed yet';
         }
     };
 
@@ -29,7 +29,7 @@ subtest 'site writes application' => sub {
 };
 
 subtest 'site index and navigation' => sub {
-    my $tmpdir = File::Temp->newdir;
+    my $tmpdir = tempdir;
     my $site = site( $tmpdir,
         index => 'blog',
         nav => [
@@ -48,15 +48,15 @@ subtest 'site index and navigation' => sub {
     subtest 'build' => sub {
         $site->build;
         subtest 'site index content' => test_content( $tmpdir, $site, $blog->index, build => 'index.html' );
-        ok !-f catfile( $tmpdir->dirname, 'deploy', 'index.html' ), 'not deployed yet';
-        ok !-f catfile( $tmpdir->dirname, 'build', 'blog', 'index.html' ),
+        ok !$tmpdir->child( 'deploy', 'index.html' )->exists, 'not deployed yet';
+        ok !$tmpdir->child( 'build', 'blog', 'index.html' )->exists,
             'site index renames app page';
     };
 
     subtest 'deploy' => sub {
         $site->deploy;
         subtest 'site index content' => test_content( $tmpdir, $site, $blog->index, deploy => 'index.html' );
-        ok !-f catfile( $tmpdir->dirname, 'deploy', 'blog', 'index.html' ),
+        ok !$tmpdir->child( 'deploy', 'blog', 'index.html' )->exists,
             'site index renames app page';
     };
 };
@@ -67,12 +67,12 @@ sub site {
     my ( $tmpdir, %site_args ) = @_;
 
     my $theme = Statocles::Theme->new(
-        source_dir => catdir( $SHARE_DIR, 'theme' ),
+        source_dir => $SHARE_DIR->child( 'theme' ),
     );
 
     my $blog = Statocles::App::Blog->new(
         source => Statocles::Store->new(
-            path => catdir( $SHARE_DIR, 'blog' ),
+            path => $SHARE_DIR->child( 'blog' ),
         ),
         url_root => '/blog',
         theme => $theme,
@@ -82,10 +82,10 @@ sub site {
         title => 'Test Site',
         apps => { blog => $blog },
         build_store => Statocles::Store->new(
-            path => catdir( $tmpdir->dirname, 'build' ),
+            path => $tmpdir->child( 'build' ),
         ),
         deploy_store => Statocles::Store->new(
-            path => catdir( $tmpdir->dirname, 'deploy' ),
+            path => $tmpdir->child( 'deploy' ),
         ),
         %site_args,
     );
@@ -96,8 +96,8 @@ sub site {
 sub test_content {
     my ( $tmpdir, $site, $page, $dir, $file ) = @_;
     return sub {
-        my $path = catfile( $tmpdir->dirname, $dir, $file );
-        my $html = read_file( $path );
+        my $path = $tmpdir->child( $dir, $file );
+        my $html = $path->slurp;
         eq_or_diff $html, $page->render( site => $site );
 
         like $html, qr{@{[$site->title]}}, 'page contains site title ' . $site->title;

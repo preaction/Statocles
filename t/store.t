@@ -1,7 +1,6 @@
 
 use Statocles::Test;
-use Cwd qw( getcwd );
-my $SHARE_DIR = catdir( __DIR__, 'share' );
+my $SHARE_DIR = path( __DIR__, 'share' );
 
 use Statocles::Store;
 use Statocles::Page::Document;
@@ -30,13 +29,13 @@ my @exp_docs = (
 
 subtest 'read documents' => sub {
     my $store = Statocles::Store->new(
-        path => catdir( $SHARE_DIR, 'blog' ),
+        path => $SHARE_DIR->child( 'blog' ),
     );
     cmp_deeply $store->documents, bag( @exp_docs ) or diag explain $store->documents;
 };
 
 subtest 'read with relative directory' => sub {
-    my $cwd = getcwd();
+    my $cwd = cwd;
     chdir $SHARE_DIR;
     my $store = Statocles::Store->new(
         path => 'blog',
@@ -46,24 +45,24 @@ subtest 'read with relative directory' => sub {
 };
 
 subtest 'write document' => sub {
-    my $tmpdir = File::Temp->newdir;
+    my $tmpdir = tempdir;
     my $store = Statocles::Store->new(
-        path => $tmpdir->dirname,
+        path => $tmpdir,
     );
     my $doc = {
         foo => 'bar',
         content => "# This is some content\n\nAnd a paragraph\n",
     };
     subtest 'disallow absolute paths' => sub {
-        my $path = catfile( rootdir(), 'example.yml' );
+        my $path = rootdir->child( 'example.yml' );
         throws_ok { $store->write_document( $path => $doc ) }
             qr{Cannot write document '$path': Path must not be absolute};
     };
     subtest 'simple path' => sub {
         my $full_path = $store->write_document( 'example.yml' => $doc  );
-        is $full_path, catfile( $store->path, 'example.yml' );
+        is $full_path, $store->path->child( 'example.yml' );
         cmp_deeply $store->read_document( $full_path ), $doc;
-        eq_or_diff scalar read_file( $full_path ), <<ENDFILE
+        eq_or_diff path( $full_path )->slurp, <<ENDFILE
 ---
 foo: bar
 ---
@@ -73,11 +72,11 @@ And a paragraph
 ENDFILE
     };
     subtest 'make the directories if necessary' => sub {
-        my $path = catfile(qw( blog 2014 05 28 example.yml ));
+        my $path = path(qw( blog 2014 05 28 example.yml ));
         my $full_path = $store->write_document( $path => $doc );
-        is $full_path, catfile( $tmpdir->dirname, $path );
+        is $full_path, $tmpdir->child( $path );
         cmp_deeply $store->read_document( $full_path ), $doc;
-        eq_or_diff scalar read_file( $full_path ), <<ENDFILE
+        eq_or_diff path( $full_path )->slurp, <<ENDFILE
 ---
 foo: bar
 ---
@@ -89,9 +88,9 @@ ENDFILE
 };
 
 subtest 'write pages' => sub {
-    my $tmpdir = File::Temp->newdir;
+    my $tmpdir = tempdir;
     my $store = Statocles::Store->new(
-        path => $tmpdir->dirname,
+        path => $tmpdir,
     );
     my $page = Statocles::Page::Document->new(
         path => '/2014/04/23/slug.html',
@@ -102,15 +101,14 @@ subtest 'write pages' => sub {
         ),
     );
     $store->write_page( $page->path, $page->render );
-    my $path = catfile( $tmpdir->dirname, '2014', '04', '23', 'slug.html' );
-    cmp_deeply scalar read_file( $path ), $page->render;
+    my $path = $tmpdir->child( '2014', '04', '23', 'slug.html' );
+    cmp_deeply $path->slurp, $page->render;
 };
 
 subtest 'path that has regex-special characters inside' => sub {
-    my $tmpdir = File::Temp->newdir;
-    my $baddir = catdir( $tmpdir, '[regex](name).dir' );
-    mkdir $baddir;
-    dircopy catdir( $SHARE_DIR, 'blog' ), $baddir;
+    my $tmpdir = tempdir;
+    my $baddir = $tmpdir->child( '[regex](name).dir' );
+    dircopy $SHARE_DIR->child( 'blog' )->stringify, "$baddir";
     my $store = Statocles::Store->new(
         path => $baddir,
     );

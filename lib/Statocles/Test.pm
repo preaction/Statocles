@@ -12,11 +12,8 @@ sub modules {
     return (
         @modules,
         'Test::Most',
-        'File::Temp',
         'Dir::Self' => [qw( __DIR__ )],
-        'File::Basename' => [qw( dirname )],
-        'File::Slurp' => [qw( read_file write_file )],
-        'File::Spec::Functions' => [qw( rootdir )],
+        'Path::Tiny' => [qw( path tempdir )],
     );
 }
 
@@ -40,18 +37,13 @@ In addition to all the imports from L<Statocles::Base>, this module imports:
 
 Which includes Test::More, Test::Deep, Test::Differences, and Test::Exception.
 
-=item File::Temp
-
-Which should be used in the object-oriented interface, to ensure easy and
-correct cleanup.
-
 =item Dir::Self
 
 Provides the __DIR__ keyword.
 
-=item File::Basename qw( dirname )
+=item Path::Tiny qw( tempdir )
 
-=item File::Slurp qw( read_file write_file )
+To get temporary Path::Tiny objects.
 
 =back
 

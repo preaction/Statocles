@@ -1,6 +1,6 @@
 
 use Statocles::Test;
-my $SHARE_DIR = catdir( __DIR__, '..', 'share' );
+my $SHARE_DIR = path( __DIR__ )->parent->child( 'share' );
 
 use Statocles::Document;
 use Statocles::Page::Document;

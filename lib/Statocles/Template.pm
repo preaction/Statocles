@@ -3,7 +3,6 @@ package Statocles::Template;
 
 use Statocles::Class;
 use Mojo::Template;
-use File::Slurp qw( read_file );
 
 =attr content
 
@@ -18,7 +17,7 @@ has content => (
     lazy => 1,
     default => sub {
         my ( $self ) = @_;
-        return scalar read_file( $self->path );
+        return Path::Tiny->new( $self->path )->slurp;
     },
 );
 
@@ -31,6 +30,9 @@ The path to the file for this template. Optional.
 has path => (
     is => 'ro',
     isa => Str,
+    coerce => sub {
+        return "$_[0]"; # Force stringify in case of Path::Tiny objects
+    },
 );
 
 =method BUILDARGS( )

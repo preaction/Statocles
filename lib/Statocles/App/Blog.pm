@@ -77,7 +77,7 @@ ENDHELP
             sprintf( '%02i', $day ),
             "$slug.yml",
         );
-        my $path = catfile( @parts );
+        my $path = Path::Tiny->new( @parts );
         my %doc = (
             %$default_post,
             title => $title,

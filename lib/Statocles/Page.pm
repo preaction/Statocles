@@ -15,7 +15,8 @@ The absolute URL path to save this page to.
 
 has path => (
     is => 'ro',
-    isa => Str,
+    isa => Path,
+    coerce => Path->coercion,
 );
 
 =attr markdown

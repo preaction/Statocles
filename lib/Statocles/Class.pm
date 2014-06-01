@@ -12,6 +12,7 @@ sub modules {
         @modules,
         'Moo::Lax',
         'Types::Standard' => [qw( :all )],
+        'Types::Path::Tiny' => [qw( Path )],
     );
 }
 

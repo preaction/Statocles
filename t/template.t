@@ -1,7 +1,7 @@
 
 use Statocles::Test;
 use Statocles::Template;
-my $SHARE_DIR = catdir( __DIR__, 'share' );
+my $SHARE_DIR = path( __DIR__, 'share' );
 
 my %args = (
     title => 'Title',
@@ -19,7 +19,7 @@ subtest 'template string' => sub {
 
 subtest 'template from file' => sub {
     my $t = Statocles::Template->new(
-        path => catfile( $SHARE_DIR, 'tmpl', 'page.tmpl' ),
+        path => $SHARE_DIR->child( 'tmpl', 'page.tmpl' ),
     );
     is $t->render( %args ), "Title Author Content\n";
 };

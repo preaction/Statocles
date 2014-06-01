@@ -2,8 +2,6 @@ package Statocles::Theme;
 # ABSTRACT: Templates, headers, footers, and navigation
 
 use Statocles::Class;
-use File::Find qw( find );
-use File::Slurp qw( read_file );
 use File::Share qw( dist_dir );
 
 =attr source_dir
@@ -17,7 +15,8 @@ themes from the Statocles share directory.
 
 has source_dir => (
     is => 'ro',
-    isa => Str,
+    isa => Path,
+    coerce => Path->coercion,
 );
 
 =attr templates
@@ -44,7 +43,7 @@ around BUILDARGS => sub {
     my $args = $self->$orig( @args );
     if ( $args->{source_dir} && $args->{source_dir} =~ /^::/ ) {
         my $name = substr $args->{source_dir}, 2;
-        $args->{source_dir} = catdir( dist_dir( 'Statocles' ), 'theme', $name );
+        $args->{source_dir} = Path::Tiny->new( dist_dir( 'Statocles' ) )->child( 'theme', $name );
     }
     return $args;
 };
@@ -58,24 +57,16 @@ Read the C<source_dir> and create the Statocles::Template objects inside.
 sub read {
     my ( $self ) = @_;
     my %tmpl;
-    find(
-        sub {
-            if ( /[.]tmpl$/ ) {
-                my ( $vol, $dirs, $name ) = splitpath( $File::Find::name );
-                $name =~ s/[.]tmpl$//;
-                my @dirs = splitdir( $dirs );
-                # $dirs will end with a slash, so the last item in @dirs is ''
-                my $group = $dirs[-2];
-                # $File::Find::name has / as dirsep even on Windows. Normalize
-                # so that our tests always have the OS dirsep
-                my $fullname = catpath( $vol, $dirs, "$name.tmpl" );
-                $tmpl{ $group }{ $name } = Statocles::Template->new(
-                    path => $fullname,
-                );
-            }
-        },
-        $self->source_dir,
-    );
+    my $iter = $self->source_dir->iterator({ recurse => 1, follow_symlinks => 1 });
+    while ( my $path = $iter->() ) {
+        if ( $path =~ /[.]tmpl$/ ) {
+            my $name = $path->basename( '.tmpl' ); # remove extension
+            my $group = $path->parent->basename;
+            $tmpl{ $group }{ $name } = Statocles::Template->new(
+                path => $path,
+            );
+        }
+    }
     return \%tmpl;
 }
 

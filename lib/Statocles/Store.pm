@@ -3,11 +3,8 @@ package Statocles::Store;
 
 use Statocles::Class;
 use Statocles::Document;
-use File::Find qw( find );
-use File::Spec::Functions qw( file_name_is_absolute splitdir );
-use File::Path qw( make_path );
-use File::Slurp qw( write_file );
 use YAML;
+use File::Spec::Functions qw( splitdir );
 
 =attr path
 
@@ -17,7 +14,8 @@ The path to the directory containing the documents.
 
 has path => (
     is => 'ro',
-    isa => Str,
+    isa => Path,
+    coerce => Path->coercion,
     required => 1,
 );
 
@@ -44,18 +42,14 @@ sub read_documents {
     my ( $self ) = @_;
     my $root_path = $self->path;
     my @docs;
-    find(
-        sub {
-            if ( /[.]ya?ml$/ ) {
-                my $data = $self->read_document( $_ );
-                my $rel_path = $File::Find::name;
-                $rel_path =~ s/\Q$root_path//;
-                my $doc_path = join "/", splitdir( $rel_path );
-                push @docs, Statocles::Document->new( path => $rel_path, %$data );
-            }
-        },
-        $root_path,
-    );
+    my $iter = $root_path->iterator( { recurse => 1, follow_symlinks => 1 } );
+    while ( my $path = $iter->() ) {
+        if ( $path =~ /[.]ya?ml$/ ) {
+            my $data = $self->read_document( $path );
+            my $rel_path = rootdir->child( $path->relative( $root_path ) );
+            push @docs, Statocles::Document->new( path => $rel_path, %$data );
+        }
+    }
     return \@docs;
 }
 
@@ -109,21 +103,18 @@ The document is written in Frontmatter format.
 
 sub write_document {
     my ( $self, $path, $doc ) = @_;
-    if ( file_name_is_absolute( $path ) ) {
+    $path = Path->coercion->( $path ); # Allow stringified paths, $path => $doc
+    if ( $path->is_absolute ) {
         die "Cannot write document '$path': Path must not be absolute";
     }
-    my $full_path = catfile( $self->path, $path );
-    my ( $vol, $dirs, $file ) = splitpath( $full_path );
-    make_path( catpath( $vol, $dirs ) );
 
     $doc = { %{ $doc } }; # Shallow copy for safety
     my $content = delete $doc->{content};
     my $header = YAML::Dump( $doc );
     chomp $header;
 
-    open my $fh, '>', $full_path or die "Could not open '$full_path' for writing: $!";
-    print $fh join "\n", $header, '---', $content;
-    close $fh;
+    my $full_path = $self->path->child( $path );
+    $full_path->touchpath->spew( join "\n", $header, '---', $content );
 
     return $full_path;
 }
@@ -136,10 +127,8 @@ Write the page C<html> to the given C<path>.
 
 sub write_page {
     my ( $self, $path, $html ) = @_;
-    my $full_path = catfile( $self->path, $path );
-    my ( $volume, $dirs, $file ) = splitpath( $full_path );
-    make_path( catpath( $volume, $dirs, '' ) );
-    write_file( $full_path, $html );
+    my $full_path = $self->path->child( $path );
+    $full_path->touchpath->spew( $html );
     return;
 }
 

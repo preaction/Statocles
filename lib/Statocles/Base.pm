@@ -11,7 +11,7 @@ sub modules {
         strict => [],
         warnings => [],
         feature => [qw( :5.10 )],
-        'File::Spec::Functions' => [qw( catdir catfile splitpath splitdir catpath )],
+        'Path::Tiny' => [qw( rootdir cwd )],
     );
 }
 
@@ -40,7 +40,7 @@ This module imports the following into your namespace:
 
 Currently the 5.10 feature bundle
 
-=item File::Spec::Functions qw( catdir catfile splitpath splitdir catpath )
+=item Path::Tiny qw( path rootdir )
 
 We do a lot of work with the filesystem.
 

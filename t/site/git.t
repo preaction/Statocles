@@ -12,7 +12,7 @@ use Statocles::Store;
 use Statocles::App::Blog;
 use File::Copy::Recursive qw( dircopy );
 
-my $SHARE_DIR = catdir( __DIR__, '..', 'share' );
+my $SHARE_DIR = path( __DIR__ )->parent->child( 'share' );
 
 my @temp_args;
 if ( $ENV{ NO_CLEANUP } ) {
@@ -22,11 +22,11 @@ if ( $ENV{ NO_CLEANUP } ) {
 *_git_run = \&Statocles::Site::Git::_git_run;
 
 subtest 'site writes application' => sub {
-    my $tmpdir = File::Temp->newdir( @temp_args );
-    diag "TMP: " . $tmpdir->dirname if @temp_args;
+    my $tmpdir = tempdir( @temp_args );
+    diag "TMP: " . $tmpdir if @temp_args;
 
     my $site = site( $tmpdir );
-    my $git = Git::Repository->new( work_tree => $tmpdir->dirname );
+    my $git = Git::Repository->new( work_tree => "$tmpdir" );
 
     subtest 'build' => sub {
         $site->build;
@@ -38,14 +38,14 @@ subtest 'site writes application' => sub {
 
     subtest 'deploy' => sub {
         # Changed/added files not in the build directory do not get added
-        write_file( catfile( $tmpdir->dirname, 'NEWFILE' ), 'test' );
+        $tmpdir->child( 'NEWFILE' )->spew( 'test' );
 
         $site->deploy;
 
         is current_branch( $git ), 'master', 'deploy leaves us on the branch we came from';
 
         for my $page ( $site->app( 'blog' )->pages ) {
-            ok !-f catfile( $tmpdir, $page->path ), 'file is not in master branch';
+            ok !$tmpdir->child( $page->path )->exists, 'file is not in master branch';
         }
 
         _git_run( $git, checkout => $site->deploy_branch );
@@ -66,26 +66,26 @@ done_testing;
 sub site {
     my ( $tmpdir, %site_args ) = @_;
 
-    Git::Repository->run( init => $tmpdir->dirname );
-    my $git = Git::Repository->new( work_tree => $tmpdir->dirname );
+    Git::Repository->run( init => "$tmpdir" );
+    my $git = Git::Repository->new( work_tree => "$tmpdir" );
 
     # Set some config so Git knows who we are (and doesn't complain)
     $git->run( config => 'user.name' => 'Statocles Test User' );
     $git->run( config => 'user.email' => 'statocles@example.com' );
 
     # Copy the source into the repository, so we have something to commit
-    dircopy( catdir( $SHARE_DIR, 'blog' ), catdir( $tmpdir->dirname, 'blog' ) )
+    dircopy( $SHARE_DIR->child( 'blog' )->stringify, $tmpdir->child( 'blog' )->stringify )
         or die "Could not copy directory: $!";
     $git->run( add => 'blog' );
     $git->run( commit => -m => 'Initial commit' );
 
     my $theme = Statocles::Theme->new(
-        source_dir => catdir( $SHARE_DIR, 'theme' ),
+        source_dir => $SHARE_DIR->child( 'theme' ),
     );
 
     my $blog = Statocles::App::Blog->new(
         source => Statocles::Store->new(
-            path => catdir( $tmpdir->dirname, 'blog' ),
+            path => $tmpdir->child( 'blog' ),
         ),
         url_root => '/blog',
         theme => $theme,
@@ -95,10 +95,10 @@ sub site {
         title => 'Test Site',
         apps => { blog => $blog },
         build_store => Statocles::Store->new(
-            path => catdir( $tmpdir->dirname, 'build' ),
+            path => $tmpdir->child( 'build' ),
         ),
         deploy_store => Statocles::Store->new(
-            path => $tmpdir->dirname,
+            path => $tmpdir,
         ),
         deploy_branch => 'gh-pages',
         %site_args,
@@ -110,8 +110,8 @@ sub site {
 sub test_content {
     my ( $tmpdir, $site, $page, $dir, $file ) = @_;
     return sub {
-        my $path = catfile( $tmpdir->dirname, $dir, $file );
-        my $html = read_file( $path );
+        my $path = $tmpdir->child( $dir, $file );
+        my $html = $path->slurp;
         eq_or_diff $html, $page->render( site => $site );
 
         like $html, qr{@{[$site->title]}}, 'page contains site title ' . $site->title;
