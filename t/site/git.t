@@ -14,9 +14,6 @@ use File::Copy::Recursive qw( dircopy );
 
 my $SHARE_DIR = catdir( __DIR__, '..', 'share' );
 
-$ENV{GIT_AUTHOR_NAME} = 'preaction';
-$ENV{GIT_AUTHOR_EMAIL} = 'preaction@example.com';
-
 my @temp_args;
 if ( $ENV{ NO_CLEANUP } ) {
     @temp_args = ( CLEANUP => 0 );
@@ -71,6 +68,10 @@ sub site {
 
     Git::Repository->run( init => $tmpdir->dirname );
     my $git = Git::Repository->new( work_tree => $tmpdir->dirname );
+
+    # Set some config so Git knows who we are (and doesn't complain)
+    $git->run( config => 'user.name' => 'Statocles Test User' );
+    $git->run( config => 'user.email' => 'statocles@example.com' );
 
     # Copy the source into the repository, so we have something to commit
     dircopy( catdir( $SHARE_DIR, 'blog' ), catdir( $tmpdir->dirname, 'blog' ) )
