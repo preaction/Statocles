@@ -48,6 +48,27 @@ has content => (
     isa => Str,
 );
 
+=attr tags
+
+The tags for this document. Tags are used to categorize documents.
+
+Tags may be specified as an array or as a comma-seperated string of
+tags.
+
+=cut
+
+has tags => (
+    is => 'rw',
+    isa => ArrayRef,
+    default => sub { [] },
+    coerce => sub {
+        if ( !ref $_[0] ) {
+            return [ split /\s*,\s*/, $_[0] ];
+        }
+        return $_[0];
+    },
+);
+
 =method dump
 
 Get this document as a hash reference.
@@ -57,7 +78,7 @@ Get this document as a hash reference.
 sub dump {
     my ( $self ) = @_;
     return {
-        map { $_ => $self->$_ } qw( title author content )
+        map { $_ => $self->$_ } qw( title author content tags )
     };
 }
 

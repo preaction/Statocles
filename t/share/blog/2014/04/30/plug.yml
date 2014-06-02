@@ -1,4 +1,6 @@
 title: Second Post
 author: preaction
+# Tags may be a single string
+tags: better
 ---
 Better body content

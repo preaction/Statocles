@@ -12,18 +12,28 @@ my @exp_docs = (
         title => 'First Post',
         author => 'preaction',
         content => "Body content\n",
+        # no tags. tags are optional
     ),
     Statocles::Document->new(
         path => '/2014/04/30/plug.yml',
         title => 'Second Post',
         author => 'preaction',
         content => "Better body content\n",
+        tags => [qw( better )],
     ),
     Statocles::Document->new(
         path => '/2014/05/22/(regex)[name].file.yml',
         title => 'Regex violating Post',
         author => 'preaction',
         content => "Body content\n",
+        tags => [ 'better', 'error message' ],
+    ),
+    Statocles::Document->new(
+        path => '/2014/06/02/more_tags.yml',
+        title => 'More Tags',
+        author => 'preaction',
+        content => "Body content\n",
+        tags => [ 'more', 'better', 'even more tags' ],
     ),
 );
 
@@ -45,6 +55,8 @@ subtest 'read with relative directory' => sub {
 };
 
 subtest 'write document' => sub {
+    no warnings 'once';
+    local $YAML::Indent = 4; # Ensure our test output matches our indentation level
     my $tmpdir = tempdir;
     my $store = Statocles::Store->new(
         path => $tmpdir,
@@ -52,6 +64,7 @@ subtest 'write document' => sub {
     my $doc = {
         foo => 'bar',
         content => "# This is some content\n\nAnd a paragraph\n",
+        tags => [ 'one', 'two and three', 'four' ],
     };
     subtest 'disallow absolute paths' => sub {
         my $path = rootdir->child( 'example.yml' );
@@ -65,6 +78,10 @@ subtest 'write document' => sub {
         eq_or_diff path( $full_path )->slurp, <<ENDFILE
 ---
 foo: bar
+tags:
+    - one
+    - two and three
+    - four
 ---
 # This is some content
 
@@ -79,6 +96,10 @@ ENDFILE
         eq_or_diff path( $full_path )->slurp, <<ENDFILE
 ---
 foo: bar
+tags:
+    - one
+    - two and three
+    - four
 ---
 # This is some content
 
