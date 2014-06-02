@@ -33,17 +33,17 @@ In addition to all the imports from L<Statocles::Base>, this module imports:
 
 =over
 
-=item Test::Most
+=item L<Test::Most>
 
 Which includes Test::More, Test::Deep, Test::Differences, and Test::Exception.
 
-=item Dir::Self
+=item L<Dir::Self>
 
 Provides the __DIR__ keyword.
 
-=item Path::Tiny qw( tempdir )
+=item L<Path::Tiny> qw( path tempdir )
 
-To get temporary Path::Tiny objects.
+To create Path::Tiny objects and get temporary directories.
 
 =back
 

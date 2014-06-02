@@ -66,7 +66,8 @@ __END__
 
 =head1 DESCRIPTION
 
-A Statically::Document is the base unit of content in Statocles. Applications
-take Documents to build Pages.
+A Statocles::Document is the base unit of content in Statocles.
+L<Applications|Statocles::App> take documents to build
+L<pages|Statocles::Page>.
 
 This is the Model class in the Model-View-Controller pattern.

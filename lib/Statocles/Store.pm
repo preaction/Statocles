@@ -8,7 +8,7 @@ use File::Spec::Functions qw( splitdir );
 
 =attr path
 
-The path to the directory containing the documents.
+The path to the directory containing the L<documents|Statocles::Document>.
 
 =cut
 
@@ -21,7 +21,7 @@ has path => (
 
 =attr documents
 
-All the documents currently read by this store.
+All the L<documents|Statocles::Document> currently read by this store.
 
 =cut
 
@@ -34,7 +34,7 @@ has documents => (
 
 =method read_documents()
 
-Read the directory C<path> and create the Statocles::Document objects inside.
+Read the directory C<path> and create the L<document|Statocles::Document> objects inside.
 
 =cut
 
@@ -55,9 +55,9 @@ sub read_documents {
 
 =method read_document( path )
 
-Read a single document in either pure YAML or combined YAML/Markdown
-(Frontmatter) format and return a datastructure suitable to be given to
-C<Statocles::Document::new>.
+Read a single L<document|Statocles::Document> in either pure YAML or combined
+YAML/Markdown (Frontmatter) format and return a datastructure suitable to be
+given to L<Statocles::Document|Statocles::Document>.
 
 =cut
 
@@ -95,10 +95,11 @@ sub read_document {
 
 =method write_document( $path, $doc )
 
-Write a document to the store. Returns the full path to the newly-updated
-document.
+Write a L<document|Statocles::Document> to the store. Returns the full path to
+the newly-updated document.
 
 The document is written in Frontmatter format.
+
 =cut
 
 sub write_document {
@@ -121,7 +122,7 @@ sub write_document {
 
 =method write_page( $path, $html )
 
-Write the page C<html> to the given C<path>.
+Write the L<page|Statocles::Page> C<html> to the given C<path>.
 
 =cut
 
@@ -137,9 +138,11 @@ __END__
 
 =head1 DESCRIPTION
 
-A Statocles::Store reads and writes Documents and Pages.
+A Statocles::Store reads and writes L<documents|Statocles::Document> and
+L<pages|Statocles::Page>.
 
-This class handles the parsing and inflating of Document objects.
+This class handles the parsing and inflating of
+L<"document objects"|Statocles::Document>.
 
 =head2 Frontmatter Document Format
 

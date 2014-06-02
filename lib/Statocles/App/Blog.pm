@@ -9,7 +9,7 @@ extends 'Statocles::App';
 
 =attr source
 
-The Statocles::Source to read for documents.
+The L<store|Statocles::Store> to read for documents.
 
 =cut
 
@@ -33,8 +33,8 @@ has url_root => (
 
 =attr theme
 
-The Statocles::Theme for this app. See L<#THEME> for what templates this app
-requires.
+The L<theme|Statocles::Theme> for this app. See L</THEME> for what templates this app
+uses.
 
 =cut
 
@@ -116,7 +116,7 @@ sub post_pages {
 
 =method index()
 
-Get the index page (a Statocles::Page object) for this application.
+Get the index page (a L<page|Statocles::Page> object) for this application.
 
 =cut
 
@@ -132,7 +132,7 @@ sub index {
 
 =method pages()
 
-Get all the pages for this application.
+Get all the L<pages|Statocles::Page> for this application.
 
 =cut
 
@@ -160,7 +160,7 @@ The index page template. Gets the following template variables:
 
 =item site
 
-The Statocles::Site object.
+The L<Statocles::Site> object.
 
 =item pages
 
@@ -190,7 +190,7 @@ The main post page template. Gets the following template variables:
 
 =item site
 
-The Statocles::Site object
+The L<Statocles::Site> object
 
 =item content
 
@@ -207,3 +207,12 @@ The post author
 =back
 
 =back
+
+=head1 SEE ALSO
+
+=over 4
+
+=item L<Statocles::App>
+
+=back
+

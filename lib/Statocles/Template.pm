@@ -93,7 +93,9 @@ This is the template abstraction layer for Statocles.
 
 =head1 TEMPLATE LANGUAGE
 
-The default Statocles template language is Mojolicious's Embedded Perl template. Inside the template, every key of the %args passed to render() will be available as a simple scalar:
+The default Statocles template language is Mojolicious's Embedded Perl
+template. Inside the template, every key of the %args passed to render() will
+be available as a simple scalar:
 
     # template.tmpl
     % for my $p ( @$pages ) {

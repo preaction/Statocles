@@ -8,7 +8,7 @@ use Statocles::Template;
 
 =attr document
 
-The document this page will render.
+The L<document|Statocles::Document> this page will render.
 
 =cut
 
@@ -19,7 +19,8 @@ has document => (
 
 =attr template
 
-The template to render the document.
+The L<template|Statocles::Template> to render the
+L<document|Statocles::Document>.
 
 =cut
 
@@ -42,7 +43,8 @@ sub content {
 
 =method render
 
-Render the page, using the C<template> and wrapping with the C<layout>.
+Render the page, using the L<template|Statocles::Page/template> and wrapping
+with the L<layout|Statocles::Page/layout>.
 
 =cut
 
@@ -66,4 +68,4 @@ __END__
 
 =head1 DESCRIPTION
 
-This page class takes a single document and renders it as HTML.
+This page class takes a single L<document|Statocles::Document> and renders it as HTML.

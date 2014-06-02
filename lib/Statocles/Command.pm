@@ -8,7 +8,7 @@ use Beam::Wire;
 
 =attr site
 
-The Statocles::Site we're working with.
+The L<site|Statocles::Site> we're working with.
 
 =cut
 
@@ -84,3 +84,13 @@ __END__
 =head1 DESCRIPTION
 
 This module implements the Statocles command-line interface.
+
+=head1 SEE ALSO
+
+=over 4
+
+=item L<statocles>
+
+The documentation for the command-line application.
+
+=back

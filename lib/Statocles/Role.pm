@@ -26,12 +26,12 @@ __END__
 
 This is the base module that all Statocles roles should use.
 
-In addition to all the imports from L<Statocles::Class> (except Moo::Lax), this
-module imports:
+In addition to all the imports from L<Statocles::Class> (except L<Moo::Lax>),
+this module imports:
 
 =over
 
-=item Moo::Role::Lax
+=item L<Moo::Role::Lax>
 
 Turns the module into a Role.
 

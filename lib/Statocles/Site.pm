@@ -56,7 +56,7 @@ has nav => (
 
 =attr build_store
 
-The Statocles::Store object to use for C<build()>.
+The L<store|Statocles::Store> object to use for C<build()>.
 
 =cut
 
@@ -68,7 +68,7 @@ has build_store => (
 
 =attr deploy_store
 
-The Statocles::Store object to use for C<deploy()>. Defaults to L<build_store>.
+The L<store|Statocles::Store> object to use for C<deploy()>. Defaults to L<build_store>.
 
 =cut
 
@@ -114,7 +114,7 @@ sub deploy {
 
 =method write( store )
 
-Write the application to the given C<store>, a Statocles::Store object
+Write the application to the given L<store|Statocles::Store>.
 
 =cut
 
@@ -146,6 +146,11 @@ __END__
 =head1 SYNOPSIS
 
     my $site = Statocles::Site->new(
+        title => 'My Site',
+        nav => [
+            { title => 'Home', href => '/' },
+            { title => 'Blog', href => '/blog' },
+        ],
         apps => {
             blog => Statocles::App::Blog->new( ... ),
         },
@@ -155,5 +160,5 @@ __END__
 
 =head1 DESCRIPTION
 
-A Statocles::Site is a collection of applications.
+A Statocles::Site is a collection of L<applications|Statocles::App>.
 

@@ -8,5 +8,6 @@ __END__
 
 =head1 DESCRIPTION
 
-A Statocles App turns Statocles::Documents into a set of Statocles::Pages
-that can then be written to the filesystem (or served directly, if desired).
+A Statocles App turns L<documents|Statocles::Documents> into a set of
+L<pages|Statocles::Pages> that can then be written to the filesystem (or served
+directly, if desired).

@@ -32,13 +32,17 @@ In addition to all the imports from L<Statocles::Base>, this module imports:
 
 =over
 
-=item Moo::Lax
+=item L<Moo::Lax>
 
 Moo without strictures.
 
-=item MooX::Types::MooseLike::Base
+=item L<Types::Standard>
 
 To get all the Moose-y type constraints.
+
+=item L<Types::Path::Tiny>
+
+To get L<Type::Tiny> types for L<Path::Tiny> objects.
 
 =back
 

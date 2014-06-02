@@ -50,7 +50,8 @@ around BUILDARGS => sub {
 
 =method read()
 
-Read the C<source_dir> and create the Statocles::Template objects inside.
+Read the C<source_dir> and create the L<template|Statocles::Template> objects
+inside.
 
 =cut
 
@@ -72,7 +73,8 @@ sub read {
 
 =method template( $section => $name )
 
-Get the template from the given C<section> with the given C<name>.
+Get the L<template|Statocles::Template> from the given C<section> with the
+given C<name>.
 
 =cut
 
@@ -98,8 +100,10 @@ __END__
 
 =head1 DESCRIPTION
 
-A Theme contains all the templates that applications need.
+A Theme contains all the L<templates|Statocles::Template> that
+L<applications|Statocles::App> need. This class handles finding and parsing
+files into L<template objects|Statocles::Template>.
 
-When the C<source_dir> is read, the templates inside are organized based on
+When the L</source_dir> is read, the templates inside are organized based on
 their name and their parent directory.
 

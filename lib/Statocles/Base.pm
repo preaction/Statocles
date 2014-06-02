@@ -32,15 +32,20 @@ This module imports the following into your namespace:
 
 =over
 
-=item strict
+=item L<Statocles>
 
-=item warnings
+The base module is imported to make sure that L<File::Share> can find the right
+share directory.
 
-=item feature
+=item L<strict>
+
+=item L<warnings>
+
+=item L<feature>
 
 Currently the 5.10 feature bundle
 
-=item Path::Tiny qw( path rootdir )
+=item L<Path::Tiny> qw( path rootdir )
 
 We do a lot of work with the filesystem.
 
