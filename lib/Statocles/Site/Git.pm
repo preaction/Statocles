@@ -7,19 +7,6 @@ extends 'Statocles::Site';
 use File::Copy::Recursive qw( dircopy );
 use Git::Repository;
 
-=attr deploy_dir
-
-The directory of the Git repository to deploy to.
-
-=cut
-
-has deploy_dir => (
-    is => 'ro',
-    isa => Path,
-    coerce => Path->coercion,
-    default => sub { cwd },
-);
-
 =attr deploy_branch
 
 The Git branch to deploy to.
