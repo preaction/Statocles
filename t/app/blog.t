@@ -1,6 +1,7 @@
 
 use Statocles::Test;
 use Capture::Tiny qw( capture );
+use File::Spec::Functions qw( splitdir );
 use Statocles::Theme;
 use Statocles::Store;
 use Statocles::App::Blog;
@@ -41,11 +42,15 @@ my $app = Statocles::App::Blog->new(
 my @got_pages = $app->pages;
 
 subtest 'blog post pages' => sub {
-    my @doc_paths = (
-        [ '2014', '04', '23', 'slug.yml' ],
-        [ '2014', '04', '30', 'plug.yml' ],
-        [ '2014', '05', '22', '(regex)[name].file.yml' ],
-    );
+    my @doc_paths;
+    my $iter = $app->source->path->iterator({ recurse => 1, follow_symlinks => 1 });
+    while ( my $path = $iter->() ) {
+        next unless $path->is_file;
+        my $rel_path = $path->relative( $app->source->path );
+        my @dir_parts = splitdir( $rel_path->parent->stringify );
+        push @doc_paths, [ @dir_parts, $rel_path->basename ];
+    }
+
     my @pages;
     for my $doc_path ( @doc_paths ) {
         my $doc = Statocles::Document->new(
