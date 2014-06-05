@@ -4,7 +4,7 @@ Statocles - A static site generator
 
 # VERSION
 
-version 0.007
+version 0.008
 
 # DESCRIPTION
 
@@ -12,7 +12,7 @@ Statocles is a tool for building static HTML pages from documents.
 
 ## DOCUMENTS
 
-A [document](http://search.cpan.org/perldoc?Statocles::Document) is a data structure. The default store reads documents in a combined
+A [document](https://metacpan.org/pod/Statocles::Document) is a data structure. The default store reads documents in a combined
 YAML and Markdown format.
 
 Documents are formatted with a YAML document on top, and Markdown content
@@ -24,22 +24,21 @@ on the bottom, like so:
     ---
     # This is the markdown content
     
-
     This is a paragraph
 
 This is the same format that [Jekyll](http://jekyllrb.com) uses. The document
-format is described in the [Statocles::Store](http://search.cpan.org/perldoc?Statocles::Store) documentation under
-[Frontmatter Document Format](http://search.cpan.org/perldoc?Statocles::Store#Frontmatter Document Format).
+format is described in the [Statocles::Store](https://metacpan.org/pod/Statocles::Store) documentation under
+[Frontmatter Document Format](https://metacpan.org/pod/Statocles::Store#Frontmatter-Document-Format).
 
 ## PAGES
 
-A [Statocles::Page](http://search.cpan.org/perldoc?Statocles::Page) is rendered HTML ready to be sent to a user.
+A [Statocles::Page](https://metacpan.org/pod/Statocles::Page) is rendered HTML ready to be sent to a user.
 
-- [Statocles::Page::Document](http://search.cpan.org/perldoc?Statocles::Page::Document)
+- [Statocles::Page::Document](https://metacpan.org/pod/Statocles::Page::Document)
 
     This page renders a single document.
 
-- [Statocles::Page::List](http://search.cpan.org/perldoc?Statocles::Page::List)
+- [Statocles::Page::List](https://metacpan.org/pod/Statocles::Page::List)
 
     This page renders a list of other pages (not documents).
 
@@ -47,25 +46,25 @@ A [Statocles::Page](http://search.cpan.org/perldoc?Statocles::Page) is rendered 
 
 An application takes a bunch of documents and turns them into HTML pages.
 
-- [Statocles::App::Blog](http://search.cpan.org/perldoc?Statocles::App::Blog)
+- [Statocles::App::Blog](https://metacpan.org/pod/Statocles::App::Blog)
 
     A simple blogging application.
 
 # SITES
 
-A [Statocles::Site](http://search.cpan.org/perldoc?Statocles::Site) manages a bunch of applications, writing and deploying the resulting
+A [Statocles::Site](https://metacpan.org/pod/Statocles::Site) manages a bunch of applications, writing and deploying the resulting
 pages.
 
 Deploying the site may involve a simple file copy, but it could also involve a
 Git repository, an FTP site, or a database.
 
-- [Statocles::Site::Git](http://search.cpan.org/perldoc?Statocles::Site::Git)
+- [Statocles::Site::Git](https://metacpan.org/pod/Statocles::Site::Git)
 
     A simple Git repository site.
 
 # STORES
 
-A [Statocles::Store](http://search.cpan.org/perldoc?Statocles::Store) reads and writes documents and pages. The default store
+A [Statocles::Store](https://metacpan.org/pod/Statocles::Store) reads and writes documents and pages. The default store
 reads documents in YAML and writes pages to a file, but stores could read
 documents as JSON, or from a Mongo database, and write pages to a database, or
 whereever you want!

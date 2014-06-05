@@ -2,7 +2,7 @@ NAME
     Statocles - A static site generator
 
 VERSION
-    version 0.007
+    version 0.008
 
 DESCRIPTION
     Statocles is a tool for building static HTML pages from documents.
