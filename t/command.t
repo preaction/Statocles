@@ -117,11 +117,11 @@ subtest 'build site' => sub {
         'build',
     );
     subtest 'default site' => test_site(
-        $config->{build}{args}{path},
+        $tmp->child( 'build_site' ),
         @args,
     );
     subtest 'custom site' => test_site(
-        $config->{build_foo}{args}{path},
+        $tmp->child( 'build_foo' ),
         '--site' => 'site_foo',
         @args,
     );
@@ -133,11 +133,11 @@ subtest 'deploy site' => sub {
         'deploy',
     );
     subtest 'default site' => test_site(
-        $config->{deploy}{args}{path},
+        $tmp->child( 'deploy_site' ),
         @args,
     );
     subtest 'custom site' => test_site(
-        $config->{deploy_foo}{args}{path},
+        $tmp->child( 'deploy_foo' ),
         '--site' => 'site_foo',
         @args,
     );
