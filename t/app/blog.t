@@ -46,6 +46,7 @@ subtest 'blog post pages' => sub {
     my $iter = $app->source->path->iterator({ recurse => 1, follow_symlinks => 1 });
     while ( my $path = $iter->() ) {
         next unless $path->is_file;
+        next unless $path =~ /[.]yml$/;
         my $rel_path = $path->relative( $app->source->path );
         my @dir_parts = splitdir( $rel_path->parent->stringify );
         push @doc_paths, [ @dir_parts, $rel_path->basename ];
