@@ -6,10 +6,14 @@
         <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script>
         <title><%= $site->title %></title>
         <style type="text/css">
-            section > hgroup > h1 {
+            article > hgroup > h1,
+            main > hgroup > h1
+            {
                 border-bottom: 4px solid #045578;
             }
-            section > hgroup > h2 {
+            article > hgroup > h2,
+            main > hgroup > h2 
+            {
                 float: right;
                 font-size: 12pt;
             }
