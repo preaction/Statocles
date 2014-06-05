@@ -126,8 +126,41 @@ sub index {
         path => join( "/", $self->url_root, 'index.html' ),
         template => $self->theme->template( blog => 'index' ),
         layout => $self->theme->template( site => 'layout' ),
+        # Sorting by path just happens to also sort by date
         pages => [ sort { $b->path cmp $a->path } $self->post_pages ],
     );
+}
+
+=method tag_pages()
+
+Get L<pages|Statocles::Page> for the tags in the blog post documents.
+
+=cut
+
+sub tag_pages {
+    my ( $self ) = @_;
+
+    my %tagged_docs;
+    for my $page ( $self->post_pages ) {
+        for my $tag ( @{ $page->document->tags } ) {
+            push @{ $tagged_docs{ $tag } }, $page;
+        }
+    }
+
+    my @tag_pages;
+    for my $tag ( keys %tagged_docs ) {
+        my $name = $tag;
+        $name =~ s/\s+/-/g;
+        push @tag_pages, Statocles::Page::List->new(
+            path => join( '/', $self->url_root, 'tag', "$name.html" ),
+            template => $self->theme->template( blog => 'index' ),
+            layout => $self->theme->template( site => 'layout' ),
+            # Sorting by path just happens to also sort by date
+            pages => [ sort { $b->path cmp $a->path } @{ $tagged_docs{ $tag } } ],
+        );
+    }
+
+    return @tag_pages;
 }
 
 =method pages()
@@ -138,7 +171,7 @@ Get all the L<pages|Statocles::Page> for this application.
 
 sub pages {
     my ( $self ) = @_;
-    return ( $self->post_pages, $self->index );
+    return ( $self->post_pages, $self->index, $self->tag_pages );
 }
 
 1;

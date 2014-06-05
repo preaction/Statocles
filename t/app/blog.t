@@ -39,43 +39,87 @@ my $app = Statocles::App::Blog->new(
     theme => $theme,
 );
 
-my @got_pages = $app->pages;
+my @all_pages;
 
-subtest 'blog post pages' => sub {
-    my @doc_paths;
-    my $iter = $app->source->path->iterator({ recurse => 1, follow_symlinks => 1 });
+sub docs {
+    my ( $root_path ) = @_;
+    my @doc_specs;
+
+    my $iter = $root_path->iterator({ recurse => 1, follow_symlinks => 1 });
     while ( my $path = $iter->() ) {
         next unless $path->is_file;
         next unless $path =~ /[.]yml$/;
-        my $rel_path = $path->relative( $app->source->path );
-        my @dir_parts = splitdir( $rel_path->parent->stringify );
-        push @doc_paths, [ @dir_parts, $rel_path->basename ];
-    }
 
-    my @pages;
-    for my $doc_path ( @doc_paths ) {
+        my $rel_path = $path->relative( $root_path );
+        my @doc_path = ( splitdir( $rel_path->parent->stringify ), $rel_path->basename );
+
         my $doc = Statocles::Document->new(
-            path => rootdir->child( @$doc_path ),
-            %{ $app->source->read_document( $SHARE_DIR->child( 'blog', @$doc_path ) ) },
+            path => rootdir->child( @doc_path ),
+            %{ $app->source->read_document( $SHARE_DIR->child( 'blog', @doc_path ) ) },
         );
 
-        my $page_path = join '/', '', 'blog', @$doc_path;
+        push @doc_specs, {
+            path => \@doc_path,
+            doc => $doc,
+        };
+    }
+
+    return @doc_specs;
+}
+
+sub pages {
+    my ( @doc_specs ) = @_;
+
+    my @pages;
+    for my $doc_spec ( @doc_specs ) {
+        my $page_path = join '/', '', 'blog', @{ $doc_spec->{ path } };
         $page_path =~ s/[.]yml$/.html/;
 
         my $page = Statocles::Page::Document->new(
             template => $theme->template( blog => 'post' ),
             layout => $theme->template( site => 'layout' ),
             path => $page_path,
-            document => $doc,
+            document => $doc_spec->{ doc },
         );
 
         push @pages, $page;
     }
+    return @pages;
+}
 
+subtest 'blog post pages' => sub {
+    my @doc_specs = docs( $app->source->path );
+    my @pages = pages( @doc_specs );
     cmp_deeply
         [ $app->post_pages ],
         bag( @pages )
             or diag explain [ $app->post_pages ], \@pages;
+    push @all_pages, @pages;
+};
+
+subtest 'tag pages' => sub {
+    my %tagged_docs;
+    for my $doc_spec ( docs( $app->source->path ) ) {
+        for my $tag ( @{ $doc_spec->{doc}->tags } ) {
+            push @{ $tagged_docs{ $tag } }, $doc_spec;
+        }
+    }
+
+    my @tag_pages;
+    for my $tag ( keys %tagged_docs ) {
+        my $name = $tag;
+        $name =~ s/\s+/-/g;
+        push @tag_pages, Statocles::Page::List->new(
+            path => "/blog/tag/$name.html",
+            template => $theme->template( blog => 'index' ),
+            layout => $theme->template( site => 'layout' ),
+            # Sorting by path just happens to also sort by date
+            pages => [ sort { $b->path cmp $a->path } pages( @{ $tagged_docs{ $tag } } ) ],
+        );
+    }
+
+    cmp_deeply [ $app->tag_pages ], \@tag_pages;
+    push @all_pages, @tag_pages;
 };
 
 subtest 'index page' => sub {
@@ -84,10 +128,15 @@ subtest 'index page' => sub {
         template => $theme->template( blog => 'index' ),
         layout => $theme->template( site => 'layout' ),
         # Sorting by path just happens to also sort by date
-        pages => [ sort { $b->path cmp $a->path } $app->post_pages ],
+        pages => [ sort { $b->path cmp $a->path } pages( docs( $app->source->path ) ) ],
     );
 
     cmp_deeply $app->index, $page;
+    push @all_pages, $page;
+};
+
+subtest 'all pages()' => sub {
+    cmp_deeply [ $app->pages ], bag( @all_pages );
 };
 
 subtest 'commands' => sub {
