@@ -55,11 +55,13 @@ sub render {
         %{$self->document},
         content => $self->content,
         path => $self->path,
+        app => $self->app,
     );
     return $self->layout->render(
         %args,
         content => $content,
         path => $self->path,
+        app => $self->app,
     );
 }
 

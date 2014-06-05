@@ -105,6 +105,7 @@ sub post_pages {
         $path =~ s{/{2,}}{/}g;
         $path =~ s{[.]\w+$}{.html};
         push @pages, Statocles::Page::Document->new(
+            app => $self,
             layout => $self->theme->templates->{site}{layout},
             template => $self->theme->templates->{blog}{post},
             document => $doc,
@@ -123,6 +124,7 @@ Get the index page (a L<page|Statocles::Page> object) for this application.
 sub index {
     my ( $self ) = @_;
     return Statocles::Page::List->new(
+        app => $self,
         path => join( "/", $self->url_root, 'index.html' ),
         template => $self->theme->template( blog => 'index' ),
         layout => $self->theme->template( site => 'layout' ),
@@ -140,19 +142,13 @@ Get L<pages|Statocles::Page> for the tags in the blog post documents.
 sub tag_pages {
     my ( $self ) = @_;
 
-    my %tagged_docs;
-    for my $page ( $self->post_pages ) {
-        for my $tag ( @{ $page->document->tags } ) {
-            push @{ $tagged_docs{ $tag } }, $page;
-        }
-    }
+    my %tagged_docs = $self->_tag_docs;
 
     my @tag_pages;
     for my $tag ( keys %tagged_docs ) {
-        my $name = $tag;
-        $name =~ s/\s+/-/g;
         push @tag_pages, Statocles::Page::List->new(
-            path => join( '/', $self->url_root, 'tag', "$name.html" ),
+            app => $self,
+            path => $self->_tag_url( $tag ),
             template => $self->theme->template( blog => 'index' ),
             layout => $self->theme->template( site => 'layout' ),
             # Sorting by path just happens to also sort by date
@@ -172,6 +168,40 @@ Get all the L<pages|Statocles::Page> for this application.
 sub pages {
     my ( $self ) = @_;
     return ( $self->post_pages, $self->index, $self->tag_pages );
+}
+
+=method tags()
+
+Get a set of hashrefs suitable for creating a list of tag links. The hashrefs
+contain the following keys:
+
+    title => 'The tag text'
+    href => 'The URL to the tag page'
+
+=cut
+
+sub tags {
+    my ( $self ) = @_;
+    my %tagged_docs = $self->_tag_docs;
+    return map {; { title => $_, href => $self->_tag_url( $_ ), } }
+        sort keys %tagged_docs
+}
+
+sub _tag_docs {
+    my ( $self ) = @_;
+    my %tagged_docs;
+    for my $page ( $self->post_pages ) {
+        for my $tag ( @{ $page->document->tags } ) {
+            push @{ $tagged_docs{ $tag } }, $page;
+        }
+    }
+    return %tagged_docs;
+}
+
+sub _tag_url {
+    my ( $self, $tag ) = @_;
+    $tag =~ s/\s+/-/g;
+    return join "/", $self->url_root, "tag", "$tag.html";
 }
 
 1;

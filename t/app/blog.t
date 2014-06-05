@@ -76,6 +76,7 @@ sub pages {
         $page_path =~ s/[.]yml$/.html/;
 
         my $page = Statocles::Page::Document->new(
+            app => $app,
             template => $theme->template( blog => 'post' ),
             layout => $theme->template( site => 'layout' ),
             path => $page_path,
@@ -110,6 +111,7 @@ subtest 'tag pages' => sub {
         my $name = $tag;
         $name =~ s/\s+/-/g;
         push @tag_pages, Statocles::Page::List->new(
+            app => $app,
             path => "/blog/tag/$name.html",
             template => $theme->template( blog => 'index' ),
             layout => $theme->template( site => 'layout' ),
@@ -120,10 +122,20 @@ subtest 'tag pages' => sub {
 
     cmp_deeply [ $app->tag_pages ], \@tag_pages;
     push @all_pages, @tag_pages;
+
+    subtest 'tag navigation' => sub {
+        cmp_deeply [ $app->tags ], [
+            { title => 'better', href => '/blog/tag/better.html' },
+            { title => 'error message', href => '/blog/tag/error-message.html' },
+            { title => 'even more tags', href => '/blog/tag/even-more-tags.html' },
+            { title => 'more', href => '/blog/tag/more.html' },
+        ];
+    };
 };
 
 subtest 'index page' => sub {
     my $page = Statocles::Page::List->new(
+        app => $app,
         path => '/blog/index.html',
         template => $theme->template( blog => 'index' ),
         layout => $theme->template( site => 'layout' ),

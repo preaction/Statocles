@@ -49,10 +49,12 @@ sub render {
             map { +{ %{ $_->document }, content => $_->content, path => $_->path } }
             @{ $self->pages }
         ],
+        app => $self->app,
     );
     return $self->layout->render(
         %args,
         content => $content,
+        app => $self->app,
     );
 }
 

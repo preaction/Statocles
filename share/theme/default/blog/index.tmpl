@@ -1,15 +1,33 @@
-% for my $p ( @$pages ) {
-<section>
-    <hgroup>
-        <h1><a href="<%= $p->{path} %>"><%= $p->{title} %></a></h1>
-        <h2><%= $p->{author} %></h2>
-    </hgroup>
-    <article>
-    <%= $p->{content} %>
-    </article>
-</section>
-% }
-<ul class="pager">
-    <li class="previous"><a href="#">&larr; Older</a></li>
-    <li class="next disabled"><a href="#">Newer &rarr;</a></li>
-</ul>
+
+<div class="row">
+
+    <div class="col-md-9">
+        % for my $p ( @$pages ) {
+        <section>
+            <hgroup>
+                <h1><a href="<%= $p->{path} %>"><%= $p->{title} %></a></h1>
+                <h2><%= $p->{author} %></h2>
+            </hgroup>
+            <article>
+            <%= $p->{content} %>
+            </article>
+        </section>
+        % }
+        <ul class="pager">
+            <li class="previous"><a href="#">&larr; Older</a></li>
+            <li class="next disabled"><a href="#">Newer &rarr;</a></li>
+        </ul>
+    </div>
+
+    <div class="col-md-3">
+        <nav id="tags">
+            <h1>Tags</h1>
+            <ul class="list-inline">
+            % for my $tag ( $app->tags ) {
+                <li><a href="<%= $tag->{href} %>"><%= $tag->{title} %></a></li>
+            % }
+            </ul>
+        </nav>
+    </div>
+
+</div>

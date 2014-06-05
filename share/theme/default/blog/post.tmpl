@@ -1,9 +1,26 @@
-<section>
-    <hgroup>
-        <h1><%= $title %></h1>
-        <h2><%= $author %></h2>
-    </hgroup>
-    <article>
-    <%= $content %>
-    </article>
-</section>
+<div class="row">
+
+    <div class="col-md-9">
+        <section>
+            <hgroup>
+                <h1><%= $title %></h1>
+                <h2><%= $author %></h2>
+            </hgroup>
+            <article>
+            <%= $content %>
+            </article>
+        </section>
+    </div>
+
+    <div class="col-md-3">
+        <nav id="tags">
+            <h1>Tags</h1>
+            <ul class="list-inline">
+            % for my $tag ( $app->tags ) {
+                <li><a href="<%= $tag->{href} %>"><%= $tag->{title} %></a></li>
+            % }
+            </ul>
+        </nav>
+    </div>
+
+</div>
