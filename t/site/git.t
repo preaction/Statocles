@@ -1,9 +1,11 @@
 
 use Statocles::Test;
 BEGIN {
-    my $git_version = `git --version`;
+    my $git_version = ( split ' ', `git --version` )[-1];
     plan skip_all => 'Git not installed' unless $git_version;
     diag "Git version: $git_version";
+    my $v = sprintf '%i.%03i', split /[.]/, $git_version;
+    plan skip_all => 'Git 1.5 or higher required' unless $v >= 1.005;
 };
 
 use Statocles::Site::Git;
