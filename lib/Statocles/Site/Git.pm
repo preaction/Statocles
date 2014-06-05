@@ -42,7 +42,9 @@ sub deploy {
         if ( $path->is_file ) {
             my $name = "$path";
             $name =~ s/\Q$build_dir/$deploy_dir/;
-            push @files, $name;
+            # Git versions before 1.7.4.1 require a relative path to 'git add'
+            my $deploy_path = Path::Tiny->new( $name );
+            push @files, $deploy_path->relative( $deploy_dir )->stringify;
         }
     };
 

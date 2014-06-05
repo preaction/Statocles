@@ -68,7 +68,12 @@ done_testing;
 sub site {
     my ( $tmpdir, %site_args ) = @_;
 
-    Git::Repository->run( init => "$tmpdir" );
+    # Git before 1.6.4 does not allow directory as argument to "init"
+    my $cwd = cwd;
+    chdir $tmpdir;
+    Git::Repository->run( "init" );
+    chdir $cwd;
+
     my $git = Git::Repository->new( work_tree => "$tmpdir" );
 
     # Set some config so Git knows who we are (and doesn't complain)
