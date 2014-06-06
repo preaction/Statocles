@@ -4,6 +4,9 @@
         <main>
             <hgroup>
                 <h1><%= $title %></h1>
+                <h2><time datetime="<%= $published->strftime('%Y-%m-%d') %>">
+                    <%= $published->strftime('%Y-%m-%d') %>
+                </time></h2>
                 <h2><%= $author %></h2>
             </hgroup>
             <%= $content %>

@@ -75,8 +75,11 @@ sub pages {
         my $page_path = join '/', '', 'blog', @{ $doc_spec->{ path } };
         $page_path =~ s/[.]yml$/.html/;
 
+        my $date = join '-', @{ $doc_spec->{ path } }[0..2];
+
         my $page = Statocles::Page::Document->new(
             app => $app,
+            published => Time::Piece->strptime( $date, '%Y-%m-%d' ),
             template => $theme->template( blog => 'post' ),
             layout => $theme->template( site => 'layout' ),
             path => $page_path,

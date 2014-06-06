@@ -106,12 +106,17 @@ sub post_pages {
         my $path = join "/", $self->url_root, $doc->path;
         $path =~ s{/{2,}}{/}g;
         $path =~ s{[.]\w+$}{.html};
+
+        my @date_parts = $path =~ m{/(\d{4})/(\d{2})/(\d{2})/[^/]+$};
+        my $date = join "-", @date_parts;
+
         push @pages, Statocles::Page::Document->new(
             app => $self,
             layout => $self->theme->templates->{site}{layout},
             template => $self->theme->templates->{blog}{post},
             document => $doc,
             path => $path,
+            published => Time::Piece->strptime( $date, '%Y-%m-%d' ),
         );
     }
     return @pages;

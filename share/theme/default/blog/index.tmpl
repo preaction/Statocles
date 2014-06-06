@@ -7,6 +7,9 @@
             <article>
                 <hgroup>
                     <h1><a href="<%= $p->{path} %>"><%= $p->{title} %></a></h1>
+                    <h2><time datetime="<%= $p->{published}->strftime('%Y-%m-%d') %>">
+                        <%= $p->{published}->strftime('%Y-%m-%d') %>
+                    </time></h2>
                     <h2><%= $p->{author} %></h2>
                 </hgroup>
                 <%= $p->{content} %>
