@@ -6,6 +6,17 @@ with 'Statocles::Page';
 use Text::Markdown;
 use Statocles::Template;
 
+=attr published
+
+The publish date/time of this page. A L<Time::Piece> object.
+
+=cut
+
+has published => (
+    is => 'ro',
+    isa => InstanceOf['Time::Piece'],
+);
+
 =attr document
 
 The L<document|Statocles::Document> this page will render.
@@ -56,12 +67,14 @@ sub render {
         content => $self->content,
         path => $self->path,
         app => $self->app,
+        published => $self->published,
     );
     return $self->layout->render(
         %args,
         content => $content,
         path => $self->path,
         app => $self->app,
+        published => $self->published,
     );
 }
 

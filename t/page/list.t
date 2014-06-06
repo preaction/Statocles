@@ -6,6 +6,7 @@ use Statocles::Page::List;
 
 my @pages = (
     Statocles::Page::Document->new(
+        published => Time::Piece->strptime( '2014-04-30', '%Y-%m-%d' ),
         path => '/blog/2014/04/30/page.html',
         document => Statocles::Document->new(
             path => '/2014/04/30/page.yml',
@@ -15,6 +16,7 @@ my @pages = (
         ),
     ),
     Statocles::Page::Document->new(
+        published => Time::Piece->strptime( '2014-04-23', '%Y-%m-%d' ),
         path => '/blog/2014/04/23/slug.html',
         document => Statocles::Document->new(
             path => '/2014/04/23/slug.yml',
@@ -33,7 +35,7 @@ subtest 'simple list (default templates)' => sub {
 
     my $html =  join( "\n",
                 map {
-                    join( " ", $_->path, $_->document->title, $_->document->author, $_->content ),
+                    join( " ", $_->published, $_->path, $_->document->title, $_->document->author, $_->content ),
                 }
                 @pages
             ) . "\n\n";
@@ -49,14 +51,14 @@ subtest 'extra args' => sub {
         template => <<'ENDTEMPLATE',
 <%= $site %>
 % for my $page ( @$pages ) {
-<%= $page->{path} %> <%= $page->{title} %> <%= $page->{author} %> <%= $page->{content} %>
+<%= $page->{published} %> <%= $page->{path} %> <%= $page->{title} %> <%= $page->{author} %> <%= $page->{content} %>
 % }
 ENDTEMPLATE
     );
 
     my $html    = "hello hello\n"
                 . join( "\n",
-                    map { join( " ", $_->path, $_->document->title, $_->document->author, $_->content ), }
+                    map { join( " ", $_->published, $_->path, $_->document->title, $_->document->author, $_->content ), }
                     @pages
                 ) . "\n\n";
 

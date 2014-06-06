@@ -32,14 +32,17 @@ subtest 'simple page (default template)' => sub {
 };
 
 subtest 'template string' => sub {
+    my $tp = Time::Piece->new;
+
     my $page = Statocles::Page::Document->new(
         document => $doc,
         path => '/path/to/page.html',
-        template => '<%= $path %> <%= $title %> <%= $author %> <%= $content %>',
+        published => $tp,
+        template => '<%= $published %> <%= $path %> <%= $title %> <%= $author %> <%= $content %>',
     );
 
     my $output = $page->render;
-    my $expect = join " ", $page->path, $doc->title, $doc->author,
+    my $expect = join " ", $page->published, $page->path, $doc->title, $doc->author,
         $md->markdown( $doc->content ) . "\n\n";
     eq_or_diff $output, $expect;
 };
