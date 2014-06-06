@@ -6,6 +6,8 @@ use Statocles::Document;
 use YAML;
 use File::Spec::Functions qw( splitdir );
 
+my $DT_FORMAT = '%Y-%m-%d %H:%M:%S';
+
 =attr path
 
 The path to the directory containing the L<documents|Statocles::Document>.
@@ -90,6 +92,14 @@ sub read_document {
         $doc->{content} = $buffer;
     }
 
+    return $self->_thaw_document( $doc );
+}
+
+sub _thaw_document {
+    my ( $self, $doc ) = @_;
+    if ( exists $doc->{last_modified} ) {
+        $doc->{last_modified} = Time::Piece->strptime( $doc->{last_modified}, $DT_FORMAT );
+    }
     return $doc;
 }
 
@@ -111,13 +121,21 @@ sub write_document {
 
     $doc = { %{ $doc } }; # Shallow copy for safety
     my $content = delete $doc->{content};
-    my $header = YAML::Dump( $doc );
+    my $header = YAML::Dump( $self->_freeze_document( $doc ) );
     chomp $header;
 
     my $full_path = $self->path->child( $path );
     $full_path->touchpath->spew( join "\n", $header, '---', $content );
 
     return $full_path;
+}
+
+sub _freeze_document {
+    my ( $self, $doc ) = @_;
+    if ( exists $doc->{last_modified} ) {
+        $doc->{last_modified} = $doc->{last_modified}->strftime( $DT_FORMAT );
+    }
+    return $doc;
 }
 
 =method write_page( $path, $html )

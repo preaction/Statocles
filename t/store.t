@@ -6,6 +6,8 @@ use Statocles::Store;
 use Statocles::Page::Document;
 use File::Copy::Recursive qw( dircopy );
 
+my $DT_FORMAT = '%Y-%m-%d %H:%M:%S';
+
 my @exp_docs = (
     Statocles::Document->new(
         path => '/2014/04/23/slug.yml',
@@ -13,6 +15,7 @@ my @exp_docs = (
         author => 'preaction',
         content => "Body content\n",
         # no tags. tags are optional
+        last_modified => Time::Piece->strptime( '2014-04-30 06:50:35', $DT_FORMAT ),
     ),
     Statocles::Document->new(
         path => '/2014/04/30/plug.yml',
@@ -20,6 +23,7 @@ my @exp_docs = (
         author => 'preaction',
         content => "Better body content\n",
         tags => [qw( better )],
+        last_modified => Time::Piece->strptime( '2014-04-30 00:00:00', $DT_FORMAT ),
     ),
     Statocles::Document->new(
         path => '/2014/05/22/(regex)[name].file.yml',
@@ -27,6 +31,7 @@ my @exp_docs = (
         author => 'preaction',
         content => "Body content\n",
         tags => [ 'better', 'error message' ],
+        # last_modified is optional
     ),
     Statocles::Document->new(
         path => '/2014/06/02/more_tags.yml',
@@ -34,6 +39,7 @@ my @exp_docs = (
         author => 'preaction',
         content => "Body content\n",
         tags => [ 'more', 'better', 'even more tags' ],
+        last_modified => Time::Piece->strptime( '2014-06-02 15:34:32', $DT_FORMAT ),
     ),
 );
 
@@ -61,10 +67,13 @@ subtest 'write document' => sub {
     my $store = Statocles::Store->new(
         path => $tmpdir,
     );
+    my $tp = Time::Piece->strptime( '2014-06-05 00:00:00', $DT_FORMAT );
+    my $dt = $tp->strftime( '%Y-%m-%d %H:%M:%S' );
     my $doc = {
         foo => 'bar',
         content => "# This is some content\n\nAnd a paragraph\n",
         tags => [ 'one', 'two and three', 'four' ],
+        last_modified => $tp,
     };
     subtest 'disallow absolute paths' => sub {
         my $path = rootdir->child( 'example.yml' );
@@ -74,10 +83,12 @@ subtest 'write document' => sub {
     subtest 'simple path' => sub {
         my $full_path = $store->write_document( 'example.yml' => $doc  );
         is $full_path, $store->path->child( 'example.yml' );
-        cmp_deeply $store->read_document( $full_path ), $doc;
+        cmp_deeply $store->read_document( $full_path ), $doc
+            or diag explain $store->read_document( $full_path );
         eq_or_diff path( $full_path )->slurp, <<ENDFILE
 ---
 foo: bar
+last_modified: $dt
 tags:
     - one
     - two and three
@@ -96,6 +107,7 @@ ENDFILE
         eq_or_diff path( $full_path )->slurp, <<ENDFILE
 ---
 foo: bar
+last_modified: $dt
 tags:
     - one
     - two and three

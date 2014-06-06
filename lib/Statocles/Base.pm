@@ -12,6 +12,7 @@ sub modules {
         warnings => [],
         feature => [qw( :5.10 )],
         'Path::Tiny' => [qw( rootdir cwd )],
+        'Time::Piece',
     );
 }
 
