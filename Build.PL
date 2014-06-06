@@ -36,6 +36,7 @@ my %module_build_args = (
     "Path::Tiny" => "0.054",
     "Pod::Usage::Return" => 0,
     "Text::Markdown" => 0,
+    "Time::Piece" => 0,
     "Type::Tiny" => 0,
     "Types::Path::Tiny" => 0,
     "YAML" => 0,
