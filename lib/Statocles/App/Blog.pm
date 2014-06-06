@@ -52,7 +52,8 @@ users get exactly what they need to run.
 =cut
 
 our $default_post = {
-    author => '',
+    author => undef,
+    tags => undef,
     content => <<'ENDCONTENT',
 Markdown content goes here.
 ENDCONTENT
@@ -81,6 +82,7 @@ ENDHELP
         my %doc = (
             %$default_post,
             title => $title,
+            last_modified => Time::Piece->new,
         );
         my $full_path = $self->source->write_document( $path => \%doc );
         print "New post at: $full_path\n";
