@@ -7,7 +7,14 @@ package Statocles;
 1;
 __END__
 
+=head1 GETTING STARTED
+
+To get started with your own Statocle site, see
+L<the setup help|Statocles::Help::Setup>.
+
 =head1 DESCRIPTION
+
+This document is an overview of the Statocles application.
 
 Statocles is a tool for building static HTML pages from documents.
 

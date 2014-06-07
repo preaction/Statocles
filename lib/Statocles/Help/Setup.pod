@@ -1,0 +1,248 @@
+# PODNAME: Statocles::Help::Setup
+# ABSTRACT: A guide to setting up a new Statocles site
+
+=head1 DESCRIPTION
+
+This document describes how to set up a simple blog web site suitable to
+be deployed to GitHub Pages using Statocles.
+
+=head1 site.yml - The Main Configuration File
+
+Statocles uses L<Beam::Wire|Beam::Wire>, a dependency-injection module, to
+define its configuration. The format is L<http://yaml.org|YAML> and contains
+the data needed to build the objects: Arguments to the object's constructor.
+This means that any C<ATTRIBUTES> defined in the documentation can be used in
+the configuration file.
+
+The configuration file is, by default, called C<site.yml>. See
+L<the statocles command documentation|statocles> if you want to have multiple
+site configuration files.
+
+=head2 A Theme
+
+First, we'll start by defining a theme. A theme
+(L<Statocles::Theme|Statocles::Theme>) builds and parses templates into
+L<Statocles::Template|Statocles::Template> objects. We'll use the Statocles
+default theme, included with the module.
+
+    theme:
+        class: Statocles::Theme
+        args:
+            source_dir: '::default'
+
+One of the most useful things about using a dependency injection module is that
+you can easily plug-in your own classes. If you want to use your own template
+format, you can build your own Statocles::Theme class that provides a different
+kind of Statocles::Template object and use that instead.
+
+=head2 A Source
+
+Statocles takes simple, YAML-and-Markdown-formatted
+L<document|Statocles::Document> files and builds HTML pages out of them.
+
+So we need a place to put our source documents. A L<store|Statocles::Store>
+fills multiple roles relating to reading and writing files. Right now, we need
+it to hold on to our blog posts. We'll put our blog posts in the C<blog>
+directory.
+
+    blog_store:
+        class: Statocles::Store
+        args:
+            path: blog
+
+The L<blog application|Statocles::App::Blog> will use this store to add new
+blog posts and build web pages from the documents in the C<blog> directory.
+More on that later.
+
+Though stores are usually just directories, they could also be a database,
+getting the blog post documents from a document database.
+
+=head2 An App
+
+A L<Statocles app|Statocles::App> is the driver that turns documents into
+L<pages|Statocles::Page>. To build pages, we need a theme and a store full
+of documents.
+
+Since we're building a blog site, we'll use the
+L<Statocles blog app|Statocles::App::Blog>:
+
+    blog_app:
+        class: Statocles::App::Blog
+        args:
+            url_root: /blog
+            theme:
+                $ref: theme
+            source:
+                $ref: blog_store
+
+We put our blog app under the root URL C</blog>. All pages that come from this
+app will start with C</blog> (except the index page, we'll move that to
+C</index.html>).  We used our already-defined C<theme> and C<blog_store>
+objects to fill in the required C<theme> and C<source> application attributes
+(C<$ref> is a Beam::Wire special instruction that says "look up this object
+from the config file").
+
+=head2 A Destination
+
+Before we can generate pages, we need a place to put them. Statocles needs two
+places, a build directory, a staging area, an a deploy directory, the final
+destination for the site.
+
+    build:
+        class: Statocles::Store
+        args:
+            path: build
+
+    deploy:
+        class: Statocles::Store
+        args:
+            path: .
+
+For our site, we've got a C<build> directory for our staging area, where we can
+verify that our site looks correct before we deploy. Our deploy will happen in
+the root directory of our site. This is good for GitHub Pages site.
+
+Though stores are usually just directories, they could also perform an SFTP or
+FTP or transfer the pages to a CDN (I think I have some evolution to do here).
+
+=head2 A Site
+
+Now that we're ready, we can tie it all together. A L<site|Statocles::Site> is
+a collection of apps that build and deploy to the same place. The special L<git
+site|Statocles::Site::Git> knows how to deploy to git repositories.
+
+    site:
+        class: Statocles::Site::Git
+        args:
+            apps:
+                blog:
+                    $ref: blog
+            build_store:
+                $ref: build
+            deploy_store:
+                $ref: deploy
+            deploy_branch: master
+            title: My Site
+            index: blog
+            nav:
+                main:
+                    - title: Blog
+                      href: /index.html
+
+When adding apps to our site, we give them a name (in this case C<blog>) so
+that we can refer to them on the command-line (later). We add our
+C<build_store> and C<deploy_store>. The git branch we want to deploy to is
+C<master>. As part of the default template, we can provide a site C<title>.
+
+The C<index> attribute gives the name of the app to use as our index page.
+Since we only have one app, we can only give it the C<blog>. Whatever main page
+the blog app defines will be moved to the main site index C</index.html>.
+
+Finally, we can define a C<nav> list, again giving a name: C<main>. The
+default template uses the C<main> nav across the top.
+
+=head2 The Complete site.yml
+
+Combine it all together and you get. Feel free to copy and paste to start your
+own site.
+
+    theme:
+        class: Statocles::Theme
+        args:
+            source_dir: '::default'
+    blog_store:
+        class: Statocles::Store
+        args:
+            path: blog
+    blog_app:
+        class: Statocles::App::Blog
+        args:
+            url_root: /blog
+            theme:
+                $ref: theme
+            source:
+                $ref: blog_store
+    build:
+        class: Statocles::Store
+        args:
+            path: build
+    deploy:
+        class: Statocles::Store
+        args:
+            path: .
+    site:
+        class: Statocles::Site::Git
+        args:
+            apps:
+                blog:
+                    $ref: blog
+            build_store:
+                $ref: build
+            deploy_store:
+                $ref: deploy
+
+            title: My Site
+            index: blog
+            nav:
+                main:
+                    - title: Blog
+                      href: /index.html
+
+=head1 The C<statocles> Command
+
+Now that we have a C<site.yml>, we can run the L<statocles|statocles> command
+to manage our site.
+
+=head2 Initialize Your Git Repo
+
+    $ git init
+    $ git remote add origin ssh://git@github.com/preaction/preaction.github.io
+
+Before we can get going, we need to create our git repository.
+
+I<NOTE:> In the future I plan to include this as a C<statocles create> command.
+
+=head2 Create A Blog Post
+
+Remember when we gave our blog app a name? Now we can use that name to access
+the blog's command-line commands. To create a new blog post, we can use the
+C<post> command:
+
+    $ statocles blog post My First Post
+    New post at: blog/2014/06/04/my-first-post.yml
+
+Everything after C<post> will be used as the title of the post.
+
+If you have the C<EDITOR> environment variable set, your editor will
+automatically open on the newly-created document.
+
+=head2 Build The Site
+
+    $ statocles build
+
+Running the C<build> command will write all our pages to the C<build> store,
+which points to the C<build> directory. We can open up this directory and look
+at the files to make sure that our deploy will be correct.
+
+I<NOTE:> In the future, you'll be able to run a local web server to navigate
+your site, but that's not yet available.
+
+=head2 Commit Your Changes
+
+    $ git add blog/2014/06/04/my-first-post.yml
+    $ git commit -m'My first post'
+
+Once the build looks good, we'll want to commit our changes. The major feature
+of having a website in a git repository is change tracking.
+
+=head2 Deploy The Site
+
+    $ statocles deploy
+    $ git push origin master
+
+Running the C<deploy> command will, in the case of the git site, commit the
+updated pages to the git repository. Then we just need to do a C<git push>
+to make our changes live on GitHub Pages.
+
+I<NOTE:> In the future, C<deploy> may perform C<push> automatically.
+
