@@ -60,8 +60,8 @@ sub read {
     my %tmpl;
     my $iter = $self->source_dir->iterator({ recurse => 1, follow_symlinks => 1 });
     while ( my $path = $iter->() ) {
-        if ( $path =~ /[.]tmpl$/ ) {
-            my $name = $path->basename( '.tmpl' ); # remove extension
+        if ( $path =~ /[.]ep$/ ) {
+            my $name = $path->basename( '.ep' ); # remove extension
             my $group = $path->parent->basename;
             $tmpl{ $group }{ $name } = Statocles::Template->new(
                 path => $path,
@@ -89,14 +89,14 @@ __END__
 =head1 SYNOPSIS
 
     # Template directory layout
-    /theme/site/layout.tmpl
-    /theme/blog/index.tmpl
-    /theme/blog/post.tmpl
+    /theme/site/layout.html.ep
+    /theme/blog/index.html.ep
+    /theme/blog/post.html.ep
 
     my $theme      = Statocles::Theme->new( path => '/theme' );
-    my $layout     = $theme->template( site => 'layout' );
-    my $blog_index = $theme->template( blog => 'index' );
-    my $blog_post  = $theme->template( blog => 'post' );
+    my $layout     = $theme->template( site => 'layout.html' );
+    my $blog_index = $theme->template( blog => 'index.html' );
+    my $blog_post  = $theme->template( blog => 'post.html' );
 
 =head1 DESCRIPTION
 

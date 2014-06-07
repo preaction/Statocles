@@ -29,26 +29,26 @@ sub read_templates {
 
     $dir = path( $dir );
 
-    my $tmpl_fn = $dir->child( 'blog', 'post.tmpl' );
+    my $tmpl_fn = $dir->child( 'blog', 'post.html.ep' );
     my $tmpl = Statocles::Template->new(
         path => $tmpl_fn,
     );
-    my $index_fn = $dir->child( 'blog', 'index.tmpl' );
+    my $index_fn = $dir->child( 'blog', 'index.html.ep' );
     my $index = Statocles::Template->new(
         path => $index_fn,
     );
-    my $layout_fn = $dir->child( 'site', 'layout.tmpl' );
+    my $layout_fn = $dir->child( 'site', 'layout.html.ep' );
     my $layout = Statocles::Template->new(
         path => $layout_fn,
     );
 
     return (
         blog => {
-            post => $tmpl,
-            index => $index,
+            'post.html' => $tmpl,
+            'index.html' => $index,
         },
         site => {
-            layout => $layout,
+            'layout.html' => $layout,
         },
     );
 }
@@ -60,7 +60,7 @@ subtest 'templates from directory' => sub {
             source_dir => $SHARE_DIR->child( 'theme' ),
         );
         cmp_deeply $theme->templates, \%exp_templates;
-        cmp_deeply $theme->template( blog => 'post' ), $exp_templates{blog}{post};
+        cmp_deeply $theme->template( blog => 'post.html' ), $exp_templates{blog}{'post.html'};
     };
 
     subtest 'relative directory' => sub {
@@ -72,7 +72,7 @@ subtest 'templates from directory' => sub {
             source_dir => 'theme',
         );
         cmp_deeply $theme->templates, \%exp_templates;
-        cmp_deeply $theme->template( blog => 'post' ), $exp_templates{blog}{post};
+        cmp_deeply $theme->template( blog => 'post.html' ), $exp_templates{blog}{'post.html'};
 
         chdir $cwd;
     };

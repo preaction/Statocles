@@ -144,8 +144,8 @@ sub post_pages {
 
         push @pages, Statocles::Page::Document->new(
             app => $self,
-            layout => $self->theme->templates->{site}{layout},
-            template => $self->theme->templates->{blog}{post},
+            layout => $self->theme->template( site => 'layout.html' ),
+            template => $self->theme->template( blog => 'post.html' ),
             document => $doc,
             path => $path,
             published => Time::Piece->strptime( $date, '%Y-%m-%d' ),
@@ -169,8 +169,8 @@ sub index {
         # Sorting by path just happens to also sort by date
         pages => [ sort { $b->path cmp $a->path } $self->post_pages ],
         app => $self,
-        template => $self->theme->template( blog => 'index' ),
-        layout => $self->theme->template( site => 'layout' ),
+        template => $self->theme->template( blog => 'index.html' ),
+        layout => $self->theme->template( site => 'layout.html' ),
     );
 }
 
@@ -194,8 +194,8 @@ sub tag_pages {
             # Sorting by path just happens to also sort by date
             pages => [ sort { $b->path cmp $a->path } @{ $tagged_docs{ $tag } } ],
             app => $self,
-            template => $self->theme->template( blog => 'index' ),
-            layout => $self->theme->template( site => 'layout' ),
+            template => $self->theme->template( blog => 'index.html' ),
+            layout => $self->theme->template( site => 'layout.html' ),
         );
     }
 

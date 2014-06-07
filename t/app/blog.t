@@ -11,19 +11,19 @@ my $SHARE_DIR = path( __DIR__ )->parent->child( 'share' );
 my $theme = Statocles::Theme->new(
     templates => {
         site => {
-            layout => Statocles::Template->new(
+            'layout.html' => Statocles::Template->new(
                 content => 'HEAD <%= $content %> FOOT',
             ),
         },
         blog => {
-            index => Statocles::Template->new(
+            'index.html' => Statocles::Template->new(
                 content => <<'ENDTEMPLATE'
 % for my $page ( @$pages ) {
 <% $page->{title} %> <% $page->{author} %> <% $page->{content} %>
 % }
 ENDTEMPLATE
             ),
-            post => Statocles::Template->new(
+            'post.html' => Statocles::Template->new(
                 content => '<%= $title %> <%= $author %> <%= $content %>',
             ),
         },
@@ -82,8 +82,8 @@ sub pages {
         my $page = Statocles::Page::Document->new(
             app => $app,
             published => Time::Piece->strptime( $date, '%Y-%m-%d' ),
-            template => $theme->template( blog => 'post' ),
-            layout => $theme->template( site => 'layout' ),
+            template => $theme->template( blog => 'post.html' ),
+            layout => $theme->template( site => 'layout.html' ),
             path => $page_path,
             document => $doc_spec->{ doc },
         );
@@ -109,8 +109,8 @@ subtest 'tag pages' => sub {
 
     my %page_args = (
         app => $app,
-        template => $theme->template( blog => 'index' ),
-        layout => $theme->template( site => 'layout' ),
+        template => $theme->template( blog => 'index.html' ),
+        layout => $theme->template( site => 'layout.html' ),
     );
 
     my @tag_pages = (
@@ -160,8 +160,8 @@ subtest 'index page(s)' => sub {
     my @sorted_docs = sort { $b->{doc}->path cmp $a->{doc}->path } docs( $app->source->path );
     my %page_args = (
         app => $app,
-        template => $theme->template( blog => 'index' ),
-        layout => $theme->template( site => 'layout' ),
+        template => $theme->template( blog => 'index.html' ),
+        layout => $theme->template( site => 'layout.html' ),
     );
 
     my @pages = (

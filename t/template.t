@@ -19,7 +19,7 @@ subtest 'template string' => sub {
 
 subtest 'template from file' => sub {
     my $t = Statocles::Template->new(
-        path => $SHARE_DIR->child( 'tmpl', 'page.tmpl' ),
+        path => $SHARE_DIR->child( 'tmpl', 'page.html.ep' ),
     );
     is $t->render( %args ), "Title Author Content\n";
 };
