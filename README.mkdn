@@ -4,9 +4,11 @@ Statocles - A static site generator
 
 # VERSION
 
-version 0.009
+version 0.010
 
 # DESCRIPTION
+
+This document is an overview of the Statocles application.
 
 Statocles is a tool for building static HTML pages from documents.
 
@@ -41,6 +43,11 @@ A [Statocles::Page](https://metacpan.org/pod/Statocles::Page) is rendered HTML r
 - [Statocles::Page::List](https://metacpan.org/pod/Statocles::Page::List)
 
     This page renders a list of other pages (not documents).
+
+# GETTING STARTED
+
+To get started with your own Statocle site, see
+[the setup help](https://metacpan.org/pod/Statocles::Help::Setup).
 
 # APPLICATIONS
 

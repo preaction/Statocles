@@ -2,9 +2,11 @@ NAME
     Statocles - A static site generator
 
 VERSION
-    version 0.009
+    version 0.010
 
 DESCRIPTION
+    This document is an overview of the Statocles application.
+
     Statocles is a tool for building static HTML pages from documents.
 
   DOCUMENTS
@@ -34,6 +36,9 @@ DESCRIPTION
 
     Statocles::Page::List
         This page renders a list of other pages (not documents).
+
+GETTING STARTED
+    To get started with your own Statocle site, see the setup help.
 
 APPLICATIONS
     An application takes a bunch of documents and turns them into HTML
