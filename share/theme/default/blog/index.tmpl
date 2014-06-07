@@ -17,8 +17,22 @@
             % }
         </main>
         <ul class="pager">
-            <li class="previous"><a href="#">&larr; Older</a></li>
-            <li class="next disabled"><a href="#">Newer &rarr;</a></li>
+            <li class="previous <%= !$next ? 'disabled' : '' %>">
+                % if ( $next ) {
+                <a href="<%= $next %>">&larr; Older</a>
+                % }
+                % else {
+                <span>&larr; Older</span>
+                % }
+            </li>
+            <li class="next <%= !$prev ? 'disabled' : '' %>">
+                % if ( $prev ) {
+                <a href="<%= $prev %>">Newer &rarr;</a>
+                % }
+                % else {
+                <span>Newer &rarr;</span>
+                % }
+            </li>
         </ul>
     </div>
 
