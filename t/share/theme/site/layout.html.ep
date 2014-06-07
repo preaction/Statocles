@@ -1,5 +1,5 @@
 <%= $site->title %>
-% for my $nav ( @{ $site->nav } ) {
+% for my $nav ( @{ $site->nav->{ main } } ) {
 <%= $nav->{title} %> -- <%= $nav->{href} %>
 % }
 <%= $content %>

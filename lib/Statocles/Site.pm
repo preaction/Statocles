@@ -41,17 +41,33 @@ has index => (
 
 =attr nav
 
-The main site navigation. An array of hashes with the following keys:
+Named navigation lists. A hash of arrays of hashes with the following keys:
 
     title - The title of the link
     href - The href of the link
+
+The most likely name for your navigation will be C<main>. Navigation names
+are defined by your L<theme|Statocles::Theme>. For example:
+
+    {
+        main => [
+            {
+                title => 'Blog',
+                href => '/blog/index.html',
+            },
+            {
+                title => 'Contact',
+                href => '/contact.html',
+            },
+        ],
+    }
 
 =cut
 
 has nav => (
     is => 'ro',
-    isa => ArrayRef[HashRef[Str]],
-    default => sub { [] },
+    isa => HashRef[ArrayRef[HashRef[Str]]],
+    default => sub { {} },
 );
 
 =attr build_store

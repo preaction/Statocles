@@ -122,7 +122,7 @@ sub test_content {
         eq_or_diff $html, $page->render( site => $site );
 
         like $html, qr{@{[$site->title]}}, 'page contains site title ' . $site->title;
-        for my $nav ( @{ $site->nav } ) {
+        for my $nav ( @{ $site->nav->{main} } ) {
             my $title = $nav->{title};
             my $url = $nav->{href};
             like $html, qr{$title}, 'page contains nav title ' . $title;
