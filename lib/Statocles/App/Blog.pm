@@ -117,6 +117,7 @@ Get the individual post Statocles::Page objects.
 
 sub post_pages {
     my ( $self ) = @_;
+    my $today = Time::Piece->new->ymd;
     my @pages;
     for my $doc ( @{ $self->source->documents } ) {
         my $path = join "/", $self->url_root, $doc->path;
@@ -125,6 +126,8 @@ sub post_pages {
 
         my @date_parts = $path =~ m{/(\d{4})/(\d{2})/(\d{2})/[^/]+$};
         my $date = join "-", @date_parts;
+
+        next if $date gt $today;
 
         push @pages, Statocles::Page::Document->new(
             app => $self,

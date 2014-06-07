@@ -41,6 +41,14 @@ my @exp_docs = (
         tags => [ 'more', 'better', 'even more tags' ],
         last_modified => Time::Piece->strptime( '2014-06-02 15:34:32', $DT_FORMAT ),
     ),
+    Statocles::Document->new(
+        path => '/9999/12/31/forever-is-a-long-time.yml',
+        title => 'Forever Is A Long Time',
+        author => 'preaction',
+        content => "# You'll never see this\n\nNor will your children's children's children\n",
+        tags => [ 'future' ],
+        last_modified => Time::Piece->strptime( '2014-06-02 04:05:06', $DT_FORMAT ),
+    ),
 );
 
 subtest 'read documents' => sub {

@@ -49,6 +49,7 @@ sub docs {
     while ( my $path = $iter->() ) {
         next unless $path->is_file;
         next unless $path =~ /[.]yml$/;
+        next if $path =~ m{\b9999\b}; # It will never be 9999
 
         my $rel_path = $path->relative( $root_path );
         my @doc_path = ( splitdir( $rel_path->parent->stringify ), $rel_path->basename );
