@@ -64,6 +64,9 @@ Takes a list of key-value pairs with the following keys:
     pages   - The arrayref of Statocles::Page::Document objects to paginate.
     after   - The number of items per page. Defaults to 5.
 
+Return a list of Statocles::Page::List objects in numerical order, the index
+page first (if any).
+
 =cut
 
 sub paginate {

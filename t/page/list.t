@@ -104,7 +104,7 @@ subtest 'pagination' => sub {
                 ),
             );
 
-            cmp_deeply \@paged_lists, bag( @exp_pages ),
+            cmp_deeply \@paged_lists, \@exp_pages,
                 or diag explain \@paged_lists, \@exp_pages;
         };
         subtest 'single page' => sub {
@@ -121,7 +121,7 @@ subtest 'pagination' => sub {
                 ),
             );
 
-            cmp_deeply \@paged_lists, bag( @exp_pages ),
+            cmp_deeply \@paged_lists, \@exp_pages,
                 or diag explain \@paged_lists, \@exp_pages;
         };
     };
@@ -153,7 +153,7 @@ subtest 'pagination' => sub {
                 ),
             );
 
-            cmp_deeply \@paged_lists, bag( @exp_pages ),
+            cmp_deeply \@paged_lists, \@exp_pages,
                 or diag explain \@paged_lists, \@exp_pages;
         };
         subtest 'single page' => sub {
@@ -171,7 +171,7 @@ subtest 'pagination' => sub {
                 ),
             );
 
-            cmp_deeply \@paged_lists, bag( @exp_pages ),
+            cmp_deeply \@paged_lists, \@exp_pages,
                 or diag explain \@paged_lists, \@exp_pages;
         };
     };
