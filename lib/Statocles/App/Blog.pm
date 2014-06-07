@@ -45,6 +45,19 @@ has theme => (
     required => 1,
 );
 
+=attr page_size
+
+The number of posts to put in a page (the main page and the tag pages). Defaults
+to 5.
+
+=cut
+
+has page_size => (
+    is => 'ro',
+    isa => Int,
+    default => 5,
+);
+
 =method command( app_name, args )
 
 Run a command on this app. The app name is used to build the help, so
@@ -149,13 +162,15 @@ Get the index page (a L<page|Statocles::Page> object) for this application.
 
 sub index {
     my ( $self ) = @_;
-    return Statocles::Page::List->new(
-        app => $self,
-        path => join( "/", $self->url_root, 'index.html' ),
-        template => $self->theme->template( blog => 'index' ),
-        layout => $self->theme->template( site => 'layout' ),
+    return Statocles::Page::List->paginate(
+        after => $self->page_size,
+        path => join( "/", $self->url_root, 'page-%i.html' ),
+        index => join( "/", $self->url_root, 'index.html' ),
         # Sorting by path just happens to also sort by date
         pages => [ sort { $b->path cmp $a->path } $self->post_pages ],
+        app => $self,
+        template => $self->theme->template( blog => 'index' ),
+        layout => $self->theme->template( site => 'layout' ),
     );
 }
 
@@ -172,13 +187,15 @@ sub tag_pages {
 
     my @tag_pages;
     for my $tag ( keys %tagged_docs ) {
-        push @tag_pages, Statocles::Page::List->new(
-            app => $self,
-            path => $self->_tag_url( $tag ),
-            template => $self->theme->template( blog => 'index' ),
-            layout => $self->theme->template( site => 'layout' ),
+        push @tag_pages, Statocles::Page::List->paginate(
+            after => $self->page_size,
+            path => join( "/", $self->url_root, 'tag', $tag, 'page-%i.html' ),
+            index => $self->_tag_url( $tag ),
             # Sorting by path just happens to also sort by date
             pages => [ sort { $b->path cmp $a->path } @{ $tagged_docs{ $tag } } ],
+            app => $self,
+            template => $self->theme->template( blog => 'index' ),
+            layout => $self->theme->template( site => 'layout' ),
         );
     }
 
@@ -227,7 +244,7 @@ sub _tag_docs {
 sub _tag_url {
     my ( $self, $tag ) = @_;
     $tag =~ s/\s+/-/g;
-    return join "/", $self->url_root, "tag", "$tag.html";
+    return join "/", $self->url_root, "tag", $tag, "index.html";
 }
 
 1;

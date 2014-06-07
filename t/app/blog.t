@@ -37,6 +37,7 @@ my $app = Statocles::App::Blog->new(
     source => Statocles::Store->new( path => $SHARE_DIR->child( 'blog' ) ),
     url_root => '/blog',
     theme => $theme,
+    page_size => 2,
 );
 
 my @all_pages;
@@ -103,52 +104,85 @@ subtest 'blog post pages' => sub {
 };
 
 subtest 'tag pages' => sub {
-    my %tagged_docs;
-    for my $doc_spec ( docs( $app->source->path ) ) {
-        for my $tag ( @{ $doc_spec->{doc}->tags } ) {
-            push @{ $tagged_docs{ $tag } }, $doc_spec;
-        }
-    }
+    # Sorting by path just happens to also sort by date
+    my @sorted_docs = sort { $b->{doc}->path cmp $a->{doc}->path } docs( $app->source->path );
 
-    my @tag_pages;
-    for my $tag ( keys %tagged_docs ) {
-        my $name = $tag;
-        $name =~ s/\s+/-/g;
-        push @tag_pages, Statocles::Page::List->new(
-            app => $app,
-            path => "/blog/tag/$name.html",
-            template => $theme->template( blog => 'index' ),
-            layout => $theme->template( site => 'layout' ),
-            # Sorting by path just happens to also sort by date
-            pages => [ sort { $b->path cmp $a->path } pages( @{ $tagged_docs{ $tag } } ) ],
-        );
-    }
+    my %page_args = (
+        app => $app,
+        template => $theme->template( blog => 'index' ),
+        layout => $theme->template( site => 'layout' ),
+    );
 
-    cmp_deeply [ $app->tag_pages ], \@tag_pages;
+    my @tag_pages = (
+        Statocles::Page::List->new(
+            %page_args,
+            path => '/blog/tag/better/index.html',
+            pages => [ pages( @sorted_docs[0,1] ) ],
+            next => '/blog/tag/better/page-2.html',
+        ),
+        Statocles::Page::List->new(
+            %page_args,
+            path => '/blog/tag/better/page-2.html',
+            pages => [ pages( $sorted_docs[2] ) ],
+            prev => '/blog/tag/better/index.html',
+        ),
+        Statocles::Page::List->new(
+            %page_args,
+            path => '/blog/tag/error-message/index.html',
+            pages => [ pages( $sorted_docs[1] ) ],
+        ),
+        Statocles::Page::List->new(
+            %page_args,
+            path => '/blog/tag/more/index.html',
+            pages => [ pages( $sorted_docs[0] ) ],
+        ),
+        Statocles::Page::List->new(
+            %page_args,
+            path => '/blog/tag/even-more-tags/index.html',
+            pages => [ pages( $sorted_docs[0] ) ],
+        ),
+    );
+
+    cmp_deeply [ $app->tag_pages ], bag( @tag_pages );
     push @all_pages, @tag_pages;
 
     subtest 'tag navigation' => sub {
         cmp_deeply [ $app->tags ], [
-            { title => 'better', href => '/blog/tag/better.html' },
-            { title => 'error message', href => '/blog/tag/error-message.html' },
-            { title => 'even more tags', href => '/blog/tag/even-more-tags.html' },
-            { title => 'more', href => '/blog/tag/more.html' },
+            { title => 'better', href => '/blog/tag/better/index.html' },
+            { title => 'error message', href => '/blog/tag/error-message/index.html' },
+            { title => 'even more tags', href => '/blog/tag/even-more-tags/index.html' },
+            { title => 'more', href => '/blog/tag/more/index.html' },
         ];
     };
 };
 
-subtest 'index page' => sub {
-    my $page = Statocles::Page::List->new(
+subtest 'index page(s)' => sub {
+    my @sorted_docs = sort { $b->{doc}->path cmp $a->{doc}->path } docs( $app->source->path );
+    my %page_args = (
         app => $app,
-        path => '/blog/index.html',
         template => $theme->template( blog => 'index' ),
         layout => $theme->template( site => 'layout' ),
-        # Sorting by path just happens to also sort by date
-        pages => [ sort { $b->path cmp $a->path } pages( docs( $app->source->path ) ) ],
     );
 
-    cmp_deeply $app->index, $page;
-    push @all_pages, $page;
+    my @pages = (
+        Statocles::Page::List->new(
+            %page_args,
+            path => '/blog/index.html',
+            # Sorting by path just happens to also sort by date
+            pages => [ pages( @sorted_docs[0,1] ) ],
+            next => '/blog/page-2.html',
+        ),
+        Statocles::Page::List->new(
+            %page_args,
+            path => '/blog/page-2.html',
+            # Sorting by path just happens to also sort by date
+            pages => [ pages( @sorted_docs[2,3] ) ],
+            prev => '/blog/index.html',
+        ),
+    );
+
+    cmp_deeply [$app->index], bag( @pages );
+    push @all_pages, @pages;
 };
 
 subtest 'all pages()' => sub {

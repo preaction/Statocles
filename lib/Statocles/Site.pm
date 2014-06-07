@@ -126,8 +126,14 @@ sub write {
     );
     for my $app_name ( keys %{ $apps } ) {
         my $app = $apps->{$app_name};
+
+        my $index_path;
+        if ( $self->index eq $app_name ) {
+            $index_path = ($app->index)[0]->path;
+        }
+
         for my $page ( $app->pages ) {
-            if ( $self->index eq $app_name && $page->path eq $app->index->path ) {
+            if ( $index_path && $page->path eq $index_path ) {
                 # Rename the app's page so that we don't get two pages with identical
                 # content
                 $page = Statocles::Page::List->new(
