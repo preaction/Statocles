@@ -110,6 +110,8 @@ sub render {
             @{ $self->pages }
         ],
         app => $self->app,
+        next => $self->next,
+        prev => $self->prev,
     );
     return $self->layout->render(
         %args,

@@ -57,12 +57,16 @@ subtest 'extra args' => sub {
     my $list = Statocles::Page::List->new(
         path => '/blog/index.html',
         pages => \@pages,
+        next => '/blog/page-2.html',
+        prev => '/blog/page--1.html',
         layout => '<%= $site %> <%= $content %>',
         template => <<'ENDTEMPLATE',
 <%= $site %>
 % for my $page ( @$pages ) {
 <%= $page->{published} %> <%= $page->{path} %> <%= $page->{title} %> <%= $page->{author} %> <%= $page->{content} %>
 % }
+<%= $prev %>
+<%= $next %>
 ENDTEMPLATE
     );
 
@@ -70,7 +74,7 @@ ENDTEMPLATE
                 . join( "\n",
                     map { join( " ", $_->published, $_->path, $_->document->title, $_->document->author, $_->content ), }
                     @pages
-                ) . "\n\n";
+                ) . "\n/blog/page--1.html\n/blog/page-2.html\n\n";
 
     my $output = $list->render( site => 'hello', title => 'DOES NOT OVERRIDE' );
     eq_or_diff $output, $html;
