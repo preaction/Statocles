@@ -2,6 +2,7 @@ package Statocles::App::Blog;
 # ABSTRACT: A blog application
 
 use Statocles::Class;
+use Getopt::Long qw( GetOptionsFromArray );
 use Statocles::Page::Document;
 use Statocles::Page::List;
 
@@ -64,21 +65,36 @@ sub command {
     if ( $argv[0] eq 'help' ) {
         print <<ENDHELP;
 $name help -- This help file
-$name post <title> -- Create a new blog post with the given title
+$name post [--date YYYY-MM-DD] <title> -- Create a new blog post with the given title
 ENDHELP
     }
     elsif ( $argv[0] eq 'post' ) {
+        my %opt;
+        GetOptionsFromArray( \@argv, \%opt,
+            'date:s',
+        );
+
         my $title = join " ", @argv[1..$#argv];
         my $slug = lc $title;
         $slug =~ s/\s+/-/g;
-        my ( undef, undef, undef, $day, $mon, $year ) = localtime;
-        my @parts = (
-            sprintf( '%04i', $year + 1900 ),
-            sprintf( '%02i', $mon + 1 ),
+
+        my ( $year, $mon, $day );
+        if ( $opt{ date } ) {
+            ( $year, $mon, $day ) = split /-/, $opt{date};
+        }
+        else {
+            ( undef, undef, undef, $day, $mon, $year ) = localtime;
+            $year += 1900;
+            $mon += 1;
+        }
+
+        my @date_parts = (
+            sprintf( '%04i', $year ),
+            sprintf( '%02i', $mon ),
             sprintf( '%02i', $day ),
-            "$slug.yml",
         );
-        my $path = Path::Tiny->new( @parts );
+
+        my $path = Path::Tiny->new( @date_parts, "$slug.yml" );
         my %doc = (
             %$default_post,
             title => $title,
