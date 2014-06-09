@@ -55,7 +55,7 @@ to 5.
 has page_size => (
     is => 'ro',
     isa => Int,
-    default => 5,
+    default => sub { 5 },
 );
 
 =method command( app_name, args )
