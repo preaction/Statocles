@@ -109,19 +109,6 @@ has last_modified => (
     isa => InstanceOf['Time::Piece'],
 );
 
-=method dump
-
-Get this document as a hash reference.
-
-=cut
-
-sub dump {
-    my ( $self ) = @_;
-    return {
-        map { $_ => $self->$_ } qw( title author content tags )
-    };
-}
-
 1;
 __END__
 
