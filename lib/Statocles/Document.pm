@@ -69,6 +69,35 @@ has tags => (
     },
 );
 
+=attr links
+
+Related links for this document. Links are used to build relationships
+to other web addresses. Link categories are named based on their
+relationship.
+
+    crosspost - The same document posted to another web site
+
+Each category contains an arrayref of hashrefs with the following keys:
+
+    title - The title of the link
+    href - The URL for the link
+
+=cut
+
+has links => (
+    is => 'rw',
+    isa => HashRef[ArrayRef[HashRef]],
+    coerce => sub {
+        # Normalize to arrays
+        for my $category ( keys %{$_[0]} ) {
+            if ( ref $_[0]{$category} ne 'ARRAY' ) {
+                $_[0]{$category} = [ $_[0]{$category} ];
+            }
+        }
+        return $_[0];
+    },
+);
+
 =attr last_modified
 
 The date/time this document was last modified.

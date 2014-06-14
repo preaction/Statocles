@@ -16,6 +16,14 @@ my @exp_docs = (
         content => "Body content\n",
         # no tags. tags are optional
         last_modified => Time::Piece->strptime( '2014-04-30 06:50:35', $DT_FORMAT ),
+        links => {
+            crosspost => [
+                {
+                    title => 'blogs.perl.org',
+                    href => 'http://blogs.perl.org/preaction/404.html',
+                },
+            ],
+        },
     ),
     Statocles::Document->new(
         path => '/2014/04/30/plug.yml',
@@ -24,6 +32,7 @@ my @exp_docs = (
         content => "Better body content\n",
         tags => [qw( better )],
         last_modified => Time::Piece->strptime( '2014-04-30 00:00:00', $DT_FORMAT ),
+        # links is optional
     ),
     Statocles::Document->new(
         path => '/2014/05/22/(regex)[name].file.yml',
@@ -40,6 +49,14 @@ my @exp_docs = (
         content => "Body content\n",
         tags => [ 'more', 'better', 'even more tags' ],
         last_modified => Time::Piece->strptime( '2014-06-02 15:34:32', $DT_FORMAT ),
+        links => {
+            crosspost => [
+                {
+                    title => 'blogs.perl.org',
+                    href => 'http://blogs.perl.org/preaction/404.html',
+                },
+            ],
+        },
     ),
     Statocles::Document->new(
         path => '/9999/12/31/forever-is-a-long-time.yml',
