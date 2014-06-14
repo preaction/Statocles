@@ -69,6 +69,17 @@ has tags => (
     },
 );
 
+=attr last_modified
+
+The date/time this document was last modified.
+
+=cut
+
+has last_modified => (
+    is => 'rw',
+    isa => InstanceOf['Time::Piece'],
+);
+
 =method dump
 
 Get this document as a hash reference.
