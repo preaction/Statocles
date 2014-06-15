@@ -30,7 +30,6 @@
     </head>
     <body>
         <header>
-            % if ( @{ $site->nav->{main} } ) {
             <nav class="navbar navbar-default navbar-static-top" role="navigation">
                 <div class="container">
                 <!-- Brand and toggle get grouped for better mobile display -->
@@ -45,14 +44,15 @@
                     </div>
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="top-navbar-collapse-1">
+                        % if ( @{ $site->nav->{main} } ) {
                         <ul class="nav navbar-nav">
                             % for my $nav ( @{ $site->nav->{main} } ) {
                             <li><a href="<%= $nav->{href} %>"><%= $nav->{title} %></a></li>
                             % }
                         </ul>
+                        % }
                     </div>
                 </div>
-            % }
             </nav>
         </header>
         <div class="main container">
