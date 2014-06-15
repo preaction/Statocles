@@ -87,6 +87,7 @@ Each category contains an arrayref of hashrefs with the following keys:
 has links => (
     is => 'rw',
     isa => HashRef[ArrayRef[HashRef]],
+    default => sub { +{} },
     coerce => sub {
         # Normalize to arrays
         for my $category ( keys %{$_[0]} ) {
