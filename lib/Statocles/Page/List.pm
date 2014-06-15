@@ -45,7 +45,8 @@ has '+template' => (
         Statocles::Template->new(
             content => <<'ENDTEMPLATE'
 % for my $page ( @$pages ) {
-<%= $page->{published} %> <%= $page->{path} %> <%= $page->{title} %> <%= $page->{author} %> <%= $page->{content} %>
+% my $doc = $page->document;
+<%= $page->published %> <%= $page->path %> <%= $doc->title %> <%= $doc->author %> <%= $page->content %>
 % }
 ENDTEMPLATE
         );
@@ -95,27 +96,17 @@ sub paginate {
     return @retval;
 }
 
-=method render
+=method vars
 
-Render this page. Returns the full content of the page.
+Get the template variables for this page.
 
 =cut
 
-sub render {
-    my ( $self, %args ) = @_;
-    my $content = $self->template->render(
-        %args,
-        pages => [
-            map { +{ %{ $_->document }, published => $_->published, content => $_->content, path => $_->path } }
-            @{ $self->pages }
-        ],
-        app => $self->app,
-        next => $self->next,
-        prev => $self->prev,
-    );
-    return $self->layout->render(
-        %args,
-        content => $content,
+sub vars {
+    my ( $self ) = @_;
+    return (
+        self => $self,
+        pages => $self->pages,
         app => $self->app,
     );
 }

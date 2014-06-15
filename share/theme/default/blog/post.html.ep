@@ -3,11 +3,11 @@
     <div class="col-md-9">
         <main>
             <hgroup>
-                <h1><%= $title %></h1>
-                <h2><time datetime="<%= $published->strftime('%Y-%m-%d') %>">
-                    <%= $published->strftime('%Y-%m-%d') %>
+                <h1><%= $doc->title %></h1>
+                <h2><time datetime="<%= $self->published->strftime('%Y-%m-%d') %>">
+                    <%= $self->published->strftime('%Y-%m-%d') %>
                 </time></h2>
-                <h2><%= $author %></h2>
+                <h2><%= $doc->author %></h2>
             </hgroup>
             <%= $content %>
         </main>

@@ -52,29 +52,19 @@ sub content {
     return $self->markdown->markdown( $self->document->content );
 }
 
-=method render
+=method vars
 
-Render the page, using the L<template|Statocles::Page/template> and wrapping
-with the L<layout|Statocles::Page/layout>.
+Get the template variables for this page.
 
 =cut
 
-sub render {
-    my ( $self, %args ) = @_;
-    my $content = $self->template->render(
-        %args,
-        %{$self->document},
+sub vars {
+    my ( $self ) = @_;
+    return (
         content => $self->content,
-        path => $self->path,
+        self => $self,
+        doc => $self->document,
         app => $self->app,
-        published => $self->published,
-    );
-    return $self->layout->render(
-        %args,
-        content => $content,
-        path => $self->path,
-        app => $self->app,
-        published => $self->published,
     );
 }
 

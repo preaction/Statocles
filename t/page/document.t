@@ -38,7 +38,11 @@ subtest 'template string' => sub {
         document => $doc,
         path => '/path/to/page.html',
         published => $tp,
-        template => '<%= $published %> <%= $path %> <%= $title %> <%= $author %> <%= $content %>',
+        template => join( ' ',
+            ( map { "<\%= \$self->$_ \%>" } qw( published path ) ),
+            ( map { "<\%= \$doc->$_ \%>" } qw( title author ) ),
+            '<%= $content %>',
+        ),
     );
 
     my $output = $page->render;
@@ -51,7 +55,11 @@ subtest 'layout' => sub {
     my $page = Statocles::Page::Document->new(
         document => $doc,
         path => '/path/to/page.html',
-        template => '<%= $path %> <%= $title %> <%= $author %> <%= $content %>',
+        template => join( ' ',
+            '<%= $self->path %>',
+            ( map { "<\%= \$doc->$_ \%>" } qw( title author ) ),
+            '<%= $content %>',
+        ),
         layout => 'HEAD <%= $content %> FOOT',
     );
 
@@ -65,7 +73,12 @@ subtest 'extra args' => sub {
     my $page = Statocles::Page::Document->new(
         document => $doc,
         path => '/path/to/page.html',
-        template => '<%= $site %> <%= $path %> <%= $title %> <%= $author %> <%= $content %>',
+        template => join( ' ',
+            '<%= $site %>',
+            ( map { "<\%= \$self->$_ \%>" } qw( path ) ),
+            ( map { "<\%= \$doc->$_ \%>" } qw( title author ) ),
+            '<%= $content %>',
+        ),
         layout => '<%= $site %> HEAD <%= $content %> FOOT',
     );
 

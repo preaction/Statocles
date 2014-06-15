@@ -1,1 +1,1 @@
-<%= $title %> <%= $author %> <%= $content %>
+<%= $self->title %> <%= $self->author %> <%= $content %>

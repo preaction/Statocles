@@ -1,3 +1,4 @@
 % for my $page ( @$pages ) {
-<%= $page->{title} %> <%= $page->{author} %> <%= $page->{content} %>
+% my $doc = $page->document;
+<%= $doc->title %> <%= $doc->author %> <%= $page->content %>
 % }

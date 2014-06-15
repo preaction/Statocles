@@ -77,6 +77,26 @@ has layout => (
     },
 );
 
+=method render
+
+Render the page, using the L<template|Statocles::Page/template> and wrapping
+with the L<layout|Statocles::Page/layout>.
+
+=cut
+
+sub render {
+    my ( $self, %args ) = @_;
+    my $content = $self->template->render(
+        %args,
+        $self->vars,
+    );
+    return $self->layout->render(
+        %args,
+        $self->vars,
+        content => $content,
+    );
+}
+
 1;
 __END__
 
