@@ -22,6 +22,10 @@
             nav#tags h1 {
                 font-size: 14pt;
             }
+            .crosspost {
+                margin: 0 2em;
+                font-style: italic;
+            }
         </style>
     </head>
     <body>

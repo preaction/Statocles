@@ -7,6 +7,13 @@
                 <h2><time datetime="<%= $self->published->strftime('%Y-%m-%d') %>">
                     <%= $self->published->strftime('%Y-%m-%d') %>
                 </time></h2>
+                % if ( $doc->links->{crosspost} ) {
+                    % for my $link ( @{ $doc->links->{crosspost} } ) {
+                        <p><a class="crosspost" href="<%= $link->{href} %>">
+                            Read <%= $doc->title %> on <%= $link->{title} %>.
+                        </a></p>
+                    % }
+                % }
                 <h2><%= $doc->author %></h2>
             </hgroup>
             <%= $content %>
