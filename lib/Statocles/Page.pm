@@ -5,7 +5,7 @@ use Statocles::Role;
 use Statocles::Template;
 use Text::Markdown;
 
-requires 'render';
+requires 'vars';
 
 =attr app
 
