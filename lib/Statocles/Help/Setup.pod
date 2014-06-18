@@ -238,11 +238,8 @@ of having a website in a git repository is change tracking.
 =head2 Deploy The Site
 
     $ statocles deploy
-    $ git push origin master
 
 Running the C<deploy> command will, in the case of the git site, commit the
-updated pages to the git repository. Then we just need to do a C<git push>
-to make our changes live on GitHub Pages.
-
-I<NOTE:> In the future, C<deploy> may perform C<push> automatically.
+updated pages to the git repository. C<deploy> will try to do a C<git push>
+automatically, so your changes are now live on Github Pages!
 

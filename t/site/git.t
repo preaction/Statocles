@@ -27,27 +27,32 @@ subtest 'site writes application' => sub {
     my $tmpdir = tempdir( @temp_args );
     diag "TMP: " . $tmpdir if @temp_args;
 
-    my $site = site( $tmpdir );
-    my $git = Git::Repository->new( work_tree => "$tmpdir" );
+    my ( $site, $workdir, $remotedir ) = site( $tmpdir );
+    my $git = Git::Repository->new( work_tree => "$workdir" );
+    my $remotegit = Git::Repository->new( work_tree => "$remotedir" );
 
     subtest 'build' => sub {
         $site->build;
 
         for my $page ( $site->app( 'blog' )->pages ) {
-            subtest 'page content' => test_content( $tmpdir, $site, $page, build => $page->path );
+            subtest 'page content' => test_content( $workdir, $site, $page, build => $page->path );
         }
     };
 
     subtest 'deploy' => sub {
         # Changed/added files not in the build directory do not get added
-        $tmpdir->child( 'NEWFILE' )->spew( 'test' );
+        $workdir->child( 'NEWFILE' )->spew( 'test' );
+
+        # Origin must be on a different branch in order for push to work
+        _git_run( $remotegit, branch => 'safe' );
+        _git_run( $remotegit, checkout => 'safe' );
 
         $site->deploy;
 
         is current_branch( $git ), 'master', 'deploy leaves us on the branch we came from';
 
         for my $page ( $site->app( 'blog' )->pages ) {
-            ok !$tmpdir->child( $page->path )->exists, 'file is not in master branch';
+            ok !$workdir->child( $page->path )->exists, 'file is not in master branch';
         }
 
         _git_run( $git, checkout => $site->deploy_branch );
@@ -57,9 +62,16 @@ subtest 'site writes application' => sub {
         unlike $log, qr{NEWFILE};
 
         for my $page ( $site->app( 'blog' )->pages ) {
-            subtest 'page content' => test_content( $tmpdir, $site, $page, '.' => $page->path );
+            subtest 'page content' => test_content( $workdir, $site, $page, '.' => $page->path );
         }
         _git_run( $git, checkout => 'master' );
+
+        subtest 'deploy performs git push' => sub {
+            _git_run( $remotegit, checkout => 'gh-pages' );
+            for my $page ( $site->app( 'blog' )->pages ) {
+                subtest 'page content' => test_content( $remotedir, $site, $page, '.' => $page->path );
+            }
+        };
     };
 };
 
@@ -68,23 +80,37 @@ done_testing;
 sub site {
     my ( $tmpdir, %site_args ) = @_;
 
+    my $workdir = $tmpdir->child( 'workdir' );
+    $workdir->mkpath;
+    my $remotedir = $tmpdir->child( 'remotedir' );
+    $remotedir->mkpath;
+
     # Git before 1.6.4 does not allow directory as argument to "init"
     my $cwd = cwd;
-    chdir $tmpdir;
+    chdir $workdir;
     Git::Repository->run( "init" );
     chdir $cwd;
 
-    my $git = Git::Repository->new( work_tree => "$tmpdir" );
+    chdir $remotedir;
+    Git::Repository->run( "init" );
+    chdir $cwd;
+
+    my $remotegit = Git::Repository->new( work_tree => "$remotedir" );
+    my $workgit = Git::Repository->new( work_tree => "$workdir" );
+    _git_run( $workgit, remote => add => origin => "$remotedir" );
 
     # Set some config so Git knows who we are (and doesn't complain)
-    $git->run( config => 'user.name' => 'Statocles Test User' );
-    $git->run( config => 'user.email' => 'statocles@example.com' );
+    for my $git ( $workgit, $remotegit ) {
+        _git_run( $git, config => 'user.name' => 'Statocles Test User' );
+        _git_run( $git, config => 'user.email' => 'statocles@example.com' );
+    }
 
     # Copy the source into the repository, so we have something to commit
-    dircopy( $SHARE_DIR->child( 'blog' )->stringify, $tmpdir->child( 'blog' )->stringify )
+    dircopy( $SHARE_DIR->child( 'blog' )->stringify, $remotedir->child( 'blog' )->stringify )
         or die "Could not copy directory: $!";
-    $git->run( add => 'blog' );
-    $git->run( commit => -m => 'Initial commit' );
+    _git_run( $remotegit, add => 'blog' );
+    _git_run( $remotegit, commit => -m => 'Initial commit' );
+    _git_run( $workgit, pull => origin => 'master' );
 
     my $theme = Statocles::Theme->new(
         source_dir => $SHARE_DIR->child( 'theme' ),
@@ -92,7 +118,7 @@ sub site {
 
     my $blog = Statocles::App::Blog->new(
         source => Statocles::Store->new(
-            path => $tmpdir->child( 'blog' ),
+            path => $workdir->child( 'blog' ),
         ),
         url_root => '/blog',
         theme => $theme,
@@ -102,16 +128,16 @@ sub site {
         title => 'Test Site',
         apps => { blog => $blog },
         build_store => Statocles::Store->new(
-            path => $tmpdir->child( 'build' ),
+            path => $workdir->child( 'build' ),
         ),
         deploy_store => Statocles::Store->new(
-            path => $tmpdir,
+            path => $workdir,
         ),
         deploy_branch => 'gh-pages',
         %site_args,
     );
 
-    return $site;
+    return ( $site, $workdir, $remotedir );
 }
 
 sub test_content {
