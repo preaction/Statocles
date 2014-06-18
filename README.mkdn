@@ -17,7 +17,7 @@ develop rich web content using basic text-based tools.
 ## GETTING STARTED
 
 To get started with your own Statocle site, see
-[the Statocles setup help](https://metacpan.org/pod/Statocles::Help::Setup).
+[the Statocles setup help in Statocles::Help::Setup](https://metacpan.org/pod/Statocles::Help::Setup).
 
 # OVERVIEW
 
