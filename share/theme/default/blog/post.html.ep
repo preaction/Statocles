@@ -2,20 +2,27 @@
 
     <div class="col-md-9">
         <main>
-            <hgroup>
+            <header>
                 <h1><%= $doc->title %></h1>
-                <h2><time datetime="<%= $self->published->strftime('%Y-%m-%d') %>">
-                    <%= $self->published->strftime('%Y-%m-%d') %>
-                </time></h2>
+                <aside>
+                    <p><time datetime="<%= $self->published->strftime('%Y-%m-%d') %>">
+                        Posted on <%= $self->published->strftime('%Y-%m-%d') %>
+                    </time>
+                    by <%= $doc->author %></p>
+                </aside>
                 % if ( $doc->links->{crosspost} ) {
+                <div class="alert alert-info">
+                    <p>Originally posted as:</p>
+                    <ul>
                     % for my $link ( @{ $doc->links->{crosspost} } ) {
-                        <p><a class="crosspost" href="<%= $link->{href} %>">
-                            Read <%= $doc->title %> on <%= $link->{title} %>.
-                        </a></p>
+                        <li><a class="alert-link" href="<%= $link->{href} %>">
+                            <em><%= $doc->title %></em> on <%= $link->{title} %>.
+                        </a></li>
                     % }
+                    </ul>
+                </div>
                 % }
-                <h2><%= $doc->author %></h2>
-            </hgroup>
+            </header>
             <%= $content %>
         </main>
     </div>

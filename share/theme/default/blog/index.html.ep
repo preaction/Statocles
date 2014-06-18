@@ -6,20 +6,27 @@
             % for my $page ( @$pages ) {
             % my $doc = $page->document;
             <article>
-                <hgroup>
+                <header>
                     <h1><a href="<%= $page->path %>"><%= $doc->title %></a></h1>
-                    <h2><time datetime="<%= $page->published->strftime('%Y-%m-%d') %>">
-                        <%= $page->published->strftime('%Y-%m-%d') %>
-                    </time></h2>
-                    <h2><%= $doc->author %></h2>
-                </hgroup>
-                % if ( $doc->links->{crosspost} ) {
-                    % for my $link ( @{ $doc->links->{crosspost} } ) {
-                        <p><a class="crosspost" href="<%= $link->{href} %>">
-                            Read <%= $doc->title %> on <%= $link->{title} %>.
-                        </a></p>
+                    <aside>
+                        <p><time datetime="<%= $page->published->strftime('%Y-%m-%d') %>">
+                            Posted on <%= $page->published->strftime('%Y-%m-%d') %>
+                        </time>
+                        by <%= $doc->author %></p>
+                    </aside>
+                    % if ( $doc->links->{crosspost} ) {
+                    <div class="alert alert-info">
+                        <p>Originally posted as:</p>
+                        <ul>
+                        % for my $link ( @{ $doc->links->{crosspost} } ) {
+                            <li><a class="alert-link" href="<%= $link->{href} %>">
+                                <em><%= $doc->title %></em> on <%= $link->{title} %>.
+                            </a></li>
+                        % }
+                        </ul>
+                    </div>
                     % }
-                % }
+                </header>
                 <%= $page->content %>
             </article>
             % }

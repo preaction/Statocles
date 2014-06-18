@@ -11,20 +11,12 @@
             {
                 border-bottom: 4px solid #045578;
             }
-            article > hgroup > h2,
-            main > hgroup > h2 
-            {
-                float: right;
-                clear: right;
+            header aside {
                 margin-top: 0;
                 font-size: 12pt;
             }
             nav#tags h1 {
                 font-size: 14pt;
-            }
-            .crosspost {
-                margin: 0 2em;
-                font-style: italic;
             }
         </style>
     </head>
