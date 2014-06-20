@@ -209,38 +209,48 @@ subtest 'commands' => sub {
 
     subtest 'post' => sub {
         subtest 'create new post' => sub {
-            local $ENV{EDITOR}; # We can't very well open vim...
-            my ( undef, undef, undef, $day, $mon, $year ) = localtime;
-            my $doc_path = $tmpdir->child(
-                'blog',
-                sprintf( '%04i', $year + 1900 ),
-                sprintf( '%02i', $mon + 1 ),
-                sprintf( '%02i', $day ),
-                'this-is-a-title.yml',
-            );
-
-            subtest 'run the command' => sub {
-                my @args = qw( blog post This is a Title );
+            subtest 'without $EDITOR, title is required' => sub {
+                local $ENV{EDITOR};
+                my @args = qw( blog post );
                 my ( $out, $err, $exit ) = capture { $app->command( @args ) };
-                ok !$err, 'nothing on stdout';
-                is $exit, 0;
-                like $out, qr{New post at: \Q$doc_path},
-                    'contains blog post document path';
+                like $err, qr{Title is required when \$EDITOR is not set};
+                like $err, qr{blog post <title>};
+                isnt $exit, 0;
             };
 
-            subtest 'check the generated document' => sub {
-                my $doc = $app->source->read_document( $doc_path );
-                cmp_deeply $doc, {
-                    title => 'This is a Title',
-                    author => undef,
-                    tags => undef,
-                    last_modified => isa( 'Time::Piece' ),
-                    content => <<'ENDMARKDOWN',
+            subtest 'default document' => sub {
+                local $ENV{EDITOR}; # We can't very well open vim...
+                my ( undef, undef, undef, $day, $mon, $year ) = localtime;
+                my $doc_path = $tmpdir->child(
+                    'blog',
+                    sprintf( '%04i', $year + 1900 ),
+                    sprintf( '%02i', $mon + 1 ),
+                    sprintf( '%02i', $day ),
+                    'this-is-a-title.yml',
+                );
+
+                subtest 'run the command' => sub {
+                    my @args = qw( blog post This is a Title );
+                    my ( $out, $err, $exit ) = capture { $app->command( @args ) };
+                    ok !$err, 'nothing on stdout';
+                    is $exit, 0;
+                    like $out, qr{New post at: \Q$doc_path},
+                        'contains blog post document path';
+                };
+
+                subtest 'check the generated document' => sub {
+                    my $doc = $app->source->read_document( $doc_path );
+                    cmp_deeply $doc, {
+                        title => 'This is a Title',
+                        author => undef,
+                        tags => undef,
+                        last_modified => isa( 'Time::Piece' ),
+                        content => <<'ENDMARKDOWN',
 Markdown content goes here.
 ENDMARKDOWN
-                };
-                my $dt_str = $doc->{last_modified}->strftime( '%Y-%m-%d %H:%M:%S' );
-                eq_or_diff $doc_path->slurp, <<ENDCONTENT;
+                    };
+                    my $dt_str = $doc->{last_modified}->strftime( '%Y-%m-%d %H:%M:%S' );
+                    eq_or_diff $doc_path->slurp, <<ENDCONTENT;
 ---
 author: ~
 last_modified: $dt_str
@@ -249,37 +259,37 @@ title: This is a Title
 ---
 Markdown content goes here.
 ENDCONTENT
+                };
             };
-        };
-        subtest 'custom date' => sub {
-            local $ENV{EDITOR}; # We can't very well open vim...
+            subtest 'custom date' => sub {
+                local $ENV{EDITOR}; # We can't very well open vim...
 
-            my $doc_path = $tmpdir->child(
-                'blog', '2014', '04', '01', 'this-is-a-title.yml',
-            );
+                my $doc_path = $tmpdir->child(
+                    'blog', '2014', '04', '01', 'this-is-a-title.yml',
+                );
 
-            subtest 'run the command' => sub {
-                my @args = qw( blog post --date 2014-4-1 This is a Title );
-                my ( $out, $err, $exit ) = capture { $app->command( @args ) };
-                ok !$err, 'nothing on stdout';
-                is $exit, 0;
-                like $out, qr{New post at: \Q$doc_path},
-                    'contains blog post document path';
-            };
+                subtest 'run the command' => sub {
+                    my @args = qw( blog post --date 2014-4-1 This is a Title );
+                    my ( $out, $err, $exit ) = capture { $app->command( @args ) };
+                    ok !$err, 'nothing on stdout';
+                    is $exit, 0;
+                    like $out, qr{New post at: \Q$doc_path},
+                        'contains blog post document path';
+                };
 
-            subtest 'check the generated document' => sub {
-                my $doc = $app->source->read_document( $doc_path );
-                cmp_deeply $doc, {
-                    title => 'This is a Title',
-                    author => undef,
-                    tags => undef,
-                    last_modified => isa( 'Time::Piece' ),
-                    content => <<'ENDMARKDOWN',
+                subtest 'check the generated document' => sub {
+                    my $doc = $app->source->read_document( $doc_path );
+                    cmp_deeply $doc, {
+                        title => 'This is a Title',
+                        author => undef,
+                        tags => undef,
+                        last_modified => isa( 'Time::Piece' ),
+                        content => <<'ENDMARKDOWN',
 Markdown content goes here.
 ENDMARKDOWN
-                };
-                my $dt_str = $doc->{last_modified}->strftime( '%Y-%m-%d %H:%M:%S' );
-                eq_or_diff $doc_path->slurp, <<ENDCONTENT;
+                    };
+                    my $dt_str = $doc->{last_modified}->strftime( '%Y-%m-%d %H:%M:%S' );
+                    eq_or_diff $doc_path->slurp, <<ENDCONTENT;
 ---
 author: ~
 last_modified: $dt_str
@@ -288,6 +298,7 @@ title: This is a Title
 ---
 Markdown content goes here.
 ENDCONTENT
+                };
             };
         };
     };

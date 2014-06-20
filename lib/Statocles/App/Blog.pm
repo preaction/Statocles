@@ -88,6 +88,15 @@ ENDHELP
         );
 
         my $title = join " ", @argv[1..$#argv];
+        if ( !$ENV{EDITOR} && !$title ) {
+            print STDERR <<"ENDHELP";
+Title is required when \$EDITOR is not set.
+
+Usage: $name post <title>
+ENDHELP
+            return 1;
+        }
+
         my $slug = lc $title;
         $slug =~ s/\s+/-/g;
 
