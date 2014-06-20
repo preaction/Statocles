@@ -88,6 +88,7 @@ subtest 'get help' => sub {
     ok !$err, 'help output is on stdout';
     like $out, qr{statocles -h},
         'reports pod from bin/statocles, not Statocles::Command';
+    is $exit, 0;
 };
 
 subtest 'get version' => sub {
