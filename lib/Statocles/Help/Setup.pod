@@ -175,7 +175,7 @@ your own site.
         args:
             apps:
                 blog:
-                    $ref: blog
+                    $ref: blog_app
             build_store:
                 $ref: build
             deploy_store:
