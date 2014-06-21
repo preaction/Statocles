@@ -66,6 +66,13 @@ my @exp_docs = (
         tags => [ 'future' ],
         last_modified => Time::Piece->strptime( '2014-06-02 04:05:06', $DT_FORMAT ),
     ),
+    Statocles::Document->new(
+        path => '/draft/a-draft-post.yml',
+        title => 'A Draft',
+        author => 'preaction',
+        last_modified => Time::Piece->strptime( '2014-06-21 00:06:00', $DT_FORMAT ),
+        content => "Draft body content\n",
+    ),
 );
 
 subtest 'read documents' => sub {

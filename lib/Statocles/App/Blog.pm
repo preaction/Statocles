@@ -147,6 +147,7 @@ sub post_pages {
         $path =~ s{[.]\w+$}{.html};
 
         my @date_parts = $path =~ m{/(\d{4})/(\d{2})/(\d{2})/[^/]+$};
+        next unless @date_parts;
         my $date = join "-", @date_parts;
 
         next if $date gt $today;

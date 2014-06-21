@@ -55,6 +55,10 @@ sub docs {
         my $rel_path = $path->relative( $root_path );
         my @doc_path = ( splitdir( $rel_path->parent->stringify ), $rel_path->basename );
 
+        # Must have YYYY/MM/DD in the front of the path
+        next unless @doc_path > 3;
+        next unless join( "", @doc_path[0..2] ) =~ /\d{8}/;
+
         my $doc = Statocles::Document->new(
             path => rootdir->child( @doc_path ),
             %{ $app->source->read_document( $SHARE_DIR->child( 'blog', @doc_path ) ) },
