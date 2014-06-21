@@ -116,7 +116,7 @@ site|Statocles::Site::Git> knows how to deploy to git repositories.
         args:
             apps:
                 blog:
-                    $ref: blog
+                    $ref: blog_app
             build_store:
                 $ref: build
             deploy_store:
