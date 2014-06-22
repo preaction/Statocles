@@ -26,6 +26,20 @@ ENDTEMPLATE
             'post.html' => Statocles::Template->new(
                 content => '<%= $title %> <%= $author %> <%= $content %>',
             ),
+            'index.rss' => Statocles::Template->new(
+                content => <<'ENDTEMPLATE'
+% for my $page ( @$pages ) {
+<% $page->{title} %> <% $page->{author} %> <% $page->{content} %>
+% }
+ENDTEMPLATE
+            ),
+            'index.atom' => Statocles::Template->new(
+                content => <<'ENDTEMPLATE'
+% for my $page ( @$pages ) {
+<% $page->{title} %> <% $page->{author} %> <% $page->{content} %>
+% }
+ENDTEMPLATE
+            ),
         },
     },
 );
@@ -97,9 +111,11 @@ sub pages {
     return @pages;
 }
 
+# Sorting by path just happens to also sort by date
+my @sorted_docs = sort { $b->{doc}->path cmp $a->{doc}->path } docs( $app->source->path );
+
 subtest 'blog post pages' => sub {
-    my @doc_specs = docs( $app->source->path );
-    my @pages = pages( @doc_specs );
+    my @pages = pages( @sorted_docs );
     cmp_deeply
         [ $app->post_pages ],
         bag( @pages )
@@ -108,13 +124,20 @@ subtest 'blog post pages' => sub {
 };
 
 subtest 'tag pages' => sub {
-    # Sorting by path just happens to also sort by date
-    my @sorted_docs = sort { $b->{doc}->path cmp $a->{doc}->path } docs( $app->source->path );
-
     my %page_args = (
         app => $app,
         template => $theme->template( blog => 'index.html' ),
         layout => $theme->template( site => 'layout.html' ),
+    );
+    my %rss_args = (
+        app => $app,
+        type => 'application/rss+xml',
+        template => $theme->template( blog => 'index.rss' ),
+    );
+    my %atom_args = (
+        app => $app,
+        type => 'application/atom+xml',
+        template => $theme->template( blog => 'index.atom' ),
     );
 
     my @tag_pages = (
@@ -147,6 +170,70 @@ subtest 'tag pages' => sub {
         ),
     );
 
+    my @feeds = (
+        [
+            Statocles::Page::Feed->new(
+                %atom_args,
+                path => '/blog/tag/better.atom',
+                page => $tag_pages[0],
+            ),
+            Statocles::Page::Feed->new(
+                %rss_args,
+                path => '/blog/tag/better.rss',
+                page => $tag_pages[0],
+            ),
+        ],
+        [
+            Statocles::Page::Feed->new(
+                %atom_args,
+                path => '/blog/tag/error-message.atom',
+                page => $tag_pages[2],
+            ),
+            Statocles::Page::Feed->new(
+                %rss_args,
+                path => '/blog/tag/error-message.rss',
+                page => $tag_pages[2],
+            ),
+        ],
+        [
+            Statocles::Page::Feed->new(
+                %atom_args,
+                path => '/blog/tag/more.atom',
+                page => $tag_pages[3],
+            ),
+            Statocles::Page::Feed->new(
+                %rss_args,
+                path => '/blog/tag/more.rss',
+                page => $tag_pages[3],
+            ),
+        ],
+        [
+            Statocles::Page::Feed->new(
+                %atom_args,
+                path => '/blog/tag/even-more-tags.atom',
+                page => $tag_pages[4],
+            ),
+            Statocles::Page::Feed->new(
+                %rss_args,
+                path => '/blog/tag/even-more-tags.rss',
+                page => $tag_pages[4],
+            ),
+        ],
+    );
+
+    # Add feed pages to the tag pages
+    for my $list ( @tag_pages[0,1] ) {
+        $list->links->{feed} = [
+            map { { href => $_->path, type => $_->type, } } @{ $feeds[0] }
+        ];
+    }
+    for my $i ( 2..$#tag_pages ) {
+        $tag_pages[$i]->links->{feed} = [
+            map { { href => $_->path, type => $_->type } } @{ $feeds[$i-1] }
+        ];
+    }
+
+    push @tag_pages, map { @$_ } @feeds;
     cmp_deeply [ $app->tag_pages ], bag( @tag_pages );
     push @all_pages, @tag_pages;
 
@@ -161,11 +248,20 @@ subtest 'tag pages' => sub {
 };
 
 subtest 'index page(s)' => sub {
-    my @sorted_docs = sort { $b->{doc}->path cmp $a->{doc}->path } docs( $app->source->path );
     my %page_args = (
         app => $app,
         template => $theme->template( blog => 'index.html' ),
         layout => $theme->template( site => 'layout.html' ),
+    );
+    my %rss_args = (
+        app => $app,
+        type => 'application/rss+xml',
+        template => $theme->template( blog => 'index.rss' ),
+    );
+    my %atom_args = (
+        app => $app,
+        type => 'application/atom+xml',
+        template => $theme->template( blog => 'index.atom' ),
     );
 
     my @pages = (
@@ -184,6 +280,27 @@ subtest 'index page(s)' => sub {
             prev => '/blog/index.html',
         ),
     );
+
+    my @feeds = (
+        Statocles::Page::Feed->new(
+            %atom_args,
+            path => '/blog/index.atom',
+            page => $pages[0],
+        ),
+        Statocles::Page::Feed->new(
+            %rss_args,
+            path => '/blog/index.rss',
+            page => $pages[0],
+        ),
+    );
+
+    for my $page ( @pages ) {
+        $page->links->{feed} = [
+            map { { href => $_->path, type => $_->type } } @feeds
+        ];
+    }
+
+    push @pages, @feeds;
 
     cmp_deeply [$app->index], bag( @pages );
     push @all_pages, @pages;

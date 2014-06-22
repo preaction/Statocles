@@ -37,6 +37,14 @@ sub read_templates {
     my $index = Statocles::Template->new(
         path => $index_fn,
     );
+    my $rss_fn = $dir->child( 'blog', 'index.rss.ep' );
+    my $rss = Statocles::Template->new(
+        path => $rss_fn,
+    );
+    my $atom_fn = $dir->child( 'blog', 'index.atom.ep' );
+    my $atom = Statocles::Template->new(
+        path => $atom_fn,
+    );
     my $layout_fn = $dir->child( 'site', 'layout.html.ep' );
     my $layout = Statocles::Template->new(
         path => $layout_fn,
@@ -46,6 +54,8 @@ sub read_templates {
         blog => {
             'post.html' => $tmpl,
             'index.html' => $index,
+            'index.rss' => $rss,
+            'index.atom' => $atom,
         },
         site => {
             'layout.html' => $layout,

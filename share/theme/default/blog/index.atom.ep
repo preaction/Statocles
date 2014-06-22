@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id><%= $site->url( $self->page->path ) %></id>
+    <title><%= $site->title %></title>
+    <updated><%= Time::Piece->new->strftime('%Y-%m-%dT%H:%M:%SZ') %></updated>
+    <link rel="self" href="<%= $site->url( $self->path ) %>"/>
+    <link rel="alternate" href="<%= $site->url( $self->page->path ) %>"/>
+    <generator version="<%= $Statocles::VERSION %>">Statocles</generator>
+    % for my $p ( @$pages ) {
+    % my $doc = $p->document;
+    <entry>
+        <id><%= $site->url( $p->path ) %></id>
+        <title><%= $doc->title %></title>
+        <author><name><%= $doc->author %></name></author>
+        <link rel="alternate" href="<%= $site->url( $p->path ) %>" />
+        <content type="html"><![CDATA[
+            <%= $p->content %>
+        ]]></content>
+        <updated><%= $p->published->strftime('%Y-%m-%dT%H:%M:%SZ') %></updated>
+        % for my $t ( $doc->tags ) {
+        <category term="<%= $t %>" />
+        % }
+    </entry>
+    % }
+</feed>

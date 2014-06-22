@@ -1,0 +1,5 @@
+<%= $site->title %>
+% for my $page ( @$pages ) {
+% my $doc = $page->document;
+<%= $doc->title %> <%= $doc->author %> <%= $page->content %>
+% }

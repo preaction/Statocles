@@ -19,6 +19,11 @@
                 font-size: 14pt;
             }
         </style>
+        % if ( $self->links->{feed} ) {
+            % for my $link ( @{ $self->links->{feed} } ) {
+            <link rel="alternate" href="<%= $link->{href} %>" type="<%= $link->{type} %>" />
+            % }
+        % }
     </head>
     <body>
         <header>

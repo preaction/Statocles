@@ -6,6 +6,7 @@ use Memoize qw( memoize );
 use Getopt::Long qw( GetOptionsFromArray );
 use Statocles::Page::Document;
 use Statocles::Page::List;
+use Statocles::Page::Feed;
 
 extends 'Statocles::App';
 
@@ -168,13 +169,26 @@ memoize( 'post_pages' );
 
 =method index()
 
-Get the index page (a L<page|Statocles::Page> object) for this application.
+Get the index page (a L<list page|Statocles::Page::List>) for this application.
+This includes all the relevant L<feed pages|Statocles::Page::Feed>.
 
 =cut
 
+my %FEEDS = (
+    rss => {
+        type => 'application/rss+xml',
+        template => 'index.rss',
+    },
+    atom => {
+        type => 'application/atom+xml',
+        template => 'index.atom',
+    },
+);
+
 sub index {
     my ( $self ) = @_;
-    return Statocles::Page::List->paginate(
+
+    my @pages = Statocles::Page::List->paginate(
         after => $self->page_size,
         path => join( "/", $self->url_root, 'page-%i.html' ),
         index => join( "/", $self->url_root, 'index.html' ),
@@ -184,6 +198,27 @@ sub index {
         template => $self->theme->template( blog => 'index.html' ),
         layout => $self->theme->template( site => 'layout.html' ),
     );
+
+    my $index = $pages[0];
+    my @feed_pages;
+    for my $feed ( sort keys %FEEDS ) {
+        push @feed_pages, Statocles::Page::Feed->new(
+            app => $self,
+            type => $FEEDS{ $feed }{ type },
+            page => $index,
+            path => join( "/", $self->url_root, 'index.' . $feed ),
+            template => $self->theme->template( blog => $FEEDS{$feed}{template} ),
+        );
+    }
+
+    # Add the feeds to all the pages
+    for my $page ( @pages ) {
+        $page->links->{feed} = [
+            map { { href => $_->path, type => $_->type } } @feed_pages
+        ];
+    }
+
+    return ( @pages, @feed_pages );
 }
 memoize( 'index' );
 
@@ -198,9 +233,9 @@ sub tag_pages {
 
     my %tagged_docs = $self->_tag_docs;
 
-    my @tag_pages;
+    my @pages;
     for my $tag ( keys %tagged_docs ) {
-        push @tag_pages, Statocles::Page::List->paginate(
+        my @tag_pages = Statocles::Page::List->paginate(
             after => $self->page_size,
             path => join( "/", $self->url_root, 'tag', $tag, 'page-%i.html' ),
             index => $self->_tag_url( $tag ),
@@ -210,9 +245,33 @@ sub tag_pages {
             template => $self->theme->template( blog => 'index.html' ),
             layout => $self->theme->template( site => 'layout.html' ),
         );
+
+        my $index = $tag_pages[0];
+        my @feed_pages;
+        for my $feed ( keys %FEEDS ) {
+            my $tag_file = $tag . '.' . $feed;
+            $tag_file =~ s/\s+/-/g;
+
+            push @feed_pages, Statocles::Page::Feed->new(
+                type => $FEEDS{ $feed }{ type },
+                app => $self,
+                page => $index,
+                path => join( "/", $self->url_root, 'tag', $tag_file ),
+                template => $self->theme->template( blog => $FEEDS{$feed}{template} ),
+            );
+        }
+
+        # Add the feeds to all the pages
+        for my $page ( @tag_pages ) {
+            $page->links->{feed} = [
+                map { { href => $_->path, type => $_->type } } @feed_pages
+            ];
+        }
+
+        push @pages, @tag_pages, @feed_pages;
     }
 
-    return @tag_pages;
+    return @pages;
 }
 memoize( 'tag_pages' );
 
@@ -224,7 +283,7 @@ Get all the L<pages|Statocles::Page> for this application.
 
 sub pages {
     my ( $self ) = @_;
-    return ( $self->post_pages, $self->index, $self->tag_pages );
+    return map { $self->$_ } qw( post_pages index tag_pages );
 }
 
 =method tags()
