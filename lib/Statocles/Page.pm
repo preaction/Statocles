@@ -88,10 +88,14 @@ sub render {
     my ( $self, %args ) = @_;
     my $content = $self->template->render(
         %args,
+        self => $self,
+        app => $self->app,
         $self->vars,
     );
     return $self->layout->render(
         %args,
+        self => $self,
+        app => $self->app,
         $self->vars,
         content => $content,
     );

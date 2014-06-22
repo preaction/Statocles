@@ -105,9 +105,7 @@ Get the template variables for this page.
 sub vars {
     my ( $self ) = @_;
     return (
-        self => $self,
         pages => $self->pages,
-        app => $self->app,
     );
 }
 

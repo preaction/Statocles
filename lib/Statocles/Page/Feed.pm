@@ -44,9 +44,7 @@ Get the template variables for this page.
 sub vars {
     my ( $self ) = @_;
     return (
-        self => $self,
         pages => $self->page->pages,
-        app => $self->app,
     );
 }
 

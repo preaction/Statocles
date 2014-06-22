@@ -62,9 +62,7 @@ sub vars {
     my ( $self ) = @_;
     return (
         content => $self->content,
-        self => $self,
         doc => $self->document,
-        app => $self->app,
     );
 }
 
