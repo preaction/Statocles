@@ -25,7 +25,7 @@ The absolute URL path to save this page to.
 =cut
 
 has path => (
-    is => 'ro',
+    is => 'rw',
     isa => Path,
     coerce => Path->coercion,
 );

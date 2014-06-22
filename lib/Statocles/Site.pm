@@ -152,10 +152,7 @@ sub write {
             if ( $index_path && $page->path eq $index_path ) {
                 # Rename the app's page so that we don't get two pages with identical
                 # content
-                $page = Statocles::Page::List->new(
-                    %{ $page },
-                    path => '/index.html',
-                );
+                $page->path( '/index.html' );
             }
             $store->write_page( $page->path, $page->render( %args ) );
         }
