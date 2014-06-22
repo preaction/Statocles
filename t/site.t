@@ -63,6 +63,17 @@ subtest 'site index and navigation' => sub {
     };
 };
 
+subtest 'site urls' => sub {
+    my $tmpdir = tempdir;
+    my $site = site( $tmpdir,
+        base_url => 'http://example.com/',
+    );
+    is $site->url( '/index.html' ),
+       'http://example.com/index.html';
+    is $site->url( '/blog/2014/01/01/a-page.html' ),
+       'http://example.com/blog/2014/01/01/a-page.html';
+};
+
 done_testing;
 
 sub site {

@@ -14,6 +14,17 @@ has title => (
     isa => Str,
 );
 
+=attr base_url
+
+The base URL of the site, including protocol and domain. Used mostly for feeds.
+
+=cut
+
+has base_url => (
+    is => 'ro',
+    isa => Str,
+);
+
 =attr apps
 
 The applications in this site. Each application has a name
@@ -157,6 +168,20 @@ sub write {
             $store->write_page( $page->path, $page->render( %args ) );
         }
     }
+}
+
+=method url( path )
+
+Get the full URL to the given path by prepending the C<base_url>.
+
+=cut
+
+sub url {
+    my ( $self, $path ) = @_;
+    my $base = $self->base_url;
+    $base =~ s{/$}{};
+    $path =~ s{^/}{};
+    return join "/", $base, $path;
 }
 
 1;
