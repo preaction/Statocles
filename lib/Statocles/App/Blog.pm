@@ -176,10 +176,12 @@ This includes all the relevant L<feed pages|Statocles::Page::Feed>.
 
 my %FEEDS = (
     rss => {
+        title => 'RSS',
         type => 'application/rss+xml',
         template => 'index.rss',
     },
     atom => {
+        title => 'Atom',
         type => 'application/atom+xml',
         template => 'index.atom',
     },
@@ -201,21 +203,26 @@ sub index {
 
     my $index = $pages[0];
     my @feed_pages;
+    my @feed_links;
     for my $feed ( sort keys %FEEDS ) {
-        push @feed_pages, Statocles::Page::Feed->new(
+        my $page = Statocles::Page::Feed->new(
             app => $self,
             type => $FEEDS{ $feed }{ type },
             page => $index,
             path => join( "/", $self->url_root, 'index.' . $feed ),
             template => $self->theme->template( blog => $FEEDS{$feed}{template} ),
         );
+        push @feed_pages, $page;
+        push @feed_links, {
+            title => $FEEDS{ $feed }{ title },
+            href => $page->path,
+            type => $page->type,
+        };
     }
 
     # Add the feeds to all the pages
     for my $page ( @pages ) {
-        $page->links->{feed} = [
-            map { { href => $_->path, type => $_->type } } @feed_pages
-        ];
+        $page->links->{feed} = \@feed_links;
     }
 
     return ( @pages, @feed_pages );
@@ -248,24 +255,29 @@ sub tag_pages {
 
         my $index = $tag_pages[0];
         my @feed_pages;
-        for my $feed ( keys %FEEDS ) {
+        my @feed_links;
+        for my $feed ( sort keys %FEEDS ) {
             my $tag_file = $tag . '.' . $feed;
             $tag_file =~ s/\s+/-/g;
 
-            push @feed_pages, Statocles::Page::Feed->new(
+            my $page = Statocles::Page::Feed->new(
                 type => $FEEDS{ $feed }{ type },
                 app => $self,
                 page => $index,
                 path => join( "/", $self->url_root, 'tag', $tag_file ),
                 template => $self->theme->template( blog => $FEEDS{$feed}{template} ),
             );
+            push @feed_pages, $page;
+            push @feed_links, {
+                title => $FEEDS{ $feed }{ title },
+                href => $page->path,
+                type => $page->type,
+            };
         }
 
         # Add the feeds to all the pages
         for my $page ( @tag_pages ) {
-            $page->links->{feed} = [
-                map { { href => $_->path, type => $_->type } } @feed_pages
-            ];
+            $page->links->{feed} = \@feed_links;
         }
 
         push @pages, @tag_pages, @feed_pages;

@@ -15,7 +15,7 @@
                 margin-top: 0;
                 font-size: 12pt;
             }
-            nav#tags h1 {
+            .sidebar h1 {
                 font-size: 14pt;
             }
         </style>

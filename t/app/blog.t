@@ -226,11 +226,16 @@ subtest 'tag pages' => sub {
         $list->links->{feed} = [
             map { { href => $_->path, type => $_->type, } } @{ $feeds[0] }
         ];
+        $list->links->{feed}[0]{title} = 'Atom';
+        $list->links->{feed}[1]{title} = 'RSS';
     }
     for my $i ( 2..$#tag_pages ) {
-        $tag_pages[$i]->links->{feed} = [
+        my $list = $tag_pages[$i];
+        $list->links->{feed} = [
             map { { href => $_->path, type => $_->type } } @{ $feeds[$i-1] }
         ];
+        $list->links->{feed}[0]{title} = 'Atom';
+        $list->links->{feed}[1]{title} = 'RSS';
     }
 
     push @tag_pages, map { @$_ } @feeds;
@@ -296,7 +301,8 @@ subtest 'index page(s)' => sub {
 
     for my $page ( @pages ) {
         $page->links->{feed} = [
-            map { { href => $_->path, type => $_->type } } @feeds
+            { title => 'Atom', href => $feeds[0]->path, type => $feeds[0]->type },
+            { title => 'RSS', href => $feeds[1]->path, type => $feeds[1]->type },
         ];
     }
 
