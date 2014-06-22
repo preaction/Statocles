@@ -1,0 +1,60 @@
+package Statocles::Page::Feed;
+# ABSTRACT: A page for a feed of another page
+
+use Statocles::Class;
+with 'Statocles::Page';
+
+=attr page
+
+The source L<list page|Statocles::Page::List> to use for this feed.
+
+=cut
+
+has page => (
+    is => 'ro',
+    isa => InstanceOf['Statocles::Page::List'],
+);
+
+=attr template
+
+The body template for this list. Should be a string or a Statocles::Template
+object.
+
+=cut
+
+has '+template' => (
+    default => sub {
+        Statocles::Template->new(
+            content => <<'ENDTEMPLATE'
+% for my $page ( @$pages ) {
+% my $doc = $page->document;
+<%= $page->published %> <%= $page->path %> <%= $doc->title %> <%= $doc->author %> <%= $page->content %>
+% }
+ENDTEMPLATE
+        );
+    },
+);
+
+=method vars
+
+Get the template variables for this page.
+
+=cut
+
+sub vars {
+    my ( $self ) = @_;
+    return (
+        self => $self,
+        pages => $self->page->pages,
+        app => $self->app,
+    );
+}
+
+1;
+__END__
+
+=head1 DESCRIPTION
+
+A feed page encapsulates a L<list page|Statocles::Page::List> to display in a
+feed view (RSS or ATOM or similar).
+
