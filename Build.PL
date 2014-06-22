@@ -20,7 +20,7 @@ my %module_build_args = (
     "Doug Bell <preaction\@cpan.org>"
   ],
   "dist_name" => "Statocles",
-  "dist_version" => "0.012",
+  "dist_version" => "0.013",
   "license" => "perl",
   "module_name" => "Statocles",
   "recommends" => {},
@@ -32,6 +32,7 @@ my %module_build_args = (
     "Git::Repository" => 0,
     "Import::Base" => 0,
     "List::MoreUtils" => 0,
+    "Memoize" => 0,
     "Mojolicious" => 0,
     "Moo::Lax" => 0,
     "Path::Tiny" => "0.054",

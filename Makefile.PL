@@ -37,6 +37,7 @@ my %WriteMakefileArgs = (
     "Git::Repository" => 0,
     "Import::Base" => 0,
     "List::MoreUtils" => 0,
+    "Memoize" => 0,
     "Mojolicious" => 0,
     "Moo::Lax" => 0,
     "Path::Tiny" => "0.054",
@@ -54,7 +55,7 @@ my %WriteMakefileArgs = (
     "Test::Compile" => 0,
     "Test::Most" => 0
   },
-  "VERSION" => "0.012",
+  "VERSION" => "0.013",
   "test" => {
     "TESTS" => "t/*.t t/app/*.t t/page/*.t t/site/*.t"
   }
@@ -69,6 +70,7 @@ my %FallbackPrereqs = (
   "Git::Repository" => 0,
   "Import::Base" => 0,
   "List::MoreUtils" => 0,
+  "Memoize" => 0,
   "Module::Build" => "0.3601",
   "Mojolicious" => 0,
   "Moo::Lax" => 0,
