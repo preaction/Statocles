@@ -30,6 +30,25 @@ has path => (
     coerce => Path->coercion,
 );
 
+=attr links
+
+A hash of arrays of links to pages related to this page. Possible keys:
+
+    feed        - Feed pages related to this page
+
+Each item in the array is a hash with the following keys:
+
+    href        - The page for the link
+    type        - The MIME type of the link, optional
+
+=cut
+
+has links => (
+    is => 'ro',
+    isa => HashRef[ArrayRef[HashRef]],
+    default => sub { {} },
+);
+
 =attr markdown
 
 The L<Text::Markdown> object to render document Markdown.
