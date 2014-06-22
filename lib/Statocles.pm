@@ -60,6 +60,10 @@ post, for example.
 This page renders a list of other pages (not documents). This is used for index
 pages.
 
+=item L<Statocles::Page::Feed>
+
+This page renders an alternate version of a list page, like an RSS or Atom feed.
+
 =back
 
 =head1 APPLICATIONS
