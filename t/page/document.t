@@ -18,6 +18,11 @@ This is a paragraph of markdown.
 ## Subtitle 2
 
 This is another paragraph of markdown.
+
+---
+
+This is a second section of content
+
 MARKDOWN
 );
 my $md = Text::Markdown->new;
@@ -76,6 +81,25 @@ subtest 'extra args' => sub {
     my $output = $page->render( site => 'hello', title => 'DOES NOT OVERRIDE', );
     my $expect = join " ", 'hello', 'HEAD', 'hello', $page->path, $doc->title,
         $doc->author, $md->markdown( $doc->content ) . "\n", 'FOOT' . "\n";
+    eq_or_diff $output, $expect;
+};
+
+subtest 'content sections' => sub {
+    my $page = Statocles::Page::Document->new(
+        document => $doc,
+        path => '/path/to/page.html',
+        template => <<'ENDTEMPLATE',
+% my @sections = $self->sections;
+<%= $sections[0] %>
+% if ( @sections > 1 ) {
+MORE...
+% }
+ENDTEMPLATE
+    );
+
+    my $output = $page->render;
+    my @sections = split /\n---\n/, $doc->content;
+    my $expect = join "\n", $md->markdown( $sections[0] ), "MORE...", "", "";
     eq_or_diff $output, $expect;
 };
 

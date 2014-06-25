@@ -12,7 +12,7 @@ my @pages = (
             path => '/2014/06/04/blug.yml',
             title => 'Third post',
             author => 'preaction',
-            content => 'Not as good body content',
+            content => "Not as good body content",
         ),
     ),
     Statocles::Page::Document->new(
@@ -22,7 +22,7 @@ my @pages = (
             path => '/2014/04/30/page.yml',
             title => 'Second post',
             author => 'preaction',
-            content => 'Better body content',
+            content => "Better body content\n---\nSecond section\n---\nThird section",
         ),
     ),
     Statocles::Page::Document->new(
@@ -32,7 +32,7 @@ my @pages = (
             path => '/2014/04/23/slug.yml',
             title => 'First post',
             author => 'preaction',
-            content => 'Body content',
+            content => "Body content\n---\nSecond Section\n",
         ),
     ),
 );
@@ -67,6 +67,30 @@ ENDTEMPLATE
                 ) . "\n/blog/page--1.html\n/blog/page-2.html\n\n";
 
     my $output = $list->render( site => 'hello', title => 'DOES NOT OVERRIDE' );
+    eq_or_diff $output, $html;
+};
+
+subtest 'content sections' => sub {
+    my $list = Statocles::Page::List->new(
+        path => '/blog/index.html',
+        pages => \@pages,
+        template => <<'ENDTEMPLATE',
+% for my $page ( @$pages ) {
+% my @sections = $page->sections;
+<%= join "\n", @sections[0,1] %>
+% if ( @sections > 2 ) {
+MORE...
+% }
+% }
+ENDTEMPLATE
+    );
+
+    my $output = $list->render;
+    my $html = join "\n",
+        $pages[0]->content, "", ($pages[1]->sections)[0,1],
+        "MORE...", ($pages[2]->sections)[0,1], "", ""
+        ;
+
     eq_or_diff $output, $html;
 };
 

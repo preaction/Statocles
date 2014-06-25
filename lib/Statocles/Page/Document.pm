@@ -53,6 +53,19 @@ sub vars {
     );
 }
 
+=method sections
+
+Get a list of content divided into sections. The Markdown "---" marker divides
+sections.
+
+=cut
+
+sub sections {
+    my ( $self ) = @_;
+    my @sections = split /\n---\n/, $self->document->content;
+    return map { $self->markdown->markdown( $_ ) } @sections;
+}
+
 1;
 __END__
 
