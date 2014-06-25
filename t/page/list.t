@@ -77,7 +77,7 @@ subtest 'content sections' => sub {
         template => <<'ENDTEMPLATE',
 % for my $page ( @$pages ) {
 % my @sections = $page->sections;
-<%= join "\n", @sections[0,1] %>
+<%= join "\n", grep { defined } @sections[0,1] %>
 % if ( @sections > 2 ) {
 MORE...
 % }
@@ -87,7 +87,7 @@ ENDTEMPLATE
 
     my $output = $list->render;
     my $html = join "\n",
-        $pages[0]->content, "", ($pages[1]->sections)[0,1],
+        $pages[0]->content, ($pages[1]->sections)[0,1],
         "MORE...", ($pages[2]->sections)[0,1], "", ""
         ;
 

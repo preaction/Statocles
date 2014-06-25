@@ -164,7 +164,7 @@ subtest 'write pages' => sub {
             author => 'preaction',
             content => 'Body content',
         ),
-        template => '<% $content %>',
+        template => '<%= $content %>',
     );
     $store->write_page( $page->path, $page->render );
     my $path = $tmpdir->child( '2014', '04', '23', 'slug.html' );
