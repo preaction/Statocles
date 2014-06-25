@@ -9,39 +9,7 @@ use Statocles::Template;
 my $SHARE_DIR = path( __DIR__ )->parent->child( 'share' );
 
 my $theme = Statocles::Theme->new(
-    templates => {
-        site => {
-            'layout.html' => Statocles::Template->new(
-                content => 'HEAD <%= $content %> FOOT',
-            ),
-        },
-        blog => {
-            'index.html' => Statocles::Template->new(
-                content => <<'ENDTEMPLATE'
-% for my $page ( @$pages ) {
-<% $page->{title} %> <% $page->{author} %> <% $page->{content} %>
-% }
-ENDTEMPLATE
-            ),
-            'post.html' => Statocles::Template->new(
-                content => '<%= $title %> <%= $author %> <%= $content %>',
-            ),
-            'index.rss' => Statocles::Template->new(
-                content => <<'ENDTEMPLATE'
-% for my $page ( @$pages ) {
-<% $page->{title} %> <% $page->{author} %> <% $page->{content} %>
-% }
-ENDTEMPLATE
-            ),
-            'index.atom' => Statocles::Template->new(
-                content => <<'ENDTEMPLATE'
-% for my $page ( @$pages ) {
-<% $page->{title} %> <% $page->{author} %> <% $page->{content} %>
-% }
-ENDTEMPLATE
-            ),
-        },
-    },
+    source_dir => $SHARE_DIR->child( 'theme' ),
 );
 
 my $md = Text::Markdown->new;
