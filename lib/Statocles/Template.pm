@@ -84,6 +84,24 @@ sub _vars {
     return join " ", 'my $vars = shift;', map { "my \$$_ = \$vars->{'$_'};" } @vars;
 }
 
+=method coercion
+
+A class method to returns a coercion sub to convert strings into template
+objects.
+
+=cut
+
+sub coercion {
+    my ( $class ) = @_;
+    return sub {
+        die "Template is undef" unless defined $_[0];
+        return !ref $_[0]
+            ? Statocles::Template->new( content => $_[0] )
+            : $_[0]
+            ;
+    };
+}
+
 1;
 __END__
 

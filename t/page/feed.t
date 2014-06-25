@@ -47,6 +47,12 @@ subtest 'simple feed' => sub {
     my $feed = Statocles::Page::Feed->new(
         path => '/blog/index.rss',
         page => $list,
+        template => <<'ENDTEMPLATE',
+% for my $page ( @$pages ) {
+% my $doc = $page->document;
+<%= $page->published %> <%= $page->path %> <%= $doc->title %> <%= $doc->author %> <%= $page->content %>
+% }
+ENDTEMPLATE
     );
 
     my $html =  join( "\n",

@@ -28,19 +28,6 @@ has document => (
     isa => InstanceOf['Statocles::Document'],
 );
 
-=attr template
-
-The L<template|Statocles::Template> to render the
-L<document|Statocles::Document>.
-
-=cut
-
-has '+template' => (
-    default => sub {
-        Statocles::Template->new( content => '<%= $content %>' );
-    },
-);
-
 =method content
 
 Generate the document HTML by converting Markdown.

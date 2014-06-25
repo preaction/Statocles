@@ -33,26 +33,6 @@ has [qw( next prev )] => (
     coerce => Path->coercion,
 );
 
-=attr template
-
-The body template for this list. Should be a string or a Statocles::Template
-object.
-
-=cut
-
-has '+template' => (
-    default => sub {
-        Statocles::Template->new(
-            content => <<'ENDTEMPLATE'
-% for my $page ( @$pages ) {
-% my $doc = $page->document;
-<%= $page->published %> <%= $page->path %> <%= $doc->title %> <%= $doc->author %> <%= $page->content %>
-% }
-ENDTEMPLATE
-        );
-    },
-);
-
 =method paginate
 
 Build a paginated list of Statocles::Page::List objects.

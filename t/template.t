@@ -24,4 +24,10 @@ subtest 'template from file' => sub {
     is $t->render( %args ), "Title Author Content\n";
 };
 
+subtest 'invalid template coercions' => sub {
+    my $coerce = Statocles::Template->coercion;
+    throws_ok {
+        $coerce->( undef );
+    } qr{Template is undef};
+};
 done_testing;

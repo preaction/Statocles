@@ -37,25 +37,6 @@ my @pages = (
     ),
 );
 
-subtest 'simple list (default templates)' => sub {
-    my $list = Statocles::Page::List->new(
-        path => '/blog/index.html',
-        pages => \@pages,
-    );
-
-    my $html =  join( "\n",
-                map {
-                    join( " ",
-                        $_->published, $_->path, $_->document->title,
-                        $_->document->author, $_->content,
-                    ),
-                }
-                @pages
-            ) . "\n\n";
-
-    eq_or_diff $list->render, $html;
-};
-
 subtest 'extra args' => sub {
     my $list = Statocles::Page::List->new(
         path => '/blog/index.html',

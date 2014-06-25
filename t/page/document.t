@@ -22,15 +22,6 @@ MARKDOWN
 );
 my $md = Text::Markdown->new;
 
-subtest 'simple page (default template)' => sub {
-    my $page = Statocles::Page::Document->new(
-        document => $doc,
-    );
-
-    my $output = $page->render;
-    eq_or_diff $output, $md->markdown( $doc->content ) . "\n\n";
-};
-
 subtest 'template string' => sub {
     my $tp = Time::Piece->new;
 
@@ -86,15 +77,6 @@ subtest 'extra args' => sub {
     my $expect = join " ", 'hello', 'HEAD', 'hello', $page->path, $doc->title,
         $doc->author, $md->markdown( $doc->content ) . "\n", 'FOOT' . "\n";
     eq_or_diff $output, $expect;
-};
-
-subtest 'invalid template coercions' => sub {
-    throws_ok {
-        Statocles::Page::Document->new(
-            document => $doc,
-            template => undef,
-        );
-    } qr{Template is undef};
 };
 
 done_testing;

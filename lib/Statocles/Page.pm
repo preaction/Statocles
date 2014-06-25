@@ -61,24 +61,18 @@ has markdown => (
     default => sub { Text::Markdown->new },
 );
 
-my @template_attrs = (
-    is => 'ro',
-    isa => InstanceOf['Statocles::Template'],
-    coerce => sub {
-        die "Template is undef" unless defined $_[0];
-        return !ref $_[0]
-            ? Statocles::Template->new( content => $_[0] )
-            : $_[0]
-            ;
-    },
-);
-
 =attr template
 
 The main L<template|Statocles::Template> for this page. The result will be
 wrapped in the L<layout template|/layout>.
 
 =cut
+
+my @template_attrs = (
+    is => 'ro',
+    isa => InstanceOf['Statocles::Template'],
+    coerce => Statocles::Template->coercion,
+);
 
 has template => @template_attrs;
 
