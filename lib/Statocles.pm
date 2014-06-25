@@ -20,6 +20,53 @@ Statocles is an application for building static web pages from a set of plain
 YAML and Markdown files. It is designed to make it as simple as possible to
 develop rich web content using basic text-based tools.
 
+=head2 FEATURES
+
+=over
+
+=item *
+
+A simple format combining YAML and Markdown for editing site content.
+
+=item *
+
+A command-line application for building, deploying, and editing the site.
+
+=item *
+
+A L<blogging application|Statocles::App::Blog#FEATURES> with
+
+=over
+
+=item *
+
+RSS and Atom syndication feeds.
+
+=item *
+
+Tags to organize blog posts. Tags have their own custom feeds.
+
+=item *
+
+Crosspost links to direct users to a syndicated blog.
+
+=item *
+
+Post-dated blog posts to appear automatically when the date is passed.
+
+=back
+
+=item *
+
+Customizable L<templates|Statocles::Template> using L<the Mojolicious template
+language|Mojo::Template#SYNTAX>.
+
+=item *
+
+A clean default theme using L<Twitter Bootstrap|http://getbootstrap.com>.
+
+=back
+
 =head1 OVERVIEW
 
 =head2 DOCUMENTS
