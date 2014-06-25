@@ -23,7 +23,12 @@
                 </div>
                 % }
             </header>
-            <%= $content %>
+            % my @sections = $self->sections;
+            % for my $i ( 0..$#sections ) {
+            <section id="section-<%= $i+1 %>">
+                <%= $sections[$i] %>
+            </section>
+            % }
         </main>
     </div>
 

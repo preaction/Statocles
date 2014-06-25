@@ -345,6 +345,12 @@ This is a simple blog application for Statocles.
 
 =item *
 
+Content dividers. By dividing your main content with "---", you create
+sections. Only the first section will show up on the index page or in RSS
+feeds.
+
+=item *
+
 RSS and Atom syndication feeds.
 
 =item *
