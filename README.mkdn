@@ -4,13 +4,26 @@ Statocles - A static site generator
 
 # VERSION
 
-version 0.013
+version 0.014
 
 # DESCRIPTION
 
 Statocles is an application for building static web pages from a set of plain
 YAML and Markdown files. It is designed to make it as simple as possible to
 develop rich web content using basic text-based tools.
+
+## FEATURES
+
+- A simple format combining YAML and Markdown for editing site content.
+- A command-line application for building, deploying, and editing the site.
+- A [blogging application](https://metacpan.org/pod/Statocles::App::Blog#FEATURES) with
+    - RSS and Atom syndication feeds.
+    - Tags to organize blog posts. Tags have their own custom feeds.
+    - Crosspost links to direct users to a syndicated blog.
+    - Post-dated blog posts to appear automatically when the date is passed.
+- Customizable [templates](https://metacpan.org/pod/Statocles::Template) using [the Mojolicious template
+language](https://metacpan.org/pod/Mojo::Template#SYNTAX).
+- A clean default theme using [Twitter Bootstrap](http://getbootstrap.com).
 
 # GUIDES
 
@@ -56,6 +69,10 @@ generate multiple pages, and pages may have multiple formats like HTML or RSS.
 
     This page renders a list of other pages (not documents). This is used for index
     pages.
+
+- [Statocles::Page::Feed](https://metacpan.org/pod/Statocles::Page::Feed)
+
+    This page renders an alternate version of a list page, like an RSS or Atom feed.
 
 # APPLICATIONS
 
