@@ -30,21 +30,7 @@
                 % my @sections = $page->sections;
                 <%= $sections[0] %>
                 % if ( @sections > 1 ) {
-                    % if ( $doc->links->{crosspost} ) {
-                        <ul>
-                        % for my $link ( @{ $doc->links->{crosspost} } ) {
-                            <li><a href="<%= $link->{href} %>">
-                                Continue reading <em><%= $doc->title %></em> on <%= $link->{title} %>...
-                            </a></li>
-                        % }
-                            <li><a href="<%= $page->path %>#section-2">
-                                Continue reading on this site...
-                            </a></li>
-                        </ul>
-                    % }
-                    % else {
-                        <p><a href="<%= $page->path %>#section-2">Continue reading...</a></p>
-                    % }
+                    <p><a href="<%= $page->path %>#section-2">Continue reading <%= $doc->title %>...</a></p>
                 % }
             </article>
             % }
