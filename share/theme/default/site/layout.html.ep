@@ -17,6 +17,13 @@
             .sidebar h1 {
                 font-size: 14pt;
             }
+
+            /** Add a line when using the "Continue reading..." link */
+            section:target {
+                padding-top: 0.5em;
+                border-top: 4px solid #045578;
+            }
+
         </style>
         % if ( $self->links->{feed} ) {
             % for my $link ( @{ $self->links->{feed} } ) {
