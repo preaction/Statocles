@@ -30,4 +30,14 @@ subtest 'invalid template coercions' => sub {
         $coerce->( undef );
     } qr{Template is undef};
 };
+
+subtest 'template with errors' => sub {
+    my $tmpl = Statocles::Template->new(
+        path => $SHARE_DIR->child( 'tmpl', 'error.html.ep' ),
+    );
+    throws_ok {
+        $tmpl->render( title => "whatevers" );
+    } qr{Error in template};
+};
+
 done_testing;
