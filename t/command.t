@@ -45,6 +45,7 @@ my $config = {
     site => {
         class => 'Statocles::Site',
         args => {
+            base_url => 'http://example.com',
             title => 'Site Title',
             index => 'blog',
             build_store => { '$ref' => 'build' },
@@ -69,6 +70,7 @@ my $config = {
     site_foo => {
         class => 'Statocles::Site',
         args => {
+            base_url => 'http://example.net',
             title => 'Site Foo',
             index => 'blog',
             build_store => { '$ref' => 'build_foo' },
@@ -107,6 +109,7 @@ sub test_site {
         is $exit, 0, 'exit code';
         ok !$err, 'no errors/warnings' or diag $err;
         ok $root->child( 'index.html' )->exists, 'index file exists';
+        ok $root->child( 'sitemap.xml' )->exists, 'sitemap.xml exists';
         ok $root->child( 'blog', '2014', '04', '23', 'slug.html' )->exists;
         ok $root->child( 'blog', '2014', '04', '30', 'plug.html' )->exists;
     };

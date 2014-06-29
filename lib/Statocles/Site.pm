@@ -3,6 +3,7 @@ package Statocles::Site;
 
 use Statocles::Class;
 use Statocles::Store;
+use Mojo::DOM;
 
 =attr title
 
@@ -151,6 +152,7 @@ Write the application to the given L<store|Statocles::Store>.
 sub write {
     my ( $self, $store ) = @_;
     my $apps = $self->apps;
+    my @pages;
     my %args = (
         site => $self,
     );
@@ -169,8 +171,39 @@ sub write {
                 $page->path( '/index.html' );
             }
             $store->write_page( $page->path, $page->render( %args ) );
+            push @pages, $page;
         }
     }
+
+    # Build the sitemap.xml
+    my $sitemap = Mojo::DOM->new->xml(1);
+    for my $page ( @pages ) {
+        next if $page->isa( 'Statocles::Page::Feed' );
+        my $node = Mojo::DOM->new->xml(1);
+
+        my ( $changefreq, $priority, $lastmod ) = ( 'never', '0.5', undef );
+        if ( $page->isa( 'Statocles::Page::List' ) ) {
+            $changefreq = 'daily';
+            $priority = '0.3';
+        }
+        elsif ( $page->isa( 'Statocles::Page::Document' ) ) {
+            $lastmod = $page->document->last_modified
+                     ? $page->document->last_modified->strftime( '%Y-%m-%d' )
+                     : $page->published->strftime( '%Y-%m-%d' );
+        }
+
+        $node->type( 'url' );
+        $node->append_content( '<loc>' . $self->url( $page->path ) . '</loc>' );
+        $node->append_content( '<changefreq>' . $changefreq . '</changefreq>' );
+        $node->append_content( '<priority>' . $priority . '</priority>' );
+        if ( $lastmod ) {
+            $node->append_content( '<lastmod>' . $lastmod . '</lastmod>' );
+        }
+
+        $sitemap->append_content( "<url>$node</url>" );
+    }
+    $sitemap = $sitemap->wrap( '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>' );
+    $store->write_page( 'sitemap.xml', '<?xml version="1.0" encoding="UTF-8"?>' . $sitemap->to_string );
 }
 
 =method url( path )
