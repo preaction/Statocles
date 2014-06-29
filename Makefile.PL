@@ -51,11 +51,12 @@ my %WriteMakefileArgs = (
     "warnings" => 0
   },
   "TEST_REQUIRES" => {
+    "Capture::Tiny" => 0,
     "Dir::Self" => 0,
     "Test::Compile" => 0,
     "Test::Most" => 0
   },
-  "VERSION" => "0.015",
+  "VERSION" => "0.016",
   "test" => {
     "TESTS" => "t/*.t t/app/*.t t/page/*.t t/site/*.t t/theme/*.t"
   }
@@ -64,6 +65,7 @@ my %WriteMakefileArgs = (
 
 my %FallbackPrereqs = (
   "Beam::Wire" => 0,
+  "Capture::Tiny" => 0,
   "Dir::Self" => 0,
   "File::Copy::Recursive" => 0,
   "File::Share" => 0,

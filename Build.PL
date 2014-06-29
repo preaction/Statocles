@@ -20,7 +20,7 @@ my %module_build_args = (
     "Doug Bell <preaction\@cpan.org>"
   ],
   "dist_name" => "Statocles",
-  "dist_version" => "0.015",
+  "dist_version" => "0.016",
   "license" => "perl",
   "module_name" => "Statocles",
   "recommends" => {},
@@ -52,6 +52,7 @@ my %module_build_args = (
     "dist" => "share"
   },
   "test_requires" => {
+    "Capture::Tiny" => 0,
     "Dir::Self" => 0,
     "Test::Compile" => 0,
     "Test::Most" => 0
@@ -60,6 +61,7 @@ my %module_build_args = (
 
 
 my %fallback_build_requires = (
+  "Capture::Tiny" => 0,
   "Dir::Self" => 0,
   "Module::Build" => "0.3601",
   "Test::Compile" => 0,
