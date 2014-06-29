@@ -10,13 +10,13 @@ use Statocles::Page::Feed;
 
 extends 'Statocles::App';
 
-=attr source
+=attr store
 
 The L<store|Statocles::Store> to read for documents.
 
 =cut
 
-has source => (
+has store => (
     is => 'ro',
     isa => InstanceOf['Statocles::Store'],
 );
@@ -124,7 +124,7 @@ ENDHELP
             title => $title,
             last_modified => Time::Piece->new,
         );
-        my $full_path = $self->source->write_document( $path => \%doc );
+        my $full_path = $self->store->write_document( $path => \%doc );
         print "New post at: $full_path\n";
         if ( $ENV{EDITOR} ) {
             system $ENV{EDITOR}, $full_path;
@@ -143,7 +143,7 @@ sub post_pages {
     my ( $self ) = @_;
     my $today = Time::Piece->new->ymd;
     my @pages;
-    for my $doc ( @{ $self->source->documents } ) {
+    for my $doc ( @{ $self->store->documents } ) {
         my $path = join "/", $self->url_root, $doc->path;
         $path =~ s{/{2,}}{/}g;
         $path =~ s{[.]\w+$}{.html};

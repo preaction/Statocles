@@ -72,13 +72,13 @@ L<Statocles blog app|Statocles::App::Blog>:
             url_root: /blog
             theme:
                 $ref: theme
-            source:
+            store:
                 $ref: blog_store
 
 We put our blog app under the root URL C</blog>. All pages that come from this
 app will start with C</blog> (except the index page, we'll move that to
 C</index.html>).  We used our already-defined C<theme> and C<blog_store>
-objects to fill in the required C<theme> and C<source> application attributes
+objects to fill in the required C<theme> and C<store> application attributes
 (C<$ref> is a Beam::Wire special instruction that says "look up this object
 from the config file").
 
@@ -160,7 +160,7 @@ your own site.
             url_root: /blog
             theme:
                 $ref: theme
-            source:
+            store:
                 $ref: blog_store
     build:
         class: Statocles::Store

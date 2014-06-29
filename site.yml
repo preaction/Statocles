@@ -30,7 +30,7 @@ site:
             blog:
                 $class: Statocles::App::Blog
                 $args:
-                    source:
+                    store:
                         $class: Statocles::Store
                         $args:
                             path: share/blog

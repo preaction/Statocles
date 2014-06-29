@@ -85,7 +85,7 @@ sub site {
     );
 
     my $blog = Statocles::App::Blog->new(
-        source => Statocles::Store->new(
+        store => Statocles::Store->new(
             path => $SHARE_DIR->child( 'blog' ),
         ),
         url_root => '/blog',

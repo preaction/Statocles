@@ -105,7 +105,7 @@ sub site {
         _git_run( $git, config => 'user.email' => 'statocles@example.com' );
     }
 
-    # Copy the source into the repository, so we have something to commit
+    # Copy the store into the repository, so we have something to commit
     dircopy( $SHARE_DIR->child( 'blog' )->stringify, $remotedir->child( 'blog' )->stringify )
         or die "Could not copy directory: $!";
     _git_run( $remotegit, add => 'blog' );
@@ -117,7 +117,7 @@ sub site {
     );
 
     my $blog = Statocles::App::Blog->new(
-        source => Statocles::Store->new(
+        store => Statocles::Store->new(
             path => $workdir->child( 'blog' ),
         ),
         url_root => '/blog',

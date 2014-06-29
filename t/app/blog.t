@@ -16,7 +16,7 @@ my $md = Text::Markdown->new;
 my $tmpdir = tempdir;
 
 my $app = Statocles::App::Blog->new(
-    source => Statocles::Store->new( path => $SHARE_DIR->child( 'blog' ) ),
+    store => Statocles::Store->new( path => $SHARE_DIR->child( 'blog' ) ),
     url_root => '/blog',
     theme => $theme,
     page_size => 2,
@@ -43,7 +43,7 @@ sub docs {
 
         my $doc = Statocles::Document->new(
             path => rootdir->child( @doc_path ),
-            %{ $app->source->read_document( $SHARE_DIR->child( 'blog', @doc_path ) ) },
+            %{ $app->store->read_document( $SHARE_DIR->child( 'blog', @doc_path ) ) },
         );
 
         push @doc_specs, {
@@ -80,7 +80,7 @@ sub pages {
 }
 
 # Sorting by path just happens to also sort by date
-my @sorted_docs = sort { $b->{doc}->path cmp $a->{doc}->path } docs( $app->source->path );
+my @sorted_docs = sort { $b->{doc}->path cmp $a->{doc}->path } docs( $app->store->path );
 
 subtest 'blog post pages' => sub {
     my @pages = pages( @sorted_docs );
@@ -288,7 +288,7 @@ subtest 'commands' => sub {
     # We need an app we can edit
     my $tmpdir = tempdir;
     my $app = Statocles::App::Blog->new(
-        source => Statocles::Store->new( path => $tmpdir->child( 'blog' ) ),
+        store => Statocles::Store->new( path => $tmpdir->child( 'blog' ) ),
         url_root => '/blog',
         theme => $theme,
     );
@@ -334,7 +334,7 @@ subtest 'commands' => sub {
                 };
 
                 subtest 'check the generated document' => sub {
-                    my $doc = $app->source->read_document( $doc_path );
+                    my $doc = $app->store->read_document( $doc_path );
                     cmp_deeply $doc, {
                         title => 'This is a Title',
                         author => undef,
@@ -373,7 +373,7 @@ ENDCONTENT
                 };
 
                 subtest 'check the generated document' => sub {
-                    my $doc = $app->source->read_document( $doc_path );
+                    my $doc = $app->store->read_document( $doc_path );
                     cmp_deeply $doc, {
                         title => 'This is a Title',
                         author => undef,

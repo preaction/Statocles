@@ -34,7 +34,7 @@ my $store = Statocles::Store->new(
 
 my $blog = Statocles::App::Blog->new(
     url_root => '/blog',
-    source => $store,
+    store => $store,
     theme => Statocles::Theme->new( path => 'DUMMY' ),
 );
 
