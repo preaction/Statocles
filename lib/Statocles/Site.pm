@@ -204,6 +204,13 @@ sub write {
     }
     $sitemap = $sitemap->wrap( '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>' );
     $store->write_page( 'sitemap.xml', '<?xml version="1.0" encoding="UTF-8"?>' . $sitemap->to_string );
+
+    my @robots = (
+        "Sitemap: " . $self->url( 'sitemap.xml' ),
+        "User-Agent: *",
+        "Disallow: ",
+    );
+    $store->write_page( 'robots.txt', join "\n", @robots );
 }
 
 =method url( path )

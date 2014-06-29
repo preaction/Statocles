@@ -65,7 +65,7 @@ subtest 'site index and navigation' => sub {
     };
 };
 
-subtest 'sitemap.xml' => sub {
+subtest 'sitemap.xml and robots.txt' => sub {
     my $tmpdir = tempdir;
     my $site = site( $tmpdir, index => 'blog' );
 
@@ -127,7 +127,15 @@ subtest 'sitemap.xml' => sub {
         is $dom->at('urlset')->type, 'urlset';
         my @urls = $dom->at('urlset')->children->map( $to_href )->each;
         cmp_deeply \@urls, bag( @expect ) or diag explain \@urls;
+        cmp_deeply
+            [ $tmpdir->child( 'build', 'robots.txt' )->lines ],
+            [
+                "Sitemap: http://example.com/sitemap.xml\n",
+                "User-Agent: *\n",
+                "Disallow: ",
+            ];
         ok !$tmpdir->child( 'deploy', 'sitemap.xml' )->exists, 'not deployed yet';
+        ok !$tmpdir->child( 'deploy', 'robots.txt' )->exists, 'not deployed yet';
     };
     subtest 'deploy' => sub {
         $site->deploy;
@@ -135,6 +143,13 @@ subtest 'sitemap.xml' => sub {
         is $dom->at('urlset')->type, 'urlset';
         my @urls = $dom->at('urlset')->children->map( $to_href )->each;
         cmp_deeply \@urls, bag( @expect ) or diag explain \@urls;
+        cmp_deeply
+            [ $tmpdir->child( 'deploy', 'robots.txt' )->lines ],
+            [
+                "Sitemap: http://example.com/sitemap.xml\n",
+                "User-Agent: *\n",
+                "Disallow: ",
+            ];
     };
 };
 
