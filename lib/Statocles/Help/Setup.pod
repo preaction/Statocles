@@ -23,17 +23,8 @@ site configuration files.
 First, we'll start by defining a theme. A theme
 (L<Statocles::Theme|Statocles::Theme>) builds and parses templates into
 L<Statocles::Template|Statocles::Template> objects. We'll use the Statocles
-default theme, included with the module.
-
-    theme:
-        class: Statocles::Theme
-        args:
-            source_dir: '::default'
-
-One of the most useful things about using a dependency injection module is that
-you can easily plug-in your own classes. If you want to use your own template
-format, you can build your own Statocles::Theme class that provides a different
-kind of Statocles::Template object and use that instead.
+default theme, included with the module. The special C<::default> string will
+look in the Statocles C<share/theme> directory.
 
 =head2 A Source
 
@@ -45,17 +36,9 @@ fills multiple roles relating to reading and writing files. Right now, we need
 it to hold on to our blog posts. We'll put our blog posts in the C<blog>
 directory.
 
-    blog_store:
-        class: Statocles::Store
-        args:
-            path: blog
-
 The L<blog application|Statocles::App::Blog> will use this store to add new
 blog posts and build web pages from the documents in the C<blog> directory.
 More on that later.
-
-Though stores are usually just directories, they could also be a database,
-getting the blog post documents from a document database.
 
 =head2 An App
 
@@ -70,17 +53,24 @@ L<Statocles blog app|Statocles::App::Blog>:
         class: Statocles::App::Blog
         args:
             url_root: /blog
-            theme:
-                $ref: theme
-            store:
-                $ref: blog_store
+            theme: '::default'
+            store: 'blog'
 
 We put our blog app under the root URL C</blog>. All pages that come from this
 app will start with C</blog> (except the index page, we'll move that to
-C</index.html>).  We used our already-defined C<theme> and C<blog_store>
-objects to fill in the required C<theme> and C<store> application attributes
-(C<$ref> is a Beam::Wire special instruction that says "look up this object
-from the config file").
+C</index.html>).
+
+We define our theme with the string C<::default>, which will get magically
+coerced into a L<theme object|Statocles::Theme>. We define our store with the
+string C<blog>, which will get magically coerced into a L<store
+object|Statocles::Store>.
+
+One of the most useful things about using a dependency injection module is that
+you can easily plug-in your own classes. If you want to use your own template
+format, you can build your own Statocles::Theme class that provides a different
+kind of Statocles::Template object and use that instead. If you want to use your
+own document format, you can make your own Statocles::Store class that reads
+from a database.
 
 =head2 A Destination
 
@@ -88,19 +78,9 @@ Before we can generate pages, we need a place to put them. Statocles needs two
 places, a build directory (a staging area), and a deploy directory (the final
 destination for the site).
 
-    build:
-        class: Statocles::Store
-        args:
-            path: build
-
-    deploy:
-        class: Statocles::Store
-        args:
-            path: .
-
 For our site, we've got a C<build> directory for our staging area, where we can
 verify that our site looks correct before we deploy. Our deploy will happen in
-the root directory of our site. This is good for a GitHub Pages site.
+the root directory of our site (C<.>). This is good for a GitHub Pages site.
 
 Though stores are usually just directories, they could also perform an SFTP or
 FTP or transfer the pages to a CDN (I think I have some evolution to do here).
@@ -117,10 +97,8 @@ site|Statocles::Site::Git> knows how to deploy to git repositories.
             apps:
                 blog:
                     $ref: blog_app
-            build_store:
-                $ref: build
-            deploy_store:
-                $ref: deploy
+            build_store: 'build'
+            deploy_store: '.'
             deploy_branch: master
             title: My Site
             index: blog
@@ -130,9 +108,13 @@ site|Statocles::Site::Git> knows how to deploy to git repositories.
                       href: /index.html
 
 When adding apps to our site, we give them a name (in this case C<blog>) so
-that we can refer to them on the command-line (later). We add our
-C<build_store> and C<deploy_store>. The git branch we want to deploy to is
-C<master>. As part of the default template, we can provide a site C<title>.
+that we can refer to them on the command-line (later).
+
+Just like the blog store, the C<build_store> and C<deploy_store> will magically
+create a Statocles::Store object from the path string.
+
+The git branch we want to deploy to is C<master>. As part of the default
+template, we can provide a site C<title>.
 
 The C<index> attribute gives the name of the app to use as our index page.
 Since we only have one app, we can only give it the C<blog>. Whatever main page
@@ -146,41 +128,20 @@ default template uses the C<main> nav across the top.
 Combine it all together and you get this. Feel free to copy and paste to start
 your own site.
 
-    theme:
-        class: Statocles::Theme
-        args:
-            source_dir: '::default'
-    blog_store:
-        class: Statocles::Store
-        args:
-            path: blog
     blog_app:
         class: Statocles::App::Blog
         args:
             url_root: /blog
-            theme:
-                $ref: theme
-            store:
-                $ref: blog_store
-    build:
-        class: Statocles::Store
-        args:
-            path: build
-    deploy:
-        class: Statocles::Store
-        args:
-            path: .
+            theme: '::default'
+            store: 'blog'
     site:
         class: Statocles::Site::Git
         args:
             apps:
                 blog:
                     $ref: blog_app
-            build_store:
-                $ref: build
-            deploy_store:
-                $ref: deploy
-
+            build_store: 'build'
+            deploy_store: '.'
             title: My Site
             index: blog
             nav:

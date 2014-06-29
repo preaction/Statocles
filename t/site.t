@@ -80,27 +80,17 @@ done_testing;
 sub site {
     my ( $tmpdir, %site_args ) = @_;
 
-    my $theme = Statocles::Theme->new(
-        source_dir => $SHARE_DIR->child( 'theme' ),
-    );
-
     my $blog = Statocles::App::Blog->new(
-        store => Statocles::Store->new(
-            path => $SHARE_DIR->child( 'blog' ),
-        ),
+        store => $SHARE_DIR->child( 'blog' ),
         url_root => '/blog',
-        theme => $theme,
+        theme => $SHARE_DIR->child( 'theme' ),
     );
 
     my $site = Statocles::Site->new(
         title => 'Test Site',
         apps => { blog => $blog },
-        build_store => Statocles::Store->new(
-            path => $tmpdir->child( 'build' ),
-        ),
-        deploy_store => Statocles::Store->new(
-            path => $tmpdir->child( 'deploy' ),
-        ),
+        build_store => $tmpdir->child( 'build' ),
+        deploy_store => $tmpdir->child( 'deploy' ),
         %site_args,
     );
 

@@ -2,6 +2,7 @@ package Statocles::Site;
 # ABSTRACT: An entire, configured website
 
 use Statocles::Class;
+use Statocles::Store;
 
 =attr title
 
@@ -91,6 +92,7 @@ has build_store => (
     is => 'ro',
     isa => InstanceOf['Statocles::Store'],
     required => 1,
+    coerce => Statocles::Store->coercion,
 );
 
 =attr deploy_store
@@ -104,6 +106,7 @@ has deploy_store => (
     isa => InstanceOf['Statocles::Store'],
     lazy => 1,
     default => sub { $_[0]->build_store },
+    coerce => Statocles::Store->coercion,
 );
 
 =method app( name )

@@ -3,6 +3,7 @@ package Statocles::Theme;
 
 use Statocles::Class;
 use File::Share qw( dist_dir );
+use Scalar::Util qw( blessed );
 
 =attr source_dir
 
@@ -81,6 +82,21 @@ given C<name>.
 sub template {
     my ( $self, $app, $template ) = @_;
     return $self->templates->{ $app }{ $template };
+}
+
+=method coercion
+
+Class method to coerce a string representing a path into a Statocles::Theme
+object. Returns a subref suitable to be used as a type coercion in an attriute.
+
+=cut
+
+sub coercion {
+    my ( $class ) = @_;
+    return sub {
+        return $_[0] if blessed $_[0] and $_[0]->isa( $class );
+        return $class->new( source_dir => $_[0] );
+    };
 }
 
 1;

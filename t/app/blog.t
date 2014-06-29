@@ -16,9 +16,9 @@ my $md = Text::Markdown->new;
 my $tmpdir = tempdir;
 
 my $app = Statocles::App::Blog->new(
-    store => Statocles::Store->new( path => $SHARE_DIR->child( 'blog' ) ),
+    store => $SHARE_DIR->child( 'blog' ),
     url_root => '/blog',
-    theme => $theme,
+    theme => $SHARE_DIR->child( 'theme' ), # test theme coercion
     page_size => 2,
 );
 

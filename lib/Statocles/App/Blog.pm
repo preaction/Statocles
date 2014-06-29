@@ -4,6 +4,8 @@ package Statocles::App::Blog;
 use Statocles::Class;
 use Memoize qw( memoize );
 use Getopt::Long qw( GetOptionsFromArray );
+use Statocles::Store;
+use Statocles::Theme;
 use Statocles::Page::Document;
 use Statocles::Page::List;
 use Statocles::Page::Feed;
@@ -19,6 +21,7 @@ The L<store|Statocles::Store> to read for documents.
 has store => (
     is => 'ro',
     isa => InstanceOf['Statocles::Store'],
+    coerce => Statocles::Store->coercion,
 );
 
 =attr url_root
@@ -45,6 +48,7 @@ has theme => (
     is => 'ro',
     isa => InstanceOf['Statocles::Theme'],
     required => 1,
+    coerce => Statocles::Theme->coercion,
 );
 
 =attr page_size

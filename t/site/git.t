@@ -112,27 +112,17 @@ sub site {
     _git_run( $remotegit, commit => -m => 'Initial commit' );
     _git_run( $workgit, pull => origin => 'master' );
 
-    my $theme = Statocles::Theme->new(
-        source_dir => $SHARE_DIR->child( 'theme' ),
-    );
-
     my $blog = Statocles::App::Blog->new(
-        store => Statocles::Store->new(
-            path => $workdir->child( 'blog' ),
-        ),
+        store => $workdir->child( 'blog' ),
         url_root => '/blog',
-        theme => $theme,
+        theme => $SHARE_DIR->child( 'theme' ),
     );
 
     my $site = Statocles::Site::Git->new(
         title => 'Test Site',
         apps => { blog => $blog },
-        build_store => Statocles::Store->new(
-            path => $workdir->child( 'build' ),
-        ),
-        deploy_store => Statocles::Store->new(
-            path => $workdir,
-        ),
+        build_store => $workdir->child( 'build' ),
+        deploy_store => $workdir,
         deploy_branch => 'gh-pages',
         %site_args,
     );

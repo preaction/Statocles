@@ -2,6 +2,7 @@ package Statocles::Store;
 # ABSTRACT: A repository for Documents and Pages
 
 use Statocles::Class;
+use Scalar::Util qw( blessed );
 use Statocles::Document;
 use YAML;
 use File::Spec::Functions qw( splitdir );
@@ -149,6 +150,21 @@ sub write_page {
     my $full_path = $self->path->child( $path );
     $full_path->touchpath->spew( $html );
     return;
+}
+
+=method coercion
+
+Class method to coerce a string representing a path into a Statocles::Store
+object. Returns a subref suitable to be used as a type coercion in an attriute.
+
+=cut
+
+sub coercion {
+    my ( $class ) = @_;
+    return sub {
+        return $_[0] if blessed $_[0] and $_[0]->isa( $class );
+        return $class->new( path => $_[0] );
+    };
 }
 
 1;
