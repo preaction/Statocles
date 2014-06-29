@@ -4,7 +4,7 @@ Statocles - A static site generator
 
 # VERSION
 
-version 0.016
+version 0.017
 
 # DESCRIPTION
 
@@ -16,6 +16,7 @@ develop rich web content using basic text-based tools.
 
 - A simple format combining YAML and Markdown for editing site content.
 - A command-line application for building, deploying, and editing the site.
+- A simple daemon to display a test site before it goes live.
 - A [blogging application](https://metacpan.org/pod/Statocles::App::Blog#FEATURES) with
     - RSS and Atom syndication feeds.
     - Tags to organize blog posts. Tags have their own custom feeds.
