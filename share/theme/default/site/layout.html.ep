@@ -24,6 +24,17 @@
                 border-top: 4px solid #045578;
             }
 
+            /** Don't allow <pre> to push too much */
+            pre {
+                max-width: 100%;
+                overflow-x: scroll;
+            }
+
+            /** <code> is used for input and output, so let it wrap */
+            code {
+                white-space: normal;
+            }
+
         </style>
         % if ( $self->links->{feed} ) {
             % for my $link ( @{ $self->links->{feed} } ) {
