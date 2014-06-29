@@ -124,6 +124,7 @@ sub site {
         build_store => $workdir->child( 'build' ),
         deploy_store => $workdir,
         deploy_branch => 'gh-pages',
+        base_url => 'http://example.com',
         %site_args,
     );
 
