@@ -185,8 +185,13 @@ Running the C<build> command will write all our pages to the C<build> store,
 which points to the C<build> directory. We can open up this directory and look
 at the files to make sure that our deploy will be correct.
 
-I<NOTE:> In the future, you'll be able to run a local web server to navigate
-your site, but that's not yet available.
+=head2 Test The Site
+
+    $ statocles daemon
+    Listening on http://*:3000
+
+Run the C<daemon> command to start an HTTP server to view your built site. If
+you edit any content, running C<build> again will update the site.
 
 =head2 Commit Your Changes
 

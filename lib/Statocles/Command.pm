@@ -66,6 +66,17 @@ sub main {
             }
             return 0;
         }
+        elsif ( $method eq 'daemon' ) {
+            require Mojo::Server::Daemon;
+            my $daemon = Mojo::Server::Daemon->new(
+                silent => 1,
+                app => Statocles::Command::_MOJOAPP->new(
+                    site => $cmd->site,
+                ),
+            );
+            print "Listening on " . $daemon->listen->[0] . "\n";
+            $daemon->run;
+        }
     }
     else {
         my $app_name = $argv[0];
@@ -73,6 +84,23 @@ sub main {
     }
 
     return 0;
+}
+
+package Statocles::Command::_MOJOAPP;
+
+use Mojo::Base 'Mojolicious';
+has 'site';
+
+sub startup {
+    my ( $self ) = @_;
+    $self->routes->get( '/', sub { $_[0]->redirect_to( '/index.html' ) } );
+    unshift @{ $self->static->paths },
+        $self->site->build_store->path,
+        # Add the deploy store for non-Statocles content
+        # This won't work in certain situations, like a Git repo on another branch, but
+        # this is convenience until we can track image directories and other non-generated
+        # content.
+        $self->site->deploy_store->path;
 }
 
 1;

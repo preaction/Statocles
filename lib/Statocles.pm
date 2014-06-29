@@ -34,6 +34,10 @@ A command-line application for building, deploying, and editing the site.
 
 =item *
 
+A simple daemon to display a test site before it goes live.
+
+=item *
+
 A L<blogging application|Statocles::App::Blog#FEATURES> with
 
 =over

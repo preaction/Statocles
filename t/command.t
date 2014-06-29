@@ -5,6 +5,7 @@ use FindBin;
 use Capture::Tiny qw( capture );
 use Statocles::Command;
 use Statocles::Site;
+use Mojo::IOLoop;
 use YAML;
 
 # Build a config file so we can test config loading and still use
@@ -169,6 +170,21 @@ subtest 'delegate to app command' => sub {
     is $exit, 0;
     like $out, qr{\Qblog post [--date YYYY-MM-DD] <title> -- Create a new blog post},
         'contains blog help information';
+};
+
+subtest 'run the http daemon' => sub {
+    # We need to stop the daemon after it starts
+    my $timeout = Mojo::IOLoop->singleton->timer( 0, sub { kill 'TERM', $$ } );
+    my @args = (
+        '--config' => "$config_fn",
+        'daemon',
+    );
+    my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+    undef $timeout;
+    ok !$err, 'port info is on stdout';
+    is $exit, 0;
+    like $out, qr{\QListening on http://*:3000\E\n},
+        'contains http port information';
 };
 
 done_testing;
