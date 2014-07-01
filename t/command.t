@@ -175,6 +175,8 @@ subtest 'delegate to app command' => sub {
 subtest 'run the http daemon' => sub {
     # We need to stop the daemon after it starts
     my $timeout = Mojo::IOLoop->singleton->timer( 0, sub { kill 'TERM', $$ } );
+    # We want it to pick a random port
+    local $ENV{MOJO_LISTEN} = 'http://127.0.0.1';
     my @args = (
         '--config' => "$config_fn",
         'daemon',
@@ -183,7 +185,7 @@ subtest 'run the http daemon' => sub {
     undef $timeout;
     ok !$err, 'port info is on stdout';
     is $exit, 0;
-    like $out, qr{\QListening on http://*:3000\E\n},
+    like $out, qr{\QListening on http://127.0.0.1\E\n},
         'contains http port information';
 };
 
