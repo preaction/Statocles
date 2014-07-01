@@ -14,12 +14,13 @@ before_install:
     - source perl-travis-helper/init
     - build-perl
     - perl -V
+    - cpanm --quiet --notest Dist::Zilla::Plugin::PodWeaver
     - build-dist
     - cd $BUILD_DIR
 
 install:
     - export RELEASE_TESTING=1 AUTOMATED_TESTING=1 AUTHOR_TESTING=1 HARNESS_OPTIONS=j10:c HARNESS_TIMER=1
-    - cpanm --quiet --notest Devel::Cover::Report::Coveralls Dist::Zilla::Plugin::PodWeaver
+    - cpanm --quiet --notest Devel::Cover::Report::Coveralls
     - cpanm --quiet --notest --installdeps .
 
 script:
