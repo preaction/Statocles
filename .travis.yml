@@ -1,30 +1,30 @@
 language: perl
-    perl:
-        - "blead"
-        - "5.20"
-        - "5.18"
-        - "5.16"
-        - "5.14"
-        - "5.12"
-        - "5.10"
-        - "5.8"
+perl:
+    - "blead"
+    - "5.20"
+    - "5.18"
+    - "5.16"
+    - "5.14"
+    - "5.12"
+    - "5.10"
+    - "5.8"
 
-    before_install:
-        - git clone git://github.com/haarg/perl-travis-helper
-        - source perl-travis-helper/init
-        - build-perl
-        - perl -V
-        - build-dist
-        - cd $BUILD_DIR
+before_install:
+    - git clone git://github.com/haarg/perl-travis-helper
+    - source perl-travis-helper/init
+    - build-perl
+    - perl -V
+    - build-dist
+    - cd $BUILD_DIR
 
-    install:
-        - export RELEASE_TESTING=1 AUTOMATED_TESTING=1 AUTHOR_TESTING=1 HARNESS_OPTIONS=j10:c HARNESS_TIMER=1
-        - cpanm --quiet --notest Devel::Cover::Report::Coveralls
-        - cpanm --quiet --notest --installdeps .
+install:
+    - export RELEASE_TESTING=1 AUTOMATED_TESTING=1 AUTHOR_TESTING=1 HARNESS_OPTIONS=j10:c HARNESS_TIMER=1
+    - cpanm --quiet --notest Devel::Cover::Report::Coveralls
+    - cpanm --quiet --notest --installdeps .
 
-    script:
-        - PERL5OPT=-MDevel::Cover=-coverage,statement,branch,condition,path,subroutine prove -lrsv t
-        - cover
+script:
+    - PERL5OPT=-MDevel::Cover=-coverage,statement,branch,condition,path,subroutine prove -lrsv t
+    - cover
 
-    after_success:
-        - cover -report coveralls
+after_success:
+    - cover -report coveralls
