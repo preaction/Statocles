@@ -14,7 +14,6 @@ before_install:
     - source perl-travis-helper/init
     - build-perl
     - perl -V
-    - cpanm --quiet --notest Dist::Zilla::Plugin::PodWeaver
     - build-dist
     - cd $BUILD_DIR
 
