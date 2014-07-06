@@ -56,7 +56,7 @@ my %WriteMakefileArgs = (
     "Test::Compile" => 0,
     "Test::Most" => 0
   },
-  "VERSION" => "0.017",
+  "VERSION" => "0.018",
   "test" => {
     "TESTS" => "t/*.t t/app/*.t t/page/*.t t/site/*.t t/theme/*.t"
   }
