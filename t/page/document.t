@@ -10,6 +10,7 @@ my $doc = Statocles::Document->new(
     path => '/path/to/document.yml',
     title => 'Page Title',
     author => 'preaction',
+    tags => [qw( foo bar baz )],
     content => <<'MARKDOWN',
 # Subtitle
 
@@ -101,6 +102,51 @@ ENDTEMPLATE
     my @sections = split /\n---\n/, $doc->content;
     my $expect = join "\n", $md->markdown( $sections[0] ), "MORE...", "", "";
     eq_or_diff $output, $expect;
+};
+
+subtest 'page tags' => sub {
+    my $page = Statocles::Page::Document->new(
+        document => $doc,
+        path => '/path/to/page.html',
+        tags => [
+            {
+                title => 'foo',
+                href => '/path/to/foo.html',
+            },
+            {
+                title => 'bar',
+                href => '/path/to/bar.html',
+            },
+            {
+                title => 'baz',
+                href => '/path/to/baz.html',
+            },
+        ],
+        template => <<'ENDTEMPLATE',
+% for my $link ( @{ $self->tags } ) {
+<%= $link->{title} %>: <%= $link->{href} %>
+% }
+ENDTEMPLATE
+    );
+
+    my $output = $page->render;
+    my $expect = join "\n", ( map { join ": ", $_->{title}, $_->{href} } @{ $page->tags } ), "", "";
+    eq_or_diff $output, $expect;
+
+    subtest 'default' => sub {
+        my $page = Statocles::Page::Document->new(
+            document => $doc,
+            path => '/path/to/page.html',
+            template => <<'ENDTEMPLATE',
+% for my $link ( @{ $self->tags } ) {
+<%= $link->{title} %>: <%= $link->{href} %>
+% }
+ENDTEMPLATE
+        );
+        my $output;
+        lives_ok { $output = $page->render };
+        is $output, "\n";
+    };
 };
 
 done_testing;

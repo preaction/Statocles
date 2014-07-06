@@ -28,6 +28,22 @@ has document => (
     isa => InstanceOf['Statocles::Document'],
 );
 
+=attr tags
+
+The tag links for this document. An array of link hashes with the following
+keys:
+
+    title   - The title of the link
+    href    - The page of the link
+
+=cut
+
+has tags => (
+    is => 'ro',
+    isa => ArrayRef[HashRef],
+    default => sub { [] },
+);
+
 =method content
 
 Generate the document HTML by converting Markdown.
