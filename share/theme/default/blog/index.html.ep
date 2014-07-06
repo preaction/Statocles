@@ -8,6 +8,11 @@
             <article>
                 <header>
                     <h1><a href="<%= $page->path %>"><%= $doc->title %></a></h1>
+                    <p class="tags">Tags:
+                    % for my $tag ( @{ $page->tags } ) {
+                        <a href="<%= $tag->{href} %>" rel="tag"><%= $tag->{title} %></a>
+                    % }
+                    </p>
                     <aside>
                         <p><time datetime="<%= $page->published->strftime('%Y-%m-%d') %>">
                             Posted on <%= $page->published->strftime('%Y-%m-%d') %>

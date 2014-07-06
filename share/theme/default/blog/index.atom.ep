@@ -31,6 +31,11 @@
             % else {
                 <p><a href="<%= $site->url( $p->path ) %>#section-2">Continue reading...</a></p>
             % }
+            <p>Tags:
+            % for my $tag ( @{ $p->tags } ) {
+                <a href="<%= $tag->{href} %>"><%= $tag->{title} %></a>
+            % }
+            </p>
         ]]></content>
         <updated><%= $p->published->strftime('%Y-%m-%dT%H:%M:%SZ') %></updated>
         % for my $t ( $doc->tags ) {

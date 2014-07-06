@@ -35,6 +35,10 @@
                 white-space: normal;
             }
 
+            .tags {
+                float: right;
+            }
+
         </style>
         % if ( $self->links->{feed} ) {
             % for my $link ( @{ $self->links->{feed} } ) {

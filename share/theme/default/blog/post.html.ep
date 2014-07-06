@@ -4,6 +4,11 @@
         <main>
             <header>
                 <h1><%= $doc->title %></h1>
+                <p class="tags">Tags:
+                % for my $tag ( @{ $self->tags } ) {
+                    <a href="<%= $tag->{href} %>" rel="tag"><%= $tag->{title} %></a>
+                % }
+                </p>
                 <aside>
                     <p><time datetime="<%= $self->published->strftime('%Y-%m-%d') %>">
                         Posted on <%= $self->published->strftime('%Y-%m-%d') %>
