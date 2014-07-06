@@ -158,6 +158,14 @@ sub post_pages {
 
         next if $date gt $today;
 
+        my @tags;
+        for my $tag ( @{ $doc->tags } ) {
+            push @tags, {
+                title => $tag,
+                href => $self->_tag_url( $tag ),
+            };
+        }
+
         push @pages, Statocles::Page::Document->new(
             app => $self,
             layout => $self->theme->template( site => 'layout.html' ),
@@ -165,6 +173,7 @@ sub post_pages {
             document => $doc,
             path => $path,
             published => Time::Piece->strptime( $date, '%Y-%m-%d' ),
+            tags => \@tags,
         );
     }
     return @pages;

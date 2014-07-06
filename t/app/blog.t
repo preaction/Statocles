@@ -65,6 +65,16 @@ sub pages {
 
         my $date = join '-', @{ $doc_spec->{ path } }[0..2];
 
+        my @tags;
+        for my $tag ( @{ $doc_spec->{doc}->tags } ) {
+            my $tag_url = $tag;
+            $tag_url =~ s/\s+/-/g;
+            push @tags, {
+                title => $tag,
+                href => "/blog/tag/$tag_url/index.html",
+            };
+        }
+
         my $page = Statocles::Page::Document->new(
             app => $app,
             published => Time::Piece->strptime( $date, '%Y-%m-%d' ),
@@ -72,6 +82,7 @@ sub pages {
             layout => $theme->template( site => 'layout.html' ),
             path => $page_path,
             document => $doc_spec->{ doc },
+            tags => \@tags,
         );
 
         push @pages, $page;
