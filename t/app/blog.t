@@ -20,6 +20,8 @@ my $app = Statocles::App::Blog->new(
     url_root => '/blog',
     theme => $SHARE_DIR->child( 'theme' ), # test theme coercion
     page_size => 2,
+    # Remove from the index all posts tagged "better", unless they're tagged "more"
+    index_tags => [ '-better', '+more', '+error message' ],
 );
 
 my @all_pages;
@@ -260,7 +262,7 @@ subtest 'index page(s)' => sub {
             %page_args,
             path => '/blog/page-2.html',
             # Sorting by path just happens to also sort by date
-            pages => [ pages( @sorted_docs[2,3] ) ],
+            pages => [ pages( $sorted_docs[3] ) ],
             prev => '/blog/index.html',
         ),
     );
