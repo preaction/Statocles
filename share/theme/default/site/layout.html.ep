@@ -39,6 +39,13 @@
                 float: right;
             }
 
+            /**
+             * Don't allow main content images to push things around
+             */
+            main img {
+                max-width: 100%;
+            }
+
         </style>
         % if ( $self->links->{feed} ) {
             % for my $link ( @{ $self->links->{feed} } ) {
