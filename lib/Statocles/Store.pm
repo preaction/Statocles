@@ -72,7 +72,12 @@ sub read_document {
     while ( my $line = <$fh> ) {
         if ( !$doc ) { # Building YAML
             if ( $line =~ /^---/ && $buffer ) {
-                $doc = YAML::Load( $buffer );
+                eval {
+                    $doc = YAML::Load( $buffer );
+                };
+                if ( $@ ) {
+                    die "Error parsing YAML in '$path'\n$@";
+                }
                 $buffer = '';
             }
             else {
@@ -87,7 +92,12 @@ sub read_document {
 
     # Clear the remaining buffer
     if ( !$doc && $buffer ) { # Must be only YAML
-        $doc = YAML::Load( $buffer );
+        eval {
+            $doc = YAML::Load( $buffer );
+        };
+        if ( $@ ) {
+            die "Error parsing YAML in '$path'\n$@";
+        }
     }
     elsif ( !$doc->{content} && $buffer ) {
         $doc->{content} = $buffer;

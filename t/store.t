@@ -80,6 +80,13 @@ subtest 'read documents' => sub {
         path => $SHARE_DIR->child( 'blog' ),
     );
     cmp_deeply $store->documents, bag( @exp_docs ) or diag explain $store->documents;
+
+    subtest 'bad documents' => sub {
+        my $store = Statocles::Store->new(
+            path => $SHARE_DIR->child( 'error' ),
+        );
+        throws_ok { $store->documents } qr{Error parsing YAML in};
+    };
 };
 
 subtest 'read with relative directory' => sub {
