@@ -170,7 +170,7 @@ sub write {
                 # content
                 $page->path( '/index.html' );
             }
-            $store->write_page( $page->path, $page->render( %args ) );
+            $store->write_file( $page->path, $page->render( %args ) );
             push @pages, $page;
         }
     }
@@ -203,14 +203,14 @@ sub write {
         $sitemap->append_content( "<url>$node</url>" );
     }
     $sitemap = $sitemap->wrap( '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>' );
-    $store->write_page( 'sitemap.xml', '<?xml version="1.0" encoding="UTF-8"?>' . $sitemap->to_string );
+    $store->write_file( 'sitemap.xml', '<?xml version="1.0" encoding="UTF-8"?>' . $sitemap->to_string );
 
     my @robots = (
         "Sitemap: " . $self->url( 'sitemap.xml' ),
         "User-Agent: *",
         "Disallow: ",
     );
-    $store->write_page( 'robots.txt', join "\n", @robots );
+    $store->write_file( 'robots.txt', join "\n", @robots );
 }
 
 =method url( path )

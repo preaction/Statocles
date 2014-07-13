@@ -149,16 +149,17 @@ sub _freeze_document {
     return $doc;
 }
 
-=method write_page( $path, $html )
+=method write_file( $path, $content )
 
-Write the L<page|Statocles::Page> C<html> to the given C<path>.
+Write the given C<content> to the given C<path>. This is mostly used to write
+out L<page objects|Statocles::Page>.
 
 =cut
 
-sub write_page {
-    my ( $self, $path, $html ) = @_;
+sub write_file {
+    my ( $self, $path, $content ) = @_;
     my $full_path = $self->path->child( $path );
-    $full_path->touchpath->spew( $html );
+    $full_path->touchpath->spew( $content );
     return;
 }
 
@@ -183,7 +184,7 @@ __END__
 =head1 DESCRIPTION
 
 A Statocles::Store reads and writes L<documents|Statocles::Document> and
-L<pages|Statocles::Page>.
+files (mostly L<pages|Statocles::Page>).
 
 This class handles the parsing and inflating of
 L<"document objects"|Statocles::Document>.

@@ -159,7 +159,7 @@ ENDFILE
     };
 };
 
-subtest 'write pages' => sub {
+subtest 'write files' => sub {
     my $tmpdir = tempdir;
     my $store = Statocles::Store->new(
         path => $tmpdir,
@@ -173,7 +173,7 @@ subtest 'write pages' => sub {
         ),
         template => '<%= $content %>',
     );
-    $store->write_page( $page->path, $page->render );
+    $store->write_file( $page->path, $page->render );
     my $path = $tmpdir->child( '2014', '04', '23', 'slug.html' );
     cmp_deeply $path->slurp, $page->render;
 };
