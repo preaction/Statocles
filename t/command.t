@@ -105,6 +105,7 @@ subtest 'get version' => sub {
 
 sub test_site {
     my ( $root, @args ) = @_;
+    my $verbose = grep { /^-v$|^--verbose$/ } @args;
     return sub {
         my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
         is $exit, 0, 'exit code';
@@ -113,6 +114,15 @@ sub test_site {
         ok $root->child( 'sitemap.xml' )->exists, 'sitemap.xml exists';
         ok $root->child( 'blog', '2014', '04', '23', 'slug.html' )->exists;
         ok $root->child( 'blog', '2014', '04', '30', 'plug.html' )->exists;
+        if ( $verbose ) {
+            subtest 'verbose output is verbose' => sub {
+                like $out, qr{Write file: /index[.]html};
+                like $out, qr{Write file: sitemap[.]xml};
+            };
+        }
+        else {
+            ok !$out, 'no output without verbose';
+        }
     };
 }
 
@@ -130,6 +140,11 @@ subtest 'build site' => sub {
         '--site' => 'site_foo',
         @args,
     );
+    subtest 'verbose' => test_site(
+        $tmp->child( 'build_site' ),
+        @args,
+        '-v',
+    );
 };
 
 subtest 'deploy site' => sub {
@@ -145,6 +160,11 @@ subtest 'deploy site' => sub {
         $tmp->child( 'deploy_foo' ),
         '--site' => 'site_foo',
         @args,
+    );
+    subtest 'verbose' => test_site(
+        $tmp->child( 'deploy_site' ),
+        @args,
+        '--verbose',
     );
 };
 

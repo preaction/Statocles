@@ -1,8 +1,24 @@
 package Statocles;
 # ABSTRACT: A static site generator
 
-# This module exists for both documentation and to help File::Share
-# find the right share dir
+use Statocles::Base;
+use base 'Exporter';
+our @EXPORT_OK = qw( diag );
+
+our $VERBOSE = 0;
+
+=sub diag( level, message )
+
+Write a diagnostic message to STDOUT, but only if C<$Statocles::VERBOSE> is set.
+
+=cut
+
+# I imagine this is just temporary until we start using Log::Any or something...
+sub diag {
+    my ( $level, @msg ) = @_;
+    return unless $VERBOSE >= $level;
+    say @msg;
+}
 
 1;
 __END__
@@ -117,7 +133,7 @@ This page renders an alternate version of a list page, like an RSS or Atom feed.
 
 =back
 
-=head1 APPLICATIONS
+=head2 APPLICATIONS
 
 An application is the module that will take the documents the user provides and
 turn them into the pages that can be written out to the filesystem.
@@ -130,7 +146,7 @@ A simple blogging application.
 
 =back
 
-=head1 SITES
+=head2 SITES
 
 A L<Statocles::Site> manages a bunch of applications, writing and deploying the
 resulting pages.
@@ -146,7 +162,7 @@ A simple Git repository site.
 
 =back
 
-=head1 STORES
+=head2 STORES
 
 A L<Statocles::Store> reads and writes documents and pages. The default store
 reads documents in YAML and writes pages to a file, but stores could read

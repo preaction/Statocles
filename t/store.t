@@ -5,6 +5,7 @@ my $SHARE_DIR = path( __DIR__, 'share' );
 use Statocles::Store;
 use Statocles::Page::Document;
 use File::Copy::Recursive qw( dircopy );
+use Capture::Tiny qw( capture );
 
 my $DT_FORMAT = '%Y-%m-%d %H:%M:%S';
 
@@ -193,6 +194,45 @@ subtest 'store coercion' => sub {
     my $store = $coerce->( $SHARE_DIR->child( 'blog' ) );
     isa_ok $store, 'Statocles::Store';
     is $store->path, $SHARE_DIR->child( 'blog' );
+};
+
+subtest 'verbose' => sub {
+    no warnings qw( once );
+    local $Statocles::VERBOSE = 1;
+
+    subtest 'write' => sub {
+        my $tmpdir = tempdir;
+        my $store = Statocles::Store->new(
+            path => $tmpdir,
+        );
+
+        subtest 'write_file' => sub {
+            my ( $out, $err, $exit ) = capture {
+                $store->write_file( 'path.html' => 'HTML' );
+            };
+            ok !$err, 'no output on stderr' or diag $err;
+            is $out, "Write file: path.html\n";
+        };
+
+        subtest 'write_document' => sub {
+            my ( $out, $err, $exit ) = capture {
+                $store->write_document( 'path.yml' => { foo => 'BAR' } );
+            };
+            ok !$err, 'no output on stderr' or diag $err;
+            is $out, "Write document: path.yml\n";
+        };
+    };
+
+    subtest 'read document' => sub {
+        my $store = Statocles::Store->new(
+            path => $SHARE_DIR->child( 'blog' ),
+        );
+        my ( $out, $err, $exit ) = capture {
+            $store->read_document( path( qw( 2014 04 23 slug.yml ) ) );
+        };
+        ok !$err, 'no output on stderr' or diag $err;
+        is $out, 'Read document: ' . path( qw( 2014 04 23 slug.yml ) ) . "\n";
+    };
 };
 
 done_testing;

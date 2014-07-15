@@ -30,12 +30,14 @@ sub main {
     my %opt = (
         config => 'site.yml',
         site => 'site',
+        verbose => 0,
     );
     GetOptionsFromArray( \@argv, \%opt,
         'config:s',
         'site:s',
         'help|h',
         'version',
+        'verbose|v+',
     );
     return pod2usage(0) if $opt{help};
 
@@ -43,6 +45,8 @@ sub main {
         print "Statocles version $Statocles::Command::VERSION (Perl $^V)\n";
         return 0;
     }
+
+    local $Statocles::VERBOSE = $opt{verbose};
 
     my $wire = Beam::Wire->new( file => $opt{config} );
 

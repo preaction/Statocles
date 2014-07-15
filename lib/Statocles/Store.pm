@@ -66,6 +66,7 @@ given to L<Statocles::Document|Statocles::Document>.
 
 sub read_document {
     my ( $self, $path ) = @_;
+    diag( 1, "Read document: ", $path );
     my $full_path = $self->path->child( $path );
     open my $fh, '<', $full_path or die "Could not open '$full_path' for reading: $!\n";
     my $doc;
@@ -130,6 +131,7 @@ sub write_document {
     if ( $path->is_absolute ) {
         die "Cannot write document '$path': Path must not be absolute";
     }
+    diag( 1, "Write document: ", $path );
 
     $doc = { %{ $doc } }; # Shallow copy for safety
     my $content = delete( $doc->{content} ) // '';
@@ -159,6 +161,7 @@ out L<page objects|Statocles::Page>.
 
 sub write_file {
     my ( $self, $path, $content ) = @_;
+    diag( 1, "Write file: ", $path );
     my $full_path = $self->path->child( $path );
     $full_path->touchpath->spew( $content );
     return;
