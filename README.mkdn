@@ -4,7 +4,7 @@ Statocles - A static site generator
 
 # VERSION
 
-version 0.019
+version 0.020
 
 # DESCRIPTION
 
@@ -75,7 +75,7 @@ generate multiple pages, and pages may have multiple formats like HTML or RSS.
 
     This page renders an alternate version of a list page, like an RSS or Atom feed.
 
-# APPLICATIONS
+## APPLICATIONS
 
 An application is the module that will take the documents the user provides and
 turn them into the pages that can be written out to the filesystem.
@@ -84,7 +84,7 @@ turn them into the pages that can be written out to the filesystem.
 
     A simple blogging application.
 
-# SITES
+## SITES
 
 A [Statocles::Site](https://metacpan.org/pod/Statocles::Site) manages a bunch of applications, writing and deploying the
 resulting pages.
@@ -96,12 +96,14 @@ Git repository, an FTP site, or a database.
 
     A simple Git repository site.
 
-# STORES
+## STORES
 
 A [Statocles::Store](https://metacpan.org/pod/Statocles::Store) reads and writes documents and pages. The default store
 reads documents in YAML and writes pages to a file, but stores could read
 documents as JSON, or from a Mongo database, and write pages to a database, or
 whereever you want!
+
+Write a diagnostic message to STDOUT, but only if `$Statocles::VERBOSE` is set.
 
 # AUTHOR
 
@@ -113,3 +115,11 @@ This software is copyright (c) 2014 by Doug Bell.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
+
+# POD ERRORS
+
+Hey! **The above document had some coding errors, which are explained below:**
+
+- Around line 157:
+
+    Unknown directive: =sub

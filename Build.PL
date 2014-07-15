@@ -20,7 +20,7 @@ my %module_build_args = (
     "Doug Bell <preaction\@cpan.org>"
   ],
   "dist_name" => "Statocles",
-  "dist_version" => "0.019",
+  "dist_version" => "0.020",
   "license" => "perl",
   "module_name" => "Statocles",
   "recommends" => {},
