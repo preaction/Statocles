@@ -131,7 +131,7 @@ sub write_document {
     }
 
     $doc = { %{ $doc } }; # Shallow copy for safety
-    my $content = delete $doc->{content};
+    my $content = delete( $doc->{content} ) // '';
     my $header = YAML::Dump( $self->_freeze_document( $doc ) );
     chomp $header;
 
