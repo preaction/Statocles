@@ -122,8 +122,8 @@ subtest 'write document' => sub {
     subtest 'simple path' => sub {
         my $full_path = $store->write_document( 'example.yml' => $doc  );
         is $full_path, $store->path->child( 'example.yml' );
-        cmp_deeply $store->read_document( $full_path ), $doc
-            or diag explain $store->read_document( $full_path );
+        cmp_deeply $store->read_document( 'example.yml' ), $doc
+            or diag explain $store->read_document( 'example.yml' );
         eq_or_diff path( $full_path )->slurp, <<ENDFILE
 ---
 foo: bar
@@ -142,7 +142,7 @@ ENDFILE
         my $path = path(qw( blog 2014 05 28 example.yml ));
         my $full_path = $store->write_document( $path => $doc );
         is $full_path, $tmpdir->child( $path );
-        cmp_deeply $store->read_document( $full_path ), $doc;
+        cmp_deeply $store->read_document( $path ), $doc;
         eq_or_diff path( $full_path )->slurp, <<ENDFILE
 ---
 foo: bar

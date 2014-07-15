@@ -48,8 +48,8 @@ sub read_documents {
     my $iter = $root_path->iterator( { recurse => 1, follow_symlinks => 1 } );
     while ( my $path = $iter->() ) {
         if ( $path =~ /[.]ya?ml$/ ) {
-            my $data = $self->read_document( $path );
             my $rel_path = rootdir->child( $path->relative( $root_path ) );
+            my $data = $self->read_document( $rel_path );
             push @docs, Statocles::Document->new( path => $rel_path, %$data );
         }
     }
@@ -66,7 +66,8 @@ given to L<Statocles::Document|Statocles::Document>.
 
 sub read_document {
     my ( $self, $path ) = @_;
-    open my $fh, '<', $path or die "Could not open '$path' for reading: $!\n";
+    my $full_path = $self->path->child( $path );
+    open my $fh, '<', $full_path or die "Could not open '$full_path' for reading: $!\n";
     my $doc;
     my $buffer = '';
     while ( my $line = <$fh> ) {
@@ -76,7 +77,7 @@ sub read_document {
                     $doc = YAML::Load( $buffer );
                 };
                 if ( $@ ) {
-                    die "Error parsing YAML in '$path'\n$@";
+                    die "Error parsing YAML in '$full_path'\n$@";
                 }
                 $buffer = '';
             }
@@ -96,7 +97,7 @@ sub read_document {
             $doc = YAML::Load( $buffer );
         };
         if ( $@ ) {
-            die "Error parsing YAML in '$path'\n$@";
+            die "Error parsing YAML in '$full_path'\n$@";
         }
     }
     elsif ( !$doc->{content} && $buffer ) {

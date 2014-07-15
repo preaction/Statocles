@@ -45,7 +45,7 @@ sub docs {
 
         my $doc = Statocles::Document->new(
             path => rootdir->child( @doc_path ),
-            %{ $app->store->read_document( $SHARE_DIR->child( 'blog', @doc_path ) ) },
+            %{ $app->store->read_document( path( @doc_path ) ) },
         );
 
         push @doc_specs, {
@@ -347,7 +347,7 @@ subtest 'commands' => sub {
                 };
 
                 subtest 'check the generated document' => sub {
-                    my $doc = $app->store->read_document( $doc_path );
+                    my $doc = $app->store->read_document( $doc_path->relative( $tmpdir->child('blog') ) );
                     cmp_deeply $doc, {
                         title => 'This is a Title',
                         author => undef,
@@ -386,7 +386,7 @@ ENDCONTENT
                 };
 
                 subtest 'check the generated document' => sub {
-                    my $doc = $app->store->read_document( $doc_path );
+                    my $doc = $app->store->read_document( $doc_path->relative( $tmpdir->child( 'blog' ) ) );
                     cmp_deeply $doc, {
                         title => 'This is a Title',
                         author => undef,
