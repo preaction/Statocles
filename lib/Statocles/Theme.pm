@@ -2,22 +2,23 @@ package Statocles::Theme;
 # ABSTRACT: Templates, headers, footers, and navigation
 
 use Statocles::Class;
+use Statocles::Store;
 use File::Share qw( dist_dir );
 use Scalar::Util qw( blessed );
 
-=attr path
+=attr store
 
-The source directory for this theme.
+The source L<store|Statocles::Store> for this theme.
 
 If the path begins with ::, will pull one of the Statocles default
 themes from the Statocles share directory.
 
 =cut
 
-has path => (
+has store => (
     is => 'ro',
-    isa => Path,
-    coerce => Path->coercion,
+    isa => InstanceOf['Statocles::Store'],
+    coerce => Statocles::Store->coercion,
 );
 
 =attr templates
@@ -42,9 +43,9 @@ Handle the path :: share theme.
 around BUILDARGS => sub {
     my ( $orig, $self, @args ) = @_;
     my $args = $self->$orig( @args );
-    if ( $args->{path} && $args->{path} =~ /^::/ ) {
-        my $name = substr $args->{path}, 2;
-        $args->{path} = Path::Tiny->new( dist_dir( 'Statocles' ) )->child( 'theme', $name );
+    if ( $args->{store} && !ref $args->{store} && $args->{store} =~ /^::/ ) {
+        my $name = substr $args->{store}, 2;
+        $args->{store} = Path::Tiny->new( dist_dir( 'Statocles' ) )->child( 'theme', $name );
     }
     return $args;
 };
@@ -59,7 +60,7 @@ inside.
 sub read {
     my ( $self ) = @_;
     my %tmpl;
-    my $iter = $self->path->iterator({ recurse => 1, follow_symlinks => 1 });
+    my $iter = $self->store->path->iterator({ recurse => 1, follow_symlinks => 1 });
     while ( my $path = $iter->() ) {
         if ( $path =~ /[.]ep$/ ) {
             my $name = $path->basename( '.ep' ); # remove extension
@@ -95,7 +96,7 @@ sub coercion {
     my ( $class ) = @_;
     return sub {
         return $_[0] if blessed $_[0] and $_[0]->isa( $class );
-        return $class->new( path => $_[0] );
+        return $class->new( store => $_[0] );
     };
 }
 
@@ -109,7 +110,7 @@ __END__
     /theme/blog/index.html.ep
     /theme/blog/post.html.ep
 
-    my $theme      = Statocles::Theme->new( path => '/theme' );
+    my $theme      = Statocles::Theme->new( store => '/theme' );
     my $layout     = $theme->template( site => 'layout.html' );
     my $blog_index = $theme->template( blog => 'index.html' );
     my $blog_post  = $theme->template( blog => 'post.html' );
@@ -120,6 +121,6 @@ A Theme contains all the L<templates|Statocles::Template> that
 L<applications|Statocles::App> need. This class handles finding and parsing
 files into L<template objects|Statocles::Template>.
 
-When the L</path> is read, the templates inside are organized based on
+When the L</store> is read, the templates inside are organized based on
 their name and their parent directory.
 

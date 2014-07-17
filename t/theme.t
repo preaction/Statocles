@@ -28,7 +28,7 @@ subtest 'theme coercion' => sub {
     my $coerce = Statocles::Theme->coercion;
     my $theme = $coerce->( $SHARE_DIR->child( 'theme' ) );
     isa_ok $theme, 'Statocles::Theme';
-    is $theme->path, $SHARE_DIR->child( 'theme' );
+    is $theme->store->path, $SHARE_DIR->child( 'theme' );
 };
 
 sub read_templates {
@@ -74,7 +74,16 @@ subtest 'templates from directory' => sub {
     subtest 'absolute directory' => sub {
         my %exp_templates = read_templates( $SHARE_DIR->child( 'theme' ) );
         my $theme = Statocles::Theme->new(
-            path => $SHARE_DIR->child( 'theme' ),
+            store => $SHARE_DIR->child( 'theme' ),
+        );
+        cmp_deeply $theme->templates, \%exp_templates;
+        cmp_deeply $theme->template( blog => 'post.html' ), $exp_templates{blog}{'post.html'};
+    };
+
+    subtest 'absolute directory' => sub {
+        my %exp_templates = read_templates( $SHARE_DIR->child( 'theme' ) );
+        my $theme = Statocles::Theme->new(
+            store => Statocles::Store->new( path => $SHARE_DIR->child( 'theme' ) ),
         );
         cmp_deeply $theme->templates, \%exp_templates;
         cmp_deeply $theme->template( blog => 'post.html' ), $exp_templates{blog}{'post.html'};
@@ -86,7 +95,7 @@ subtest 'templates from directory' => sub {
 
         my %exp_templates = read_templates( 'theme' );
         my $theme = Statocles::Theme->new(
-            path => 'theme',
+            store => 'theme',
         );
         cmp_deeply $theme->templates, \%exp_templates;
         cmp_deeply $theme->template( blog => 'post.html' ), $exp_templates{blog}{'post.html'};
@@ -96,10 +105,10 @@ subtest 'templates from directory' => sub {
 
     subtest 'default Statocles theme' => sub {
         my $theme = Statocles::Theme->new(
-            path => '::default',
+            store => '::default',
         );
         my $theme_path = path(qw( theme default ));
-        like $theme->path, qr{\Q$theme_path\E$}
+        like $theme->store->path, qr{\Q$theme_path\E$}
     };
 };
 

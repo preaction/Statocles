@@ -9,7 +9,7 @@ use Statocles::Template;
 my $SHARE_DIR = path( __DIR__ )->parent->child( 'share' );
 
 my $theme = Statocles::Theme->new(
-    path => $SHARE_DIR->child( 'theme' ),
+    store => $SHARE_DIR->child( 'theme' ),
 );
 
 my $md = Text::Markdown->new;

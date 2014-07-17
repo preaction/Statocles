@@ -15,7 +15,7 @@ my $config = {
     theme => {
         class => 'Statocles::Theme',
         args => {
-            path => $SHARE_DIR->child( 'theme' ),
+            store => $SHARE_DIR->child( 'theme' ),
         },
     },
     build => {
