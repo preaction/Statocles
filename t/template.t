@@ -40,4 +40,36 @@ subtest 'template with errors' => sub {
     } qr{Error in template};
 };
 
+subtest 'template include' => sub {
+    subtest 'include another template' => sub {
+        my $tmpl = Statocles::Template->new(
+            path => $SHARE_DIR->child( 'tmpl', 'include_with_template.html.ep' ),
+            include_dirs => [
+                $SHARE_DIR->child( 'tmpl' ),
+            ],
+        );
+        is $tmpl->render( %args ), "INCLUDE Title\n ENDINCLUDE Title Author Content\n";
+    };
+
+    subtest 'include a plain HTML file' => sub {
+        my $tmpl = Statocles::Template->new(
+            path => $SHARE_DIR->child( 'tmpl', 'include_with_html.html.ep' ),
+            include_dirs => [
+                $SHARE_DIR->child( 'tmpl' ),
+            ],
+        );
+        is $tmpl->render( %args ), "INCLUDE INCLUDEDHTML\n ENDINCLUDE Title Author Content\n";
+    };
+
+    subtest 'missing include dies' => sub {
+        my $tmpl = Statocles::Template->new(
+            path => $SHARE_DIR->child( 'tmpl', 'include_with_template.html.ep' ),
+            include_dirs => [ $SHARE_DIR ],
+        );
+        throws_ok {
+            $tmpl->render( %args );
+        } qr{Error in template: Can not find include "included_template[.]html" in directories: $SHARE_DIR};
+    };
+};
+
 done_testing;

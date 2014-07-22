@@ -36,6 +36,18 @@ has path => (
     },
 );
 
+=attr include_dirs
+
+An array of paths to search for includes in. Optional.
+
+=cut
+
+has include_dirs => (
+    is => 'ro',
+    isa => ArrayRef[Path],
+    default => sub { [] },
+);
+
 =method BUILDARGS( )
 
 Set the default path to something useful for in-memory templates.
@@ -73,8 +85,8 @@ sub render {
     my $t = Mojo::Template->new(
         name => $self->path,
     );
-    $t->prepend( $self->_vars( keys %args ) );
-    my $content = $t->render( $self->content, \%args );
+    $t->prepend( $self->_prelude( '_tmpl', keys %args ) );
+    my $content = $t->render( $self->content, { %args, _tmpl => $self } );
     if ( blessed $content && $content->isa( 'Mojo::Exception' ) ) {
         die "Error in template: " . $content;
     }
@@ -84,9 +96,35 @@ sub render {
 # Build the Perl string that will unpack the passed-in args
 # This is how Mojolicious::Plugin::EPRenderer does it, but I'm probably
 # doing something wrong here...
-sub _vars {
+sub _prelude {
     my ( $self, @vars ) = @_;
-    return join " ", 'my $vars = shift;', map { "my \$$_ = \$vars->{'$_'};" } @vars;
+    return join " ",
+        'use strict; use warnings;',
+        'my $vars = shift;',
+        map( { "my \$$_ = \$vars->{'$_'};" } @vars ),
+        # Must eval subs that try to capture lexicals.
+        # See "Variable %s is not available" in perldiag
+        'eval q{sub include($) { $_tmpl->_include( $vars, @_ ) }}',
+        ;
+}
+
+
+# Find and include the given file. If it's a template, give it the given vars
+sub _include {
+    my ( $self, $vars, $name ) = @_;
+    for my $dir ( @{ $self->include_dirs } ) {
+        if ( $dir->child( "$name.ep" )->exists ) {
+            my $inner_tmpl = __PACKAGE__->new(
+                path => $dir->child( "$name.ep" ),
+                include_dirs => $self->include_dirs,
+            );
+            return $inner_tmpl->render( %$vars );
+        }
+        elsif ( $dir->child( $name )->exists ) {
+            return $dir->child( $name )->slurp;
+        }
+    }
+    die qq{Can not find include "$name" in directories: } . join " ", @{ $self->include_dirs };
 }
 
 =method coercion
