@@ -67,6 +67,7 @@ sub read {
             my $group = $path->parent->basename;
             $tmpl{ $group }{ $name } = Statocles::Template->new(
                 path => $path,
+                include_dirs => [ $self->store->path ],
             );
         }
     }
