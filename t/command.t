@@ -209,4 +209,42 @@ subtest 'run the http daemon' => sub {
         'contains http port information';
 };
 
+subtest 'bundle the necessary components' => sub {
+    subtest 'theme' => sub {
+        my @args = (
+            '--config' => "$config_fn",
+            bundle => theme => 'default',
+        );
+        my @site_layout = qw( share theme default site layout.html.ep );
+        my @site_footer = qw( share theme default site footer.html );
+        subtest 'first time creates directories' => sub {
+            my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+            #; diag `find $tmp`;
+            is $exit, 0;
+            ok !$err;
+            like $out, qr{Theme "default" written to "share/theme/default"};
+            like $out, qr{Make sure to update "$config_fn"};
+            is $tmp->child( @site_layout )->slurp,
+                $SHARE_DIR->parent->parent->child( @site_layout )->slurp;
+            ok $tmp->child( @site_footer )->is_file;
+        };
+        subtest 'second time does not overwrite hooks' => sub {
+            # Write new hooks
+            $tmp->child( @site_footer )->spew( 'SITE FOOTER' );
+            # Templates will get overwritten no matter what
+            $tmp->child( @site_layout )->spew( 'TEMPLATE DAMAGED' );
+
+            my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+            is $exit, 0;
+            ok !$err;
+            like $out, qr{Theme "default" written to "share/theme/default"};
+            like $out, qr{Make sure to update "$config_fn"};
+
+            is $tmp->child( @site_layout )->slurp,
+                $SHARE_DIR->parent->parent->child( @site_layout )->slurp;
+            is $tmp->child( @site_footer )->slurp, 'SITE FOOTER';
+        };
+    };
+};
+
 done_testing;

@@ -20,11 +20,12 @@ __END__
 
 The command to run. Available commands:
 
-    build       - Build the site
-    daemon      - Run an HTTP daemon to test the built site
-    deploy      - Deploy the site
-    apps        - List the applications in this site
-    <app> help  - Get help for a specific application
+    build                   - Build the site
+    daemon                  - Run an HTTP daemon to test the built site
+    deploy                  - Deploy the site
+    bundle theme <name>     - Bundle a theme in the site directory
+    apps                    - List the applications in this site
+    <app> help              - Get help for a specific application
 
 =head1 OPTIONS
 
