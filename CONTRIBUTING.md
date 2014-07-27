@@ -1,8 +1,39 @@
 # CONTRIBUTING
 
-If you're not sure about anything, feel free to open an issue and ask!
+This project is free software for the express purpose of collaboration.
+We welcome all input, bug reports, feature requests, general comments,
+and patches.
+
+If you're not sure about anything, please open an issue and ask!
+
+## Standard of Conduct
+
+To ensure a welcoming, safe, collaborative environment, this project
+will enforce a standard of conduct:
+
+* The topic of this project is the project itself. Please stay on-topic.
+* Stick to the facts
+* Avoid demeaning remarks and sarcasm
+
+Unacceptable behavior will receive a single, public warning. Repeated
+unacceptable behavior will result in removal from the project.
+
+Remember, all the people who contribute to this project are volunteers.
+
+### Please Try to Avoid
+
+This behavior is not against the standard of conduct, but following
+these guidelines will make it easier to manage the project.
+
+* Comments with only '+1'
+    * Every open issue will be addressed.
 
 ## What to Contribute
+
+### Comments
+
+The issue tracker is used for both bug reports and to-do list. Anything
+on the issue tracker, open or closed, is available for discussion.
 
 ### Fixes
 
@@ -36,7 +67,7 @@ I don't worry too much about this, yet. I'm sure I'll fill this section
 in a bit more. For now, try to match as best you can the code that
 already exists in this project.
 
-## Developing on this Project
+## How to Contribute
 
 This project uses Dist::Zilla for its releases, but you aren't required
 to use it for contributing.
