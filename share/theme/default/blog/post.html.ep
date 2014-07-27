@@ -38,6 +38,7 @@
     </div>
 
     <div class="col-md-3">
+        %= include 'site/sidebar_before.html'
         <nav id="tags">
             <h1>Tags</h1>
             <ul class="list-inline">

@@ -61,6 +61,7 @@
     </div>
 
     <div class="sidebar col-md-3">
+        %= include 'site/sidebar_before.html'
         <h1>Tags</h1>
         <ul class="list-inline">
         % for my $tag ( $app->tags ) {

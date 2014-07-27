@@ -79,9 +79,11 @@
                     </div>
                 </div>
             </nav>
+            %= include 'site/header_after.html'
         </header>
         <div class="main container">
             <%= $content %>
         </div>
+        %= include 'site/footer.html'
     </body>
 </html>
