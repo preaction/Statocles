@@ -86,7 +86,18 @@ sub render {
         name => $self->path,
     );
     $t->prepend( $self->_prelude( '_tmpl', keys %args ) );
-    my $content = $t->render( $self->content, { %args, _tmpl => $self } );
+
+    my $content;
+    {
+        # Add the helper subs, like Mojolicious::Plugin::EPRenderer does
+        no strict 'refs';
+        no warnings 'redefine';
+        local *{"@{[$t->namespace]}::include"} = sub {
+            $self->_include( \%args, @_ );
+        };
+        $content = $t->render( $self->content, \%args );
+    }
+
     if ( blessed $content && $content->isa( 'Mojo::Exception' ) ) {
         die "Error in template: " . $content;
     }
@@ -102,9 +113,6 @@ sub _prelude {
         'use strict; use warnings;',
         'my $vars = shift;',
         map( { "my \$$_ = \$vars->{'$_'};" } @vars ),
-        # Must eval subs that try to capture lexicals.
-        # See "Variable %s is not available" in perldiag
-        'eval q{sub include($) { $_tmpl->_include( $vars, @_ ) }}',
         ;
 }
 
