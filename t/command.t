@@ -86,12 +86,21 @@ my $config_fn = $tmp->child( 'site.yml' );
 YAML::DumpFile( $config_fn, $config );
 
 subtest 'get help' => sub {
-    $0 = path( $FindBin::Bin )->parent->child( 'bin', 'statocles' )->stringify;
-    my ( $out, $err, $exit ) = capture { Statocles::Command->main( '-h' ) };
-    ok !$err, 'help output is on stdout';
-    like $out, qr{statocles -h},
-        'reports pod from bin/statocles, not Statocles::Command';
-    is $exit, 0;
+    local $0 = path( $FindBin::Bin )->parent->child( 'bin', 'statocles' )->stringify;
+    subtest '-h' => sub {
+        my ( $out, $err, $exit ) = capture { Statocles::Command->main( '-h' ) };
+        ok !$err, 'help output is on stdout';
+        like $out, qr{statocles -h},
+            'reports pod from bin/statocles, not Statocles::Command';
+        is $exit, 0;
+    };
+    subtest '--help' => sub {
+        my ( $out, $err, $exit ) = capture { Statocles::Command->main( '--help' ) };
+        ok !$err, 'help output is on stdout';
+        like $out, qr{statocles -h},
+            'reports pod from bin/statocles, not Statocles::Command';
+        is $exit, 0;
+    };
 };
 
 subtest 'get version' => sub {

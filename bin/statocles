@@ -2,8 +2,18 @@
 # ABSTRACT: Run Statocles commands
 package statocles;
 
+# Mojolicious::Commands currently calls GetOptions and clobbers a few of
+# our command-line options. Since I don't want to rely on the envvars
+# that get set in that process, we'll do this little dance here.
+#
+# This happens because we build a Mojolicious app inside the Statocles::Command
+# module, which loads Mojolicious, which loads Mojolicious::Commands, which
+# calls GetOptions on @ARGV
+my @argv;
+BEGIN { @argv = @ARGV };
+
 use Statocles::Command;
-exit Statocles::Command->main( @ARGV );
+exit Statocles::Command->main( @argv );
 
 __END__
 

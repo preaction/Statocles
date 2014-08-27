@@ -111,21 +111,30 @@ sub main {
     return 0;
 }
 
-package Statocles::Command::_MOJOAPP;
+{
+    package Statocles::Command::_MOJOAPP;
 
-use Mojo::Base 'Mojolicious';
-has 'site';
+    # Currently, as of Mojolicious 5.12, loading the Mojolicious module here
+    # will load the Mojolicious::Commands module, which calls GetOptions, which
+    # will remove -h, --help, -m, and -s from @ARGV. We fix this by copying
+    # @ARGV in bin/statocles before we call Statocles::Command.
+    #
+    # We could fix this in the future by moving this out into its own module,
+    # that is only loaded after we are done passing @ARGV into main(), above.
+    use Mojo::Base 'Mojolicious';
+    has 'site';
 
-sub startup {
-    my ( $self ) = @_;
-    $self->routes->get( '/', sub { $_[0]->redirect_to( '/index.html' ) } );
-    unshift @{ $self->static->paths },
-        $self->site->build_store->path,
-        # Add the deploy store for non-Statocles content
-        # This won't work in certain situations, like a Git repo on another branch, but
-        # this is convenience until we can track image directories and other non-generated
-        # content.
-        $self->site->deploy_store->path;
+    sub startup {
+        my ( $self ) = @_;
+        $self->routes->get( '/', sub { $_[0]->redirect_to( '/index.html' ) } );
+        unshift @{ $self->static->paths },
+            $self->site->build_store->path,
+            # Add the deploy store for non-Statocles content
+            # This won't work in certain situations, like a Git repo on another branch, but
+            # this is convenience until we can track image directories and other non-generated
+            # content.
+            $self->site->deploy_store->path;
+    }
 }
 
 1;
