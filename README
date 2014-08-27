@@ -2,7 +2,7 @@ NAME
     Statocles - A static site generator
 
 VERSION
-    version 0.020
+    version 0.021
 
 DESCRIPTION
     Statocles is an application for building static web pages from a set of
@@ -102,6 +102,8 @@ OVERVIEW
     could read documents as JSON, or from a Mongo database, and write pages
     to a database, or whereever you want!
 
+SUBROUTINES
+  diag( level, message )
     Write a diagnostic message to STDOUT, but only if $Statocles::VERBOSE is
     set.
 
@@ -113,11 +115,4 @@ COPYRIGHT AND LICENSE
 
     This is free software; you can redistribute it and/or modify it under
     the same terms as the Perl 5 programming language system itself.
-
-POD ERRORS
-    Hey! The above document had some coding errors, which are explained
-    below:
-
-    Around line 178:
-        Unknown directive: =sub
 
