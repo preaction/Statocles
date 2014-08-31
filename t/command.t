@@ -203,7 +203,7 @@ subtest 'delegate to app command' => sub {
 
 subtest 'run the http daemon' => sub {
     # We need to stop the daemon after it starts
-    my $timeout = Mojo::IOLoop->singleton->timer( 0, sub { kill 'TERM', $$ } );
+    my $timeout = Mojo::IOLoop->singleton->timer( 0, sub { Mojo::IOLoop->stop } );
     # We want it to pick a random port
     local $ENV{MOJO_LISTEN} = 'http://127.0.0.1';
     my @args = (

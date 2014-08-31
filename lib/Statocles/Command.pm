@@ -80,7 +80,9 @@ sub main {
             ),
         );
         print "Listening on " . $daemon->listen->[0] . "\n";
-        $daemon->run;
+        # Using start() instead of run() so we can stop() inside the tests
+        $daemon->start;
+        Mojo::IOLoop->start;
     }
     elsif ( $method eq 'bundle' ) {
         my $what = $argv[1];
