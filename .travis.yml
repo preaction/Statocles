@@ -1,6 +1,6 @@
 language: perl
 perl:
-    - "5.8"
+    #- "5.8" # Not supported by Statocles
     - "5.10"
     - "5.12"
     - "5.14"
