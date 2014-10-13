@@ -1,29 +1,40 @@
 language: perl
 perl:
-    - "5.20"
-    - "5.18"
-    - "5.16"
-    - "5.14"
-    - "5.12"
+    - "5.8"
     - "5.10"
-    #- "blead"
+    - "5.12"
+    - "5.14"
+    - "5.16"
+    - "5.18"
+    - "5.20"
+    - "blead"
+
+matrix:
+    include:
+        - perl: 5.18
+          env: COVERAGE=1
+    allow_failures:
+        - perl: "blead"
 
 before_install:
-    - git clone git://github.com/haarg/perl-travis-helper
-    - source perl-travis-helper/init
+    - git clone git://github.com/travis-perl/helpers ~/travis-perl-helpers
+    - source ~/travis-perl-helpers/init
     - build-perl
     - perl -V
     - build-dist
     - cd $BUILD_DIR
 
 install:
-    - export RELEASE_TESTING=1 AUTOMATED_TESTING=1 AUTHOR_TESTING=1 HARNESS_OPTIONS=j10:c HARNESS_TIMER=1
-    - cpanm --quiet --notest Devel::Cover::Report::Coveralls
-    - cpanm --quiet --notest --installdeps .
+    - cpan-install --deps
+    - cpan-install --coverage
+
+before_script:
+    - coverage-setup
 
 script:
-    - PERL5OPT=-MDevel::Cover=-coverage,statement,branch,condition,path,subroutine prove -lrsv t
-    - cover
+    - perl Makefile.PL
+    - make
+    - prove -bl -s -j$(test-jobs) $(test-files)
 
 after_success:
-    - cover -report coveralls
+    - coverage-report
