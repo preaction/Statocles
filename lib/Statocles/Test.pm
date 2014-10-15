@@ -11,7 +11,7 @@ sub modules {
     my @modules = $class->SUPER::modules( %args );
     return (
         @modules,
-        'Test::Most',
+        qw( Test::More Test::Deep Test::Differences Test::Exception ),
         'Dir::Self' => [qw( __DIR__ )],
         'Path::Tiny' => [qw( path tempdir )],
     );
@@ -33,9 +33,13 @@ In addition to all the imports from L<Statocles::Base>, this module imports:
 
 =over
 
-=item L<Test::Most>
+=item L<Test::More>
 
-Which includes Test::More, Test::Deep, Test::Differences, and Test::Exception.
+=item L<Test::Deep>
+
+=item L<Test::Differences>
+
+=item L<Test::Exception>
 
 =item L<Dir::Self>
 
