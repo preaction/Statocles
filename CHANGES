@@ -1,6 +1,8 @@
 Changelog for Statocles
 
-0.023 2014-11-03T00:41:45
+0.023 2014-11-03T00:59:36
+ - add a SYNOPSIS section so we get our badges
+ - add new build artifacts
  - update dist.ini for new best practices
  - break up Test::Most
  - 5.8 is not supported by Statocles

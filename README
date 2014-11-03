@@ -4,6 +4,22 @@ NAME
 VERSION
     version 0.023
 
+SYNOPSIS
+        # !!! Read the Getting Started guide to set up a site.yml config file
+
+        # Create a new blog post
+        export EDITOR=vim
+        statocles blog post
+
+        # Build the site
+        statocles build
+
+        # Test the site in a local web browser
+        statocles daemon
+
+        # Deploy the site
+        statocles deploy
+
 DESCRIPTION
     Statocles is an application for building static web pages from a set of
     plain YAML and Markdown files. It is designed to make it as simple as

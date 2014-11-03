@@ -6,6 +6,27 @@ Statocles - A static site generator
 
 version 0.023
 
+# STATUS
+
+<a href="https://travis-ci.org/preaction/Statocles"><img src="https://travis-ci.org/preaction/Statocles.svg?branch=master"></a><a href="https://coveralls.io/r/preaction/Statocles"><img src="https://coveralls.io/repos/preaction/Statocles/badge.png" alt="Coverage Status" /></a>
+
+# SYNOPSIS
+
+    # !!! Read the Getting Started guide to set up a site.yml config file
+
+    # Create a new blog post
+    export EDITOR=vim
+    statocles blog post
+
+    # Build the site
+    statocles build
+
+    # Test the site in a local web browser
+    statocles daemon
+
+    # Deploy the site
+    statocles deploy
+
 # DESCRIPTION
 
 Statocles is an application for building static web pages from a set of plain
