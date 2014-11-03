@@ -23,6 +23,23 @@ sub diag {
 1;
 __END__
 
+=head1 SYNOPSIS
+
+    # !!! Read the Getting Started guide to set up a site.yml config file
+
+    # Create a new blog post
+    export EDITOR=vim
+    statocles blog post
+
+    # Build the site
+    statocles build
+
+    # Test the site in a local web browser
+    statocles daemon
+
+    # Deploy the site
+    statocles deploy
+
 =head1 GUIDES
 
 =head2 GETTING STARTED
