@@ -1,0 +1,267 @@
+Changelog for Statocles
+
+0.023 2014-11-03T00:41:45
+ - update dist.ini for new best practices
+ - break up Test::Most
+ - 5.8 is not supported by Statocles
+ - update travis.yml for new perl travis helpers
+
+0.022 2014-08-31T07:49:50
+ - release v0.022
+ - fix t/command.t dying on Win32
+
+0.021 2014-08-27T22:07:14
+ - release v0.021
+ - add a base zsh completion config
+ - use $^X to invoke the currently-running perl
+ - fix --help not working
+ - add =sub to weaver.ini
+ - add 'bundle theme' command
+ - add some hooks into the default theme
+ - add a standard of conduct to CONTRIBUTING
+ - fix redefine warning from include sub
+ - theme sets template include dir to theme dir
+ - add template includes
+ - have Theme use a Store instead of a raw path
+
+0.020 2014-07-15T05:01:49
+ - add docs about --verbose flag
+ - add --verbose flag to show some useful information
+ - make read_document take a relative path
+ - silence warning when no content in the document
+ - write_page -> write_file
+ - better reporting on YAML loading errors
+ - fix post images breaking the layout
+
+0.019 2014-07-07T03:15:50
+ - release v0.019
+ - allow filtering of tags on the index page
+ - require Mojolicious 4.76
+
+0.018 2014-07-06T03:38:29
+ - release v0.018
+ - add blog page tags to the default theme
+ - add page tags to the blog
+ - add tags to pages
+ - let someone else test blead
+ - Mojolicious requires at least 5.10
+ - no more SurgicalPodWeaver, use regular PodWeaver
+ - get podweaver before we install
+ - PodWeaver still isn't specified by SurgicalPodWeaver
+ - fix yaml syntax for travis.yml
+ - possibly fix `daemon` test by randomizing the port
+ - add travis-ci and coveralls
+
+0.017 2014-06-29T23:27:27
+ - release v0.017
+ - add basic daemon command
+
+0.016 2014-06-29T04:58:34
+ - release v0.016
+ - quiet some warnings
+ - add a simple robots.txt
+ - add sitemap.xml generation
+ - change theme source_dir -> path
+ - add coercions for Theme and Store
+ - fix pre and code wrapping
+ - blog source -> store
+ - add test prereq found by kwalitee
+ - fix pod error found by kwalitee
+
+0.015 2014-06-28T06:12:23
+ - release v0.015
+ - fix default layout error if no main nav
+ - add test to check default theme syntax
+ - fix exception in test template
+ - throw an exception when template fails to render
+ - add a line to help with the continue reading link
+ - fix bottom-border on post header
+ - remove crosspost links from the bottom of list
+
+0.014 2014-06-25T05:40:52
+ - release v0.014
+ - squelch some warnings in the new test templates
+ - add content sections to the default templates
+ - add sectioned content to document pages
+ - remove the default templates
+ - remove the custom test templates
+ - add a feature list for marketing purposes
+ - add a link to the feed page in the main doc
+
+0.013 2014-06-22T08:01:13
+ - release v0.013
+ - add feed titles and links to feeds in the page
+ - add RSS and Atom feeds to blog index and tag pages
+ - add generic page links hashref
+ - put self and app in all pages
+ - add site method to get a full URL for feeds
+ - cache page objects so we can modify them
+ - add feed pages
+ - ignore blog directories that aren't YYYY/MM/DD
+ - fix setup help - blog -> blog_app
+ - blog -> blog_app
+ - die with an error if we can't make a slug
+ - return the exit code from called sub
+ - fix some typos in the setup help
+
+0.012 2014-06-18T06:15:07
+ - release v0.012
+ - deploy now performs 'git push'
+ - add rel next/prev to pagination links
+ - better format for crosspost links
+ - put the list of guides first in the documentation
+ - we moved the core of 'render' to 'vars'
+
+0.011 2014-06-15T03:10:40
+ - release v0.011
+ - still show the topbar if site lacks main nav
+ - add crosspost links to the default blog templates
+ - everything used in template should have default
+ - reorganize template vars to prefer objects
+ - remove unused dump method
+ - add crosspost links to documents
+ - add last_modified attribute to documents
+ - defaults must be subref
+ - fix bad link to YAML
+
+0.010 2014-06-07T09:27:29
+ - release v0.010
+ - add a setup guide until we get a create command
+ - add named navs, so we can add more nav lists later
+ - add next/prev to list page render()
+ - mark html templates as such; use .ep like Mojo
+ - add paginate() constructor for paginated lists
+ - fix the pagination links in the default blog theme
+ - add pagination to the blog
+ - enforce an order on the paginated pages
+ - add optional index path to pagination
+ - do not build posts whose day has not yet come
+ - allow setting the date when creating a new post
+
+0.009 2014-06-06T20:15:15
+ - release v0.009
+ - add the published date to the blog pages
+ - add published date to pages
+ - add last_modified and tags to default blog post
+ - add last_modified to documents
+ - make the default templates more semantic
+
+0.008 2014-06-05T04:35:12
+ - release v0.008
+ - add tag navigation to the blog
+ - add tag pages to the blog
+ - avoid swp files when scanning for documents
+ - bump Path::Tiny version to 0.054
+ - remove the site/ directory from the release
+ - handle older versions of git better
+ - Git::Repository requires git 1.5 or higher
+
+0.007 2014-06-02T05:07:23
+ - add tags attr to document
+ - remove hard-coded document paths in test
+ - remove unused attribute
+ - add/update links in documentation
+ - migrate to Path::Tiny
+ - Set a real git config user name/email
+ - switch to Type::Tiny. thanks mst!
+ - fix link to Jekyll. Thanks buu!
+
+0.006 2014-05-29T06:01:50
+ - sort blog index page by post date
+ - use frontmatter format in addition to pure YAML
+ - open $EDITOR for the user creating a blog post
+ - add 'blog post' command to add new posts to a blog
+ - return the full path to the document
+ - add write_document method to Store
+ - add application command delegation
+ - add 'apps' command to list the apps in a site
+
+0.005 2014-05-26T06:29:14
+ - docs and pages do not need to be in any order
+ - use canon dirsep in template path
+ - doc paths are files; page paths are URLs
+ - remove warning if source_dir is undefined
+ - Moo only allows subrefs as default
+ - preset git name/email
+
+0.004 2014-05-25T06:28:44
+ - get themes from Statocles share dir
+ - add another caller to ignore finding template path
+ - move the pager controls to the blog index
+ - add the page path to the template
+ - add missing ABSTRACT
+
+0.003 2014-05-25T03:26:39
+ - release v0.003
+ - fix git commands writing to stdout
+ - always specify a template path
+ - allow regex-unsafe characters in file path
+
+0.002 2014-05-21T04:17:39
+ - release v0.002
+ - fix one of the dir seperator problems on Win32
+ - check for git earlier in the test
+ - add missing prereqs
+
+0.001 2014-05-20T04:41:29
+ - make sure only built files get committed
+ - add a basic git-based site
+ - document Statocles::Template and everything else
+ - better default theme with more example content
+ - basic site navigation array
+ - reduce duplication in site test
+ - fix default site theme for Statocles::Template
+ - add --version command-line script option
+ - switch to Mojo::Template
+ - attribute -> attr
+ - add some missing documentation to Page classes
+ - change Page to a role
+ - add a base Role class
+ - refactor test to remove some duplication
+ - add missing layout template
+ - add site title
+ - pull the render() call out of the store
+ - add additional template arguments to pages
+ - add error checking to template fill_in()
+ - site index should not duplicate an app page
+ - remove the link because POD->Markdown does bad things
+ - add some introduction documentation
+ - add initial default theme and an example site.yml
+ - fix loading theme from a relative directory
+ - fix read documents from a relative directory
+ - set the execute bit
+ - add initial command-line interface
+ - break up build and deploy stores
+ - remove destination from apps to reduce duplication
+ - add missing index page to theme test
+ - add an index page to the entire site
+ - add index page to the blog
+ - all pages need paths
+ - add initial List page, for indexes
+ - test multiple blog posts in preparation for lists
+ - better description of what the method returns
+ - File -> Store to get all docs from a dir path
+ - add site class
+ - provide a single pages() method in applications
+ - fix template not being stored with the right group
+ - throw a better error when the template is undef
+ - fix broken tests
+ - allow loading of theme templates from a directory
+ - we don't need these imports
+ - add layouts to blog application
+ - add layout to page
+ - blog app can now read source files from directory
+ - add write() method to blog app
+ - make sure to create full paths when writing pages
+ - add theme to the blog app
+ - add themes - bundles of templates
+ - initial build artifacts
+ - initial work on a blog application
+ - add documentation
+ - rename project to Statocles
+ - add some documentation
+ - add ref to File that Document is read from/writ to
+ - write pages to disk
+ - add simple page rendering
+ - add base File and Document classes
+
