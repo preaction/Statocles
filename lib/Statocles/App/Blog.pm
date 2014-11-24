@@ -101,13 +101,24 @@ Markdown content goes here.
 ENDCONTENT
 };
 
+my $USAGE_INFO = <<'ENDHELP';
+USAGE:
+
+    $name help -- This help file
+    $name post [--date YYYY-MM-DD] <title> -- Create a new blog post with the given title
+ENDHELP
+
 sub command {
     my ( $self, $name, @argv ) = @_;
+
+    if ( !$argv[0] ) {
+        print "ERROR: Missing command\n";
+        print eval "qq{$USAGE_INFO}";
+        return 1;
+    }
+
     if ( $argv[0] eq 'help' ) {
-        print <<ENDHELP;
-$name help -- This help file
-$name post [--date YYYY-MM-DD] <title> -- Create a new blog post with the given title
-ENDHELP
+        print eval "qq{$USAGE_INFO}";
     }
     elsif ( $argv[0] eq 'post' ) {
         my %opt;
@@ -163,6 +174,12 @@ ENDHELP
         print "New post at: $full_path\n";
 
     }
+    else {
+        print qq{ERROR: Unknown command "$argv[0]"\n};
+        print eval "qq{$USAGE_INFO}";
+        return 1;
+    }
+
     return 0;
 }
 
