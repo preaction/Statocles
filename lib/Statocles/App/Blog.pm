@@ -102,8 +102,7 @@ ENDCONTENT
 };
 
 my $USAGE_INFO = <<'ENDHELP';
-USAGE:
-
+Usage:
     $name help -- This help file
     $name post [--date YYYY-MM-DD] <title> -- Create a new blog post with the given title
 ENDHELP
