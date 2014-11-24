@@ -112,8 +112,8 @@ sub command {
     my ( $self, $name, @argv ) = @_;
 
     if ( !$argv[0] ) {
-        print "ERROR: Missing command\n";
-        print eval "qq{$USAGE_INFO}";
+        print STDERR "ERROR: Missing command\n";
+        print STDERR eval "qq{$USAGE_INFO}";
         return 1;
     }
 
@@ -175,8 +175,8 @@ ENDHELP
 
     }
     else {
-        print qq{ERROR: Unknown command "$argv[0]"\n};
-        print eval "qq{$USAGE_INFO}";
+        print STDERR qq{ERROR: Unknown command "$argv[0]"\n};
+        print STDERR eval "qq{$USAGE_INFO}";
         return 1;
     }
 
