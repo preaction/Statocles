@@ -111,6 +111,17 @@ subtest 'get version' => sub {
     is $output, "Statocles version 1.00 (Perl $^V)\n";
 };
 
+subtest 'error messages' => sub {
+    local $0 = path( $FindBin::Bin )->parent->child( 'bin', 'statocles' )->stringify;
+
+    my ( $out, $err, $exit ) = capture { Statocles::Command->main };
+    ok !$out, 'error output is on stderr';
+    like $err, qr{ERROR: Missing command};
+    like $err, qr{statocles -h},
+        'reports pod from bin/statocles, not Statocles::Command';
+    isnt $exit, 0;
+};
+
 
 sub test_site {
     my ( $root, @args ) = @_;

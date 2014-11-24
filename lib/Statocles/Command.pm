@@ -43,6 +43,8 @@ sub main {
     );
     return pod2usage(0) if $opt{help};
 
+    return pod2usage("ERROR: Missing command") unless $argv[0];
+
     if ( $opt{version} ) {
         print "Statocles version $Statocles::Command::VERSION (Perl $^V)\n";
         return 0;
