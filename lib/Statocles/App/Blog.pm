@@ -125,9 +125,6 @@ ENDHELP
             return 1;
         }
 
-        my $slug = lc $title;
-        $slug =~ s/\s+/-/g;
-
         my ( $year, $mon, $day );
         if ( $opt{ date } ) {
             ( $year, $mon, $day ) = split /-/, $opt{date};
@@ -144,17 +141,27 @@ ENDHELP
             sprintf( '%02i', $day ),
         );
 
-        my $path = Path::Tiny->new( @date_parts, "$slug.yml" );
         my %doc = (
             %$default_post,
             title => $title,
             last_modified => Time::Piece->new,
         );
+
+        if ( $ENV{EDITOR} ) {
+            # I can see no good way to test this automatically
+            my $tmp_store = Statocles::Store->new( path => Path::Tiny->tempdir );
+            my $tmp_path = $tmp_store->write_document( new_post => \%doc );
+            system $ENV{EDITOR}, $tmp_path;
+            %doc = %{ $tmp_store->read_document( 'new_post' ) };
+            $title = $doc{title};
+        }
+
+        my $slug = lc $title;
+        $slug =~ s/\s+/-/g;
+        my $path = Path::Tiny->new( @date_parts, "$slug.yml" );
         my $full_path = $self->store->write_document( $path => \%doc );
         print "New post at: $full_path\n";
-        if ( $ENV{EDITOR} ) {
-            system $ENV{EDITOR}, $full_path;
-        }
+
     }
     return 0;
 }
