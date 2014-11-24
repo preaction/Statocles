@@ -43,12 +43,13 @@ sub main {
     );
     return pod2usage(0) if $opt{help};
 
-    return pod2usage("ERROR: Missing command") unless $argv[0];
-
     if ( $opt{version} ) {
         print "Statocles version $Statocles::Command::VERSION (Perl $^V)\n";
         return 0;
     }
+
+    my $method = $argv[0];
+    return pod2usage("ERROR: Missing command") unless $method;
 
     local $Statocles::VERBOSE = $opt{verbose};
 
@@ -58,7 +59,6 @@ sub main {
         site => $wire->get( $opt{site} ),
     );
 
-    my $method = $argv[0];
     if ( grep { $_ eq $method } qw( build deploy ) ) {
         $cmd->site->$method;
         return 0;
