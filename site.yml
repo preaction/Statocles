@@ -1,7 +1,7 @@
 theme:
     class: Statocles::Theme
     args:
-        source_dir: share/theme/default
+        store: share/theme/default
 
 build:
     class: Statocles::Store
@@ -11,12 +11,13 @@ build:
 deploy:
     class: Statocles::Store
     args:
-        path: site/deploy
+        path: .
 
 site:
-    class: Statocles::Site
+    class: Statocles::Site::Git
     args:
         title: Statocles
+        base_url: http://preaction.github.io/Statocles/
         nav:
             main:
                 - title: Blog
@@ -25,6 +26,7 @@ site:
             $ref: build
         deploy_store:
             $ref: deploy
+        deploy_branch: gh-pages
         index: blog
         apps:
             blog:
@@ -33,7 +35,7 @@ site:
                     store:
                         $class: Statocles::Store
                         $args:
-                            path: share/blog
+                            path: site/blog
                     url_root: /blog
                     theme:
                         $ref: theme
