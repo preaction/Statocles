@@ -156,6 +156,7 @@ sub write {
     my %args = (
         site => $self,
     );
+
     for my $app_name ( keys %{ $apps } ) {
         my $app = $apps->{$app_name};
 
@@ -167,7 +168,7 @@ sub write {
         for my $page ( $app->pages ) {
             if ( $index_path && $page->path eq $index_path ) {
                 # Rename the app's page so that we don't get two pages with identical
-                # content
+                # content, which is bad for SEO
                 $page->path( '/index.html' );
             }
             $store->write_file( $page->path, $page->render( %args ) );
@@ -205,6 +206,8 @@ sub write {
     $sitemap = $sitemap->wrap( '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>' );
     $store->write_file( 'sitemap.xml', '<?xml version="1.0" encoding="UTF-8"?>' . $sitemap->to_string );
 
+    # robots.txt is the best way for crawlers to automatically discover sitemap.xml
+    # We should do more with this later...
     my @robots = (
         "Sitemap: " . $self->url( 'sitemap.xml' ),
         "User-Agent: *",
@@ -222,6 +225,7 @@ Get the full URL to the given path by prepending the C<base_url>.
 sub url {
     my ( $self, $path ) = @_;
     my $base = $self->base_url;
+    # Remove the / from both sides of the join so we don't double up
     $base =~ s{/$}{};
     $path =~ s{^/}{};
     return join "/", $base, $path;
