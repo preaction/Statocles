@@ -19,6 +19,7 @@ has store => (
     is => 'ro',
     isa => InstanceOf['Statocles::Store'],
     coerce => Statocles::Store->coercion,
+    required => 1,
 );
 
 =attr _templates
@@ -31,7 +32,6 @@ has _templates => (
     is => 'ro',
     isa => HashRef[HashRef[InstanceOf['Statocles::Template']]],
     default => sub { {} },
-    init_arg => 'templates',
 );
 
 =method BUILDARGS
