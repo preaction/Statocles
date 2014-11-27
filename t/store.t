@@ -160,23 +160,36 @@ ENDFILE
     };
 };
 
-subtest 'write files' => sub {
-    my $tmpdir = tempdir;
-    my $store = Statocles::Store->new(
-        path => $tmpdir,
-    );
-    my $page = Statocles::Page::Document->new(
-        path => '/2014/04/23/slug.html',
-        document => Statocles::Document->new(
-            title => 'First Post',
-            author => 'preaction',
-            content => 'Body content',
-        ),
-        template => '<%= $content %>',
-    );
-    $store->write_file( $page->path, $page->render );
-    my $path = $tmpdir->child( '2014', '04', '23', 'slug.html' );
-    cmp_deeply $path->slurp, $page->render;
+subtest 'files' => sub {
+
+    subtest 'read files' => sub {
+        my $store = Statocles::Store->new(
+            path => $SHARE_DIR->child( 'theme' ),
+        );
+        my $content = $store->read_file( path( blog => 'post.html.ep' ) );
+        eq_or_diff $SHARE_DIR->child( qw( theme blog post.html.ep ) )->slurp, $content;
+    };
+
+    subtest 'write files' => sub {
+        my $tmpdir = tempdir;
+        my $store = Statocles::Store->new(
+            path => $tmpdir,
+        );
+        my $page = Statocles::Page::Document->new(
+            path => '/2014/04/23/slug.html',
+            document => Statocles::Document->new(
+                title => 'First Post',
+                author => 'preaction',
+                content => 'Body content',
+            ),
+            template => '<%= $content %>',
+        );
+
+        $store->write_file( $page->path, $page->render );
+        my $path = $tmpdir->child( '2014', '04', '23', 'slug.html' );
+        cmp_deeply $path->slurp, $page->render;
+    };
+
 };
 
 subtest 'path that has regex-special characters inside' => sub {
@@ -223,16 +236,32 @@ subtest 'verbose' => sub {
         };
     };
 
-    subtest 'read document' => sub {
-        my $store = Statocles::Store->new(
-            path => $SHARE_DIR->child( 'blog' ),
-        );
-        my ( $out, $err, $exit ) = capture {
-            $store->read_document( path( qw( 2014 04 23 slug.yml ) ) );
+    subtest 'read' => sub {
+
+        subtest 'read file' => sub {
+            my $store = Statocles::Store->new(
+                path => $SHARE_DIR->child( 'theme' ),
+            );
+            my ( $out, $err, $exit ) = capture {
+                $store->read_file( path( qw( blog post.html.ep ) ) );
+            };
+            ok !$err, 'no output on stderr' or diag $err;
+            is $out, 'Read file: ' . path( qw( blog post.html.ep ) ) . "\n";
         };
-        ok !$err, 'no output on stderr' or diag $err;
-        is $out, 'Read document: ' . path( qw( 2014 04 23 slug.yml ) ) . "\n";
+
+        subtest 'read document' => sub {
+            my $store = Statocles::Store->new(
+                path => $SHARE_DIR->child( 'blog' ),
+            );
+            my ( $out, $err, $exit ) = capture {
+                $store->read_document( path( qw( 2014 04 23 slug.yml ) ) );
+            };
+            ok !$err, 'no output on stderr' or diag $err;
+            is $out, 'Read document: ' . path( qw( 2014 04 23 slug.yml ) ) . "\n";
+        };
+
     };
+
 };
 
 done_testing;

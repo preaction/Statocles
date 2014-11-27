@@ -152,6 +152,18 @@ sub _freeze_document {
     return $doc;
 }
 
+=method read_file( $path )
+
+Read the file from the given C<path>.
+
+=cut
+
+sub read_file {
+    my ( $self, $path ) = @_;
+    diag( 1, "Read file: ", $path );
+    return $self->path->child( $path )->slurp;
+}
+
 =method write_file( $path, $content )
 
 Write the given C<content> to the given C<path>. This is mostly used to write
