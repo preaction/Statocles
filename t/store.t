@@ -170,6 +170,14 @@ subtest 'files' => sub {
         eq_or_diff $SHARE_DIR->child( qw( theme blog post.html.ep ) )->slurp, $content;
     };
 
+    subtest 'has file' => sub {
+        my $store = Statocles::Store->new(
+            path => $SHARE_DIR->child( 'theme' ),
+        );
+        ok $store->has_file( path( blog => 'post.html.ep' ) );
+        ok !$store->has_file( path( blog => 'DONTHAVE.html.ep' ) );
+    };
+
     subtest 'write files' => sub {
         my $tmpdir = tempdir;
         my $store = Statocles::Store->new(

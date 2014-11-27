@@ -164,6 +164,20 @@ sub read_file {
     return $self->path->child( $path )->slurp;
 }
 
+=method has_file( $path )
+
+Returns true if a file exists with the given C<path>.
+
+NOTE: This should not be used to check for directories, as not all stores have
+directories.
+
+=cut
+
+sub has_file {
+    my ( $self, $path ) = @_;
+    return $self->path->child( $path )->is_file;
+}
+
 =method write_file( $path, $content )
 
 Write the given C<content> to the given C<path>. This is mostly used to write
