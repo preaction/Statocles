@@ -76,13 +76,22 @@ sub read_templates {
 }
 
 subtest 'templates from directory' => sub {
+    my @templates = (
+        [ blog => 'post.html' ],
+        [ blog => 'index.html' ],
+        [ blog => 'index.rss' ],
+        [ blog => 'index.atom' ],
+        [ site => 'layout.html' ],
+    );
+
     subtest 'absolute directory' => sub {
         my %exp_templates = read_templates( $SHARE_DIR->child( 'theme' ) );
         my $theme = Statocles::Theme->new(
             store => $SHARE_DIR->child( 'theme' ),
         );
-        cmp_deeply $theme->templates, \%exp_templates;
-        cmp_deeply $theme->template( blog => 'post.html' ), $exp_templates{blog}{'post.html'};
+        for my $tmpl ( @templates ) {
+            cmp_deeply $theme->template( @$tmpl ), $exp_templates{ $tmpl->[0] }{ $tmpl->[1] };
+        }
     };
 
     subtest 'absolute directory' => sub {
@@ -90,8 +99,9 @@ subtest 'templates from directory' => sub {
         my $theme = Statocles::Theme->new(
             store => Statocles::Store->new( path => $SHARE_DIR->child( 'theme' ) ),
         );
-        cmp_deeply $theme->templates, \%exp_templates;
-        cmp_deeply $theme->template( blog => 'post.html' ), $exp_templates{blog}{'post.html'};
+        for my $tmpl ( @templates ) {
+            cmp_deeply $theme->template( @$tmpl ), $exp_templates{ $tmpl->[0] }{ $tmpl->[1] };
+        }
     };
 
     subtest 'relative directory' => sub {
@@ -102,8 +112,9 @@ subtest 'templates from directory' => sub {
         my $theme = Statocles::Theme->new(
             store => 'theme',
         );
-        cmp_deeply $theme->templates, \%exp_templates;
-        cmp_deeply $theme->template( blog => 'post.html' ), $exp_templates{blog}{'post.html'};
+        for my $tmpl ( @templates ) {
+            cmp_deeply $theme->template( @$tmpl ), $exp_templates{ $tmpl->[0] }{ $tmpl->[1] };
+        }
 
         chdir $cwd;
     };

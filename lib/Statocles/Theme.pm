@@ -21,17 +21,17 @@ has store => (
     coerce => Statocles::Store->coercion,
 );
 
-=attr templates
+=attr _templates
 
-The template objects for this theme.
+The cached template objects for this theme.
 
 =cut
 
-has templates => (
+has _templates => (
     is => 'ro',
     isa => HashRef[HashRef[InstanceOf['Statocles::Template']]],
-    lazy => 1,
-    builder => 'read',
+    default => sub { {} },
+    init_arg => 'templates',
 );
 
 =method BUILDARGS
@@ -50,28 +50,20 @@ around BUILDARGS => sub {
     return $args;
 };
 
-=method read()
+=method read( $section => $name )
 
-Read the C<path> and create the L<template|Statocles::Template> objects
-inside.
+Read the template for the given C<section> and C<name> and create the
+L<template|Statocles::Template> object.
 
 =cut
 
 sub read {
-    my ( $self ) = @_;
-    my %tmpl;
-    my $iter = $self->store->path->iterator({ recurse => 1, follow_symlinks => 1 });
-    while ( my $path = $iter->() ) {
-        if ( $path =~ /[.]ep$/ ) {
-            my $name = $path->basename( '.ep' ); # remove extension
-            my $group = $path->parent->basename;
-            $tmpl{ $group }{ $name } = Statocles::Template->new(
-                path => $path,
-                include_dirs => [ $self->store->path ],
-            );
-        }
-    }
-    return \%tmpl;
+    my ( $self, $app, $template ) = @_;
+    my $path = $self->store->path->child( $app, $template );
+    return Statocles::Template->new(
+        path => $path . ".ep",
+        include_dirs => [ $self->store->path ],
+    );
 }
 
 =method template( $section => $name )
@@ -83,7 +75,7 @@ given C<name>.
 
 sub template {
     my ( $self, $app, $template ) = @_;
-    return $self->templates->{ $app }{ $template };
+    return $self->_templates->{ $app }{ $template } ||= $self->read( $app, $template );
 }
 
 =method coercion
