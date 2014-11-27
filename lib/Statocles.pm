@@ -102,6 +102,10 @@ language|Mojo::Template#SYNTAX>.
 
 A clean default theme using L<Twitter Bootstrap|http://getbootstrap.com>.
 
+=item *
+
+SEO-friendly features such as L<sitemaps (sitemap.xml)|http://www.sitemaps.org>.
+
 =back
 
 =head1 OVERVIEW
