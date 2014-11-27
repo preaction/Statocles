@@ -64,7 +64,7 @@ sub read {
     return Statocles::Template->new(
         path => $path,
         content => $content,
-        include_dirs => [ $self->store->path ],
+        store => $self->store,
     );
 }
 

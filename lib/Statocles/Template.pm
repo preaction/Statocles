@@ -2,6 +2,7 @@ package Statocles::Template;
 # ABSTRACT: A template object to pass around
 
 use Statocles::Class;
+use Statocles::Store;
 use Mojo::Template;
 use Scalar::Util qw( blessed );
 
@@ -36,16 +37,17 @@ has path => (
     },
 );
 
-=attr include_dirs
+=attr store
 
-An array of paths to search for includes in. Optional.
+A store to use for includes. Optional.
 
 =cut
 
-has include_dirs => (
+has store => (
     is => 'ro',
-    isa => ArrayRef[Path],
-    default => sub { [] },
+    isa => InstanceOf['Statocles::Store'],
+    predicate => 'has_store',
+    coerce => Statocles::Store->coercion,
 );
 
 =method BUILDARGS( )
@@ -120,19 +122,24 @@ sub _prelude {
 # Find and include the given file. If it's a template, give it the given vars
 sub _include {
     my ( $self, $vars, $name ) = @_;
-    for my $dir ( @{ $self->include_dirs } ) {
-        if ( $dir->child( "$name.ep" )->exists ) {
-            my $inner_tmpl = __PACKAGE__->new(
-                path => $dir->child( "$name.ep" ),
-                include_dirs => $self->include_dirs,
-            );
-            return $inner_tmpl->render( %$vars );
-        }
-        elsif ( $dir->child( $name )->exists ) {
-            return $dir->child( $name )->slurp;
-        }
+    if ( !$self->has_store ) {
+        die qq{Can not include: No store!};
     }
-    die qq{Can not find include "$name" in directories: } . join " ", @{ $self->include_dirs };
+
+    my $store = $self->store;
+    if ( $store->has_file( "$name.ep" ) ) {
+        my $inner_tmpl = __PACKAGE__->new(
+            path => "$name.ep",
+            content => $store->read_file( "$name.ep" ),
+            store => $store,
+        );
+        return $inner_tmpl->render( %$vars );
+    }
+    elsif ( $store->has_file( $name ) ) {
+        return $store->read_file( $name );
+    }
+
+    die qq{Can not find include "$name" in store "$store"};
 }
 
 =method coercion

@@ -32,43 +32,43 @@ subtest 'theme coercion' => sub {
 };
 
 sub read_templates {
-    my ( $dir ) = @_;
+    my ( $store ) = @_;
 
-    $dir = path( $dir );
+    my $dir = $store->path;
 
     my $tmpl_fn = $dir->child( 'blog', 'post.html.ep' );
     my $tmpl = Statocles::Template->new(
         path => $tmpl_fn->relative( $dir ),
         content => $tmpl_fn->slurp,
-        include_dirs => [ $dir ],
+        store => $store,
     );
 
     my $index_fn = $dir->child( 'blog', 'index.html.ep' );
     my $index = Statocles::Template->new(
         path => $index_fn->relative( $dir ),
         content => $index_fn->slurp,
-        include_dirs => [ $dir ],
+        store => $store,
     );
 
     my $rss_fn = $dir->child( 'blog', 'index.rss.ep' );
     my $rss = Statocles::Template->new(
         path => $rss_fn->relative( $dir ),
         content => $rss_fn->slurp,
-        include_dirs => [ $dir ],
+        store => $store,
     );
 
     my $atom_fn = $dir->child( 'blog', 'index.atom.ep' );
     my $atom = Statocles::Template->new(
         path => $atom_fn->relative( $dir ),
         content => $atom_fn->slurp,
-        include_dirs => [ $dir ],
+        store => $store,
     );
 
     my $layout_fn = $dir->child( 'site', 'layout.html.ep' );
     my $layout = Statocles::Template->new(
         path => $layout_fn->relative( $dir ),
         content => $layout_fn->slurp,
-        include_dirs => [ $dir ],
+        store => $store,
     );
 
     return (
@@ -94,19 +94,12 @@ subtest 'templates from directory' => sub {
     );
 
     subtest 'absolute directory' => sub {
-        my %exp_templates = read_templates( $SHARE_DIR->child( 'theme' ) );
-        my $theme = Statocles::Theme->new(
-            store => $SHARE_DIR->child( 'theme' ),
+        my $store = Statocles::Store->new(
+            path => $SHARE_DIR->child( 'theme' ),
         );
-        for my $tmpl ( @templates ) {
-            cmp_deeply $theme->template( @$tmpl ), $exp_templates{ $tmpl->[0] }{ $tmpl->[1] };
-        }
-    };
-
-    subtest 'absolute directory' => sub {
-        my %exp_templates = read_templates( $SHARE_DIR->child( 'theme' ) );
+        my %exp_templates = read_templates( $store );
         my $theme = Statocles::Theme->new(
-            store => Statocles::Store->new( path => $SHARE_DIR->child( 'theme' ) ),
+            store => $store,
         );
         for my $tmpl ( @templates ) {
             cmp_deeply $theme->template( @$tmpl ), $exp_templates{ $tmpl->[0] }{ $tmpl->[1] };
@@ -117,7 +110,11 @@ subtest 'templates from directory' => sub {
         my $cwd = getcwd();
         chdir $SHARE_DIR;
 
-        my %exp_templates = read_templates( 'theme' );
+        my $store = Statocles::Store->new(
+            path => 'theme',
+        );
+
+        my %exp_templates = read_templates( $store );
         my $theme = Statocles::Theme->new(
             store => 'theme',
         );

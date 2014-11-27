@@ -108,16 +108,16 @@ my %app_vars = (
     },
 );
 
-my @themes = $THEME_DIR->children;
-for my $theme ( @themes ) {
-    subtest $theme->basename => sub {
-        my $iter = $theme->iterator({ recurse => 1 });
+my @theme_dirs = $THEME_DIR->children;
+for my $theme_dir ( @theme_dirs ) {
+    subtest $theme_dir->basename => sub {
+        my $iter = $theme_dir->iterator({ recurse => 1 });
         while ( my $path = $iter->() ) {
             next unless $path->is_file;
             next unless $path->basename =~ /[.]ep$/;
             my $tmpl = Statocles::Template->new(
                 path => $path,
-                include_dirs => [ $theme ],
+                store => $theme_dir,
             );
             my $name = $path->basename;
             my $app = $path->parent->basename;
