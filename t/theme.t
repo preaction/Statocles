@@ -38,27 +38,36 @@ sub read_templates {
 
     my $tmpl_fn = $dir->child( 'blog', 'post.html.ep' );
     my $tmpl = Statocles::Template->new(
-        path => $tmpl_fn,
+        path => $tmpl_fn->relative( $dir ),
+        content => $tmpl_fn->slurp,
         include_dirs => [ $dir ],
     );
+
     my $index_fn = $dir->child( 'blog', 'index.html.ep' );
     my $index = Statocles::Template->new(
-        path => $index_fn,
+        path => $index_fn->relative( $dir ),
+        content => $index_fn->slurp,
         include_dirs => [ $dir ],
     );
+
     my $rss_fn = $dir->child( 'blog', 'index.rss.ep' );
     my $rss = Statocles::Template->new(
-        path => $rss_fn,
+        path => $rss_fn->relative( $dir ),
+        content => $rss_fn->slurp,
         include_dirs => [ $dir ],
     );
+
     my $atom_fn = $dir->child( 'blog', 'index.atom.ep' );
     my $atom = Statocles::Template->new(
-        path => $atom_fn,
+        path => $atom_fn->relative( $dir ),
+        content => $atom_fn->slurp,
         include_dirs => [ $dir ],
     );
+
     my $layout_fn = $dir->child( 'site', 'layout.html.ep' );
     my $layout = Statocles::Template->new(
-        path => $layout_fn,
+        path => $layout_fn->relative( $dir ),
+        content => $layout_fn->slurp,
         include_dirs => [ $dir ],
     );
 

@@ -59,9 +59,11 @@ L<template|Statocles::Template> object.
 
 sub read {
     my ( $self, $app, $template ) = @_;
-    my $path = $self->store->path->child( $app, $template );
+    my $path = Path::Tiny->new( $app, $template . ".ep" );
+    my $content = $self->store->read_file( $path );
     return Statocles::Template->new(
-        path => $path . ".ep",
+        path => $path,
+        content => $content,
         include_dirs => [ $self->store->path ],
     );
 }
