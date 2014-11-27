@@ -1,6 +1,20 @@
 Changelog for Statocles
 
-0.023 2014-11-03T00:59:36
+0.023 2014-11-27T07:06:06
+ - set up Statocles website
+ - require a store in the Theme
+ - use store instead of include_dirs to find includes
+ - add has_file method to Store
+ - use store read_file in theme
+ - add read_file method to store
+ - do not preload all theme templates
+ - fix --version to work without a method
+ - make blog usage look like pod2usage
+ - show an error and usage if no command given
+ - move unexpected errors to STDERR
+ - show an error when missing/incorrect blog command
+ - open post in editor before deciding its location
+ - we do need some stinkin badges!
  - add a SYNOPSIS section so we get our badges
  - add new build artifacts
  - update dist.ini for new best practices
