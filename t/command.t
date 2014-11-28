@@ -214,18 +214,28 @@ subtest 'delegate to app command' => sub {
 
 subtest 'run the http daemon' => sub {
     # We need to stop the daemon after it starts
-    my $timeout = Mojo::IOLoop->singleton->timer( 0, sub { Mojo::IOLoop->stop } );
+    my $port;
+    my $timeout = Mojo::IOLoop->singleton->timer( 0, sub {
+        my $daemon = $Statocles::Command::daemon;
+        my $id = $daemon->acceptors->[0];
+        $port = $daemon->ioloop->acceptor( $id )->handle->sockport;
+        Mojo::IOLoop->stop;
+    } );
+
     # We want it to pick a random port
     local $ENV{MOJO_LISTEN} = 'http://127.0.0.1';
+
     my @args = (
         '--config' => "$config_fn",
         'daemon',
     );
+
     my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
     undef $timeout;
+
     ok !$err, 'port info is on stdout';
     is $exit, 0;
-    like $out, qr{\QListening on http://127.0.0.1\E\n},
+    like $out, qr{\QListening on http://127.0.0.1:$port\E\n},
         'contains http port information';
 };
 

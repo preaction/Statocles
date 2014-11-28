@@ -75,15 +75,22 @@ sub main {
     }
     elsif ( $method eq 'daemon' ) {
         require Mojo::Server::Daemon;
-        my $daemon = Mojo::Server::Daemon->new(
+        our $daemon = Mojo::Server::Daemon->new(
             silent => 1,
             app => Statocles::Command::_MOJOAPP->new(
                 site => $cmd->site,
             ),
         );
-        print "Listening on " . $daemon->listen->[0] . "\n";
+
         # Using start() instead of run() so we can stop() inside the tests
         $daemon->start;
+
+        # Find the port we're listening on
+        my $id = $daemon->acceptors->[0];
+        my $handle = $daemon->ioloop->acceptor( $id )->handle;
+        print "Listening on " . sprintf( 'http://%s:%d', $handle->sockhost || '127.0.0.1', $handle->sockport ) . "\n";
+
+        # Give control to the IOLoop
         Mojo::IOLoop->start;
     }
     elsif ( $method eq 'bundle' ) {
