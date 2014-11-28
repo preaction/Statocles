@@ -2,7 +2,7 @@ NAME
     Statocles - A static site generator
 
 VERSION
-    version 0.023
+    version 0.024
 
 SYNOPSIS
         # !!! Read the Getting Started guide to set up a site.yml config file
@@ -49,6 +49,9 @@ DESCRIPTION
 
     *   A clean default theme using Twitter Bootstrap
         <http://getbootstrap.com>.
+
+    *   SEO-friendly features such as sitemaps (sitemap.xml)
+        <http://www.sitemaps.org>.
 
 GUIDES
   GETTING STARTED

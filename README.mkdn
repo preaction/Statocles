@@ -4,7 +4,7 @@ Statocles - A static site generator
 
 # VERSION
 
-version 0.023
+version 0.024
 
 # STATUS
 
@@ -46,6 +46,7 @@ develop rich web content using basic text-based tools.
 - Customizable [templates](https://metacpan.org/pod/Statocles::Template) using [the Mojolicious template
 language](https://metacpan.org/pod/Mojo::Template#SYNTAX).
 - A clean default theme using [Twitter Bootstrap](http://getbootstrap.com).
+- SEO-friendly features such as [sitemaps (sitemap.xml)](http://www.sitemaps.org).
 
 # GUIDES
 

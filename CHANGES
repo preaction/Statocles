@@ -1,6 +1,17 @@
 Changelog for Statocles
 
-0.023 2014-11-27T07:06:06
+0.024 2014-11-28T10:27:54
+ - support nonroot sites in the `daemon` command
+ - disable mojolicious's Net::DNS::Native support
+ - always show the right port in the daemon command
+ - support folders in base_url for non-root sites
+ - Site update
+ - build more html-like test content
+ - add/update some comments in Site
+ - add note about sitemaps to the features list
+
+0.023 2014-11-27T07:06:38
+ - release v0.023
  - set up Statocles website
  - require a store in the Theme
  - use store instead of include_dirs to find includes
