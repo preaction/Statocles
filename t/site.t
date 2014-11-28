@@ -5,6 +5,7 @@ use Statocles::Theme;
 use Statocles::Store;
 use Statocles::App::Blog;
 use Mojo::DOM;
+use Mojo::URL;
 my $SHARE_DIR = path( __DIR__, 'share' );
 
 subtest 'site writes application' => sub {
@@ -15,7 +16,7 @@ subtest 'site writes application' => sub {
         $site->build;
 
         for my $page ( $site->app( 'blog' )->pages ) {
-            subtest 'page content' => test_content( $tmpdir, $site, $page, build => $page->path );
+            subtest 'page content: ' . $page->path => test_content( $tmpdir, $site, $page, build => $page->path );
             ok !$tmpdir->child( 'deploy', $page->path )->exists, 'not deployed yet';
         }
     };
@@ -24,7 +25,7 @@ subtest 'site writes application' => sub {
         $site->deploy;
 
         for my $page ( $site->app( 'blog' )->pages ) {
-            subtest 'page content' => test_content( $tmpdir, $site, $page, deploy => $page->path );
+            subtest 'page content: ' . $page->path => test_content( $tmpdir, $site, $page, deploy => $page->path );
         }
     };
 };
@@ -51,7 +52,7 @@ subtest 'site index and navigation' => sub {
 
     subtest 'build' => sub {
         $site->build;
-        subtest 'site index content' => test_content( $tmpdir, $site, $page, build => 'index.html' );
+        subtest 'site index content: ' . $page->path => test_content( $tmpdir, $site, $page, build => 'index.html' );
         ok !$tmpdir->child( 'deploy', 'index.html' )->exists, 'not deployed yet';
         ok !$tmpdir->child( 'build', 'blog', 'index.html' )->exists,
             'site index renames app page';
@@ -59,7 +60,7 @@ subtest 'site index and navigation' => sub {
 
     subtest 'deploy' => sub {
         $site->deploy;
-        subtest 'site index content' => test_content( $tmpdir, $site, $page, deploy => 'index.html' );
+        subtest 'site index content: ' . $page->path => test_content( $tmpdir, $site, $page, deploy => 'index.html' );
         ok !$tmpdir->child( 'deploy', 'blog', 'index.html' )->exists,
             'site index renames app page';
     };
@@ -154,14 +155,54 @@ subtest 'sitemap.xml and robots.txt' => sub {
 };
 
 subtest 'site urls' => sub {
-    my $tmpdir = tempdir;
-    my $site = site( $tmpdir,
-        base_url => 'http://example.com/',
-    );
-    is $site->url( '/index.html' ),
-       'http://example.com/index.html';
-    is $site->url( '/blog/2014/01/01/a-page.html' ),
-       'http://example.com/blog/2014/01/01/a-page.html';
+    subtest 'domain only' => sub {
+        my $tmpdir = tempdir;
+        my $site = site( $tmpdir,
+            base_url => 'http://example.com/',
+        );
+
+        is $site->url( '/index.html' ),
+           'http://example.com/index.html';
+        is $site->url( '/blog/2014/01/01/a-page.html' ),
+           'http://example.com/blog/2014/01/01/a-page.html';
+    };
+
+    subtest 'domain and folder' => sub {
+        my $tmpdir = tempdir;
+        my $site = site( $tmpdir,
+            base_url => 'http://example.com/folder',
+        );
+
+        is $site->url( '/index.html' ),
+           'http://example.com/folder/index.html';
+        is $site->url( '/blog/2014/01/01/a-page.html' ),
+           'http://example.com/folder/blog/2014/01/01/a-page.html';
+    };
+
+    subtest 'base URL with folder rewrites content' => sub {
+        my $tmpdir = tempdir;
+        my $site = site( $tmpdir,
+            base_url => 'http://example.com/folder',
+        );
+
+        subtest 'build' => sub {
+            $site->build;
+
+            for my $page ( $site->app( 'blog' )->pages ) {
+                subtest 'page content: ' . $page->path => test_content( $tmpdir, $site, $page, build => $page->path );
+                ok !$tmpdir->child( 'deploy', $page->path )->exists, 'not deployed yet';
+            }
+        };
+
+        subtest 'deploy' => sub {
+            $site->deploy;
+
+            for my $page ( $site->app( 'blog' )->pages ) {
+                subtest 'page content: ' . $page->path => test_content( $tmpdir, $site, $page, deploy => $page->path );
+            }
+        };
+
+    };
 };
 
 done_testing;
@@ -190,17 +231,40 @@ sub site {
 
 sub test_content {
     my ( $tmpdir, $site, $page, $dir, $file ) = @_;
+    my $base_url = Mojo::URL->new( $site->base_url );
+    my $base_path = $base_url->path;
+    $base_path =~ s{/$}{};
+
     return sub {
         my $path = $tmpdir->child( $dir, $file );
-        my $html = $path->slurp;
-        eq_or_diff $html, $page->render( site => $site );
+        my $got_dom = Mojo::DOM->new( $path->slurp );
 
-        like $html, qr{@{[$site->title]}}, 'page contains site title ' . $site->title;
-        for my $nav ( @{ $site->nav->{ 'main' } } ) {
-            my $title = $nav->{title};
-            my $url = $nav->{href};
-            like $html, qr{$title}, 'page contains nav main title ' . $title;
-            like $html, qr{$url}, 'page contains nav main url ' . $url;
+        my $expect_dom = Mojo::DOM->new( $page->render( site => $site ) );
+        if ( $base_path =~ /\S/ ) {
+            for my $attr ( qw( src href ) ) {
+                for my $el ( $expect_dom->find( "[$attr]" )->each ) {
+                    my $url = $el->attr( $attr );
+                    next unless $url =~ m{^/};
+                    $el->attr( $attr, join "", $base_path, $url );
+                }
+            }
         }
+
+        eq_or_diff "$got_dom", "$expect_dom";
+
+        if ( $got_dom->at('title') ) {
+            like $got_dom->at('title')->text, qr{@{[$site->title]}}, 'page contains site title ' . $site->title;
+        }
+
+        if ( $got_dom->at( 'nav' ) ) {
+            my @nav_got    = $got_dom->at('nav')->find( 'a' )->map( sub { { href => $_->attr( 'href' ), title => $_->text } } )->each;
+            my @nav_expect = @{ $site->nav->{ 'main' } };
+            if ( $base_path =~ /\S/ ) {
+                @nav_expect = map {; { title => $_->{title}, href => join "", $base_path, $_->{href} } } @nav_expect;
+            }
+            cmp_deeply \@nav_got, \@nav_expect or diag explain \@nav_got;
+        }
+
     };
 }
+

@@ -3,6 +3,7 @@ package Statocles::Site;
 
 use Statocles::Class;
 use Statocles::Store;
+use Mojo::URL;
 use Mojo::DOM;
 
 =attr title
@@ -157,6 +158,7 @@ sub write {
         site => $self,
     );
 
+    # Collect all the pages for this site
     for my $app_name ( keys %{ $apps } ) {
         my $app = $apps->{$app_name};
 
@@ -171,9 +173,29 @@ sub write {
                 # content, which is bad for SEO
                 $page->path( '/index.html' );
             }
-            $store->write_file( $page->path, $page->render( %args ) );
             push @pages, $page;
         }
+    }
+
+    # Rewrite page content to add base URL
+    my $base_path = Mojo::URL->new( $self->base_url )->path;
+    $base_path =~ s{/$}{};
+    for my $page ( @pages ) {
+        my $html = $page->render( %args );
+
+        if ( $base_path =~ /\S/ ) {
+            my $dom = Mojo::DOM->new( $html );
+            for my $attr ( qw( src href ) ) {
+                for my $el ( $dom->find( "[$attr]" )->each ) {
+                    my $url = $el->attr( $attr );
+                    next unless $url =~ m{^/};
+                    $el->attr( $attr, join "", $base_path, $url );
+                }
+            }
+            $html = $dom->to_string;
+        }
+
+        $store->write_file( $page->path, $html );
     }
 
     # Build the sitemap.xml
