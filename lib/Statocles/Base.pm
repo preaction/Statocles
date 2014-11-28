@@ -6,6 +6,10 @@ use warnings;
 use base 'Import::Base';
 
 sub modules {
+    # Disable spurious warnings on platforms that Net::DNS::Native does not
+    # support. We don't use this much mojo
+    $ENV{MOJO_NO_NDN} = 1;
+
     return (
         strict => [],
         warnings => [],
