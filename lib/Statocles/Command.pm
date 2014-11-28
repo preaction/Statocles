@@ -137,7 +137,17 @@ sub main {
 
     sub startup {
         my ( $self ) = @_;
-        $self->routes->get( '/', sub { $_[0]->redirect_to( '/index.html' ) } );
+        my $base;
+        if ( $self->site->base_url ) {
+            $base = Mojo::URL->new( $self->site->base_url )->path;
+            $base =~ s{/$}{};
+        }
+
+        my $index = "/index.html";
+        if ( $base ) {
+            $index = $base . $index;
+        }
+
         unshift @{ $self->static->paths },
             $self->site->build_store->path,
             # Add the deploy store for non-Statocles content
@@ -145,7 +155,26 @@ sub main {
             # this is convenience until we can track image directories and other non-generated
             # content.
             $self->site->deploy_store->path;
+
+        $self->routes->get( '/', sub {
+            my ( $c ) = @_;
+            $c->redirect_to( $index );
+        } );
+
+        # Add a route for the "home" URL
+        if ( $base && $base ne '/' ) {
+            $self->routes->get( $base, sub {
+                my ( $c ) = @_;
+                $c->redirect_to( $index );
+            } );
+            $self->routes->get( $base . '/*path', sub {
+                my ( $c ) = @_;
+                $self->static->dispatch( $c );
+            } );
+        }
+
     }
+
 }
 
 1;
