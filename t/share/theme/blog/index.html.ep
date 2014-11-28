@@ -1,4 +1,4 @@
 % for my $page ( @$pages ) {
 % my $doc = $page->document;
-<%= $doc->title %> <%= $doc->author %> <%= $page->content %>
+<a href="<%= $page->path %>"><%= $doc->title %></a> <%= $doc->author %> <%= $page->content %>
 % }

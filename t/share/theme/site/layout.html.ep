@@ -1,5 +1,12 @@
-<%= $site->title %>
-% for my $nav ( @{ $site->nav->{ main } } ) {
-<%= $nav->{title} %> -- <%= $nav->{href} %>
-% }
-<%= $content %>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><%= $site->title %></title>
+    </head>
+    <body>
+        % for my $nav ( @{ $site->nav->{ main } } ) {
+            <a href="<%= $nav->{href} %>"><%= $nav->{title} %></a>
+        % }
+        <%= $content %>
+    </body>
+</html>
