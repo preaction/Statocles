@@ -6,8 +6,8 @@ use Capture::Tiny qw( capture );
 use Statocles::Command;
 use Statocles::Site;
 use Mojo::IOLoop;
-use Mojo::IOLoop::Delay;
-use Mojo::UserAgent;
+use Test::Mojo;
+use Beam::Wire;
 use YAML;
 
 # Build a config file so we can test config loading and still use
@@ -216,11 +216,13 @@ subtest 'delegate to app command' => sub {
 
 subtest 'run the http daemon' => sub {
     # We need to stop the daemon after it starts
-    my $port;
+    my ( $port, $app );
     my $timeout = Mojo::IOLoop->singleton->timer( 0, sub {
         my $daemon = $Statocles::Command::daemon;
         my $id = $daemon->acceptors->[0];
         $port = $daemon->ioloop->acceptor( $id )->handle->sockport;
+        $app = $daemon->app;
+        $daemon->stop;
         Mojo::IOLoop->stop;
     } );
 
@@ -240,66 +242,39 @@ subtest 'run the http daemon' => sub {
     like $out, qr{\QListening on http://127.0.0.1:$port\E\n},
         'contains http port information';
 
-    subtest 'run the daemon with a folder in the base_url' => sub {
-        local $config->{site}{args}{base_url} = 'http://example.com/nonroot';
-        my $config_fn = $tmp->child( 'site_nonroot.yml' );
-        YAML::DumpFile( $config_fn, $config );
+    isa_ok $app, 'Statocles::Command::_MOJOAPP';
 
-        # We need to check the daemon after it starts
-        my $port;
-        my $timeout = Mojo::IOLoop->singleton->timer( 0, sub {
-            my $daemon = $Statocles::Command::daemon;
-            my $id = $daemon->acceptors->[0];
-            $port = $daemon->ioloop->acceptor( $id )->handle->sockport;
+    subtest 'Mojolicious app' => sub {
+        subtest 'nonroot site' => sub {
+            local $config->{site}{args}{base_url} = 'http://example.com/nonroot';
+            my $config_fn = $tmp->child( 'site_nonroot.yml' );
+            YAML::DumpFile( $config_fn, $config );
 
-            my $ua = Mojo::UserAgent->new( inactivity_timeout => 5, max_redirects => 0, ioloop => $daemon->ioloop );
-            my $delay = Mojo::IOLoop::Delay->new( ioloop => $daemon->ioloop );
-
-            $delay->steps(
-                sub {
-                    my ( $delay ) = @_;
-                    # Check that / redirects
-                    $ua->get( "http://127.0.0.1:$port", $delay->begin );
-                },
-                sub {
-                    my ( $delay, $tx ) = @_;
-                    is $tx->res->code, 302, 'got redirect';
-                    my $location = $tx->res->headers->location;
-                    is $location, '/nonroot/index.html', 'redirect to real root';
-
-                    # Check that /nonroot redirects
-                    $ua->get( "http://127.0.0.1:$port/nonroot", $delay->begin );
-                },
-                sub {
-                    my ( $delay, $tx ) = @_;
-                    # The rest of these tests do not work and I do not know why
-                    # But I also cannot take them out, because I also do not know why
-                    #is $tx->res->code, 302, 'got redirect';
-                    my $location = $tx->res->headers->location;
-                    #is $location, '/nonroot/index.html', 'redirect to real root';
-
-                    # Check that /nonroot/index.html gets the right content
-                    $ua->get( "http://127.0.0.1:$port/nonroot/index.html", $delay->begin );
-                },
-                sub {
-                    my ( $delay, $tx ) = @_;
-                    #is $tx->res->code, 200, 'got ok' or diag $tx->res->body;
-                    Mojo::IOLoop->stop;
-                },
+            my $t = Test::Mojo->new(
+                Statocles::Command::_MOJOAPP->new(
+                    site => Beam::Wire->new( file => "$config_fn" )->get( 'site' ),
+                ),
             );
 
-        } );
+            # Check that / redirects
+            $t->get_ok( "/" )
+                ->status_is( 302 )
+                ->header_is( Location => '/nonroot/index.html' )
+                ;
 
-        my @args = (
-            '--config' => "$config_fn",
-            'daemon',
-        );
-        my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+            # Check that /nonroot redirects
+            $t->get_ok( "/nonroot" )
+                ->status_is( 302 )
+                ->header_is( Location => '/nonroot/index.html' )
+                ;
 
-        undef $timeout;
-        is $exit, 0;
-        like $out, qr{\QListening on http://127.0.0.1:$port\E\n},
-            'contains http port and root folder information';
+            # Check that /nonroot/index.html gets the right content
+            $t->get_ok( "/nonroot/index.html" )
+                ->status_is( 200 )
+                ->content_is( $tmp->child( deploy_site => 'index.html' )->slurp )
+                ;
+
+        };
     };
 };
 

@@ -139,7 +139,7 @@ sub main {
         my ( $self ) = @_;
         my $base;
         if ( $self->site->base_url ) {
-            $base = Mojo::URL->new( $self->site->base_url )->path;
+            $base = Mojo::URL->new( $self->site->base_url )->path->to_string;
             $base =~ s{/$}{};
         }
 
@@ -162,7 +162,7 @@ sub main {
         } );
 
         # Add a route for the "home" URL
-        if ( $base && $base ne '/' ) {
+        if ( $base ) {
             $self->routes->get( $base, sub {
                 my ( $c ) = @_;
                 $c->redirect_to( $index );
