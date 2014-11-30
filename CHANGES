@@ -1,6 +1,11 @@
 Changelog for Statocles
 
-0.024 2014-11-28T10:27:54
+0.025 2014-11-30T08:32:00
+ - add better dzil tag annotation
+ - fix tests for the mojolicious app used by daemon
+
+0.024 2014-11-28T10:28:35
+ - release v0.024
  - support nonroot sites in the `daemon` command
  - disable mojolicious's Net::DNS::Native support
  - always show the right port in the daemon command
