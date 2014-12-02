@@ -245,6 +245,45 @@ subtest 'run the http daemon' => sub {
     isa_ok $app, 'Statocles::Command::_MOJOAPP';
 
     subtest 'Mojolicious app' => sub {
+        subtest 'root site' => sub {
+
+            my $t = Test::Mojo->new(
+                Statocles::Command::_MOJOAPP->new(
+                    site => Beam::Wire->new( file => "$config_fn" )->get( 'site' ),
+                ),
+            );
+
+            # Check that / gets index.html
+            $t->get_ok( "/" )
+                ->status_is( 200 )
+                ->content_is( $tmp->child( deploy_site => 'index.html' )->slurp )
+                ;
+
+            # Check that /index.html gets the right content
+            $t->get_ok( "/index.html" )
+                ->status_is( 200 )
+                ->content_is( $tmp->child( deploy_site => 'index.html' )->slurp )
+                ;
+
+            # Check that malicious URL gets plonked
+            $t->get_ok( '/../../../../../etc/passwd' )
+                ->status_is( 400 )
+                ->or( sub { diag $t->tx->res->body } )
+                ;
+
+            # Check that missing URL gets 404'd
+            $t->get_ok( "/MISSING_FILE_THAT_SHOULD_ERROR.html" )
+                ->status_is( 404 )
+                ->or( sub { diag $t->tx->res->body } )
+                ;
+
+            $t->get_ok( "/missing" )
+                ->status_is( 404 )
+                ->or( sub { diag $t->tx->res->body } )
+                ;
+
+        };
+
         subtest 'nonroot site' => sub {
             local $config->{site}{args}{base_url} = 'http://example.com/nonroot';
             my $config_fn = $tmp->child( 'site_nonroot.yml' );
@@ -259,19 +298,37 @@ subtest 'run the http daemon' => sub {
             # Check that / redirects
             $t->get_ok( "/" )
                 ->status_is( 302 )
-                ->header_is( Location => '/nonroot/index.html' )
+                ->header_is( Location => '/nonroot' )
+                ->or( sub { diag $t->tx->res->body } )
                 ;
 
-            # Check that /nonroot redirects
+            # Check that /nonroot gets index.html
             $t->get_ok( "/nonroot" )
-                ->status_is( 302 )
-                ->header_is( Location => '/nonroot/index.html' )
+                ->status_is( 200 )
+                ->content_is( $tmp->child( deploy_site => 'index.html' )->slurp )
                 ;
 
             # Check that /nonroot/index.html gets the right content
             $t->get_ok( "/nonroot/index.html" )
                 ->status_is( 200 )
                 ->content_is( $tmp->child( deploy_site => 'index.html' )->slurp )
+                ;
+
+            # Check that malicious URL gets plonked
+            $t->get_ok( '/nonroot/../../../../../etc/passwd' )
+                ->status_is( 400 )
+                ->or( sub { diag $t->tx->res->body } )
+                ;
+
+            # Check that missing URL gets 404'd
+            $t->get_ok( "/nonroot/MISSING_FILE_THAT_SHOULD_ERROR.html" )
+                ->status_is( 404 )
+                ->or( sub { diag $t->tx->res->body } )
+                ;
+
+            $t->get_ok( "/missing" )
+                ->status_is( 404 )
+                ->or( sub { diag $t->tx->res->body } )
                 ;
 
         };

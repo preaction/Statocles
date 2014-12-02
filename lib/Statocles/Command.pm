@@ -156,21 +156,38 @@ sub main {
             # content.
             $self->site->deploy_store->path;
 
-        $self->routes->get( '/', sub {
+        my $serve_static = sub {
             my ( $c ) = @_;
-            $c->redirect_to( $index );
-        } );
+            my $path = Mojo::Path->new( $c->stash->{path} );
 
-        # Add a route for the "home" URL
+            # Taint check the path, just in case someone uses this "dev" tool to
+            # serve real content
+            return $c->render( status => 400, text => "You didn't say the magic word" )
+                if $path->canonicalize->parts->[0] eq '..';
+
+            my $asset = $self->static->file( $path );
+            if ( !$asset ) {
+                # Check for index.html
+                my $path = Mojo::Path->new( $c->stash->{path} . "/index.html" );
+                $asset = $self->static->file( $path );
+            }
+
+            if ( !$asset ) {
+                return $c->render( status => 404, text => 'Not found' );
+            }
+
+            return $c->reply->asset( $asset );
+        };
+
         if ( $base ) {
-            $self->routes->get( $base, sub {
+            $self->routes->get( '/', sub {
                 my ( $c ) = @_;
-                $c->redirect_to( $index );
+                $c->redirect_to( $base );
             } );
-            $self->routes->get( $base . '/*path', sub {
-                my ( $c ) = @_;
-                $self->static->dispatch( $c );
-            } );
+            $self->routes->get( $base . '/*path' )->to( path => 'index.html', cb => $serve_static );
+        }
+        else {
+            $self->routes->get( '/*path' )->to( path => 'index.html', cb => $serve_static );
         }
 
     }
