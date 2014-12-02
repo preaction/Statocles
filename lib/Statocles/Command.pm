@@ -123,7 +123,8 @@ sub main {
 }
 
 {
-    package Statocles::Command::_MOJOAPP;
+    package # Do not index this
+        Statocles::Command::_MOJOAPP;
 
     # Currently, as of Mojolicious 5.12, loading the Mojolicious module here
     # will load the Mojolicious::Commands module, which calls GetOptions, which
