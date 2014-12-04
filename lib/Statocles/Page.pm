@@ -101,6 +101,56 @@ has layout => (
     },
 );
 
+=attr search_change_frequency
+
+How frequently a search engine should check this page for changes. This is used
+in the L<sitemap.xml|http://www.sitemaps.org> to give hints to search engines.
+
+Should be one of:
+
+    always
+    hourly
+    daily
+    weekly
+    monthly
+    yearly
+    never
+
+Defaults to C<weekly>.
+
+B<NOTE:> This is only a hint to search engines, not a command. Pages marked C<hourly>
+may be checked less often, and pages marked C<never> may still be checked once in a
+while. C<never> is mainly used for archived pages or permanent links.
+
+=cut
+
+has search_change_frequency => (
+    is => 'ro',
+    isa => Enum[qw( always hourly daily weekly monthly yearly never )],
+    default => sub { 'weekly' },
+);
+
+=attr search_priority
+
+How high should this page rank in search results compared to similar pages on
+this site?  This is used in the L<sitemap.xml|http://www.sitemaps.org> to rank
+individual, full pages more highly than aggregate, list pages.
+
+Value should be between C<0.0> and C<1.0>. The default is C<0.5>.
+
+This is only used to decide which pages are more important for the search
+engine to crawl, and which pages within your site should be given to users. It
+does not improve your rankings compared to other sites. See L<the sitemap
+protocol|http://sitemaps.org> for details.
+
+=cut
+
+has search_priority => (
+    is => 'ro',
+    isa => Num,
+    default => sub { 0.5 },
+);
+
 =method render
 
 Render the page, using the L<template|Statocles::Page/template> and wrapping

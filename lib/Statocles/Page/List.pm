@@ -34,6 +34,32 @@ has [qw( next prev )] => (
     coerce => Path->coercion,
 );
 
+=attr search_change_frequency
+
+Override the default L<search_change_frequency|Statocles::Page/search_change_frequency>
+to C<daily>, because these pages aggregate other pages.
+
+=cut
+
+has '+search_change_frequency' => (
+    default => sub { 'daily' },
+);
+
+=attr search_priority
+
+Override the default L<search_priority|Statocles::Page/search_priority> to reduce
+the rank of list pages to C<0.3>.
+
+It is more important for users to get to the full page than
+to get to this list page, which may contain truncated content, and whose relevant
+content may appear 3-4 items down the page.
+
+=cut
+
+has '+search_priority' => (
+    default => sub { 0.3 },
+);
+
 =method paginate
 
 Build a paginated list of Statocles::Page::List objects.

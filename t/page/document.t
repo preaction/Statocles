@@ -29,6 +29,21 @@ MARKDOWN
 );
 my $md = Text::Markdown->new;
 
+subtest 'attribute defaults' => sub {
+    my $page = Statocles::Page::Document->new(
+        document => $doc,
+        path => '/path/to/page.html',
+    );
+
+    subtest 'search_change_frequency' => sub {
+        is $page->search_change_frequency, 'weekly';
+    };
+
+    subtest 'search_priority' => sub {
+        is $page->search_priority, 0.5;
+    };
+};
+
 subtest 'page last modified' => sub {
     subtest 'defaults to document last modified' => sub {
 
