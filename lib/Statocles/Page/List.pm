@@ -3,6 +3,7 @@ package Statocles::Page::List;
 
 use Statocles::Class;
 with 'Statocles::Page';
+use List::Util qw( max );
 use List::MoreUtils qw( part );
 use Statocles::Template;
 
@@ -87,6 +88,18 @@ sub vars {
     return (
         pages => $self->pages,
     );
+}
+
+=method last_modified
+
+Get the last modified date of this page. This will be the most recent last modified
+date of the pages inside this page.
+
+=cut
+
+sub last_modified {
+    my ( $self ) = @_;
+    return max map { $_->last_modified } @{ $self->pages };
 }
 
 1;

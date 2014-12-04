@@ -37,6 +37,15 @@ my @pages = (
     ),
 );
 
+subtest 'last_modified' => sub {
+    my $list = Statocles::Page::List->new(
+        path => '/blog/index.html',
+        pages => \@pages,
+    );
+    isa_ok $list->last_modified, 'Time::Piece';
+    is $list->last_modified->datetime, $pages[0]->last_modified->datetime;
+};
+
 subtest 'extra args' => sub {
     my $list = Statocles::Page::List->new(
         path => '/blog/index.html',
