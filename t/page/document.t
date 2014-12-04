@@ -11,6 +11,7 @@ my $doc = Statocles::Document->new(
     title => 'Page Title',
     author => 'preaction',
     tags => [qw( foo bar baz )],
+    last_modified => Time::Piece->new( time - 600 ),
     content => <<'MARKDOWN',
 # Subtitle
 
@@ -27,6 +28,31 @@ This is a second section of content
 MARKDOWN
 );
 my $md = Text::Markdown->new;
+
+subtest 'page last modified' => sub {
+    subtest 'defaults to document last modified' => sub {
+
+        my $page = Statocles::Page::Document->new(
+            document => $doc,
+            path => '/path/to/page.html',
+        );
+
+        isa_ok $page->last_modified, 'Time::Piece';
+        is $page->last_modified->datetime, $doc->last_modified->datetime;
+    };
+
+    subtest 'overridden by published date' => sub {
+        my $tp = Time::Piece->new;
+        my $page = Statocles::Page::Document->new(
+            document => $doc,
+            path => '/path/to/page.html',
+            published => $tp,
+        );
+
+        isa_ok $page->last_modified, 'Time::Piece';
+        is $page->last_modified->datetime, $tp->datetime;
+    };
+};
 
 subtest 'template string' => sub {
     my $tp = Time::Piece->new;

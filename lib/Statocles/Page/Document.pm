@@ -6,17 +6,6 @@ with 'Statocles::Page';
 use Text::Markdown;
 use Statocles::Template;
 
-=attr published
-
-The publish date/time of this page. A L<Time::Piece> object.
-
-=cut
-
-has published => (
-    is => 'ro',
-    isa => InstanceOf['Time::Piece'],
-);
-
 =attr document
 
 The L<document|Statocles::Document> this page will render.
@@ -80,6 +69,21 @@ sub sections {
     my ( $self ) = @_;
     my @sections = split /\n---\n/, $self->document->content;
     return map { $self->markdown->markdown( $_ ) } @sections;
+}
+
+=method last_modified
+
+Get the last modified date of this page by checking the document or using the page's
+publish date.
+
+=cut
+
+sub last_modified {
+    my ( $self ) = @_;
+    if ( my $dt = $self->published ) {
+        return $dt;
+    }
+    return $self->document->last_modified;
 }
 
 1;

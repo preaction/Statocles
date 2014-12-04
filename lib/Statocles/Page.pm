@@ -30,6 +30,17 @@ has path => (
     coerce => Path->coercion,
 );
 
+=attr published
+
+The publish date/time of this page. A L<Time::Piece> object.
+
+=cut
+
+has published => (
+    is => 'ro',
+    isa => InstanceOf['Time::Piece'],
+);
+
 =attr links
 
 A hash of arrays of links to pages related to this page. Possible keys:
