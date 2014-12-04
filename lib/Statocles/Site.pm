@@ -199,34 +199,10 @@ sub write {
     }
 
     # Build the sitemap.xml
-    my $sitemap = Mojo::DOM->new->xml(1);
-    for my $page ( @pages ) {
-        next if $page->isa( 'Statocles::Page::Feed' );
-        my $node = Mojo::DOM->new->xml(1);
-
-        my ( $changefreq, $priority, $lastmod ) = ( 'never', '0.5', undef );
-        if ( $page->isa( 'Statocles::Page::List' ) ) {
-            $changefreq = 'daily';
-            $priority = '0.3';
-        }
-        elsif ( $page->isa( 'Statocles::Page::Document' ) ) {
-            $lastmod = $page->document->last_modified
-                     ? $page->document->last_modified->strftime( '%Y-%m-%d' )
-                     : $page->published->strftime( '%Y-%m-%d' );
-        }
-
-        $node->type( 'url' );
-        $node->append_content( '<loc>' . $self->url( $page->path ) . '</loc>' );
-        $node->append_content( '<changefreq>' . $changefreq . '</changefreq>' );
-        $node->append_content( '<priority>' . $priority . '</priority>' );
-        if ( $lastmod ) {
-            $node->append_content( '<lastmod>' . $lastmod . '</lastmod>' );
-        }
-
-        $sitemap->append_content( "<url>$node</url>" );
-    }
-    $sitemap = $sitemap->wrap( '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>' );
-    $store->write_file( 'sitemap.xml', '<?xml version="1.0" encoding="UTF-8"?>' . $sitemap->to_string );
+    my @indexed_pages = grep { !$_->isa( 'Statocles::Page::Feed' ) } @pages;
+    my $default_theme = Statocles::Theme->new( store => '::default' );
+    my $tmpl = $default_theme->template( site => 'sitemap.xml' );
+    $store->write_file( 'sitemap.xml', $tmpl->render( site => $self, pages => \@indexed_pages ) );
 
     # robots.txt is the best way for crawlers to automatically discover sitemap.xml
     # We should do more with this later...

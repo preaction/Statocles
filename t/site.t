@@ -83,11 +83,26 @@ subtest 'sitemap.xml and robots.txt' => sub {
     };
 
     my %page_mod = (
-        '/blog/2014/04/23/slug.html' => '2014-04-30',
+        '/blog/2014/04/23/slug.html' => '2014-04-23',
         '/blog/2014/04/30/plug.html' => '2014-04-30',
         '/blog/2014/05/22/(regex)[name].file.html' => '2014-05-22',
         '/blog/2014/06/02/more_tags.html' => '2014-06-02',
+        '/index.html' => '2014-06-02',
+        '/blog/page-2.html' => '2014-04-30',
+        '/blog/tag/more/index.html' => '2014-06-02',
+        '/blog/tag/better/index.html' => '2014-06-02',
+        '/blog/tag/better/page-2.html' => '2014-04-30',
+        '/blog/tag/error-message/index.html' => '2014-05-22',
+        '/blog/tag/even-more-tags/index.html' => '2014-06-02',
     );
+
+    my @posts = qw(
+        /blog/2014/04/23/slug.html
+        /blog/2014/04/30/plug.html
+        /blog/2014/05/22/(regex)[name].file.html
+        /blog/2014/06/02/more_tags.html
+    );
+
     my @lists = qw(
         /index.html
         /blog/page-2.html
@@ -105,6 +120,7 @@ subtest 'sitemap.xml and robots.txt' => sub {
                     loc => "http://example.com$_",
                     priority => '0.3',
                     changefreq => 'daily',
+                    lastmod => $page_mod{ $_ },
                 }
             }
             @lists
@@ -114,11 +130,11 @@ subtest 'sitemap.xml and robots.txt' => sub {
                 {
                     loc => "http://example.com$_",
                     priority => '0.5',
-                    changefreq => 'never',
+                    changefreq => 'weekly',
                     lastmod => $page_mod{ $_ },
                 }
             }
-            keys %page_mod
+            @posts
         )
     );
 

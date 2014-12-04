@@ -105,6 +105,10 @@ my %app_vars = (
             self => $page{ document },
             app => $blog,
         },
+        'sitemap.xml.ep' => {
+            site => $site,
+            pages => [ $page{ list }, $page{ document } ],
+        },
     },
 );
 
