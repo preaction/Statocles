@@ -19,6 +19,8 @@ subtest 'constructor' => sub {
         index_module => 'My',
     );
 
+    isa_ok +Statocles::App::Perldoc->new( %required ), 'Statocles::App';
+
     subtest 'constructor errors' => sub {
         for my $key ( keys %required ) {
             dies_ok {

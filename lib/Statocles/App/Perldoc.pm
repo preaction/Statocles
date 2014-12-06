@@ -2,6 +2,7 @@ package Statocles::App::Perldoc;
 # ABSTRACT: Render documentation for Perl modules
 
 use Statocles::Class;
+extends 'Statocles::App';
 use Statocles::Theme;
 use Statocles::Page::Raw;
 use Scalar::Util qw( blessed );
