@@ -15,6 +15,17 @@ has content => (
     required => 1,
 );
 
+=attr last_modified
+
+The last modified time of the page.
+
+=cut
+
+has last_modified => (
+    is => 'ro',
+    isa => InstanceOf['Time::Piece'],
+);
+
 =method vars
 
 Get the template variables for this page.

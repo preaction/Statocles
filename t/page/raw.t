@@ -27,6 +27,15 @@ subtest 'attribute defaults' => sub {
     };
 };
 
+subtest 'optional attributes' => sub {
+    my $page = Statocles::Page::Raw->new(
+        path => '/path/to/page.html',
+        content => 'some test content',
+        last_modified => Time::Piece->new,
+    );
+    isa_ok $page->last_modified, 'Time::Piece';
+};
+
 subtest 'render' => sub {
     my $page = Statocles::Page::Raw->new(
         path => '/path/to/page.html',
