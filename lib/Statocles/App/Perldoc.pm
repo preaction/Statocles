@@ -159,7 +159,6 @@ sub weave {
     my $ppi_document = PPI::Document->new( \$perl_utf8 ) or die PPI::Document->errstr;
 
     ### Copy/paste from Pod::Elemental::PerlMunger
-    my $last_code_elem;
     my $code_elems = $ppi_document->find(
         sub {
             return
@@ -170,42 +169,22 @@ sub weave {
     );
 
     $code_elems ||= [];
-    for my $elem ( @$code_elems ) {
-        # Really, we might get two elements on the same line, and one could be
-        # later in position because it could have a later column — but we don't
-        # care, because we're only thinking about Pod, which is linewise.
-        next
-            if $last_code_elem
-            and $elem->line_number <= $last_code_elem->line_number;
-
-        $last_code_elem = $elem;
-    }
-
     my @pod_tokens;
 
-    {
-        my @queue = $ppi_document->children;
-        while ( my $element = shift @queue ) {
-            if ( $element->isa( 'PPI::Token::Pod' ) ) {
-                my $after_last = $last_code_elem
-                    && $last_code_elem->line_number > $element->line_number;
+    my @queue = $ppi_document->children;
+    while ( my $element = shift @queue ) {
+        if ( $element->isa( 'PPI::Token::Pod' ) ) {
+            # save the text for use in building the Pod-only document
+            push @pod_tokens, "$element";
+        }
 
-                # save the text for use in building the Pod-only document
-                push @pod_tokens, "$element";
-
-                # Replace with nothing
-                $element->delete;
-
-                next;
-            }
-
-            if ( blessed $element && $element->isa( 'PPI::Node' ) ) {
-                # Depth-first keeps the queue size down
-                unshift @queue, $element->children;
-            }
+        if ( blessed $element && $element->isa( 'PPI::Node' ) ) {
+            # Depth-first keeps the queue size down
+            unshift @queue, $element->children;
         }
     }
 
+    ## Check for any problems, like POD inside of heredoc or strings
     my $finder = sub {
         my $node = $_[ 1 ];
         return 0
@@ -216,10 +195,8 @@ sub weave {
     };
 
     if ( $ppi_document->find_first( $finder ) ) {
-        warn
-            sprintf "can't invoke %s on %s: there is POD inside string literals",
-            $self->plugin_name,
-            $path;
+        warn "can't invoke Pod::Weaver on '$path': There is POD in string literals";
+        return '';
     }
 
     my $pod_str = join "\n", @pod_tokens;
@@ -238,43 +215,7 @@ sub weave {
 
     ### END MUNGE THE POD
 
-    my $new_pod = $weaved_doc->as_pod_string;
-
-    my $end_finder = sub {
-        return 1
-            if $_[ 1 ]->isa( 'PPI::Statement::End' )
-            || $_[ 1 ]->isa( 'PPI::Statement::Data' );
-        return 0;
-    };
-
-    my $end = do {
-        my $end_elem = $ppi_document->find( $end_finder );
-
-        # If there's nothing after __END__, we can put the POD there:
-        if (
-            not $end_elem
-            or (    @$end_elem == 1
-                and $end_elem->[ 0 ]->isa( 'PPI::Statement::End' )
-                and $end_elem->[ 0 ] =~ /^__END__\s*\z/ )
-            )
-        {
-            $end_elem = [];
-        }
-
-        @$end_elem ? join q{}, @$end_elem : undef;
-    };
-
-    $ppi_document->prune( $end_finder );
-
-    my $new_perl =
-        Encode::decode( 'utf-8', $ppi_document->serialize, Encode::FB_CROAK, );
-
-    s/\n\s*\z// for $new_perl, $new_pod;
-
-    my $pod_text = defined $end
-        ? "$new_perl\n\n$new_pod\n\n$end"
-        : "$new_perl\n\n__END__\n\n$new_pod\n";
-    ### End copy/paste from Pod::Elemental::PerlMunger
+    my $pod_text = $weaved_doc->as_pod_string;
 
     #; say $pod_text;
     return $pod_text;
