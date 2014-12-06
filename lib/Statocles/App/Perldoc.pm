@@ -82,6 +82,7 @@ Render the requested modules as HTML.
 sub pages {
     my ( $self ) = @_;
     my @dirs = map { "$_" } @{ $self->inc };
+    my $pod_base = 'https://metacpan.org/pod/';
 
     my %modules;
     for my $glob ( @{ $self->modules } ) {
@@ -102,20 +103,33 @@ sub pages {
         #; say Dumper $path;
 
         my $parser = Pod::Simple::XHTML->new;
-        $parser->perldoc_url_prefix( 'https://metacpan.org/pod/' );
+        $parser->perldoc_url_prefix( $pod_base );
         $parser->$_('') for qw( html_header html_footer );
         $parser->output_string( \(my $parser_output) );
         $parser->parse_file( "$path" );
         #; say $parser_output;
 
-        my $url = $module eq $self->index_module ? 'index.html' : $path;
-        $url =~ s/[.]pm$/.html/;
+        # Rewrite links for modules that we will be serving locally
+        my $dom = Mojo::DOM->new( $parser_output );
+        for my $node ( $dom->find( 'a[href]' )->each ) {
+            my $href = $node->attr( 'href' );
+            $href =~ s/$pod_base//;
+
+            if ( grep { $href =~ /^$_/ } @{ $self->modules } ) {
+                $href = join '/', split /::/, $href;
+                $href .= '.html';
+                $node->attr( href => join '/', $self->url_root, $href );
+            }
+        }
+
+        my $page_url = $module eq $self->index_module ? 'index.html' : $path;
+        $page_url =~ s/[.]pm$/.html/;
 
         push @pages, Statocles::Page::Raw->new(
-            path => join( '/', $self->url_root, $url ),
+            path => join( '/', $self->url_root, $page_url ),
             layout => $self->theme->template( site => 'layout.html' ),
             template => $self->theme->template( perldoc => 'pod.html' ),
-            content => $parser_output,
+            content => "$dom",
         );
 
     }
