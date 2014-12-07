@@ -48,7 +48,11 @@ has inc => (
     isa => ArrayRef[Path],
     # We can't check for existence, because @INC might contain nonexistent
     # directories (I think)
-    default => sub { [ map { Path::Tiny->new( $_ ) } @INC ] },
+    default => sub { [ @INC ] },
+    coerce => sub {
+        my ( $args ) = @_;
+        return [ map { Path::Tiny->new( $_ ) } @$args ];
+    },
 );
 
 =attr modules

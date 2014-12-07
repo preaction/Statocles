@@ -22,13 +22,17 @@ subtest 'constructor' => sub {
     isa_ok +Statocles::App::Perldoc->new( %required ), 'Statocles::App';
 
     subtest 'constructor errors' => sub {
-        for my $key ( keys %required ) {
-            dies_ok {
-                Statocles::App::Perldoc->new(
-                    map {; $_ => $required{ $_ } } grep { $_ ne $key } keys %required,
-                );
-            } $key . ' is required';
-        }
+
+        subtest 'required attributes' => sub {
+            for my $key ( keys %required ) {
+                dies_ok {
+                    Statocles::App::Perldoc->new(
+                        map {; $_ => $required{ $_ } } grep { $_ ne $key } keys %required,
+                    );
+                } $key . ' is required';
+            }
+        };
+
     };
 
     subtest 'attribute defaults' => sub {
@@ -42,6 +46,38 @@ subtest 'constructor' => sub {
         }
     };
 
+    subtest 'attribute types/coercions' => sub {
+        subtest 'inc' => sub {
+
+            subtest 'all strings' => sub {
+                my $app;
+                lives_ok {
+                    $app = Statocles::App::Perldoc->new(
+                        %required,
+                        inc => [ 'test', 'two' ],
+                    )
+                };
+
+                cmp_deeply $app->inc, array_each( isa( 'Path::Tiny' ) );
+                is $app->inc->[0]->stringify, "test";
+                is $app->inc->[1]->stringify, "two";
+            };
+
+            subtest 'some strings / some paths' => sub {
+                my $app;
+                lives_ok {
+                    $app = Statocles::App::Perldoc->new(
+                        %required,
+                        inc => [ 'test', Path::Tiny->new( 'two' ) ],
+                    )
+                };
+
+                cmp_deeply $app->inc, array_each( isa( 'Path::Tiny' ) );
+                is $app->inc->[0]->stringify, "test";
+                is $app->inc->[1]->stringify, "two";
+            };
+        };
+    };
 };
 
 subtest 'perldoc pages' => sub {
