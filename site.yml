@@ -22,6 +22,8 @@ site:
             main:
                 - title: Blog
                   href: /index.html
+                - title: Docs
+                  href: /pod
         build_store:
             $ref: build
         deploy_store:
@@ -29,6 +31,18 @@ site:
         deploy_branch: gh-pages
         index: blog
         apps:
+            pod:
+                $class: Statocles::App::Perldoc
+                $args:
+                    url_root: /pod
+                    inc:
+                        - lib/
+                    modules:
+                        - 'Statocles'
+                        - 'Statocles::'
+                    index_module: Statocles
+                    theme:
+                        $ref: theme
             blog:
                 $class: Statocles::App::Blog
                 $args:
