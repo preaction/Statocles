@@ -101,6 +101,7 @@ The path to the Pod::Weaver configuration file
 has weave_config => (
     is => 'ro',
     isa => Path,
+    default => sub { './weaver.ini' },
     coerce => Path->coercion,
 );
 

@@ -39,6 +39,7 @@ subtest 'constructor' => sub {
         my %defaults = (
             inc => [ map { Path::Tiny->new( $_ ) } @INC ],
             weave => 0,
+            weave_config => Path::Tiny->new( './weaver.ini' ),
         );
 
         my $app = Statocles::App::Perldoc->new( %required );
