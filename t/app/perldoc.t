@@ -159,7 +159,7 @@ subtest 'perldoc pages' => sub {
         my @pages = $app->pages;
         is scalar @pages, 2, 'correct number of pages';
         for my $page ( @pages ) {
-            isa_ok $page, 'Statocles::Page::Raw';
+            isa_ok $page, 'Statocles::Page::Plain';
             like $page->path, qr{^/pod};
 
             if ( !$page_tests{ $page->path } ) {

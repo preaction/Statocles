@@ -2,18 +2,18 @@
 use Statocles::Test;
 my $SHARE_DIR = path( __DIR__ )->parent->child( 'share' );
 
-use Statocles::Page::Raw;
+use Statocles::Page::Plain;
 
 subtest 'constructor errors' => sub {
     dies_ok {
-        Statocles::Page::Raw->new(
+        Statocles::Page::Plain->new(
             path => '/allowed.html',
         )
     } 'content is required';
 };
 
 subtest 'attribute defaults' => sub {
-    my $page = Statocles::Page::Raw->new(
+    my $page = Statocles::Page::Plain->new(
         path => '/path/to/page.html',
         content => 'some test content',
     );
@@ -32,7 +32,7 @@ subtest 'attribute defaults' => sub {
 };
 
 subtest 'render' => sub {
-    my $page = Statocles::Page::Raw->new(
+    my $page = Statocles::Page::Plain->new(
         path => '/path/to/page.html',
         content => 'some test content',
         layout => "LAYOUT\n<%= \$content %>",

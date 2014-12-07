@@ -4,7 +4,7 @@ package Statocles::App::Perldoc;
 use Statocles::Class;
 extends 'Statocles::App';
 use Statocles::Theme;
-use Statocles::Page::Raw;
+use Statocles::Page::Plain;
 use Scalar::Util qw( blessed );
 use List::MoreUtils qw( any );
 use Pod::Simple::Search;
@@ -169,7 +169,7 @@ sub pages {
         my $page_url = $module eq $self->index_module ? 'index.html' : "$module.html";
         $page_url =~ s{::}{/}g;
 
-        push @pages, Statocles::Page::Raw->new(
+        push @pages, Statocles::Page::Plain->new(
             path => join( '/', $self->url_root, $page_url ),
             layout => $self->theme->template( site => 'layout.html' ),
             template => $self->theme->template( perldoc => 'pod.html' ),
