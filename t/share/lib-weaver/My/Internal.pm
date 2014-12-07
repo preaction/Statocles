@@ -1,9 +1,6 @@
 package
     My::Internal;
-
-=head1 NAME
-
-My::Internal - An internal module to link to
+# ABSTRACT: An internal module to link to
 
 =head1 SYNOPSIS
 

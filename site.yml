@@ -41,6 +41,7 @@ site:
                         - 'Statocles'
                         - 'Statocles::'
                     index_module: Statocles
+                    weave: 1
                     theme:
                         $ref: theme
             blog:

@@ -82,14 +82,6 @@ subtest 'constructor' => sub {
 
 subtest 'perldoc pages' => sub {
 
-    my $app = Statocles::App::Perldoc->new(
-        url_root => '/pod',
-        inc => [ $SHARE_DIR->child( 'lib' ) ],
-        modules => [qw( My My:: )],
-        index_module => 'My',
-        theme => $SHARE_DIR->child( 'theme' ),
-    );
-
     my %page_tests = (
         '/pod/index.html' => sub {
             my ( $dom ) = @_;
@@ -143,31 +135,65 @@ subtest 'perldoc pages' => sub {
         },
     );
 
-    my @pages = $app->pages;
-    is scalar @pages, 2, 'correct number of pages';
-    for my $page ( @pages ) {
-        isa_ok $page, 'Statocles::Page::Raw';
-        like $page->path, qr{^/pod};
+    my $test_pages = sub {
+        my ( $app ) = @_;
 
-        if ( !$page_tests{ $page->path } ) {
-            fail "No tests found for page: " . $page->path;
-            next;
+        my @pages = $app->pages;
+        is scalar @pages, 2, 'correct number of pages';
+        for my $page ( @pages ) {
+            isa_ok $page, 'Statocles::Page::Raw';
+            like $page->path, qr{^/pod};
+
+            if ( !$page_tests{ $page->path } ) {
+                fail "No tests found for page: " . $page->path;
+                next;
+            }
+
+            my $output = $page->render( site => $site );
+            if ( $page->path =~ /[.]html$/ ) {
+                my $dom = Mojo::DOM->new( $output );
+                fail "Could not parse dom" unless $dom;
+                subtest 'html content: ' . $page->path, $page_tests{ $page->path }->( $dom );
+            }
+            elsif ( $page->path =~ /[.]txt$/ ) {
+                subtest 'text content: ' . $page->path, $page_tests{ $page->path }->( $output );
+            }
+            else {
+                fail "Unknown page: " . $page->path;
+            }
+
+        }
+    };
+
+    subtest 'without Pod::Weaver' => sub {
+        my $app = Statocles::App::Perldoc->new(
+            url_root => '/pod',
+            inc => [ $SHARE_DIR->child( 'lib' ) ],
+            modules => [qw( My My:: )],
+            index_module => 'My',
+            theme => $SHARE_DIR->child( 'theme' ),
+        );
+
+        $test_pages->( $app );
+    };
+
+    subtest 'with Pod::Weaver' => sub {
+        if ( !eval { require Pod::Weaver; 1 } ) {
+            pass "No tests without Pod::Weaver";
+            return;
         }
 
-        my $output = $page->render( site => $site );
-        if ( $page->path =~ /[.]html$/ ) {
-            my $dom = Mojo::DOM->new( $output );
-            fail "Could not parse dom" unless $dom;
-            subtest 'html content: ' . $page->path, $page_tests{ $page->path }->( $dom );
-        }
-        elsif ( $page->path =~ /[.]txt$/ ) {
-            subtest 'text content: ' . $page->path, $page_tests{ $page->path }->( $output );
-        }
-        else {
-            fail "Unknown page: " . $page->path;
-        }
+        my $app = Statocles::App::Perldoc->new(
+            url_root => '/pod',
+            inc => [ $SHARE_DIR->child( 'lib-weaver' ) ],
+            modules => [qw( My My:: )],
+            index_module => 'My',
+            theme => $SHARE_DIR->child( 'theme' ),
+            weave => 1,
+        );
 
-    }
+        $test_pages->( $app );
+    };
 };
 
 done_testing;

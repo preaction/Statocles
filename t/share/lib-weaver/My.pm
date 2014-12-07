@@ -1,9 +1,6 @@
 package
     My;
-
-=head1 NAME
-
-My - A sample for my perldoc app
+# ABSTRACT: A sample for my perldoc app
 
 =head1 SYNOPSIS
 

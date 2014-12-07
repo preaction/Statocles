@@ -1,9 +1,6 @@
 package
     External;
-
-=head1 NAME
-
-External - A module that is part of our project but not to be included in the POD
+# ABSTRACT: A module that is part of our project but not to be included in the POD
 
 =head1 SYNOPSIS
 

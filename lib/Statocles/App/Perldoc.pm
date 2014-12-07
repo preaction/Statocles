@@ -80,6 +80,18 @@ has index_module => (
     required => 1,
 );
 
+=attr weave
+
+If true, run the POD through L<Pod::Weaver> before converting to HTML
+
+=cut
+
+has weave => (
+    is => 'ro',
+    isa => Bool,
+    default => sub { 0 },
+);
+
 =method pages
 
 Render the requested modules as HTML.
@@ -110,7 +122,10 @@ sub pages {
         #; say Dumper $path;
 
         # Weave the POD before trying to make HTML
-        my $pod = $self->weave( $path );
+        my $pod = $self->weave
+                ? $self->_weave_module( $path )
+                : Path::Tiny->new( $path )->slurp
+                ;
 
         my $parser = Pod::Simple::XHTML->new;
         $parser->perldoc_url_prefix( $pod_base );
@@ -153,13 +168,13 @@ sub pages {
     return @pages;
 }
 
-=method weave
+=method _weave_module( $path )
 
-If desired, run Pod::Weaver on the POD before creating HTML.
+Run Pod::Weaver on the POD in the given path
 
 =cut
 
-sub weave {
+sub _weave_module {
     my ( $self, $path ) = @_;
 
     # Oh... My... GOD...
