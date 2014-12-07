@@ -190,9 +190,15 @@ sub _weave_module {
     my ( $self, $path ) = @_;
 
     # Oh... My... GOD...
-    require PPI;
-    require Pod::Elemental;
-    require Encode;
+    my @missing;
+    eval { require Pod::Weaver; 1; } or push @missing, 'Pod::Weaver';
+    eval { require PPI; 1; } or push @missing, 'PPI';
+    eval { require Pod::Elemental; 1; } or push @missing, 'Pod::Elemental';
+    eval { require Encode; 1; } or push @missing, 'Encode';
+    if ( @missing ) {
+        die "Cannot weave POD: Missing modules " . join( " ", @missing );
+    }
+
     my $perl_utf8 = Encode::encode( 'utf-8', Path::Tiny->new( $path )->slurp, Encode::FB_CROAK );
     my $ppi_document = PPI::Document->new( \$perl_utf8 ) or die PPI::Document->errstr;
 
@@ -242,7 +248,6 @@ sub _weave_module {
 
     ### MUNGE THE POD HERE!
 
-    require Pod::Weaver;
     my $weaver = Pod::Weaver->new_from_config(
         { root => $self->weave_config->parent->stringify },
     );
