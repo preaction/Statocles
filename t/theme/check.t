@@ -99,6 +99,12 @@ my %app_vars = (
             doc => $store->documents->[0],
         },
     },
+    perldoc => {
+        'pod.html.ep' => {
+            %common_vars,
+            content => 'Fake content',
+        },
+    },
     site => {
         'layout.html.ep' => {
             %common_vars,
