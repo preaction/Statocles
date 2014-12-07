@@ -25,15 +25,10 @@ subtest 'attribute defaults' => sub {
     subtest 'search_priority' => sub {
         is $page->search_priority, 0.5;
     };
-};
 
-subtest 'optional attributes' => sub {
-    my $page = Statocles::Page::Raw->new(
-        path => '/path/to/page.html',
-        content => 'some test content',
-        last_modified => Time::Piece->new,
-    );
-    isa_ok $page->last_modified, 'Time::Piece';
+    subtest 'last_modified' => sub {
+        isa_ok $page->last_modified, 'Time::Piece';
+    };
 };
 
 subtest 'render' => sub {

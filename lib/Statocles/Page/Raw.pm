@@ -24,6 +24,7 @@ The last modified time of the page.
 has last_modified => (
     is => 'ro',
     isa => InstanceOf['Time::Piece'],
+    default => sub { Time::Piece->new },
 );
 
 =method vars
