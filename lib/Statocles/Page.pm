@@ -28,6 +28,7 @@ has path => (
     is => 'rw',
     isa => Path,
     coerce => Path->coercion,
+    required => 1,
 );
 
 =attr published

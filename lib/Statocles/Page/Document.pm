@@ -15,6 +15,7 @@ The L<document|Statocles::Document> this page will render.
 has document => (
     is => 'ro',
     isa => InstanceOf['Statocles::Document'],
+    required => 1,
 );
 
 =attr tags

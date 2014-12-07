@@ -29,18 +29,37 @@ MARKDOWN
 );
 my $md = Text::Markdown->new;
 
-subtest 'attribute defaults' => sub {
-    my $page = Statocles::Page::Document->new(
-        document => $doc,
+subtest 'constructor' => sub {
+    my %required = (
         path => '/path/to/page.html',
+        document => $doc,
     );
 
-    subtest 'search_change_frequency' => sub {
-        is $page->search_change_frequency, 'weekly';
+    subtest 'constructor errors' => sub {
+
+        subtest 'required attributes' => sub {
+            for my $key ( keys %required ) {
+                dies_ok {
+                    Statocles::Page::Document->new(
+                        map {; $_ => $required{ $_ } } grep { $_ ne $key } keys %required,
+                    );
+                } $key . ' is required';
+            }
+        };
+
     };
 
-    subtest 'search_priority' => sub {
-        is $page->search_priority, 0.5;
+    subtest 'attribute defaults' => sub {
+        my $page = Statocles::Page::Document->new( %required );
+
+        subtest 'search_change_frequency' => sub {
+            is $page->search_change_frequency, 'weekly';
+        };
+
+        subtest 'search_priority' => sub {
+            is $page->search_priority, 0.5;
+        };
+
     };
 };
 
