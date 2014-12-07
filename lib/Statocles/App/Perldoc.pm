@@ -95,7 +95,7 @@ sub pages {
     for my $glob ( @{ $self->modules } ) {
         %modules = (
             %modules,
-            %{ Pod::Simple::Search->new->inc(0)->limit_glob( $glob )->survey( @dirs ) },
+            %{ Pod::Simple::Search->new->inc(0)->limit_re( qr{^$glob} )->survey( @dirs ) },
         );
     }
 
