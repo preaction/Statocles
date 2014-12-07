@@ -122,7 +122,7 @@ subtest 'perldoc pages' => sub {
                     is $node->text, 'My::Internal - An internal module to link to';
                 }
                 if ( ok $node = $dom->at( 'h1#SYNOPSIS + pre code' ) ) {
-                    is $node->text, qr{my \$int = My::Internal->new};
+                    like $node->text, qr{my \$int = My::Internal->new};
                 }
                 ok $dom->at( 'a[href="/pod/index.html"]' ), 'internal link to index page';
             };

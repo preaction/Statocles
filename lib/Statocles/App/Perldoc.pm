@@ -126,14 +126,20 @@ sub pages {
             $href =~ s/$pod_base//;
 
             if ( grep { $href =~ /^$_/ } @{ $self->modules } ) {
-                $href = join '/', split /::/, $href;
-                $href .= '.html';
-                $node->attr( href => join '/', $self->url_root, $href );
+                my $new_href;
+                if ( $href eq $self->index_module ) {
+                    $new_href = 'index.html';
+                }
+                else {
+                    $new_href = join '/', split /::/, $href;
+                    $new_href .= '.html';
+                }
+                $node->attr( href => join '/', $self->url_root, $new_href );
             }
         }
 
-        my $page_url = $module eq $self->index_module ? 'index.html' : $path;
-        $page_url =~ s/[.]pm$/.html/;
+        my $page_url = $module eq $self->index_module ? 'index.html' : "$module.html";
+        $page_url =~ s{::}{/}g;
 
         push @pages, Statocles::Page::Raw->new(
             path => join( '/', $self->url_root, $page_url ),
