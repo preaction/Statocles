@@ -78,6 +78,22 @@ subtest 'constructor' => sub {
                 is $app->inc->[1]->stringify, "two";
             };
         };
+
+        subtest 'weave_config' => sub {
+            subtest 'string' => sub {
+                my $app;
+                lives_ok {
+                    $app = Statocles::App::Perldoc->new(
+                        %required,
+                        weave_config => 'foo',
+                    );
+                };
+
+                isa_ok $app->weave_config, 'Path::Tiny';
+                is $app->weave_config->stringify, 'foo';
+            };
+        };
+
     };
 };
 
@@ -191,6 +207,7 @@ subtest 'perldoc pages' => sub {
             index_module => 'My',
             theme => $SHARE_DIR->child( 'theme' ),
             weave => 1,
+            weave_config => $SHARE_DIR->child( 'weaver.ini' ),
         );
 
         $test_pages->( $app );

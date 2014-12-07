@@ -92,6 +92,18 @@ has weave => (
     default => sub { 0 },
 );
 
+=attr weave_config
+
+The path to the Pod::Weaver configuration file
+
+=cut
+
+has weave_config => (
+    is => 'ro',
+    isa => Path,
+    coerce => Path->coercion,
+);
+
 =method pages
 
 Render the requested modules as HTML.
@@ -232,7 +244,7 @@ sub _weave_module {
 
     require Pod::Weaver;
     my $weaver = Pod::Weaver->new_from_config(
-        { root => '.' },
+        { root => $self->weave_config->parent->stringify },
     );
     my $weaved_doc = $weaver->weave_document({
         pod_document => $pod_document,
