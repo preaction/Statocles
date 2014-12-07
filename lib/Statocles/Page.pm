@@ -84,6 +84,9 @@ my @template_attrs = (
     is => 'ro',
     isa => InstanceOf['Statocles::Template'],
     coerce => Statocles::Template->coercion,
+    default => sub {
+        Statocles::Template->new( content => '<%= $content %>' ),
+    },
 );
 
 has template => @template_attrs;
@@ -95,12 +98,7 @@ L<template|/template>.
 
 =cut
 
-has layout => (
-    @template_attrs,
-    default => sub {
-        Statocles::Template->new( content => '<%= $content %>' ),
-    },
-);
+has layout => @template_attrs;
 
 =attr search_change_frequency
 

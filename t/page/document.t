@@ -60,6 +60,16 @@ subtest 'constructor' => sub {
             is $page->search_priority, 0.5;
         };
 
+        subtest 'layout' => sub {
+            isa_ok $page->layout, 'Statocles::Template';
+            is $page->layout->content, '<%= $content %>';
+        };
+
+        subtest 'template' => sub {
+            isa_ok $page->template, 'Statocles::Template';
+            is $page->template->content, '<%= $content %>';
+        };
+
     };
 };
 
