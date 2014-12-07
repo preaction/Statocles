@@ -38,11 +38,12 @@ subtest 'constructor' => sub {
     subtest 'attribute defaults' => sub {
         my %defaults = (
             inc => [ map { Path::Tiny->new( $_ ) } @INC ],
+            weave => 0,
         );
 
         my $app = Statocles::App::Perldoc->new( %required );
         for my $key ( keys %defaults ) {
-            cmp_deeply $app->$key, $defaults{ $key };
+            cmp_deeply $app->$key, $defaults{ $key }, "$key default value";
         }
     };
 
