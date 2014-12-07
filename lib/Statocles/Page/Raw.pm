@@ -1,4 +1,5 @@
 package Statocles::Page::Raw;
+# ABSTRACT: A raw page (with templates)
 
 use Statocles::Class;
 with 'Statocles::Page';
