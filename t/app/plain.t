@@ -99,6 +99,7 @@ subtest 'perldoc pages' => sub {
         is scalar @pages, scalar keys %page_tests, 'correct number of pages';
         for my $page ( @pages ) {
             isa_ok $page, 'Statocles::Page::Document';
+            isa_ok $page->last_modified, 'Time::Piece', 'must set a last_modified';
 
             if ( !$page_tests{ $page->path } ) {
                 fail "No tests found for page: " . $page->path;

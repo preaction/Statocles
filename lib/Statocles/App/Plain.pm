@@ -65,6 +65,7 @@ sub pages {
             path => join( '/', $self->url_root, $url ),
             document => $doc,
             layout => $self->theme->template( site => 'layout.html' ),
+            published => Time::Piece->new,
         );
     }
 
