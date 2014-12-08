@@ -90,6 +90,23 @@ subtest 'perldoc pages' => sub {
 
             };
         },
+
+        '/foo/utf8.html' => sub {
+            my ( $dom ) = @_;
+            return sub {
+                # XXX: Find the layout and template
+                my $node;
+
+                if ( ok $node = $dom->at( 'h1' ) ) {
+                    is $node->text, "\x{2665} Snowman!";
+                }
+
+                if ( ok $node = $dom->at( 'h1 + p' ) ) {
+                    is $node->text, "\x{2603}"
+                }
+
+            };
+        },
     );
 
     my $test_pages = sub {
@@ -129,6 +146,9 @@ subtest 'perldoc pages' => sub {
             store => $SHARE_DIR->child( 'plain' ),
         );
 
+        my @warnings;
+        local $SIG{__WARN__} = sub { push @warnings, $_[0] };
+
         $test_pages->( $app );
 
         subtest 'index page' => sub {
@@ -138,6 +158,7 @@ subtest 'perldoc pages' => sub {
             ok grep { $_->path eq $index->path } $app->pages;
         };
 
+        ok !@warnings, "no warnings!" or diag join "\n", @warnings;
     };
 };
 

@@ -68,7 +68,7 @@ sub read_document {
     my ( $self, $path ) = @_;
     diag( 1, "Read document: ", $path );
     my $full_path = $self->path->child( $path );
-    open my $fh, '<', $full_path or die "Could not open '$full_path' for reading: $!\n";
+    open my $fh, '<:encoding(UTF-8)', $full_path or die "Could not open '$full_path' for reading: $!\n";
     my $doc;
     my $buffer = '';
     while ( my $line = <$fh> ) {
@@ -161,7 +161,7 @@ Read the file from the given C<path>.
 sub read_file {
     my ( $self, $path ) = @_;
     diag( 1, "Read file: ", $path );
-    return $self->path->child( $path )->slurp;
+    return $self->path->child( $path )->slurp_utf8;
 }
 
 =method has_file( $path )
@@ -189,7 +189,7 @@ sub write_file {
     my ( $self, $path, $content ) = @_;
     diag( 1, "Write file: ", $path );
     my $full_path = $self->path->child( $path );
-    $full_path->touchpath->spew( $content );
+    $full_path->touchpath->spew_utf8( $content );
     return;
 }
 
