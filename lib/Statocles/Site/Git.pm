@@ -72,13 +72,15 @@ sub _git_run {
     my ( $git, @args ) = @_;
     my $cmdline = join " ", 'git', @args;
     my $cmd = $git->command( @args );
-    my $stdout = readline( $cmd->stdout ) // '';
-    my $stderr = readline( $cmd->stderr ) // '';
+    my $stdout = join( "\n", readline( $cmd->stdout ) ) // '';
+    my $stderr = join( "\n", readline( $cmd->stderr ) ) // '';
     $cmd->close;
     my $exit = $cmd->exit;
+
     if ( $exit ) {
-        warn "git $args[0] exited with $exit\n-- CMD --\n$cmdline\n-- STDOUT --\n$stdout\n-- STDERR --\n$stderr\n";
+        die "git $args[0] exited with $exit\n\n-- CMD --\n$cmdline\n\n-- STDOUT --\n$stdout\n\n-- STDERR --\n$stderr\n";
     }
+
     return $cmd->exit;
 }
 
