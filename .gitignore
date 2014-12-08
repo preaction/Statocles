@@ -1,6 +1,6 @@
 .build
 *.swp
 *.tar.gz
-Statocles-*
+/Statocles-*
 /site/_build
 /site/_deploy
