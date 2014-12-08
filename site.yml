@@ -1,7 +1,7 @@
 theme:
     class: Statocles::Theme
     args:
-        store: share/theme/default
+        store: site/theme
 
 build:
     class: Statocles::Store
