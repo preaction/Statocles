@@ -2,4 +2,5 @@
 *.swp
 *.tar.gz
 Statocles-*
-/site
+/site/_build
+/site/_deploy

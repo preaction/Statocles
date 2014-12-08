@@ -6,7 +6,7 @@ theme:
 build:
     class: Statocles::Store
     args:
-        path: site/build
+        path: site/_build
 
 deploy:
     class: Statocles::Store
