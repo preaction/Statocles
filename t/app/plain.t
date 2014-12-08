@@ -130,8 +130,15 @@ subtest 'perldoc pages' => sub {
         );
 
         $test_pages->( $app );
-    };
 
+        subtest 'index page' => sub {
+            my $index = $app->index;
+            isa_ok $index, 'Statocles::Page::Document';
+            is $index->path, '/index.html';
+            ok grep { $_->path eq $index->path } $app->pages;
+        };
+
+    };
 };
 
 done_testing;

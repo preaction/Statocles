@@ -3,6 +3,7 @@ package Statocles::App::Plain;
 
 use Statocles::Class;
 extends 'Statocles::App';
+use List::Util qw( first );
 use Statocles::Store;
 use Statocles::Theme;
 use Statocles::Page::Document;
@@ -47,13 +48,14 @@ has theme => (
     coerce => Statocles::Theme->coercion,
 );
 
-=method pages
+has _pages => (
+    is => 'ro',
+    isa => ArrayRef[ConsumerOf['Statocles::Page']],
+    lazy => 1,
+    builder => '_build_pages',
+);
 
-Get the L<pages|Statocles::Page> for this app.
-
-=cut
-
-sub pages {
+sub _build_pages {
     my ( $self ) = @_;
     my @pages;
 
@@ -69,7 +71,32 @@ sub pages {
         );
     }
 
-    return @pages;
+    return \@pages;
+}
+
+=method pages
+
+Get the L<pages|Statocles::Page> for this app.
+
+=cut
+
+sub pages {
+    my ( $self ) = @_;
+    return @{ $self->_pages };
+}
+
+=method index
+
+The main index page for this app. This app may be used for the L<site
+index|Statocles::Site/index>.
+
+=cut
+
+sub index {
+    my ( $self ) = @_;
+    my $index_path = join "/", $self->url_root, 'index.html';
+    $index_path =~ s{/+}{/}g;
+    return first { $_->path eq $index_path } $self->pages;
 }
 
 1;
