@@ -1,0 +1,19 @@
+---
+title: Home
+---
+
+# Statocles
+
+Statocles is a <abbr title="Content Management System">CMS</abbr> for building static
+websites.
+
+Statocles is [built in Perl](http://perl.org) 
+
+## Getting Started
+
+Install the latest version of Statocles from CPAN.
+
+    cpan Statocles
+
+Build a basic site using [the Statocles Setup tutorial](/pod/Statocles/Help/Setup.html).
+
