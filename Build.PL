@@ -20,13 +20,18 @@ my %module_build_args = (
     "Doug Bell <preaction\@cpan.org>"
   ],
   "dist_name" => "Statocles",
-  "dist_version" => "0.025",
+  "dist_version" => "0.026",
   "license" => "perl",
   "module_name" => "Statocles",
-  "recommends" => {},
+  "recommends" => {
+    "PPI" => 0,
+    "Pod::Elemental" => 0,
+    "Pod::Weaver" => 0
+  },
   "recursive_test_files" => 1,
   "requires" => {
     "Beam::Wire" => 0,
+    "Encode" => 0,
     "File::Copy::Recursive" => 0,
     "File::Share" => 0,
     "Git::Repository" => 0,

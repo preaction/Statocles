@@ -1,4 +1,5 @@
 requires "Beam::Wire" => "0";
+requires "Encode" => "0";
 requires "File::Copy::Recursive" => "0";
 requires "File::Share" => "0";
 requires "Git::Repository" => "0";
@@ -17,6 +18,9 @@ requires "YAML" => "0";
 requires "perl" => "5.010";
 requires "strict" => "0";
 requires "warnings" => "0";
+recommends "PPI" => "0";
+recommends "Pod::Elemental" => "0";
+recommends "Pod::Weaver" => "0";
 
 on 'build' => sub {
   requires "Module::Build" => "0.3601";

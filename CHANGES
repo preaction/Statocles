@@ -1,6 +1,53 @@
 Changelog for Statocles
 
-0.025 2014-11-30T08:32:00
+0.026 2014-12-08T03:48:24
+ - always use utf-8 when reading/writing files
+ - add initial release announcement
+ - remove test post
+ - add new index page for introduction to Statocles
+ - allow plain app to be used as site index
+ - set a last_modified date for the plain Page
+ - add github banner to Statocles site
+ - bundle the site theme so we can edit it
+ - move Statocles site and prepare gitignore file
+ - move the statocles website
+ - add plain app for making pages from plain markdown
+ - make page template optional with a default
+ - make path and document required attributes
+ - rename Page::Raw to Page::Plain
+ - add missing ABSTRACT to Page::Raw
+ - add a default weaver.ini config
+ - die with friendly error when missing Pod::Weaver
+ - only remove .ini files from the dist root
+ - add path to Pod::Weaver config file
+ - test default value for weave
+ - fix theme check for perldoc app templates
+ - make Pod::Weaver optional in Perldoc app
+ - add perldoc app to the Statocles website
+ - add default template for perldoc app
+ - fix internal links to the index module
+ - fix module searching in Perldoc app
+ - set a default last_modified for Raw pages
+ - coerce strings into paths in Perldoc app
+ - fix Perldoc app to extend Statocles::App
+ - add last_modified to Raw pages
+ - simplify pod weaving
+ - mark optional prereqs as "Recommends"
+ - weave the POD before trying to make HTML
+ - rewrite links to internal modules
+ - add initial progress on Perldoc app
+ - add page to contain raw content
+ - make sitemap.xml a template
+ - add page attrs for sitemap changefreq and priority
+ - add last_modified to the list page
+ - add last_modified to document page object
+ - add IRC channel to meta resources
+ - do not index the private MOJOAPP package
+ - handle index.html for directories in test daemon
+ - add dzil tag annotation with name, date, and changelog
+
+0.025 2014-11-30T08:32:33
+ - release v0.025
  - add better dzil tag annotation
  - fix tests for the mojolicious app used by daemon
 

@@ -33,6 +33,7 @@ my %WriteMakefileArgs = (
   "NAME" => "Statocles",
   "PREREQ_PM" => {
     "Beam::Wire" => 0,
+    "Encode" => 0,
     "File::Copy::Recursive" => 0,
     "File::Share" => 0,
     "Git::Repository" => 0,
@@ -60,7 +61,7 @@ my %WriteMakefileArgs = (
     "Test::Exception" => 0,
     "Test::More" => 0
   },
-  "VERSION" => "0.025",
+  "VERSION" => "0.026",
   "test" => {
     "TESTS" => "t/*.t t/app/*.t t/bin/*.t t/page/*.t t/site/*.t t/theme/*.t"
   }
@@ -71,6 +72,7 @@ my %FallbackPrereqs = (
   "Beam::Wire" => 0,
   "Capture::Tiny" => 0,
   "Dir::Self" => 0,
+  "Encode" => 0,
   "ExtUtils::MakeMaker" => 0,
   "File::Copy::Recursive" => 0,
   "File::Share" => 0,
