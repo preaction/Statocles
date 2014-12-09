@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+        <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap-theme.min.css" rel="stylesheet">
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <title>Statocles</title>
+        <style type="text/css">
+            main header h1
+            {
+                border-bottom: 4px solid #045578;
+            }
+            header aside {
+                margin-top: 0;
+                font-size: 12pt;
+            }
+            .sidebar h1 {
+                font-size: 14pt;
+            }
+
+            /** Add a line when using the "Continue reading..." link */
+            section:target {
+                padding-top: 0.5em;
+                border-top: 4px solid #045578;
+            }
+
+            /** Don't allow <pre> to push too much */
+            pre {
+                max-width: 100%;
+                overflow-x: scroll;
+            }
+
+            /** <code> is used for input and output, so let it wrap */
+            code {
+                white-space: normal;
+            }
+
+            .tags {
+                float: right;
+            }
+
+            /**
+             * Don't allow main content images to push things around
+             */
+            main img {
+                max-width: 100%;
+            }
+
+        </style>
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-default navbar-static-top" role="navigation">
+                <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button class="navbar-toggle" data-target="#top-navbar-collapse-1" data-toggle="collapse" type="button">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="/Statocles/">Statocles</a>
+                    </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="top-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li><a href="/Statocles/blog">Blog</a></li>
+                            <li><a href="/Statocles/pod">Docs</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <a href="https://github.com/preaction/Statocles"><img alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; z-index: 1000; border: 0;"></a>
+
+        </header>
+        <div class="main container">
+            <h1 id="NAME">NAME</h1>
+
+<p>Statocles::Store - A repository for Documents and Pages</p>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>A Statocles::Store reads and writes <a href="/Statocles/pod/Statocles/Document.html">documents</a> and files (mostly <a href="/Statocles/pod/Statocles/Page.html">pages</a>).</p>
+
+<p>This class handles the parsing and inflating of <a href="/Statocles/pod/Statocles/Document.html">&quot;document objects&quot;</a>.</p>
+
+<h2 id="Frontmatter-Document-Format">Frontmatter Document Format</h2>
+
+<p>Documents are formatted with a YAML document on top, and Markdown content on the bottom, like so:</p>
+
+<pre><code>    ---
+    title: This is a title
+    author: preaction
+    ---
+    # This is the markdown content
+    
+    This is a paragraph</code></pre>
+
+<h1 id="ATTRIBUTES">ATTRIBUTES</h1>
+
+<h2 id="path">path</h2>
+
+<p>The path to the directory containing the <a href="/Statocles/pod/Statocles/Document.html">documents</a>.</p>
+
+<h2 id="documents">documents</h2>
+
+<p>All the <a href="/Statocles/pod/Statocles/Document.html">documents</a> currently read by this store.</p>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="read_documents">read_documents()</h2>
+
+<p>Read the directory <code>path</code> and create the <a href="/Statocles/pod/Statocles/Document.html">document</a> objects inside.</p>
+
+<h2 id="read_document-path">read_document( path )</h2>
+
+<p>Read a single <a href="/Statocles/pod/Statocles/Document.html">document</a> in either pure YAML or combined YAML/Markdown (Frontmatter) format and return a datastructure suitable to be given to <a href="/Statocles/pod/Statocles/Document.html">Statocles::Document</a>.</p>
+
+<h2 id="write_document-path-doc">write_document( $path, $doc )</h2>
+
+<p>Write a <a href="/Statocles/pod/Statocles/Document.html">document</a> to the store. Returns the full path to the newly-updated document.</p>
+
+<p>The document is written in Frontmatter format.</p>
+
+<h2 id="read_file-path">read_file( $path )</h2>
+
+<p>Read the file from the given <code>path</code>.</p>
+
+<h2 id="has_file-path">has_file( $path )</h2>
+
+<p>Returns true if a file exists with the given <code>path</code>.</p>
+
+<p>NOTE: This should not be used to check for directories, as not all stores have directories.</p>
+
+<h2 id="write_file-path-content">write_file( $path, $content )</h2>
+
+<p>Write the given <code>content</code> to the given <code>path</code>. This is mostly used to write out <a href="/Statocles/pod/Statocles/Page.html">page objects</a>.</p>
+
+<h2 id="coercion">coercion</h2>
+
+<p>Class method to coerce a string representing a path into a Statocles::Store object. Returns a subref suitable to be used as a type coercion in an attriute.</p>
+
+
+
+        </div>
+        
+    </body>
+</html>

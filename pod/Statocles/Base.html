@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+        <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap-theme.min.css" rel="stylesheet">
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <title>Statocles</title>
+        <style type="text/css">
+            main header h1
+            {
+                border-bottom: 4px solid #045578;
+            }
+            header aside {
+                margin-top: 0;
+                font-size: 12pt;
+            }
+            .sidebar h1 {
+                font-size: 14pt;
+            }
+
+            /** Add a line when using the "Continue reading..." link */
+            section:target {
+                padding-top: 0.5em;
+                border-top: 4px solid #045578;
+            }
+
+            /** Don't allow <pre> to push too much */
+            pre {
+                max-width: 100%;
+                overflow-x: scroll;
+            }
+
+            /** <code> is used for input and output, so let it wrap */
+            code {
+                white-space: normal;
+            }
+
+            .tags {
+                float: right;
+            }
+
+            /**
+             * Don't allow main content images to push things around
+             */
+            main img {
+                max-width: 100%;
+            }
+
+        </style>
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-default navbar-static-top" role="navigation">
+                <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button class="navbar-toggle" data-target="#top-navbar-collapse-1" data-toggle="collapse" type="button">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="/Statocles/">Statocles</a>
+                    </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="top-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li><a href="/Statocles/blog">Blog</a></li>
+                            <li><a href="/Statocles/pod">Docs</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <a href="https://github.com/preaction/Statocles"><img alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; z-index: 1000; border: 0;"></a>
+
+        </header>
+        <div class="main container">
+            <h1 id="NAME">NAME</h1>
+
+<p>Statocles::Base - Base module for Statocles modules</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>    package MyModule;
+    use Statocles::Module;</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>This is the base module that all Statocles modules should use (unless they&#39;re using a more-specific base).</p>
+
+<p>This module imports the following into your namespace:</p>
+
+<dl>
+
+<dt><a href="/Statocles/pod/index.html">Statocles</a></dt>
+<dd>
+
+<p>The base module is imported to make sure that <a href="https://metacpan.org/pod/File::Share">File::Share</a> can find the right share directory.</p>
+
+</dd>
+<dt><a href="https://metacpan.org/pod/strict">strict</a></dt>
+<dd>
+
+</dd>
+<dt><a href="https://metacpan.org/pod/warnings">warnings</a></dt>
+<dd>
+
+</dd>
+<dt><a href="https://metacpan.org/pod/feature">feature</a></dt>
+<dd>
+
+<p>Currently the 5.10 feature bundle</p>
+
+</dd>
+<dt><a href="https://metacpan.org/pod/Path::Tiny">Path::Tiny</a> qw( path rootdir )</dt>
+<dd>
+
+<p>We do a lot of work with the filesystem.</p>
+
+</dd>
+</dl>
+
+<h1 id="SEE-ALSO">SEE ALSO</h1>
+
+<dl>
+
+<dt><a href="https://metacpan.org/pod/Import::Base">Import::Base</a></dt>
+<dd>
+
+</dd>
+</dl>
+
+
+
+        </div>
+        
+    </body>
+</html>

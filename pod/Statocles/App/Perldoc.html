@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+        <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap-theme.min.css" rel="stylesheet">
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <title>Statocles</title>
+        <style type="text/css">
+            main header h1
+            {
+                border-bottom: 4px solid #045578;
+            }
+            header aside {
+                margin-top: 0;
+                font-size: 12pt;
+            }
+            .sidebar h1 {
+                font-size: 14pt;
+            }
+
+            /** Add a line when using the "Continue reading..." link */
+            section:target {
+                padding-top: 0.5em;
+                border-top: 4px solid #045578;
+            }
+
+            /** Don't allow <pre> to push too much */
+            pre {
+                max-width: 100%;
+                overflow-x: scroll;
+            }
+
+            /** <code> is used for input and output, so let it wrap */
+            code {
+                white-space: normal;
+            }
+
+            .tags {
+                float: right;
+            }
+
+            /**
+             * Don't allow main content images to push things around
+             */
+            main img {
+                max-width: 100%;
+            }
+
+        </style>
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-default navbar-static-top" role="navigation">
+                <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button class="navbar-toggle" data-target="#top-navbar-collapse-1" data-toggle="collapse" type="button">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="/Statocles/">Statocles</a>
+                    </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="top-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li><a href="/Statocles/blog">Blog</a></li>
+                            <li><a href="/Statocles/pod">Docs</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <a href="https://github.com/preaction/Statocles"><img alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; z-index: 1000; border: 0;"></a>
+
+        </header>
+        <div class="main container">
+            <h1 id="NAME">NAME</h1>
+
+<p>Statocles::App::Perldoc - Render documentation for Perl modules</p>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>This application generates HTML from the POD in the requested modules.</p>
+
+<h1 id="ATTRIBUTES">ATTRIBUTES</h1>
+
+<h2 id="url_root">url_root</h2>
+
+<p>The URL root of this application. All pages from this app will be under this root. Use this to ensure two apps do not try to write the same path.</p>
+
+<h2 id="theme">theme</h2>
+
+<p>The <a href="/Statocles/pod/Statocles/Theme.html">theme</a> for this app. See <a href="#THEME">&quot;THEME&quot;</a> for what templates this app uses.</p>
+
+<h2 id="inc">inc</h2>
+
+<p>The directories to search for modules. Defaults to @INC.</p>
+
+<h2 id="modules">modules</h2>
+
+<p>The root modules to find. Required. All child modules will be included. Any module that does not start with one of these strings will not be included.</p>
+
+<h2 id="index_module">index_module</h2>
+
+<p>The module to use for the index page. Required.</p>
+
+<h2 id="weave">weave</h2>
+
+<p>If true, run the POD through <a href="https://metacpan.org/pod/Pod::Weaver">Pod::Weaver</a> before converting to HTML</p>
+
+<h2 id="weave_config">weave_config</h2>
+
+<p>The path to the Pod::Weaver configuration file</p>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="pages">pages</h2>
+
+<p>Render the requested modules as HTML.</p>
+
+<h2 id="weave_module-path">_weave_module( $path )</h2>
+
+<p>Run Pod::Weaver on the POD in the given path</p>
+
+
+
+        </div>
+        
+    </body>
+</html>

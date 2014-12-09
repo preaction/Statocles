@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+        <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap-theme.min.css" rel="stylesheet">
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <title>Statocles</title>
+        <style type="text/css">
+            main header h1
+            {
+                border-bottom: 4px solid #045578;
+            }
+            header aside {
+                margin-top: 0;
+                font-size: 12pt;
+            }
+            .sidebar h1 {
+                font-size: 14pt;
+            }
+
+            /** Add a line when using the "Continue reading..." link */
+            section:target {
+                padding-top: 0.5em;
+                border-top: 4px solid #045578;
+            }
+
+            /** Don't allow <pre> to push too much */
+            pre {
+                max-width: 100%;
+                overflow-x: scroll;
+            }
+
+            /** <code> is used for input and output, so let it wrap */
+            code {
+                white-space: normal;
+            }
+
+            .tags {
+                float: right;
+            }
+
+            /**
+             * Don't allow main content images to push things around
+             */
+            main img {
+                max-width: 100%;
+            }
+
+        </style>
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-default navbar-static-top" role="navigation">
+                <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button class="navbar-toggle" data-target="#top-navbar-collapse-1" data-toggle="collapse" type="button">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="/Statocles/">Statocles</a>
+                    </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="top-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li><a href="/Statocles/blog">Blog</a></li>
+                            <li><a href="/Statocles/pod">Docs</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <a href="https://github.com/preaction/Statocles"><img alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; z-index: 1000; border: 0;"></a>
+
+        </header>
+        <div class="main container">
+            <h1 id="NAME">NAME</h1>
+
+<p>Statocles::Page - Render documents into HTML</p>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>A Statocles::Page takes one or more <a href="/Statocles/pod/Statocles/Document.html">documents</a> and renders them into one or more HTML pages using a main <a href="#template">template</a> and a <a href="#layout">layout template</a>.</p>
+
+<h1 id="ATTRIBUTES">ATTRIBUTES</h1>
+
+<h2 id="app">app</h2>
+
+<p>The application this page came from, so we can give it to the templates.</p>
+
+<h2 id="path">path</h2>
+
+<p>The absolute URL path to save this page to.</p>
+
+<h2 id="published">published</h2>
+
+<p>The publish date/time of this page. A <a href="https://metacpan.org/pod/Time::Piece">Time::Piece</a> object.</p>
+
+<h2 id="links">links</h2>
+
+<p>A hash of arrays of links to pages related to this page. Possible keys:</p>
+
+<pre><code>    feed        - Feed pages related to this page</code></pre>
+
+<p>Each item in the array is a hash with the following keys:</p>
+
+<pre><code>    href        - The page for the link
+    type        - The MIME type of the link, optional</code></pre>
+
+<h2 id="markdown">markdown</h2>
+
+<p>The <a href="https://metacpan.org/pod/Text::Markdown">Text::Markdown</a> object to render document Markdown.</p>
+
+<h2 id="template">template</h2>
+
+<p>The main <a href="/Statocles/pod/Statocles/Template.html">template</a> for this page. The result will be wrapped in the <a href="#layout">layout template</a>.</p>
+
+<h2 id="layout">layout</h2>
+
+<p>The layout <a href="/Statocles/pod/Statocles/Template.html">template</a> for this page, which will wrap the content generated by the <a href="#template">template</a>.</p>
+
+<h2 id="search_change_frequency">search_change_frequency</h2>
+
+<p>How frequently a search engine should check this page for changes. This is used in the <a href="http://www.sitemaps.org">sitemap.xml</a> to give hints to search engines.</p>
+
+<p>Should be one of:</p>
+
+<pre><code>    always
+    hourly
+    daily
+    weekly
+    monthly
+    yearly
+    never</code></pre>
+
+<p>Defaults to <code>weekly</code>.</p>
+
+<p><b>NOTE:</b> This is only a hint to search engines, not a command. Pages marked <code>hourly</code> may be checked less often, and pages marked <code>never</code> may still be checked once in a while. <code>never</code> is mainly used for archived pages or permanent links.</p>
+
+<h2 id="search_priority">search_priority</h2>
+
+<p>How high should this page rank in search results compared to similar pages on this site? This is used in the <a href="http://www.sitemaps.org">sitemap.xml</a> to rank individual, full pages more highly than aggregate, list pages.</p>
+
+<p>Value should be between <code>0.0</code> and <code>1.0</code>. The default is <code>0.5</code>.</p>
+
+<p>This is only used to decide which pages are more important for the search engine to crawl, and which pages within your site should be given to users. It does not improve your rankings compared to other sites. See <a href="http://sitemaps.org">the sitemap protocol</a> for details.</p>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="render">render</h2>
+
+<p>Render the page, using the <a href="/Statocles/pod/Statocles/Page#template.html">template</a> and wrapping with the <a href="/Statocles/pod/Statocles/Page#layout.html">layout</a>.</p>
+
+<h1 id="SEE-ALSO">SEE ALSO</h1>
+
+<dl>
+
+<dt><a href="/Statocles/pod/Statocles/Page/Document.html">Statocles::Page::Document</a></dt>
+<dd>
+
+<p>A page that renders a single document.</p>
+
+</dd>
+<dt><a href="/Statocles/pod/Statocles/Page/List.html">Statocles::Page::List</a></dt>
+<dd>
+
+<p>A page that renders a list of other pages.</p>
+
+</dd>
+</dl>
+
+
+
+        </div>
+        
+    </body>
+</html>

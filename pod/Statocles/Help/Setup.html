@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+        <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap-theme.min.css" rel="stylesheet">
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <title>Statocles</title>
+        <style type="text/css">
+            main header h1
+            {
+                border-bottom: 4px solid #045578;
+            }
+            header aside {
+                margin-top: 0;
+                font-size: 12pt;
+            }
+            .sidebar h1 {
+                font-size: 14pt;
+            }
+
+            /** Add a line when using the "Continue reading..." link */
+            section:target {
+                padding-top: 0.5em;
+                border-top: 4px solid #045578;
+            }
+
+            /** Don't allow <pre> to push too much */
+            pre {
+                max-width: 100%;
+                overflow-x: scroll;
+            }
+
+            /** <code> is used for input and output, so let it wrap */
+            code {
+                white-space: normal;
+            }
+
+            .tags {
+                float: right;
+            }
+
+            /**
+             * Don't allow main content images to push things around
+             */
+            main img {
+                max-width: 100%;
+            }
+
+        </style>
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-default navbar-static-top" role="navigation">
+                <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button class="navbar-toggle" data-target="#top-navbar-collapse-1" data-toggle="collapse" type="button">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="/Statocles/">Statocles</a>
+                    </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="top-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li><a href="/Statocles/blog">Blog</a></li>
+                            <li><a href="/Statocles/pod">Docs</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <a href="https://github.com/preaction/Statocles"><img alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; z-index: 1000; border: 0;"></a>
+
+        </header>
+        <div class="main container">
+            <h1 id="NAME">NAME</h1>
+
+<p>Statocles::Help::Setup - A guide to setting up a new Statocles site</p>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>This document describes how to set up a simple blog web site suitable to be deployed to GitHub Pages using Statocles.</p>
+
+<h1 id="site.yml---The-Main-Configuration-File">site.yml - The Main Configuration File</h1>
+
+<p>Statocles uses <a href="https://metacpan.org/pod/Beam::Wire">Beam::Wire</a>, a dependency-injection module, to define its configuration. The format is <a href="http://yaml.org">YAML</a> and contains the data needed to build the objects: Arguments to the object&#39;s constructor. This means that any <code>ATTRIBUTES</code> defined in the documentation can be used in the configuration file.</p>
+
+<p>The configuration file is, by default, called <code>site.yml</code>. See <a href="https://metacpan.org/pod/statocles">the statocles command documentation</a> if you want to have multiple site configuration files.</p>
+
+<h2 id="A-Theme">A Theme</h2>
+
+<p>First, we&#39;ll start by defining a theme. A theme (<a href="/Statocles/pod/Statocles/Theme.html">Statocles::Theme</a>) builds and parses templates into <a href="/Statocles/pod/Statocles/Template.html">Statocles::Template</a> objects. We&#39;ll use the Statocles default theme, included with the module. The special <code>::default</code> string will look in the Statocles <code>share/theme</code> directory.</p>
+
+<h2 id="A-Source">A Source</h2>
+
+<p>Statocles takes simple, YAML-and-Markdown-formatted <a href="/Statocles/pod/Statocles/Document.html">document</a> files and builds HTML pages out of them.</p>
+
+<p>So we need a place to put our source documents. A <a href="/Statocles/pod/Statocles/Store.html">store</a> fills multiple roles relating to reading and writing files. Right now, we need it to hold on to our blog posts. We&#39;ll put our blog posts in the <code>blog</code> directory.</p>
+
+<p>The <a href="/Statocles/pod/Statocles/App/Blog.html">blog application</a> will use this store to add new blog posts and build web pages from the documents in the <code>blog</code> directory. More on that later.</p>
+
+<h2 id="An-App">An App</h2>
+
+<p>A <a href="/Statocles/pod/Statocles/App.html">Statocles app</a> is the driver that turns documents into <a href="/Statocles/pod/Statocles/Page.html">pages</a>. To build pages, we need a theme and a store full of documents.</p>
+
+<p>Since we&#39;re building a blog site, we&#39;ll use the <a href="/Statocles/pod/Statocles/App/Blog.html">Statocles blog app</a>:</p>
+
+<pre><code>    blog_app:
+        class: Statocles::App::Blog
+        args:
+            url_root: /blog
+            theme: &#39;::default&#39;
+            store: &#39;blog&#39;</code></pre>
+
+<p>We put our blog app under the root URL <code>/blog</code>. All pages that come from this app will start with <code>/blog</code> (except the index page, we&#39;ll move that to <code>/index.html</code>).</p>
+
+<p>We define our theme with the string <code>::default</code>, which will get magically coerced into a <a href="/Statocles/pod/Statocles/Theme.html">theme object</a>. We define our store with the string <code>blog</code>, which will get magically coerced into a <a href="/Statocles/pod/Statocles/Store.html">store object</a>.</p>
+
+<p>One of the most useful things about using a dependency injection module is that you can easily plug-in your own classes. If you want to use your own template format, you can build your own Statocles::Theme class that provides a different kind of Statocles::Template object and use that instead. If you want to use your own document format, you can make your own Statocles::Store class that reads from a database.</p>
+
+<h2 id="A-Destination">A Destination</h2>
+
+<p>Before we can generate pages, we need a place to put them. Statocles needs two places, a build directory (a staging area), and a deploy directory (the final destination for the site).</p>
+
+<p>For our site, we&#39;ve got a <code>build</code> directory for our staging area, where we can verify that our site looks correct before we deploy. Our deploy will happen in the root directory of our site (<code>.</code>). This is good for a GitHub Pages site.</p>
+
+<p>Though stores are usually just directories, they could also perform an SFTP or FTP or transfer the pages to a CDN (I think I have some evolution to do here).</p>
+
+<h2 id="A-Site">A Site</h2>
+
+<p>Now that we&#39;re ready, we can tie it all together. A <a href="/Statocles/pod/Statocles/Site.html">site</a> is a collection of apps that build and deploy to the same place. The special <a href="/Statocles/pod/Statocles/Site/Git.html">git site</a> knows how to deploy to git repositories.</p>
+
+<pre><code>    site:
+        class: Statocles::Site::Git
+        args:
+            apps:
+                blog:
+                    $ref: blog_app
+            build_store: &#39;build&#39;
+            deploy_store: &#39;.&#39;
+            deploy_branch: master
+            title: My Site
+            index: blog
+            nav:
+                main:
+                    - title: Blog
+                      href: /index.html</code></pre>
+
+<p>When adding apps to our site, we give them a name (in this case <code>blog</code>) so that we can refer to them on the command-line (later).</p>
+
+<p>Just like the blog store, the <code>build_store</code> and <code>deploy_store</code> will magically create a Statocles::Store object from the path string.</p>
+
+<p>The git branch we want to deploy to is <code>master</code>. As part of the default template, we can provide a site <code>title</code>.</p>
+
+<p>The <code>index</code> attribute gives the name of the app to use as our index page. Since we only have one app, we can only give it the <code>blog</code>. Whatever main page the blog app defines will be moved to the main site index <code>/index.html</code>.</p>
+
+<p>Finally, we can define a <code>nav</code> list, again giving a name: <code>main</code>. The default template uses the <code>main</code> nav across the top.</p>
+
+<h2 id="The-Complete-site.yml">The Complete site.yml</h2>
+
+<p>Combine it all together and you get this. Feel free to copy and paste to start your own site.</p>
+
+<pre><code>    blog_app:
+        class: Statocles::App::Blog
+        args:
+            url_root: /blog
+            theme: &#39;::default&#39;
+            store: &#39;blog&#39;
+    site:
+        class: Statocles::Site::Git
+        args:
+            apps:
+                blog:
+                    $ref: blog_app
+            build_store: &#39;build&#39;
+            deploy_store: &#39;.&#39;
+            title: My Site
+            index: blog
+            nav:
+                main:
+                    - title: Blog
+                      href: /index.html</code></pre>
+
+<h1 id="The-statocles-Command">The <code>statocles</code> Command</h1>
+
+<p>Now that we have a <code>site.yml</code>, we can run the <a href="https://metacpan.org/pod/statocles">statocles</a> command to manage our site.</p>
+
+<h2 id="Initialize-Your-Git-Repo">Initialize Your Git Repo</h2>
+
+<pre><code>    $ git init
+    $ git remote add origin ssh://git@github.com/preaction/preaction.github.io</code></pre>
+
+<p>Before we can get going, we need to create our git repository.</p>
+
+<p><i>NOTE:</i> In the future I plan to include this as a <code>statocles create</code> command.</p>
+
+<h2 id="Create-A-Blog-Post">Create A Blog Post</h2>
+
+<p>Remember when we gave our blog app a name? Now we can use that name to access the blog&#39;s command-line commands. To create a new blog post, we can use the <code>post</code> command:</p>
+
+<pre><code>    $ statocles blog post My First Post
+    New post at: blog/2014/06/04/my-first-post.yml</code></pre>
+
+<p>Everything after <code>post</code> will be used as the title of the post.</p>
+
+<p>If you have the <code>EDITOR</code> environment variable set, your editor will automatically open on the newly-created document.</p>
+
+<h2 id="Build-The-Site">Build The Site</h2>
+
+<pre><code>    $ statocles build</code></pre>
+
+<p>Running the <code>build</code> command will write all our pages to the <code>build</code> store, which points to the <code>build</code> directory. We can open up this directory and look at the files to make sure that our deploy will be correct.</p>
+
+<h2 id="Test-The-Site">Test The Site</h2>
+
+<pre><code>    $ statocles daemon
+    Listening on http://*:3000</code></pre>
+
+<p>Run the <code>daemon</code> command to start an HTTP server to view your built site. If you edit any content, running <code>build</code> again will update the site.</p>
+
+<h2 id="Commit-Your-Changes">Commit Your Changes</h2>
+
+<pre><code>    $ git add blog/2014/06/04/my-first-post.yml
+    $ git commit -m&#39;My first post&#39;</code></pre>
+
+<p>Once the build looks good, we&#39;ll want to commit our changes. The major feature of having a website in a git repository is change tracking.</p>
+
+<h2 id="Deploy-The-Site">Deploy The Site</h2>
+
+<pre><code>    $ statocles deploy</code></pre>
+
+<p>Running the <code>deploy</code> command will, in the case of the git site, commit the updated pages to the git repository. <code>deploy</code> will try to do a <code>git push</code> automatically, so your changes are now live on Github Pages!</p>
+
+
+
+        </div>
+        
+    </body>
+</html>

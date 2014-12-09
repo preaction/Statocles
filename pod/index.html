@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+        <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap-theme.min.css" rel="stylesheet">
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <title>Statocles</title>
+        <style type="text/css">
+            main header h1
+            {
+                border-bottom: 4px solid #045578;
+            }
+            header aside {
+                margin-top: 0;
+                font-size: 12pt;
+            }
+            .sidebar h1 {
+                font-size: 14pt;
+            }
+
+            /** Add a line when using the "Continue reading..." link */
+            section:target {
+                padding-top: 0.5em;
+                border-top: 4px solid #045578;
+            }
+
+            /** Don't allow <pre> to push too much */
+            pre {
+                max-width: 100%;
+                overflow-x: scroll;
+            }
+
+            /** <code> is used for input and output, so let it wrap */
+            code {
+                white-space: normal;
+            }
+
+            .tags {
+                float: right;
+            }
+
+            /**
+             * Don't allow main content images to push things around
+             */
+            main img {
+                max-width: 100%;
+            }
+
+        </style>
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-default navbar-static-top" role="navigation">
+                <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button class="navbar-toggle" data-target="#top-navbar-collapse-1" data-toggle="collapse" type="button">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="/Statocles/">Statocles</a>
+                    </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="top-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li><a href="/Statocles/blog">Blog</a></li>
+                            <li><a href="/Statocles/pod">Docs</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <a href="https://github.com/preaction/Statocles"><img alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; z-index: 1000; border: 0;"></a>
+
+        </header>
+        <div class="main container">
+            <h1 id="NAME">NAME</h1>
+
+<p>Statocles - A static site generator</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>    # !!! Read the Getting Started guide to set up a site.yml config file
+
+    # Create a new blog post
+    export EDITOR=vim
+    statocles blog post
+
+    # Build the site
+    statocles build
+
+    # Test the site in a local web browser
+    statocles daemon
+
+    # Deploy the site
+    statocles deploy</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>Statocles is an application for building static web pages from a set of plain YAML and Markdown files. It is designed to make it as simple as possible to develop rich web content using basic text-based tools.</p>
+
+<h2 id="FEATURES">FEATURES</h2>
+
+<ul>
+
+<li><p>A simple format combining YAML and Markdown for editing site content.</p>
+
+</li>
+<li><p>A command-line application for building, deploying, and editing the site.</p>
+
+</li>
+<li><p>A simple daemon to display a test site before it goes live.</p>
+
+</li>
+<li><p>A <a href="/Statocles/pod/Statocles/App/Blog#FEATURES.html">blogging application</a> with</p>
+
+<ul>
+
+<li><p>RSS and Atom syndication feeds.</p>
+
+</li>
+<li><p>Tags to organize blog posts. Tags have their own custom feeds.</p>
+
+</li>
+<li><p>Crosspost links to direct users to a syndicated blog.</p>
+
+</li>
+<li><p>Post-dated blog posts to appear automatically when the date is passed.</p>
+
+</li>
+</ul>
+
+</li>
+<li><p>Customizable <a href="/Statocles/pod/Statocles/Template.html">templates</a> using <a href="https://metacpan.org/pod/Mojo::Template#SYNTAX">the Mojolicious template language</a>.</p>
+
+</li>
+<li><p>A clean default theme using <a href="http://getbootstrap.com">Twitter Bootstrap</a>.</p>
+
+</li>
+<li><p>SEO-friendly features such as <a href="http://www.sitemaps.org">sitemaps (sitemap.xml)</a>.</p>
+
+</li>
+</ul>
+
+<h1 id="GUIDES">GUIDES</h1>
+
+<h2 id="GETTING-STARTED">GETTING STARTED</h2>
+
+<p>To get started with your own Statocle site, see <a href="/Statocles/pod/Statocles/Help/Setup.html">the Statocles setup help in Statocles::Help::Setup</a>.</p>
+
+<h1 id="OVERVIEW">OVERVIEW</h1>
+
+<h2 id="DOCUMENTS">DOCUMENTS</h2>
+
+<p>A <a href="/Statocles/pod/Statocles/Document.html">document</a> is the main content of the site. The user does all the work with documents: adding, editing, and removing documents.</p>
+
+<p>The default store reads documents in a combined YAML and Markdown format, easily editable with any text editor. A sample document looks like:</p>
+
+<pre><code>    ---
+    title: This is a title
+    author: preaction
+    ---
+    # This is the markdown content
+
+    This is a paragraph</code></pre>
+
+<p>This is the same format that <a href="http://jekyllrb.com">Jekyll</a> uses. The document format is described in the <a href="/Statocles/pod/Statocles/Store.html">Statocles::Store</a> documentation under <a href="/Statocles/pod/Statocles/Store#Frontmatter-Document-Format.html">Frontmatter Document Format</a>.</p>
+
+<h2 id="PAGES">PAGES</h2>
+
+<p>A <a href="/Statocles/pod/Statocles/Page.html">Statocles::Page</a> is rendered HTML ready to be sent to a user. Statocles generates pages from the documents that the user provides. One document may generate multiple pages, and pages may have multiple formats like HTML or RSS.</p>
+
+<dl>
+
+<dt><a href="/Statocles/pod/Statocles/Page/Document.html">Statocles::Page::Document</a></dt>
+<dd>
+
+<p>This page renders a single document. This is used for the main page of a blog post, for example.</p>
+
+</dd>
+<dt><a href="/Statocles/pod/Statocles/Page/List.html">Statocles::Page::List</a></dt>
+<dd>
+
+<p>This page renders a list of other pages (not documents). This is used for index pages.</p>
+
+</dd>
+<dt><a href="/Statocles/pod/Statocles/Page/Feed.html">Statocles::Page::Feed</a></dt>
+<dd>
+
+<p>This page renders an alternate version of a list page, like an RSS or Atom feed.</p>
+
+</dd>
+</dl>
+
+<h2 id="APPLICATIONS">APPLICATIONS</h2>
+
+<p>An application is the module that will take the documents the user provides and turn them into the pages that can be written out to the filesystem.</p>
+
+<dl>
+
+<dt><a href="/Statocles/pod/Statocles/App/Blog.html">Statocles::App::Blog</a></dt>
+<dd>
+
+<p>A simple blogging application.</p>
+
+</dd>
+</dl>
+
+<h2 id="SITES">SITES</h2>
+
+<p>A <a href="/Statocles/pod/Statocles/Site.html">Statocles::Site</a> manages a bunch of applications, writing and deploying the resulting pages.</p>
+
+<p>Deploying the site may involve a simple file copy, but it could also involve a Git repository, an FTP site, or a database.</p>
+
+<dl>
+
+<dt><a href="/Statocles/pod/Statocles/Site/Git.html">Statocles::Site::Git</a></dt>
+<dd>
+
+<p>A simple Git repository site.</p>
+
+</dd>
+</dl>
+
+<h2 id="STORES">STORES</h2>
+
+<p>A <a href="/Statocles/pod/Statocles/Store.html">Statocles::Store</a> reads and writes documents and pages. The default store reads documents in YAML and writes pages to a file, but stores could read documents as JSON, or from a Mongo database, and write pages to a database, or whereever you want!</p>
+
+<h1 id="SUBROUTINES">SUBROUTINES</h1>
+
+<h2 id="diag-level-message">diag( level, message )</h2>
+
+<p>Write a diagnostic message to STDOUT, but only if <code>$Statocles::VERBOSE</code> is set.</p>
+
+
+
+        </div>
+        
+    </body>
+</html>

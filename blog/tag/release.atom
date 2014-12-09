@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>http://preaction.github.io/Statocles/blog/tag/release/index.html</id>
+    <title>Statocles</title>
+    <updated>2014-12-09T02:26:02Z</updated>
+    <link href="http://preaction.github.io/Statocles/blog/tag/release.atom" rel="self" />
+    <link href="http://preaction.github.io/Statocles/blog/tag/release/index.html" rel="alternate" />
+    <generator version="0.026">Statocles</generator>
+    <entry>
+        <id>http://preaction.github.io/Statocles/blog/2014/12/08/release-v0.027.html</id>
+        <title>Release v0.027</title>
+        <author><name>preaction</name></author>
+        <link href="http://preaction.github.io/Statocles/blog/2014/12/08/release-v0.027.html" rel="alternate" />
+        <content type="html"><![CDATA[
+            <p>This release fixes some issues that would prevent Statocles from installing. I may have
+finally fixed <a href="https://github.com/preaction/Statocles/issues/110">the Win32 test failure that has been plaguing me!</a></p>
+
+<p>In this release:</p>
+
+<ul>
+<li><a href="https://github.com/preaction/Statocles/commit/00ec3ff70bc197bce3be289514ac952f5b0b29a7">try to fix bundle failure on Win32</a> (<a href="https://github.com/preaction/Statocles/issues/110">#110</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/5ee43d1a72d30d9f9bad8f5621aaf1519536f26d">bump required Mojolicious to 5.41</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/9afa82798b3119b50720a61b71a91664ce78cfb3">only ignore Statocles bundles in the root directory</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/ca2dd7a3e5396af1c9db9078f291c3fffc92489b">die if there's a git error</a></li>
+</ul>
+
+                <p><a href="http://preaction.github.io/Statocles/blog/2014/12/08/release-v0.027.html#section-2">Continue reading...</a></p>
+            <p>Tags:
+                <a href="/blog/tag/release/index.html">release</a>
+            </p>
+        ]]></content>
+        <updated>2014-12-08T00:00:00Z</updated>
+        <category term="ARRAY(0x7ff16cc96c60)" />
+    </entry>
+    <entry>
+        <id>http://preaction.github.io/Statocles/blog/2014/12/07/statocles-initial-public-(alpha)-release.html</id>
+        <title>Statocles Initial Public (alpha) Release</title>
+        <author><name>preaction</name></author>
+        <link href="http://preaction.github.io/Statocles/blog/2014/12/07/statocles-initial-public-(alpha)-release.html" rel="alternate" />
+        <content type="html"><![CDATA[
+            <p>Though Statocles has been on CPAN for months, this is the first time I'm announcing its
+availability to the world!</p>
+
+<p>Statocles is a CMS for building static HTML websites. The goals of this app are to make
+it easy to edit content via any text editor [1].</p>
+
+<p>This initial release includes:</p>
+
+<ul>
+<li>A blog app</li>
+<li>Plain pages, for things like About Us and Contact Us</li>
+<li>A POD renderer for documentation of Perl projects</li>
+</ul>
+
+<p>This site is generated with Statocles, and so is <a href="http://preaction.github.io">my blog</a>.</p>
+
+<h2>Getting Started</h2>
+
+<p><a href="http://metacpan.org/pod/Statocles">Get Statocles from CPAN</a> and <a href="/pod/Statocles/Help/Setup.html">follow the Statocles
+Setup guide</a>. If you have any issues, report them on
+<a href="https://github.com/preaction/Statocles">the Statocles Githup Repo</a>. If you have questions,
+<a href="https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">join us on IRC on irc.perl.org #statocles</a>!</p>
+
+<p>[1]: A future project will make Statocles content editable with a web interface</p>
+
+                <p><a href="http://preaction.github.io/Statocles/blog/2014/12/07/statocles-initial-public-(alpha)-release.html#section-2">Continue reading...</a></p>
+            <p>Tags:
+                <a href="/blog/tag/release/index.html">release</a>
+            </p>
+        ]]></content>
+        <updated>2014-12-07T00:00:00Z</updated>
+        <category term="ARRAY(0x7ff16c491d30)" />
+    </entry>
+</feed>
+
