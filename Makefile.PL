@@ -40,7 +40,7 @@ my %WriteMakefileArgs = (
     "Import::Base" => 0,
     "List::MoreUtils" => 0,
     "Memoize" => 0,
-    "Mojolicious" => "4.76",
+    "Mojolicious" => "5.41",
     "Moo::Lax" => 0,
     "Path::Tiny" => "0.054",
     "Pod::Usage::Return" => 0,
@@ -61,7 +61,7 @@ my %WriteMakefileArgs = (
     "Test::Exception" => 0,
     "Test::More" => 0
   },
-  "VERSION" => "0.026",
+  "VERSION" => "0.027",
   "test" => {
     "TESTS" => "t/*.t t/app/*.t t/bin/*.t t/page/*.t t/site/*.t t/theme/*.t"
   }
@@ -82,7 +82,7 @@ my %FallbackPrereqs = (
   "List::MoreUtils" => 0,
   "Memoize" => 0,
   "Module::Build" => "0.3601",
-  "Mojolicious" => "4.76",
+  "Mojolicious" => "5.41",
   "Moo::Lax" => 0,
   "Path::Tiny" => "0.054",
   "Pod::Usage::Return" => 0,

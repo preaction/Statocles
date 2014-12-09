@@ -1,6 +1,13 @@
 Changelog for Statocles
 
-0.026 2014-12-08T03:48:24
+0.027 2014-12-09T04:21:20
+ - try to fix bundle failure on Win32
+ - bump required Mojolicious to 5.41
+ - only ignore Statocles bundles in the root directory
+ - die if there's a git error
+
+0.026 2014-12-08T03:49:57
+ - release v0.026
  - always use utf-8 when reading/writing files
  - add initial release announcement
  - remove test post
