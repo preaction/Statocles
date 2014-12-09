@@ -107,7 +107,8 @@ sub main {
                 my $dest = $theme_dest->child( $relative );
                 # Don't overwrite site-customized hooks
                 next if ( $path->stat->size == 0 && $dest->exists );
-                $dest->touchpath;
+                $dest->remove if $dest->exists;
+                $dest->parent->mkpath;
                 $path->copy( $dest );
             }
             say qq{Theme "$theme_name" written to "share/theme/$theme_name"};
