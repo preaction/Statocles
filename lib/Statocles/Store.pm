@@ -5,6 +5,7 @@ use Statocles::Class;
 use Scalar::Util qw( blessed );
 use Statocles::Document;
 use YAML;
+use List::MoreUtils qw( firstidx );
 use File::Spec::Functions qw( splitdir );
 
 my $DT_FORMAT = '%Y-%m-%d %H:%M:%S';
@@ -68,41 +69,35 @@ sub read_document {
     my ( $self, $path ) = @_;
     diag( 1, "Read document: ", $path );
     my $full_path = $self->path->child( $path );
-    open my $fh, '<:encoding(UTF-8)', $full_path or die "Could not open '$full_path' for reading: $!\n";
-    my $doc;
-    my $buffer = '';
-    while ( my $line = <$fh> ) {
-        if ( !$doc ) { # Building YAML
-            if ( $line =~ /^---/ && $buffer ) {
-                eval {
-                    $doc = YAML::Load( $buffer );
-                };
-                if ( $@ ) {
-                    die "Error parsing YAML in '$full_path'\n$@";
-                }
-                $buffer = '';
-            }
-            else {
-                $buffer .= $line;
-            }
-        }
-        else { # Building Markdown
-            $buffer .= $line;
-        }
-    }
-    close $fh;
+    my @lines = $full_path->lines_utf8;
 
-    # Clear the remaining buffer
-    if ( !$doc && $buffer ) { # Must be only YAML
+    shift @lines while $lines[0] =~ /^---/;
+    # The next --- is the end of the YAML frontmatter
+    my $i = firstidx { /^---/ } @lines;
+
+    my $doc;
+    # If we found the marker between YAML and Markdown
+    if ( $i > 0 ) {
+        # Before the marker is YAML
         eval {
-            $doc = YAML::Load( $buffer );
+            $doc = YAML::Load( join "", @lines[0..$i-1] );
         };
         if ( $@ ) {
             die "Error parsing YAML in '$full_path'\n$@";
         }
+        # After the marker is Markdown
+        if ( !$doc->{content} ) {
+            $doc->{content} = join "", @lines[$i+1..$#lines];
+        }
     }
-    elsif ( !$doc->{content} && $buffer ) {
-        $doc->{content} = $buffer;
+    # Otherwise, must be completely YAML
+    else {
+        eval {
+            $doc = YAML::Load( join "", @lines );
+        };
+        if ( $@ ) {
+            die "Error parsing YAML in '$full_path'\n$@";
+        }
     }
 
     return $self->_thaw_document( $doc );
