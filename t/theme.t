@@ -3,6 +3,7 @@ use Statocles::Test;
 use Statocles::Theme;
 use Statocles::Template;
 use Cwd qw( getcwd );
+use Scalar::Util qw( refaddr );
 my $SHARE_DIR = path( __DIR__, 'share' );
 
 subtest 'attributes' => sub {
@@ -119,6 +120,16 @@ subtest 'templates from directory' => sub {
         my $theme_path = path(qw( theme default ));
         like $theme->store->path, qr{\Q$theme_path\E$}
     };
+};
+
+subtest 'theme caching' => sub {
+    my $theme = Statocles::Theme->new(
+        store => '::default',
+    );
+
+    my $tmpl = $theme->template( site => 'sitemap.xml' );
+    $theme->clear;
+    isnt refaddr $theme->template( site => 'sitemap.xml' ), refaddr $tmpl, 'new object created';
 };
 
 done_testing;

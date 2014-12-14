@@ -32,6 +32,8 @@ has _templates => (
     is => 'ro',
     isa => HashRef[HashRef[InstanceOf['Statocles::Template']]],
     default => sub { {} },
+    lazy => 1,  # Must be lazy or the clearer won't re-init the default
+    clearer => 'clear',
 );
 
 =method BUILDARGS
