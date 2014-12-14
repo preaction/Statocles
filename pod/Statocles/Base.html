@@ -82,13 +82,19 @@
 <h1 id="SYNOPSIS">SYNOPSIS</h1>
 
 <pre><code>    package MyModule;
-    use Statocles::Module;</code></pre>
+    use Statocles::Base;
+
+    use Statocles::Base &#39;Class&#39;;
+    use Statocles::Base &#39;Role&#39;;
+    use Statocles::Base &#39;Test&#39;;</code></pre>
 
 <h1 id="DESCRIPTION">DESCRIPTION</h1>
 
-<p>This is the base module that all Statocles modules should use (unless they&#39;re using a more-specific base).</p>
+<p>This is the base module that all Statocles modules should use.</p>
 
-<p>This module imports the following into your namespace:</p>
+<h1 id="MODULES">MODULES</h1>
+
+<p>This module always imports the following into your namespace:</p>
 
 <dl>
 
@@ -116,6 +122,100 @@
 <dd>
 
 <p>We do a lot of work with the filesystem.</p>
+
+</dd>
+<dt><a href="https://metacpan.org/pod/Time::Piece">Time::Piece</a></dt>
+<dd>
+
+</dd>
+</dl>
+
+<h1 id="BUNDLES">BUNDLES</h1>
+
+<p>The following bundles are available. You may import one or more of these by name.</p>
+
+<h2 id="Class">Class</h2>
+
+<p>The class bundle makes your package into a class and includes:</p>
+
+<dl>
+
+<dt><a href="https://metacpan.org/pod/Moo::Lax">Moo::Lax</a></dt>
+<dd>
+
+</dd>
+<dt><a href="https://metacpan.org/pod/Types::Standard">Types::Standard</a> &#39;:all&#39;</dt>
+<dd>
+
+</dd>
+<dt><a href="https://metacpan.org/pod/Types::Path::Tiny">Types::Path::Tiny</a> &#39;:all&#39;</dt>
+<dd>
+
+</dd>
+<dt><a href="/Statocles/pod/Statocles/Types.html">Statocles::Types</a> &#39;:all&#39;</dt>
+<dd>
+
+</dd>
+</dl>
+
+<h2 id="Role">Role</h2>
+
+<p>The role bundle makes your package into a role and includes:</p>
+
+<dl>
+
+<dt><a href="https://metacpan.org/pod/Moo::Role::Lax">Moo::Role::Lax</a></dt>
+<dd>
+
+</dd>
+<dt><a href="https://metacpan.org/pod/Types::Standard">Types::Standard</a> &#39;:all&#39;</dt>
+<dd>
+
+</dd>
+<dt><a href="https://metacpan.org/pod/Types::Path::Tiny">Types::Path::Tiny</a> &#39;:all&#39;</dt>
+<dd>
+
+</dd>
+<dt><a href="/Statocles/pod/Statocles/Types.html">Statocles::Types</a> &#39;:all&#39;</dt>
+<dd>
+
+</dd>
+</dl>
+
+<h2 id="Test">Test</h2>
+
+<p>The test bundle includes:</p>
+
+<dl>
+
+<dt><a href="https://metacpan.org/pod/Test::More">Test::More</a></dt>
+<dd>
+
+</dd>
+<dt><a href="https://metacpan.org/pod/Test::Deep">Test::Deep</a></dt>
+<dd>
+
+</dd>
+<dt><a href="https://metacpan.org/pod/Test::Differences">Test::Differences</a></dt>
+<dd>
+
+</dd>
+<dt><a href="https://metacpan.org/pod/Test::Exception">Test::Exception</a></dt>
+<dd>
+
+</dd>
+<dt><a href="https://metacpan.org/pod/Dir::Self">Dir::Self</a> &#39;__DIR__&#39;</dt>
+<dd>
+
+</dd>
+<dt><a href="https://metacpan.org/pod/Path::Tiny">Path::Tiny</a> &#39;path&#39;, &#39;tempdir&#39;</dt>
+<dd>
+
+</dd>
+<dt><a href="/Statocles/pod/Statocles/Site.html">Statocles::Site</a></dt>
+<dd>
+
+<p>In order to have logging, a site object must be created.</p>
 
 </dd>
 </dl>

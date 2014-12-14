@@ -5,7 +5,53 @@
         <link>http://preaction.github.io/Statocles/blog/index.html</link>
         <atom:link href="http://preaction.github.io/Statocles/blog/index.rss" rel="self" type="application/rss+xml" />
         <description>Blog feed of Statocles</description>
-        <generator>Statocles 0.026</generator>
+        <generator>Statocles 0.028</generator>
+        <item>
+            <title>Release v0.028</title>
+            <link>http://preaction.github.io/Statocles/blog/2014/12/14/release-v0.028.html</link>
+            <guid>http://preaction.github.io/Statocles/blog/2014/12/14/release-v0.028.html</guid>
+            <description><![CDATA[
+                <p>This release adds automatic rebuilding of the site when changes are made (OSX
+only, so far). We're now using Mojo::Log for logging (instead of a hacked up
+<code>diag()</code> sub).</p>
+
+<p>A breaking change to applications: The <code>index()</code> method is no longer used by
+the site to determine what is the front page of the app, appropriate to
+transform into the front page of the site. Now, the first item returned by
+<code>pages()</code> must be the index page. This reduces the number of methods
+applications need, and made it easier to implement the automatic rebuilding.</p>
+
+<p>Finally, some much-needed cleanup as part of the automatic rebuilding feature.
+Still plenty of cleanup to go.</p>
+
+<p>In this release:</p>
+
+<ul>
+<li>set the default log level to "info"</li>
+<li>fix test only emits "Watching" if we have the right module</li>
+<li>use bundles to remove extra Base modules</li>
+<li>fix new "redundant argument in sprintf warning"</li>
+<li>change all instances of print to say</li>
+<li>use Mojo::Log for logging</li>
+<li>create type library for types and coercions</li>
+<li>watch for filesystem events and rebuild the site</li>
+<li>remove index method from apps</li>
+<li>remove caching from Blog app</li>
+<li>add clear method to theme to clear template cache</li>
+<li>add method to clear document cache</li>
+<li>clean up reading documents and parsing frontmatter</li>
+<li>remove the Statocles site.yml from CPAN tarballs</li>
+</ul>
+
+                    <p><a href="http://preaction.github.io/Statocles/blog/2014/12/14/release-v0.028.html#section-2">Continue reading...</a></p>
+                <p>Tags:
+                    <a href="/blog/tag/release/index.html">release</a>
+                </p>
+            ]]></description>
+            <pubDate>
+                Sun, 14 Dec 2014 00:00:00 -0600
+            </pubDate>
+        </item>
         <item>
             <title>Release v0.027</title>
             <link>http://preaction.github.io/Statocles/blog/2014/12/08/release-v0.027.html</link>

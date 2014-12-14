@@ -75,107 +75,37 @@
 
         </header>
         <div class="main container">
-            <h1 id="NAME">NAME</h1>
+            <p>This release adds automatic rebuilding of the site when changes are made (OSX
+only, so far). We&#39;re now using Mojo::Log for logging (instead of a hacked up
+<code>diag()</code> sub).</p>
 
-<p>Statocles::Site - An entire, configured website</p>
+<p>A breaking change to applications: The <code>index()</code> method is no longer used by
+the site to determine what is the front page of the app, appropriate to
+transform into the front page of the site. Now, the first item returned by
+<code>pages()</code> must be the index page. This reduces the number of methods
+applications need, and made it easier to implement the automatic rebuilding.</p>
 
-<h1 id="SYNOPSIS">SYNOPSIS</h1>
+<p>Finally, some much-needed cleanup as part of the automatic rebuilding feature.
+Still plenty of cleanup to go.</p>
 
-<pre><code>    my $site = Statocles::Site-&gt;new(
-        title =&gt; &#39;My Site&#39;,
-        nav =&gt; [
-            { title =&gt; &#39;Home&#39;, href =&gt; &#39;/&#39; },
-            { title =&gt; &#39;Blog&#39;, href =&gt; &#39;/blog&#39; },
-        ],
-        apps =&gt; {
-            blog =&gt; Statocles::App::Blog-&gt;new( ... ),
-        },
-    );
+<p>In this release:</p>
 
-    $site-&gt;deploy;</code></pre>
-
-<h1 id="DESCRIPTION">DESCRIPTION</h1>
-
-<p>A Statocles::Site is a collection of <a href="/Statocles/pod/Statocles/App.html">applications</a>.</p>
-
-<h1 id="ATTRIBUTES">ATTRIBUTES</h1>
-
-<h2 id="title">title</h2>
-
-<p>The site title, used in templates.</p>
-
-<h2 id="base_url">base_url</h2>
-
-<p>The base URL of the site, including protocol and domain. Used mostly for feeds.</p>
-
-<h2 id="apps">apps</h2>
-
-<p>The applications in this site. Each application has a name that can be used later.</p>
-
-<h2 id="index">index</h2>
-
-<p>The application to use as the site index. The application&#39;s individual index() method will be called to get the index page.</p>
-
-<h2 id="nav">nav</h2>
-
-<p>Named navigation lists. A hash of arrays of hashes with the following keys:</p>
-
-<pre><code>    title - The title of the link
-    href - The href of the link</code></pre>
-
-<p>The most likely name for your navigation will be <code>main</code>. Navigation names are defined by your <a href="/Statocles/pod/Statocles/Theme.html">theme</a>. For example:</p>
-
-<pre><code>    {
-        main =&gt; [
-            {
-                title =&gt; &#39;Blog&#39;,
-                href =&gt; &#39;/blog/index.html&#39;,
-            },
-            {
-                title =&gt; &#39;Contact&#39;,
-                href =&gt; &#39;/contact.html&#39;,
-            },
-        ],
-    }</code></pre>
-
-<h2 id="build_store">build_store</h2>
-
-<p>The <a href="/Statocles/pod/Statocles/Store.html">store</a> object to use for <code>build()</code>.</p>
-
-<h2 id="deploy_store">deploy_store</h2>
-
-<p>The <a href="/Statocles/pod/Statocles/Store.html">store</a> object to use for <code>deploy()</code>. Defaults to <a href="https://metacpan.org/pod/build_store">build_store</a>.</p>
-
-<h2 id="log">log</h2>
-
-<p>A <a href="https://metacpan.org/pod/Mojo::Log">Mojo::Log</a> object to write logs to. Defaults to STDERR.</p>
-
-<h1 id="METHODS">METHODS</h1>
-
-<h2 id="BUILD">BUILD</h2>
-
-<p>Register this site as the global site.</p>
-
-<h2 id="app-name">app( name )</h2>
-
-<p>Get the app with the given <code>name</code>.</p>
-
-<h2 id="build">build</h2>
-
-<p>Build the site in its build location</p>
-
-<h2 id="deploy">deploy</h2>
-
-<p>Write each application to its destination.</p>
-
-<h2 id="write-store">write( store )</h2>
-
-<p>Write the application to the given <a href="/Statocles/pod/Statocles/Store.html">store</a>.</p>
-
-<h2 id="url-path">url( path )</h2>
-
-<p>Get the full URL to the given path by prepending the <code>base_url</code>.</p>
-
+<ul>
+<li>set the default log level to &quot;info&quot;</li>
+<li>fix test only emits &quot;Watching&quot; if we have the right module</li>
+<li>use bundles to remove extra Base modules</li>
+<li>fix new &quot;redundant argument in sprintf warning&quot;</li>
+<li>change all instances of print to say</li>
+<li>use Mojo::Log for logging</li>
+<li>create type library for types and coercions</li>
+<li>watch for filesystem events and rebuild the site</li>
+<li>remove index method from apps</li>
+<li>remove caching from Blog app</li>
+<li>add clear method to theme to clear template cache</li>
+<li>add method to clear document cache</li>
+<li>clean up reading documents and parsing frontmatter</li>
+<li>remove the Statocles site.yml from CPAN tarballs</li>
+</ul>
 
 
         </div>

@@ -2,10 +2,56 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://preaction.github.io/Statocles/blog/index.html</id>
     <title>Statocles</title>
-    <updated>2014-12-09T02:26:02Z</updated>
+    <updated>2014-12-14T06:24:12Z</updated>
     <link href="http://preaction.github.io/Statocles/blog/index.atom" rel="self" />
     <link href="http://preaction.github.io/Statocles/blog/index.html" rel="alternate" />
-    <generator version="0.026">Statocles</generator>
+    <generator version="0.028">Statocles</generator>
+    <entry>
+        <id>http://preaction.github.io/Statocles/blog/2014/12/14/release-v0.028.html</id>
+        <title>Release v0.028</title>
+        <author><name>preaction</name></author>
+        <link href="http://preaction.github.io/Statocles/blog/2014/12/14/release-v0.028.html" rel="alternate" />
+        <content type="html"><![CDATA[
+            <p>This release adds automatic rebuilding of the site when changes are made (OSX
+only, so far). We're now using Mojo::Log for logging (instead of a hacked up
+<code>diag()</code> sub).</p>
+
+<p>A breaking change to applications: The <code>index()</code> method is no longer used by
+the site to determine what is the front page of the app, appropriate to
+transform into the front page of the site. Now, the first item returned by
+<code>pages()</code> must be the index page. This reduces the number of methods
+applications need, and made it easier to implement the automatic rebuilding.</p>
+
+<p>Finally, some much-needed cleanup as part of the automatic rebuilding feature.
+Still plenty of cleanup to go.</p>
+
+<p>In this release:</p>
+
+<ul>
+<li>set the default log level to "info"</li>
+<li>fix test only emits "Watching" if we have the right module</li>
+<li>use bundles to remove extra Base modules</li>
+<li>fix new "redundant argument in sprintf warning"</li>
+<li>change all instances of print to say</li>
+<li>use Mojo::Log for logging</li>
+<li>create type library for types and coercions</li>
+<li>watch for filesystem events and rebuild the site</li>
+<li>remove index method from apps</li>
+<li>remove caching from Blog app</li>
+<li>add clear method to theme to clear template cache</li>
+<li>add method to clear document cache</li>
+<li>clean up reading documents and parsing frontmatter</li>
+<li>remove the Statocles site.yml from CPAN tarballs</li>
+</ul>
+
+                <p><a href="http://preaction.github.io/Statocles/blog/2014/12/14/release-v0.028.html#section-2">Continue reading...</a></p>
+            <p>Tags:
+                <a href="/blog/tag/release/index.html">release</a>
+            </p>
+        ]]></content>
+        <updated>2014-12-14T00:00:00Z</updated>
+        <category term="ARRAY(0x7fc43ce475d8)" />
+    </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2014/12/08/release-v0.027.html</id>
         <title>Release v0.027</title>
@@ -30,7 +76,7 @@ finally fixed <a href="https://github.com/preaction/Statocles/issues/110">the Wi
             </p>
         ]]></content>
         <updated>2014-12-08T00:00:00Z</updated>
-        <category term="ARRAY(0x7ff16cc96c60)" />
+        <category term="ARRAY(0x7fc43ce5e0c0)" />
     </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2014/12/07/statocles-initial-public-(alpha)-release.html</id>
@@ -69,7 +115,7 @@ Setup guide</a>. If you have any issues, report them on
             </p>
         ]]></content>
         <updated>2014-12-07T00:00:00Z</updated>
-        <category term="ARRAY(0x7ff16c491d30)" />
+        <category term="ARRAY(0x7fc44168b658)" />
     </entry>
 </feed>
 
