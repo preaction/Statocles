@@ -48,32 +48,6 @@ has theme => (
     coerce => Statocles::Theme->coercion,
 );
 
-has _pages => (
-    is => 'ro',
-    isa => ArrayRef[ConsumerOf['Statocles::Page']],
-    lazy => 1,
-    builder => '_build_pages',
-);
-
-sub _build_pages {
-    my ( $self ) = @_;
-    my @pages;
-
-    for my $doc ( @{ $self->store->documents } ) {
-        my $url = $doc->path;
-        $url =~ s/[.]yml$/.html/;
-
-        push @pages, Statocles::Page::Document->new(
-            path => join( '/', $self->url_root, $url ),
-            document => $doc,
-            layout => $self->theme->template( site => 'layout.html' ),
-            published => Time::Piece->new,
-        );
-    }
-
-    return \@pages;
-}
-
 =method pages
 
 Get the L<pages|Statocles::Page> for this app.
@@ -82,21 +56,28 @@ Get the L<pages|Statocles::Page> for this app.
 
 sub pages {
     my ( $self ) = @_;
-    return @{ $self->_pages };
-}
+    my @pages;
 
-=method index
+    for my $doc ( @{ $self->store->documents } ) {
+        my $url = $doc->path;
+        $url =~ s/[.]yml$/.html/;
 
-The main index page for this app. This app may be used for the L<site
-index|Statocles::Site/index>.
+        my $page = Statocles::Page::Document->new(
+            path => join( '/', $self->url_root, $url ),
+            document => $doc,
+            layout => $self->theme->template( site => 'layout.html' ),
+            published => Time::Piece->new,
+        );
 
-=cut
+        if ( $url eq 'index.html' ) {
+            unshift @pages, $page;
+        }
+        else {
+            push @pages, $page;
+        }
+    }
 
-sub index {
-    my ( $self ) = @_;
-    my $index_path = join "/", $self->url_root, 'index.html';
-    $index_path =~ s{/+}{/}g;
-    return first { $_->path eq $index_path } $self->pages;
+    return @pages;
 }
 
 1;

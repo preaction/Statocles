@@ -114,6 +114,8 @@ subtest 'perldoc pages' => sub {
 
         my @pages = $app->pages;
         is scalar @pages, scalar keys %page_tests, 'correct number of pages';
+        is $pages[0]->path, '/index.html', 'index page must come first';
+
         for my $page ( @pages ) {
             isa_ok $page, 'Statocles::Page::Document';
             isa_ok $page->last_modified, 'Time::Piece', 'must set a last_modified';
@@ -150,13 +152,6 @@ subtest 'perldoc pages' => sub {
         local $SIG{__WARN__} = sub { push @warnings, $_[0] };
 
         $test_pages->( $app );
-
-        subtest 'index page' => sub {
-            my $index = $app->index;
-            isa_ok $index, 'Statocles::Page::Document';
-            is $index->path, '/index.html';
-            ok grep { $_->path eq $index->path } $app->pages;
-        };
 
         ok !@warnings, "no warnings!" or diag join "\n", @warnings;
     };

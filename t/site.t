@@ -48,7 +48,7 @@ subtest 'site index and navigation' => sub {
         },
     );
     my $blog = $site->app( 'blog' );
-    my $page = ( $blog->index )[0];
+    my $page = ( $blog->pages )[0];
 
     subtest 'build' => sub {
         $site->build;

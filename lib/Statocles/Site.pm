@@ -162,19 +162,14 @@ sub write {
     for my $app_name ( keys %{ $apps } ) {
         my $app = $apps->{$app_name};
 
-        my $index_path;
+        my @app_pages = $app->pages;
         if ( $self->index eq $app_name ) {
-            $index_path = ($app->index)[0]->path;
+            # Rename the app's page so that we don't get two pages with identical
+            # content, which is bad for SEO
+            $app_pages[0]->path( '/index.html' );
         }
 
-        for my $page ( $app->pages ) {
-            if ( $index_path && $page->path eq $index_path ) {
-                # Rename the app's page so that we don't get two pages with identical
-                # content, which is bad for SEO
-                $page->path( '/index.html' );
-            }
-            push @pages, $page;
-        }
+        push @pages, @app_pages;
     }
 
     # Rewrite page content to add base URL

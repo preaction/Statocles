@@ -166,16 +166,26 @@ sub pages {
             }
         }
 
-        my $page_url = $module eq $self->index_module ? 'index.html' : "$module.html";
-        $page_url =~ s{::}{/}g;
+        if ( $module eq $self->index_module ) {
+            unshift @pages, Statocles::Page::Plain->new(
+                path => join( '/', $self->url_root, 'index.html' ),
+                layout => $self->theme->template( site => 'layout.html' ),
+                template => $self->theme->template( perldoc => 'pod.html' ),
+                content => "$dom",
+            );
+        }
+        else {
+            my $page_url = "$module.html";
+            $page_url =~ s{::}{/}g;
 
-        push @pages, Statocles::Page::Plain->new(
-            path => join( '/', $self->url_root, $page_url ),
-            layout => $self->theme->template( site => 'layout.html' ),
-            template => $self->theme->template( perldoc => 'pod.html' ),
-            content => "$dom",
-        );
+            push @pages, Statocles::Page::Plain->new(
+                path => join( '/', $self->url_root, $page_url ),
+                layout => $self->theme->template( site => 'layout.html' ),
+                template => $self->theme->template( perldoc => 'pod.html' ),
+                content => "$dom",
+            );
 
+        }
     }
 
     return @pages;
