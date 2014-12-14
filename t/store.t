@@ -82,6 +82,15 @@ subtest 'read documents' => sub {
     );
     cmp_deeply $store->documents, bag( @exp_docs ) or diag explain $store->documents;
 
+    subtest 'clear documents' => sub {
+        # Edit the document
+        $store->documents->[0]->title( 'This is a new title' );
+        # Clear all the documents
+        $store->clear;
+        # Re-read them from disk
+        cmp_deeply $store->documents, bag( @exp_docs ) or diag explain $store->documents;
+    };
+
     subtest 'bad documents' => sub {
         my $store = Statocles::Store->new(
             path => $SHARE_DIR->child( 'error' ),

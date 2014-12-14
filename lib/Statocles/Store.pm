@@ -27,6 +27,10 @@ has path => (
 
 All the L<documents|Statocles::Document> currently read by this store.
 
+=method clear()
+
+Clear the cached documents in this Store.
+
 =cut
 
 has documents => (
@@ -34,6 +38,7 @@ has documents => (
     isa => ArrayRef[InstanceOf['Statocles::Document']],
     lazy => 1,
     builder => 'read_documents',
+    clearer => 'clear',
 );
 
 =method read_documents()
