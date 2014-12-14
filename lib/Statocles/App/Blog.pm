@@ -110,13 +110,13 @@ sub command {
     my ( $self, $name, @argv ) = @_;
 
     if ( !$argv[0] ) {
-        print STDERR "ERROR: Missing command\n";
-        print STDERR eval "qq{$USAGE_INFO}";
+        say STDERR "ERROR: Missing command";
+        say STDERR eval "qq{$USAGE_INFO}";
         return 1;
     }
 
     if ( $argv[0] eq 'help' ) {
-        print eval "qq{$USAGE_INFO}";
+        say eval "qq{$USAGE_INFO}";
     }
     elsif ( $argv[0] eq 'post' ) {
         my %opt;
@@ -126,7 +126,7 @@ sub command {
 
         my $title = join " ", @argv[1..$#argv];
         if ( !$ENV{EDITOR} && !$title ) {
-            print STDERR <<"ENDHELP";
+            say STDERR <<"ENDHELP";
 Title is required when \$EDITOR is not set.
 
 Usage: $name post <title>
@@ -169,12 +169,12 @@ ENDHELP
         $slug =~ s/\s+/-/g;
         my $path = Path::Tiny->new( @date_parts, "$slug.yml" );
         my $full_path = $self->store->write_document( $path => \%doc );
-        print "New post at: $full_path\n";
+        say "New post at: $full_path";
 
     }
     else {
-        print STDERR qq{ERROR: Unknown command "$argv[0]"\n};
-        print STDERR eval "qq{$USAGE_INFO}";
+        say STDERR qq{ERROR: Unknown command "$argv[0]"};
+        say STDERR eval "qq{$USAGE_INFO}";
         return 1;
     }
 

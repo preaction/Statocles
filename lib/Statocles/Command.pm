@@ -44,7 +44,7 @@ sub main {
     return pod2usage(0) if $opt{help};
 
     if ( $opt{version} ) {
-        print "Statocles version $Statocles::Command::VERSION (Perl $^V)\n";
+        say "Statocles version $Statocles::Command::VERSION (Perl $^V)";
         return 0;
     }
 
@@ -72,7 +72,7 @@ sub main {
             my $app = $apps->{$app_name};
             my $root = $app->url_root;
             my $class = ref $app;
-            print "$app_name ($root -- $class)\n";
+            say "$app_name ($root -- $class)";
         }
         return 0;
     }
@@ -91,7 +91,7 @@ sub main {
         # Find the port we're listening on
         my $id = $daemon->acceptors->[0];
         my $handle = $daemon->ioloop->acceptor( $id )->handle;
-        print "Listening on " . sprintf( 'http://%s:%d', $handle->sockhost || '127.0.0.1', $handle->sockport ) . "\n";
+        say "Listening on " . sprintf( 'http://%s:%d', $handle->sockhost || '127.0.0.1', $handle->sockport );
 
         # Give control to the IOLoop
         Mojo::IOLoop->start;

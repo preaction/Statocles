@@ -65,11 +65,11 @@ around BUILDARGS => sub {
             || $caller_class->isa( 'Sub::Quote' )
             || $caller_class->isa( 'Method::Generate::Constructor' )
         ) {
-            #; print "Class: $caller_class\n";
+            #; say "Class: $caller_class";
             $i++;
             $caller_class = (caller $i)[0];
         }
-        #; print "Class: $caller_class\n";
+        #; say "Class: $caller_class";
         $args->{path} = join " line ", (caller($i))[1,2];
     }
     return $args;
