@@ -233,6 +233,7 @@ subtest 'run the http daemon' => sub {
 
     # We want it to pick a random port
     local $ENV{MOJO_LISTEN} = 'http://127.0.0.1';
+    local $ENV{MOJO_LOG_LEVEL} = 'info'; # But sometimes this isn't set?
 
     my @args = (
         '--config' => "$config_fn",
