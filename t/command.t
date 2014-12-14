@@ -244,8 +244,15 @@ subtest 'run the http daemon' => sub {
 
     my $store_path = $app->site->app( 'blog' )->store->path;
     my $theme_path = $app->site->app( 'blog' )->theme->store->path;
-    like $err, qr{Watching for changes in '$store_path'}, 'watch is reported';
-    like $err, qr{Watching for changes in '$theme_path'}, 'watch is reported';
+
+    if ( eval { require Mac::FSEvents; 1; } ) {
+        like $err, qr{Watching for changes in '$store_path'}, 'watch is reported';
+        like $err, qr{Watching for changes in '$theme_path'}, 'watch is reported';
+    }
+    else {
+        ok !$err, 'nothing on stderr' or diag $err;
+    }
+
     is $exit, 0;
     like $out, qr{\QListening on http://127.0.0.1:$port\E\n},
         'contains http port information';
