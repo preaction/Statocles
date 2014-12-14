@@ -2,7 +2,6 @@ package Statocles::App::Blog;
 # ABSTRACT: A blog application
 
 use Statocles::Class;
-use Memoize qw( memoize );
 use Getopt::Long qw( GetOptionsFromArray );
 use Statocles::Store;
 use Statocles::Theme;
@@ -223,7 +222,6 @@ sub post_pages {
     }
     return @pages;
 }
-memoize( 'post_pages' );
 
 =method index()
 
@@ -299,7 +297,6 @@ sub index {
 
     return ( @pages, @feed_pages );
 }
-memoize( 'index' );
 
 =method tag_pages()
 
@@ -357,7 +354,6 @@ sub tag_pages {
 
     return @pages;
 }
-memoize( 'tag_pages' );
 
 =method pages()
 

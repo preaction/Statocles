@@ -434,11 +434,4 @@ ENDCONTENT
     };
 };
 
-subtest 'cache pages' => sub {
-    my ( $index1 ) = $app->index;
-    my ( $index2 ) = $app->index;
-    $index1->path( '/index.html' );
-    is $index2->path, $index1->path;
-};
-
 done_testing;
