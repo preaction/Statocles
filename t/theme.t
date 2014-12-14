@@ -1,5 +1,5 @@
 
-use Statocles::Test;
+use Statocles::Base 'Test';
 use Statocles::Theme;
 use Statocles::Template;
 use Cwd qw( getcwd );

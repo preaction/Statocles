@@ -1,7 +1,7 @@
 package Statocles::Page::Feed;
 # ABSTRACT: A page for a feed of another page
 
-use Statocles::Class;
+use Statocles::Base 'Class';
 with 'Statocles::Page';
 
 =attr page

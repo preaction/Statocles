@@ -1,7 +1,7 @@
 package Statocles::App::Perldoc;
 # ABSTRACT: Render documentation for Perl modules
 
-use Statocles::Class;
+use Statocles::Base 'Class';
 extends 'Statocles::App';
 use Statocles::Theme;
 use Statocles::Page::Plain;

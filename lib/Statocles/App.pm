@@ -1,7 +1,7 @@
 package Statocles::App;
 # ABSTRACT: Base class for Statocles applications
 
-use Statocles::Class;
+use Statocles::Base 'Class';
 
 1;
 __END__

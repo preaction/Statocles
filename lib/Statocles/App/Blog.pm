@@ -1,7 +1,7 @@
 package Statocles::App::Blog;
 # ABSTRACT: A blog application
 
-use Statocles::Class;
+use Statocles::Base 'Class';
 use Getopt::Long qw( GetOptionsFromArray );
 use Statocles::Store;
 use Statocles::Theme;

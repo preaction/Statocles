@@ -1,7 +1,7 @@
 package Statocles::Site;
 # ABSTRACT: An entire, configured website
 
-use Statocles::Class;
+use Statocles::Base 'Class';
 use Statocles::Store;
 use Mojo::URL;
 use Mojo::DOM;

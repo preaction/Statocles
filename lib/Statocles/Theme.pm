@@ -1,7 +1,7 @@
 package Statocles::Theme;
 # ABSTRACT: Templates, headers, footers, and navigation
 
-use Statocles::Class;
+use Statocles::Base 'Class';
 use Statocles::Store;
 use File::Share qw( dist_dir );
 use Scalar::Util qw( blessed );

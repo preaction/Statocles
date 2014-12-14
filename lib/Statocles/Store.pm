@@ -1,7 +1,7 @@
 package Statocles::Store;
 # ABSTRACT: A repository for Documents and Pages
 
-use Statocles::Class;
+use Statocles::Base 'Class';
 use Scalar::Util qw( blessed );
 use Statocles::Document;
 use YAML;

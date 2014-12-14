@@ -1,5 +1,5 @@
 
-use Statocles::Test;
+use Statocles::Base 'Test';
 use Capture::Tiny qw( capture );
 use File::Spec::Functions qw( splitdir );
 use Statocles::Theme;

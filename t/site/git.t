@@ -1,5 +1,5 @@
 
-use Statocles::Test;
+use Statocles::Base 'Test';
 BEGIN {
     my $git_version = ( split ' ', `git --version` )[-1];
     plan skip_all => 'Git not installed' unless $git_version;

@@ -3,7 +3,7 @@
 # the bin/statocles frontend's delegation to Statocles::Command
 # works.
 
-use Statocles::Test;
+use Statocles::Base 'Test';
 my $BIN = path( __DIR__, '..', '..', 'bin', 'statocles' );
 use Capture::Tiny qw( capture );
 

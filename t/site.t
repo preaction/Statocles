@@ -1,5 +1,5 @@
 
-use Statocles::Test;
+use Statocles::Base 'Test';
 use Statocles::Site;
 use Statocles::Theme;
 use Statocles::Store;

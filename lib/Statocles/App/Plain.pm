@@ -1,7 +1,7 @@
 package Statocles::App::Plain;
 # ABSTRACT: Plain documents made into pages with no extras
 
-use Statocles::Class;
+use Statocles::Base 'Class';
 extends 'Statocles::App';
 use List::Util qw( first );
 use Statocles::Store;

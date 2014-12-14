@@ -1,7 +1,7 @@
 package Statocles::Page::List;
 # ABSTRACT: A page presenting a list of other pages
 
-use Statocles::Class;
+use Statocles::Base 'Class';
 with 'Statocles::Page';
 use List::Util qw( max );
 use List::MoreUtils qw( part );

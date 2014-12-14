@@ -1,5 +1,5 @@
 
-use Statocles::Test;
+use Statocles::Base 'Test';
 use Statocles::Site;
 use Statocles::App::Perldoc;
 use Mojo::DOM;

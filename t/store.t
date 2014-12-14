@@ -1,5 +1,5 @@
 
-use Statocles::Test;
+use Statocles::Base 'Test';
 my $SHARE_DIR = path( __DIR__, 'share' );
 $Statocles::SITE = Statocles::Site->new( build_store => '.' );
 

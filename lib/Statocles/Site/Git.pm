@@ -1,7 +1,7 @@
 package Statocles::Site::Git;
 # ABSTRACT: A git-based site
 
-use Statocles::Class;
+use Statocles::Base 'Class';
 extends 'Statocles::Site';
 
 use File::Copy::Recursive qw( dircopy );

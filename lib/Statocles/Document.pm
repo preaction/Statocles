@@ -1,7 +1,7 @@
 package Statocles::Document;
 # ABSTRACT: Base class for all Statocles documents
 
-use Statocles::Class;
+use Statocles::Base 'Class';
 
 =attr path
 

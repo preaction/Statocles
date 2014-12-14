@@ -1,7 +1,7 @@
 package Statocles::Command;
 # ABSTRACT: The statocles command-line interface
 
-use Statocles::Class;
+use Statocles::Base 'Class';
 use Getopt::Long qw( GetOptionsFromArray );
 use Pod::Usage::Return qw( pod2usage );
 use File::Share qw( dist_dir );

@@ -1,7 +1,7 @@
 package Statocles::Page;
 # ABSTRACT: Render documents into HTML
 
-use Statocles::Role;
+use Statocles::Base 'Role';
 use Statocles::Template;
 use Text::Markdown;
 

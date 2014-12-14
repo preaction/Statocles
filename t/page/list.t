@@ -1,5 +1,5 @@
 
-use Statocles::Test;
+use Statocles::Base 'Test';
 use Statocles::Page::Document;
 use Statocles::Document;
 use Statocles::Page::List;

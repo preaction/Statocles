@@ -1,7 +1,7 @@
 package Statocles::Page::Plain;
 # ABSTRACT: A plain page (with templates)
 
-use Statocles::Class;
+use Statocles::Base 'Class';
 with 'Statocles::Page';
 
 =attr content
