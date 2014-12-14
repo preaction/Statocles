@@ -158,6 +158,69 @@ sub main {
             # content.
             $self->site->deploy_store->path;
 
+        # Watch for filesystem events and rebuild the site Right now this only
+        # works on OSX. We should spin this off into Mojo::IOLoop::FSEvents and
+        # make it work cross-platform, including a pure-Perl fallback
+        my $can_watch = eval { require Mac::FSEvents; 1 };
+        if ( !$can_watch && $^O =~ /darwin/ ) {
+            say "To watch for filesystem changes and automatically rebuild the site, ",
+                "install the Mac::FSEvents module from CPAN";
+        }
+
+        if ( $can_watch ) {
+
+            # Collect the paths to watch
+            my %watches = ();
+            for my $app ( values %{ $self->site->apps } ) {
+                if ( $app->can( 'theme' ) ) {
+                    push @{ $watches{ $app->theme->store->path } }, $app->theme;
+                }
+
+                if ( $app->can( 'store' ) ) {
+                    push @{ $watches{ $app->store->path } }, $app->store;
+                }
+
+            }
+
+            require Mojo::IOLoop::Stream;
+            my $ioloop = Mojo::IOLoop->singleton;
+            use Cwd qw( getcwd );
+            my $build_dir = Path::Tiny->new( getcwd, $self->site->build_store->path );
+
+            for my $path ( keys %watches ) {
+                say "Watching for changes in '$path'";
+
+                my $fs = Mac::FSEvents->new( {
+                    path => "$path",
+                    latency => 1.0,
+                } );
+
+                my $handle = $fs->watch;
+                $ioloop->reactor->io( $handle, sub {
+                    my ( $reactor, $writable ) = @_;
+
+                    my $rebuild;
+                    REBUILD:
+                    while ( $reactor->is_readable( $handle ) ) {
+                        for my $event ( $fs->read_events ) {
+                            if ( $event->path =~ /^\Q$build_dir/ ) {
+                                next;
+                            }
+
+                            $_->clear for @{ $watches{ $path } };
+                            $rebuild = 1;
+                        }
+                    }
+
+                    if ( $rebuild ) {
+                        say "Path '$path' changed... Rebuilding";
+                        $self->site->build;
+                    }
+                } );
+                $ioloop->reactor->watch( $handle, 1, 0 );
+            }
+        }
+
         my $serve_static = sub {
             my ( $c ) = @_;
             my $path = Mojo::Path->new( $c->stash->{path} );

@@ -5,6 +5,7 @@ use FindBin;
 use Capture::Tiny qw( capture );
 use Statocles::Command;
 use Statocles::Site;
+use File::Copy::Recursive qw( dircopy );
 use Mojo::IOLoop;
 use Test::Mojo;
 use Beam::Wire;
@@ -13,11 +14,14 @@ use YAML;
 # Build a config file so we can test config loading and still use
 # temporary directories
 my $tmp = tempdir;
+dircopy $SHARE_DIR->child( 'blog' )->stringify, $tmp->child( 'blog' )->stringify;
+dircopy $SHARE_DIR->child( 'theme' )->stringify, $tmp->child( 'theme' )->stringify;
+
 my $config = {
     theme => {
         class => 'Statocles::Theme',
         args => {
-            store => $SHARE_DIR->child( 'theme' ),
+            store => $tmp->child( 'theme' ),
         },
     },
     build => {
@@ -38,7 +42,7 @@ my $config = {
             store => {
                 '$class' => 'Statocles::Store',
                 '$args' => {
-                    path => $SHARE_DIR->child( 'blog' ),
+                    path => $tmp->child( 'blog' ),
                 },
             },
             url_root => '/blog',
@@ -256,13 +260,13 @@ subtest 'run the http daemon' => sub {
             # Check that / gets index.html
             $t->get_ok( "/" )
                 ->status_is( 200 )
-                ->content_is( $tmp->child( deploy_site => 'index.html' )->slurp )
+                ->content_is( $tmp->child( build_site => 'index.html' )->slurp )
                 ;
 
             # Check that /index.html gets the right content
             $t->get_ok( "/index.html" )
                 ->status_is( 200 )
-                ->content_is( $tmp->child( deploy_site => 'index.html' )->slurp )
+                ->content_is( $tmp->child( build_site => 'index.html' )->slurp )
                 ;
 
             # Check that malicious URL gets plonked
@@ -282,6 +286,63 @@ subtest 'run the http daemon' => sub {
                 ->or( sub { diag $t->tx->res->body } )
                 ;
 
+            if ( eval { require Mac::FSEvents; 1; } ) {
+                subtest 'watch for filesystem events' => sub {
+
+                    subtest 'content store' => sub {
+                        my $path = Path::Tiny->new( qw( 2014 06 02 more_tags.yml ) );
+                        my $store = $t->app->site->app( 'blog' )->store;
+                        my $doc = $store->read_document( $path );
+                        $doc->{content} = "This is some new content for our blog!";
+                        $store->write_document( $path, $doc );
+
+                        my $ioloop = Mojo::IOLoop->singleton;
+                        # It sucks that we have to wait like this...
+                        my $wait = $ioloop->timer( 2, sub {
+                            # Must stop before running the test because the test will
+                            # start the loop again
+                            Mojo::IOLoop->stop;
+
+                            # Check that /index.html gets the right content
+                            $t->get_ok( "/index.html" )
+                                ->status_is( 200 )
+                                ->content_is( $tmp->child( build_site => 'index.html' )->slurp )
+                                ->content_like( qr{This is some new content for our blog!} )
+                                ;
+
+                        } );
+
+                        Mojo::IOLoop->start;
+                    };
+
+                    subtest 'theme store' => sub {
+                        my $path = Path::Tiny->new( qw( site layout.html.ep ) );
+                        my $store = $t->app->site->app( 'blog' )->theme->store;
+                        my $tmpl = $store->read_file( $path );
+                        $tmpl =~ s{\Q</body>}{<p>Extra footer!</p></body>};
+                        $store->write_file( $path, $tmpl );
+
+                        my $ioloop = Mojo::IOLoop->singleton;
+                        # It sucks that we have to wait like this...
+                        my $wait = $ioloop->timer( 2, sub {
+                            # Must stop before running the test because the test will
+                            # start the loop again
+                            Mojo::IOLoop->stop;
+
+                            # Check that /index.html gets the right content
+                            $t->get_ok( "/index.html" )
+                                ->status_is( 200 )
+                                ->content_is( $tmp->child( build_site => 'index.html' )->slurp )
+                                ->content_like( qr{<p>Extra footer!</p>} )
+                                ;
+
+                        } );
+
+                        Mojo::IOLoop->start;
+                    };
+
+                };
+            }
         };
 
         subtest 'nonroot site' => sub {
@@ -305,13 +366,13 @@ subtest 'run the http daemon' => sub {
             # Check that /nonroot gets index.html
             $t->get_ok( "/nonroot" )
                 ->status_is( 200 )
-                ->content_is( $tmp->child( deploy_site => 'index.html' )->slurp )
+                ->content_is( $tmp->child( build_site => 'index.html' )->slurp )
                 ;
 
             # Check that /nonroot/index.html gets the right content
             $t->get_ok( "/nonroot/index.html" )
                 ->status_is( 200 )
-                ->content_is( $tmp->child( deploy_site => 'index.html' )->slurp )
+                ->content_is( $tmp->child( build_site => 'index.html' )->slurp )
                 ;
 
             # Check that malicious URL gets plonked
