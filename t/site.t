@@ -10,7 +10,7 @@ my $SHARE_DIR = path( __DIR__, 'share' );
 
 subtest 'site writes application' => sub {
     my $tmpdir = tempdir;
-    my $site = site( $tmpdir );
+    my $site = test_site( $tmpdir );
 
     subtest 'build' => sub {
         $site->build;
@@ -32,7 +32,7 @@ subtest 'site writes application' => sub {
 
 subtest 'site index and navigation' => sub {
     my $tmpdir = tempdir;
-    my $site = site( $tmpdir,
+    my $site = test_site( $tmpdir,
         index => 'blog',
         nav => {
             main => [
@@ -68,7 +68,7 @@ subtest 'site index and navigation' => sub {
 
 subtest 'sitemap.xml and robots.txt' => sub {
     my $tmpdir = tempdir;
-    my $site = site( $tmpdir, index => 'blog' );
+    my $site = test_site( $tmpdir, index => 'blog' );
 
     my @pages = map { $_->pages } values %{ $site->apps };
     my $today = Time::Piece->new->strftime( '%Y-%m-%d' );
@@ -173,7 +173,7 @@ subtest 'sitemap.xml and robots.txt' => sub {
 subtest 'site urls' => sub {
     subtest 'domain only' => sub {
         my $tmpdir = tempdir;
-        my $site = site( $tmpdir,
+        my $site = test_site( $tmpdir,
             base_url => 'http://example.com/',
         );
 
@@ -185,7 +185,7 @@ subtest 'site urls' => sub {
 
     subtest 'domain and folder' => sub {
         my $tmpdir = tempdir;
-        my $site = site( $tmpdir,
+        my $site = test_site( $tmpdir,
             base_url => 'http://example.com/folder',
         );
 
@@ -197,7 +197,7 @@ subtest 'site urls' => sub {
 
     subtest 'base URL with folder rewrites content' => sub {
         my $tmpdir = tempdir;
-        my $site = site( $tmpdir,
+        my $site = test_site( $tmpdir,
             base_url => 'http://example.com/folder',
         );
 
@@ -223,7 +223,7 @@ subtest 'site urls' => sub {
 
 done_testing;
 
-sub site {
+sub test_site {
     my ( $tmpdir, %site_args ) = @_;
 
     my $blog = Statocles::App::Blog->new(
@@ -241,6 +241,10 @@ sub site {
         base_url => 'http://example.com',
         %site_args,
     );
+
+    subtest 'new site changes global site' => sub {
+        is +site->log, $site->log;
+    };
 
     return $site;
 }

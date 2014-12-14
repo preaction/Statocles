@@ -14,6 +14,7 @@ sub modules {
         qw( Test::More Test::Deep Test::Differences Test::Exception ),
         'Dir::Self' => [qw( __DIR__ )],
         'Path::Tiny' => [qw( path tempdir )],
+        'Statocles::Site',
     );
 }
 

@@ -5,6 +5,7 @@ use Statocles::Class;
 use Statocles::Store;
 use Mojo::URL;
 use Mojo::DOM;
+use Mojo::Log;
 
 =attr title
 
@@ -110,6 +111,31 @@ has deploy_store => (
     default => sub { $_[0]->build_store },
     coerce => Store->coercion,
 );
+
+=attr log
+
+A L<Mojo::Log> object to write logs to. Defaults to STDERR.
+
+=cut
+
+has log => (
+    is => 'ro',
+    isa => InstanceOf['Mojo::Log'],
+    lazy => 1,
+    default => sub {
+        Mojo::Log->new( level => 'warn' );
+    },
+);
+
+=method BUILD
+
+Register this site as the global site.
+
+=cut
+
+sub BUILD {
+    $Statocles::SITE = shift;
+}
 
 =method app( name )
 

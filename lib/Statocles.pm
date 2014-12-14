@@ -1,24 +1,20 @@
 package Statocles;
 # ABSTRACT: A static site generator
 
-use Statocles::Base;
-use base 'Exporter';
-our @EXPORT_OK = qw( diag );
+# The currently-running site.
+# I hate this, but I know of no better way to ensure that we always have access
+# to a Mojo::Log object, while still being relatively useful, without having to
+# wire up every single object with a log object.
+our $SITE;
 
-our $VERBOSE = 0;
-
-=sub diag( level, message )
-
-Write a diagnostic message to STDOUT, but only if C<$Statocles::VERBOSE> is set.
-
-=cut
-
-# I imagine this is just temporary until we start using Log::Any or something...
-sub diag {
-    my ( $level, @msg ) = @_;
-    return unless $VERBOSE >= $level;
-    say @msg;
+BEGIN {
+    package # Hide from PAUSE
+        site;
+    sub log { return $SITE->log }
 }
+
+use Statocles::Base;
+
 
 1;
 __END__

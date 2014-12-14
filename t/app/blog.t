@@ -7,6 +7,7 @@ use Statocles::Store;
 use Statocles::App::Blog;
 use Statocles::Template;
 my $SHARE_DIR = path( __DIR__ )->parent->child( 'share' );
+$Statocles::SITE = Statocles::Site->new( build_store => '.' );
 
 my $theme = Statocles::Theme->new(
     store => $SHARE_DIR->child( 'theme' ),

@@ -72,7 +72,7 @@ given to L<Statocles::Document|Statocles::Document>.
 
 sub read_document {
     my ( $self, $path ) = @_;
-    diag( 1, "Read document: ", $path );
+    site->log->debug( "Read document: " . $path );
     my $full_path = $self->path->child( $path );
     my @lines = $full_path->lines_utf8;
 
@@ -131,7 +131,7 @@ sub write_document {
     if ( $path->is_absolute ) {
         die "Cannot write document '$path': Path must not be absolute";
     }
-    diag( 1, "Write document: ", $path );
+    site->log->debug( "Write document: " . $path );
 
     $doc = { %{ $doc } }; # Shallow copy for safety
     my $content = delete( $doc->{content} ) // '';
@@ -160,7 +160,7 @@ Read the file from the given C<path>.
 
 sub read_file {
     my ( $self, $path ) = @_;
-    diag( 1, "Read file: ", $path );
+    site->log->debug( "Read file: " . $path );
     return $self->path->child( $path )->slurp_utf8;
 }
 
@@ -187,7 +187,7 @@ out L<page objects|Statocles::Page>.
 
 sub write_file {
     my ( $self, $path, $content ) = @_;
-    diag( 1, "Write file: ", $path );
+    site->log->debug( "Write file: " . $path );
     my $full_path = $self->path->child( $path );
     $full_path->touchpath->spew_utf8( $content );
     return;

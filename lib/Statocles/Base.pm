@@ -16,7 +16,7 @@ sub modules {
         feature => [qw( :5.10 )],
         'Path::Tiny' => [qw( rootdir cwd )],
         'Time::Piece',
-        Statocles => [qw( diag )],
+        'Statocles',
     );
 }
 

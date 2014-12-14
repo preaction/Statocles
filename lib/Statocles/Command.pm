@@ -51,13 +51,16 @@ sub main {
     my $method = $argv[0];
     return pod2usage("ERROR: Missing command") unless $method;
 
-    local $Statocles::VERBOSE = $opt{verbose};
-
     my $wire = Beam::Wire->new( file => $opt{config} );
 
     my $cmd = $class->new(
         site => $wire->get( $opt{site} ),
     );
+
+    if ( $opt{verbose} ) {
+        $cmd->site->log->handle( \*STDOUT );
+        $cmd->site->log->level( 'debug' );
+    }
 
     if ( grep { $_ eq $method } qw( build deploy ) ) {
         $cmd->site->$method;
@@ -139,6 +142,8 @@ sub main {
 
     sub startup {
         my ( $self ) = @_;
+        $self->log( $self->site->log );
+
         my $base;
         if ( $self->site->base_url ) {
             $base = Mojo::URL->new( $self->site->base_url )->path->to_string;
@@ -188,7 +193,7 @@ sub main {
             my $build_dir = Path::Tiny->new( getcwd, $self->site->build_store->path );
 
             for my $path ( keys %watches ) {
-                say "Watching for changes in '$path'";
+                $self->log->info( "Watching for changes in '$path'" );
 
                 my $fs = Mac::FSEvents->new( {
                     path => "$path",
@@ -213,7 +218,7 @@ sub main {
                     }
 
                     if ( $rebuild ) {
-                        say "Path '$path' changed... Rebuilding";
+                        $self->log->info( "Path '$path' changed... Rebuilding" );
                         $self->site->build;
                     }
                 } );

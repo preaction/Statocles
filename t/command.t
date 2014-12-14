@@ -133,9 +133,10 @@ sub test_site {
     my ( $root, @args ) = @_;
     my $verbose = grep { /^-v$|^--verbose$/ } @args;
     return sub {
+        local $ENV{MOJO_LOG_LEVEL}; # Test::Mojo sets this to "debug"
         my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
         is $exit, 0, 'exit code';
-        ok !$err, 'no errors/warnings' or diag $err;
+        ok !$err, "no errors/warnings (verbose: $verbose)" or diag $err;
         ok $root->child( 'index.html' )->exists, 'index file exists';
         ok $root->child( 'sitemap.xml' )->exists, 'sitemap.xml exists';
         ok $root->child( 'blog', '2014', '04', '23', 'slug.html' )->exists;
@@ -147,7 +148,7 @@ sub test_site {
             };
         }
         else {
-            ok !$out, 'no output without verbose';
+            ok !$out, 'no output without verbose' or diag $out;
         }
     };
 }
@@ -241,7 +242,10 @@ subtest 'run the http daemon' => sub {
     my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
     undef $timeout;
 
-    ok !$err, 'port info is on stdout';
+    my $store_path = $app->site->app( 'blog' )->store->path;
+    my $theme_path = $app->site->app( 'blog' )->theme->store->path;
+    like $err, qr{Watching for changes in '$store_path'}, 'watch is reported';
+    like $err, qr{Watching for changes in '$theme_path'}, 'watch is reported';
     is $exit, 0;
     like $out, qr{\QListening on http://127.0.0.1:$port\E\n},
         'contains http port information';
