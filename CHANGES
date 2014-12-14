@@ -1,6 +1,25 @@
 Changelog for Statocles
 
-0.027 2014-12-09T04:21:20
+0.028 2014-12-14T11:59:29
+ - set the default log level to "info"
+ - fix test only emits "Watching" if we have the right module
+ - use bundles to remove extra Base modules
+ - fix new "redundant argument in sprintf warning"
+ - change all instances of print to say
+ - use Mojo::Log for logging
+ - create type library for types and coercions
+ - watch for filesystem events and rebuild the site
+ - remove index method from apps
+ - remove caching from Blog app
+ - add clear method to theme to clear template cache
+ - add method to clear document cache
+ - clean up reading documents and parsing frontmatter
+ - remove the Statocles site.yml from CPAN tarballs
+ - add release announcement for v0.027
+ - remove old site leftovers from main branch
+
+0.027 2014-12-09T04:22:24
+ - release v0.027
  - try to fix bundle failure on Win32
  - bump required Mojolicious to 5.41
  - only ignore Statocles bundles in the root directory

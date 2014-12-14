@@ -4,7 +4,7 @@ Statocles - A static site generator
 
 # VERSION
 
-version 0.027
+version 0.028
 
 # STATUS
 
@@ -124,12 +124,6 @@ A [Statocles::Store](https://metacpan.org/pod/Statocles::Store) reads and writes
 reads documents in YAML and writes pages to a file, but stores could read
 documents as JSON, or from a Mongo database, and write pages to a database, or
 whereever you want!
-
-# SUBROUTINES
-
-## diag( level, message )
-
-Write a diagnostic message to STDOUT, but only if `$Statocles::VERBOSE` is set.
 
 # AUTHOR
 
