@@ -45,9 +45,9 @@ A store to use for includes. Optional.
 
 has store => (
     is => 'ro',
-    isa => InstanceOf['Statocles::Store'],
+    isa => Store,
     predicate => 'has_store',
-    coerce => Statocles::Store->coercion,
+    coerce => Store->coercion,
 );
 
 =method BUILDARGS( )

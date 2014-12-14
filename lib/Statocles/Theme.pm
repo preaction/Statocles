@@ -17,8 +17,8 @@ themes from the Statocles share directory.
 
 has store => (
     is => 'ro',
-    isa => InstanceOf['Statocles::Store'],
-    coerce => Statocles::Store->coercion,
+    isa => Store,
+    coerce => Store->coercion,
     required => 1,
 );
 
@@ -80,21 +80,6 @@ given C<name>.
 sub template {
     my ( $self, $app, $template ) = @_;
     return $self->_templates->{ $app }{ $template } ||= $self->read( $app, $template );
-}
-
-=method coercion
-
-Class method to coerce a string representing a path into a Statocles::Theme
-object. Returns a subref suitable to be used as a type coercion in an attriute.
-
-=cut
-
-sub coercion {
-    my ( $class ) = @_;
-    return sub {
-        return $_[0] if blessed $_[0] and $_[0]->isa( $class );
-        return $class->new( store => $_[0] );
-    };
 }
 
 1;

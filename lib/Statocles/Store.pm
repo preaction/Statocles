@@ -193,21 +193,6 @@ sub write_file {
     return;
 }
 
-=method coercion
-
-Class method to coerce a string representing a path into a Statocles::Store
-object. Returns a subref suitable to be used as a type coercion in an attriute.
-
-=cut
-
-sub coercion {
-    my ( $class ) = @_;
-    return sub {
-        return $_[0] if blessed $_[0] and $_[0]->isa( $class );
-        return $class->new( path => $_[0] );
-    };
-}
-
 1;
 __END__
 

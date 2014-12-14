@@ -12,13 +12,6 @@ subtest 'attributes' => sub {
     };
 };
 
-subtest 'theme coercion' => sub {
-    my $coerce = Statocles::Theme->coercion;
-    my $theme = $coerce->( $SHARE_DIR->child( 'theme' ) );
-    isa_ok $theme, 'Statocles::Theme';
-    is $theme->store->path, $SHARE_DIR->child( 'theme' );
-};
-
 sub read_templates {
     my ( $store ) = @_;
 

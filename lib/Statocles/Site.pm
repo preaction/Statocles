@@ -92,9 +92,9 @@ The L<store|Statocles::Store> object to use for C<build()>.
 
 has build_store => (
     is => 'ro',
-    isa => InstanceOf['Statocles::Store'],
+    isa => Store,
     required => 1,
-    coerce => Statocles::Store->coercion,
+    coerce => Store->coercion,
 );
 
 =attr deploy_store
@@ -105,10 +105,10 @@ The L<store|Statocles::Store> object to use for C<deploy()>. Defaults to L<build
 
 has deploy_store => (
     is => 'ro',
-    isa => InstanceOf['Statocles::Store'],
+    isa => Store,
     lazy => 1,
     default => sub { $_[0]->build_store },
-    coerce => Statocles::Store->coercion,
+    coerce => Store->coercion,
 );
 
 =method app( name )

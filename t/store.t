@@ -219,13 +219,6 @@ subtest 'path that has regex-special characters inside' => sub {
     cmp_deeply $store->documents, bag( @exp_docs );
 };
 
-subtest 'store coercion' => sub {
-    my $coerce = Statocles::Store->coercion;
-    my $store = $coerce->( $SHARE_DIR->child( 'blog' ) );
-    isa_ok $store, 'Statocles::Store';
-    is $store->path, $SHARE_DIR->child( 'blog' );
-};
-
 subtest 'verbose' => sub {
     no warnings qw( once );
     local $Statocles::VERBOSE = 1;

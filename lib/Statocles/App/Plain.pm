@@ -28,9 +28,9 @@ The L<store|Statocles::Store> containing this app's documents. Required.
 
 has store => (
     is => 'ro',
-    isa => InstanceOf['Statocles::Store'],
+    isa => Store,
     required => 1,
-    coerce => Statocles::Store->coercion,
+    coerce => Store->coercion,
 );
 
 =attr theme
@@ -43,9 +43,9 @@ Only layouts are used.
 
 has theme => (
     is => 'ro',
-    isa => InstanceOf['Statocles::Theme'],
+    isa => Theme,
     required => 1,
-    coerce => Statocles::Theme->coercion,
+    coerce => Theme->coercion,
 );
 
 =method pages

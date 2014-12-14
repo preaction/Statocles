@@ -32,9 +32,9 @@ uses.
 
 has theme => (
     is => 'ro',
-    isa => InstanceOf['Statocles::Theme'],
+    isa => Theme,
     required => 1,
-    coerce => Statocles::Theme->coercion,
+    coerce => Theme->coercion,
 );
 
 =attr inc

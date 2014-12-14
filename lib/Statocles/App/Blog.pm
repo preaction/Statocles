@@ -19,8 +19,8 @@ The L<store|Statocles::Store> to read for documents.
 
 has store => (
     is => 'ro',
-    isa => InstanceOf['Statocles::Store'],
-    coerce => Statocles::Store->coercion,
+    isa => Store,
+    coerce => Store->coercion,
 );
 
 =attr url_root
@@ -45,9 +45,9 @@ uses.
 
 has theme => (
     is => 'ro',
-    isa => InstanceOf['Statocles::Theme'],
+    isa => Theme,
     required => 1,
-    coerce => Statocles::Theme->coercion,
+    coerce => Theme->coercion,
 );
 
 =attr page_size

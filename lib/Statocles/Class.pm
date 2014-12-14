@@ -13,6 +13,7 @@ sub modules {
         'Moo::Lax',
         'Types::Standard' => [qw( :all )],
         'Types::Path::Tiny' => [qw( Path )],
+        'Statocles::Types' => [qw( :all )],
     );
 }
 
