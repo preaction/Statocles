@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://preaction.github.io/Statocles/blog/index.html</id>
     <title>Statocles</title>
-    <updated>2014-12-14T06:24:12Z</updated>
+    <updated>2014-12-15T02:32:48Z</updated>
     <link href="http://preaction.github.io/Statocles/blog/index.atom" rel="self" />
     <link href="http://preaction.github.io/Statocles/blog/index.html" rel="alternate" />
     <generator version="0.028">Statocles</generator>
@@ -50,7 +50,7 @@ Still plenty of cleanup to go.</p>
             </p>
         ]]></content>
         <updated>2014-12-14T00:00:00Z</updated>
-        <category term="ARRAY(0x7fc43ce475d8)" />
+        <category term="ARRAY(0x7f87fe2d38c0)" />
     </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2014/12/08/release-v0.027.html</id>
@@ -76,7 +76,7 @@ finally fixed <a href="https://github.com/preaction/Statocles/issues/110">the Wi
             </p>
         ]]></content>
         <updated>2014-12-08T00:00:00Z</updated>
-        <category term="ARRAY(0x7fc43ce5e0c0)" />
+        <category term="ARRAY(0x7f87fe2afef0)" />
     </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2014/12/07/statocles-initial-public-(alpha)-release.html</id>
@@ -115,7 +115,7 @@ Setup guide</a>. If you have any issues, report them on
             </p>
         ]]></content>
         <updated>2014-12-07T00:00:00Z</updated>
-        <category term="ARRAY(0x7fc44168b658)" />
+        <category term="ARRAY(0x7f87fe2b00d0)" />
     </entry>
 </feed>
 
