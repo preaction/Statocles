@@ -87,7 +87,9 @@ has nav => (
 
 =attr build_store
 
-The L<store|Statocles::Store> object to use for C<build()>.
+The L<store|Statocles::Store> object to use for C<build()>. This is a workspace
+and will be rebuilt often, using the C<build> and C<daemon> commands. This is
+also the store the C<daemon> command reads to serve the site.
 
 =cut
 
@@ -101,6 +103,8 @@ has build_store => (
 =attr deploy_store
 
 The L<store|Statocles::Store> object to use for C<deploy()>. Defaults to L<build_store>.
+This is intended to be the production deployment of the site. A build gets promoted
+to production by using the C<deploy> command.
 
 =cut
 
