@@ -77,6 +77,10 @@ sub main {
         return 0;
     }
     elsif ( $method eq 'daemon' ) {
+        # Build the site first no matter what.  We may end up watching for
+        # future changes, but assume they meant to build first
+        $cmd->site->build;
+
         require Mojo::Server::Daemon;
         our $daemon = Mojo::Server::Daemon->new(
             silent => 1,

@@ -220,6 +220,8 @@ subtest 'delegate to app command' => sub {
 };
 
 subtest 'run the http daemon' => sub {
+    $tmp->child( 'build_site' )->remove_tree; # We want daemon to rebuild the site
+
     # We need to stop the daemon after it starts
     my ( $port, $app );
     my $timeout = Mojo::IOLoop->singleton->timer( 0, sub {
@@ -259,6 +261,8 @@ subtest 'run the http daemon' => sub {
         'contains http port information';
 
     isa_ok $app, 'Statocles::Command::_MOJOAPP';
+
+    ok $tmp->child( 'build_site', 'index.html' )->exists, 'site was built';
 
     subtest 'Mojolicious app' => sub {
         subtest 'root site' => sub {
