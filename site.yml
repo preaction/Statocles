@@ -24,6 +24,14 @@ site:
                   href: /blog
                 - title: Docs
                   href: /pod
+                - title: Code
+                  href: 'http://github.com/preaction/Statocles'
+                - title: Bugs
+                  href: 'http://github.com/preaction/Statocles/issues'
+                - title: CPAN
+                  href: 'http://metacpan.org/pod/Statocles'
+                - title: IRC
+                  href: 'https://chat.mibbit.com/?channel=%23statocles&server=irc.perl.org'
         build_store:
             $ref: build
         deploy_store:
