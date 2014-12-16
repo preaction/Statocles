@@ -242,7 +242,7 @@ sub main {
             my $asset = $self->static->file( $path );
             if ( !$asset ) {
                 # Check for index.html
-                my $path = Mojo::Path->new( $c->stash->{path} . "/index.html" );
+                $path = Mojo::Path->new( $c->stash->{path} . "/index.html" );
                 $asset = $self->static->file( $path );
             }
 
@@ -250,7 +250,8 @@ sub main {
                 return $c->render( status => 404, text => 'Not found' );
             }
 
-            return $c->reply->asset( $asset );
+            # The static helper will choose the right content type and charset
+            return $c->reply->static( $path );
         };
 
         if ( $base ) {

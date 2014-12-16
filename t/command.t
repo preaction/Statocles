@@ -276,13 +276,15 @@ subtest 'run the http daemon' => sub {
             # Check that / gets index.html
             $t->get_ok( "/" )
                 ->status_is( 200 )
-                ->content_is( $tmp->child( build_site => 'index.html' )->slurp )
+                ->content_is( $tmp->child( build_site => 'index.html' )->slurp_utf8 )
+                ->content_type_is( 'text/html;charset=UTF-8' )
                 ;
 
             # Check that /index.html gets the right content
             $t->get_ok( "/index.html" )
                 ->status_is( 200 )
-                ->content_is( $tmp->child( build_site => 'index.html' )->slurp )
+                ->content_is( $tmp->child( build_site => 'index.html' )->slurp_utf8 )
+                ->content_type_is( 'text/html;charset=UTF-8' )
                 ;
 
             # Check that malicious URL gets plonked
@@ -322,8 +324,9 @@ subtest 'run the http daemon' => sub {
                             # Check that /index.html gets the right content
                             $t->get_ok( "/index.html" )
                                 ->status_is( 200 )
-                                ->content_is( $tmp->child( build_site => 'index.html' )->slurp )
+                                ->content_is( $tmp->child( build_site => 'index.html' )->slurp_utf8 )
                                 ->content_like( qr{This is some new content for our blog!} )
+                                ->content_type_is( 'text/html;charset=UTF-8' )
                                 ;
 
                         } );
@@ -348,8 +351,9 @@ subtest 'run the http daemon' => sub {
                             # Check that /index.html gets the right content
                             $t->get_ok( "/index.html" )
                                 ->status_is( 200 )
-                                ->content_is( $tmp->child( build_site => 'index.html' )->slurp )
+                                ->content_is( $tmp->child( build_site => 'index.html' )->slurp_utf8 )
                                 ->content_like( qr{<p>Extra footer!</p>} )
+                                ->content_type_is( 'text/html;charset=UTF-8' )
                                 ;
 
                         } );
@@ -382,13 +386,15 @@ subtest 'run the http daemon' => sub {
             # Check that /nonroot gets index.html
             $t->get_ok( "/nonroot" )
                 ->status_is( 200 )
-                ->content_is( $tmp->child( build_site => 'index.html' )->slurp )
+                ->content_is( $tmp->child( build_site => 'index.html' )->slurp_utf8 )
+                ->content_type_is( 'text/html;charset=UTF-8' )
                 ;
 
             # Check that /nonroot/index.html gets the right content
             $t->get_ok( "/nonroot/index.html" )
                 ->status_is( 200 )
-                ->content_is( $tmp->child( build_site => 'index.html' )->slurp )
+                ->content_is( $tmp->child( build_site => 'index.html' )->slurp_utf8 )
+                ->content_type_is( 'text/html;charset=UTF-8' )
                 ;
 
             # Check that malicious URL gets plonked
@@ -427,8 +433,8 @@ subtest 'bundle the necessary components' => sub {
             ok !$err;
             like $out, qr{Theme "default" written to "share/theme/default"};
             like $out, qr{Make sure to update "$config_fn"};
-            is $tmp->child( @site_layout )->slurp,
-                $SHARE_DIR->parent->parent->child( @site_layout )->slurp;
+            is $tmp->child( @site_layout )->slurp_utf8,
+                $SHARE_DIR->parent->parent->child( @site_layout )->slurp_utf8;
             ok $tmp->child( @site_footer )->is_file;
         };
         subtest 'second time does not overwrite hooks' => sub {
@@ -443,9 +449,9 @@ subtest 'bundle the necessary components' => sub {
             like $out, qr{Theme "default" written to "share/theme/default"};
             like $out, qr{Make sure to update "$config_fn"};
 
-            is $tmp->child( @site_layout )->slurp,
-                $SHARE_DIR->parent->parent->child( @site_layout )->slurp;
-            is $tmp->child( @site_footer )->slurp, 'SITE FOOTER';
+            is $tmp->child( @site_layout )->slurp_utf8,
+                $SHARE_DIR->parent->parent->child( @site_layout )->slurp_utf8;
+            is $tmp->child( @site_footer )->slurp_utf8, 'SITE FOOTER';
         };
     };
 };
