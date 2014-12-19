@@ -96,6 +96,7 @@ sub paginate {
             pages => [ @{$pages}[ @{ $sets[$i] } ] ],
             ( $i != $#sets ? ( next => sprintf( $path_format, $i + 2 ) ) : () ),
             ( $i > 0 ? ( prev => $prev ) : () ),
+            published => $pages->[0]->last_modified,
             %args,
         );
     }
@@ -125,7 +126,7 @@ date of the pages inside this page.
 
 sub last_modified {
     my ( $self ) = @_;
-    return max map { $_->last_modified } @{ $self->pages };
+    return $self->published || max map { $_->last_modified } @{ $self->pages };
 }
 
 1;
