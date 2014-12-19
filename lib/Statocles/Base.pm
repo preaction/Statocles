@@ -33,6 +33,7 @@ our %IMPORT_BUNDLES = (
         'Path::Tiny' => [qw( path tempdir )],
         'Statocles::Test' => [qw( test_constructor test_pages )],
         'Statocles::Site',
+        sub { $Statocles::VERSION = 0.001; return }, # Set version normally done via dzil
     ],
 
     Class => [

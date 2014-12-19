@@ -16,8 +16,8 @@ subtest 'site writes application' => sub {
         $site->build;
 
         for my $page ( $site->app( 'blog' )->pages ) {
-            subtest 'page content: ' . $page->path => test_content( $tmpdir, $site, $page, build => $page->path );
-            ok !$tmpdir->child( 'deploy', $page->path )->exists, 'not deployed yet';
+            ok $tmpdir->child( 'build', $page->path )->exists, $page->path . ' built';
+            ok !$tmpdir->child( 'deploy', $page->path )->exists, $page->path . ' not deployed yet';
         }
     };
 
@@ -25,7 +25,8 @@ subtest 'site writes application' => sub {
         $site->deploy;
 
         for my $page ( $site->app( 'blog' )->pages ) {
-            subtest 'page content: ' . $page->path => test_content( $tmpdir, $site, $page, deploy => $page->path );
+            ok $tmpdir->child( 'build', $page->path )->exists, $page->path . ' built';
+            ok $tmpdir->child( 'deploy', $page->path )->exists, $page->path . ' deployed';
         }
     };
 };
@@ -88,10 +89,10 @@ subtest 'sitemap.xml and robots.txt' => sub {
         '/blog/2014/05/22/(regex)[name].file.html' => '2014-05-22',
         '/blog/2014/06/02/more_tags.html' => '2014-06-02',
         '/index.html' => '2014-06-02',
-        '/blog/page-2.html' => '2014-04-30',
+        '/blog/page-2.html' => '2014-06-02',
         '/blog/tag/more/index.html' => '2014-06-02',
         '/blog/tag/better/index.html' => '2014-06-02',
-        '/blog/tag/better/page-2.html' => '2014-04-30',
+        '/blog/tag/better/page-2.html' => '2014-06-02',
         '/blog/tag/error-message/index.html' => '2014-05-22',
         '/blog/tag/even-more-tags/index.html' => '2014-06-02',
     );
@@ -154,6 +155,7 @@ subtest 'sitemap.xml and robots.txt' => sub {
         ok !$tmpdir->child( 'deploy', 'sitemap.xml' )->exists, 'not deployed yet';
         ok !$tmpdir->child( 'deploy', 'robots.txt' )->exists, 'not deployed yet';
     };
+
     subtest 'deploy' => sub {
         $site->deploy;
         my $dom = Mojo::DOM->new( $tmpdir->child( 'deploy', 'sitemap.xml' )->slurp );
@@ -269,8 +271,6 @@ sub test_content {
                 }
             }
         }
-
-        eq_or_diff "$got_dom", "$expect_dom";
 
         if ( $got_dom->at('title') ) {
             like $got_dom->at('title')->text, qr{@{[$site->title]}}, 'page contains site title ' . $site->title;

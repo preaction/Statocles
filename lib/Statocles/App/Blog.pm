@@ -21,6 +21,7 @@ has store => (
     is => 'ro',
     isa => Store,
     coerce => Store->coercion,
+    required => 1,
 );
 
 =attr url_root

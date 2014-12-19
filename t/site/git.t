@@ -35,7 +35,8 @@ subtest 'site writes application' => sub {
         $site->build;
 
         for my $page ( $site->app( 'blog' )->pages ) {
-            subtest 'page content' => test_content( $workdir, $site, $page, build => $page->path );
+            ok $workdir->child( 'build', $page->path )->exists, $page->path . ' built';
+            ok !$workdir->child( $page->path )->exists, $page->path . ' not deployed yet';
         }
     };
 
@@ -52,7 +53,7 @@ subtest 'site writes application' => sub {
         is current_branch( $git ), 'master', 'deploy leaves us on the branch we came from';
 
         for my $page ( $site->app( 'blog' )->pages ) {
-            ok !$workdir->child( $page->path )->exists, 'file is not in master branch';
+            ok !$workdir->child( $page->path )->exists, $page->path . ' is not in master branch';
         }
 
         _git_run( $git, checkout => $site->deploy_branch );
@@ -62,14 +63,14 @@ subtest 'site writes application' => sub {
         unlike $log, qr{NEWFILE};
 
         for my $page ( $site->app( 'blog' )->pages ) {
-            subtest 'page content' => test_content( $workdir, $site, $page, '.' => $page->path );
+            ok $workdir->child( $page->path )->exists, $page->path . ' is in deploy branch';
         }
         _git_run( $git, checkout => 'master' );
 
         subtest 'deploy performs git push' => sub {
             _git_run( $remotegit, checkout => 'gh-pages' );
             for my $page ( $site->app( 'blog' )->pages ) {
-                subtest 'page content' => test_content( $remotedir, $site, $page, '.' => $page->path );
+                ok $remotedir->child( $page->path )->exists, $page->path . ' deployed';
             }
         };
     };
@@ -129,23 +130,6 @@ sub site {
     );
 
     return ( $site, $workdir, $remotedir );
-}
-
-sub test_content {
-    my ( $tmpdir, $site, $page, $dir, $file ) = @_;
-    return sub {
-        my $path = $tmpdir->child( $dir, $file );
-        my $html = $path->slurp;
-        eq_or_diff $html, $page->render( site => $site );
-
-        like $html, qr{@{[$site->title]}}, 'page contains site title ' . $site->title;
-        for my $nav ( @{ $site->nav->{main} } ) {
-            my $title = $nav->{title};
-            my $url = $nav->{href};
-            like $html, qr{$title}, 'page contains nav title ' . $title;
-            like $html, qr{$url}, 'page contains nav url ' . $url;
-        }
-    };
 }
 
 sub current_branch {

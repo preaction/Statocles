@@ -1,4 +1,14 @@
 % for my $page ( @$pages ) {
-% my $doc = $page->document;
-<a href="<%= $page->path %>"><%= $doc->title %></a> <%= $doc->author %> <%= $page->content %>
+    <article>
+        % my $doc = $page->document;
+        <h1><a href="<%= $page->path %>"><%= $doc->title %></a></h1>
+        <span class="author"><%= $doc->author %></span>
+        <div class="content">
+            % my @sections = $page->sections;
+            <%= $sections[0] %>
+            % if ( @sections > 1 ) {
+                <p><a href="<%= $page->path %>#section-2">Continue reading <%= $doc->title %>...</a></p>
+            % }
+        </div>
+    </article>
 % }

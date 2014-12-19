@@ -106,8 +106,11 @@ sub test_pages {
     is $pages[0]->path, $index_path, 'index page must come first';
 
     for my $page ( @pages ) {
-        ok $page->DOES( 'Statocles::Page' );
-        isa_ok $page->last_modified, 'Time::Piece', 'must set a last_modified';
+        ok $page->DOES( 'Statocles::Page' ), 'must be a Statocles::Page';
+
+        if ( !$page->isa( 'Statocles::Page::Feed' ) ) {
+            isa_ok $page->last_modified, 'Time::Piece', 'must set a last_modified';
+        }
 
         if ( !$page_tests{ $page->path } ) {
             fail "No tests found for page: " . $page->path;
@@ -115,7 +118,7 @@ sub test_pages {
         }
 
         my $output = $page->render( site => $site );
-        if ( $page->path =~ /[.]html$/ ) {
+        if ( $page->path =~ /[.](?:html|rss|atom)$/ ) {
             my $dom = Mojo::DOM->new( $output );
             fail "Could not parse dom" unless $dom;
             subtest 'html content: ' . $page->path, $page_tests{ $page->path }, $output, $dom;

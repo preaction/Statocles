@@ -1,317 +1,571 @@
 
 use Statocles::Base 'Test';
 use Capture::Tiny qw( capture );
-use File::Spec::Functions qw( splitdir );
-use Statocles::Theme;
-use Statocles::Store;
 use Statocles::App::Blog;
-use Statocles::Template;
 my $SHARE_DIR = path( __DIR__ )->parent->child( 'share' );
-$Statocles::SITE = Statocles::Site->new( build_store => '.' );
 
-my $theme = Statocles::Theme->new(
-    store => $SHARE_DIR->child( 'theme' ),
+my $site = Statocles::Site->new(
+    title => 'Example Site',
+    base_url => 'http://example.com/',
+    build_store => '.'
 );
+local $Statocles::VERSION = '0.001';
 
-my $md = Text::Markdown->new;
-my $tmpdir = tempdir;
-
-my $app = Statocles::App::Blog->new(
-    store => $SHARE_DIR->child( 'blog' ),
-    url_root => '/blog',
-    theme => $SHARE_DIR->child( 'theme' ), # test theme coercion
-    page_size => 2,
-    # Remove from the index all posts tagged "better", unless they're tagged "more"
-    index_tags => [ '-better', '+more', '+error message' ],
-);
-
-my @all_pages;
-
-sub docs {
-    my ( $root_path ) = @_;
-    my @doc_specs;
-
-    my $iter = $root_path->iterator({ recurse => 1, follow_symlinks => 1 });
-    while ( my $path = $iter->() ) {
-        next unless $path->is_file;
-        next unless $path =~ /[.]yml$/;
-        next if $path =~ m{\b9999\b}; # It will never be 9999
-
-        my $rel_path = $path->relative( $root_path );
-        my @doc_path = ( splitdir( $rel_path->parent->stringify ), $rel_path->basename );
-
-        # Must have YYYY/MM/DD in the front of the path
-        next unless @doc_path > 3;
-        next unless join( "", @doc_path[0..2] ) =~ /\d{8}/;
-
-        my $doc = Statocles::Document->new(
-            path => rootdir->child( @doc_path ),
-            %{ $app->store->read_document( path( @doc_path ) ) },
-        );
-
-        push @doc_specs, {
-            path => \@doc_path,
-            doc => $doc,
-        };
-    }
-
-    return @doc_specs;
-}
-
-sub pages {
-    my ( @doc_specs ) = @_;
-
-    my @pages;
-    for my $doc_spec ( @doc_specs ) {
-        my $page_path = join '/', '', 'blog', @{ $doc_spec->{ path } };
-        $page_path =~ s/[.]yml$/.html/;
-
-        my $date = join '-', @{ $doc_spec->{ path } }[0..2];
-
-        my @tags;
-        for my $tag ( @{ $doc_spec->{doc}->tags } ) {
-            my $tag_url = $tag;
-            $tag_url =~ s/\s+/-/g;
-            push @tags, {
-                title => $tag,
-                href => "/blog/tag/$tag_url/index.html",
-            };
-        }
-
-        my $page = Statocles::Page::Document->new(
-            app => $app,
-            published => Time::Piece->strptime( $date, '%Y-%m-%d' ),
-            template => $theme->template( blog => 'post.html' ),
-            layout => $theme->template( site => 'layout.html' ),
-            path => $page_path,
-            document => $doc_spec->{ doc },
-            tags => \@tags,
-        );
-
-        push @pages, $page;
-    }
-    return @pages;
-}
-
-# Sorting by path just happens to also sort by date
-my @sorted_docs = sort { $b->{doc}->path cmp $a->{doc}->path } docs( $app->store->path );
-
-subtest 'blog post pages' => sub {
-    my @pages = pages( @sorted_docs );
-    cmp_deeply
-        [ $app->post_pages ],
-        bag( @pages )
-            or diag explain [ $app->post_pages ], \@pages;
-    push @all_pages, @pages;
-};
-
-subtest 'tag pages' => sub {
-    my %page_args = (
-        app => $app,
-        template => $theme->template( blog => 'index.html' ),
-        layout => $theme->template( site => 'layout.html' ),
-    );
-    my %rss_args = (
-        app => $app,
-        type => 'application/rss+xml',
-        template => $theme->template( blog => 'index.rss' ),
-    );
-    my %atom_args = (
-        app => $app,
-        type => 'application/atom+xml',
-        template => $theme->template( blog => 'index.atom' ),
+subtest 'constructor' => sub {
+    my %required = (
+        store => $SHARE_DIR->child( 'blog' ),
+        url_root => '/blog',
+        theme => $SHARE_DIR->child( 'theme' ),
     );
 
-    my @tag_pages = (
-        Statocles::Page::List->new(
-            %page_args,
-            path => '/blog/tag/better/index.html',
-            pages => [ pages( @sorted_docs[0,1] ) ],
-            next => '/blog/tag/better/page-2.html',
-        ),
-        Statocles::Page::List->new(
-            %page_args,
-            path => '/blog/tag/better/page-2.html',
-            pages => [ pages( $sorted_docs[2] ) ],
-            prev => '/blog/tag/better/index.html',
-        ),
-        Statocles::Page::List->new(
-            %page_args,
-            path => '/blog/tag/error-message/index.html',
-            pages => [ pages( $sorted_docs[1] ) ],
-        ),
-        Statocles::Page::List->new(
-            %page_args,
-            path => '/blog/tag/more/index.html',
-            pages => [ pages( $sorted_docs[0] ) ],
-        ),
-        Statocles::Page::List->new(
-            %page_args,
-            path => '/blog/tag/even-more-tags/index.html',
-            pages => [ pages( $sorted_docs[0] ) ],
-        ),
+    test_constructor(
+        'Statocles::App::Blog',
+        required => \%required,
+        default => {
+            page_size => 5,
+            index_tags => [],
+        },
     );
 
-    my @feeds = (
-        [
-            Statocles::Page::Feed->new(
-                %atom_args,
-                path => '/blog/tag/better.atom',
-                page => $tag_pages[0],
-            ),
-            Statocles::Page::Feed->new(
-                %rss_args,
-                path => '/blog/tag/better.rss',
-                page => $tag_pages[0],
-            ),
-        ],
-        [
-            Statocles::Page::Feed->new(
-                %atom_args,
-                path => '/blog/tag/error-message.atom',
-                page => $tag_pages[2],
-            ),
-            Statocles::Page::Feed->new(
-                %rss_args,
-                path => '/blog/tag/error-message.rss',
-                page => $tag_pages[2],
-            ),
-        ],
-        [
-            Statocles::Page::Feed->new(
-                %atom_args,
-                path => '/blog/tag/more.atom',
-                page => $tag_pages[3],
-            ),
-            Statocles::Page::Feed->new(
-                %rss_args,
-                path => '/blog/tag/more.rss',
-                page => $tag_pages[3],
-            ),
-        ],
-        [
-            Statocles::Page::Feed->new(
-                %atom_args,
-                path => '/blog/tag/even-more-tags.atom',
-                page => $tag_pages[4],
-            ),
-            Statocles::Page::Feed->new(
-                %rss_args,
-                path => '/blog/tag/even-more-tags.rss',
-                page => $tag_pages[4],
-            ),
-        ],
-    );
+    subtest 'attribute types/coercions' => sub {
+        subtest 'store' => sub {
+            my $app = Statocles::App::Blog->new( %required );
+            isa_ok $app->store, 'Statocles::Store';
+            is $app->store->path, $SHARE_DIR->child( 'blog' );
+        },
 
-    # Add feed pages to the tag pages
-    for my $list ( @tag_pages[0,1] ) {
-        $list->links->{feed} = [
-            map { { href => $_->path, type => $_->type, } } @{ $feeds[0] }
-        ];
-        $list->links->{feed}[0]{title} = 'Atom';
-        $list->links->{feed}[1]{title} = 'RSS';
-    }
-    for my $i ( 2..$#tag_pages ) {
-        my $list = $tag_pages[$i];
-        $list->links->{feed} = [
-            map { { href => $_->path, type => $_->type } } @{ $feeds[$i-1] }
-        ];
-        $list->links->{feed}[0]{title} = 'Atom';
-        $list->links->{feed}[1]{title} = 'RSS';
-    }
+        subtest 'theme' => sub {
+            my $app = Statocles::App::Blog->new( %required );
+            isa_ok $app->theme, 'Statocles::Theme';
+            is $app->theme->store->path, $SHARE_DIR->child( 'theme' );
+        },
 
-    push @tag_pages, map { @$_ } @feeds;
-    cmp_deeply [ $app->tag_pages( pages( @sorted_docs ) ) ], bag( @tag_pages );
-    push @all_pages, @tag_pages;
-
-    subtest 'tag navigation' => sub {
-        cmp_deeply [ $app->tags( pages( @sorted_docs ) ) ], [
-            { title => 'better', href => '/blog/tag/better/index.html' },
-            { title => 'error message', href => '/blog/tag/error-message/index.html' },
-            { title => 'even more tags', href => '/blog/tag/even-more-tags/index.html' },
-            { title => 'more', href => '/blog/tag/more/index.html' },
-        ];
     };
 };
 
-subtest 'index page(s)' => sub {
-    my %page_args = (
-        app => $app,
-        template => $theme->template( blog => 'index.html' ),
-        layout => $theme->template( site => 'layout.html' ),
-    );
-    my %rss_args = (
-        app => $app,
-        type => 'application/rss+xml',
-        template => $theme->template( blog => 'index.rss' ),
-    );
-    my %atom_args = (
-        app => $app,
-        type => 'application/atom+xml',
-        template => $theme->template( blog => 'index.atom' ),
+subtest 'pages' => sub {
+    my $app = Statocles::App::Blog->new(
+        store => $SHARE_DIR->child( 'blog' ),
+        url_root => '/blog',
+        theme => $SHARE_DIR->child( 'theme' ),
+        page_size => 2,
+        # Remove from the index all posts tagged "better", unless they're tagged "more"
+        index_tags => [ '-better', '+more', '+error message' ],
     );
 
-    my @pages = (
-        Statocles::Page::List->new(
-            %page_args,
-            path => '/blog/index.html',
-            # Sorting by path just happens to also sort by date
-            pages => [ pages( @sorted_docs[0,1] ) ],
-            next => '/blog/page-2.html',
-        ),
-        Statocles::Page::List->new(
-            %page_args,
-            path => '/blog/page-2.html',
-            # Sorting by path just happens to also sort by date
-            pages => [ pages( $sorted_docs[3] ) ],
-            prev => '/blog/index.html',
-        ),
+    test_pages(
+        $site, $app,
+
+        # Index pages
+        '/blog/index.html' => sub {
+            my ( $html, $dom ) = @_;
+
+            cmp_deeply [ $dom->find( 'h1 a' )->map( 'text' )->each ],
+                [ 'More Tags', 'Regex violating Post' ],
+                'first page has 2 latest post titles';
+
+            cmp_deeply [ $dom->find( 'h1 a' )->map( attr => 'href' )->each ],
+                [ '/blog/2014/06/02/more_tags.html', '/blog/2014/05/22/(regex)[name].file.html' ],
+                'first page has 2 latest post paths';
+
+            cmp_deeply [ $dom->find( '.author' )->map( 'text' )->each ],
+                [ ( 'preaction' ) x 2 ],
+                'author is correct';
+        },
+
+        '/blog/page-2.html' => sub {
+            my ( $html, $dom ) = @_;
+
+            cmp_deeply [ $dom->find( 'h1 a' )->map( 'text' )->each ],
+                [ "First Post" ],
+                'second page has earliest post';
+
+            cmp_deeply [ $dom->find( 'h1 a' )->map( attr => 'href' )->each ],
+                [ '/blog/2014/04/23/slug.html', ],
+                'second page has earliest post';
+
+            cmp_deeply [ $dom->find( '.author' )->map( 'text' )->each ],
+                [ 'preaction' ],
+                'author is correct';
+        },
+
+        # Index feeds
+        '/blog/index.atom' => sub {
+            my ( $atom, $dom ) = @_;
+
+            is $dom->at( 'feed > id' )->text, 'http://example.com/blog/index.html';
+            is $dom->at( 'feed > title' )->text, 'Example Site';
+            like $dom->at( 'feed > updated' )->text, qr{^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z};
+
+            is $dom->at( 'feed > link[rel=self]' )->attr( 'href' ), 'http://example.com/blog/index.atom';
+            is $dom->at( 'feed > link[rel=alternate]' )->attr( 'href' ), 'http://example.com/blog/index.html';
+
+            is $dom->at( 'feed > generator' )->text, 'Statocles';
+            is $dom->at( 'feed > generator' )->attr( 'version' ), $Statocles::VERSION;
+
+            cmp_deeply [ $dom->find( 'entry id' )->map( 'text' )->each ],
+                [
+                    'http://example.com/blog/2014/06/02/more_tags.html',
+                    'http://example.com/blog/2014/05/22/(regex)[name].file.html',
+                ],
+                'atom feed has 2 latest post paths';
+
+            cmp_deeply [ $dom->find( 'entry title' )->map( 'text' )->each ],
+                [ 'More Tags', 'Regex violating Post' ],
+                'atom feed has 2 latest post titles';
+
+            cmp_deeply [ $dom->find( 'entry author name' )->map( 'text' )->each ],
+                [ ( 'preaction' ) x 2 ],
+                'author is correct';
+
+            cmp_deeply [ $dom->find( 'entry content' )->map( attr => 'type' )->each ],
+                [ ( 'html' ) x 2 ],
+                'content type is correct';
+        },
+
+        '/blog/index.rss' => sub {
+            my ( $rss, $dom ) = @_;
+
+            is $dom->at( 'channel > title' )->text, 'Example Site';
+            is $dom->at( 'channel > link' )->text, 'http://example.com/blog/index.html';
+            is $dom->at( 'channel > description' )->text, 'Blog feed of Example Site';
+
+            is $dom->at( 'channel > link[rel=self]' )->attr( 'href' ),
+                'http://example.com/blog/index.rss';
+
+            is $dom->at( 'channel > generator' )->text, 'Statocles ' . $Statocles::VERSION;
+
+            cmp_deeply [ $dom->find( 'item link' )->map( 'text' )->each ],
+                [
+                    'http://example.com/blog/2014/06/02/more_tags.html',
+                    'http://example.com/blog/2014/05/22/(regex)[name].file.html',
+                ],
+                'rss feed has 2 latest post paths';
+
+            cmp_deeply [ $dom->find( 'item title' )->map( 'text' )->each ],
+                [ 'More Tags', 'Regex violating Post' ],
+                'rss feed has 2 latest post titles';
+
+            cmp_deeply [ $dom->find( 'item pubDate' )->map( 'text' )->each ],
+                array_each( re( qr{\w{3}, \d{2} \w{3} \w{4} \d{2}:\d{2}:\d{2} [-+]\d{4}} ) ),
+                'pubDate is correct';
+        },
+
+        # Tag pages
+        '/blog/tag/better/index.html' => sub {
+            my ( $html, $dom ) = @_;
+
+            cmp_deeply [ $dom->find( 'h1 a' )->map( 'text' )->each ],
+                [ 'More Tags', 'Regex violating Post' ],
+                'first "better" page has 2 latest post titles';
+
+            cmp_deeply [ $dom->find( 'h1 a' )->map( attr => 'href' )->each ],
+                [ '/blog/2014/06/02/more_tags.html', '/blog/2014/05/22/(regex)[name].file.html' ],
+                'first "better" page has 2 latest post paths';
+
+            cmp_deeply [ $dom->find( '.author' )->map( 'text' )->each ],
+                [ ( 'preaction' ) x 2 ],
+                'author is correct';
+        },
+
+        '/blog/tag/better/page-2.html' => sub {
+            my ( $html, $dom ) = @_;
+
+            cmp_deeply [ $dom->find( 'h1 a' )->map( 'text' )->each ],
+                [ "Second Post" ],
+                'second "better" page has earlier post title';
+
+            cmp_deeply [ $dom->find( 'h1 a' )->map( attr => 'href' )->each ],
+                [ '/blog/2014/04/30/plug.html' ],
+                'second "better" page has earlier post url';
+
+            cmp_deeply [ $dom->find( '.author' )->map( 'text' )->each ],
+                [ 'preaction' ],
+                'author is correct';
+        },
+
+        '/blog/tag/error-message/index.html' => sub {
+            my ( $html, $dom ) = @_;
+
+            cmp_deeply [ $dom->find( 'h1 a' )->map( 'text' )->each ],
+                [ 'Regex violating Post' ],
+                '"error message" page has 1 post title';
+
+            cmp_deeply [ $dom->find( 'h1 a' )->map( attr => 'href' )->each ],
+                [ '/blog/2014/05/22/(regex)[name].file.html' ],
+                '"error message" page has 1 post url';
+
+            cmp_deeply [ $dom->find( '.author' )->map( 'text' )->each ],
+                [ 'preaction' ],
+                'author is correct';
+        },
+
+        '/blog/tag/more/index.html' => sub {
+            my ( $html, $dom ) = @_;
+
+            cmp_deeply [ $dom->find( 'h1 a' )->map( 'text' )->each ],
+                [ 'More Tags' ],
+                '"more" page has 1 post title';
+
+            cmp_deeply [ $dom->find( 'h1 a' )->map( attr => 'href' )->each ],
+                [ '/blog/2014/06/02/more_tags.html', ],
+                '"more" page has 1 post url';
+
+            cmp_deeply [ $dom->find( '.author' )->map( 'text' )->each ],
+                [ 'preaction' ],
+                'author is correct';
+        },
+
+        '/blog/tag/even-more-tags/index.html' => sub {
+            my ( $html, $dom ) = @_;
+
+            cmp_deeply [ $dom->find( 'h1 a' )->map( 'text' )->each ],
+                [ 'More Tags' ],
+                '"even more tags" page has 1 post title';
+
+            cmp_deeply [ $dom->find( 'h1 a' )->map( attr => 'href' )->each ],
+                [ '/blog/2014/06/02/more_tags.html', ],
+                '"even more tags" page has 1 post url';
+
+            cmp_deeply [ $dom->find( '.author' )->map( 'text' )->each ],
+                [ 'preaction' ],
+                'author is correct';
+        },
+
+        # Tag feeds
+        '/blog/tag/better.atom' => sub {
+            my ( $atom, $dom ) = @_;
+
+            is $dom->at( 'feed > id' )->text, 'http://example.com/blog/tag/better/index.html';
+            is $dom->at( 'feed > title' )->text, 'Example Site';
+            like $dom->at( 'feed > updated' )->text, qr{^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z};
+
+            is $dom->at( 'feed > link[rel=self]' )->attr( 'href' ),
+                'http://example.com/blog/tag/better.atom';
+            is $dom->at( 'feed > link[rel=alternate]' )->attr( 'href' ),
+                'http://example.com/blog/tag/better/index.html';
+
+            is $dom->at( 'feed > generator' )->text, 'Statocles';
+            is $dom->at( 'feed > generator' )->attr( 'version' ), $Statocles::VERSION;
+
+            cmp_deeply [ $dom->find( 'entry id' )->map( 'text' )->each ],
+                [
+                    'http://example.com/blog/2014/06/02/more_tags.html',
+                    'http://example.com/blog/2014/05/22/(regex)[name].file.html',
+                ],
+                'atom feed has 2 latest post paths';
+
+            cmp_deeply [ $dom->find( 'entry title' )->map( 'text' )->each ],
+                [ 'More Tags', 'Regex violating Post' ],
+                'atom feed has 2 latest post titles';
+
+            cmp_deeply [ $dom->find( 'entry author name' )->map( 'text' )->each ],
+                [ ( 'preaction' ) x 2 ],
+                'author is correct';
+
+            cmp_deeply [ $dom->find( 'entry content' )->map( attr => 'type' )->each ],
+                [ ( 'html' ) x 2 ],
+                'content type is correct';
+        },
+
+        '/blog/tag/better.rss' => sub {
+            my ( $rss, $dom ) = @_;
+
+            is $dom->at( 'channel > title' )->text, 'Example Site';
+            is $dom->at( 'channel > link' )->text, 'http://example.com/blog/tag/better/index.html';
+            is $dom->at( 'channel > description' )->text, 'Blog feed of Example Site';
+
+            is $dom->at( 'channel > link[rel=self]' )->attr( 'href' ),
+                'http://example.com/blog/tag/better.rss';
+
+            is $dom->at( 'channel > generator' )->text, 'Statocles ' . $Statocles::VERSION;
+
+            cmp_deeply [ $dom->find( 'item link' )->map( 'text' )->each ],
+                [
+                    'http://example.com/blog/2014/06/02/more_tags.html',
+                    'http://example.com/blog/2014/05/22/(regex)[name].file.html',
+                ],
+                'rss feed has 2 latest post paths';
+
+            cmp_deeply [ $dom->find( 'item title' )->map( 'text' )->each ],
+                [ 'More Tags', 'Regex violating Post' ],
+                'rss feed has 2 latest post titles';
+
+            cmp_deeply [ $dom->find( 'item pubDate' )->map( 'text' )->each ],
+                array_each( re( qr{\w{3}, \d{2} \w{3} \w{4} \d{2}:\d{2}:\d{2} [-+]\d{4}} ) ),
+                'pubDate is correct';
+        },
+
+        '/blog/tag/error-message.atom' => sub {
+            my ( $atom, $dom ) = @_;
+
+            is $dom->at( 'feed > id' )->text,
+                'http://example.com/blog/tag/error-message/index.html';
+            is $dom->at( 'feed > title' )->text, 'Example Site';
+            like $dom->at( 'feed > updated' )->text,
+                qr{^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z};
+
+            is $dom->at( 'feed > link[rel=self]' )->attr( 'href' ),
+                'http://example.com/blog/tag/error-message.atom';
+            is $dom->at( 'feed > link[rel=alternate]' )->attr( 'href' ),
+                'http://example.com/blog/tag/error-message/index.html';
+
+            is $dom->at( 'feed > generator' )->text, 'Statocles';
+            is $dom->at( 'feed > generator' )->attr( 'version' ), $Statocles::VERSION;
+
+            cmp_deeply [ $dom->find( 'entry id' )->map( 'text' )->each ],
+                [
+                    'http://example.com/blog/2014/05/22/(regex)[name].file.html',
+                ],
+                'atom feed has correct post paths';
+
+            cmp_deeply [ $dom->find( 'entry title' )->map( 'text' )->each ],
+                [ 'Regex violating Post' ],
+                'atom feed has correct post paths';
+
+            cmp_deeply [ $dom->find( 'entry author name' )->map( 'text' )->each ],
+                [ 'preaction' ],
+                'author is correct';
+
+            cmp_deeply [ $dom->find( 'entry content' )->map( attr => 'type' )->each ],
+                [ 'html' ],
+                'content type is correct';
+        },
+
+        '/blog/tag/error-message.rss' => sub {
+            my ( $rss, $dom ) = @_;
+
+            is $dom->at( 'channel > title' )->text, 'Example Site';
+            is $dom->at( 'channel > link' )->text, 'http://example.com/blog/tag/error-message/index.html';
+            is $dom->at( 'channel > description' )->text, 'Blog feed of Example Site';
+
+            is $dom->at( 'channel > link[rel=self]' )->attr( 'href' ),
+                'http://example.com/blog/tag/error-message.rss';
+
+            is $dom->at( 'channel > generator' )->text, 'Statocles ' . $Statocles::VERSION;
+
+            cmp_deeply [ $dom->find( 'item link' )->map( 'text' )->each ],
+                [
+                    'http://example.com/blog/2014/05/22/(regex)[name].file.html',
+                ],
+                'rss feed has correct post paths';
+
+            cmp_deeply [ $dom->find( 'item title' )->map( 'text' )->each ],
+                [ 'Regex violating Post' ],
+                'rss feed has correct post titles';
+
+            cmp_deeply [ $dom->find( 'item pubDate' )->map( 'text' )->each ],
+                array_each( re( qr{\w{3}, \d{2} \w{3} \w{4} \d{2}:\d{2}:\d{2} [-+]\d{4}} ) ),
+                'pubDate is correct';
+        },
+
+        '/blog/tag/more.atom' => sub {
+            my ( $atom, $dom ) = @_;
+
+            is $dom->at( 'feed > id' )->text,
+                'http://example.com/blog/tag/more/index.html';
+            is $dom->at( 'feed > title' )->text, 'Example Site';
+            like $dom->at( 'feed > updated' )->text,
+                qr{^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z};
+
+            is $dom->at( 'feed > link[rel=self]' )->attr( 'href' ),
+                'http://example.com/blog/tag/more.atom';
+            is $dom->at( 'feed > link[rel=alternate]' )->attr( 'href' ),
+                'http://example.com/blog/tag/more/index.html';
+
+            is $dom->at( 'feed > generator' )->text, 'Statocles';
+            is $dom->at( 'feed > generator' )->attr( 'version' ), $Statocles::VERSION;
+
+            cmp_deeply [ $dom->find( 'entry id' )->map( 'text' )->each ],
+                [
+                    'http://example.com/blog/2014/06/02/more_tags.html',
+                ],
+                'atom feed has correct post paths';
+
+            cmp_deeply [ $dom->find( 'entry title' )->map( 'text' )->each ],
+                [ 'More Tags' ],
+                'atom feed has correct post titles';
+
+            cmp_deeply [ $dom->find( 'entry author name' )->map( 'text' )->each ],
+                [ 'preaction' ],
+                'author is correct';
+
+            cmp_deeply [ $dom->find( 'entry content' )->map( attr => 'type' )->each ],
+                [ 'html' ],
+                'content type is correct';
+        },
+
+        '/blog/tag/more.rss' => sub {
+            my ( $rss, $dom ) = @_;
+
+            is $dom->at( 'channel > title' )->text, 'Example Site';
+            is $dom->at( 'channel > link' )->text, 'http://example.com/blog/tag/more/index.html';
+            is $dom->at( 'channel > description' )->text, 'Blog feed of Example Site';
+
+            is $dom->at( 'channel > link[rel=self]' )->attr( 'href' ),
+                'http://example.com/blog/tag/more.rss';
+
+            is $dom->at( 'channel > generator' )->text, 'Statocles ' . $Statocles::VERSION;
+
+            cmp_deeply [ $dom->find( 'item link' )->map( 'text' )->each ],
+                [
+                    'http://example.com/blog/2014/06/02/more_tags.html',
+                ],
+                'rss feed has correct post paths';
+
+            cmp_deeply [ $dom->find( 'item title' )->map( 'text' )->each ],
+                [ 'More Tags' ],
+                'rss feed has correct post titles';
+
+            cmp_deeply [ $dom->find( 'item pubDate' )->map( 'text' )->each ],
+                array_each( re( qr{\w{3}, \d{2} \w{3} \w{4} \d{2}:\d{2}:\d{2} [-+]\d{4}} ) ),
+                'pubDate is correct';
+        },
+
+        '/blog/tag/even-more-tags.atom' => sub {
+            my ( $atom, $dom ) = @_;
+
+            is $dom->at( 'feed > id' )->text,
+                'http://example.com/blog/tag/even-more-tags/index.html';
+            is $dom->at( 'feed > title' )->text, 'Example Site';
+            like $dom->at( 'feed > updated' )->text,
+                qr{^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z};
+
+            is $dom->at( 'feed > link[rel=self]' )->attr( 'href' ),
+                'http://example.com/blog/tag/even-more-tags.atom';
+            is $dom->at( 'feed > link[rel=alternate]' )->attr( 'href' ),
+                'http://example.com/blog/tag/even-more-tags/index.html';
+
+            is $dom->at( 'feed > generator' )->text, 'Statocles';
+            is $dom->at( 'feed > generator' )->attr( 'version' ), $Statocles::VERSION;
+
+            cmp_deeply [ $dom->find( 'entry id' )->map( 'text' )->each ],
+                [
+                    'http://example.com/blog/2014/06/02/more_tags.html',
+                ],
+                'atom feed has correct post paths';
+
+            cmp_deeply [ $dom->find( 'entry title' )->map( 'text' )->each ],
+                [ 'More Tags' ],
+                'atom feed has correct post titles';
+
+            cmp_deeply [ $dom->find( 'entry author name' )->map( 'text' )->each ],
+                [ 'preaction' ],
+                'author is correct';
+
+            cmp_deeply [ $dom->find( 'entry content' )->map( attr => 'type' )->each ],
+                [ 'html' ],
+                'content type is correct';
+        },
+
+        '/blog/tag/even-more-tags.rss' => sub {
+            my ( $rss, $dom ) = @_;
+
+            is $dom->at( 'channel > title' )->text, 'Example Site';
+            is $dom->at( 'channel > link' )->text,
+                'http://example.com/blog/tag/even-more-tags/index.html';
+            is $dom->at( 'channel > description' )->text, 'Blog feed of Example Site';
+
+            is $dom->at( 'channel > link[rel=self]' )->attr( 'href' ),
+                'http://example.com/blog/tag/even-more-tags.rss';
+
+            is $dom->at( 'channel > generator' )->text, 'Statocles ' . $Statocles::VERSION;
+
+            cmp_deeply [ $dom->find( 'item link' )->map( 'text' )->each ],
+                [
+                    'http://example.com/blog/2014/06/02/more_tags.html',
+                ],
+                'rss feed has right post links';
+
+            cmp_deeply [ $dom->find( 'item title' )->map( 'text' )->each ],
+                [ 'More Tags' ],
+                'rss feed has right post titles';
+
+            cmp_deeply [ $dom->find( 'item pubDate' )->map( 'text' )->each ],
+                array_each( re( qr{\w{3}, \d{2} \w{3} \w{4} \d{2}:\d{2}:\d{2} [-+]\d{4}} ) ),
+                'pubDate is correct';
+        },
+
+        # Post pages
+        '/blog/2014/04/23/slug.html' => sub {
+            my ( $html, $dom ) = @_;
+
+            is $dom->at( 'header h1' )->text, 'First Post';
+            is $dom->at( '.author' )->text, 'preaction';
+            ok !scalar $dom->find( 'header .tags a' )->each, 'no tags';
+
+            # crosspost, blogs.perl.org, http://blogs.perl.org/preaction/404.html
+            is $dom->at( '.crosspost a' )->attr( 'href' ),
+                'http://blogs.perl.org/preaction/404.html';
+            is $dom->at( '.crosspost a em' )->text, 'First Post';
+            is $dom->at( '.crosspost a' )->text, 'on blogs.perl.org.';
+        },
+
+        '/blog/2014/04/30/plug.html' => sub {
+            my ( $html, $dom ) = @_;
+
+            is $dom->at( 'header h1' )->text, 'Second Post';
+            is $dom->at( '.author' )->text, 'preaction';
+
+            cmp_deeply [ $dom->find( '.tags a' )->map( 'text' )->each ],
+                [ 'better' ];
+            cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
+                [ '/blog/tag/better/index.html' ];
+
+            ok !scalar $dom->find( '.crosspost' )->each, 'no crosspost';
+        },
+
+        '/blog/2014/05/22/(regex)[name].file.html' => sub {
+            my ( $html, $dom ) = @_;
+
+            is $dom->at( 'header h1' )->text, 'Regex violating Post';
+            is $dom->at( '.author' )->text, 'preaction';
+
+            cmp_deeply [ $dom->find( '.tags a' )->map( 'text' )->each ],
+                bag( 'better', 'error message' );
+            cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
+                bag(
+                    '/blog/tag/better/index.html',
+                    '/blog/tag/error-message/index.html',
+                );
+
+            ok !scalar $dom->find( '.crosspost' )->each, 'no crosspost';
+        },
+
+        '/blog/2014/06/02/more_tags.html' => sub {
+            my ( $html, $dom ) = @_;
+
+            is $dom->at( 'header h1' )->text, 'More Tags';
+            is $dom->at( '.author' )->text, 'preaction';
+
+            cmp_deeply [ $dom->find( '.tags a' )->map( 'text' )->each ],
+                bag( 'more', 'better', 'even more tags' );
+            cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
+                bag(
+                    '/blog/tag/more/index.html',
+                    '/blog/tag/better/index.html',
+                    '/blog/tag/even-more-tags/index.html',
+                );
+
+            # crosspost, blogs.perl.org, http://blogs.perl.org/preaction/404.html
+            is $dom->at( '.crosspost a' )->attr( 'href' ),
+                'http://blogs.perl.org/preaction/404.html';
+            is $dom->at( '.crosspost a em' )->text, 'More Tags';
+            is $dom->at( '.crosspost a' )->text, 'on blogs.perl.org.';
+        },
+
+        # Does not show /blog/9999/12/31/forever-is-a-long-time.html
+        # Does not show /blog/draft/a-draft-post.html
     );
-
-    my @feeds = (
-        Statocles::Page::Feed->new(
-            %atom_args,
-            path => '/blog/index.atom',
-            page => $pages[0],
-        ),
-        Statocles::Page::Feed->new(
-            %rss_args,
-            path => '/blog/index.rss',
-            page => $pages[0],
-        ),
-    );
-
-    for my $page ( @pages ) {
-        $page->links->{feed} = [
-            { title => 'Atom', href => $feeds[0]->path, type => $feeds[0]->type },
-            { title => 'RSS', href => $feeds[1]->path, type => $feeds[1]->type },
-        ];
-    }
-
-    push @pages, @feeds;
-
-    cmp_deeply [$app->index( pages( @sorted_docs ) )], bag( @pages );
-
-    # index page must be first!
-    unshift @all_pages, @pages;
-};
-
-subtest 'all pages()' => sub {
-    my @got_pages = $app->pages;
-    # index page must be first
-    my $got_index = shift @got_pages;
-    my $exp_index = shift @all_pages;
-    cmp_deeply $got_index, $exp_index;
-    cmp_deeply [ @got_pages ], bag( @all_pages );
 };
 
 subtest 'commands' => sub {
     # We need an app we can edit
     my $tmpdir = tempdir;
     my $app = Statocles::App::Blog->new(
-        store => Statocles::Store->new( path => $tmpdir->child( 'blog' ) ),
+        store => $tmpdir->child( 'blog' ),
         url_root => '/blog',
-        theme => $theme,
+        theme => $SHARE_DIR->child( 'theme' ),
     );
 
     subtest 'errors' => sub {
