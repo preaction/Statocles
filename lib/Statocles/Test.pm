@@ -6,7 +6,7 @@ use Test::More;
 use Test::Exception;
 use Test::Deep;
 use base qw( Exporter );
-our @EXPORT_OK = qw( test_constructor );
+our @EXPORT_OK = qw( test_constructor test_pages );
 
 =sub test_constructor( class, args )
 
@@ -69,6 +69,67 @@ sub test_constructor {
         }
 
     };
+}
+
+=sub test_pages( site, app, tests )
+
+Test the pages of the given app. C<tests> is a set of pairs of C<path> => C<callback>
+to test the pages returned by the app.
+
+The C<callback> will be given two arguments:
+
+=over
+
+=item C<output>
+
+The output of the rendered page.
+
+=item C<dom>
+
+If the page is HTML, a L<Mojo::DOM> object ready for testing.
+
+=back
+
+=cut
+
+sub test_pages {
+    my ( $site, $app, $index_path, $index_test, %page_tests ) = @_;
+    $page_tests{ $index_path } = $index_test;
+
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+
+    my @warnings;
+    local $SIG{__WARN__} = sub { push @warnings, $_[0] };
+
+    my @pages = $app->pages;
+    is scalar @pages, scalar keys %page_tests, 'correct number of pages';
+    is $pages[0]->path, $index_path, 'index page must come first';
+
+    for my $page ( @pages ) {
+        ok $page->DOES( 'Statocles::Page' );
+        isa_ok $page->last_modified, 'Time::Piece', 'must set a last_modified';
+
+        if ( !$page_tests{ $page->path } ) {
+            fail "No tests found for page: " . $page->path;
+            next;
+        }
+
+        my $output = $page->render( site => $site );
+        if ( $page->path =~ /[.]html$/ ) {
+            my $dom = Mojo::DOM->new( $output );
+            fail "Could not parse dom" unless $dom;
+            subtest 'html content: ' . $page->path, $page_tests{ $page->path }, $output, $dom;
+        }
+        elsif ( $page->path =~ /[.]txt$/ ) {
+            subtest 'text content: ' . $page->path, $page_tests{ $page->path }, $output;
+        }
+        else {
+            fail "Unknown page: " . $page->path;
+        }
+
+    }
+
+    ok !@warnings, "no warnings!" or diag join "\n", @warnings;
 }
 
 1;

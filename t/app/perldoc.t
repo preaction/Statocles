@@ -82,89 +82,49 @@ subtest 'constructor' => sub {
 
 subtest 'perldoc pages' => sub {
 
-    my %page_tests = (
+    my @page_tests = (
         '/pod/index.html' => sub {
-            my ( $dom ) = @_;
-            return sub {
-                # XXX: Find the layout and template
-                my $node;
-                if ( ok $node = $dom->at( 'h1#NAME' ) ) {
-                    is $node->text, 'NAME';
-                }
-                if ( ok $node = $dom->at( 'h1#NAME + p' ) ) {
-                    is $node->text, 'My - A sample for my perldoc app';
-                }
-                if ( ok $node = $dom->at( 'h1#SYNOPSIS + pre code' ) ) {
-                    like $node->text, qr{my \$my = My->new};
-                }
-                ok $dom->at( 'a[href="/pod/My/Internal.html"]' ), 'internal link exists';
-                ok $dom->at( 'a[href="https://metacpan.org/pod/External"]' ), 'external link exists';
-            };
+            my ( $html, $dom ) = @_;
+            # XXX: Find the layout and template
+            my $node;
+
+            if ( ok $node = $dom->at( 'h1#NAME' ) ) {
+                is $node->text, 'NAME';
+            }
+
+            if ( ok $node = $dom->at( 'h1#NAME + p' ) ) {
+                is $node->text, 'My - A sample for my perldoc app';
+            }
+
+            if ( ok $node = $dom->at( 'h1#SYNOPSIS + pre code' ) ) {
+                like $node->text, qr{my \$my = My->new};
+            }
+
+            ok $dom->at( 'a[href="/pod/My/Internal.html"]' ), 'internal link exists';
+            ok $dom->at( 'a[href="https://metacpan.org/pod/External"]' ), 'external link exists';
         },
 
         '/pod/My/Internal.html' => sub {
-            my ( $dom ) = @_;
-            return sub {
-                # XXX: Find the layout and template
-                my $node;
-                if ( ok $node = $dom->at( 'h1#NAME' ) ) {
-                    is $node->text, 'NAME';
-                }
-                if ( ok $node = $dom->at( 'h1#NAME + p' ) ) {
-                    is $node->text, 'My::Internal - An internal module to link to';
-                }
-                if ( ok $node = $dom->at( 'h1#SYNOPSIS + pre code' ) ) {
-                    like $node->text, qr{my \$int = My::Internal->new};
-                }
-                ok $dom->at( 'a[href="/pod/index.html"]' ), 'internal link to index page';
-            };
+            my ( $html, $dom ) = @_;
+            # XXX: Find the layout and template
+            my $node;
+
+            if ( ok $node = $dom->at( 'h1#NAME' ) ) {
+                is $node->text, 'NAME';
+            }
+
+            if ( ok $node = $dom->at( 'h1#NAME + p' ) ) {
+                is $node->text, 'My::Internal - An internal module to link to';
+            }
+
+            if ( ok $node = $dom->at( 'h1#SYNOPSIS + pre code' ) ) {
+                like $node->text, qr{my \$int = My::Internal->new};
+            }
+
+            ok $dom->at( 'a[href="/pod/index.html"]' ), 'internal link to index page';
         },
 
-        '/pod/My.txt' => sub {
-            my ( $text ) = @_;
-            return sub {
-                eq_or_diff $text, $SHARE_DIR->child( 'lib', 'My.pm' )->slurp;
-            };
-        },
-
-        '/pod/My/Internal.txt' => sub {
-            my ( $text ) = @_;
-            return sub {
-                eq_or_diff $text, $SHARE_DIR->child( 'lib', 'My', 'Internal.pm' )->slurp;
-            };
-        },
     );
-
-    my $test_pages = sub {
-        my ( $app ) = @_;
-
-        my @pages = $app->pages;
-        is scalar @pages, 2, 'correct number of pages';
-        is $pages[0]->path, '/pod/index.html', 'index is first';
-        for my $page ( @pages ) {
-            isa_ok $page, 'Statocles::Page::Plain';
-            like $page->path, qr{^/pod};
-
-            if ( !$page_tests{ $page->path } ) {
-                fail "No tests found for page: " . $page->path;
-                next;
-            }
-
-            my $output = $page->render( site => $site );
-            if ( $page->path =~ /[.]html$/ ) {
-                my $dom = Mojo::DOM->new( $output );
-                fail "Could not parse dom" unless $dom;
-                subtest 'html content: ' . $page->path, $page_tests{ $page->path }->( $dom );
-            }
-            elsif ( $page->path =~ /[.]txt$/ ) {
-                subtest 'text content: ' . $page->path, $page_tests{ $page->path }->( $output );
-            }
-            else {
-                fail "Unknown page: " . $page->path;
-            }
-
-        }
-    };
 
     subtest 'without Pod::Weaver' => sub {
         my $app = Statocles::App::Perldoc->new(
@@ -175,7 +135,7 @@ subtest 'perldoc pages' => sub {
             theme => $SHARE_DIR->child( 'theme' ),
         );
 
-        $test_pages->( $app );
+        test_pages( $site, $app, @page_tests );
     };
 
     subtest 'with Pod::Weaver' => sub {
@@ -225,7 +185,7 @@ subtest 'perldoc pages' => sub {
             weave_config => $SHARE_DIR->child( 'weaver.ini' ),
         );
 
-        $test_pages->( $app );
+        test_pages( $site, $app, @page_tests );
     };
 };
 

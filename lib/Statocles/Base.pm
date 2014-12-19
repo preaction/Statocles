@@ -31,7 +31,7 @@ our %IMPORT_BUNDLES = (
         qw( Test::More Test::Deep Test::Differences Test::Exception ),
         'Dir::Self' => [qw( __DIR__ )],
         'Path::Tiny' => [qw( path tempdir )],
-        'Statocles::Test' => [qw( test_constructor )],
+        'Statocles::Test' => [qw( test_constructor test_pages )],
         'Statocles::Site',
     ],
 
