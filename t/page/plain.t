@@ -4,31 +4,21 @@ my $SHARE_DIR = path( __DIR__ )->parent->child( 'share' );
 
 use Statocles::Page::Plain;
 
-subtest 'constructor errors' => sub {
-    dies_ok {
-        Statocles::Page::Plain->new(
-            path => '/allowed.html',
-        )
-    } 'content is required';
-};
-
-subtest 'attribute defaults' => sub {
-    my $page = Statocles::Page::Plain->new(
-        path => '/path/to/page.html',
-        content => 'some test content',
+subtest 'constructor' => sub {
+    test_constructor(
+        'Statocles::Page::Plain',
+        required => {
+            path => '/index.html',
+            content => 'some test content',
+        },
+        default => {
+            search_change_frequency => 'weekly',
+            search_priority => 0.5,
+            last_modified => sub {
+                isa_ok $_, 'Time::Piece';
+            },
+        },
     );
-
-    subtest 'search_change_frequency' => sub {
-        is $page->search_change_frequency, 'weekly';
-    };
-
-    subtest 'search_priority' => sub {
-        is $page->search_priority, 0.5;
-    };
-
-    subtest 'last_modified' => sub {
-        isa_ok $page->last_modified, 'Time::Piece';
-    };
 };
 
 subtest 'render' => sub {

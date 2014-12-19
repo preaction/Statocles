@@ -12,27 +12,16 @@ my $site = Statocles::Site->new(
 );
 
 subtest 'constructor' => sub {
-    my %required = (
-        url_root => '/',
-        theme => $SHARE_DIR->child( 'theme' ),
-        store => $SHARE_DIR->child( 'plain' ),
+
+    test_constructor(
+        "Statocles::App::Plain",
+        required => {
+            url_root => '/',
+            theme => $SHARE_DIR->child( 'theme' ),
+            store => $SHARE_DIR->child( 'plain' ),
+        },
     );
 
-    isa_ok +Statocles::App::Plain->new( %required ), 'Statocles::App';
-
-    subtest 'constructor errors' => sub {
-
-        subtest 'required attributes' => sub {
-            for my $key ( keys %required ) {
-                dies_ok {
-                    Statocles::App::Plain->new(
-                        map {; $_ => $required{ $_ } } grep { $_ ne $key } keys %required,
-                    );
-                } $key . ' is required';
-            }
-        };
-
-    };
 };
 
 subtest 'perldoc pages' => sub {

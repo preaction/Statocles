@@ -31,6 +31,7 @@ our %IMPORT_BUNDLES = (
         qw( Test::More Test::Deep Test::Differences Test::Exception ),
         'Dir::Self' => [qw( __DIR__ )],
         'Path::Tiny' => [qw( path tempdir )],
+        'Statocles::Test' => [qw( test_constructor )],
         'Statocles::Site',
     ],
 
@@ -142,6 +143,10 @@ The test bundle includes:
 =item L<Dir::Self> '__DIR__'
 
 =item L<Path::Tiny> 'path', 'tempdir'
+
+=item L<Statocles::Test>
+
+Some common test routines for Statocles.
 
 =item L<Statocles::Site>
 

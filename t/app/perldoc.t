@@ -12,6 +12,7 @@ my $site = Statocles::Site->new(
 );
 
 subtest 'constructor' => sub {
+
     my %required = (
         url_root => '/pod',
         theme => $SHARE_DIR->child( 'theme' ),
@@ -19,34 +20,15 @@ subtest 'constructor' => sub {
         index_module => 'My',
     );
 
-    isa_ok +Statocles::App::Perldoc->new( %required ), 'Statocles::App';
-
-    subtest 'constructor errors' => sub {
-
-        subtest 'required attributes' => sub {
-            for my $key ( keys %required ) {
-                dies_ok {
-                    Statocles::App::Perldoc->new(
-                        map {; $_ => $required{ $_ } } grep { $_ ne $key } keys %required,
-                    );
-                } $key . ' is required';
-            }
-        };
-
-    };
-
-    subtest 'attribute defaults' => sub {
-        my %defaults = (
+    test_constructor(
+        "Statocles::App::Perldoc",
+        required => \%required,
+        default => {
             inc => [ map { Path::Tiny->new( $_ ) } @INC ],
             weave => 0,
             weave_config => Path::Tiny->new( './weaver.ini' ),
-        );
-
-        my $app = Statocles::App::Perldoc->new( %required );
-        for my $key ( keys %defaults ) {
-            cmp_deeply $app->$key, $defaults{ $key }, "$key default value";
-        }
-    };
+        },
+    );
 
     subtest 'attribute types/coercions' => sub {
         subtest 'inc' => sub {
