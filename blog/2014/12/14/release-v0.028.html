@@ -46,6 +46,12 @@
                 max-width: 100%;
             }
 
+            footer .tagline {
+                font-size: smaller;
+                line-height: 1.3;
+                text-align: right;
+            }
+
         </style>
     </head>
     <body>
@@ -79,24 +85,7 @@
 
         </header>
         <div class="main container">
-            <div class="row">
-
-    <div class="col-md-9">
-        <main>
-            <header>
-                <h1>Release v0.028</h1>
-                <p class="tags">Tags:
-                    <a href="/Statocles/blog/tag/release/index.html" rel="tag">release</a>
-                </p>
-                <aside>
-                    <p><time datetime="2014-12-14">
-                        Posted on 2014-12-14
-                    </time>
-                    by preaction</p>
-                </aside>
-            </header>
-            <section id="section-1">
-                <p>This release adds automatic rebuilding of the site when changes are made (OSX
+            <p>This release adds automatic rebuilding of the site when changes are made (OSX
 only, so far). We&#39;re now using Mojo::Log for logging (instead of a hacked up
 <code>diag()</code> sub).</p>
 
@@ -112,38 +101,30 @@ Still plenty of cleanup to go.</p>
 <p>In this release:</p>
 
 <ul>
-<li>set the default log level to &quot;info&quot;</li>
-<li>fix test only emits &quot;Watching&quot; if we have the right module</li>
-<li>use bundles to remove extra Base modules</li>
-<li>fix new &quot;redundant argument in sprintf warning&quot;</li>
-<li>change all instances of print to say</li>
-<li>use Mojo::Log for logging</li>
-<li>create type library for types and coercions</li>
-<li>watch for filesystem events and rebuild the site</li>
-<li>remove index method from apps</li>
-<li>remove caching from Blog app</li>
-<li>add clear method to theme to clear template cache</li>
-<li>add method to clear document cache</li>
-<li>clean up reading documents and parsing frontmatter</li>
-<li>remove the Statocles site.yml from CPAN tarballs</li>
+<li><a href="https://github.com/preaction/Statocles/commit/65cf7b77c37f140447eb8fbff0a6beed6d2eb554">set the default log level to &quot;info&quot;</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/3794f261c21512c791c731640fda04c36fd6ddf3">fix test only emits &quot;Watching&quot; if we have the right module</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/2aaffc3a6a6a009cc648c327fef162e0b319d01f">use bundles to remove extra Base modules</a> (<a href="https://github.com/preaction/Statocles/issues/128">#128</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/a88422ea3fba7058ee31041e48b3246d4dff59d0">fix new &quot;redundant argument in sprintf warning&quot;</a> (<a href="https://github.com/preaction/Statocles/issues/121">#121</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/1124203ca2ead63507d57e656dca2bfb0583f5de">change all instances of print to say</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/baa115c99653bc4ca0731f320b2b59e419998402">use Mojo::Log for logging</a> (<a href="https://github.com/preaction/Statocles/issues/122">#122</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/2f69b22a347f16713fd9c3a2a65af46cca91110e">create type library for types and coercions</a> (<a href="https://github.com/preaction/Statocles/issues/122">#122</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/c2a201378af91dd6f43ab5f1b57e1f11557598ad">watch for filesystem events and rebuild the site</a> (<a href="https://github.com/preaction/Statocles/issues/154">#154</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/4f9fa65278b2e62188b59fe8dbf82648fc5905cc">remove index method from apps</a> (<a href="https://github.com/preaction/Statocles/issues/141">#141</a>, <a href="https://github.com/preaction/Statocles/issues/142">#142</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/518eefc500b6b7c7b19bf53c48f8e06ed5496224">remove caching from Blog app</a> (<a href="https://github.com/preaction/Statocles/issues/154">#154</a>, <a href="https://github.com/preaction/Statocles/issues/153">#153</a>, <a href="https://github.com/preaction/Statocles/issues/141">#141</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/2289eb0b3f2891ba7bad722f71bc59536e4f9ea4">add clear method to theme to clear template cache</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/d50c95aaf11f896c885496b16648f65e870e9072">add method to clear document cache</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/6e9147cd35b6e8150e98e5f241365bb37284ca62">clean up reading documents and parsing frontmatter</a> (<a href="https://github.com/preaction/Statocles/issues/149">#149</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/c4eeb50db506c9337db23c5879137fca235b3163">remove the Statocles site.yml from CPAN tarballs</a></li>
 </ul>
 
-            </section>
-        </main>
-    </div>
-
-    <div class="col-md-3">
-        
-        <nav id="tags">
-            <h1>Tags</h1>
-            <ul class="list-inline">
-            </ul>
-        </nav>
-    </div>
-
-</div>
 
         </div>
-        
+        <footer>
+            
+            <div class="container tagline">
+                <a href="http://preaction.github.io/Statocles">Made with Statocles</a><br>
+                <a href="http://www.perl.org">Powered by Perl</a>
+            </div>
+        </footer>
     </body>
 </html>

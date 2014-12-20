@@ -1,30 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>http://preaction.github.io/Statocles/index.html</loc>
-        <changefreq>weekly</changefreq>
-        <priority>0.5</priority>
-        <lastmod>2014-12-15</lastmod>
-    </url>
-    <url>
-        <loc>http://preaction.github.io/Statocles/blog/2014/12/07/statocles-initial-public-(alpha)-release.html</loc>
-        <changefreq>weekly</changefreq>
-        <priority>0.5</priority>
-        <lastmod>2014-12-15</lastmod>
-    </url>
-    <url>
-        <loc>http://preaction.github.io/Statocles/blog/2014/12/08/release-v0.027.html</loc>
-        <changefreq>weekly</changefreq>
-        <priority>0.5</priority>
-        <lastmod>2014-12-15</lastmod>
-    </url>
-    <url>
-        <loc>http://preaction.github.io/Statocles/blog/2014/12/14/release-v0.028.html</loc>
-        <changefreq>weekly</changefreq>
-        <priority>0.5</priority>
-        <lastmod>2014-12-15</lastmod>
-    </url>
-    <url>
         <loc>http://preaction.github.io/Statocles/blog/index.html</loc>
         <changefreq>daily</changefreq>
         <priority>0.3</priority>
@@ -55,123 +31,153 @@
         <lastmod>2014-12-14</lastmod>
     </url>
     <url>
+        <loc>http://preaction.github.io/Statocles/index.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.5</priority>
+        <lastmod>2014-12-20</lastmod>
+    </url>
+    <url>
+        <loc>http://preaction.github.io/Statocles/blog/2014/12/07/statocles-initial-public-(alpha)-release.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.5</priority>
+        <lastmod>2014-12-20</lastmod>
+    </url>
+    <url>
+        <loc>http://preaction.github.io/Statocles/blog/2014/12/08/release-v0.027.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.5</priority>
+        <lastmod>2014-12-20</lastmod>
+    </url>
+    <url>
+        <loc>http://preaction.github.io/Statocles/blog/2014/12/14/release-v0.028.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.5</priority>
+        <lastmod>2014-12-20</lastmod>
+    </url>
+    <url>
         <loc>http://preaction.github.io/Statocles/pod/index.html</loc>
         <changefreq>weekly</changefreq>
         <priority>0.5</priority>
-        <lastmod>2014-12-15</lastmod>
+        <lastmod>2014-12-20</lastmod>
     </url>
     <url>
         <loc>http://preaction.github.io/Statocles/pod/Statocles/App/Plain.html</loc>
         <changefreq>weekly</changefreq>
         <priority>0.5</priority>
-        <lastmod>2014-12-15</lastmod>
-    </url>
-    <url>
-        <loc>http://preaction.github.io/Statocles/pod/Statocles/Page/List.html</loc>
-        <changefreq>weekly</changefreq>
-        <priority>0.5</priority>
-        <lastmod>2014-12-15</lastmod>
-    </url>
-    <url>
-        <loc>http://preaction.github.io/Statocles/pod/Statocles/Page/Feed.html</loc>
-        <changefreq>weekly</changefreq>
-        <priority>0.5</priority>
-        <lastmod>2014-12-15</lastmod>
-    </url>
-    <url>
-        <loc>http://preaction.github.io/Statocles/pod/Statocles/App/Blog.html</loc>
-        <changefreq>weekly</changefreq>
-        <priority>0.5</priority>
-        <lastmod>2014-12-15</lastmod>
-    </url>
-    <url>
-        <loc>http://preaction.github.io/Statocles/pod/Statocles/App.html</loc>
-        <changefreq>weekly</changefreq>
-        <priority>0.5</priority>
-        <lastmod>2014-12-15</lastmod>
-    </url>
-    <url>
-        <loc>http://preaction.github.io/Statocles/pod/Statocles/Document.html</loc>
-        <changefreq>weekly</changefreq>
-        <priority>0.5</priority>
-        <lastmod>2014-12-15</lastmod>
-    </url>
-    <url>
-        <loc>http://preaction.github.io/Statocles/pod/Statocles/App/Perldoc.html</loc>
-        <changefreq>weekly</changefreq>
-        <priority>0.5</priority>
-        <lastmod>2014-12-15</lastmod>
-    </url>
-    <url>
-        <loc>http://preaction.github.io/Statocles/pod/Statocles/Types.html</loc>
-        <changefreq>weekly</changefreq>
-        <priority>0.5</priority>
-        <lastmod>2014-12-15</lastmod>
-    </url>
-    <url>
-        <loc>http://preaction.github.io/Statocles/pod/Statocles/Site/Git.html</loc>
-        <changefreq>weekly</changefreq>
-        <priority>0.5</priority>
-        <lastmod>2014-12-15</lastmod>
-    </url>
-    <url>
-        <loc>http://preaction.github.io/Statocles/pod/Statocles/Help/Setup.html</loc>
-        <changefreq>weekly</changefreq>
-        <priority>0.5</priority>
-        <lastmod>2014-12-15</lastmod>
-    </url>
-    <url>
-        <loc>http://preaction.github.io/Statocles/pod/Statocles/Page/Plain.html</loc>
-        <changefreq>weekly</changefreq>
-        <priority>0.5</priority>
-        <lastmod>2014-12-15</lastmod>
+        <lastmod>2014-12-20</lastmod>
     </url>
     <url>
         <loc>http://preaction.github.io/Statocles/pod/Statocles/Command.html</loc>
         <changefreq>weekly</changefreq>
         <priority>0.5</priority>
-        <lastmod>2014-12-15</lastmod>
+        <lastmod>2014-12-20</lastmod>
     </url>
     <url>
-        <loc>http://preaction.github.io/Statocles/pod/Statocles/Theme.html</loc>
+        <loc>http://preaction.github.io/Statocles/pod/Statocles/Page/Plain.html</loc>
         <changefreq>weekly</changefreq>
         <priority>0.5</priority>
-        <lastmod>2014-12-15</lastmod>
-    </url>
-    <url>
-        <loc>http://preaction.github.io/Statocles/pod/Statocles/Template.html</loc>
-        <changefreq>weekly</changefreq>
-        <priority>0.5</priority>
-        <lastmod>2014-12-15</lastmod>
-    </url>
-    <url>
-        <loc>http://preaction.github.io/Statocles/pod/Statocles/Site.html</loc>
-        <changefreq>weekly</changefreq>
-        <priority>0.5</priority>
-        <lastmod>2014-12-15</lastmod>
-    </url>
-    <url>
-        <loc>http://preaction.github.io/Statocles/pod/Statocles/Store.html</loc>
-        <changefreq>weekly</changefreq>
-        <priority>0.5</priority>
-        <lastmod>2014-12-15</lastmod>
-    </url>
-    <url>
-        <loc>http://preaction.github.io/Statocles/pod/Statocles/Base.html</loc>
-        <changefreq>weekly</changefreq>
-        <priority>0.5</priority>
-        <lastmod>2014-12-15</lastmod>
-    </url>
-    <url>
-        <loc>http://preaction.github.io/Statocles/pod/Statocles/Page/Document.html</loc>
-        <changefreq>weekly</changefreq>
-        <priority>0.5</priority>
-        <lastmod>2014-12-15</lastmod>
+        <lastmod>2014-12-20</lastmod>
     </url>
     <url>
         <loc>http://preaction.github.io/Statocles/pod/Statocles/Page.html</loc>
         <changefreq>weekly</changefreq>
         <priority>0.5</priority>
-        <lastmod>2014-12-15</lastmod>
+        <lastmod>2014-12-20</lastmod>
+    </url>
+    <url>
+        <loc>http://preaction.github.io/Statocles/pod/Statocles/Store.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.5</priority>
+        <lastmod>2014-12-20</lastmod>
+    </url>
+    <url>
+        <loc>http://preaction.github.io/Statocles/pod/Statocles/Test.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.5</priority>
+        <lastmod>2014-12-20</lastmod>
+    </url>
+    <url>
+        <loc>http://preaction.github.io/Statocles/pod/Statocles/App/Perldoc.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.5</priority>
+        <lastmod>2014-12-20</lastmod>
+    </url>
+    <url>
+        <loc>http://preaction.github.io/Statocles/pod/Statocles/Page/Document.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.5</priority>
+        <lastmod>2014-12-20</lastmod>
+    </url>
+    <url>
+        <loc>http://preaction.github.io/Statocles/pod/Statocles/Page/List.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.5</priority>
+        <lastmod>2014-12-20</lastmod>
+    </url>
+    <url>
+        <loc>http://preaction.github.io/Statocles/pod/Statocles/App.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.5</priority>
+        <lastmod>2014-12-20</lastmod>
+    </url>
+    <url>
+        <loc>http://preaction.github.io/Statocles/pod/Statocles/App/Blog.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.5</priority>
+        <lastmod>2014-12-20</lastmod>
+    </url>
+    <url>
+        <loc>http://preaction.github.io/Statocles/pod/Statocles/Document.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.5</priority>
+        <lastmod>2014-12-20</lastmod>
+    </url>
+    <url>
+        <loc>http://preaction.github.io/Statocles/pod/Statocles/Template.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.5</priority>
+        <lastmod>2014-12-20</lastmod>
+    </url>
+    <url>
+        <loc>http://preaction.github.io/Statocles/pod/Statocles/Page/Feed.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.5</priority>
+        <lastmod>2014-12-20</lastmod>
+    </url>
+    <url>
+        <loc>http://preaction.github.io/Statocles/pod/Statocles/Base.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.5</priority>
+        <lastmod>2014-12-20</lastmod>
+    </url>
+    <url>
+        <loc>http://preaction.github.io/Statocles/pod/Statocles/Types.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.5</priority>
+        <lastmod>2014-12-20</lastmod>
+    </url>
+    <url>
+        <loc>http://preaction.github.io/Statocles/pod/Statocles/Site/Git.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.5</priority>
+        <lastmod>2014-12-20</lastmod>
+    </url>
+    <url>
+        <loc>http://preaction.github.io/Statocles/pod/Statocles/Help/Setup.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.5</priority>
+        <lastmod>2014-12-20</lastmod>
+    </url>
+    <url>
+        <loc>http://preaction.github.io/Statocles/pod/Statocles/Site.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.5</priority>
+        <lastmod>2014-12-20</lastmod>
+    </url>
+    <url>
+        <loc>http://preaction.github.io/Statocles/pod/Statocles/Theme.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.5</priority>
+        <lastmod>2014-12-20</lastmod>
     </url>
 </urlset>

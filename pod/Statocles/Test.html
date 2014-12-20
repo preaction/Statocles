@@ -46,6 +46,12 @@
                 max-width: 100%;
             }
 
+            footer .tagline {
+                font-size: smaller;
+                line-height: 1.3;
+                text-align: right;
+            }
+
         </style>
     </head>
     <body>
@@ -67,6 +73,10 @@
                         <ul class="nav navbar-nav">
                             <li><a href="/Statocles/blog">Blog</a></li>
                             <li><a href="/Statocles/pod">Docs</a></li>
+                            <li><a href="http://github.com/preaction/Statocles">Code</a></li>
+                            <li><a href="http://github.com/preaction/Statocles/issues">Bugs</a></li>
+                            <li><a href="http://metacpan.org/pod/Statocles">CPAN</a></li>
+                            <li><a href="https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">IRC</a></li>
                         </ul>
                     </div>
                 </div>
@@ -77,57 +87,48 @@
         <div class="main container">
             <h1 id="NAME">NAME</h1>
 
-<p>Statocles::Test - Base set of imports for all Statocles tests</p>
+<p>Statocles::Test - Common test routines for Statocles</p>
 
-<h1 id="SYNOPSIS">SYNOPSIS</h1>
+<h1 id="SUBROUTINES">SUBROUTINES</h1>
 
-<pre><code>    # t/mytest.t
-    use Statocles::Test;</code></pre>
+<h2 id="test_constructor-class-args">test_constructor( class, args )</h2>
 
-<h1 id="DESCRIPTION">DESCRIPTION</h1>
-
-<p>This is the base module that all Statocles test scripts should use.</p>
-
-<p>In addition to all the imports from <a href="/Statocles/pod/Statocles/Base.html">Statocles::Base</a>, this module imports:</p>
+<p>Test an object constructor. <code>class</code> is the class to test. <code>args</code> is a list of name/value pairs with the following keys:</p>
 
 <dl>
 
-<dt><a href="https://metacpan.org/pod/Test::More">Test::More</a></dt>
+<dt>required</dt>
 <dd>
+
+<p>A set of name/value pairs for required arguments. These will be tested to ensure they are required. They will be added to every attempt to construct an object.</p>
 
 </dd>
-<dt><a href="https://metacpan.org/pod/Test::Deep">Test::Deep</a></dt>
+<dt>default</dt>
 <dd>
 
-</dd>
-<dt><a href="https://metacpan.org/pod/Test::Differences">Test::Differences</a></dt>
-<dd>
-
-</dd>
-<dt><a href="https://metacpan.org/pod/Test::Exception">Test::Exception</a></dt>
-<dd>
-
-</dd>
-<dt><a href="https://metacpan.org/pod/Dir::Self">Dir::Self</a></dt>
-<dd>
-
-<p>Provides the __DIR__ keyword.</p>
-
-</dd>
-<dt><a href="https://metacpan.org/pod/Path::Tiny">Path::Tiny</a> qw( path tempdir )</dt>
-<dd>
-
-<p>To create Path::Tiny objects and get temporary directories.</p>
+<p>A set of name/value pairs for default arguments. These will be tested to ensure they are set to the correct defaults.</p>
 
 </dd>
 </dl>
 
-<h1 id="SEE-ALSO">SEE ALSO</h1>
+<h2 id="test_pages-site-app-tests">test_pages( site, app, tests )</h2>
+
+<p>Test the pages of the given app. <code>tests</code> is a set of pairs of <code>path</code> =&gt; <code>callback</code> to test the pages returned by the app.</p>
+
+<p>The <code>callback</code> will be given two arguments:</p>
 
 <dl>
 
-<dt><a href="/Statocles/pod/Statocles/Base.html">Statocles::Base</a></dt>
+<dt><code>output</code></dt>
 <dd>
+
+<p>The output of the rendered page.</p>
+
+</dd>
+<dt><code>dom</code></dt>
+<dd>
+
+<p>If the page is HTML, a <a href="https://metacpan.org/pod/Mojo::DOM">Mojo::DOM</a> object ready for testing.</p>
 
 </dd>
 </dl>
@@ -135,6 +136,12 @@
 
 
         </div>
-        
+        <footer>
+            
+            <div class="container tagline">
+                <a href="http://preaction.github.io/Statocles">Made with Statocles</a><br>
+                <a href="http://www.perl.org">Powered by Perl</a>
+            </div>
+        </footer>
     </body>
 </html>
