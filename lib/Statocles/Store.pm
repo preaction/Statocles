@@ -41,6 +41,16 @@ has documents => (
     clearer => 'clear',
 );
 
+sub BUILD {
+    my ( $self ) = @_;
+    if ( !$self->path->exists ) {
+        die sprintf "Store path '%s' does not exist", $self->path->stringify;
+    }
+    elsif ( !$self->path->is_dir ) {
+        die sprintf "Store path '%s' is not a directory", $self->path->stringify;
+    }
+}
+
 =method read_documents()
 
 Read the directory C<path> and create the L<document|Statocles::Document> objects inside.

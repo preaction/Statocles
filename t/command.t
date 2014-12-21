@@ -16,6 +16,10 @@ use YAML;
 my $tmp = tempdir;
 dircopy $SHARE_DIR->child( qw( app blog ) )->stringify, $tmp->child( 'blog' )->stringify;
 dircopy $SHARE_DIR->child( 'theme' )->stringify, $tmp->child( 'theme' )->stringify;
+$tmp->child( 'build_site' )->mkpath;
+$tmp->child( 'deploy_site' )->mkpath;
+$tmp->child( 'build_foo' )->mkpath;
+$tmp->child( 'deploy_foo' )->mkpath;
 
 my $config = {
     theme => {
@@ -221,6 +225,7 @@ subtest 'delegate to app command' => sub {
 
 subtest 'run the http daemon' => sub {
     $tmp->child( 'build_site' )->remove_tree; # We want daemon to rebuild the site
+    $tmp->child( 'build_site' )->mkpath;
 
     # We need to stop the daemon after it starts
     my ( $port, $app );

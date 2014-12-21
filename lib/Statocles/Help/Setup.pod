@@ -82,6 +82,10 @@ For our site, we've got a C<build> directory for our staging area, where we can
 verify that our site looks correct before we deploy. Our deploy will happen in
 the root directory of our site (C<.>). This is good for a GitHub Pages site.
 
+Make sure both of these directories exist:
+
+    $ mkdir build
+
 Though stores are usually just directories, they could also perform an SFTP or
 FTP or transfer the pages to a CDN (I think I have some evolution to do here).
 

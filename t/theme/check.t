@@ -9,39 +9,35 @@ use Statocles::Page::Document;
 use Statocles::Page::Feed;
 use Statocles::App::Blog;
 use Statocles::Site;
-use Statocles::Store;
 use Statocles::Theme;
 
 my $THEME_DIR = path( __DIR__, '..', '..', 'share', 'theme' );
 
-my $store = Statocles::Store->new(
-    path => 'DUMMY',
-    documents => [
-        Statocles::Document->new(
-            path => 'DUMMY',
-            title => 'Title One',
-            author => 'preaction',
-            content => 'Content One',
-        ),
-        Statocles::Document->new(
-            path => 'DUMMY',
-            title => 'Title Two',
-            author => 'preaction',
-            content => 'Content Two',
-        ),
-    ],
+my @documents = (
+    Statocles::Document->new(
+        path => 'DUMMY',
+        title => 'Title One',
+        author => 'preaction',
+        content => 'Content One',
+    ),
+    Statocles::Document->new(
+        path => 'DUMMY',
+        title => 'Title Two',
+        author => 'preaction',
+        content => 'Content Two',
+    ),
 );
 
 my $blog = Statocles::App::Blog->new(
     url_root => '/blog',
-    store => $store,
-    theme => Statocles::Theme->new( store => 'DUMMY' ),
+    store => '.',
+    theme => '.',
 );
 
 my $site = Statocles::Site->new(
     base_url => 'http://example.com',
-    build_store => $store,
-    deploy_store => $store,
+    build_store => '.',
+    deploy_store => '.',
     title => 'Test Title',
     apps => {
         blog => $blog,
@@ -51,7 +47,7 @@ my $site = Statocles::Site->new(
 my %page = (
     document => Statocles::Page::Document->new(
         path => 'document.html',
-        document => $store->documents->[0],
+        document => $documents[0],
         published => Time::Piece->new,
     ),
 );
@@ -96,7 +92,7 @@ my %app_vars = (
         'post.html.ep' => {
             %common_vars,
             self => $page{ document },
-            doc => $store->documents->[0],
+            doc => $documents[0],
         },
     },
     perldoc => {

@@ -235,6 +235,9 @@ sub test_site {
         page_size => 2,
     );
 
+    $tmpdir->child( 'build' )->mkpath;
+    $tmpdir->child( 'deploy' )->mkpath;
+
     my $site = Statocles::Site->new(
         title => 'Test Site',
         apps => { blog => $blog },

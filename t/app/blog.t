@@ -562,6 +562,8 @@ subtest 'pages' => sub {
 subtest 'commands' => sub {
     # We need an app we can edit
     my $tmpdir = tempdir;
+    $tmpdir->child( 'blog' )->mkpath;
+
     my $app = Statocles::App::Blog->new(
         store => $tmpdir->child( 'blog' ),
         url_root => '/blog',

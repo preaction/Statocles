@@ -119,6 +119,8 @@ sub site {
         theme => $SHARE_DIR->child( 'theme' ),
     );
 
+    $workdir->child( 'build' )->mkpath;
+
     my $site = Statocles::Site::Git->new(
         title => 'Test Site',
         apps => { blog => $blog },
