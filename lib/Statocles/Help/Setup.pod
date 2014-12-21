@@ -194,8 +194,12 @@ at the files to make sure that our deploy will be correct.
     $ statocles daemon
     Listening on http://*:3000
 
-Run the C<daemon> command to start an HTTP server to view your built site. If
-you edit any content, running C<build> again will update the site.
+Run the C<daemon> command to start an HTTP server to view your built site. This
+will automatically build the site, so if you forgot to run C<build>, don't
+worry.
+
+If you edit any content, running C<build> again will update the site. On Mac
+OS X, editing any content will automatically rebuild the site.
 
 =head2 Commit Your Changes
 
