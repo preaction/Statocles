@@ -243,24 +243,59 @@ subtest 'files' => sub {
             or diag explain \@got_paths;
     };
 
-    subtest 'write files' => sub {
-        my @warnings;
-        local $SIG{__WARN__} = sub { push @warnings, $_[0] };
-
-        my $tmpdir = tempdir;
+    subtest 'open file' => sub {
         my $store = Statocles::Store->new(
-            path => $tmpdir,
+            path => $SHARE_DIR->child( qw( store files ) ),
         );
 
-        my $content = "\x{2603} This is some plain text";
-        $store->write_file( path( qw( store files text.txt ) ), $content );
-        my $path = $tmpdir->child( qw( store files text.txt ) );
-        eq_or_diff $path->slurp_utf8, $content;
-
-        ok !@warnings, 'no warnings from write'
-            or diag "Got warnings: \n\t" . join "\n\t", @warnings;
+        my $fh = $store->open_file( path( 'text.txt' ) );
+        my $content = do { local $/; <$fh> };
+        eq_or_diff $content, $SHARE_DIR->child( qw( store files text.txt ) )->slurp_utf8;
     };
 
+    subtest 'write files' => sub {
+
+        subtest 'string' => sub {
+            my @warnings;
+            local $SIG{__WARN__} = sub { push @warnings, $_[0] };
+
+            my $tmpdir = tempdir;
+            my $store = Statocles::Store->new(
+                path => $tmpdir,
+            );
+
+            my $content = "\x{2603} This is some plain text";
+
+            $store->write_file( path( qw( store files text.txt ) ), $content );
+
+            my $path = $tmpdir->child( qw( store files text.txt ) );
+            eq_or_diff $path->slurp_utf8, $content;
+
+            ok !@warnings, 'no warnings from write'
+                or diag "Got warnings: \n\t" . join "\n\t", @warnings;
+        };
+
+        subtest 'filehandle' => sub {
+            my @warnings;
+            local $SIG{__WARN__} = sub { push @warnings, $_[0] };
+
+            my $tmpdir = tempdir;
+            my $store = Statocles::Store->new(
+                path => $tmpdir,
+            );
+
+            my $fh = $SHARE_DIR->child( qw( store files text.txt ) )->openr_utf8;
+
+            $store->write_file( path( qw( store files text.txt ) ), $fh );
+
+            my $path = $tmpdir->child( qw( store files text.txt ) );
+            eq_or_diff $path->slurp_utf8, $SHARE_DIR->child( qw( store files text.txt ) )->slurp_utf8;
+
+            ok !@warnings, 'no warnings from write'
+                or diag "Got warnings: \n\t" . join "\n\t", @warnings;
+        };
+
+    };
 };
 
 subtest 'verbose' => sub {

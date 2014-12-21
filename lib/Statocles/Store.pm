@@ -228,10 +228,23 @@ sub find_files {
     };
 }
 
+=method open_file( $path )
+
+Open the file with the given path. Returns a filehandle.
+
+=cut
+
+sub open_file {
+    my ( $self, $path ) = @_;
+    return $self->path->child( $path )->openr_utf8;
+}
+
 =method write_file( $path, $content )
 
 Write the given C<content> to the given C<path>. This is mostly used to write
 out L<page objects|Statocles::Page>.
+
+C<content> may be a simple string or a filehandle.
 
 =cut
 
@@ -239,7 +252,17 @@ sub write_file {
     my ( $self, $path, $content ) = @_;
     site->log->debug( "Write file: " . $path );
     my $full_path = $self->path->child( $path );
-    $full_path->touchpath->spew_utf8( $content );
+
+    if ( ref $content eq 'GLOB' ) {
+        my $fh = $full_path->touchpath->openw_utf8;
+        while ( my $line = <$content> ) {
+            $fh->print( $line );
+        }
+    }
+    else {
+        $full_path->touchpath->spew_utf8( $content );
+    }
+
     return;
 }
 
