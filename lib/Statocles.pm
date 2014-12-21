@@ -185,3 +185,9 @@ A L<Statocles::Store> reads and writes documents and pages. The default store
 reads documents in YAML and writes pages to a file, but stores could read
 documents as JSON, or from a Mongo database, and write pages to a database, or
 whereever you want!
+
+=head1 SEE ALSO
+
+There are static site generators written in other languages. See a big list of them at
+L<https://staticsitegenerators.net>.
+
