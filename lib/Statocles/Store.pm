@@ -8,7 +8,8 @@ use YAML;
 use List::MoreUtils qw( firstidx );
 use File::Spec::Functions qw( splitdir );
 
-my $DT_FORMAT = '%Y-%m-%d %H:%M:%S';
+my $DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S';
+my $DATE_FORMAT = '%Y-%m-%d';
 
 =attr path
 
@@ -121,7 +122,28 @@ sub read_document {
 sub _thaw_document {
     my ( $self, $doc ) = @_;
     if ( exists $doc->{last_modified} ) {
-        $doc->{last_modified} = Time::Piece->strptime( $doc->{last_modified}, $DT_FORMAT );
+
+        my $dt;
+        eval {
+            $dt = Time::Piece->strptime( $doc->{last_modified}, $DATETIME_FORMAT );
+        };
+
+        if ( $@ ) {
+            eval {
+                $dt = Time::Piece->strptime( $doc->{last_modified}, $DATE_FORMAT );
+            };
+
+            if ( $@ ) {
+                die sprintf "Could not parse last_modified '%s'. Does not match '%s' or '%s'",
+                    $doc->{last_modified},
+                    $DATETIME_FORMAT,
+                    $DATE_FORMAT,
+                    ;
+            }
+
+        }
+
+        $doc->{last_modified} = $dt;
     }
     return $doc;
 }
@@ -157,7 +179,7 @@ sub write_document {
 sub _freeze_document {
     my ( $self, $doc ) = @_;
     if ( exists $doc->{last_modified} ) {
-        $doc->{last_modified} = $doc->{last_modified}->strftime( $DT_FORMAT );
+        $doc->{last_modified} = $doc->{last_modified}->strftime( $DATETIME_FORMAT );
     }
     return $doc;
 }

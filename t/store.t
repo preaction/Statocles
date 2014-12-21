@@ -135,10 +135,20 @@ subtest 'read documents' => sub {
     };
 
     subtest 'bad documents' => sub {
-        my $store = Statocles::Store->new(
-            path => $SHARE_DIR->child( qw( store error bad-yaml ) ),
-        );
-        throws_ok { $store->documents } qr{Error parsing YAML in};
+        subtest 'invalid yaml' => sub {
+            my $store = Statocles::Store->new(
+                path => $SHARE_DIR->child( qw( store error bad-yaml ) ),
+            );
+            throws_ok { $store->documents } qr{Error parsing YAML in};
+        };
+
+        subtest 'invalid date/time' => sub {
+            my $store = Statocles::Store->new(
+                path => $SHARE_DIR->child( qw( store error bad-dates ) ),
+            );
+            throws_ok { $store->documents }
+                qr{Could not parse last_modified '11/12/2014'[.] Does not match '\Q$DT_FORMAT\E' or '%Y-%m-%d'};
+        };
     };
 
     subtest 'write document' => sub {
