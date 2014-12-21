@@ -210,6 +210,24 @@ sub has_file {
     return $self->path->child( $path )->is_file;
 }
 
+=method find_files()
+
+Returns an iterator that, when called, produces a single path suitable to be passed
+to L<read_file>.
+
+=cut
+
+sub find_files {
+    my ( $self ) = @_;
+    my $iter = $self->path->iterator({ recurse => 1 });
+    return sub {
+        my $path = $iter->();
+        return unless $path;
+        $path = $iter->() while $path->is_dir;
+        return $path->relative( $self->path );
+    };
+}
+
 =method write_file( $path, $content )
 
 Write the given C<content> to the given C<path>. This is mostly used to write

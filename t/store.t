@@ -224,6 +224,25 @@ subtest 'files' => sub {
         ok !$store->has_file( path( 'missing.exe' ) );
     };
 
+    subtest 'find files' => sub {
+        my $store = Statocles::Store->new(
+            path => $SHARE_DIR->child( qw( store files ) ),
+        );
+        my @expect_paths = (
+            path( qw( text.txt ) ),
+            path( qw( folder doc.yml ) ),
+        );
+
+        my $iter = $store->find_files;
+        my @got_paths;
+        while ( my $path = $iter->() ) {
+            push @got_paths, $path;
+        }
+
+        cmp_deeply \@got_paths, bag( @expect_paths )
+            or diag explain \@got_paths;
+    };
+
     subtest 'write files' => sub {
         my @warnings;
         local $SIG{__WARN__} = sub { push @warnings, $_[0] };
