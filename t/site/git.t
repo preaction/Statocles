@@ -107,7 +107,7 @@ sub site {
     }
 
     # Copy the store into the repository, so we have something to commit
-    dircopy( $SHARE_DIR->child( 'blog' )->stringify, $remotedir->child( 'blog' )->stringify )
+    dircopy( $SHARE_DIR->child( qw( app blog ) )->stringify, $remotedir->child( 'blog' )->stringify )
         or die "Could not copy directory: $!";
     _git_run( $remotegit, add => 'blog' );
     _git_run( $remotegit, commit => -m => 'Initial commit' );

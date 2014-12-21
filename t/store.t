@@ -79,7 +79,7 @@ my @exp_docs = (
 
 subtest 'read documents' => sub {
     my $store = Statocles::Store->new(
-        path => $SHARE_DIR->child( 'blog' ),
+        path => $SHARE_DIR->child( qw( app blog ) ),
     );
     cmp_deeply $store->documents, bag( @exp_docs ) or diag explain $store->documents;
 
@@ -94,7 +94,7 @@ subtest 'read documents' => sub {
 
     subtest 'bad documents' => sub {
         my $store = Statocles::Store->new(
-            path => $SHARE_DIR->child( 'error' ),
+            path => $SHARE_DIR->child( qw( store error ) ),
         );
         throws_ok { $store->documents } qr{Error parsing YAML in};
     };
@@ -104,7 +104,7 @@ subtest 'read with relative directory' => sub {
     my $cwd = cwd;
     chdir $SHARE_DIR;
     my $store = Statocles::Store->new(
-        path => 'blog',
+        path => 'app/blog',
     );
     cmp_deeply $store->documents, bag( @exp_docs );
     chdir $cwd;
@@ -213,7 +213,7 @@ subtest 'files' => sub {
 subtest 'path that has regex-special characters inside' => sub {
     my $tmpdir = tempdir;
     my $baddir = $tmpdir->child( '[regex](name).dir' );
-    dircopy $SHARE_DIR->child( 'blog' )->stringify, "$baddir";
+    dircopy $SHARE_DIR->child( qw( app blog ) )->stringify, "$baddir";
     my $store = Statocles::Store->new(
         path => $baddir,
     );
@@ -260,7 +260,7 @@ subtest 'verbose' => sub {
 
         subtest 'read document' => sub {
             my $store = Statocles::Store->new(
-                path => $SHARE_DIR->child( 'blog' ),
+                path => $SHARE_DIR->child( qw( app blog ) ),
             );
             my $path = path( qw( 2014 04 23 slug.yml ) );
             my ( $out, $err, $exit ) = capture {

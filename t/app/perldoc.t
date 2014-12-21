@@ -129,7 +129,7 @@ subtest 'perldoc pages' => sub {
     subtest 'without Pod::Weaver' => sub {
         my $app = Statocles::App::Perldoc->new(
             url_root => '/pod',
-            inc => [ $SHARE_DIR->child( 'lib' ) ],
+            inc => [ $SHARE_DIR->child( qw( app perldoc lib ) ) ],
             modules => [qw( My My:: )],
             index_module => 'My',
             theme => $SHARE_DIR->child( 'theme' ),
@@ -163,12 +163,12 @@ subtest 'perldoc pages' => sub {
 
             my $app = Statocles::App::Perldoc->new(
                 url_root => '/pod',
-                inc => [ $SHARE_DIR->child( 'lib-weaver' ) ],
+                inc => [ $SHARE_DIR->child( qw( app perldoc lib-weaver ) ) ],
                 modules => [qw( My My:: )],
                 index_module => 'My',
                 theme => $SHARE_DIR->child( 'theme' ),
                 weave => 1,
-                weave_config => $SHARE_DIR->child( 'weaver.ini' ),
+                weave_config => $SHARE_DIR->child( qw( app perldoc weaver.ini ) ),
             );
             dies_ok { $app->pages };
         };
@@ -177,12 +177,12 @@ subtest 'perldoc pages' => sub {
 
         my $app = Statocles::App::Perldoc->new(
             url_root => '/pod',
-            inc => [ $SHARE_DIR->child( 'lib-weaver' ) ],
+            inc => [ $SHARE_DIR->child( qw( app perldoc lib-weaver ) ) ],
             modules => [qw( My My:: )],
             index_module => 'My',
             theme => $SHARE_DIR->child( 'theme' ),
             weave => 1,
-            weave_config => $SHARE_DIR->child( 'weaver.ini' ),
+            weave_config => $SHARE_DIR->child( qw( app perldoc weaver.ini ) ),
         );
 
         test_pages( $site, $app, @page_tests );

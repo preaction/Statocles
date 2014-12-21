@@ -18,7 +18,7 @@ subtest 'constructor' => sub {
         required => {
             url_root => '/',
             theme => $SHARE_DIR->child( 'theme' ),
-            store => $SHARE_DIR->child( 'plain' ),
+            store => $SHARE_DIR->child( qw( app plain ) ),
         },
     );
 
@@ -29,7 +29,7 @@ subtest 'pages' => sub {
     my $app = Statocles::App::Plain->new(
         url_root => '/',
         theme => $SHARE_DIR->child( 'theme' ),
-        store => $SHARE_DIR->child( 'plain' ),
+        store => $SHARE_DIR->child( qw( app plain ) ),
     );
 
     test_pages(

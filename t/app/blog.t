@@ -13,7 +13,7 @@ local $Statocles::VERSION = '0.001';
 
 subtest 'constructor' => sub {
     my %required = (
-        store => $SHARE_DIR->child( 'blog' ),
+        store => $SHARE_DIR->child( qw( app blog ) ),
         url_root => '/blog',
         theme => $SHARE_DIR->child( 'theme' ),
     );
@@ -31,7 +31,7 @@ subtest 'constructor' => sub {
         subtest 'store' => sub {
             my $app = Statocles::App::Blog->new( %required );
             isa_ok $app->store, 'Statocles::Store';
-            is $app->store->path, $SHARE_DIR->child( 'blog' );
+            is $app->store->path, $SHARE_DIR->child( qw( app blog ) );
         },
 
         subtest 'theme' => sub {
@@ -45,7 +45,7 @@ subtest 'constructor' => sub {
 
 subtest 'pages' => sub {
     my $app = Statocles::App::Blog->new(
-        store => $SHARE_DIR->child( 'blog' ),
+        store => $SHARE_DIR->child( qw( app blog ) ),
         url_root => '/blog',
         theme => $SHARE_DIR->child( 'theme' ),
         page_size => 2,

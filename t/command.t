@@ -14,7 +14,7 @@ use YAML;
 # Build a config file so we can test config loading and still use
 # temporary directories
 my $tmp = tempdir;
-dircopy $SHARE_DIR->child( 'blog' )->stringify, $tmp->child( 'blog' )->stringify;
+dircopy $SHARE_DIR->child( qw( app blog ) )->stringify, $tmp->child( 'blog' )->stringify;
 dircopy $SHARE_DIR->child( 'theme' )->stringify, $tmp->child( 'theme' )->stringify;
 
 my $config = {

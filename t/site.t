@@ -229,7 +229,7 @@ sub test_site {
     my ( $tmpdir, %site_args ) = @_;
 
     my $blog = Statocles::App::Blog->new(
-        store => $SHARE_DIR->child( 'blog' ),
+        store => $SHARE_DIR->child( qw( app blog ) ),
         url_root => '/blog',
         theme => $SHARE_DIR->child( 'theme' ),
         page_size => 2,
