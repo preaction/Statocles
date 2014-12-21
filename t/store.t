@@ -12,12 +12,33 @@ my $DT_FORMAT = '%Y-%m-%d %H:%M:%S';
 
 my @exp_docs = (
     Statocles::Document->new(
-        path => '/2014/04/23/slug.yml',
-        title => 'First Post',
+        path => '/required.yml',
+        title => 'Required Document',
         author => 'preaction',
-        content => "Body content\n",
-        # no tags. tags are optional
-        last_modified => Time::Piece->strptime( '2014-04-30 06:50:35', $DT_FORMAT ),
+        content => "No optional things in here, at all!\n",
+    ),
+
+    Statocles::Document->new(
+        path => '/datetime.yml',
+        title => 'Datetime Document',
+        author => 'preaction',
+        last_modified => Time::Piece->strptime( '2014-04-30 15:34:32', $DT_FORMAT ),
+        content => "Parses date/time for last_modified\n",
+    ),
+
+    Statocles::Document->new(
+        path => '/date.yml',
+        title => 'Date Document',
+        author => 'preaction',
+        last_modified => Time::Piece->strptime( '2014-04-30', '%Y-%m-%d' ),
+        content => "Parses date only for last_modified\n",
+    ),
+
+    Statocles::Document->new(
+        path => '/links/crosspost_single.yml',
+        title => 'Linked Document',
+        author => 'preaction',
+        content => "This document has a single crosspost link\n",
         links => {
             crosspost => [
                 {
@@ -27,59 +48,36 @@ my @exp_docs = (
             ],
         },
     ),
+
     Statocles::Document->new(
-        path => '/2014/04/30/plug.yml',
-        title => 'Second Post',
+        path => '/tags/single.yml',
+        title => 'Tagged (Single) Document',
         author => 'preaction',
-        content => "Better body content\n",
-        tags => [qw( better )],
-        last_modified => Time::Piece->strptime( '2014-04-30 00:00:00', $DT_FORMAT ),
-        # links is optional
+        tags => [qw( single )],
+        content => "This document has a single tag\n",
     ),
+
     Statocles::Document->new(
-        path => '/2014/05/22/(regex)[name].file.yml',
-        title => 'Regex violating Post',
+        path => '/tags/array.yml',
+        title => 'Tagged (Array) Document',
         author => 'preaction',
-        content => "Body content\n",
-        tags => [ 'better', 'error message' ],
-        # last_modified is optional
+        tags => [ 'multiple', 'tags', 'in an', 'array' ],
+        content => "This document has multiple tags in an array\n",
     ),
+
     Statocles::Document->new(
-        path => '/2014/06/02/more_tags.yml',
-        title => 'More Tags',
+        path => '/tags/comma.yml',
+        title => 'Tagged (Comma) Document',
         author => 'preaction',
-        content => "Body content\n",
-        tags => [ 'more', 'better', 'even more tags' ],
-        last_modified => Time::Piece->strptime( '2014-06-02 15:34:32', $DT_FORMAT ),
-        links => {
-            crosspost => [
-                {
-                    title => 'blogs.perl.org',
-                    href => 'http://blogs.perl.org/preaction/404.html',
-                },
-            ],
-        },
+        tags => [ "multiple", "tags", "separated by", "commas" ],
+        content => "This document has multiple tags separated by commas\n",
     ),
-    Statocles::Document->new(
-        path => '/9999/12/31/forever-is-a-long-time.yml',
-        title => 'Forever Is A Long Time',
-        author => 'preaction',
-        content => "# You'll never see this\n\nNor will your children's children's children\n",
-        tags => [ 'future' ],
-        last_modified => Time::Piece->strptime( '2014-06-02 04:05:06', $DT_FORMAT ),
-    ),
-    Statocles::Document->new(
-        path => '/draft/a-draft-post.yml',
-        title => 'A Draft',
-        author => 'preaction',
-        last_modified => Time::Piece->strptime( '2014-06-21 00:06:00', $DT_FORMAT ),
-        content => "Draft body content\n",
-    ),
+
 );
 
 subtest 'read documents' => sub {
     my $store = Statocles::Store->new(
-        path => $SHARE_DIR->child( qw( app blog ) ),
+        path => $SHARE_DIR->child( qw( store docs ) ),
     );
     cmp_deeply $store->documents, bag( @exp_docs ) or diag explain $store->documents;
 
@@ -92,81 +90,71 @@ subtest 'read documents' => sub {
         cmp_deeply $store->documents, bag( @exp_docs ) or diag explain $store->documents;
     };
 
+    subtest 'read with relative directory' => sub {
+        my $cwd = cwd;
+        chdir $SHARE_DIR;
+        my $store = Statocles::Store->new(
+            path => 'store/docs',
+        );
+        cmp_deeply $store->documents, bag( @exp_docs );
+        chdir $cwd;
+    };
+
+    subtest 'path that has regex-special characters inside' => sub {
+        my $tmpdir = tempdir;
+        my $baddir = $tmpdir->child( '[regex](name).dir' );
+        dircopy $SHARE_DIR->child( qw( store docs ) )->stringify, "$baddir";
+        my $store = Statocles::Store->new(
+            path => $baddir,
+        );
+        cmp_deeply $store->documents, bag( @exp_docs );
+    };
+
     subtest 'bad documents' => sub {
         my $store = Statocles::Store->new(
             path => $SHARE_DIR->child( qw( store error ) ),
         );
         throws_ok { $store->documents } qr{Error parsing YAML in};
     };
-};
 
-subtest 'read with relative directory' => sub {
-    my $cwd = cwd;
-    chdir $SHARE_DIR;
-    my $store = Statocles::Store->new(
-        path => 'app/blog',
-    );
-    cmp_deeply $store->documents, bag( @exp_docs );
-    chdir $cwd;
-};
+    subtest 'write document' => sub {
+        no warnings 'once';
+        local $YAML::Indent = 4; # Ensure our test output matches our indentation level
+        my $tmpdir = tempdir;
+        my $store = Statocles::Store->new(
+            path => $tmpdir,
+        );
+        my $tp = Time::Piece->strptime( '2014-06-05 00:00:00', $DT_FORMAT );
+        my $dt = $tp->strftime( '%Y-%m-%d %H:%M:%S' );
+        my $doc = {
+            foo => 'bar',
+            content => "# This is some content\n\nAnd a paragraph\n",
+            tags => [ 'one', 'two and three', 'four' ],
+            last_modified => $tp,
+        };
 
-subtest 'write document' => sub {
-    no warnings 'once';
-    local $YAML::Indent = 4; # Ensure our test output matches our indentation level
-    my $tmpdir = tempdir;
-    my $store = Statocles::Store->new(
-        path => $tmpdir,
-    );
-    my $tp = Time::Piece->strptime( '2014-06-05 00:00:00', $DT_FORMAT );
-    my $dt = $tp->strftime( '%Y-%m-%d %H:%M:%S' );
-    my $doc = {
-        foo => 'bar',
-        content => "# This is some content\n\nAnd a paragraph\n",
-        tags => [ 'one', 'two and three', 'four' ],
-        last_modified => $tp,
-    };
-    subtest 'disallow absolute paths' => sub {
-        my $path = rootdir->child( 'example.yml' );
-        throws_ok { $store->write_document( $path => $doc ) }
-            qr{Cannot write document '$path': Path must not be absolute};
-    };
-    subtest 'simple path' => sub {
-        my $full_path = $store->write_document( 'example.yml' => $doc  );
-        is $full_path, $store->path->child( 'example.yml' );
-        cmp_deeply $store->read_document( 'example.yml' ), $doc
-            or diag explain $store->read_document( 'example.yml' );
-        eq_or_diff path( $full_path )->slurp, <<ENDFILE
----
-foo: bar
-last_modified: $dt
-tags:
-    - one
-    - two and three
-    - four
----
-# This is some content
+        subtest 'disallow absolute paths' => sub {
+            my $path = rootdir->child( 'example.yml' );
+            throws_ok { $store->write_document( $path => $doc ) }
+                qr{Cannot write document '$path': Path must not be absolute};
+        };
 
-And a paragraph
-ENDFILE
-    };
-    subtest 'make the directories if necessary' => sub {
-        my $path = path(qw( blog 2014 05 28 example.yml ));
-        my $full_path = $store->write_document( $path => $doc );
-        is $full_path, $tmpdir->child( $path );
-        cmp_deeply $store->read_document( $path ), $doc;
-        eq_or_diff path( $full_path )->slurp, <<ENDFILE
----
-foo: bar
-last_modified: $dt
-tags:
-    - one
-    - two and three
-    - four
----
-# This is some content
+        subtest 'simple path' => sub {
+            my $full_path = $store->write_document( 'example.yml' => $doc  );
+            is $full_path, $store->path->child( 'example.yml' );
+            cmp_deeply $store->read_document( 'example.yml' ), $doc
+                or diag explain $store->read_document( 'example.yml' );
+            eq_or_diff path( $full_path )->slurp, $SHARE_DIR->child( qw( store write doc.yml ) )->slurp_utf8;
+        };
 
-And a paragraph
-ENDFILE
+        subtest 'make the directories if necessary' => sub {
+            my $path = path(qw( blog 2014 05 28 example.yml ));
+            my $full_path = $store->write_document( $path => $doc );
+            is $full_path, $tmpdir->child( $path );
+            cmp_deeply $store->read_document( $path ), $doc;
+            eq_or_diff path( $full_path )->slurp, $SHARE_DIR->child( qw( store write doc.yml ) )->slurp_utf8;
+        };
+
     };
 };
 
@@ -174,18 +162,18 @@ subtest 'files' => sub {
 
     subtest 'read files' => sub {
         my $store = Statocles::Store->new(
-            path => $SHARE_DIR->child( 'theme' ),
+            path => $SHARE_DIR->child( qw( store files ) ),
         );
-        my $content = $store->read_file( path( blog => 'post.html.ep' ) );
-        eq_or_diff $SHARE_DIR->child( qw( theme blog post.html.ep ) )->slurp, $content;
+        my $content = $store->read_file( path( 'text.txt' ) );
+        eq_or_diff $SHARE_DIR->child( qw( store files text.txt ) )->slurp, $content;
     };
 
     subtest 'has file' => sub {
         my $store = Statocles::Store->new(
-            path => $SHARE_DIR->child( 'theme' ),
+            path => $SHARE_DIR->child( qw( store files ) ),
         );
-        ok $store->has_file( path( blog => 'post.html.ep' ) );
-        ok !$store->has_file( path( blog => 'DONTHAVE.html.ep' ) );
+        ok $store->has_file( path( 'text.txt' ) );
+        ok !$store->has_file( path( 'missing.exe' ) );
     };
 
     subtest 'write files' => sub {
@@ -193,31 +181,13 @@ subtest 'files' => sub {
         my $store = Statocles::Store->new(
             path => $tmpdir,
         );
-        my $page = Statocles::Page::Document->new(
-            path => '/2014/04/23/slug.html',
-            document => Statocles::Document->new(
-                title => 'First Post',
-                author => 'preaction',
-                content => 'Body content',
-            ),
-            template => '<%= $content %>',
-        );
 
-        $store->write_file( $page->path, $page->render );
-        my $path = $tmpdir->child( '2014', '04', '23', 'slug.html' );
-        cmp_deeply $path->slurp, $page->render;
+        my $content = $SHARE_DIR->child( qw( store files text.txt ) )->slurp_utf8;
+        $store->write_file( path( qw( store files text.txt ) ), $content );
+        my $path = $tmpdir->child( qw( store files text.txt ) );
+        eq_or_diff $path->slurp, $content;
     };
 
-};
-
-subtest 'path that has regex-special characters inside' => sub {
-    my $tmpdir = tempdir;
-    my $baddir = $tmpdir->child( '[regex](name).dir' );
-    dircopy $SHARE_DIR->child( qw( app blog ) )->stringify, "$baddir";
-    my $store = Statocles::Store->new(
-        path => $baddir,
-    );
-    cmp_deeply $store->documents, bag( @exp_docs );
 };
 
 subtest 'verbose' => sub {
@@ -260,9 +230,9 @@ subtest 'verbose' => sub {
 
         subtest 'read document' => sub {
             my $store = Statocles::Store->new(
-                path => $SHARE_DIR->child( qw( app blog ) ),
+                path => $SHARE_DIR->child( qw( store docs ) ),
             );
-            my $path = path( qw( 2014 04 23 slug.yml ) );
+            my $path = path( qw( required.yml ) );
             my ( $out, $err, $exit ) = capture {
                 $store->read_document( $path );
             };
