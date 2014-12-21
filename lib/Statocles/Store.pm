@@ -139,7 +139,7 @@ sub write_document {
     chomp $header;
 
     my $full_path = $self->path->child( $path );
-    $full_path->touchpath->spew( join "\n", $header, '---', $content );
+    $full_path->touchpath->spew_utf8( join "\n", $header, '---', $content );
 
     return $full_path;
 }

@@ -128,7 +128,7 @@ subtest 'read documents' => sub {
         my $dt = $tp->strftime( '%Y-%m-%d %H:%M:%S' );
         my $doc = {
             foo => 'bar',
-            content => "# This is some content\n\nAnd a paragraph\n",
+            content => "# \x{2603} This is some content\n\nAnd a paragraph\n",
             tags => [ 'one', 'two and three', 'four' ],
             last_modified => $tp,
         };
@@ -140,19 +140,33 @@ subtest 'read documents' => sub {
         };
 
         subtest 'simple path' => sub {
+            my @warnings;
+            local $SIG{__WARN__} = sub { push @warnings, $_[0] };
+
             my $full_path = $store->write_document( 'example.yml' => $doc  );
             is $full_path, $store->path->child( 'example.yml' );
             cmp_deeply $store->read_document( 'example.yml' ), $doc
                 or diag explain $store->read_document( 'example.yml' );
-            eq_or_diff path( $full_path )->slurp, $SHARE_DIR->child( qw( store write doc.yml ) )->slurp_utf8;
+            eq_or_diff path( $full_path )->slurp_utf8,
+                $SHARE_DIR->child( qw( store write doc.yml ) )->slurp_utf8;
+
+            ok !@warnings, 'no warnings from write'
+                or diag "Got warnings: \n\t" . join "\n\t", @warnings;
         };
 
         subtest 'make the directories if necessary' => sub {
+            my @warnings;
+            local $SIG{__WARN__} = sub { push @warnings, $_[0] };
+
             my $path = path(qw( blog 2014 05 28 example.yml ));
             my $full_path = $store->write_document( $path => $doc );
             is $full_path, $tmpdir->child( $path );
             cmp_deeply $store->read_document( $path ), $doc;
-            eq_or_diff path( $full_path )->slurp, $SHARE_DIR->child( qw( store write doc.yml ) )->slurp_utf8;
+            eq_or_diff path( $full_path )->slurp_utf8,
+                $SHARE_DIR->child( qw( store write doc.yml ) )->slurp_utf8;
+
+            ok !@warnings, 'no warnings from write'
+                or diag "Got warnings: \n\t" . join "\n\t", @warnings;
         };
 
     };
@@ -165,7 +179,7 @@ subtest 'files' => sub {
             path => $SHARE_DIR->child( qw( store files ) ),
         );
         my $content = $store->read_file( path( 'text.txt' ) );
-        eq_or_diff $SHARE_DIR->child( qw( store files text.txt ) )->slurp, $content;
+        eq_or_diff $SHARE_DIR->child( qw( store files text.txt ) )->slurp_utf8, $content;
     };
 
     subtest 'has file' => sub {
@@ -177,15 +191,21 @@ subtest 'files' => sub {
     };
 
     subtest 'write files' => sub {
+        my @warnings;
+        local $SIG{__WARN__} = sub { push @warnings, $_[0] };
+
         my $tmpdir = tempdir;
         my $store = Statocles::Store->new(
             path => $tmpdir,
         );
 
-        my $content = $SHARE_DIR->child( qw( store files text.txt ) )->slurp_utf8;
+        my $content = "\x{2603} This is some plain text";
         $store->write_file( path( qw( store files text.txt ) ), $content );
         my $path = $tmpdir->child( qw( store files text.txt ) );
-        eq_or_diff $path->slurp, $content;
+        eq_or_diff $path->slurp_utf8, $content;
+
+        ok !@warnings, 'no warnings from write'
+            or diag "Got warnings: \n\t" . join "\n\t", @warnings;
     };
 
 };
