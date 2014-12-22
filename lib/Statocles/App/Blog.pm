@@ -157,6 +157,11 @@ ENDHELP
             last_modified => Time::Piece->new,
         );
 
+        # Read post content on STDIN
+        if ( !-t *STDIN ) {
+            $doc{content} = do { local $/; <STDIN> };
+        }
+
         if ( $ENV{EDITOR} ) {
             # I can see no good way to test this automatically
             my $tmp_store = Statocles::Store->new( path => Path::Tiny->tempdir );

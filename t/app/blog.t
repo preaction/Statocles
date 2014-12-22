@@ -655,6 +655,7 @@ Markdown content goes here.
 ENDCONTENT
                 };
             };
+
             subtest 'custom date' => sub {
                 local $ENV{EDITOR}; # We can't very well open vim...
 
@@ -694,6 +695,45 @@ Markdown content goes here.
 ENDCONTENT
                 };
             };
+
+            subtest 'content from STDIN' => sub {
+                local $ENV{EDITOR}; # We can't very well open vim...
+
+                my ( undef, undef, undef, $day, $mon, $year ) = localtime;
+                my $doc_path = $tmpdir->child(
+                    'blog',
+                    sprintf( '%04i', $year + 1900 ),
+                    sprintf( '%02i', $mon + 1 ),
+                    sprintf( '%02i', $day ),
+                    'this-is-a-title-for-stdin.yml',
+                );
+
+                subtest 'run the command' => sub {
+                    open my $stdin, '<', \"This is content from STDIN\n";
+                    local *STDIN = $stdin;
+
+                    my @args = qw( blog post This is a Title for stdin );
+                    my ( $out, $err, $exit ) = capture { $app->command( @args ) };
+                    ok !$err, 'nothing on stdout';
+                    is $exit, 0;
+                    like $out, qr{New post at: \Q$doc_path},
+                        'contains blog post document path';
+                };
+
+                subtest 'check the generated document' => sub {
+                    my $doc = $app->store->read_document( $doc_path->relative( $tmpdir->child('blog') ) );
+                    cmp_deeply $doc, {
+                        title => 'This is a Title for stdin',
+                        author => undef,
+                        tags => undef,
+                        last_modified => isa( 'Time::Piece' ),
+                        content => <<'ENDMARKDOWN',
+This is content from STDIN
+ENDMARKDOWN
+                    };
+                };
+            };
+
         };
     };
 };
