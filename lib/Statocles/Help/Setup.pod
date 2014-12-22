@@ -6,13 +6,13 @@
 This document describes how to set up a simple blog web site suitable to
 be deployed to GitHub Pages using Statocles.
 
-=head1 site.yml - The Main Configuration File
+=head1 Building site.yml - The Main Configuration File
 
-Statocles uses L<Beam::Wire|Beam::Wire>, a dependency-injection module, to
-define its configuration. The format is L<YAML|http://yaml.org> and contains
-the data needed to build the objects: Arguments to the object's constructor.
-This means that any C<ATTRIBUTES> defined in the documentation can be used in
-the configuration file.
+Statocles uses L<Beam::Wire|Beam::Wire>, a dependency-injection module, for
+configuration. The format is L<YAML|http://yaml.org> and contains the data
+needed to build the objects: Arguments to the object's constructor.  This means
+that any C<ATTRIBUTES> defined in the documentation can be used in the
+configuration file.
 
 The configuration file is, by default, called C<site.yml>. See
 L<the statocles command documentation|statocles> if you want to have multiple
@@ -58,19 +58,19 @@ L<Statocles blog app|Statocles::App::Blog>:
 
 We put our blog app under the root URL C</blog>. All pages that come from this
 app will start with C</blog> (except the index page, we'll move that to
-C</index.html>).
+C</index.html>, later).
 
 We define our theme with the string C<::default>, which will get magically
 coerced into a L<theme object|Statocles::Theme>. We define our store with the
 string C<blog>, which will get magically coerced into a L<store
 object|Statocles::Store>.
 
-One of the most useful things about using a dependency injection module is that
-you can easily plug-in your own classes. If you want to use your own template
-format, you can build your own Statocles::Theme class that provides a different
-kind of Statocles::Template object and use that instead. If you want to use your
-own document format, you can make your own Statocles::Store class that reads
-from a database.
+B<NOTE:> One of the most useful things about using a dependency injection
+module is that you can easily plug-in your own classes. If you want to use your
+own template format, you can build your own Statocles::Theme class that
+provides a different kind of Statocles::Template object and use that instead.
+If you want to use your own document format, you can make your own
+Statocles::Store class that reads from a database.
 
 =head2 A Destination
 
@@ -78,9 +78,9 @@ Before we can generate pages, we need a place to put them. Statocles needs two
 places, a build directory (a staging area), and a deploy directory (the final
 destination for the site).
 
-For our site, we've got a C<build> directory for our staging area, where we can
-verify that our site looks correct before we deploy. Our deploy will happen in
-the root directory of our site (C<.>). This is good for a GitHub Pages site.
+For our site, we will make a C<build> directory for our staging area, where we
+can verify that our site looks correct before we deploy. Our deploy will happen
+in the root directory of our site (C<.>). This is good for a GitHub Pages site.
 
 Make sure both of these directories exist:
 
@@ -216,4 +216,139 @@ of having a website in a git repository is change tracking.
 Running the C<deploy> command will, in the case of the git site, commit the
 updated pages to the git repository. C<deploy> will try to do a C<git push>
 automatically, so your changes are now live on Github Pages!
+
+=head1 Adding More Apps
+
+In addition to our blog app, we also want to add some plain Markdown content, and some
+images.
+
+=head2 Plain Markdown
+
+For plain markdown, there is the L<plain app:
+Statocles::App::Plain|Statocles::App::Plain>. The plain app takes the same
+YAML-and-Markdown-formatted documents as the blog app and creates HTML pages,
+without the lists, tags, and feeds the blog generates.
+
+Like the blog, we need a store to find our documents. This time, we'll use the
+root directory of our repository, C<.>. Also like the blog, we need a theme to
+allow for layout templates (we'll use the default theme again). Finally, we'll
+need a URL root. Since we're using the root directory for our documents, we'll
+use the root URL for our destination C</>.
+
+    plain_app:
+        class: Statocles::App::Plain
+        args:
+            url_root: '/'
+            theme: '::default'
+            store: '.'
+
+Now we just need to add this app to our site, but before we do, we'll create an
+app for our static files.
+
+=head2 Static Files
+
+Lastly, we wanted a place to put any file at all. No processing. No templates.
+Just a simple copy from one store to another. For this one, we'll put
+everything in the C</static> directory, and give a URL root to match. Since
+there is no processing, we don't need a theme here.
+
+    static_app:
+        class: Statocles::App::Static
+        args:
+            url_root: '/static'
+            store: 'static'
+
+=head2 Add the New Apps
+
+To enable the new apps, we just need to add them to the site's C<apps>.
+
+    site:
+        class: Statocles::Site::Git
+        args:
+            apps:
+                blog:
+                    $ref: blog_app
+                plain:
+                    $ref: plain_app
+                static:
+                    $ref: static_app
+
+=head2 Add Plain Content
+
+Now, we just need some content for our plain app to deploy. The plain app uses the same
+format as the blog, so we need a YAML header followed by some Markdown content:
+
+Create a file named C<about.yml> with the following content:
+
+    ---
+    title: About
+    ---
+    # About Me
+
+    This is a personal website!
+
+Then, run C<statocles build>. The C<about.yml> turns into C<about.html> in our C<build/>
+directory.
+
+Now we should probably make a link in our main nav to the new about page:
+
+    site:
+        class: Statocles::Site::Git
+        args:
+            # ... [redacted]
+
+            nav:
+                main:
+                    - title: Blog
+                      href: /index.html
+                    - title: About
+                      href: /about.html
+
+Now, if we run C<statocles build> again, we can see the link in our header.
+
+=head2 The Complete site.yml - With More Apps
+
+Along with the blog app and our other settings, here is our new, complete site.yml:
+
+    blog_app:
+        class: Statocles::App::Blog
+        args:
+            url_root: /blog
+            theme: '::default'
+            store: 'blog'
+
+    plain_app:
+        class: Statocles::App::Plain
+        args:
+            url_root: '/'
+            theme: '::default'
+            store: '.'
+
+    static_app:
+
+    site:
+        class: Statocles::Site::Git
+        args:
+            apps:
+                blog:
+                    $ref: blog_app
+                plain:
+                    $ref: plain_app
+                static:
+                    $ref: static_app
+
+            build_store: 'build'
+            deploy_store: '.'
+
+            title: My Site
+            index: blog
+            nav:
+                main:
+                    - title: Blog
+                      href: /index.html
+                    - title: About
+                      href: /about.html
+
+If we're satisfied with our new About page, we can deploy our site with
+C<statocles deploy>.
 
