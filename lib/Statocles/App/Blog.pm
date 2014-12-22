@@ -160,6 +160,12 @@ ENDHELP
         # Read post content on STDIN
         if ( !-t *STDIN ) {
             $doc{content} = do { local $/; <STDIN> };
+            # Re-open STDIN as the TTY so that the editor (vim) can use it
+            # XXX Is this also a problem on Windows?
+            if ( -e '/dev/tty' ) {
+                close STDIN;
+                open STDIN, '/dev/tty';
+            }
         }
 
         if ( $ENV{EDITOR} ) {

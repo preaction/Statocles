@@ -718,6 +718,10 @@ ENDCONTENT
                     is $exit, 0;
                     like $out, qr{New post at: \Q$doc_path},
                         'contains blog post document path';
+
+                    if ( -e '/dev/tty' ) {
+                        ok -t *STDIN, 'STDIN gets reset to our TTY';
+                    }
                 };
 
                 subtest 'check the generated document' => sub {
