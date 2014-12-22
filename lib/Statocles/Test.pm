@@ -93,7 +93,14 @@ If the page is HTML, a L<Mojo::DOM> object ready for testing.
 =cut
 
 sub test_pages {
-    my ( $site, $app, $index_path, $index_test, %page_tests ) = @_;
+    my ( $site, $app ) = ( shift, shift );
+
+    my %opt;
+    if ( ref $_[0] eq 'HASH' ) {
+        %opt = %{ +shift };
+    }
+
+    my ( $index_path, $index_test, %page_tests ) = @_;
     $page_tests{ $index_path } = $index_test;
 
     local $Test::Builder::Level = $Test::Builder::Level + 1;
@@ -102,8 +109,12 @@ sub test_pages {
     local $SIG{__WARN__} = sub { push @warnings, $_[0] };
 
     my @pages = $app->pages;
+
     is scalar @pages, scalar keys %page_tests, 'correct number of pages';
-    is $pages[0]->path, $index_path, 'index page must come first';
+
+    if ( !$opt{noindex} ) {
+        is $pages[0]->path, $index_path, 'index page must come first';
+    }
 
     for my $page ( @pages ) {
         ok $page->DOES( 'Statocles::Page' ), 'must be a Statocles::Page';

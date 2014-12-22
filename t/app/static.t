@@ -31,7 +31,7 @@ subtest 'pages' => sub {
     );
 
     test_pages(
-        $site, $app,
+        $site, $app, { noindex => 1 },
 
         '/static.txt' => sub {
             my ( $text ) = @_;
