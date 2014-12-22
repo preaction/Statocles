@@ -206,21 +206,23 @@ sub write {
     my $base_path = Mojo::URL->new( $self->base_url )->path;
     $base_path =~ s{/$}{};
     for my $page ( @pages ) {
-        my $html = $page->render( %args );
+        my $content = $page->render( %args );
 
-        if ( $base_path =~ /\S/ ) {
-            my $dom = Mojo::DOM->new( $html );
-            for my $attr ( qw( src href ) ) {
-                for my $el ( $dom->find( "[$attr]" )->each ) {
-                    my $url = $el->attr( $attr );
-                    next unless $url =~ m{^/};
-                    $el->attr( $attr, join "", $base_path, $url );
+        if ( !ref $content ) {
+            if ( $base_path =~ /\S/ ) {
+                my $dom = Mojo::DOM->new( $content );
+                for my $attr ( qw( src href ) ) {
+                    for my $el ( $dom->find( "[$attr]" )->each ) {
+                        my $url = $el->attr( $attr );
+                        next unless $url =~ m{^/};
+                        $el->attr( $attr, join "", $base_path, $url );
+                    }
                 }
+                $content = $dom->to_string;
             }
-            $html = $dom->to_string;
         }
 
-        $store->write_file( $page->path, $html );
+        $store->write_file( $page->path, $content );
     }
 
     # Build the sitemap.xml
