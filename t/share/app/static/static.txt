@@ -1,0 +1,4 @@
+This is some static text.
+
+Since we have to copy the file, due to the nature of the Store API. This
+could be a problem...

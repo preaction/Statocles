@@ -118,12 +118,17 @@ sub test_pages {
         }
 
         my $output = $page->render( site => $site );
+        # Handle filehandles from render
+        if ( ref $output eq 'GLOB' ) {
+            $output = do { local $/; <$output> };
+        }
+
         if ( $page->path =~ /[.](?:html|rss|atom)$/ ) {
             my $dom = Mojo::DOM->new( $output );
             fail "Could not parse dom" unless $dom;
             subtest 'html content: ' . $page->path, $page_tests{ $page->path }, $output, $dom;
         }
-        elsif ( $page->path =~ /[.]txt$/ ) {
+        elsif ( $page_tests{ $page->path } ) {
             subtest 'text content: ' . $page->path, $page_tests{ $page->path }, $output;
         }
         else {
