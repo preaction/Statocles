@@ -17,7 +17,9 @@ applications need, and made it easier to implement the automatic rebuilding.
 Finally, some much-needed cleanup as part of the automatic rebuilding feature.
 Still plenty of cleanup to go.
 
-In this release:
+Full changelog:
+
+---
 
 * [set the default log level to "info"](https://github.com/preaction/Statocles/commit/65cf7b77c37f140447eb8fbff0a6beed6d2eb554)
 * [fix test only emits "Watching" if we have the right module](https://github.com/preaction/Statocles/commit/3794f261c21512c791c731640fda04c36fd6ddf3)
