@@ -232,11 +232,13 @@ sub find_files {
 
 Open the file with the given path. Returns a filehandle.
 
+The filehandle opened is using raw bytes, not UTF-8 characters.
+
 =cut
 
 sub open_file {
     my ( $self, $path ) = @_;
-    return $self->path->child( $path )->openr_utf8;
+    return $self->path->child( $path )->openr_raw;
 }
 
 =method write_file( $path, $content )
@@ -244,7 +246,9 @@ sub open_file {
 Write the given C<content> to the given C<path>. This is mostly used to write
 out L<page objects|Statocles::Page>.
 
-C<content> may be a simple string or a filehandle.
+C<content> may be a simple string or a filehandle. If given a string, will
+write the string using UTF-8 characters. If given a filehandle, will write out
+the raw bytes read from it with no special encoding.
 
 =cut
 
@@ -254,7 +258,7 @@ sub write_file {
     my $full_path = $self->path->child( $path );
 
     if ( ref $content eq 'GLOB' ) {
-        my $fh = $full_path->touchpath->openw_utf8;
+        my $fh = $full_path->touchpath->openw_raw;
         while ( my $line = <$content> ) {
             $fh->print( $line );
         }

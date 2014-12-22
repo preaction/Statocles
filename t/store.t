@@ -230,6 +230,7 @@ subtest 'files' => sub {
         );
         my @expect_paths = (
             path( qw( text.txt ) )->absolute( '/' ),
+            path( qw( image.png ) )->absolute( '/' ),
             path( qw( folder doc.yml ) )->absolute( '/' ),
         );
 
@@ -257,7 +258,7 @@ subtest 'files' => sub {
 
         my $fh = $store->open_file( path( 'text.txt' ) );
         my $content = do { local $/; <$fh> };
-        eq_or_diff $content, $SHARE_DIR->child( qw( store files text.txt ) )->slurp_utf8;
+        eq_or_diff $content, $SHARE_DIR->child( qw( store files text.txt ) )->slurp_raw;
     };
 
     subtest 'write files' => sub {
@@ -273,6 +274,7 @@ subtest 'files' => sub {
 
             my $content = "\x{2603} This is some plain text";
 
+            # write_file with string is written using UTF-8
             $store->write_file( path( qw( store files text.txt ) ), $content );
 
             my $path = $tmpdir->child( qw( store files text.txt ) );
@@ -283,25 +285,43 @@ subtest 'files' => sub {
         };
 
         subtest 'filehandle' => sub {
-            my @warnings;
-            local $SIG{__WARN__} = sub { push @warnings, $_[0] };
-
             my $tmpdir = tempdir;
             my $store = Statocles::Store->new(
                 path => $tmpdir,
             );
 
-            my $fh = $SHARE_DIR->child( qw( store files text.txt ) )->openr_utf8;
+            subtest 'plain text files' => sub {
+                my @warnings;
+                local $SIG{__WARN__} = sub { push @warnings, $_[0] };
 
-            $store->write_file( path( qw( store files text.txt ) ), $fh );
+                my $fh = $SHARE_DIR->child( qw( store files text.txt ) )->openr_raw;
 
-            my $path = $tmpdir->child( qw( store files text.txt ) );
-            eq_or_diff $path->slurp_utf8, $SHARE_DIR->child( qw( store files text.txt ) )->slurp_utf8;
+                $store->write_file( path( qw( store files text.txt ) ), $fh );
 
-            ok !@warnings, 'no warnings from write'
-                or diag "Got warnings: \n\t" . join "\n\t", @warnings;
+                my $path = $tmpdir->child( qw( store files text.txt ) );
+                eq_or_diff $path->slurp_raw, $SHARE_DIR->child( qw( store files text.txt ) )->slurp_raw;
+
+                ok !@warnings, 'no warnings from write'
+                    or diag "Got warnings: \n\t" . join "\n\t", @warnings;
+            };
+
+            subtest 'images' => sub {
+                my @warnings;
+                local $SIG{__WARN__} = sub { push @warnings, $_[0] };
+
+                my $fh = $SHARE_DIR->child( qw( store files image.png ) )->openr_raw;
+
+                $store->write_file( path( qw( store files image.png ) ), $fh );
+
+                my $path = $tmpdir->child( qw( store files image.png ) );
+                ok $path->slurp_raw eq $SHARE_DIR->child( qw( store files image.png ) )->slurp_raw,
+                    'image content is correct';
+
+                ok !@warnings, 'no warnings from write'
+                    or diag "Got warnings: \n\t" . join "\n\t", @warnings;
+            };
+
         };
-
     };
 };
 
