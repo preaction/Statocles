@@ -1,13 +1,9 @@
 ---
 title: Home
 ---
-
-# Statocles
-
-Statocles is a <abbr title="Content Management System">CMS</abbr> for building static
-websites.
-
-Statocles is [built in Perl](http://perl.org) 
+<div id="index-banner">
+<h1>Statocles <small>Static, App-capable Websites</small></h1>
+</div>
 
 ## Getting Started
 

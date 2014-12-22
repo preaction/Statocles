@@ -58,6 +58,7 @@
             <link rel="alternate" href="<%= $link->{href} %>" type="<%= $link->{type} %>" />
             % }
         % }
+        %= include 'site/head_after.html'
     </head>
     <body>
         <header>

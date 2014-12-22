@@ -39,6 +39,7 @@ site:
         deploy_branch: gh-pages
         index: page
         apps:
+
             page:
                 $class: Statocles::App::Plain
                 $args:
@@ -46,6 +47,13 @@ site:
                     store: site/
                     theme:
                         $ref: theme
+
+            static:
+                $class: Statocles::App::Static
+                $args:
+                    url_root: /
+                    store: site/
+
             pod:
                 $class: Statocles::App::Perldoc
                 $args:
@@ -59,6 +67,7 @@ site:
                     weave: 1
                     theme:
                         $ref: theme
+
             blog:
                 $class: Statocles::App::Blog
                 $args:
