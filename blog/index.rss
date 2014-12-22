@@ -5,7 +5,36 @@
         <link>http://preaction.github.io/Statocles/blog/index.html</link>
         <atom:link href="http://preaction.github.io/Statocles/blog/index.rss" rel="self" type="application/rss+xml" />
         <description>Blog feed of Statocles</description>
-        <generator>Statocles </generator>
+        <generator>Statocles 0.030</generator>
+        <item>
+            <title>Release v0.029</title>
+            <link>http://preaction.github.io/Statocles/blog/2014/12/22/release-v0.029.html</link>
+            <guid>http://preaction.github.io/Statocles/blog/2014/12/22/release-v0.029.html</guid>
+            <description><![CDATA[
+                <p>This release adds support for static files to the Store and a new app for
+adding static files to your site.</p>
+
+<p>Since Statocles is meant to be used with a command line, you can now redirect
+input into the "blog post" command. This makes it easy to write scripts that
+generate markdown and use them with the blog.</p>
+
+<p>The Statocles website also got a bit of a facelift, and that revealed a bunch more
+bugs to fix.</p>
+
+<p>There was also a lot of test cleanup in this release, to make future
+development easier.</p>
+
+<p>Full changelog:</p>
+
+                    <p><a href="http://preaction.github.io/Statocles/blog/2014/12/22/release-v0.029.html#section-2">Continue reading...</a></p>
+                <p>Tags:
+                    <a href="/blog/tag/release/index.html">release</a>
+                </p>
+            ]]></description>
+            <pubDate>
+                Mon, 22 Dec 2014 00:00:00 -0600
+            </pubDate>
+        </item>
         <item>
             <title>Release v0.028</title>
             <link>http://preaction.github.io/Statocles/blog/2014/12/14/release-v0.028.html</link>

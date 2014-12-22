@@ -2,10 +2,39 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://preaction.github.io/Statocles/blog/index.html</id>
     <title>Statocles</title>
-    <updated>2014-12-22T04:55:25Z</updated>
+    <updated>2014-12-22T05:19:29Z</updated>
     <link href="http://preaction.github.io/Statocles/blog/index.atom" rel="self" />
     <link href="http://preaction.github.io/Statocles/blog/index.html" rel="alternate" />
-    <generator version="">Statocles</generator>
+    <generator version="0.030">Statocles</generator>
+    <entry>
+        <id>http://preaction.github.io/Statocles/blog/2014/12/22/release-v0.029.html</id>
+        <title>Release v0.029</title>
+        <author><name>preaction</name></author>
+        <link href="http://preaction.github.io/Statocles/blog/2014/12/22/release-v0.029.html" rel="alternate" />
+        <content type="html"><![CDATA[
+            <p>This release adds support for static files to the Store and a new app for
+adding static files to your site.</p>
+
+<p>Since Statocles is meant to be used with a command line, you can now redirect
+input into the "blog post" command. This makes it easy to write scripts that
+generate markdown and use them with the blog.</p>
+
+<p>The Statocles website also got a bit of a facelift, and that revealed a bunch more
+bugs to fix.</p>
+
+<p>There was also a lot of test cleanup in this release, to make future
+development easier.</p>
+
+<p>Full changelog:</p>
+
+                <p><a href="http://preaction.github.io/Statocles/blog/2014/12/22/release-v0.029.html#section-2">Continue reading...</a></p>
+            <p>Tags:
+                <a href="/blog/tag/release/index.html">release</a>
+            </p>
+        ]]></content>
+        <updated>2014-12-22T00:00:00Z</updated>
+        <category term="ARRAY(0x7f88d304fdd0)" />
+    </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2014/12/14/release-v0.028.html</id>
         <title>Release v0.028</title>
@@ -50,7 +79,7 @@ Still plenty of cleanup to go.</p>
             </p>
         ]]></content>
         <updated>2014-12-14T00:00:00Z</updated>
-        <category term="ARRAY(0x7fead3f87eb8)" />
+        <category term="ARRAY(0x7f88d3020ff8)" />
     </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2014/12/08/release-v0.027.html</id>
@@ -76,7 +105,7 @@ finally fixed <a href="https://github.com/preaction/Statocles/issues/110">the Wi
             </p>
         ]]></content>
         <updated>2014-12-08T00:00:00Z</updated>
-        <category term="ARRAY(0x7fead3f6eaa8)" />
+        <category term="ARRAY(0x7f88d3040240)" />
     </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2014/12/07/statocles-initial-public-(alpha)-release.html</id>
@@ -115,7 +144,7 @@ Setup guide</a>. If you have any issues, report them on
             </p>
         ]]></content>
         <updated>2014-12-07T00:00:00Z</updated>
-        <category term="ARRAY(0x7fead3f7ba30)" />
+        <category term="ARRAY(0x7f88d304fd58)" />
     </entry>
 </feed>
 

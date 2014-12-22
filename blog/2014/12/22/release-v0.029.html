@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+        <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap-theme.min.css" rel="stylesheet">
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <title>Statocles</title>
+        <style type="text/css">
+            main header h1
+            {
+                border-bottom: 4px solid #045578;
+            }
+            header aside {
+                margin-top: 0;
+                font-size: 12pt;
+            }
+            .sidebar h1 {
+                font-size: 14pt;
+            }
+
+            /** Add a line when using the "Continue reading..." link */
+            section:target {
+                padding-top: 0.5em;
+                border-top: 4px solid #045578;
+            }
+
+            /** Don't allow <pre> to push too much */
+            pre {
+                max-width: 100%;
+                overflow-x: scroll;
+            }
+
+            /** <code> is used for input and output, so let it wrap */
+            code {
+                white-space: normal;
+            }
+
+            .tags {
+                float: right;
+            }
+
+            /**
+             * Don't allow main content images to push things around
+             */
+            main img {
+                max-width: 100%;
+            }
+
+            footer .tagline {
+                font-size: smaller;
+                line-height: 1.3;
+                text-align: right;
+            }
+
+        </style>
+        <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
+<style>
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Forum', sans-serif;
+        font-weight: bold;
+    }
+
+    #index-banner {
+        font-family: 'Forum', sans-serif;
+        height: 300px;
+        position: relative;
+    }
+    #index-banner:before, #index-banner:after {
+        width: 60px;
+        height: 300px;
+        content: url(/Statocles/theme/images/column.png);
+    }
+    #index-banner:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #index-banner:after {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    #index-banner h1 {
+        padding-top: 1em;
+        text-transform: uppercase;
+        font-size: 72px;
+        text-align: center;
+    }
+    #index-banner h1 small {
+        display: block;
+        font-size: 24px;
+    }
+
+</style>
+
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-default navbar-static-top" role="navigation">
+                <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button class="navbar-toggle" data-target="#top-navbar-collapse-1" data-toggle="collapse" type="button">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="/Statocles/">Statocles</a>
+                    </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="top-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li><a href="/Statocles/blog">Blog</a></li>
+                            <li><a href="/Statocles/pod">Docs</a></li>
+                            <li><a href="http://github.com/preaction/Statocles">Code</a></li>
+                            <li><a href="http://github.com/preaction/Statocles/issues">Bugs</a></li>
+                            <li><a href="http://metacpan.org/pod/Statocles">CPAN</a></li>
+                            <li><a href="https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">IRC</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <a href="https://github.com/preaction/Statocles"><img alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; z-index: 1000; border: 0;"></a>
+
+        </header>
+        <div class="main container">
+            <div class="row">
+
+    <div class="col-md-9">
+        <main>
+            <header>
+                <h1>Release v0.029</h1>
+                <p class="tags">Tags:
+                    <a href="/Statocles/blog/tag/release/index.html" rel="tag">release</a>
+                </p>
+                <aside>
+                    <p><time datetime="2014-12-22">
+                        Posted on 2014-12-22
+                    </time>
+                    by preaction</p>
+                </aside>
+            </header>
+            <section id="section-1">
+                <p>This release adds support for static files to the Store and a new app for
+adding static files to your site.</p>
+
+<p>Since Statocles is meant to be used with a command line, you can now redirect
+input into the &quot;blog post&quot; command. This makes it easy to write scripts that
+generate markdown and use them with the blog.</p>
+
+<p>The Statocles website also got a bit of a facelift, and that revealed a bunch more
+bugs to fix.</p>
+
+<p>There was also a lot of test cleanup in this release, to make future
+development easier.</p>
+
+<p>Full changelog:</p>
+
+            </section>
+            <section id="section-2">
+                <ul>
+<li><a href="https://github.com/preaction/Statocles/commit/f26beb18f5096acc947c6a0b5a479c8aabe718e6">release v0.029</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/54c36c3302e7941f909613afa517c1ba1dc0bef3">add new home page layout</a> (<a href="https://github.com/preaction/Statocles/issues/148">#148</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/08d34e0a0130d702bd02542f6299f742d6e90ba7">add head_after include for custom <head> JS and CSS</head></a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/01b42cdd82def3865c25e78d605b24b089dcf93c">fix site altering raw file content with base URL</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/e084118b88e3838e38d5afa027d770ab22ca9903">open/write filehandles using raw bytes</a> (<a href="https://github.com/preaction/Statocles/issues/171">#171</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/709ea186cc8fda642770cc6e69895de3a1eda390">allow blog post content on STDIN</a> (<a href="https://github.com/preaction/Statocles/issues/164">#164</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/06a7a989e09615b3ab9abd0378ad66ddb1714a79">add plain and static apps to Setup guide</a> (<a href="https://github.com/preaction/Statocles/issues/166">#166</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/4b11c83535432de6e9bfda35cbc14740cfcd3bbb">allow for test_pages without index test</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/65728398cbaa6b907fce031af0e8f751c9617eb3">fix syntax error on 5.10. &#39;...&#39; was added in 5.12</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/cd9d7a4ad83e314852913ba7a2cdaa3109377b1a">add Static app for tracking static files</a> (<a href="https://github.com/preaction/Statocles/issues/22">#22</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/eb1508af382577347e20a6e40d4f16a3084f0a99">make sure find_files returns absolute paths</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/c7288a0666247ab33d84c9487d1e7e3dd52eb524">add File page to move files between stores</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/b8620fd037ed439a5981788842272daf129cd36f">add open_file and write_file for filehandles</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/f29177ffc7614db7de56dd42b418a7f68c40c4c7">add find_files method to Store</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/b4516136c617f58e3514ee3814704fb2a2493446">add SEE ALSO about other static site tools</a> (<a href="https://github.com/preaction/Statocles/issues/68">#68</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/a513b29b9841a35b7b4c9dea6349ed32f29afa47">clarify setup docs about daemon command</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/f89234c31d5db910bdc19ce9db6696ec4c24811b">trap date/time parsing exceptions</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/e5ecc79d77ed255259efe6fbcd0137a13e25b6c5">move test yaml error document to a directory</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/46dd5dee2248c97769a62a005820bea755cece5f">check that store path exists and is directory</a> (<a href="https://github.com/preaction/Statocles/issues/124">#124</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/532bf265d416b880933ab2fcc9734a9ec058d405">make sure store is always using utf-8</a> (<a href="https://github.com/preaction/Statocles/issues/145">#145</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/4476b67a0691796c7b1f19c38821070a273f3085">cleanup store tests to use files</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/03b18578800d642014d115faedd55803c3471d97">remove spurious test collateral</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/231c371af4be11d3303ba2b2487c07920c40a7d2">organize t/share directory better</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/5849cf5fa36bc2675745e6f3cdd3820097c1139f">add script to generate release commit lists</a> (<a href="https://github.com/preaction/Statocles/issues/157">#157</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/0cc268abcf0344ed0fb7aeca1a1cdab0751f84dd">cleanup blog tests</a> (<a href="https://github.com/preaction/Statocles/issues/133">#133</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/fb3017dacd0da801b80ca58a884a62f4b04add1e">add test_pages helper function</a> (<a href="https://github.com/preaction/Statocles/issues/132">#132</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/0d52340dd8de23907b872f05e5ce1303adeadc78">add test_constructor helper function</a> (<a href="https://github.com/preaction/Statocles/issues/132">#132</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/c8e2dfec0b398f4366b60b4afbc5e3630db9cc80">paginated list pages should share last_modified</a> (<a href="https://github.com/preaction/Statocles/issues/125">#125</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/b12156913ef924afdef222161e9b5b449151d5c9">fix: daemon serves data with wrong charset</a> (<a href="https://github.com/preaction/Statocles/issues/162">#162</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/6e9d7faa0927bed65acd46f9c5a28dde06083f42">add tagline to default theme</a> (<a href="https://github.com/preaction/Statocles/issues/161">#161</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/e0569e91dfd3790fffa5a24e577bab84096dc288">clarify what each destination Store is used for</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/3a85938871f37961c3442d1f8d4a6a181044a089">build the site when daemon starts up</a> (<a href="https://github.com/preaction/Statocles/issues/155">#155</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/438b1c33ffeee4e9e37ed9e552f824ff2680c490">add links to github, cpan, and irc to site</a> (<a href="https://github.com/preaction/Statocles/issues/156">#156</a>)</li>
+</ul>
+
+            </section>
+        </main>
+    </div>
+
+    <div class="col-md-3">
+        
+        <nav id="tags">
+            <h1>Tags</h1>
+            <ul class="list-inline">
+            </ul>
+        </nav>
+    </div>
+
+</div>
+
+        </div>
+        <footer>
+            
+            <div class="container tagline">
+                <a href="http://preaction.github.io/Statocles">Made with Statocles</a><br>
+                <a href="http://www.perl.org">Powered by Perl</a>
+            </div>
+        </footer>
+    </body>
+</html>
