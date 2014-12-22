@@ -36,7 +36,7 @@ Dies. This page has no templates and no template variables.
 
 # XXX: This may have to be implemented in the future, to allow for some useful edge
 # cases.
-sub vars { ... }
+sub vars { die "Unimplemented" }
 
 =method render
 
