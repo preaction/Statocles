@@ -229,8 +229,8 @@ subtest 'files' => sub {
             path => $SHARE_DIR->child( qw( store files ) ),
         );
         my @expect_paths = (
-            path( qw( text.txt ) ),
-            path( qw( folder doc.yml ) ),
+            path( qw( text.txt ) )->absolute( '/' ),
+            path( qw( folder doc.yml ) )->absolute( '/' ),
         );
 
         my $iter = $store->find_files;
@@ -241,6 +241,13 @@ subtest 'files' => sub {
 
         cmp_deeply \@got_paths, bag( @expect_paths )
             or diag explain \@got_paths;
+
+        subtest 'can pass paths to read_file' => sub {
+            my ( $path ) = grep { $_->basename eq 'text.txt' } @got_paths;
+            eq_or_diff $store->read_file( $path ),
+                $SHARE_DIR->child( qw( store files text.txt ) )->slurp_utf8;
+        };
+
     };
 
     subtest 'open file' => sub {

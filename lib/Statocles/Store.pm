@@ -224,7 +224,7 @@ sub find_files {
         my $path = $iter->();
         return unless $path;
         $path = $iter->() while $path->is_dir;
-        return $path->relative( $self->path );
+        return $path->relative( $self->path )->absolute( '/' );
     };
 }
 
