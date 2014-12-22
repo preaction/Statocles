@@ -58,9 +58,9 @@ my %WriteMakefileArgs = (
     "Test::Deep" => 0,
     "Test::Differences" => 0,
     "Test::Exception" => 0,
-    "Test::More" => 0
+    "Test::More" => "1.001005"
   },
-  "VERSION" => "0.028",
+  "VERSION" => "0.029",
   "test" => {
     "TESTS" => "t/*.t t/app/*.t t/bin/*.t t/page/*.t t/site/*.t t/theme/*.t"
   }
@@ -88,7 +88,7 @@ my %FallbackPrereqs = (
   "Test::Deep" => 0,
   "Test::Differences" => 0,
   "Test::Exception" => 0,
-  "Test::More" => 0,
+  "Test::More" => "1.001005",
   "Text::Markdown" => 0,
   "Time::Piece" => 0,
   "Type::Tiny" => 0,

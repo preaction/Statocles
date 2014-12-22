@@ -20,7 +20,7 @@ my %module_build_args = (
     "Doug Bell <preaction\@cpan.org>"
   ],
   "dist_name" => "Statocles",
-  "dist_version" => "0.028",
+  "dist_version" => "0.029",
   "license" => "perl",
   "module_name" => "Statocles",
   "recommends" => {
@@ -63,7 +63,7 @@ my %module_build_args = (
     "Test::Deep" => 0,
     "Test::Differences" => 0,
     "Test::Exception" => 0,
-    "Test::More" => 0
+    "Test::More" => "1.001005"
   }
 );
 
@@ -76,7 +76,7 @@ my %fallback_build_requires = (
   "Test::Deep" => 0,
   "Test::Differences" => 0,
   "Test::Exception" => 0,
-  "Test::More" => 0
+  "Test::More" => "1.001005"
 );
 
 

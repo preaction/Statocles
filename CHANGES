@@ -1,6 +1,43 @@
 Changelog for Statocles
 
-0.028 2014-12-14T11:59:29
+0.029 2014-12-22T11:08:44
+ - add new home page layout
+ - add head_after include for custom <head> JS and CSS
+ - fix site altering raw file content with base URL
+ - open/write filehandles using raw bytes
+ - allow blog post content on STDIN
+ - add plain and static apps to Setup guide
+ - allow for test_pages without index test
+ - fix syntax error on 5.10. '...' was added in 5.12
+ - add Static app for tracking static files
+ - make sure find_files returns absolute paths
+ - add File page to move files between stores
+ - add open_file and write_file for filehandles
+ - add find_files method to Store
+ - add SEE ALSO about other static site tools
+ - clarify setup docs about daemon command
+ - trap date/time parsing exceptions
+ - move test yaml error document to a directory
+ - check that store path exists and is directory
+ - make sure store is always using utf-8
+ - cleanup store tests to use files
+ - remove spurious test collateral
+ - organize t/share directory better
+ - update v0.028 release with commit links
+ - add script to generate release commit lists
+ - cleanup blog tests
+ - add test_pages helper function
+ - add test_constructor helper function
+ - paginated list pages should share last_modified
+ - fix: daemon serves data with wrong charset
+ - add tagline to default theme
+ - clarify what each destination Store is used for
+ - build the site when daemon starts up
+ - add links to github, cpan, and irc to site
+ - add release announcement for v0.028
+
+0.028 2014-12-14T12:05:20
+ - release v0.028
  - set the default log level to "info"
  - fix test only emits "Watching" if we have the right module
  - use bundles to remove extra Base modules
