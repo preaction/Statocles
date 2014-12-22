@@ -53,6 +53,47 @@
             }
 
         </style>
+        <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
+<style>
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Forum', sans-serif;
+        font-weight: bold;
+    }
+
+    #index-banner {
+        font-family: 'Forum', sans-serif;
+        height: 300px;
+        position: relative;
+    }
+    #index-banner:before, #index-banner:after {
+        width: 60px;
+        height: 300px;
+        content: url(/Statocles/theme/images/column.png);
+    }
+    #index-banner:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #index-banner:after {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    #index-banner h1 {
+        padding-top: 1em;
+        text-transform: uppercase;
+        font-size: 72px;
+        text-align: center;
+    }
+    #index-banner h1 small {
+        display: block;
+        font-size: 24px;
+    }
+
+</style>
+
     </head>
     <body>
         <header>
@@ -85,7 +126,24 @@
 
         </header>
         <div class="main container">
-            <p>Though Statocles has been on CPAN for months, this is the first time I&#39;m announcing its
+            <div class="row">
+
+    <div class="col-md-9">
+        <main>
+            <header>
+                <h1>Statocles Initial Public (alpha) Release</h1>
+                <p class="tags">Tags:
+                    <a href="/Statocles/blog/tag/release/index.html" rel="tag">release</a>
+                </p>
+                <aside>
+                    <p><time datetime="2014-12-07">
+                        Posted on 2014-12-07
+                    </time>
+                    by preaction</p>
+                </aside>
+            </header>
+            <section id="section-1">
+                <p>Though Statocles has been on CPAN for months, this is the first time I&#39;m announcing its
 availability to the world!</p>
 
 <p>Statocles is a CMS for building static HTML websites. The goals of this app are to make
@@ -110,6 +168,20 @@ Setup guide</a>. If you have any issues, report them on
 
 <p>[1]: A future project will make Statocles content editable with a web interface</p>
 
+            </section>
+        </main>
+    </div>
+
+    <div class="col-md-3">
+        
+        <nav id="tags">
+            <h1>Tags</h1>
+            <ul class="list-inline">
+            </ul>
+        </nav>
+    </div>
+
+</div>
 
         </div>
         <footer>

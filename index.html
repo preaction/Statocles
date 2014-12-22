@@ -53,6 +53,47 @@
             }
 
         </style>
+        <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
+<style>
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Forum', sans-serif;
+        font-weight: bold;
+    }
+
+    #index-banner {
+        font-family: 'Forum', sans-serif;
+        height: 300px;
+        position: relative;
+    }
+    #index-banner:before, #index-banner:after {
+        width: 60px;
+        height: 300px;
+        content: url(/Statocles/theme/images/column.png);
+    }
+    #index-banner:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #index-banner:after {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    #index-banner h1 {
+        padding-top: 1em;
+        text-transform: uppercase;
+        font-size: 72px;
+        text-align: center;
+    }
+    #index-banner h1 small {
+        display: block;
+        font-size: 24px;
+    }
+
+</style>
+
     </head>
     <body>
         <header>
@@ -85,12 +126,9 @@
 
         </header>
         <div class="main container">
-            <h1>Statocles</h1>
-
-<p>Statocles is a <abbr title="Content Management System">CMS</abbr> for building static
-websites.</p>
-
-<p>Statocles is <a href="http://perl.org">built in Perl</a> </p>
+            <div id="index-banner">
+<h1>Statocles <small>Static, App-capable Websites</small></h1>
+</div>
 
 <h2>Getting Started</h2>
 

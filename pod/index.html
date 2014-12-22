@@ -53,6 +53,47 @@
             }
 
         </style>
+        <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
+<style>
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Forum', sans-serif;
+        font-weight: bold;
+    }
+
+    #index-banner {
+        font-family: 'Forum', sans-serif;
+        height: 300px;
+        position: relative;
+    }
+    #index-banner:before, #index-banner:after {
+        width: 60px;
+        height: 300px;
+        content: url(/Statocles/theme/images/column.png);
+    }
+    #index-banner:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #index-banner:after {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    #index-banner h1 {
+        padding-top: 1em;
+        text-transform: uppercase;
+        font-size: 72px;
+        text-align: center;
+    }
+    #index-banner h1 small {
+        display: block;
+        font-size: 24px;
+    }
+
+</style>
+
     </head>
     <body>
         <header>
@@ -236,6 +277,10 @@
 <h2 id="STORES">STORES</h2>
 
 <p>A <a href="/Statocles/pod/Statocles/Store.html">Statocles::Store</a> reads and writes documents and pages. The default store reads documents in YAML and writes pages to a file, but stores could read documents as JSON, or from a Mongo database, and write pages to a database, or whereever you want!</p>
+
+<h1 id="SEE-ALSO">SEE ALSO</h1>
+
+<p>There are static site generators written in other languages. See a big list of them at <a href="https://staticsitegenerators.net">https://staticsitegenerators.net</a>.</p>
 
 
 

@@ -53,6 +53,47 @@
             }
 
         </style>
+        <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
+<style>
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Forum', sans-serif;
+        font-weight: bold;
+    }
+
+    #index-banner {
+        font-family: 'Forum', sans-serif;
+        height: 300px;
+        position: relative;
+    }
+    #index-banner:before, #index-banner:after {
+        width: 60px;
+        height: 300px;
+        content: url(/Statocles/theme/images/column.png);
+    }
+    #index-banner:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #index-banner:after {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    #index-banner h1 {
+        padding-top: 1em;
+        text-transform: uppercase;
+        font-size: 72px;
+        text-align: center;
+    }
+    #index-banner h1 small {
+        display: block;
+        font-size: 24px;
+    }
+
+</style>
+
     </head>
     <body>
         <header>
@@ -93,9 +134,9 @@
 
 <p>This document describes how to set up a simple blog web site suitable to be deployed to GitHub Pages using Statocles.</p>
 
-<h1 id="site.yml---The-Main-Configuration-File">site.yml - The Main Configuration File</h1>
+<h1 id="Building-site.yml---The-Main-Configuration-File">Building site.yml - The Main Configuration File</h1>
 
-<p>Statocles uses <a href="https://metacpan.org/pod/Beam::Wire">Beam::Wire</a>, a dependency-injection module, to define its configuration. The format is <a href="http://yaml.org">YAML</a> and contains the data needed to build the objects: Arguments to the object&#39;s constructor. This means that any <code>ATTRIBUTES</code> defined in the documentation can be used in the configuration file.</p>
+<p>Statocles uses <a href="https://metacpan.org/pod/Beam::Wire">Beam::Wire</a>, a dependency-injection module, for configuration. The format is <a href="http://yaml.org">YAML</a> and contains the data needed to build the objects: Arguments to the object&#39;s constructor. This means that any <code>ATTRIBUTES</code> defined in the documentation can be used in the configuration file.</p>
 
 <p>The configuration file is, by default, called <code>site.yml</code>. See <a href="https://metacpan.org/pod/statocles">the statocles command documentation</a> if you want to have multiple site configuration files.</p>
 
@@ -124,17 +165,21 @@
             theme: &#39;::default&#39;
             store: &#39;blog&#39;</code></pre>
 
-<p>We put our blog app under the root URL <code>/blog</code>. All pages that come from this app will start with <code>/blog</code> (except the index page, we&#39;ll move that to <code>/index.html</code>).</p>
+<p>We put our blog app under the root URL <code>/blog</code>. All pages that come from this app will start with <code>/blog</code> (except the index page, we&#39;ll move that to <code>/index.html</code>, later).</p>
 
 <p>We define our theme with the string <code>::default</code>, which will get magically coerced into a <a href="/Statocles/pod/Statocles/Theme.html">theme object</a>. We define our store with the string <code>blog</code>, which will get magically coerced into a <a href="/Statocles/pod/Statocles/Store.html">store object</a>.</p>
 
-<p>One of the most useful things about using a dependency injection module is that you can easily plug-in your own classes. If you want to use your own template format, you can build your own Statocles::Theme class that provides a different kind of Statocles::Template object and use that instead. If you want to use your own document format, you can make your own Statocles::Store class that reads from a database.</p>
+<p><b>NOTE:</b> One of the most useful things about using a dependency injection module is that you can easily plug-in your own classes. If you want to use your own template format, you can build your own Statocles::Theme class that provides a different kind of Statocles::Template object and use that instead. If you want to use your own document format, you can make your own Statocles::Store class that reads from a database.</p>
 
 <h2 id="A-Destination">A Destination</h2>
 
 <p>Before we can generate pages, we need a place to put them. Statocles needs two places, a build directory (a staging area), and a deploy directory (the final destination for the site).</p>
 
-<p>For our site, we&#39;ve got a <code>build</code> directory for our staging area, where we can verify that our site looks correct before we deploy. Our deploy will happen in the root directory of our site (<code>.</code>). This is good for a GitHub Pages site.</p>
+<p>For our site, we will make a <code>build</code> directory for our staging area, where we can verify that our site looks correct before we deploy. Our deploy will happen in the root directory of our site (<code>.</code>). This is good for a GitHub Pages site.</p>
+
+<p>Make sure both of these directories exist:</p>
+
+<pre><code>    $ mkdir build</code></pre>
 
 <p>Though stores are usually just directories, they could also perform an SFTP or FTP or transfer the pages to a CDN (I think I have some evolution to do here).</p>
 
@@ -228,7 +273,9 @@
 <pre><code>    $ statocles daemon
     Listening on http://*:3000</code></pre>
 
-<p>Run the <code>daemon</code> command to start an HTTP server to view your built site. If you edit any content, running <code>build</code> again will update the site.</p>
+<p>Run the <code>daemon</code> command to start an HTTP server to view your built site. This will automatically build the site, so if you forgot to run <code>build</code>, don&#39;t worry.</p>
+
+<p>If you edit any content, running <code>build</code> again will update the site. On Mac OS X, editing any content will automatically rebuild the site.</p>
 
 <h2 id="Commit-Your-Changes">Commit Your Changes</h2>
 
@@ -242,6 +289,126 @@
 <pre><code>    $ statocles deploy</code></pre>
 
 <p>Running the <code>deploy</code> command will, in the case of the git site, commit the updated pages to the git repository. <code>deploy</code> will try to do a <code>git push</code> automatically, so your changes are now live on Github Pages!</p>
+
+<h1 id="Adding-More-Apps">Adding More Apps</h1>
+
+<p>In addition to our blog app, we also want to add some plain Markdown content, and some images.</p>
+
+<h2 id="Plain-Markdown">Plain Markdown</h2>
+
+<p>For plain markdown, there is the <a href="/Statocles/pod/Statocles/App/Plain.html">plain app: Statocles::App::Plain</a>. The plain app takes the same YAML-and-Markdown-formatted documents as the blog app and creates HTML pages, without the lists, tags, and feeds the blog generates.</p>
+
+<p>Like the blog, we need a store to find our documents. This time, we&#39;ll use the root directory of our repository, <code>.</code>. Also like the blog, we need a theme to allow for layout templates (we&#39;ll use the default theme again). Finally, we&#39;ll need a URL root. Since we&#39;re using the root directory for our documents, we&#39;ll use the root URL for our destination <code>/</code>.</p>
+
+<pre><code>    plain_app:
+        class: Statocles::App::Plain
+        args:
+            url_root: &#39;/&#39;
+            theme: &#39;::default&#39;
+            store: &#39;.&#39;</code></pre>
+
+<p>Now we just need to add this app to our site, but before we do, we&#39;ll create an app for our static files.</p>
+
+<h2 id="Static-Files">Static Files</h2>
+
+<p>Lastly, we wanted a place to put any file at all. No processing. No templates. Just a simple copy from one store to another. For this one, we&#39;ll put everything in the <code>/static</code> directory, and give a URL root to match. Since there is no processing, we don&#39;t need a theme here.</p>
+
+<pre><code>    static_app:
+        class: Statocles::App::Static
+        args:
+            url_root: &#39;/static&#39;
+            store: &#39;static&#39;</code></pre>
+
+<h2 id="Add-the-New-Apps">Add the New Apps</h2>
+
+<p>To enable the new apps, we just need to add them to the site&#39;s <code>apps</code>.</p>
+
+<pre><code>    site:
+        class: Statocles::Site::Git
+        args:
+            apps:
+                blog:
+                    $ref: blog_app
+                plain:
+                    $ref: plain_app
+                static:
+                    $ref: static_app</code></pre>
+
+<h2 id="Add-Plain-Content">Add Plain Content</h2>
+
+<p>Now, we just need some content for our plain app to deploy. The plain app uses the same format as the blog, so we need a YAML header followed by some Markdown content:</p>
+
+<p>Create a file named <code>about.yml</code> with the following content:</p>
+
+<pre><code>    ---
+    title: About
+    ---
+    # About Me
+
+    This is a personal website!</code></pre>
+
+<p>Then, run <code>statocles build</code>. The <code>about.yml</code> turns into <code>about.html</code> in our <code>build/</code> directory.</p>
+
+<p>Now we should probably make a link in our main nav to the new about page:</p>
+
+<pre><code>    site:
+        class: Statocles::Site::Git
+        args:
+            # ... [redacted]
+
+            nav:
+                main:
+                    - title: Blog
+                      href: /index.html
+                    - title: About
+                      href: /about.html</code></pre>
+
+<p>Now, if we run <code>statocles build</code> again, we can see the link in our header.</p>
+
+<h2 id="The-Complete-site.yml---With-More-Apps">The Complete site.yml - With More Apps</h2>
+
+<p>Along with the blog app and our other settings, here is our new, complete site.yml:</p>
+
+<pre><code>    blog_app:
+        class: Statocles::App::Blog
+        args:
+            url_root: /blog
+            theme: &#39;::default&#39;
+            store: &#39;blog&#39;
+
+    plain_app:
+        class: Statocles::App::Plain
+        args:
+            url_root: &#39;/&#39;
+            theme: &#39;::default&#39;
+            store: &#39;.&#39;
+
+    static_app:
+
+    site:
+        class: Statocles::Site::Git
+        args:
+            apps:
+                blog:
+                    $ref: blog_app
+                plain:
+                    $ref: plain_app
+                static:
+                    $ref: static_app
+
+            build_store: &#39;build&#39;
+            deploy_store: &#39;.&#39;
+
+            title: My Site
+            index: blog
+            nav:
+                main:
+                    - title: Blog
+                      href: /index.html
+                    - title: About
+                      href: /about.html</code></pre>
+
+<p>If we&#39;re satisfied with our new About page, we can deploy our site with <code>statocles deploy</code>.</p>
 
 
 
