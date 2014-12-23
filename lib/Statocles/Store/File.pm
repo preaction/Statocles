@@ -3,7 +3,7 @@ package Statocles::Store::File;
 
 use Statocles::Base 'Class';
 with 'Statocles::Store';
-use Scalar::Util qw( blessed );
+use Scalar::Util qw( weaken blessed );
 use Statocles::Document;
 use YAML;
 use List::MoreUtils qw( firstidx );
@@ -11,6 +11,11 @@ use File::Spec::Functions qw( splitdir );
 
 my $DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S';
 my $DATE_FORMAT = '%Y-%m-%d';
+
+# A hash of PATH => COUNT for all the open store paths. Stores are not allowed to
+# discover the files or documents of other stores (unless the two stores have the same
+# path)
+my %FILE_STORES = ();
 
 =attr path
 
@@ -20,8 +25,8 @@ The path to the directory containing the L<documents|Statocles::Document>.
 
 has path => (
     is => 'ro',
-    isa => Path,
-    coerce => Path->coercion,
+    isa => AbsPath,
+    coerce => AbsPath->coercion,
     required => 1,
 );
 
@@ -51,6 +56,15 @@ sub BUILD {
     elsif ( !$self->path->is_dir ) {
         die sprintf "Store path '%s' is not a directory", $self->path->stringify;
     }
+
+    $FILE_STORES{ $self->path->realpath }++;
+}
+
+sub DEMOLISH {
+    my ( $self, $in_global_destruction ) = @_;
+    if ( --$FILE_STORES{ $self->path->realpath } <= 0 ) {
+        delete $FILE_STORES{ $self->path->realpath };
+    }
 }
 
 =method read_documents()
@@ -65,6 +79,8 @@ sub read_documents {
     my @docs;
     my $iter = $root_path->iterator( { recurse => 1, follow_symlinks => 1 } );
     while ( my $path = $iter->() ) {
+        next unless $path->is_file;
+        next unless $self->_is_owned_path( $path );
         if ( $path =~ /[.]ya?ml$/ ) {
             my $rel_path = rootdir->child( $path->relative( $root_path ) );
             my $data = $self->read_document( $rel_path );
@@ -72,6 +88,21 @@ sub read_documents {
         }
     }
     return \@docs;
+}
+
+sub _is_owned_path {
+    my ( $self, $path ) = @_;
+    my $self_path = $self->path->realpath;
+    $path = $path->realpath;
+    my $dir = $path->parent;
+    for my $store_path ( keys %FILE_STORES ) {
+        # This is us!
+        next if $store_path eq $self_path;
+        # If our store is contained inside this store's path, we win
+        next if $self_path =~ /^\Q$store_path/;
+        return 0 if $path =~ /^\Q$store_path/;
+    }
+    return 1;
 }
 
 =method read_document( path )
@@ -223,8 +254,9 @@ sub find_files {
     my $iter = $self->path->iterator({ recurse => 1 });
     return sub {
         my $path = $iter->();
-        return unless $path;
-        $path = $iter->() while $path->is_dir;
+        return unless $path; # iterator exhausted
+        $path = $iter->() while $path && ( $path->is_dir || !$self->_is_owned_path( $path ) );
+        return unless $path; # iterator exhausted
         return $path->relative( $self->path )->absolute( '/' );
     };
 }

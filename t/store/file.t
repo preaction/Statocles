@@ -75,6 +75,14 @@ my @exp_docs = (
 
 );
 
+my @ignored_docs = (
+    Statocles::Document->new(
+        path => '/ignore/ignored.yml',
+        title => 'This document is ignored',
+        content => "This document is ignored because it's being used by another Store\n",
+    ),
+);
+
 subtest 'constructor' => sub {
     test_constructor(
         'Statocles::Store::File',
@@ -99,19 +107,26 @@ subtest 'constructor' => sub {
     };
 };
 
-subtest 'read documents' => sub {
-    my $store = Statocles::Store::File->new(
-        path => $SHARE_DIR->child( qw( store docs ) ),
-    );
-    cmp_deeply $store->documents, bag( @exp_docs ) or diag explain $store->documents;
+subtest 'documents' => sub {
 
-    subtest 'clear documents' => sub {
-        # Edit the document
-        $store->documents->[0]->title( 'This is a new title' );
-        # Clear all the documents
-        $store->clear;
-        # Re-read them from disk
+    my $ignored_store = Statocles::Store::File->new(
+        path => $SHARE_DIR->child( qw( store docs ignore ) ),
+    );
+
+    subtest 'read documents' => sub {
+        my $store = Statocles::Store::File->new(
+            path => $SHARE_DIR->child( qw( store docs ) ),
+        );
         cmp_deeply $store->documents, bag( @exp_docs ) or diag explain $store->documents;
+
+        subtest 'clear documents' => sub {
+            # Edit the document
+            $store->documents->[0]->title( 'This is a new title' );
+            # Clear all the documents
+            $store->clear;
+            # Re-read them from disk
+            cmp_deeply $store->documents, bag( @exp_docs ) or diag explain $store->documents;
+        };
     };
 
     subtest 'read with relative directory' => sub {
@@ -128,10 +143,14 @@ subtest 'read documents' => sub {
         my $tmpdir = tempdir;
         my $baddir = $tmpdir->child( '[regex](name).dir' );
         dircopy $SHARE_DIR->child( qw( store docs ) )->stringify, "$baddir";
+        my $ignored_store = Statocles::Store::File->new(
+            path => $baddir->child( qw( ignore ) ),
+        );
         my $store = Statocles::Store::File->new(
             path => $baddir,
         );
-        cmp_deeply $store->documents, bag( @exp_docs );
+        cmp_deeply $store->documents, bag( @exp_docs )
+            or diag join "\n", map { $_->path->stringify } @{ $store->documents };
     };
 
     subtest 'bad documents' => sub {
@@ -204,9 +223,23 @@ subtest 'read documents' => sub {
         };
 
     };
+
+    subtest 'removing a store reveals formerly-ignored files' => sub {
+        $ignored_store = undef;
+        my $store = Statocles::Store::File->new(
+            path => $SHARE_DIR->child( qw( store docs ) ),
+        );
+        cmp_deeply $store->documents, bag( @exp_docs, @ignored_docs )
+            or diag explain $store->documents;
+    };
 };
 
+
 subtest 'files' => sub {
+
+    my $ignored_store = Statocles::Store::File->new(
+        path => $SHARE_DIR->child( qw( store files ignore ) ),
+    );
 
     subtest 'read files' => sub {
         my $store = Statocles::Store::File->new(
