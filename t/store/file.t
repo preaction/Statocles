@@ -1,9 +1,9 @@
 
 use Statocles::Base 'Test';
-my $SHARE_DIR = path( __DIR__, 'share' );
+my $SHARE_DIR = path( __DIR__, '..', 'share' );
 $Statocles::SITE = Statocles::Site->new( build_store => '.' );
 
-use Statocles::Store;
+use Statocles::Store::File;
 use Statocles::Page::Document;
 use File::Copy::Recursive qw( dircopy );
 use Capture::Tiny qw( capture );
@@ -77,7 +77,7 @@ my @exp_docs = (
 
 subtest 'constructor' => sub {
     test_constructor(
-        'Statocles::Store',
+        'Statocles::Store::File',
         required => {
             path => $SHARE_DIR->child( qw( store docs ) ),
         },
@@ -85,13 +85,13 @@ subtest 'constructor' => sub {
 
     subtest 'path must exist and be a directory' => sub {
         throws_ok {
-            Statocles::Store->new(
+            Statocles::Store::File->new(
                 path => $SHARE_DIR->child( qw( DOES_NOT_EXIST ) ),
             );
         } qr{Store path '[^']+DOES_NOT_EXIST' does not exist};
 
         throws_ok {
-            Statocles::Store->new(
+            Statocles::Store::File->new(
                 path => $SHARE_DIR->child( qw( store docs required.yml ) ),
             );
         } qr{Store path '[^']+required\.yml' is not a directory};
@@ -100,7 +100,7 @@ subtest 'constructor' => sub {
 };
 
 subtest 'read documents' => sub {
-    my $store = Statocles::Store->new(
+    my $store = Statocles::Store::File->new(
         path => $SHARE_DIR->child( qw( store docs ) ),
     );
     cmp_deeply $store->documents, bag( @exp_docs ) or diag explain $store->documents;
@@ -117,7 +117,7 @@ subtest 'read documents' => sub {
     subtest 'read with relative directory' => sub {
         my $cwd = cwd;
         chdir $SHARE_DIR;
-        my $store = Statocles::Store->new(
+        my $store = Statocles::Store::File->new(
             path => 'store/docs',
         );
         cmp_deeply $store->documents, bag( @exp_docs );
@@ -128,7 +128,7 @@ subtest 'read documents' => sub {
         my $tmpdir = tempdir;
         my $baddir = $tmpdir->child( '[regex](name).dir' );
         dircopy $SHARE_DIR->child( qw( store docs ) )->stringify, "$baddir";
-        my $store = Statocles::Store->new(
+        my $store = Statocles::Store::File->new(
             path => $baddir,
         );
         cmp_deeply $store->documents, bag( @exp_docs );
@@ -136,14 +136,14 @@ subtest 'read documents' => sub {
 
     subtest 'bad documents' => sub {
         subtest 'invalid yaml' => sub {
-            my $store = Statocles::Store->new(
+            my $store = Statocles::Store::File->new(
                 path => $SHARE_DIR->child( qw( store error bad-yaml ) ),
             );
             throws_ok { $store->documents } qr{Error parsing YAML in};
         };
 
         subtest 'invalid date/time' => sub {
-            my $store = Statocles::Store->new(
+            my $store = Statocles::Store::File->new(
                 path => $SHARE_DIR->child( qw( store error bad-dates ) ),
             );
             throws_ok { $store->documents }
@@ -155,7 +155,7 @@ subtest 'read documents' => sub {
         no warnings 'once';
         local $YAML::Indent = 4; # Ensure our test output matches our indentation level
         my $tmpdir = tempdir;
-        my $store = Statocles::Store->new(
+        my $store = Statocles::Store::File->new(
             path => $tmpdir,
         );
         my $tp = Time::Piece->strptime( '2014-06-05 00:00:00', $DT_FORMAT );
@@ -209,7 +209,7 @@ subtest 'read documents' => sub {
 subtest 'files' => sub {
 
     subtest 'read files' => sub {
-        my $store = Statocles::Store->new(
+        my $store = Statocles::Store::File->new(
             path => $SHARE_DIR->child( qw( store files ) ),
         );
         my $content = $store->read_file( path( 'text.txt' ) );
@@ -217,7 +217,7 @@ subtest 'files' => sub {
     };
 
     subtest 'has file' => sub {
-        my $store = Statocles::Store->new(
+        my $store = Statocles::Store::File->new(
             path => $SHARE_DIR->child( qw( store files ) ),
         );
         ok $store->has_file( path( 'text.txt' ) );
@@ -225,7 +225,7 @@ subtest 'files' => sub {
     };
 
     subtest 'find files' => sub {
-        my $store = Statocles::Store->new(
+        my $store = Statocles::Store::File->new(
             path => $SHARE_DIR->child( qw( store files ) ),
         );
         my @expect_paths = (
@@ -252,7 +252,7 @@ subtest 'files' => sub {
     };
 
     subtest 'open file' => sub {
-        my $store = Statocles::Store->new(
+        my $store = Statocles::Store::File->new(
             path => $SHARE_DIR->child( qw( store files ) ),
         );
 
@@ -268,7 +268,7 @@ subtest 'files' => sub {
             local $SIG{__WARN__} = sub { push @warnings, $_[0] };
 
             my $tmpdir = tempdir;
-            my $store = Statocles::Store->new(
+            my $store = Statocles::Store::File->new(
                 path => $tmpdir,
             );
 
@@ -286,7 +286,7 @@ subtest 'files' => sub {
 
         subtest 'filehandle' => sub {
             my $tmpdir = tempdir;
-            my $store = Statocles::Store->new(
+            my $store = Statocles::Store::File->new(
                 path => $tmpdir,
             );
 
@@ -331,7 +331,7 @@ subtest 'verbose' => sub {
 
     subtest 'write' => sub {
         my $tmpdir = tempdir;
-        my $store = Statocles::Store->new(
+        my $store = Statocles::Store::File->new(
             path => $tmpdir,
         );
 
@@ -353,7 +353,7 @@ subtest 'verbose' => sub {
     subtest 'read' => sub {
 
         subtest 'read file' => sub {
-            my $store = Statocles::Store->new(
+            my $store = Statocles::Store::File->new(
                 path => $SHARE_DIR->child( 'theme' ),
             );
             my $path = path( qw( blog post.html.ep ) );
@@ -364,7 +364,7 @@ subtest 'verbose' => sub {
         };
 
         subtest 'read document' => sub {
-            my $store = Statocles::Store->new(
+            my $store = Statocles::Store::File->new(
                 path => $SHARE_DIR->child( qw( store docs ) ),
             );
             my $path = path( qw( required.yml ) );

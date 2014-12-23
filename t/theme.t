@@ -77,12 +77,12 @@ subtest 'templates from directory' => sub {
     );
 
     subtest 'absolute directory' => sub {
-        my $store = Statocles::Store->new(
+        my $store = Statocles::Store::File->new(
             path => $SHARE_DIR->child( 'theme' ),
         );
         my %exp_templates = read_templates( $store );
         my $theme = Statocles::Theme->new(
-            store => $store,
+            store => $SHARE_DIR->child( 'theme' ),
         );
         for my $tmpl ( @templates ) {
             cmp_deeply $theme->template( @$tmpl ), $exp_templates{ $tmpl->[0] }{ $tmpl->[1] };
@@ -93,7 +93,7 @@ subtest 'templates from directory' => sub {
         my $cwd = getcwd();
         chdir $SHARE_DIR;
 
-        my $store = Statocles::Store->new(
+        my $store = Statocles::Store::File->new(
             path => 'theme',
         );
 

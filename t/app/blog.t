@@ -30,7 +30,7 @@ subtest 'constructor' => sub {
     subtest 'attribute types/coercions' => sub {
         subtest 'store' => sub {
             my $app = Statocles::App::Blog->new( %required );
-            isa_ok $app->store, 'Statocles::Store';
+            ok $app->store->DOES( 'Statocles::Store' );
             is $app->store->path, $SHARE_DIR->child( qw( app blog ) );
         },
 

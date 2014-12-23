@@ -62,8 +62,8 @@ C</index.html>, later).
 
 We define our theme with the string C<::default>, which will get magically
 coerced into a L<theme object|Statocles::Theme>. We define our store with the
-string C<blog>, which will get magically coerced into a L<store
-object|Statocles::Store>.
+string C<blog>, which will get magically coerced into a L<file store
+object|Statocles::Store::File>.
 
 B<NOTE:> One of the most useful things about using a dependency injection
 module is that you can easily plug-in your own classes. If you want to use your
@@ -115,7 +115,7 @@ When adding apps to our site, we give them a name (in this case C<blog>) so
 that we can refer to them on the command-line (later).
 
 Just like the blog store, the C<build_store> and C<deploy_store> will magically
-create a Statocles::Store object from the path string.
+create a Statocles::Store::File object from the path string.
 
 The git branch we want to deploy to is C<master>. As part of the default
 template, we can provide a site C<title>.

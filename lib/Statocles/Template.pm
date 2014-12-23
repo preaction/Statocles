@@ -2,7 +2,6 @@ package Statocles::Template;
 # ABSTRACT: A template object to pass around
 
 use Statocles::Base 'Class';
-use Statocles::Store;
 use Mojo::Template;
 use Scalar::Util qw( blessed );
 

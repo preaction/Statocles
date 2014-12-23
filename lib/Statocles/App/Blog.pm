@@ -3,7 +3,7 @@ package Statocles::App::Blog;
 
 use Statocles::Base 'Class';
 use Getopt::Long qw( GetOptionsFromArray );
-use Statocles::Store;
+use Statocles::Store::File;
 use Statocles::Theme;
 use Statocles::Page::Document;
 use Statocles::Page::List;
@@ -170,7 +170,7 @@ ENDHELP
 
         if ( $ENV{EDITOR} ) {
             # I can see no good way to test this automatically
-            my $tmp_store = Statocles::Store->new( path => Path::Tiny->tempdir );
+            my $tmp_store = Statocles::Store::File->new( path => Path::Tiny->tempdir );
             my $tmp_path = $tmp_store->write_document( new_post => \%doc );
             system $ENV{EDITOR}, $tmp_path;
             %doc = %{ $tmp_store->read_document( 'new_post' ) };

@@ -4,8 +4,6 @@ package Statocles::App::Plain;
 use Statocles::Base 'Class';
 extends 'Statocles::App';
 use List::Util qw( first );
-use Statocles::Store;
-use Statocles::Theme;
 use Statocles::Page::Document;
 
 =attr url_root

@@ -2,7 +2,6 @@
 use Statocles::Base 'Test';
 use Statocles::Site;
 use Statocles::Theme;
-use Statocles::Store;
 use Statocles::App::Blog;
 use Statocles::App::Static;
 use Mojo::DOM;

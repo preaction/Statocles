@@ -10,7 +10,6 @@ BEGIN {
 
 use Statocles::Site::Git;
 use Statocles::Theme;
-use Statocles::Store;
 use Statocles::App::Blog;
 use File::Copy::Recursive qw( dircopy );
 
