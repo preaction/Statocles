@@ -3,16 +3,6 @@ theme:
     args:
         store: site/theme
 
-build:
-    class: Statocles::Store
-    args:
-        path: site/_build
-
-deploy:
-    class: Statocles::Store
-    args:
-        path: .
-
 site:
     class: Statocles::Site::Git
     args:
@@ -32,10 +22,8 @@ site:
                   href: 'http://metacpan.org/pod/Statocles'
                 - title: IRC
                   href: 'https://chat.mibbit.com/?channel=%23statocles&server=irc.perl.org'
-        build_store:
-            $ref: build
-        deploy_store:
-            $ref: deploy
+        build_store: 'site/_build'
+        deploy_store: '.'
         deploy_branch: gh-pages
         index: page
         apps:
@@ -71,10 +59,7 @@ site:
             blog:
                 $class: Statocles::App::Blog
                 $args:
-                    store:
-                        $class: Statocles::Store
-                        $args:
-                            path: site/blog
+                    store: site/blog
                     url_root: /blog
                     theme:
                         $ref: theme
