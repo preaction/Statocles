@@ -1,7 +1,7 @@
+---
 title: Second Post
 author: preaction
 last_modified: 2014-04-30 00:00:00
-# Tags may be a single string
 tags: better
 ---
 Better body content

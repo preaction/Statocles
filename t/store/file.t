@@ -19,6 +19,11 @@ my @exp_docs = (
     ),
 
     Statocles::Document->new(
+        path => '/no-frontmatter.markdown',
+        content => "\n# This Document has no frontmatter!\n\nDocuments are not required to have frontmatter!\n",
+    ),
+
+    Statocles::Document->new(
         path => '/datetime.markdown',
         title => 'Datetime Document',
         author => 'preaction',
@@ -154,6 +159,13 @@ subtest 'documents' => sub {
     };
 
     subtest 'bad documents' => sub {
+        subtest 'no ending frontmatter mark' => sub {
+            my $store = Statocles::Store::File->new(
+                path => $SHARE_DIR->child( qw( store error missing-end-mark ) ),
+            );
+            throws_ok { $store->documents } qr{\QCould not find end of front matter (---) in};
+        };
+
         subtest 'invalid yaml' => sub {
             my $store = Statocles::Store::File->new(
                 path => $SHARE_DIR->child( qw( store error bad-yaml ) ),
@@ -168,6 +180,7 @@ subtest 'documents' => sub {
             throws_ok { $store->documents }
                 qr{Could not parse last_modified '11/12/2014'[.] Does not match '\Q$DT_FORMAT\E' or '%Y-%m-%d'};
         };
+
     };
 
     subtest 'write document' => sub {

@@ -119,34 +119,32 @@ sub read_document {
     my $full_path = $self->path->child( $path );
     my @lines = $full_path->lines_utf8;
 
-    shift @lines while $lines[0] =~ /^---/;
-    # The next --- is the end of the YAML frontmatter
-    my $i = firstidx { /^---/ } @lines;
-
     my $doc;
-    # If we found the marker between YAML and Markdown
-    if ( $i > 0 ) {
+
+    if ( $lines[0] =~ /^---/ ) {
+        shift @lines;
+
+        # The next --- is the end of the YAML frontmatter
+        my $i = firstidx { /^---/ } @lines;
+
+        # If we did not find the marker between YAML and Markdown
+        if ( $i < 0 ) {
+            die "Could not find end of front matter (---) in '$full_path'\n";
+        }
+
         # Before the marker is YAML
         eval {
-            $doc = YAML::Load( join "", @lines[0..$i-1] );
+            $doc = YAML::Load( join "", splice @lines, 0, $i );
         };
         if ( $@ ) {
             die "Error parsing YAML in '$full_path'\n$@";
         }
-        # After the marker is Markdown
-        if ( !$doc->{content} ) {
-            $doc->{content} = join "", @lines[$i+1..$#lines];
-        }
+
+        # Remove the last '---' mark
+        shift @lines;
     }
-    # Otherwise, must be completely YAML
-    else {
-        eval {
-            $doc = YAML::Load( join "", @lines );
-        };
-        if ( $@ ) {
-            die "Error parsing YAML in '$full_path'\n$@";
-        }
-    }
+
+    $doc->{content} = join "", @lines;
 
     return $self->_thaw_document( $doc );
 }

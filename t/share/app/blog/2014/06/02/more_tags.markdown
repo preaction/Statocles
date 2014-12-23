@@ -1,6 +1,6 @@
+---
 title: More Tags
 author: preaction
-# Tags may be a comma-seperated string
 tags: more, better, even more tags
 last_modified: 2014-06-02 15:34:32
 links:
