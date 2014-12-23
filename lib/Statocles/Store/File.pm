@@ -81,7 +81,7 @@ sub read_documents {
     while ( my $path = $iter->() ) {
         next unless $path->is_file;
         next unless $self->_is_owned_path( $path );
-        if ( $path =~ /[.]ya?ml$/ ) {
+        if ( $path =~ /[.]markdown$/ ) {
             my $rel_path = rootdir->child( $path->relative( $root_path ) );
             my $data = $self->read_document( $rel_path );
             push @docs, Statocles::Document->new( path => $rel_path, %$data );
@@ -107,9 +107,9 @@ sub _is_owned_path {
 
 =method read_document( path )
 
-Read a single L<document|Statocles::Document> in either pure YAML or combined
-YAML/Markdown (Frontmatter) format and return a datastructure suitable to be
-given to L<Statocles::Document|Statocles::Document>.
+Read a single L<document|Statocles::Document> in Markdown with optional YAML
+frontmatter and return a datastructure suitable to be given to
+L<Statocles::Document|Statocles::Document>.
 
 =cut
 

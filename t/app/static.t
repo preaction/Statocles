@@ -38,9 +38,9 @@ subtest 'pages' => sub {
             eq_or_diff $text, $SHARE_DIR->child( qw( app static static.txt ) )->slurp_utf8;
         },
 
-        '/static.yml' => sub {
+        '/static.markdown' => sub {
             my ( $text ) = @_;
-            eq_or_diff $text, $SHARE_DIR->child( qw( app static static.yml ) )->slurp_utf8;
+            eq_or_diff $text, $SHARE_DIR->child( qw( app static static.markdown ) )->slurp_utf8;
         },
 
     );

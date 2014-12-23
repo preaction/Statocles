@@ -313,7 +313,7 @@ subtest 'run the http daemon' => sub {
                 subtest 'watch for filesystem events' => sub {
 
                     subtest 'content store' => sub {
-                        my $path = Path::Tiny->new( qw( 2014 06 02 more_tags.yml ) );
+                        my $path = Path::Tiny->new( qw( 2014 06 02 more_tags.markdown ) );
                         my $store = $t->app->site->app( 'blog' )->store;
                         my $doc = $store->read_document( $path );
                         $doc->{content} = "This is some new content for our blog!";

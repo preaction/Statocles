@@ -12,14 +12,14 @@ my $DT_FORMAT = '%Y-%m-%d %H:%M:%S';
 
 my @exp_docs = (
     Statocles::Document->new(
-        path => '/required.yml',
+        path => '/required.markdown',
         title => 'Required Document',
         author => 'preaction',
         content => "No optional things in here, at all!\n",
     ),
 
     Statocles::Document->new(
-        path => '/datetime.yml',
+        path => '/datetime.markdown',
         title => 'Datetime Document',
         author => 'preaction',
         last_modified => Time::Piece->strptime( '2014-04-30 15:34:32', $DT_FORMAT ),
@@ -27,7 +27,7 @@ my @exp_docs = (
     ),
 
     Statocles::Document->new(
-        path => '/date.yml',
+        path => '/date.markdown',
         title => 'Date Document',
         author => 'preaction',
         last_modified => Time::Piece->strptime( '2014-04-30', '%Y-%m-%d' ),
@@ -35,7 +35,7 @@ my @exp_docs = (
     ),
 
     Statocles::Document->new(
-        path => '/links/crosspost_single.yml',
+        path => '/links/crosspost_single.markdown',
         title => 'Linked Document',
         author => 'preaction',
         content => "This document has a single crosspost link\n",
@@ -50,7 +50,7 @@ my @exp_docs = (
     ),
 
     Statocles::Document->new(
-        path => '/tags/single.yml',
+        path => '/tags/single.markdown',
         title => 'Tagged (Single) Document',
         author => 'preaction',
         tags => [qw( single )],
@@ -58,7 +58,7 @@ my @exp_docs = (
     ),
 
     Statocles::Document->new(
-        path => '/tags/array.yml',
+        path => '/tags/array.markdown',
         title => 'Tagged (Array) Document',
         author => 'preaction',
         tags => [ 'multiple', 'tags', 'in an', 'array' ],
@@ -66,7 +66,7 @@ my @exp_docs = (
     ),
 
     Statocles::Document->new(
-        path => '/tags/comma.yml',
+        path => '/tags/comma.markdown',
         title => 'Tagged (Comma) Document',
         author => 'preaction',
         tags => [ "multiple", "tags", "separated by", "commas" ],
@@ -77,7 +77,7 @@ my @exp_docs = (
 
 my @ignored_docs = (
     Statocles::Document->new(
-        path => '/ignore/ignored.yml',
+        path => '/ignore/ignored.markdown',
         title => 'This document is ignored',
         content => "This document is ignored because it's being used by another Store\n",
     ),
@@ -100,9 +100,9 @@ subtest 'constructor' => sub {
 
         throws_ok {
             Statocles::Store::File->new(
-                path => $SHARE_DIR->child( qw( store docs required.yml ) ),
+                path => $SHARE_DIR->child( qw( store docs required.markdown ) ),
             );
-        } qr{Store path '[^']+required\.yml' is not a directory};
+        } qr{Store path '[^']+required\.markdown' is not a directory};
 
     };
 };
@@ -187,7 +187,7 @@ subtest 'documents' => sub {
         };
 
         subtest 'disallow absolute paths' => sub {
-            my $path = rootdir->child( 'example.yml' );
+            my $path = rootdir->child( 'example.markdown' );
             throws_ok { $store->write_document( $path => $doc ) }
                 qr{Cannot write document '$path': Path must not be absolute};
         };
@@ -196,12 +196,12 @@ subtest 'documents' => sub {
             my @warnings;
             local $SIG{__WARN__} = sub { push @warnings, $_[0] };
 
-            my $full_path = $store->write_document( 'example.yml' => $doc  );
-            is $full_path, $store->path->child( 'example.yml' );
-            cmp_deeply $store->read_document( 'example.yml' ), $doc
-                or diag explain $store->read_document( 'example.yml' );
+            my $full_path = $store->write_document( 'example.markdown' => $doc  );
+            is $full_path, $store->path->child( 'example.markdown' );
+            cmp_deeply $store->read_document( 'example.markdown' ), $doc
+                or diag explain $store->read_document( 'example.markdown' );
             eq_or_diff path( $full_path )->slurp_utf8,
-                $SHARE_DIR->child( qw( store write doc.yml ) )->slurp_utf8;
+                $SHARE_DIR->child( qw( store write doc.markdown ) )->slurp_utf8;
 
             ok !@warnings, 'no warnings from write'
                 or diag "Got warnings: \n\t" . join "\n\t", @warnings;
@@ -211,12 +211,12 @@ subtest 'documents' => sub {
             my @warnings;
             local $SIG{__WARN__} = sub { push @warnings, $_[0] };
 
-            my $path = path(qw( blog 2014 05 28 example.yml ));
+            my $path = path(qw( blog 2014 05 28 example.markdown ));
             my $full_path = $store->write_document( $path => $doc );
             is $full_path, $tmpdir->child( $path );
             cmp_deeply $store->read_document( $path ), $doc;
             eq_or_diff path( $full_path )->slurp_utf8,
-                $SHARE_DIR->child( qw( store write doc.yml ) )->slurp_utf8;
+                $SHARE_DIR->child( qw( store write doc.markdown ) )->slurp_utf8;
 
             ok !@warnings, 'no warnings from write'
                 or diag "Got warnings: \n\t" . join "\n\t", @warnings;
@@ -264,7 +264,7 @@ subtest 'files' => sub {
         my @expect_paths = (
             path( qw( text.txt ) )->absolute( '/' ),
             path( qw( image.png ) )->absolute( '/' ),
-            path( qw( folder doc.yml ) )->absolute( '/' ),
+            path( qw( folder doc.markdown ) )->absolute( '/' ),
         );
 
         my $iter = $store->find_files;
@@ -377,9 +377,9 @@ subtest 'verbose' => sub {
 
         subtest 'write_document' => sub {
             my ( $out, $err, $exit ) = capture {
-                $store->write_document( 'path.yml' => { foo => 'BAR' } );
+                $store->write_document( 'path.markdown' => { foo => 'BAR' } );
             };
-            like $err, qr{\QWrite document: path.yml};
+            like $err, qr{\QWrite document: path.markdown};
         };
     };
 
@@ -400,7 +400,7 @@ subtest 'verbose' => sub {
             my $store = Statocles::Store::File->new(
                 path => $SHARE_DIR->child( qw( store docs ) ),
             );
-            my $path = path( qw( required.yml ) );
+            my $path = path( qw( required.markdown ) );
             my ( $out, $err, $exit ) = capture {
                 $store->read_document( $path );
             };

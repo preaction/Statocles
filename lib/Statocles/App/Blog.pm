@@ -179,7 +179,7 @@ ENDHELP
 
         my $slug = lc $title;
         $slug =~ s/\s+/-/g;
-        my $path = Path::Tiny->new( @date_parts, "$slug.yml" );
+        my $path = Path::Tiny->new( @date_parts, "$slug.markdown" );
         my $full_path = $self->store->write_document( $path => \%doc );
         say "New post at: $full_path";
 

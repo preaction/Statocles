@@ -174,7 +174,7 @@ the blog's command-line commands. To create a new blog post, we can use the
 C<post> command:
 
     $ statocles blog post My First Post
-    New post at: blog/2014/06/04/my-first-post.yml
+    New post at: blog/2014/06/04/my-first-post.markdown
 
 Everything after C<post> will be used as the title of the post.
 
@@ -203,7 +203,7 @@ OS X, editing any content will automatically rebuild the site.
 
 =head2 Commit Your Changes
 
-    $ git add blog/2014/06/04/my-first-post.yml
+    $ git add blog/2014/06/04/my-first-post.markdown
     $ git commit -m'My first post'
 
 Once the build looks good, we'll want to commit our changes. The major feature
@@ -278,7 +278,7 @@ To enable the new apps, we just need to add them to the site's C<apps>.
 Now, we just need some content for our plain app to deploy. The plain app uses the same
 format as the blog, so we need a YAML header followed by some Markdown content:
 
-Create a file named C<about.yml> with the following content:
+Create a file named C<about.markdown> with the following content:
 
     ---
     title: About
@@ -287,8 +287,8 @@ Create a file named C<about.yml> with the following content:
 
     This is a personal website!
 
-Then, run C<statocles build>. The C<about.yml> turns into C<about.html> in our C<build/>
-directory.
+Then, run C<statocles build>. The C<about.markdown> turns into C<about.html> in
+our C<build/> directory.
 
 Now we should probably make a link in our main nav to the new about page:
 

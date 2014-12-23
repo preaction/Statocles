@@ -58,7 +58,7 @@ sub pages {
 
     for my $doc ( @{ $self->store->documents } ) {
         my $url = $doc->path;
-        $url =~ s/[.]yml$/.html/;
+        $url =~ s/[.]markdown$/.html/;
 
         my $page = Statocles::Page::Document->new(
             path => join( '/', $self->url_root, $url ),

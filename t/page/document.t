@@ -7,7 +7,7 @@ use Statocles::Page::Document;
 use Text::Markdown;
 
 my $doc = Statocles::Document->new(
-    path => '/path/to/document.yml',
+    path => '/path/to/document.markdown',
     title => 'Page Title',
     author => 'preaction',
     tags => [qw( foo bar baz )],
