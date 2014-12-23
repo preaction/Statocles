@@ -48,6 +48,14 @@ has documents => (
     clearer => 'clear',
 );
 
+# Cache our realpath in case it disappears before we get demolished
+has _realpath => (
+    is => 'ro',
+    isa => Path,
+    lazy => 1,
+    default => sub { $_[0]->path->realpath },
+);
+
 sub BUILD {
     my ( $self ) = @_;
     if ( !$self->path->exists ) {
@@ -57,13 +65,14 @@ sub BUILD {
         die sprintf "Store path '%s' is not a directory", $self->path->stringify;
     }
 
-    $FILE_STORES{ $self->path->realpath }++;
+    $FILE_STORES{ $self->_realpath }++;
 }
 
 sub DEMOLISH {
     my ( $self, $in_global_destruction ) = @_;
-    if ( --$FILE_STORES{ $self->path->realpath } <= 0 ) {
-        delete $FILE_STORES{ $self->path->realpath };
+    return if $in_global_destruction; # We're ending, we don't need to care anymore
+    if ( --$FILE_STORES{ $self->_realpath } <= 0 ) {
+        delete $FILE_STORES{ $self->_realpath };
     }
 }
 
@@ -92,7 +101,7 @@ sub read_documents {
 
 sub _is_owned_path {
     my ( $self, $path ) = @_;
-    my $self_path = $self->path->realpath;
+    my $self_path = $self->_realpath;
     $path = $path->realpath;
     my $dir = $path->parent;
     for my $store_path ( keys %FILE_STORES ) {
