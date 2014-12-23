@@ -167,7 +167,7 @@
 
 <p>We put our blog app under the root URL <code>/blog</code>. All pages that come from this app will start with <code>/blog</code> (except the index page, we&#39;ll move that to <code>/index.html</code>, later).</p>
 
-<p>We define our theme with the string <code>::default</code>, which will get magically coerced into a <a href="/Statocles/pod/Statocles/Theme.html">theme object</a>. We define our store with the string <code>blog</code>, which will get magically coerced into a <a href="/Statocles/pod/Statocles/Store.html">store object</a>.</p>
+<p>We define our theme with the string <code>::default</code>, which will get magically coerced into a <a href="/Statocles/pod/Statocles/Theme.html">theme object</a>. We define our store with the string <code>blog</code>, which will get magically coerced into a <a href="/Statocles/pod/Statocles/Store/File.html">file store object</a>.</p>
 
 <p><b>NOTE:</b> One of the most useful things about using a dependency injection module is that you can easily plug-in your own classes. If you want to use your own template format, you can build your own Statocles::Theme class that provides a different kind of Statocles::Template object and use that instead. If you want to use your own document format, you can make your own Statocles::Store class that reads from a database.</p>
 
@@ -205,7 +205,7 @@
 
 <p>When adding apps to our site, we give them a name (in this case <code>blog</code>) so that we can refer to them on the command-line (later).</p>
 
-<p>Just like the blog store, the <code>build_store</code> and <code>deploy_store</code> will magically create a Statocles::Store object from the path string.</p>
+<p>Just like the blog store, the <code>build_store</code> and <code>deploy_store</code> will magically create a Statocles::Store::File object from the path string.</p>
 
 <p>The git branch we want to deploy to is <code>master</code>. As part of the default template, we can provide a site <code>title</code>.</p>
 
@@ -256,7 +256,7 @@
 <p>Remember when we gave our blog app a name? Now we can use that name to access the blog&#39;s command-line commands. To create a new blog post, we can use the <code>post</code> command:</p>
 
 <pre><code>    $ statocles blog post My First Post
-    New post at: blog/2014/06/04/my-first-post.yml</code></pre>
+    New post at: blog/2014/06/04/my-first-post.markdown</code></pre>
 
 <p>Everything after <code>post</code> will be used as the title of the post.</p>
 
@@ -279,7 +279,7 @@
 
 <h2 id="Commit-Your-Changes">Commit Your Changes</h2>
 
-<pre><code>    $ git add blog/2014/06/04/my-first-post.yml
+<pre><code>    $ git add blog/2014/06/04/my-first-post.markdown
     $ git commit -m&#39;My first post&#39;</code></pre>
 
 <p>Once the build looks good, we&#39;ll want to commit our changes. The major feature of having a website in a git repository is change tracking.</p>
@@ -338,7 +338,7 @@
 
 <p>Now, we just need some content for our plain app to deploy. The plain app uses the same format as the blog, so we need a YAML header followed by some Markdown content:</p>
 
-<p>Create a file named <code>about.yml</code> with the following content:</p>
+<p>Create a file named <code>about.markdown</code> with the following content:</p>
 
 <pre><code>    ---
     title: About
@@ -347,7 +347,7 @@
 
     This is a personal website!</code></pre>
 
-<p>Then, run <code>statocles build</code>. The <code>about.yml</code> turns into <code>about.html</code> in our <code>build/</code> directory.</p>
+<p>Then, run <code>statocles build</code>. The <code>about.markdown</code> turns into <code>about.html</code> in our <code>build/</code> directory.</p>
 
 <p>Now we should probably make a link in our main nav to the new about page:</p>
 
