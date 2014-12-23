@@ -188,6 +188,9 @@ pages to a database, or whereever you want!
 
 =head1 SEE ALSO
 
-There are static site generators written in other languages. See a big list of them at
-L<https://staticsitegenerators.net>.
+For news and documentation, L<visit the Statocles website at
+http://preaction.github.io/Statocles|http://preaction.github.io/Statocles>.
+
+There are static site generators written in other languages. See a big list of
+them at L<https://staticsitegenerators.net>.
 
