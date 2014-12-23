@@ -4,7 +4,7 @@ Statocles - A static site generator
 
 # VERSION
 
-version 0.029
+version 0.030
 
 # STATUS
 
@@ -74,8 +74,8 @@ easily editable with any text editor. A sample document looks like:
     This is a paragraph
 
 This is the same format that [Jekyll](http://jekyllrb.com) uses. The document
-format is described in the [Statocles::Store](https://metacpan.org/pod/Statocles::Store) documentation under
-[Frontmatter Document Format](https://metacpan.org/pod/Statocles::Store#Frontmatter-Document-Format).
+format is described in the [Statocles::Store::File](https://metacpan.org/pod/Statocles::Store::File) documentation under
+[Frontmatter Document Format](https://metacpan.org/pod/Statocles::Store::File#Frontmatter-Document-Format).
 
 ## PAGES
 
@@ -121,9 +121,9 @@ Git repository, an FTP site, or a database.
 ## STORES
 
 A [Statocles::Store](https://metacpan.org/pod/Statocles::Store) reads and writes documents and pages. The default store
-reads documents in YAML and writes pages to a file, but stores could read
-documents as JSON, or from a Mongo database, and write pages to a database, or
-whereever you want!
+([Statocles::Store::File](https://metacpan.org/pod/Statocles::Store::File)) reads documents in YAML and writes pages to a file,
+but stores could read documents as JSON, or from a Mongo database, and write
+pages to a database, or whereever you want!
 
 # SEE ALSO
 

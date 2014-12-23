@@ -1,6 +1,20 @@
 Changelog for Statocles
 
-0.029 2014-12-22T11:08:44
+0.030 2014-12-23T12:12:59
+ - cache file store's realpath to fix race condition
+ - require frontmatter to begin with '---'
+ - rename statocles site documents to .markdown
+ - rename documents from '.yml' to '.markdown'
+ - make all file stores ignore other stores' files
+ - rename Store to Store::File
+ - ignore hidden files in the static app
+ - only allow html files in the sitemap.xml
+ - reset STDIN to the tty when piping in content
+ - put the full changelog behind a click
+ - add release announcement for v0.029
+
+0.029 2014-12-22T11:09:37
+ - release v0.029
  - add new home page layout
  - add head_after include for custom <head> JS and CSS
  - fix site altering raw file content with base URL
