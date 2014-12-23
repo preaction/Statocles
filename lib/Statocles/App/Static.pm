@@ -42,6 +42,7 @@ sub pages {
     my @pages;
     my $iter = $self->store->find_files;
     while ( my $path = $iter->() ) {
+        next if $path->basename =~ /^[.]/;
         push @pages, Statocles::Page::File->new(
             path => $path,
             fh => $self->store->open_file( $path ),
