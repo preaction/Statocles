@@ -50,6 +50,10 @@ sub main {
 
     my $method = $argv[0];
     return pod2usage("ERROR: Missing command") unless $method;
+    if ( !-e $opt{config} ) {
+        warn sprintf qq{ERROR: Could not find config file "\%s"\n}, $opt{config};
+        return 1;
+    }
 
     my $wire = Beam::Wire->new( file => $opt{config} );
 

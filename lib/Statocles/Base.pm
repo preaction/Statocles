@@ -30,7 +30,7 @@ our %IMPORT_BUNDLES = (
     Test => [
         qw( Test::More Test::Deep Test::Differences Test::Exception ),
         'Dir::Self' => [qw( __DIR__ )],
-        'Path::Tiny' => [qw( path tempdir )],
+        'Path::Tiny' => [qw( path tempdir cwd )],
         'Statocles::Test' => [qw( test_constructor test_pages )],
         'Statocles::Site',
         sub { $Statocles::VERSION = 0.001; return }, # Set version normally done via dzil

@@ -124,12 +124,41 @@ subtest 'get version' => sub {
 subtest 'error messages' => sub {
     local $0 = path( $FindBin::Bin )->parent->child( 'bin', 'statocles' )->stringify;
 
-    my ( $out, $err, $exit ) = capture { Statocles::Command->main };
-    ok !$out, 'error output is on stderr';
-    like $err, qr{ERROR: Missing command};
-    like $err, qr{statocles -h},
-        'reports pod from bin/statocles, not Statocles::Command';
-    isnt $exit, 0;
+    subtest 'no command specified' => sub {
+        my ( $out, $err, $exit ) = capture { Statocles::Command->main };
+        ok !$out, 'error output is on stderr';
+        like $err, qr{ERROR: Missing command};
+        like $err, qr{statocles -h},
+            'reports pod from bin/statocles, not Statocles::Command';
+        isnt $exit, 0;
+    };
+
+    subtest 'config file missing' => sub {
+        subtest 'no site.yml found' => sub {
+            my $tempdir = tempdir;
+            my $cwd = cwd;
+            chdir $tempdir;
+
+            my ( $out, $err, $exit ) = capture { Statocles::Command->main( 'build' ) };
+            ok !$out, 'error output is on stderr';
+            like $err, qr{\QERROR: Could not find config file "site.yml"}
+                or diag $err;
+            isnt $exit, 0;
+
+            chdir $cwd;
+        };
+
+        subtest 'custom config file missing' => sub {
+            my ( $out, $err, $exit ) = capture {
+                Statocles::Command->main( '--config', 'DOES_NOT_EXIST.yml', 'build' )
+            };
+            ok !$out, 'error output is on stderr';
+            like $err, qr{\QERROR: Could not find config file "DOES_NOT_EXIST.yml"}
+                or diag $err;
+            isnt $exit, 0;
+        };
+
+    };
 };
 
 
