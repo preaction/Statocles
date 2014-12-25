@@ -140,40 +140,21 @@ subtest 'perldoc pages' => sub {
 
     subtest 'with Pod::Weaver' => sub {
 
-        # Set a flag so that we don't get a lot of unkillable "subroutine redefined"
-        # warnings. By localizing %INC below, we potentially hide a bunch of modules
-        # that we load when the previous %INC gets restored. Then, when we load those
-        # modules, we get a bunch of "subroutine redefined" warnings.
-        my $skip_success = 0;
         if ( !eval { require Pod::Weaver; 1 } ) {
-            pass "No successful tests without Pod::Weaver";
-            $skip_success = 1;
+            subtest 'missing Pod::Weaver throws error' => sub {
+                my $app = Statocles::App::Perldoc->new(
+                    url_root => '/pod',
+                    inc => [ $SHARE_DIR->child( qw( app perldoc lib-weaver ) ) ],
+                    modules => [qw( My My:: )],
+                    index_module => 'My',
+                    theme => $SHARE_DIR->child( 'theme' ),
+                    weave => 1,
+                    weave_config => $SHARE_DIR->child( qw( app perldoc weaver.ini ) ),
+                );
+                dies_ok { $app->pages };
+            };
+            return;
         }
-
-        subtest 'missing Pod::Weaver throws error' => sub {
-            # Die when we try to load Pod::Weaver
-            local @INC = ( sub {
-                my ( undef, $file ) = @_;
-                if ( $file =~ /Weaver[.]pm$/ ) {
-                    die "Can't find Pod/Weaver.pm";
-                }
-            }, @INC );
-            local %INC = %INC;
-            delete $INC{ "Pod/Weaver.pm" };
-
-            my $app = Statocles::App::Perldoc->new(
-                url_root => '/pod',
-                inc => [ $SHARE_DIR->child( qw( app perldoc lib-weaver ) ) ],
-                modules => [qw( My My:: )],
-                index_module => 'My',
-                theme => $SHARE_DIR->child( 'theme' ),
-                weave => 1,
-                weave_config => $SHARE_DIR->child( qw( app perldoc weaver.ini ) ),
-            );
-            dies_ok { $app->pages };
-        };
-
-        return if $skip_success;
 
         my $app = Statocles::App::Perldoc->new(
             url_root => '/pod',
