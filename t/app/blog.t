@@ -1,5 +1,6 @@
 
 use Statocles::Base 'Test';
+use POSIX qw( locale_h );
 use Capture::Tiny qw( capture );
 use Statocles::App::Blog;
 my $SHARE_DIR = path( __DIR__ )->parent->child( 'share' );
@@ -53,8 +54,7 @@ subtest 'pages' => sub {
         index_tags => [ '-better', '+more', '+error message' ],
     );
 
-    test_pages(
-        $site, $app,
+    my @page_tests = (
 
         # Index pages
         '/blog/index.html' => sub {
@@ -557,6 +557,25 @@ subtest 'pages' => sub {
         # Does not show /blog/9999/12/31/forever-is-a-long-time.html
         # Does not show /blog/draft/a-draft-post.html
     );
+
+
+    test_pages( $site, $app, @page_tests );
+
+    subtest 'different locale' => sub {
+        diag "Current LC_TIME locale: " . setlocale( LC_TIME );
+
+        eval {
+            setlocale( LC_TIME, 'ru_RU' );
+        };
+        if ( $@ ) {
+            diag "Could not set locale to ru_RU: $@";
+            pass "Cannot test locale";
+            return;
+        }
+
+        test_pages( $site, $app, @page_tests );
+        is setlocale( LC_TIME ), 'ru_RU', 'locale is preserved';
+    };
 };
 
 subtest 'commands' => sub {

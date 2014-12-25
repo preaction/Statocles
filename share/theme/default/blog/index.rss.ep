@@ -1,3 +1,8 @@
+%# RSS requires date/time in the 'C' locale as per RFC822. strftime() is one of
+%# the few things that actually cares about locale.
+% use POSIX qw( locale_h );
+% my $current_locale = setlocale( LC_TIME );
+% setlocale( LC_TIME, 'C' );
 <?xml version="1.0"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
@@ -43,3 +48,4 @@
         % }
     </channel>
 </rss>
+% setlocale( LC_TIME, $current_locale );
