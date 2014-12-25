@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://preaction.github.io/Statocles/blog/tag/release/index.html</id>
     <title>Statocles</title>
-    <updated>2014-12-25T04:23:38Z</updated>
+    <updated>2014-12-25T04:24:51Z</updated>
     <link href="http://preaction.github.io/Statocles/blog/tag/release.atom" rel="self" />
     <link href="http://preaction.github.io/Statocles/blog/tag/release/index.html" rel="alternate" />
     <generator version="">Statocles</generator>
@@ -38,7 +38,7 @@ the following:</p>
             </p>
         ]]></content>
         <updated>2014-12-23T00:00:00Z</updated>
-        <category term="ARRAY(0x7ffd7a025790)" />
+        <category term="ARRAY(0x7f8c501e4dc0)" />
     </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2014/12/22/release-v0.029.html</id>
@@ -67,7 +67,7 @@ development easier.</p>
             </p>
         ]]></content>
         <updated>2014-12-22T00:00:00Z</updated>
-        <category term="ARRAY(0x7ffd7a0254c0)" />
+        <category term="ARRAY(0x7f8c4bf3b2a0)" />
     </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2014/12/14/release-v0.028.html</id>
@@ -96,7 +96,7 @@ Still plenty of cleanup to go.</p>
             </p>
         ]]></content>
         <updated>2014-12-14T00:00:00Z</updated>
-        <category term="ARRAY(0x7ffd75750e90)" />
+        <category term="ARRAY(0x7f8c4bf08ac8)" />
     </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2014/12/08/release-v0.027.html</id>
@@ -115,7 +115,7 @@ finally fixed <a href="https://github.com/preaction/Statocles/issues/110">the Wi
             </p>
         ]]></content>
         <updated>2014-12-08T00:00:00Z</updated>
-        <category term="ARRAY(0x7ffd75750c68)" />
+        <category term="ARRAY(0x7f8c501e4a00)" />
     </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2014/12/07/statocles-initial-public-(alpha)-release.html</id>
@@ -154,7 +154,7 @@ Setup guide</a>. If you have any issues, report them on
             </p>
         ]]></content>
         <updated>2014-12-07T00:00:00Z</updated>
-        <category term="ARRAY(0x7ffd75745b40)" />
+        <category term="ARRAY(0x7f8c4c61ded0)" />
     </entry>
 </feed>
 
