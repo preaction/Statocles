@@ -135,151 +135,50 @@
         <main>
             <article>
                 <header>
-                    <h1><a href="/Statocles/blog/2014/12/25/release-v0.031.html">Release v0.031</a></h1>
+                    <h1><a href="/Statocles/blog/2014/12/07/statocles-initial-public-(alpha)-release.html">Statocles Initial Public (alpha) Release</a></h1>
                     <p class="tags">Tags:
                         <a href="/Statocles/blog/tag/release/index.html" rel="tag">release</a>
                     </p>
                     <aside>
-                        <p><time datetime="2014-12-25">
-                            Posted on 2014-12-25
+                        <p><time datetime="2014-12-07">
+                            Posted on 2014-12-07
                         </time>
                         by preaction</p>
                     </aside>
                 </header>
-                <p><a href="http://cpantesters.org">CPAN Testers</a> (the best part of CPAN) revealed a bunch
-of bugs causing test failures that would prevent Statocles from being
-installed. This has demonstrated the value of writing robust test suites.
-Before we can announce a beta, we need to make sure that Statocles can be
-installed on most of the platforms that people use.</p>
+                <p>Though Statocles has been on CPAN for months, this is the first time I&#39;m announcing its
+availability to the world!</p>
 
-<p>This release fixes most of the problems that CPAN Testers have revealed.</p>
+<p>Statocles is a CMS for building static HTML websites. The goals of this app are to make
+it easy to edit content via any text editor [1].</p>
 
-<p>Full changelog below:</p>
-
-                    <p><a href="/Statocles/blog/2014/12/25/release-v0.031.html#section-2">Continue reading Release v0.031...</a></p>
-            </article>
-            <article>
-                <header>
-                    <h1><a href="/Statocles/blog/2014/12/23/release-v0.030.html">Release v0.030</a></h1>
-                    <p class="tags">Tags:
-                        <a href="/Statocles/blog/tag/release/index.html" rel="tag">release</a>
-                    </p>
-                    <aside>
-                        <p><time datetime="2014-12-23">
-                            Posted on 2014-12-23
-                        </time>
-                        by preaction</p>
-                    </aside>
-                </header>
-                <p>With the push towards a useful public beta, I made some breaking changes in
-this release:</p>
+<p>This initial release includes:</p>
 
 <ul>
-<li>All our documents now have the file extention &quot;.markdown&quot; and not &quot;.yml&quot;.
-They are not YAML files, they&#39;re Markdown files with optional YAML at the top.</li>
-<li>If the document has YAML, the document must start with &quot;---&quot;.</li>
-<li>Plain YAML files are no longer allowed.</li>
-<li>The plain file store is now called Statocles::Store::File, which means your
-site&#39;s config file may need to change.</li>
+<li>A blog app</li>
+<li>Plain pages, for things like About Us and Contact Us</li>
+<li>A POD renderer for documentation of Perl projects</li>
 </ul>
 
-<p>If you need to change all your files from &quot;.yml&quot; to &quot;.markdown&quot;, you can use
-the following:</p>
+<p>This site is generated with Statocles, and so is <a href="http://preaction.github.io">my blog</a>.</p>
 
-<pre><code>find site -name &#39;*.yml&#39; | rename -s &#39;.yml&#39; &#39;.markdown&#39;
-</code></pre>
+<h2>Getting Started</h2>
 
-<p>Full changelog:</p>
+<p><a href="http://metacpan.org/pod/Statocles">Get Statocles from CPAN</a> and <a href="/Statocles/pod/Statocles/Help/Setup.html">follow the Statocles
+Setup guide</a>. If you have any issues, report them on
+<a href="https://github.com/preaction/Statocles">the Statocles Githup Repo</a>. If you have questions,
+<a href="https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">join us on IRC on irc.perl.org #statocles</a>!</p>
 
-                    <p><a href="/Statocles/blog/2014/12/23/release-v0.030.html#section-2">Continue reading Release v0.030...</a></p>
-            </article>
-            <article>
-                <header>
-                    <h1><a href="/Statocles/blog/2014/12/22/release-v0.029.html">Release v0.029</a></h1>
-                    <p class="tags">Tags:
-                        <a href="/Statocles/blog/tag/release/index.html" rel="tag">release</a>
-                    </p>
-                    <aside>
-                        <p><time datetime="2014-12-22">
-                            Posted on 2014-12-22
-                        </time>
-                        by preaction</p>
-                    </aside>
-                </header>
-                <p>This release adds support for static files to the Store and a new app for
-adding static files to your site.</p>
+<p>[1]: A future project will make Statocles content editable with a web interface</p>
 
-<p>Since Statocles is meant to be used with a command line, you can now redirect
-input into the &quot;blog post&quot; command. This makes it easy to write scripts that
-generate markdown and use them with the blog.</p>
-
-<p>The Statocles website also got a bit of a facelift, and that revealed a bunch more
-bugs to fix.</p>
-
-<p>There was also a lot of test cleanup in this release, to make future
-development easier.</p>
-
-<p>Full changelog:</p>
-
-                    <p><a href="/Statocles/blog/2014/12/22/release-v0.029.html#section-2">Continue reading Release v0.029...</a></p>
-            </article>
-            <article>
-                <header>
-                    <h1><a href="/Statocles/blog/2014/12/14/release-v0.028.html">Release v0.028</a></h1>
-                    <p class="tags">Tags:
-                        <a href="/Statocles/blog/tag/release/index.html" rel="tag">release</a>
-                    </p>
-                    <aside>
-                        <p><time datetime="2014-12-14">
-                            Posted on 2014-12-14
-                        </time>
-                        by preaction</p>
-                    </aside>
-                </header>
-                <p>This release adds automatic rebuilding of the site when changes are made (OSX
-only, so far). We&#39;re now using Mojo::Log for logging (instead of a hacked up
-<code>diag()</code> sub).</p>
-
-<p>A breaking change to applications: The <code>index()</code> method is no longer used by
-the site to determine what is the front page of the app, appropriate to
-transform into the front page of the site. Now, the first item returned by
-<code>pages()</code> must be the index page. This reduces the number of methods
-applications need, and made it easier to implement the automatic rebuilding.</p>
-
-<p>Finally, some much-needed cleanup as part of the automatic rebuilding feature.
-Still plenty of cleanup to go.</p>
-
-<p>Full changelog:</p>
-
-                    <p><a href="/Statocles/blog/2014/12/14/release-v0.028.html#section-2">Continue reading Release v0.028...</a></p>
-            </article>
-            <article>
-                <header>
-                    <h1><a href="/Statocles/blog/2014/12/08/release-v0.027.html">Release v0.027</a></h1>
-                    <p class="tags">Tags:
-                        <a href="/Statocles/blog/tag/release/index.html" rel="tag">release</a>
-                    </p>
-                    <aside>
-                        <p><time datetime="2014-12-08">
-                            Posted on 2014-12-08
-                        </time>
-                        by preaction</p>
-                    </aside>
-                </header>
-                <p>This release fixes some issues that would prevent Statocles from installing. I may have
-finally fixed <a href="https://github.com/preaction/Statocles/issues/110">the Win32 test failure that has been plaguing me!</a></p>
-
-<p>Full changelog:</p>
-
-                    <p><a href="/Statocles/blog/2014/12/08/release-v0.027.html#section-2">Continue reading Release v0.027...</a></p>
             </article>
         </main>
         <ul class="pager">
-            <li class="previous ">
-                <a href="/Statocles/blog/page-2.html" rel="next">← Older</a>
+            <li class="previous disabled">
+                <span>← Older</span>
             </li>
-            <li class="next disabled">
-                <span>Newer →</span>
+            <li class="next ">
+                <a href="/Statocles/blog/index.html" rel="prev">Newer →</a>
             </li>
         </ul>
     </div>

@@ -131,51 +131,41 @@
     <div class="col-md-9">
         <main>
             <header>
-                <h1>Release v0.030</h1>
+                <h1>Release v0.031</h1>
                 <p class="tags">Tags:
                     <a href="/Statocles/blog/tag/release/index.html" rel="tag">release</a>
                 </p>
                 <aside>
-                    <p><time datetime="2014-12-23">
-                        Posted on 2014-12-23
+                    <p><time datetime="2014-12-25">
+                        Posted on 2014-12-25
                     </time>
                     by preaction</p>
                 </aside>
             </header>
             <section id="section-1">
-                <p>With the push towards a useful public beta, I made some breaking changes in
-this release:</p>
+                <p><a href="http://cpantesters.org">CPAN Testers</a> (the best part of CPAN) revealed a bunch
+of bugs causing test failures that would prevent Statocles from being
+installed. This has demonstrated the value of writing robust test suites.
+Before we can announce a beta, we need to make sure that Statocles can be
+installed on most of the platforms that people use.</p>
 
-<ul>
-<li>All our documents now have the file extention &quot;.markdown&quot; and not &quot;.yml&quot;.
-They are not YAML files, they&#39;re Markdown files with optional YAML at the top.</li>
-<li>If the document has YAML, the document must start with &quot;---&quot;.</li>
-<li>Plain YAML files are no longer allowed.</li>
-<li>The plain file store is now called Statocles::Store::File, which means your
-site&#39;s config file may need to change.</li>
-</ul>
+<p>This release fixes most of the problems that CPAN Testers have revealed.</p>
 
-<p>If you need to change all your files from &quot;.yml&quot; to &quot;.markdown&quot;, you can use
-the following:</p>
-
-<pre><code>find site -name &#39;*.yml&#39; | rename -s &#39;.yml&#39; &#39;.markdown&#39;
-</code></pre>
-
-<p>Full changelog:</p>
+<p>Full changelog below:</p>
 
             </section>
             <section id="section-2">
                 <ul>
-<li><a href="https://github.com/preaction/Statocles/commit/d59b333bd12df4be6fc6ade69f780ac339d95fbb">release v0.030</a></li>
-<li><a href="https://github.com/preaction/Statocles/commit/2ca6f00d30e069b0fbe5ddfeced6b7613759c851">cache file store&#39;s realpath to fix race condition</a></li>
-<li><a href="https://github.com/preaction/Statocles/commit/71ff0276938281180200a840cba747f54cf6400e">require frontmatter to begin with &#39;---&#39;</a></li>
-<li><a href="https://github.com/preaction/Statocles/commit/0c392ef516374d8a2ea978d8e3be7561ecc28a1d">rename statocles site documents to .markdown</a></li>
-<li><a href="https://github.com/preaction/Statocles/commit/48943a423e0c1d8240fd4c61fa8cdb4974a70469">rename documents from &#39;.yml&#39; to &#39;.markdown&#39;</a> (<a href="https://github.com/preaction/Statocles/issues/73">#73</a>)</li>
-<li><a href="https://github.com/preaction/Statocles/commit/bff432b118983ec0bf3a6c9571415c1c142b63a4">make all file stores ignore other stores&#39; files</a> (<a href="https://github.com/preaction/Statocles/issues/172">#172</a>)</li>
-<li><a href="https://github.com/preaction/Statocles/commit/f8d351fc78fa60a71c7453d211c1271881b99291">rename Store to Store::File</a></li>
-<li><a href="https://github.com/preaction/Statocles/commit/2faf825680dd61e0119320467457e30bde34392c">ignore hidden files in the static app</a> (<a href="https://github.com/preaction/Statocles/issues/174">#174</a>)</li>
-<li><a href="https://github.com/preaction/Statocles/commit/8981211d3e3ce194350e0d431a9fde8ecd2dfad5">only allow html files in the sitemap.xml</a> (<a href="https://github.com/preaction/Statocles/issues/176">#176</a>)</li>
-<li><a href="https://github.com/preaction/Statocles/commit/e86a5ca3f4b7412c4b78fdac27a1d6e6f0c50186">reset STDIN to the tty when piping in content</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/1d3db19809d4cbd27ed8cbe8709118c5118d4c1c">fix test failure because config not found</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/6756a44f4079e8b8b3d000df36bcfe8dac513013">fix daemon continually rebuilding the site</a> (<a href="https://github.com/preaction/Statocles/issues/172">#172</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/fcdd2d85f4fb79c0becbc23f10351dd6e8222a51">fix tags list not appearing on blog list pages</a> (<a href="https://github.com/preaction/Statocles/issues/184">#184</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/a92f02cf668779eef05504c937bf61b34bbed461">give better error when site object not found</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/737501197f3c237cc7a86675cdbb426e20136c2a">give better error when config file not found</a> (<a href="https://github.com/preaction/Statocles/issues/38">#38</a>, <a href="https://github.com/preaction/Statocles/issues/179">#179</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/6235ad543c8d60177a72681e22b2ecddbff92e93">remove tests that could redefine subs</a> (<a href="https://github.com/preaction/Statocles/issues/186">#186</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/3434173dd71c65da423be079a0f0bce474d36f24">fix setlocale test may fail and return current locale</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/be20281ae4d4373b0bb3ef4b6f6c06ccf4193d32">remove test for switching STDIN back to our tty</a> (<a href="https://github.com/preaction/Statocles/issues/187">#187</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/8ad90ceeeb131b70c4f76fd447155d80b277888b">fix RSS pubDate incorrectly using locale setting</a> (<a href="https://github.com/preaction/Statocles/issues/185">#185</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/e0ed3095c496f66273836eb3b9add53b92f91875">add link to home page in main documentation</a></li>
 </ul>
 
             </section>

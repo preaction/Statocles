@@ -53,6 +53,8 @@
             }
 
         </style>
+            <link href="/Statocles/blog/tag/release.atom" rel="alternate" type="application/atom+xml">
+            <link href="/Statocles/blog/tag/release.rss" rel="alternate" type="application/rss+xml">
         <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
 <style>
     h1, h2, h3, h4, h5, h6 {
@@ -126,70 +128,80 @@
 
         </header>
         <div class="main container">
-            <div class="row">
+            
+<div class="row">
 
     <div class="col-md-9">
         <main>
-            <header>
-                <h1>Release v0.030</h1>
-                <p class="tags">Tags:
-                    <a href="/Statocles/blog/tag/release/index.html" rel="tag">release</a>
-                </p>
-                <aside>
-                    <p><time datetime="2014-12-23">
-                        Posted on 2014-12-23
-                    </time>
-                    by preaction</p>
-                </aside>
-            </header>
-            <section id="section-1">
-                <p>With the push towards a useful public beta, I made some breaking changes in
-this release:</p>
+            <article>
+                <header>
+                    <h1><a href="/Statocles/blog/2014/12/07/statocles-initial-public-(alpha)-release.html">Statocles Initial Public (alpha) Release</a></h1>
+                    <p class="tags">Tags:
+                        <a href="/Statocles/blog/tag/release/index.html" rel="tag">release</a>
+                    </p>
+                    <aside>
+                        <p><time datetime="2014-12-07">
+                            Posted on 2014-12-07
+                        </time>
+                        by preaction</p>
+                    </aside>
+                </header>
+                <p>Though Statocles has been on CPAN for months, this is the first time I&#39;m announcing its
+availability to the world!</p>
+
+<p>Statocles is a CMS for building static HTML websites. The goals of this app are to make
+it easy to edit content via any text editor [1].</p>
+
+<p>This initial release includes:</p>
 
 <ul>
-<li>All our documents now have the file extention &quot;.markdown&quot; and not &quot;.yml&quot;.
-They are not YAML files, they&#39;re Markdown files with optional YAML at the top.</li>
-<li>If the document has YAML, the document must start with &quot;---&quot;.</li>
-<li>Plain YAML files are no longer allowed.</li>
-<li>The plain file store is now called Statocles::Store::File, which means your
-site&#39;s config file may need to change.</li>
+<li>A blog app</li>
+<li>Plain pages, for things like About Us and Contact Us</li>
+<li>A POD renderer for documentation of Perl projects</li>
 </ul>
 
-<p>If you need to change all your files from &quot;.yml&quot; to &quot;.markdown&quot;, you can use
-the following:</p>
+<p>This site is generated with Statocles, and so is <a href="http://preaction.github.io">my blog</a>.</p>
 
-<pre><code>find site -name &#39;*.yml&#39; | rename -s &#39;.yml&#39; &#39;.markdown&#39;
-</code></pre>
+<h2>Getting Started</h2>
 
-<p>Full changelog:</p>
+<p><a href="http://metacpan.org/pod/Statocles">Get Statocles from CPAN</a> and <a href="/Statocles/pod/Statocles/Help/Setup.html">follow the Statocles
+Setup guide</a>. If you have any issues, report them on
+<a href="https://github.com/preaction/Statocles">the Statocles Githup Repo</a>. If you have questions,
+<a href="https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">join us on IRC on irc.perl.org #statocles</a>!</p>
 
-            </section>
-            <section id="section-2">
-                <ul>
-<li><a href="https://github.com/preaction/Statocles/commit/d59b333bd12df4be6fc6ade69f780ac339d95fbb">release v0.030</a></li>
-<li><a href="https://github.com/preaction/Statocles/commit/2ca6f00d30e069b0fbe5ddfeced6b7613759c851">cache file store&#39;s realpath to fix race condition</a></li>
-<li><a href="https://github.com/preaction/Statocles/commit/71ff0276938281180200a840cba747f54cf6400e">require frontmatter to begin with &#39;---&#39;</a></li>
-<li><a href="https://github.com/preaction/Statocles/commit/0c392ef516374d8a2ea978d8e3be7561ecc28a1d">rename statocles site documents to .markdown</a></li>
-<li><a href="https://github.com/preaction/Statocles/commit/48943a423e0c1d8240fd4c61fa8cdb4974a70469">rename documents from &#39;.yml&#39; to &#39;.markdown&#39;</a> (<a href="https://github.com/preaction/Statocles/issues/73">#73</a>)</li>
-<li><a href="https://github.com/preaction/Statocles/commit/bff432b118983ec0bf3a6c9571415c1c142b63a4">make all file stores ignore other stores&#39; files</a> (<a href="https://github.com/preaction/Statocles/issues/172">#172</a>)</li>
-<li><a href="https://github.com/preaction/Statocles/commit/f8d351fc78fa60a71c7453d211c1271881b99291">rename Store to Store::File</a></li>
-<li><a href="https://github.com/preaction/Statocles/commit/2faf825680dd61e0119320467457e30bde34392c">ignore hidden files in the static app</a> (<a href="https://github.com/preaction/Statocles/issues/174">#174</a>)</li>
-<li><a href="https://github.com/preaction/Statocles/commit/8981211d3e3ce194350e0d431a9fde8ecd2dfad5">only allow html files in the sitemap.xml</a> (<a href="https://github.com/preaction/Statocles/issues/176">#176</a>)</li>
-<li><a href="https://github.com/preaction/Statocles/commit/e86a5ca3f4b7412c4b78fdac27a1d6e6f0c50186">reset STDIN to the tty when piping in content</a></li>
-</ul>
+<p>[1]: A future project will make Statocles content editable with a web interface</p>
 
-            </section>
+            </article>
         </main>
+        <ul class="pager">
+            <li class="previous disabled">
+                <span>← Older</span>
+            </li>
+            <li class="next ">
+                <a href="/Statocles/blog/tag/release/index.html" rel="prev">Newer →</a>
+            </li>
+        </ul>
     </div>
 
-    <div class="col-md-3">
+    <div class="sidebar col-md-3">
         
-        <nav id="tags">
-            <h1>Tags</h1>
-            <ul class="list-inline">
-                <li><a href="/Statocles/blog/tag/release/index.html">release</a></li>
-            </ul>
-        </nav>
+        <h1>Tags</h1>
+        <ul class="list-inline">
+            <li><a href="/Statocles/blog/tag/release/index.html">release</a></li>
+        </ul>
+        <h1>Feeds</h1>
+        <ul class="list-inline">
+            <li>
+                <a href="/Statocles/blog/tag/release.atom" rel="alternate" type="application/atom+xml">
+                    Atom
+                </a>
+            </li>
+            <li>
+                <a href="/Statocles/blog/tag/release.rss" rel="alternate" type="application/rss+xml">
+                    RSS
+                </a>
+            </li>
+        </ul>
     </div>
 
 </div>

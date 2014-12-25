@@ -2,10 +2,34 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://preaction.github.io/Statocles/blog/index.html</id>
     <title>Statocles</title>
-    <updated>2014-12-25T04:25:34Z</updated>
+    <updated>2014-12-25T08:19:43Z</updated>
     <link href="http://preaction.github.io/Statocles/blog/index.atom" rel="self" />
     <link href="http://preaction.github.io/Statocles/blog/index.html" rel="alternate" />
     <generator version="">Statocles</generator>
+    <entry>
+        <id>http://preaction.github.io/Statocles/blog/2014/12/25/release-v0.031.html</id>
+        <title>Release v0.031</title>
+        <author><name>preaction</name></author>
+        <link href="http://preaction.github.io/Statocles/blog/2014/12/25/release-v0.031.html" rel="alternate" />
+        <content type="html"><![CDATA[
+            <p><a href="http://cpantesters.org">CPAN Testers</a> (the best part of CPAN) revealed a bunch
+of bugs causing test failures that would prevent Statocles from being
+installed. This has demonstrated the value of writing robust test suites.
+Before we can announce a beta, we need to make sure that Statocles can be
+installed on most of the platforms that people use.</p>
+
+<p>This release fixes most of the problems that CPAN Testers have revealed.</p>
+
+<p>Full changelog below:</p>
+
+                <p><a href="http://preaction.github.io/Statocles/blog/2014/12/25/release-v0.031.html#section-2">Continue reading...</a></p>
+            <p>Tags:
+                <a href="/blog/tag/release/index.html">release</a>
+            </p>
+        ]]></content>
+        <updated>2014-12-25T00:00:00Z</updated>
+        <category term="ARRAY(0x7f9fb1d5a3d8)" />
+    </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2014/12/23/release-v0.030.html</id>
         <title>Release v0.030</title>
@@ -38,7 +62,7 @@ the following:</p>
             </p>
         ]]></content>
         <updated>2014-12-23T00:00:00Z</updated>
-        <category term="ARRAY(0x7fa2308e0090)" />
+        <category term="ARRAY(0x7f9fb1d6c218)" />
     </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2014/12/22/release-v0.029.html</id>
@@ -67,7 +91,7 @@ development easier.</p>
             </p>
         ]]></content>
         <updated>2014-12-22T00:00:00Z</updated>
-        <category term="ARRAY(0x7fa2308e00d8)" />
+        <category term="ARRAY(0x7f9fb1107ef0)" />
     </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2014/12/14/release-v0.028.html</id>
@@ -96,7 +120,7 @@ Still plenty of cleanup to go.</p>
             </p>
         ]]></content>
         <updated>2014-12-14T00:00:00Z</updated>
-        <category term="ARRAY(0x7fa2308cee08)" />
+        <category term="ARRAY(0x7f9fb1d7c498)" />
     </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2014/12/08/release-v0.027.html</id>
@@ -115,46 +139,7 @@ finally fixed <a href="https://github.com/preaction/Statocles/issues/110">the Wi
             </p>
         ]]></content>
         <updated>2014-12-08T00:00:00Z</updated>
-        <category term="ARRAY(0x7fa230882b00)" />
-    </entry>
-    <entry>
-        <id>http://preaction.github.io/Statocles/blog/2014/12/07/statocles-initial-public-(alpha)-release.html</id>
-        <title>Statocles Initial Public (alpha) Release</title>
-        <author><name>preaction</name></author>
-        <link href="http://preaction.github.io/Statocles/blog/2014/12/07/statocles-initial-public-(alpha)-release.html" rel="alternate" />
-        <content type="html"><![CDATA[
-            <p>Though Statocles has been on CPAN for months, this is the first time I'm announcing its
-availability to the world!</p>
-
-<p>Statocles is a CMS for building static HTML websites. The goals of this app are to make
-it easy to edit content via any text editor [1].</p>
-
-<p>This initial release includes:</p>
-
-<ul>
-<li>A blog app</li>
-<li>Plain pages, for things like About Us and Contact Us</li>
-<li>A POD renderer for documentation of Perl projects</li>
-</ul>
-
-<p>This site is generated with Statocles, and so is <a href="http://preaction.github.io">my blog</a>.</p>
-
-<h2>Getting Started</h2>
-
-<p><a href="http://metacpan.org/pod/Statocles">Get Statocles from CPAN</a> and <a href="/pod/Statocles/Help/Setup.html">follow the Statocles
-Setup guide</a>. If you have any issues, report them on
-<a href="https://github.com/preaction/Statocles">the Statocles Githup Repo</a>. If you have questions,
-<a href="https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">join us on IRC on irc.perl.org #statocles</a>!</p>
-
-<p>[1]: A future project will make Statocles content editable with a web interface</p>
-
-                <p><a href="http://preaction.github.io/Statocles/blog/2014/12/07/statocles-initial-public-(alpha)-release.html#section-2">Continue reading...</a></p>
-            <p>Tags:
-                <a href="/blog/tag/release/index.html">release</a>
-            </p>
-        ]]></content>
-        <updated>2014-12-07T00:00:00Z</updated>
-        <category term="ARRAY(0x7fa22bf66978)" />
+        <category term="ARRAY(0x7f9fb1d80fa8)" />
     </entry>
 </feed>
 
