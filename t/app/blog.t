@@ -564,17 +564,24 @@ subtest 'pages' => sub {
     subtest 'different locale' => sub {
         diag "Current LC_TIME locale: " . setlocale( LC_TIME );
 
+        my $new_locale;
         eval {
-            setlocale( LC_TIME, 'ru_RU' );
+            $new_locale = setlocale( LC_TIME, 'ru_RU' );
         };
         if ( $@ ) {
             diag "Could not set locale to ru_RU: $@";
             pass "Cannot test locale";
             return;
         }
+        if ( $new_locale ne 'ru_RU' ) {
+            diag "Could not set locale to ru_RU. Still $new_locale";
+            pass "Cannot test locale";
+            return;
+        }
 
         test_pages( $site, $app, @page_tests );
         is setlocale( LC_TIME ), 'ru_RU', 'locale is preserved';
+        setlocale( LC_TIME, "" );
     };
 };
 
