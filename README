@@ -2,7 +2,7 @@ NAME
     Statocles - A static site generator
 
 VERSION
-    version 0.030
+    version 0.031
 
 SYNOPSIS
         # !!! Read the Getting Started guide to set up a site.yml config file
@@ -122,6 +122,10 @@ OVERVIEW
     database, and write pages to a database, or whereever you want!
 
 SEE ALSO
+    For news and documentation, visit the Statocles website at
+    http://preaction.github.io/Statocles
+    <http://preaction.github.io/Statocles>.
+
     There are static site generators written in other languages. See a big
     list of them at <https://staticsitegenerators.net>.
 

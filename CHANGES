@@ -1,6 +1,21 @@
 Changelog for Statocles
 
-0.030 2014-12-23T12:12:59
+0.031 2014-12-25T14:10:22
+ - fix test failure because config not found
+ - fix daemon continually rebuilding the site
+ - fix tags list not appearing on blog list pages
+ - give better error when site object not found
+ - give better error when config file not found
+ - remove tests that could redefine subs
+ - fix setlocale test may fail and return current locale
+ - remove test for switching STDIN back to our tty
+ - fix RSS pubDate incorrectly using locale setting
+ - add link to home page in main documentation
+ - add release announcement for v0.030
+ - fix site.yml for renamed File store
+
+0.030 2014-12-23T12:15:40
+ - release v0.030
  - cache file store's realpath to fix race condition
  - require frontmatter to begin with '---'
  - rename statocles site documents to .markdown
