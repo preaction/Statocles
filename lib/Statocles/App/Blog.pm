@@ -86,6 +86,14 @@ has index_tags => (
     default => sub { [] },
 );
 
+# A cache of the last set of post pages we have
+# XXX: We need to allow apps to have a "clear" the way that Store and Theme do
+has _post_pages => (
+    is => 'rw',
+    isa => ArrayRef,
+    default => sub { [] },
+);
+
 =method command( app_name, args )
 
 Run a command on this app. The app name is used to build the help, so
@@ -232,6 +240,9 @@ sub post_pages {
             tags => \@tags,
         );
     }
+
+    $self->_post_pages( [ @pages ] );
+
     return @pages;
 }
 
@@ -393,8 +404,8 @@ contain the following keys:
 =cut
 
 sub tags {
-    my ( $self, @post_pages ) = @_;
-    my %tagged_docs = $self->_tag_docs( @post_pages );
+    my ( $self ) = @_;
+    my %tagged_docs = $self->_tag_docs( @{ $self->_post_pages } );
     return map {; { title => $_, href => $self->_tag_url( $_ ), } }
         sort keys %tagged_docs
 }

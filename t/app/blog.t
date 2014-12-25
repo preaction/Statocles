@@ -71,6 +71,22 @@ subtest 'pages' => sub {
             cmp_deeply [ $dom->find( '.author' )->map( 'text' )->each ],
                 [ ( 'preaction' ) x 2 ],
                 'author is correct';
+
+            cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
+                bag( qw(
+                    /blog/tag/better/index.html
+                    /blog/tag/error-message/index.html
+                    /blog/tag/more/index.html
+                    /blog/tag/even-more-tags/index.html
+                ) ),
+                'tag list is available';
+
+            cmp_deeply [ $dom->find( '.feeds a' )->map( attr => 'href' )->each ],
+                bag( qw(
+                    /blog/index.atom
+                    /blog/index.rss
+                ) ),
+                'feeds list is available';
         },
 
         '/blog/page-2.html' => sub {
@@ -87,6 +103,22 @@ subtest 'pages' => sub {
             cmp_deeply [ $dom->find( '.author' )->map( 'text' )->each ],
                 [ 'preaction' ],
                 'author is correct';
+
+            cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
+                bag( qw(
+                    /blog/tag/better/index.html
+                    /blog/tag/error-message/index.html
+                    /blog/tag/more/index.html
+                    /blog/tag/even-more-tags/index.html
+                ) ),
+                'tag list is available';
+
+            cmp_deeply [ $dom->find( '.feeds a' )->map( attr => 'href' )->each ],
+                bag( qw(
+                    /blog/index.atom
+                    /blog/index.rss
+                ) ),
+                'feeds list is available';
         },
 
         # Index feeds
@@ -166,6 +198,22 @@ subtest 'pages' => sub {
             cmp_deeply [ $dom->find( '.author' )->map( 'text' )->each ],
                 [ ( 'preaction' ) x 2 ],
                 'author is correct';
+
+            cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
+                bag( qw(
+                    /blog/tag/better/index.html
+                    /blog/tag/error-message/index.html
+                    /blog/tag/more/index.html
+                    /blog/tag/even-more-tags/index.html
+                ) ),
+                'tag list is available';
+
+            cmp_deeply [ $dom->find( '.feeds a' )->map( attr => 'href' )->each ],
+                bag( qw(
+                    /blog/tag/better.atom
+                    /blog/tag/better.rss
+                ) ),
+                'feeds list is available';
         },
 
         '/blog/tag/better/page-2.html' => sub {
@@ -182,6 +230,22 @@ subtest 'pages' => sub {
             cmp_deeply [ $dom->find( '.author' )->map( 'text' )->each ],
                 [ 'preaction' ],
                 'author is correct';
+
+            cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
+                bag( qw(
+                    /blog/tag/better/index.html
+                    /blog/tag/error-message/index.html
+                    /blog/tag/more/index.html
+                    /blog/tag/even-more-tags/index.html
+                ) ),
+                'tag list is available';
+
+            cmp_deeply [ $dom->find( '.feeds a' )->map( attr => 'href' )->each ],
+                bag( qw(
+                    /blog/tag/better.atom
+                    /blog/tag/better.rss
+                ) ),
+                'feeds list is available';
         },
 
         '/blog/tag/error-message/index.html' => sub {
@@ -198,6 +262,22 @@ subtest 'pages' => sub {
             cmp_deeply [ $dom->find( '.author' )->map( 'text' )->each ],
                 [ 'preaction' ],
                 'author is correct';
+
+            cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
+                bag( qw(
+                    /blog/tag/better/index.html
+                    /blog/tag/error-message/index.html
+                    /blog/tag/more/index.html
+                    /blog/tag/even-more-tags/index.html
+                ) ),
+                'tag list is available';
+
+            cmp_deeply [ $dom->find( '.feeds a' )->map( attr => 'href' )->each ],
+                bag( qw(
+                    /blog/tag/error-message.atom
+                    /blog/tag/error-message.rss
+                ) ),
+                'feeds list is available';
         },
 
         '/blog/tag/more/index.html' => sub {
@@ -214,6 +294,22 @@ subtest 'pages' => sub {
             cmp_deeply [ $dom->find( '.author' )->map( 'text' )->each ],
                 [ 'preaction' ],
                 'author is correct';
+
+            cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
+                bag( qw(
+                    /blog/tag/better/index.html
+                    /blog/tag/error-message/index.html
+                    /blog/tag/more/index.html
+                    /blog/tag/even-more-tags/index.html
+                ) ),
+                'tag list is available';
+
+            cmp_deeply [ $dom->find( '.feeds a' )->map( attr => 'href' )->each ],
+                bag( qw(
+                    /blog/tag/more.atom
+                    /blog/tag/more.rss
+                ) ),
+                'feeds list is available';
         },
 
         '/blog/tag/even-more-tags/index.html' => sub {
@@ -230,6 +326,22 @@ subtest 'pages' => sub {
             cmp_deeply [ $dom->find( '.author' )->map( 'text' )->each ],
                 [ 'preaction' ],
                 'author is correct';
+
+            cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
+                bag( qw(
+                    /blog/tag/better/index.html
+                    /blog/tag/error-message/index.html
+                    /blog/tag/more/index.html
+                    /blog/tag/even-more-tags/index.html
+                ) ),
+                'tag list is available';
+
+            cmp_deeply [ $dom->find( '.feeds a' )->map( attr => 'href' )->each ],
+                bag( qw(
+                    /blog/tag/even-more-tags.atom
+                    /blog/tag/even-more-tags.rss
+                ) ),
+                'feeds list is available';
         },
 
         # Tag feeds
