@@ -173,6 +173,9 @@ subtest 'error messages' => sub {
         };
 
         subtest 'custom config file missing' => sub {
+            my $cwd = cwd;
+            chdir $tmp;
+
             my ( $out, $err, $exit ) = capture {
                 Statocles::Command->main( '--config', 'DOES_NOT_EXIST.yml', 'build' )
             };
@@ -180,6 +183,8 @@ subtest 'error messages' => sub {
             like $err, qr{\QERROR: Could not find config file "DOES_NOT_EXIST.yml"}
                 or diag $err;
             isnt $exit, 0;
+
+            chdir $cwd;
         };
 
     };
@@ -203,6 +208,9 @@ subtest 'error messages' => sub {
         };
 
         subtest 'custom site missing' => sub {
+            my $cwd = cwd;
+            chdir $tmp;
+
             my ( $out, $err, $exit ) = capture {
                 Statocles::Command->main( '--site', 'DOES_NOT_EXIST', 'build' )
             };
@@ -210,6 +218,8 @@ subtest 'error messages' => sub {
             like $err, qr{\QERROR: Could not find site named "DOES_NOT_EXIST" in config file "site.yml"}
                 or diag $err;
             isnt $exit, 0;
+
+            chdir $cwd;
         };
 
     };
