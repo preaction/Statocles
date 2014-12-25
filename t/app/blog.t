@@ -728,6 +728,10 @@ ENDCONTENT
                 );
 
                 subtest 'run the command' => sub {
+                    diag -t *STDIN
+                        ? "Before test: STDIN is interactive"
+                        : "Before test: STDIN is not interactive";
+
                     open my $stdin, '<', \"This is content from STDIN\n";
                     local *STDIN = $stdin;
 
@@ -739,7 +743,9 @@ ENDCONTENT
                         'contains blog post document path';
 
                     if ( -e '/dev/tty' ) {
-                        ok -t *STDIN, 'STDIN gets reset to our TTY';
+                        diag -t *STDIN
+                            ? "After test: STDIN is now interactive"
+                            : "After Test: STDIN is still not interactive";
                     }
                 };
 
