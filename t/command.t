@@ -159,6 +159,36 @@ subtest 'error messages' => sub {
         };
 
     };
+
+    subtest 'site object missing' => sub {
+        subtest 'no site found' => sub {
+            my $tempdir = tempdir;
+            YAML::DumpFile( $tempdir->child( 'config.yml' ), { test => { } } );
+            my $cwd = cwd;
+            chdir $tempdir;
+
+            my ( $out, $err, $exit ) = capture {
+                Statocles::Command->main( '--config', 'config.yml', 'build' )
+            };
+            ok !$out, 'error output is on stderr';
+            like $err, qr{\QERROR: Could not find site named "site" in config file "config.yml"}
+                or diag $err;
+            isnt $exit, 0;
+
+            chdir $cwd;
+        };
+
+        subtest 'custom site missing' => sub {
+            my ( $out, $err, $exit ) = capture {
+                Statocles::Command->main( '--site', 'DOES_NOT_EXIST', 'build' )
+            };
+            ok !$out, 'error output is on stderr';
+            like $err, qr{\QERROR: Could not find site named "DOES_NOT_EXIST" in config file "site.yml"}
+                or diag $err;
+            isnt $exit, 0;
+        };
+
+    };
 };
 
 

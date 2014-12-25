@@ -2,6 +2,7 @@ package Statocles::Command;
 # ABSTRACT: The statocles command-line interface
 
 use Statocles::Base 'Class';
+use Scalar::Util qw( blessed );
 use Getopt::Long qw( GetOptionsFromArray );
 use Pod::Usage::Return qw( pod2usage );
 use File::Share qw( dist_dir );
@@ -56,10 +57,18 @@ sub main {
     }
 
     my $wire = Beam::Wire->new( file => $opt{config} );
+    my $site = eval { $wire->get( $opt{site} ) };
 
-    my $cmd = $class->new(
-        site => $wire->get( $opt{site} ),
-    );
+    if ( $@ ) {
+        if ( blessed $@ && $@->isa( 'Beam::Wire::Exception::NotFound' ) ) {
+            warn sprintf qq{ERROR: Could not find site named "%s" in config file "%s"\n},
+                $opt{site}, $opt{config};
+            return 1;
+        }
+        die $@;
+    }
+
+    my $cmd = $class->new( site => $site );
 
     if ( $opt{verbose} ) {
         $cmd->site->log->handle( \*STDOUT );
