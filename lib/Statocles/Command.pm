@@ -206,8 +206,7 @@ sub main {
 
             require Mojo::IOLoop::Stream;
             my $ioloop = Mojo::IOLoop->singleton;
-            use Cwd qw( getcwd );
-            my $build_dir = Path::Tiny->new( getcwd, $self->site->build_store->path );
+            my $build_dir = $self->site->build_store->path->realpath;
 
             for my $path ( keys %watches ) {
                 $self->log->info( "Watching for changes in '$path'" );
@@ -229,18 +228,20 @@ sub main {
                                 next;
                             }
 
+                            $self->log->info( "Path '" . $event->path . "' changed... Rebuilding" );
                             $_->clear for @{ $watches{ $path } };
                             $rebuild = 1;
                         }
                     }
 
                     if ( $rebuild ) {
-                        $self->log->info( "Path '$path' changed... Rebuilding" );
                         $self->site->build;
                     }
                 } );
                 $ioloop->reactor->watch( $handle, 1, 0 );
             }
+
+            $self->log->info( "Ignoring changes in '$build_dir'" );
         }
 
         my $serve_static = sub {

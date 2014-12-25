@@ -28,18 +28,21 @@ my $config = {
             store => $tmp->child( 'theme' ),
         },
     },
+
     build => {
         class => 'Statocles::Store::File',
         args => {
             path => $tmp->child( 'build_site' ),
         },
     },
+
     deploy => {
         class => 'Statocles::Store::File',
         args => {
             path => $tmp->child( 'deploy_site' ),
         },
     },
+
     blog => {
         'class' => 'Statocles::App::Blog',
         'args' => {
@@ -53,6 +56,21 @@ my $config = {
             theme => { '$ref' => 'theme' },
         },
     },
+
+    plain => {
+        'class' => 'Statocles::App::Plain',
+        'args' => {
+            store => {
+                '$class' => 'Statocles::Store::File',
+                '$args' => {
+                    path => "$tmp",
+                },
+            },
+            url_root => '/',
+            theme => { '$ref' => 'theme' },
+        },
+    },
+
     site => {
         class => 'Statocles::Site',
         args => {
@@ -63,21 +81,25 @@ my $config = {
             deploy_store => { '$ref' => 'deploy' },
             apps => {
                 blog => { '$ref' => 'blog' },
+                plain => { '$ref' => 'plain' },
             },
         },
     },
+
     build_foo => {
         class => 'Statocles::Store::File',
         args => {
             path => $tmp->child( 'build_foo' ),
         },
     },
+
     deploy_foo => {
         class => 'Statocles::Store::File',
         args => {
             path => $tmp->child( 'deploy_foo' ),
         },
     },
+
     site_foo => {
         class => 'Statocles::Site',
         args => {
@@ -88,10 +110,12 @@ my $config = {
             deploy_store => { '$ref' => 'deploy_foo' },
             apps => {
                 blog => { '$ref' => 'blog' },
+                plain => { '$ref' => 'plain' },
             },
         },
     },
 };
+
 my $config_fn = $tmp->child( 'site.yml' );
 YAML::DumpFile( $config_fn, $config );
 
@@ -266,7 +290,7 @@ subtest 'get the app list' => sub {
     my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
     ok !$err, 'app list is on stdout';
     is $exit, 0;
-    is $out, "blog (/blog -- Statocles::App::Blog)\n",
+    like $out, qr{blog \(/blog -- Statocles::App::Blog\)\n},
         'contains app name, url root, and app class';
 };
 
@@ -418,6 +442,28 @@ subtest 'run the http daemon' => sub {
                                 ->content_is( $tmp->child( build_site => 'index.html' )->slurp_utf8 )
                                 ->content_like( qr{<p>Extra footer!</p>} )
                                 ->content_type_is( 'text/html;charset=UTF-8' )
+                                ;
+
+                        } );
+
+                        Mojo::IOLoop->start;
+                    };
+
+                    subtest 'build dir is ignored' => sub {
+                        $tmp->child( 'build_site', 'index.html' )->spew_utf8( 'Trigger!' );
+
+                        my $ioloop = Mojo::IOLoop->singleton;
+                        # It sucks that we have to wait like this...
+                        my $wait = $ioloop->timer( 2, sub {
+                            # Must stop before running the test because the test will
+                            # start the loop again
+                            Mojo::IOLoop->stop;
+
+                            # Check that /index.html gets the content we wrote, and was
+                            # not rebuilt
+                            $t->get_ok( "/index.html" )
+                                ->status_is( 200 )
+                                ->content_is( 'Trigger!' )
                                 ;
 
                         } );
