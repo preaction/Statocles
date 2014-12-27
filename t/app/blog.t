@@ -676,9 +676,9 @@ subtest 'pages' => sub {
     subtest 'different locale' => sub {
         diag "Current LC_TIME locale: " . setlocale( LC_TIME );
 
-        my $new_locale;
+        my $new_locale = '';
         eval {
-            $new_locale = setlocale( LC_TIME, 'ru_RU' );
+            $new_locale = setlocale( LC_TIME, 'ru_RU' ) || '';
         };
         if ( $@ ) {
             diag "Could not set locale to ru_RU: $@";
