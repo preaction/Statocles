@@ -123,14 +123,14 @@ subtest 'get help' => sub {
     local $0 = path( $FindBin::Bin )->parent->child( 'bin', 'statocles' )->stringify;
     subtest '-h' => sub {
         my ( $out, $err, $exit ) = capture { Statocles::Command->main( '-h' ) };
-        ok !$err, 'help output is on stdout';
+        ok !$err, 'nothing on stderr' or diag "STDERR: $err";
         like $out, qr{statocles -h},
             'reports pod from bin/statocles, not Statocles::Command';
         is $exit, 0;
     };
     subtest '--help' => sub {
         my ( $out, $err, $exit ) = capture { Statocles::Command->main( '--help' ) };
-        ok !$err, 'help output is on stdout';
+        ok !$err, 'nothing on stderr' or diag "STDERR: $err";
         like $out, qr{statocles -h},
             'reports pod from bin/statocles, not Statocles::Command';
         is $exit, 0;
@@ -150,7 +150,7 @@ subtest 'error messages' => sub {
 
     subtest 'no command specified' => sub {
         my ( $out, $err, $exit ) = capture { Statocles::Command->main };
-        ok !$out, 'error output is on stderr';
+        ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
         like $err, qr{ERROR: Missing command};
         like $err, qr{statocles -h},
             'reports pod from bin/statocles, not Statocles::Command';
@@ -164,7 +164,7 @@ subtest 'error messages' => sub {
             chdir $tempdir;
 
             my ( $out, $err, $exit ) = capture { Statocles::Command->main( 'build' ) };
-            ok !$out, 'error output is on stderr';
+            ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
             like $err, qr{\QERROR: Could not find config file "site.yml"}
                 or diag $err;
             isnt $exit, 0;
@@ -179,7 +179,7 @@ subtest 'error messages' => sub {
             my ( $out, $err, $exit ) = capture {
                 Statocles::Command->main( '--config', 'DOES_NOT_EXIST.yml', 'build' )
             };
-            ok !$out, 'error output is on stderr';
+            ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
             like $err, qr{\QERROR: Could not find config file "DOES_NOT_EXIST.yml"}
                 or diag $err;
             isnt $exit, 0;
@@ -199,7 +199,7 @@ subtest 'error messages' => sub {
             my ( $out, $err, $exit ) = capture {
                 Statocles::Command->main( '--config', 'config.yml', 'build' )
             };
-            ok !$out, 'error output is on stderr';
+            ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
             like $err, qr{\QERROR: Could not find site named "site" in config file "config.yml"}
                 or diag $err;
             isnt $exit, 0;
@@ -214,7 +214,7 @@ subtest 'error messages' => sub {
             my ( $out, $err, $exit ) = capture {
                 Statocles::Command->main( '--site', 'DOES_NOT_EXIST', 'build' )
             };
-            ok !$out, 'error output is on stderr';
+            ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
             like $err, qr{\QERROR: Could not find site named "DOES_NOT_EXIST" in config file "site.yml"}
                 or diag $err;
             isnt $exit, 0;
@@ -233,7 +233,7 @@ sub test_site {
         local $ENV{MOJO_LOG_LEVEL}; # Test::Mojo sets this to "debug"
         my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
         is $exit, 0, 'exit code';
-        ok !$err, "no errors/warnings (verbose: $verbose)" or diag $err;
+        ok !$err, "no errors/warnings on stderr (verbose: $verbose)" or diag $err;
         ok $root->child( 'index.html' )->exists, 'index file exists';
         ok $root->child( 'sitemap.xml' )->exists, 'sitemap.xml exists';
         ok $root->child( 'blog', '2014', '04', '23', 'slug.html' )->exists;
@@ -298,7 +298,7 @@ subtest 'get the app list' => sub {
         'apps',
     );
     my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
-    ok !$err, 'app list is on stdout';
+    ok !$err, 'nothing on stderr' or diag "STDERR: $err";
     is $exit, 0;
     like $out, qr{blog \(/blog -- Statocles::App::Blog\)\n},
         'contains app name, url root, and app class';
@@ -310,7 +310,7 @@ subtest 'delegate to app command' => sub {
         'blog' => 'help',
     );
     my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
-    ok !$err, 'blog help is on stdout';
+    ok !$err, 'nothing on stderr' or diag "STDERR: $err";
     is $exit, 0;
     like $out, qr{\Qblog post [--date YYYY-MM-DD] <title> -- Create a new blog post},
         'contains blog help information';
@@ -351,7 +351,7 @@ subtest 'run the http daemon' => sub {
         like $err, qr{Watching for changes in '$theme_path'}, 'watch is reported';
     }
     else {
-        ok !$err, 'nothing on stderr' or diag $err;
+        ok !$err, 'nothing on stderr' or diag "STDERR: $err";
     }
 
     is $exit, 0;
@@ -550,7 +550,7 @@ subtest 'bundle the necessary components' => sub {
             my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
             #; diag `find $tmp`;
             is $exit, 0;
-            ok !$err;
+            ok !$err, 'nothing on stderr' or diag "STDERR: $err";
             like $out, qr{Theme "default" written to "share/theme/default"};
             like $out, qr{Make sure to update "$config_fn"};
             is $tmp->child( @site_layout )->slurp_utf8,
@@ -565,7 +565,7 @@ subtest 'bundle the necessary components' => sub {
 
             my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
             is $exit, 0;
-            ok !$err;
+            ok !$err, 'nothing on stderr' or diag "STDERR: $err";
             like $out, qr{Theme "default" written to "share/theme/default"};
             like $out, qr{Make sure to update "$config_fn"};
 
