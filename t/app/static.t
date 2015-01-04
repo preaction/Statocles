@@ -9,6 +9,7 @@ my $site = Statocles::Site->new(
     title => 'Test site',
     build_store => '.',
     deploy_store => '.',
+    theme => $SHARE_DIR->child( 'theme' ),
 );
 
 subtest 'constructor' => sub {

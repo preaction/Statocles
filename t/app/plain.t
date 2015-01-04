@@ -9,6 +9,7 @@ my $site = Statocles::Site->new(
     title => 'Test site',
     build_store => '.',
     deploy_store => '.',
+    theme => $SHARE_DIR->child( 'theme' ),
 );
 
 subtest 'constructor' => sub {
@@ -17,7 +18,6 @@ subtest 'constructor' => sub {
         "Statocles::App::Plain",
         required => {
             url_root => '/',
-            theme => $SHARE_DIR->child( 'theme' ),
             store => $SHARE_DIR->child( qw( app plain ) ),
         },
     );
@@ -28,7 +28,7 @@ subtest 'pages' => sub {
 
     my $app = Statocles::App::Plain->new(
         url_root => '/',
-        theme => $SHARE_DIR->child( 'theme' ),
+        site => $site,
         store => $SHARE_DIR->child( qw( app plain ) ),
     );
 

@@ -31,7 +31,6 @@ my @documents = (
 my $blog = Statocles::App::Blog->new(
     url_root => '/blog',
     store => '.',
-    theme => '.',
 );
 
 my $site = Statocles::Site->new(
@@ -39,6 +38,7 @@ my $site = Statocles::Site->new(
     build_store => '.',
     deploy_store => '.',
     title => 'Test Title',
+    theme => '.',
     apps => {
         blog => $blog,
     },

@@ -3,6 +3,18 @@ package Statocles::App;
 
 use Statocles::Base 'Class';
 
+
+=attr site
+
+The site this app is part of.
+
+=cut
+
+has site => (
+    is => 'rw',
+    isa => InstanceOf['Statocles::Site'],
+);
+
 1;
 __END__
 

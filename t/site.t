@@ -1,7 +1,6 @@
 
 use Statocles::Base 'Test';
 use Statocles::Site;
-use Statocles::Theme;
 use Statocles::App::Blog;
 use Statocles::App::Static;
 use Mojo::DOM;
@@ -270,7 +269,6 @@ sub test_site {
     my $blog = Statocles::App::Blog->new(
         store => $SHARE_DIR->child( qw( app blog ) ),
         url_root => '/blog',
-        theme => $SHARE_DIR->child( 'theme' ),
         page_size => 2,
     );
 
@@ -284,6 +282,7 @@ sub test_site {
 
     my $site = Statocles::Site->new(
         title => 'Test Site',
+        theme => $SHARE_DIR->child( 'theme' ),
         apps => {
             blog => $blog,
             static => $static,

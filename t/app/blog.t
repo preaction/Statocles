@@ -8,7 +8,8 @@ my $SHARE_DIR = path( __DIR__ )->parent->child( 'share' );
 my $site = Statocles::Site->new(
     title => 'Example Site',
     base_url => 'http://example.com/',
-    build_store => '.'
+    build_store => '.',
+    theme => $SHARE_DIR->child( 'theme' ),
 );
 local $Statocles::VERSION = '0.001';
 
@@ -16,7 +17,6 @@ subtest 'constructor' => sub {
     my %required = (
         store => $SHARE_DIR->child( qw( app blog ) ),
         url_root => '/blog',
-        theme => $SHARE_DIR->child( 'theme' ),
     );
 
     test_constructor(
@@ -35,20 +35,14 @@ subtest 'constructor' => sub {
             is $app->store->path, $SHARE_DIR->child( qw( app blog ) );
         },
 
-        subtest 'theme' => sub {
-            my $app = Statocles::App::Blog->new( %required );
-            isa_ok $app->theme, 'Statocles::Theme';
-            is $app->theme->store->path, $SHARE_DIR->child( 'theme' );
-        },
-
     };
 };
 
 subtest 'pages' => sub {
     my $app = Statocles::App::Blog->new(
         store => $SHARE_DIR->child( qw( app blog ) ),
+        site => $site,
         url_root => '/blog',
-        theme => $SHARE_DIR->child( 'theme' ),
         page_size => 2,
         # Remove from the index all posts tagged "better", unless they're tagged "more"
         index_tags => [ '-better', '+more', '+error message' ],
@@ -705,7 +699,7 @@ subtest 'commands' => sub {
     my $app = Statocles::App::Blog->new(
         store => $tmpdir->child( 'blog' ),
         url_root => '/blog',
-        theme => $SHARE_DIR->child( 'theme' ),
+        site => $site,
     );
 
     subtest 'errors' => sub {

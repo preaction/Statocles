@@ -53,7 +53,6 @@ my $config = {
                 },
             },
             url_root => '/blog',
-            theme => { '$ref' => 'theme' },
         },
     },
 
@@ -67,7 +66,6 @@ my $config = {
                 },
             },
             url_root => '/',
-            theme => { '$ref' => 'theme' },
         },
     },
 
@@ -79,6 +77,7 @@ my $config = {
             index => 'blog',
             build_store => { '$ref' => 'build' },
             deploy_store => { '$ref' => 'deploy' },
+            theme => { '$ref' => 'theme' },
             apps => {
                 blog => { '$ref' => 'blog' },
                 plain => { '$ref' => 'plain' },
@@ -108,6 +107,7 @@ my $config = {
             index => 'blog',
             build_store => { '$ref' => 'build_foo' },
             deploy_store => { '$ref' => 'deploy_foo' },
+            theme => { '$ref' => 'theme' },
             apps => {
                 blog => { '$ref' => 'blog' },
                 plain => { '$ref' => 'plain' },
@@ -344,7 +344,7 @@ subtest 'run the http daemon' => sub {
     undef $timeout;
 
     my $store_path = $app->site->app( 'blog' )->store->path;
-    my $theme_path = $app->site->app( 'blog' )->theme->store->path;
+    my $theme_path = $app->site->theme->store->path;
 
     if ( eval { require Mac::FSEvents; 1; } ) {
         like $err, qr{Watching for changes in '$store_path'}, 'watch is reported';
@@ -434,7 +434,7 @@ subtest 'run the http daemon' => sub {
 
                     subtest 'theme store' => sub {
                         my $path = Path::Tiny->new( qw( site layout.html.ep ) );
-                        my $store = $t->app->site->app( 'blog' )->theme->store;
+                        my $store = $t->app->site->theme->store;
                         my $tmpl = $store->read_file( $path );
                         $tmpl =~ s{\Q</body>}{<p>Extra footer!</p></body>};
                         $store->write_file( $path, $tmpl );

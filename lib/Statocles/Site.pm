@@ -28,6 +28,19 @@ has base_url => (
     isa => Str,
 );
 
+=attr theme
+
+The L<theme|Statocles::Theme> for this site. All apps share the same theme.
+
+=cut
+
+has theme => (
+    is => 'ro',
+    isa => Theme,
+    required => 1,
+    coerce => Theme->coercion,
+);
+
 =attr apps
 
 The applications in this site. Each application has a name
@@ -38,6 +51,7 @@ that can be used later.
 has apps => (
     is => 'ro',
     isa => HashRef[InstanceOf['Statocles::App']],
+    default => sub { {} },
 );
 
 =attr index
@@ -137,7 +151,11 @@ Register this site as the global site.
 =cut
 
 sub BUILD {
-    $Statocles::SITE = shift;
+    my ( $self ) = @_;
+    $Statocles::SITE = $self;
+    for my $app ( values %{ $self->apps } ) {
+        $app->site( $self );
+    }
 }
 
 =method app( name )

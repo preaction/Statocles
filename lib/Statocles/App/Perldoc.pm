@@ -3,7 +3,6 @@ package Statocles::App::Perldoc;
 
 use Statocles::Base 'Class';
 extends 'Statocles::App';
-use Statocles::Theme;
 use Statocles::Page::Plain;
 use Scalar::Util qw( blessed );
 use List::MoreUtils qw( any );
@@ -21,20 +20,6 @@ has url_root => (
     is => 'ro',
     isa => Str,
     required => 1,
-);
-
-=attr theme
-
-The L<theme|Statocles::Theme> for this app. See L</THEME> for what templates this app
-uses.
-
-=cut
-
-has theme => (
-    is => 'ro',
-    isa => Theme,
-    required => 1,
-    coerce => Theme->coercion,
 );
 
 =attr inc
@@ -169,8 +154,8 @@ sub pages {
         if ( $module eq $self->index_module ) {
             unshift @pages, Statocles::Page::Plain->new(
                 path => join( '/', $self->url_root, 'index.html' ),
-                layout => $self->theme->template( site => 'layout.html' ),
-                template => $self->theme->template( perldoc => 'pod.html' ),
+                layout => $self->site->theme->template( site => 'layout.html' ),
+                template => $self->site->theme->template( perldoc => 'pod.html' ),
                 content => "$dom",
             );
         }
@@ -180,8 +165,8 @@ sub pages {
 
             push @pages, Statocles::Page::Plain->new(
                 path => join( '/', $self->url_root, $page_url ),
-                layout => $self->theme->template( site => 'layout.html' ),
-                template => $self->theme->template( perldoc => 'pod.html' ),
+                layout => $self->site->theme->template( site => 'layout.html' ),
+                template => $self->site->theme->template( perldoc => 'pod.html' ),
                 content => "$dom",
             );
 

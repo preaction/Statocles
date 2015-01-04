@@ -9,7 +9,6 @@ BEGIN {
 };
 
 use Statocles::Site::Git;
-use Statocles::Theme;
 use Statocles::App::Blog;
 use File::Copy::Recursive qw( dircopy );
 
@@ -115,13 +114,13 @@ sub site {
     my $blog = Statocles::App::Blog->new(
         store => $workdir->child( 'blog' ),
         url_root => '/blog',
-        theme => $SHARE_DIR->child( 'theme' ),
     );
 
     $workdir->child( 'build' )->mkpath;
 
     my $site = Statocles::Site::Git->new(
         title => 'Test Site',
+        theme => $SHARE_DIR->child( 'theme' ),
         apps => { blog => $blog },
         build_store => $workdir->child( 'build' ),
         deploy_store => $workdir,

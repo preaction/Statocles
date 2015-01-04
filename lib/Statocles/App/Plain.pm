@@ -31,21 +31,6 @@ has store => (
     coerce => Store->coercion,
 );
 
-=attr theme
-
-The L<theme|Statocles::Theme> for this app. Required.
-
-Only layouts are used.
-
-=cut
-
-has theme => (
-    is => 'ro',
-    isa => Theme,
-    required => 1,
-    coerce => Theme->coercion,
-);
-
 =method pages
 
 Get the L<pages|Statocles::Page> for this app.
@@ -63,7 +48,7 @@ sub pages {
         my $page = Statocles::Page::Document->new(
             path => join( '/', $self->url_root, $url ),
             document => $doc,
-            layout => $self->theme->template( site => 'layout.html' ),
+            layout => $self->site->theme->template( site => 'layout.html' ),
             published => Time::Piece->new,
         );
 
@@ -86,7 +71,6 @@ __END__
     my $app = Statocles::App::Plain->new(
         url_root => '/',
         store => 'share/root',
-        theme => 'share/theme/default',
     );
     my @pages = $app->pages;
 

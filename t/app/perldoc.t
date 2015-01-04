@@ -9,13 +9,13 @@ my $site = Statocles::Site->new(
     title => 'Test site',
     build_store => '.',
     deploy_store => '.',
+    theme => $SHARE_DIR->child( 'theme' ),
 );
 
 subtest 'constructor' => sub {
 
     my %required = (
         url_root => '/pod',
-        theme => $SHARE_DIR->child( 'theme' ),
         modules => [qw( My )],
         index_module => 'My',
     );
@@ -132,7 +132,7 @@ subtest 'perldoc pages' => sub {
             inc => [ $SHARE_DIR->child( qw( app perldoc lib ) ) ],
             modules => [qw( My My:: )],
             index_module => 'My',
-            theme => $SHARE_DIR->child( 'theme' ),
+            site => $site,
         );
 
         test_pages( $site, $app, @page_tests );
@@ -147,7 +147,7 @@ subtest 'perldoc pages' => sub {
                     inc => [ $SHARE_DIR->child( qw( app perldoc lib-weaver ) ) ],
                     modules => [qw( My My:: )],
                     index_module => 'My',
-                    theme => $SHARE_DIR->child( 'theme' ),
+                    site => $site,
                     weave => 1,
                     weave_config => $SHARE_DIR->child( qw( app perldoc weaver.ini ) ),
                 );
@@ -161,7 +161,7 @@ subtest 'perldoc pages' => sub {
             inc => [ $SHARE_DIR->child( qw( app perldoc lib-weaver ) ) ],
             modules => [qw( My My:: )],
             index_module => 'My',
-            theme => $SHARE_DIR->child( 'theme' ),
+            site => $site,
             weave => 1,
             weave_config => $SHARE_DIR->child( qw( app perldoc weaver.ini ) ),
         );

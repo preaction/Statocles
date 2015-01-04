@@ -194,15 +194,12 @@ sub main {
             # Collect the paths to watch
             my %watches = ();
             for my $app ( values %{ $self->site->apps } ) {
-                if ( $app->can( 'theme' ) ) {
-                    push @{ $watches{ $app->theme->store->path } }, $app->theme;
-                }
-
                 if ( $app->can( 'store' ) ) {
                     push @{ $watches{ $app->store->path } }, $app->store;
                 }
-
             }
+
+            push @{ $watches{ $self->site->theme->store->path } }, $self->site->theme;
 
             require Mojo::IOLoop::Stream;
             my $ioloop = Mojo::IOLoop->singleton;
