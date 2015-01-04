@@ -245,8 +245,7 @@ sub write {
     # Build the sitemap.xml
     # html files only
     my @indexed_pages = grep { $_->path =~ /[.]html?$/ } @pages;
-    my $default_theme = Statocles::Theme->new( store => '::default' );
-    my $tmpl = $default_theme->template( site => 'sitemap.xml' );
+    my $tmpl = $self->theme->template( site => 'sitemap.xml' );
     $store->write_file( 'sitemap.xml', $tmpl->render( site => $self, pages => \@indexed_pages ) );
 
     # robots.txt is the best way for crawlers to automatically discover sitemap.xml
