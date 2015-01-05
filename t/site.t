@@ -169,7 +169,7 @@ subtest 'sitemap.xml and robots.txt' => sub {
             [
                 "Sitemap: http://example.com/sitemap.xml\n",
                 "User-Agent: *\n",
-                "Disallow: ",
+                "Disallow:\n",
             ];
         ok !$tmpdir->child( 'deploy', 'sitemap.xml' )->exists, 'not deployed yet';
         ok !$tmpdir->child( 'deploy', 'robots.txt' )->exists, 'not deployed yet';
@@ -186,7 +186,7 @@ subtest 'sitemap.xml and robots.txt' => sub {
             [
                 "Sitemap: http://example.com/sitemap.xml\n",
                 "User-Agent: *\n",
-                "Disallow: ",
+                "Disallow:\n",
             ];
     };
 };

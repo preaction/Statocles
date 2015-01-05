@@ -250,12 +250,8 @@ sub write {
 
     # robots.txt is the best way for crawlers to automatically discover sitemap.xml
     # We should do more with this later...
-    my @robots = (
-        "Sitemap: " . $self->url( 'sitemap.xml' ),
-        "User-Agent: *",
-        "Disallow: ",
-    );
-    $store->write_file( 'robots.txt', join "\n", @robots );
+    my $robots_tmpl = $self->theme->template( site => 'robots.txt' );
+    $store->write_file( 'robots.txt', $robots_tmpl->render( site => $self ) );
 }
 
 =method url( path )

@@ -111,6 +111,9 @@ my %app_vars = (
             site => $site,
             pages => [ $page{ list }, $page{ document } ],
         },
+        'robots.txt.ep' => {
+            site => $site,
+        },
     },
 );
 
