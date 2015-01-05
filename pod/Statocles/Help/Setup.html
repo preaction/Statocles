@@ -140,10 +140,6 @@
 
 <p>The configuration file is, by default, called <code>site.yml</code>. See <a href="https://metacpan.org/pod/statocles">the statocles command documentation</a> if you want to have multiple site configuration files.</p>
 
-<h2 id="A-Theme">A Theme</h2>
-
-<p>First, we&#39;ll start by defining a theme. A theme (<a href="/Statocles/pod/Statocles/Theme.html">Statocles::Theme</a>) builds and parses templates into <a href="/Statocles/pod/Statocles/Template.html">Statocles::Template</a> objects. We&#39;ll use the Statocles default theme, included with the module. The special <code>::default</code> string will look in the Statocles <code>share/theme</code> directory.</p>
-
 <h2 id="A-Source">A Source</h2>
 
 <p>Statocles takes simple, YAML-and-Markdown-formatted <a href="/Statocles/pod/Statocles/Document.html">document</a> files and builds HTML pages out of them.</p>
@@ -154,7 +150,7 @@
 
 <h2 id="An-App">An App</h2>
 
-<p>A <a href="/Statocles/pod/Statocles/App.html">Statocles app</a> is the driver that turns documents into <a href="/Statocles/pod/Statocles/Page.html">pages</a>. To build pages, we need a theme and a store full of documents.</p>
+<p>A <a href="/Statocles/pod/Statocles/App.html">Statocles app</a> is the driver that turns documents into <a href="/Statocles/pod/Statocles/Page.html">pages</a>. To build pages, we need a store full of documents. We define our store with the string <code>blog</code>, which will get magically coerced into a <a href="/Statocles/pod/Statocles/Store/File.html">file store object</a>.</p>
 
 <p>Since we&#39;re building a blog site, we&#39;ll use the <a href="/Statocles/pod/Statocles/App/Blog.html">Statocles blog app</a>:</p>
 
@@ -162,14 +158,9 @@
         class: Statocles::App::Blog
         args:
             url_root: /blog
-            theme: &#39;::default&#39;
             store: &#39;blog&#39;</code></pre>
 
 <p>We put our blog app under the root URL <code>/blog</code>. All pages that come from this app will start with <code>/blog</code> (except the index page, we&#39;ll move that to <code>/index.html</code>, later).</p>
-
-<p>We define our theme with the string <code>::default</code>, which will get magically coerced into a <a href="/Statocles/pod/Statocles/Theme.html">theme object</a>. We define our store with the string <code>blog</code>, which will get magically coerced into a <a href="/Statocles/pod/Statocles/Store/File.html">file store object</a>.</p>
-
-<p><b>NOTE:</b> One of the most useful things about using a dependency injection module is that you can easily plug-in your own classes. If you want to use your own template format, you can build your own Statocles::Theme class that provides a different kind of Statocles::Template object and use that instead. If you want to use your own document format, you can make your own Statocles::Store class that reads from a database.</p>
 
 <h2 id="A-Destination">A Destination</h2>
 
@@ -183,6 +174,10 @@
 
 <p>Though stores are usually just directories, they could also perform an SFTP or FTP or transfer the pages to a CDN (I think I have some evolution to do here).</p>
 
+<h2 id="A-Theme">A Theme</h2>
+
+<p>Last thing we need before we can build our site is a theme. A theme (<a href="/Statocles/pod/Statocles/Theme.html">Statocles::Theme</a>) builds and parses templates into <a href="/Statocles/pod/Statocles/Template.html">Statocles::Template</a> objects. We&#39;ll use the Statocles default theme, included with the module. The special <code>::default</code> string will look in the Statocles <code>share/theme</code> directory.</p>
+
 <h2 id="A-Site">A Site</h2>
 
 <p>Now that we&#39;re ready, we can tie it all together. A <a href="/Statocles/pod/Statocles/Site.html">site</a> is a collection of apps that build and deploy to the same place. The special <a href="/Statocles/pod/Statocles/Site/Git.html">git site</a> knows how to deploy to git repositories.</p>
@@ -190,6 +185,7 @@
 <pre><code>    site:
         class: Statocles::Site::Git
         args:
+            theme: &#39;::default&#39;
             apps:
                 blog:
                     $ref: blog_app
@@ -202,6 +198,8 @@
                 main:
                     - title: Blog
                       href: /index.html</code></pre>
+
+<p>We define our theme with the string <code>::default</code>, which will get magically coerced into a <a href="/Statocles/pod/Statocles/Theme.html">theme object</a>.</p>
 
 <p>When adding apps to our site, we give them a name (in this case <code>blog</code>) so that we can refer to them on the command-line (later).</p>
 
@@ -221,11 +219,11 @@
         class: Statocles::App::Blog
         args:
             url_root: /blog
-            theme: &#39;::default&#39;
             store: &#39;blog&#39;
     site:
         class: Statocles::Site::Git
         args:
+            theme: &#39;::default&#39;
             apps:
                 blog:
                     $ref: blog_app
@@ -237,6 +235,8 @@
                 main:
                     - title: Blog
                       href: /index.html</code></pre>
+
+<p><b>NOTE:</b> One of the most useful things about using a dependency injection module is that you can easily plug-in your own classes. If you want to use your own template format, you can build your own Statocles::Theme class that provides a different kind of Statocles::Template object and use that instead. If you want to use your own document format, you can make your own Statocles::Store class that reads from a database.</p>
 
 <h1 id="The-statocles-Command">The <code>statocles</code> Command</h1>
 
@@ -298,20 +298,19 @@
 
 <p>For plain markdown, there is the <a href="/Statocles/pod/Statocles/App/Plain.html">plain app: Statocles::App::Plain</a>. The plain app takes the same YAML-and-Markdown-formatted documents as the blog app and creates HTML pages, without the lists, tags, and feeds the blog generates.</p>
 
-<p>Like the blog, we need a store to find our documents. This time, we&#39;ll use the root directory of our repository, <code>.</code>. Also like the blog, we need a theme to allow for layout templates (we&#39;ll use the default theme again). Finally, we&#39;ll need a URL root. Since we&#39;re using the root directory for our documents, we&#39;ll use the root URL for our destination <code>/</code>.</p>
+<p>Like the blog, we need a store to find our documents. This time, we&#39;ll use the root directory of our repository, <code>.</code>. Finally, we&#39;ll need a URL root. Since we&#39;re using the root directory for our documents, we&#39;ll use the root URL for our destination <code>/</code>.</p>
 
 <pre><code>    plain_app:
         class: Statocles::App::Plain
         args:
             url_root: &#39;/&#39;
-            theme: &#39;::default&#39;
             store: &#39;.&#39;</code></pre>
 
 <p>Now we just need to add this app to our site, but before we do, we&#39;ll create an app for our static files.</p>
 
 <h2 id="Static-Files">Static Files</h2>
 
-<p>Lastly, we wanted a place to put any file at all. No processing. No templates. Just a simple copy from one store to another. For this one, we&#39;ll put everything in the <code>/static</code> directory, and give a URL root to match. Since there is no processing, we don&#39;t need a theme here.</p>
+<p>Lastly, we wanted a place to put any file at all. No processing. No templates. Just a simple copy from one store to another. For this one, we&#39;ll put everything in the <code>/static</code> directory, and give a URL root to match.</p>
 
 <pre><code>    static_app:
         class: Statocles::App::Static
@@ -373,14 +372,12 @@
         class: Statocles::App::Blog
         args:
             url_root: /blog
-            theme: &#39;::default&#39;
             store: &#39;blog&#39;
 
     plain_app:
         class: Statocles::App::Plain
         args:
             url_root: &#39;/&#39;
-            theme: &#39;::default&#39;
             store: &#39;.&#39;
 
     static_app:
@@ -388,6 +385,7 @@
     site:
         class: Statocles::Site::Git
         args:
+            theme: &#39;::default&#39;
             apps:
                 blog:
                     $ref: blog_app

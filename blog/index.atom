@@ -2,10 +2,37 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://preaction.github.io/Statocles/blog/index.html</id>
     <title>Statocles</title>
-    <updated>2014-12-25T08:19:43Z</updated>
+    <updated>2015-01-04T21:08:39Z</updated>
     <link href="http://preaction.github.io/Statocles/blog/index.atom" rel="self" />
     <link href="http://preaction.github.io/Statocles/blog/index.html" rel="alternate" />
     <generator version="">Statocles</generator>
+    <entry>
+        <id>http://preaction.github.io/Statocles/blog/2015/01/04/release-v0.032.html</id>
+        <title>Release v0.032</title>
+        <author><name>preaction</name></author>
+        <link href="http://preaction.github.io/Statocles/blog/2015/01/04/release-v0.032.html" rel="alternate" />
+        <content type="html"><![CDATA[
+            <p>Another major breaking change in this version: Theme is now an attribute of a site,
+not an app. The per-app theme was too much flexibility, and made it very difficult
+to add theme collateral like scripts, stylesheets, and images.</p>
+
+<p>The robots.txt is now a template, which allows you to overwrite it with new contents.
+The Mac::FSEvents module, which we use to watch the filesystem on OSX, is now a
+prereq for OSX users.</p>
+
+<p>Finally, some tests were updated with more diagnostics information, to track down
+some locale problems.</p>
+
+<p>Full changelog below:</p>
+
+                <p><a href="http://preaction.github.io/Statocles/blog/2015/01/04/release-v0.032.html#section-2">Continue reading...</a></p>
+            <p>Tags:
+                <a href="/blog/tag/release/index.html">release</a>
+            </p>
+        ]]></content>
+        <updated>2015-01-04T00:00:00Z</updated>
+        <category term="ARRAY(0x7fb285f231e0)" />
+    </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2014/12/25/release-v0.031.html</id>
         <title>Release v0.031</title>
@@ -28,7 +55,7 @@ installed on most of the platforms that people use.</p>
             </p>
         ]]></content>
         <updated>2014-12-25T00:00:00Z</updated>
-        <category term="ARRAY(0x7f9fb1d5a3d8)" />
+        <category term="ARRAY(0x7fb285f23390)" />
     </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2014/12/23/release-v0.030.html</id>
@@ -62,7 +89,7 @@ the following:</p>
             </p>
         ]]></content>
         <updated>2014-12-23T00:00:00Z</updated>
-        <category term="ARRAY(0x7f9fb1d6c218)" />
+        <category term="ARRAY(0x7fb283ea6e30)" />
     </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2014/12/22/release-v0.029.html</id>
@@ -91,7 +118,7 @@ development easier.</p>
             </p>
         ]]></content>
         <updated>2014-12-22T00:00:00Z</updated>
-        <category term="ARRAY(0x7f9fb1107ef0)" />
+        <category term="ARRAY(0x7fb2866b78b8)" />
     </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2014/12/14/release-v0.028.html</id>
@@ -120,26 +147,7 @@ Still plenty of cleanup to go.</p>
             </p>
         ]]></content>
         <updated>2014-12-14T00:00:00Z</updated>
-        <category term="ARRAY(0x7f9fb1d7c498)" />
-    </entry>
-    <entry>
-        <id>http://preaction.github.io/Statocles/blog/2014/12/08/release-v0.027.html</id>
-        <title>Release v0.027</title>
-        <author><name>preaction</name></author>
-        <link href="http://preaction.github.io/Statocles/blog/2014/12/08/release-v0.027.html" rel="alternate" />
-        <content type="html"><![CDATA[
-            <p>This release fixes some issues that would prevent Statocles from installing. I may have
-finally fixed <a href="https://github.com/preaction/Statocles/issues/110">the Win32 test failure that has been plaguing me!</a></p>
-
-<p>Full changelog:</p>
-
-                <p><a href="http://preaction.github.io/Statocles/blog/2014/12/08/release-v0.027.html#section-2">Continue reading...</a></p>
-            <p>Tags:
-                <a href="/blog/tag/release/index.html">release</a>
-            </p>
-        ]]></content>
-        <updated>2014-12-08T00:00:00Z</updated>
-        <category term="ARRAY(0x7f9fb1d80fa8)" />
+        <category term="ARRAY(0x7fb2866b8d50)" />
     </entry>
 </feed>
 

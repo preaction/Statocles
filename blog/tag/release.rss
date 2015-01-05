@@ -7,6 +7,33 @@
         <description>Blog feed of Statocles</description>
         <generator>Statocles </generator>
         <item>
+            <title>Release v0.032</title>
+            <link>http://preaction.github.io/Statocles/blog/2015/01/04/release-v0.032.html</link>
+            <guid>http://preaction.github.io/Statocles/blog/2015/01/04/release-v0.032.html</guid>
+            <description><![CDATA[
+                <p>Another major breaking change in this version: Theme is now an attribute of a site,
+not an app. The per-app theme was too much flexibility, and made it very difficult
+to add theme collateral like scripts, stylesheets, and images.</p>
+
+<p>The robots.txt is now a template, which allows you to overwrite it with new contents.
+The Mac::FSEvents module, which we use to watch the filesystem on OSX, is now a
+prereq for OSX users.</p>
+
+<p>Finally, some tests were updated with more diagnostics information, to track down
+some locale problems.</p>
+
+<p>Full changelog below:</p>
+
+                    <p><a href="http://preaction.github.io/Statocles/blog/2015/01/04/release-v0.032.html#section-2">Continue reading...</a></p>
+                <p>Tags:
+                    <a href="/blog/tag/release/index.html">release</a>
+                </p>
+            ]]></description>
+            <pubDate>
+                Sun, 04 Jan 2015 00:00:00 -0600
+            </pubDate>
+        </item>
+        <item>
             <title>Release v0.031</title>
             <link>http://preaction.github.io/Statocles/blog/2014/12/25/release-v0.031.html</link>
             <guid>http://preaction.github.io/Statocles/blog/2014/12/25/release-v0.031.html</guid>
@@ -120,25 +147,6 @@ Still plenty of cleanup to go.</p>
             ]]></description>
             <pubDate>
                 Sun, 14 Dec 2014 00:00:00 -0600
-            </pubDate>
-        </item>
-        <item>
-            <title>Release v0.027</title>
-            <link>http://preaction.github.io/Statocles/blog/2014/12/08/release-v0.027.html</link>
-            <guid>http://preaction.github.io/Statocles/blog/2014/12/08/release-v0.027.html</guid>
-            <description><![CDATA[
-                <p>This release fixes some issues that would prevent Statocles from installing. I may have
-finally fixed <a href="https://github.com/preaction/Statocles/issues/110">the Win32 test failure that has been plaguing me!</a></p>
-
-<p>Full changelog:</p>
-
-                    <p><a href="http://preaction.github.io/Statocles/blog/2014/12/08/release-v0.027.html#section-2">Continue reading...</a></p>
-                <p>Tags:
-                    <a href="/blog/tag/release/index.html">release</a>
-                </p>
-            ]]></description>
-            <pubDate>
-                Mon, 08 Dec 2014 00:00:00 -0600
             </pubDate>
         </item>
     </channel>

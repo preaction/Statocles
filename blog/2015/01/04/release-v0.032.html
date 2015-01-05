@@ -53,8 +53,6 @@
             }
 
         </style>
-            <link href="/Statocles/blog/index.atom" rel="alternate" type="application/atom+xml">
-            <link href="/Statocles/blog/index.rss" rel="alternate" type="application/rss+xml">
         <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
 <style>
     h1, h2, h3, h4, h5, h6 {
@@ -128,100 +126,63 @@
 
         </header>
         <div class="main container">
-            
-<div class="row">
+            <div class="row">
 
     <div class="col-md-9">
         <main>
-            <article>
-                <header>
-                    <h1><a href="/Statocles/blog/2014/12/08/release-v0.027.html">Release v0.027</a></h1>
-                    <p class="tags">Tags:
-                        <a href="/Statocles/blog/tag/release/index.html" rel="tag">release</a>
-                    </p>
-                    <aside>
-                        <p><time datetime="2014-12-08">
-                            Posted on 2014-12-08
-                        </time>
-                        by preaction</p>
-                    </aside>
-                </header>
-                <p>This release fixes some issues that would prevent Statocles from installing. I may have
-finally fixed <a href="https://github.com/preaction/Statocles/issues/110">the Win32 test failure that has been plaguing me!</a></p>
+            <header>
+                <h1>Release v0.032</h1>
+                <p class="tags">Tags:
+                    <a href="/Statocles/blog/tag/release/index.html" rel="tag">release</a>
+                </p>
+                <aside>
+                    <p><time datetime="2015-01-04">
+                        Posted on 2015-01-04
+                    </time>
+                    by preaction</p>
+                </aside>
+            </header>
+            <section id="section-1">
+                <p>Another major breaking change in this version: Theme is now an attribute of a site,
+not an app. The per-app theme was too much flexibility, and made it very difficult
+to add theme collateral like scripts, stylesheets, and images.</p>
 
-<p>Full changelog:</p>
+<p>The robots.txt is now a template, which allows you to overwrite it with new contents.
+The Mac::FSEvents module, which we use to watch the filesystem on OSX, is now a
+prereq for OSX users.</p>
 
-                    <p><a href="/Statocles/blog/2014/12/08/release-v0.027.html#section-2">Continue reading Release v0.027...</a></p>
-            </article>
-            <article>
-                <header>
-                    <h1><a href="/Statocles/blog/2014/12/07/statocles-initial-public-(alpha)-release.html">Statocles Initial Public (alpha) Release</a></h1>
-                    <p class="tags">Tags:
-                        <a href="/Statocles/blog/tag/release/index.html" rel="tag">release</a>
-                    </p>
-                    <aside>
-                        <p><time datetime="2014-12-07">
-                            Posted on 2014-12-07
-                        </time>
-                        by preaction</p>
-                    </aside>
-                </header>
-                <p>Though Statocles has been on CPAN for months, this is the first time I&#39;m announcing its
-availability to the world!</p>
+<p>Finally, some tests were updated with more diagnostics information, to track down
+some locale problems.</p>
 
-<p>Statocles is a CMS for building static HTML websites. The goals of this app are to make
-it easy to edit content via any text editor [1].</p>
+<p>Full changelog below:</p>
 
-<p>This initial release includes:</p>
-
-<ul>
-<li>A blog app</li>
-<li>Plain pages, for things like About Us and Contact Us</li>
-<li>A POD renderer for documentation of Perl projects</li>
+            </section>
+            <section id="section-2">
+                <ul>
+<li><a href="https://github.com/preaction/Statocles/commit/923f4e6f170984431c5553124765389eea9ca6a8">fix contributors dependency</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/4b640224f73ad0dda82f82c74f3603908178fed2">add template for robots.txt</a> (<a href="https://github.com/preaction/Statocles/issues/116">#116</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/4ed2e46f4aef4b4f8ad53c10403a8006552cf46c">use site-wide theme for sitemap.xml</a> (<a href="https://github.com/preaction/Statocles/issues/126">#126</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/bbbd926d2f3bff99319595ca54146b26384df1f5">move theme to site, removing it from all apps</a> (<a href="https://github.com/preaction/Statocles/issues/126">#126</a>, <a href="https://github.com/preaction/Statocles/issues/175">#175</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/f73fa9e30be7d330d32baf3fdd7b26fd2aa432a7">update copyright year</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/435b9d42aba1499d3b80ef4108c31c6c1707516f">add contributors dzil plugin for proper attribution</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/a2ac4d21558e4d992fbc1c86707dd644d72b0571">also add stderr diag to bin/statocles test</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/8ecde6f75df007a2f1f082c76ca750705e6375b3">always print stderr/stdout when testing for empty</a> (<a href="https://github.com/preaction/Statocles/issues/188">#188</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/276be0e71b7aa7ca21a68185f5a88dd13046c0be">add Mac::FSEvents to prereqs for OSX</a> (<a href="https://github.com/preaction/Statocles/issues/189">#189</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/1c452cca740f2a4b618e141663929bd725981045">prevent uninitialized warnings in locale test</a></li>
 </ul>
 
-<p>This site is generated with Statocles, and so is <a href="http://preaction.github.io">my blog</a>.</p>
-
-<h2>Getting Started</h2>
-
-<p><a href="http://metacpan.org/pod/Statocles">Get Statocles from CPAN</a> and <a href="/Statocles/pod/Statocles/Help/Setup.html">follow the Statocles
-Setup guide</a>. If you have any issues, report them on
-<a href="https://github.com/preaction/Statocles">the Statocles Githup Repo</a>. If you have questions,
-<a href="https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">join us on IRC on irc.perl.org #statocles</a>!</p>
-
-<p>[1]: A future project will make Statocles content editable with a web interface</p>
-
-            </article>
+            </section>
         </main>
-        <ul class="pager">
-            <li class="previous disabled">
-                <span>← Older</span>
-            </li>
-            <li class="next ">
-                <a href="/Statocles/blog/index.html" rel="prev">Newer →</a>
-            </li>
-        </ul>
     </div>
 
-    <div class="sidebar col-md-3">
+    <div class="col-md-3">
         
-        <h1>Tags</h1>
-        <ul class="list-inline">
-            <li><a href="/Statocles/blog/tag/release/index.html">release</a></li>
-        </ul>
-        <h1>Feeds</h1>
-        <ul class="list-inline">
-            <li>
-                <a href="/Statocles/blog/index.atom" rel="alternate" type="application/atom+xml">
-                    Atom
-                </a>
-            </li>
-            <li>
-                <a href="/Statocles/blog/index.rss" rel="alternate" type="application/rss+xml">
-                    RSS
-                </a>
-            </li>
-        </ul>
+        <nav id="tags">
+            <h1>Tags</h1>
+            <ul class="list-inline">
+                <li><a href="/Statocles/blog/tag/release/index.html">release</a></li>
+            </ul>
+        </nav>
     </div>
 
 </div>
