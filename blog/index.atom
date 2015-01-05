@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://preaction.github.io/Statocles/blog/index.html</id>
     <title>Statocles</title>
-    <updated>2015-01-04T21:08:39Z</updated>
+    <updated>2015-01-04T21:09:49Z</updated>
     <link href="http://preaction.github.io/Statocles/blog/index.atom" rel="self" />
     <link href="http://preaction.github.io/Statocles/blog/index.html" rel="alternate" />
-    <generator version="">Statocles</generator>
+    <generator version="0.032">Statocles</generator>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2015/01/04/release-v0.032.html</id>
         <title>Release v0.032</title>
@@ -31,7 +31,7 @@ some locale problems.</p>
             </p>
         ]]></content>
         <updated>2015-01-04T00:00:00Z</updated>
-        <category term="ARRAY(0x7fb285f231e0)" />
+        <category term="ARRAY(0x7f8b91659278)" />
     </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2014/12/25/release-v0.031.html</id>
@@ -55,7 +55,7 @@ installed on most of the platforms that people use.</p>
             </p>
         ]]></content>
         <updated>2014-12-25T00:00:00Z</updated>
-        <category term="ARRAY(0x7fb285f23390)" />
+        <category term="ARRAY(0x7f8b94f44568)" />
     </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2014/12/23/release-v0.030.html</id>
@@ -89,7 +89,7 @@ the following:</p>
             </p>
         ]]></content>
         <updated>2014-12-23T00:00:00Z</updated>
-        <category term="ARRAY(0x7fb283ea6e30)" />
+        <category term="ARRAY(0x7f8b9275d1d8)" />
     </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2014/12/22/release-v0.029.html</id>
@@ -118,7 +118,7 @@ development easier.</p>
             </p>
         ]]></content>
         <updated>2014-12-22T00:00:00Z</updated>
-        <category term="ARRAY(0x7fb2866b78b8)" />
+        <category term="ARRAY(0x7f8b92755ca0)" />
     </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2014/12/14/release-v0.028.html</id>
@@ -147,7 +147,7 @@ Still plenty of cleanup to go.</p>
             </p>
         ]]></content>
         <updated>2014-12-14T00:00:00Z</updated>
-        <category term="ARRAY(0x7fb2866b8d50)" />
+        <category term="ARRAY(0x7f8b96105458)" />
     </entry>
 </feed>
 
