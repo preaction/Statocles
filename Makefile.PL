@@ -60,7 +60,7 @@ my %WriteMakefileArgs = (
     "Test::Exception" => 0,
     "Test::More" => "1.001005"
   },
-  "VERSION" => "0.031",
+  "VERSION" => "0.032",
   "test" => {
     "TESTS" => "t/*.t t/app/*.t t/bin/*.t t/page/*.t t/site/*.t t/store/*.t t/theme/*.t"
   }
@@ -107,6 +107,10 @@ unless ( eval { ExtUtils::MakeMaker->VERSION(6.63_03) } ) {
 
 delete $WriteMakefileArgs{CONFIGURE_REQUIRES}
   unless eval { ExtUtils::MakeMaker->VERSION(6.52) };
+
+if ( $^O eq 'darwin' ) {
+	$WriteMakefileArgs{PREREQ_PM}{'Mac::FSEvents'} = '0';
+}
 
 WriteMakefile(%WriteMakefileArgs);
 

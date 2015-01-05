@@ -1,6 +1,21 @@
 Changelog for Statocles
 
-0.031 2014-12-25T14:10:22
+0.032 2015-01-05T02:55:29
+ - fix contributors dependency
+ - add template for robots.txt
+ - use site-wide theme for sitemap.xml
+ - update statocles website for new site-wide theme
+ - move theme to site, removing it from all apps
+ - update copyright year
+ - add contributors dzil plugin for proper attribution
+ - also add stderr diag to bin/statocles test
+ - always print stderr/stdout when testing for empty
+ - add Mac::FSEvents to prereqs for OSX
+ - prevent uninitialized warnings in locale test
+ - add release announcement for v0.031
+
+0.031 2014-12-25T14:11:45
+ - release v0.031
  - fix test failure because config not found
  - fix daemon continually rebuilding the site
  - fix tags list not appearing on blog list pages
