@@ -163,10 +163,13 @@ ENDHELP
 
         if ( $ENV{EDITOR} ) {
             # I can see no good way to test this automatically
-            my $tmp_store = Statocles::Store::File->new( path => Path::Tiny->tempdir );
-            my $tmp_path = $tmp_store->write_document( new_post => \%doc );
+            my $slug = lc $title || "new post";
+            $slug =~ s/\s+/-/g;
+            my $path = Path::Tiny->new( @date_parts, "$slug.markdown" );
+            my $tmp_path = $self->store->write_document( $path => \%doc );
             system $ENV{EDITOR}, $tmp_path;
-            %doc = %{ $tmp_store->read_document( 'new_post' ) };
+            %doc = %{ $self->store->read_document( $path ) };
+            $self->store->path->child( $path )->remove;
             $title = $doc{title};
         }
 
