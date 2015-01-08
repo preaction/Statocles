@@ -857,8 +857,8 @@ ENDCONTENT
 
                     if ( -e '/dev/tty' ) {
                         diag -t *STDIN
-                            ? "After test: STDIN is now interactive"
-                            : "After Test: STDIN is still not interactive";
+                            ? "After test: STDIN is interactive"
+                            : "After Test: STDIN is not interactive";
                     }
                 };
 
