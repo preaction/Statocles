@@ -13,111 +13,114 @@ use YAML;
 
 # Build a config file so we can test config loading and still use
 # temporary directories
-my $tmp = tempdir;
-dircopy $SHARE_DIR->child( qw( app blog ) )->stringify, $tmp->child( 'blog' )->stringify;
-dircopy $SHARE_DIR->child( 'theme' )->stringify, $tmp->child( 'theme' )->stringify;
-$tmp->child( 'build_site' )->mkpath;
-$tmp->child( 'deploy_site' )->mkpath;
-$tmp->child( 'build_foo' )->mkpath;
-$tmp->child( 'deploy_foo' )->mkpath;
+sub build_temp_site {
+    my $tmp = tempdir;
+    dircopy $SHARE_DIR->child( qw( app blog ) )->stringify, $tmp->child( 'blog' )->stringify;
+    dircopy $SHARE_DIR->child( 'theme' )->stringify, $tmp->child( 'theme' )->stringify;
+    $tmp->child( 'build_site' )->mkpath;
+    $tmp->child( 'deploy_site' )->mkpath;
+    $tmp->child( 'build_foo' )->mkpath;
+    $tmp->child( 'deploy_foo' )->mkpath;
 
-my $config = {
-    theme => {
-        class => 'Statocles::Theme',
-        args => {
-            store => $tmp->child( 'theme' ),
+    my $config = {
+        theme => {
+            class => 'Statocles::Theme',
+            args => {
+                store => $tmp->child( 'theme' ),
+            },
         },
-    },
 
-    build => {
-        class => 'Statocles::Store::File',
-        args => {
-            path => $tmp->child( 'build_site' ),
+        build => {
+            class => 'Statocles::Store::File',
+            args => {
+                path => $tmp->child( 'build_site' ),
+            },
         },
-    },
 
-    deploy => {
-        class => 'Statocles::Store::File',
-        args => {
-            path => $tmp->child( 'deploy_site' ),
+        deploy => {
+            class => 'Statocles::Store::File',
+            args => {
+                path => $tmp->child( 'deploy_site' ),
+            },
         },
-    },
 
-    blog => {
-        'class' => 'Statocles::App::Blog',
-        'args' => {
-            store => {
-                '$class' => 'Statocles::Store::File',
-                '$args' => {
-                    path => $tmp->child( 'blog' ),
+        blog => {
+            'class' => 'Statocles::App::Blog',
+            'args' => {
+                store => {
+                    '$class' => 'Statocles::Store::File',
+                    '$args' => {
+                        path => $tmp->child( 'blog' ),
+                    },
+                },
+                url_root => '/blog',
+            },
+        },
+
+        plain => {
+            'class' => 'Statocles::App::Plain',
+            'args' => {
+                store => {
+                    '$class' => 'Statocles::Store::File',
+                    '$args' => {
+                        path => "$tmp",
+                    },
+                },
+                url_root => '/',
+            },
+        },
+
+        site => {
+            class => 'Statocles::Site',
+            args => {
+                base_url => 'http://example.com',
+                title => 'Site Title',
+                index => 'blog',
+                build_store => { '$ref' => 'build' },
+                deploy_store => { '$ref' => 'deploy' },
+                theme => { '$ref' => 'theme' },
+                apps => {
+                    blog => { '$ref' => 'blog' },
+                    plain => { '$ref' => 'plain' },
                 },
             },
-            url_root => '/blog',
         },
-    },
 
-    plain => {
-        'class' => 'Statocles::App::Plain',
-        'args' => {
-            store => {
-                '$class' => 'Statocles::Store::File',
-                '$args' => {
-                    path => "$tmp",
+        build_foo => {
+            class => 'Statocles::Store::File',
+            args => {
+                path => $tmp->child( 'build_foo' ),
+            },
+        },
+
+        deploy_foo => {
+            class => 'Statocles::Store::File',
+            args => {
+                path => $tmp->child( 'deploy_foo' ),
+            },
+        },
+
+        site_foo => {
+            class => 'Statocles::Site',
+            args => {
+                base_url => 'http://example.net',
+                title => 'Site Foo',
+                index => 'blog',
+                build_store => { '$ref' => 'build_foo' },
+                deploy_store => { '$ref' => 'deploy_foo' },
+                theme => { '$ref' => 'theme' },
+                apps => {
+                    blog => { '$ref' => 'blog' },
+                    plain => { '$ref' => 'plain' },
                 },
             },
-            url_root => '/',
         },
-    },
+    };
 
-    site => {
-        class => 'Statocles::Site',
-        args => {
-            base_url => 'http://example.com',
-            title => 'Site Title',
-            index => 'blog',
-            build_store => { '$ref' => 'build' },
-            deploy_store => { '$ref' => 'deploy' },
-            theme => { '$ref' => 'theme' },
-            apps => {
-                blog => { '$ref' => 'blog' },
-                plain => { '$ref' => 'plain' },
-            },
-        },
-    },
-
-    build_foo => {
-        class => 'Statocles::Store::File',
-        args => {
-            path => $tmp->child( 'build_foo' ),
-        },
-    },
-
-    deploy_foo => {
-        class => 'Statocles::Store::File',
-        args => {
-            path => $tmp->child( 'deploy_foo' ),
-        },
-    },
-
-    site_foo => {
-        class => 'Statocles::Site',
-        args => {
-            base_url => 'http://example.net',
-            title => 'Site Foo',
-            index => 'blog',
-            build_store => { '$ref' => 'build_foo' },
-            deploy_store => { '$ref' => 'deploy_foo' },
-            theme => { '$ref' => 'theme' },
-            apps => {
-                blog => { '$ref' => 'blog' },
-                plain => { '$ref' => 'plain' },
-            },
-        },
-    },
-};
-
-my $config_fn = $tmp->child( 'site.yml' );
-YAML::DumpFile( $config_fn, $config );
+    my $config_fn = $tmp->child( 'site.yml' );
+    YAML::DumpFile( $config_fn, $config );
+    return ( $tmp, $config_fn, $config );
+}
 
 subtest 'get help' => sub {
     local $0 = path( $FindBin::Bin )->parent->child( 'bin', 'statocles' )->stringify;
@@ -146,6 +149,8 @@ subtest 'get version' => sub {
 };
 
 subtest 'error messages' => sub {
+    my ( $tmp, $config_fn, $config ) = build_temp_site();
+
     local $0 = path( $FindBin::Bin )->parent->child( 'bin', 'statocles' )->stringify;
 
     subtest 'no command specified' => sub {
@@ -251,6 +256,8 @@ sub test_site {
 }
 
 subtest 'build site' => sub {
+    my ( $tmp, $config_fn, $config ) = build_temp_site();
+
     my @args = (
         '--config' => "$config_fn",
         'build',
@@ -272,6 +279,8 @@ subtest 'build site' => sub {
 };
 
 subtest 'deploy site' => sub {
+    my ( $tmp, $config_fn, $config ) = build_temp_site();
+
     my @args = (
         '--config' => "$config_fn",
         'deploy',
@@ -293,6 +302,8 @@ subtest 'deploy site' => sub {
 };
 
 subtest 'get the app list' => sub {
+    my ( $tmp, $config_fn, $config ) = build_temp_site();
+
     my @args = (
         '--config' => "$config_fn",
         'apps',
@@ -305,6 +316,8 @@ subtest 'get the app list' => sub {
 };
 
 subtest 'delegate to app command' => sub {
+    my ( $tmp, $config_fn, $config ) = build_temp_site();
+
     my @args = (
         '--config' => "$config_fn",
         'blog' => 'help',
@@ -317,8 +330,7 @@ subtest 'delegate to app command' => sub {
 };
 
 subtest 'run the http daemon' => sub {
-    $tmp->child( 'build_site' )->remove_tree; # We want daemon to rebuild the site
-    $tmp->child( 'build_site' )->mkpath;
+    my ( $tmp, $config_fn, $config ) = build_temp_site();
 
     # We need to stop the daemon after it starts
     my ( $port, $app );
@@ -539,6 +551,8 @@ subtest 'run the http daemon' => sub {
 };
 
 subtest 'bundle the necessary components' => sub {
+    my ( $tmp, $config_fn, $config ) = build_temp_site();
+
     subtest 'theme' => sub {
         my @args = (
             '--config' => "$config_fn",
