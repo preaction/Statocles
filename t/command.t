@@ -318,15 +318,20 @@ subtest 'get the app list' => sub {
 subtest 'delegate to app command' => sub {
     my ( $tmp, $config_fn, $config ) = build_temp_site();
 
+    local $ENV{MOJO_LOG_LEVEL} = '';
+    local $ENV{EDITOR} = '';
     my @args = (
         '--config' => "$config_fn",
-        'blog' => 'help',
+        'blog' => 'post',
+        '--date' => '2014-01-01',
+        'New post',
     );
     my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
     ok !$err, 'nothing on stderr' or diag "STDERR: $err";
     is $exit, 0;
-    like $out, qr{\Qblog post [--date YYYY-MM-DD] <title> -- Create a new blog post},
-        'contains blog help information';
+    like $out, qr{\QNew post at:}, 'contains new post';
+    my $post = $tmp->child( qw( blog 2014 01 01 new-post.markdown ) );
+    ok $post->exists, 'correct post file exists';
 };
 
 subtest 'run the http daemon' => sub {

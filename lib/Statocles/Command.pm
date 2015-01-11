@@ -3,7 +3,7 @@ package Statocles::Command;
 
 use Statocles::Base 'Class';
 use Scalar::Util qw( blessed );
-use Getopt::Long qw( GetOptionsFromArray );
+use Getopt::Long qw( GetOptionsFromArray :config pass_through );
 use Pod::Usage::Return qw( pod2usage );
 use File::Share qw( dist_dir );
 use File::Copy::Recursive qw( dircopy );
