@@ -1,6 +1,15 @@
 Changelog for Statocles
 
-0.032 2015-01-05T02:55:29
+0.033 2015-01-12T03:04:42
+ - fix unable to set date for blog post from command
+ - build a new temp site for each command test
+ - remove root dotfiles and root ini files from dist
+ - switch to dzil Git::GatherDir
+ - add new blog posts to store so auto-build works
+ - add v0.032 release notification
+ - "now" is easily mistaken for "not" in test diag
+
+0.032 2015-01-05T02:55:29Z
  - fix contributors dependency
  - add template for robots.txt
  - use site-wide theme for sitemap.xml
@@ -14,7 +23,7 @@ Changelog for Statocles
  - prevent uninitialized warnings in locale test
  - add release announcement for v0.031
 
-0.031 2014-12-25T14:11:45
+0.031 2014-12-25T14:11:45Z
  - release v0.031
  - fix test failure because config not found
  - fix daemon continually rebuilding the site
@@ -29,7 +38,7 @@ Changelog for Statocles
  - add release announcement for v0.030
  - fix site.yml for renamed File store
 
-0.030 2014-12-23T12:15:40
+0.030 2014-12-23T12:15:40Z
  - release v0.030
  - cache file store's realpath to fix race condition
  - require frontmatter to begin with '---'
@@ -43,7 +52,7 @@ Changelog for Statocles
  - put the full changelog behind a click
  - add release announcement for v0.029
 
-0.029 2014-12-22T11:09:37
+0.029 2014-12-22T11:09:37Z
  - release v0.029
  - add new home page layout
  - add head_after include for custom <head> JS and CSS
@@ -80,7 +89,7 @@ Changelog for Statocles
  - add links to github, cpan, and irc to site
  - add release announcement for v0.028
 
-0.028 2014-12-14T12:05:20
+0.028 2014-12-14T12:05:20Z
  - release v0.028
  - set the default log level to "info"
  - fix test only emits "Watching" if we have the right module
@@ -99,14 +108,14 @@ Changelog for Statocles
  - add release announcement for v0.027
  - remove old site leftovers from main branch
 
-0.027 2014-12-09T04:22:24
+0.027 2014-12-09T04:22:24Z
  - release v0.027
  - try to fix bundle failure on Win32
  - bump required Mojolicious to 5.41
  - only ignore Statocles bundles in the root directory
  - die if there's a git error
 
-0.026 2014-12-08T03:49:57
+0.026 2014-12-08T03:49:57Z
  - release v0.026
  - always use utf-8 when reading/writing files
  - add initial release announcement
@@ -153,12 +162,12 @@ Changelog for Statocles
  - handle index.html for directories in test daemon
  - add dzil tag annotation with name, date, and changelog
 
-0.025 2014-11-30T08:32:33
+0.025 2014-11-30T08:32:33Z
  - release v0.025
  - add better dzil tag annotation
  - fix tests for the mojolicious app used by daemon
 
-0.024 2014-11-28T10:28:35
+0.024 2014-11-28T10:28:35Z
  - release v0.024
  - support nonroot sites in the `daemon` command
  - disable mojolicious's Net::DNS::Native support
@@ -169,7 +178,7 @@ Changelog for Statocles
  - add/update some comments in Site
  - add note about sitemaps to the features list
 
-0.023 2014-11-27T07:06:38
+0.023 2014-11-27T07:06:38Z
  - release v0.023
  - set up Statocles website
  - require a store in the Theme
@@ -192,11 +201,11 @@ Changelog for Statocles
  - 5.8 is not supported by Statocles
  - update travis.yml for new perl travis helpers
 
-0.022 2014-08-31T07:49:50
+0.022 2014-08-31T07:49:50Z
  - release v0.022
  - fix t/command.t dying on Win32
 
-0.021 2014-08-27T22:07:14
+0.021 2014-08-27T22:07:14Z
  - release v0.021
  - add a base zsh completion config
  - use $^X to invoke the currently-running perl
@@ -210,7 +219,7 @@ Changelog for Statocles
  - add template includes
  - have Theme use a Store instead of a raw path
 
-0.020 2014-07-15T05:01:49
+0.020 2014-07-15T05:01:49Z
  - add docs about --verbose flag
  - add --verbose flag to show some useful information
  - make read_document take a relative path
@@ -219,12 +228,12 @@ Changelog for Statocles
  - better reporting on YAML loading errors
  - fix post images breaking the layout
 
-0.019 2014-07-07T03:15:50
+0.019 2014-07-07T03:15:50Z
  - release v0.019
  - allow filtering of tags on the index page
  - require Mojolicious 4.76
 
-0.018 2014-07-06T03:38:29
+0.018 2014-07-06T03:38:29Z
  - release v0.018
  - add blog page tags to the default theme
  - add page tags to the blog
@@ -238,11 +247,11 @@ Changelog for Statocles
  - possibly fix `daemon` test by randomizing the port
  - add travis-ci and coveralls
 
-0.017 2014-06-29T23:27:27
+0.017 2014-06-29T23:27:27Z
  - release v0.017
  - add basic daemon command
 
-0.016 2014-06-29T04:58:34
+0.016 2014-06-29T04:58:34Z
  - release v0.016
  - quiet some warnings
  - add a simple robots.txt
@@ -254,7 +263,7 @@ Changelog for Statocles
  - add test prereq found by kwalitee
  - fix pod error found by kwalitee
 
-0.015 2014-06-28T06:12:23
+0.015 2014-06-28T06:12:23Z
  - release v0.015
  - fix default layout error if no main nav
  - add test to check default theme syntax
@@ -264,7 +273,7 @@ Changelog for Statocles
  - fix bottom-border on post header
  - remove crosspost links from the bottom of list
 
-0.014 2014-06-25T05:40:52
+0.014 2014-06-25T05:40:52Z
  - release v0.014
  - squelch some warnings in the new test templates
  - add content sections to the default templates
@@ -274,7 +283,7 @@ Changelog for Statocles
  - add a feature list for marketing purposes
  - add a link to the feed page in the main doc
 
-0.013 2014-06-22T08:01:13
+0.013 2014-06-22T08:01:13Z
  - release v0.013
  - add feed titles and links to feeds in the page
  - add RSS and Atom feeds to blog index and tag pages
@@ -290,7 +299,7 @@ Changelog for Statocles
  - return the exit code from called sub
  - fix some typos in the setup help
 
-0.012 2014-06-18T06:15:07
+0.012 2014-06-18T06:15:07Z
  - release v0.012
  - deploy now performs 'git push'
  - add rel next/prev to pagination links
@@ -298,7 +307,7 @@ Changelog for Statocles
  - put the list of guides first in the documentation
  - we moved the core of 'render' to 'vars'
 
-0.011 2014-06-15T03:10:40
+0.011 2014-06-15T03:10:40Z
  - release v0.011
  - still show the topbar if site lacks main nav
  - add crosspost links to the default blog templates
@@ -310,7 +319,7 @@ Changelog for Statocles
  - defaults must be subref
  - fix bad link to YAML
 
-0.010 2014-06-07T09:27:29
+0.010 2014-06-07T09:27:29Z
  - release v0.010
  - add a setup guide until we get a create command
  - add named navs, so we can add more nav lists later
@@ -324,7 +333,7 @@ Changelog for Statocles
  - do not build posts whose day has not yet come
  - allow setting the date when creating a new post
 
-0.009 2014-06-06T20:15:15
+0.009 2014-06-06T20:15:15Z
  - release v0.009
  - add the published date to the blog pages
  - add published date to pages
@@ -332,7 +341,7 @@ Changelog for Statocles
  - add last_modified to documents
  - make the default templates more semantic
 
-0.008 2014-06-05T04:35:12
+0.008 2014-06-05T04:35:12Z
  - release v0.008
  - add tag navigation to the blog
  - add tag pages to the blog
@@ -342,7 +351,7 @@ Changelog for Statocles
  - handle older versions of git better
  - Git::Repository requires git 1.5 or higher
 
-0.007 2014-06-02T05:07:23
+0.007 2014-06-02T05:07:23Z
  - add tags attr to document
  - remove hard-coded document paths in test
  - remove unused attribute
@@ -352,7 +361,7 @@ Changelog for Statocles
  - switch to Type::Tiny. thanks mst!
  - fix link to Jekyll. Thanks buu!
 
-0.006 2014-05-29T06:01:50
+0.006 2014-05-29T06:01:50Z
  - sort blog index page by post date
  - use frontmatter format in addition to pure YAML
  - open $EDITOR for the user creating a blog post
@@ -362,7 +371,7 @@ Changelog for Statocles
  - add application command delegation
  - add 'apps' command to list the apps in a site
 
-0.005 2014-05-26T06:29:14
+0.005 2014-05-26T06:29:14Z
  - docs and pages do not need to be in any order
  - use canon dirsep in template path
  - doc paths are files; page paths are URLs
@@ -370,26 +379,26 @@ Changelog for Statocles
  - Moo only allows subrefs as default
  - preset git name/email
 
-0.004 2014-05-25T06:28:44
+0.004 2014-05-25T06:28:44Z
  - get themes from Statocles share dir
  - add another caller to ignore finding template path
  - move the pager controls to the blog index
  - add the page path to the template
  - add missing ABSTRACT
 
-0.003 2014-05-25T03:26:39
+0.003 2014-05-25T03:26:39Z
  - release v0.003
  - fix git commands writing to stdout
  - always specify a template path
  - allow regex-unsafe characters in file path
 
-0.002 2014-05-21T04:17:39
+0.002 2014-05-21T04:17:39Z
  - release v0.002
  - fix one of the dir seperator problems on Win32
  - check for git earlier in the test
  - add missing prereqs
 
-0.001 2014-05-20T04:41:29
+0.001 2014-05-20T04:41:29Z
  - make sure only built files get committed
  - add a basic git-based site
  - document Statocles::Template and everything else
