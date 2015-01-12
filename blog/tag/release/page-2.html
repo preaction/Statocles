@@ -135,6 +135,36 @@
         <main>
             <article>
                 <header>
+                    <h1><a href="/Statocles/blog/2014/12/14/release-v0.028.html">Release v0.028</a></h1>
+                    <p class="tags">Tags:
+                        <a href="/Statocles/blog/tag/release/index.html" rel="tag">release</a>
+                    </p>
+                    <aside>
+                        <p><time datetime="2014-12-14">
+                            Posted on 2014-12-14
+                        </time>
+                        by preaction</p>
+                    </aside>
+                </header>
+                <p>This release adds automatic rebuilding of the site when changes are made (OSX
+only, so far). We&#39;re now using Mojo::Log for logging (instead of a hacked up
+<code>diag()</code> sub).</p>
+
+<p>A breaking change to applications: The <code>index()</code> method is no longer used by
+the site to determine what is the front page of the app, appropriate to
+transform into the front page of the site. Now, the first item returned by
+<code>pages()</code> must be the index page. This reduces the number of methods
+applications need, and made it easier to implement the automatic rebuilding.</p>
+
+<p>Finally, some much-needed cleanup as part of the automatic rebuilding feature.
+Still plenty of cleanup to go.</p>
+
+<p>Full changelog:</p>
+
+                    <p><a href="/Statocles/blog/2014/12/14/release-v0.028.html#section-2">Continue reading Release v0.028...</a></p>
+            </article>
+            <article>
+                <header>
                     <h1><a href="/Statocles/blog/2014/12/08/release-v0.027.html">Release v0.027</a></h1>
                     <p class="tags">Tags:
                         <a href="/Statocles/blog/tag/release/index.html" rel="tag">release</a>

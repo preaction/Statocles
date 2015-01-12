@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Statocles</title>
+        <link>http://preaction.github.io/Statocles/blog/tag/hello/index.html</link>
+        <atom:link href="http://preaction.github.io/Statocles/blog/tag/hello.rss" rel="self" type="application/rss+xml" />
+        <description>Blog feed of Statocles</description>
+        <generator>Statocles </generator>
+        <item>
+            <title>This is a new post</title>
+            <link>http://preaction.github.io/Statocles/blog/2015/01/07/this-is-a-new-post.html</link>
+            <guid>http://preaction.github.io/Statocles/blog/2015/01/07/this-is-a-new-post.html</guid>
+            <description><![CDATA[
+                <p>Markdown content goes here.</p>
+
+                    <p><a href="http://preaction.github.io/Statocles/blog/2015/01/07/this-is-a-new-post.html#section-2">Continue reading...</a></p>
+                <p>Tags:
+                    <a href="/blog/tag/hello/index.html">hello</a>
+                </p>
+            ]]></description>
+            <pubDate>
+                Wed, 07 Jan 2015 00:00:00 -0600
+            </pubDate>
+        </item>
+    </channel>
+</rss>
+

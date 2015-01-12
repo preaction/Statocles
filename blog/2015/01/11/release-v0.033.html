@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+        <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap-theme.min.css" rel="stylesheet">
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <title>Statocles</title>
+        <style type="text/css">
+            main header h1
+            {
+                border-bottom: 4px solid #045578;
+            }
+            header aside {
+                margin-top: 0;
+                font-size: 12pt;
+            }
+            .sidebar h1 {
+                font-size: 14pt;
+            }
+
+            /** Add a line when using the "Continue reading..." link */
+            section:target {
+                padding-top: 0.5em;
+                border-top: 4px solid #045578;
+            }
+
+            /** Don't allow <pre> to push too much */
+            pre {
+                max-width: 100%;
+                overflow-x: scroll;
+            }
+
+            /** <code> is used for input and output, so let it wrap */
+            code {
+                white-space: normal;
+            }
+
+            .tags {
+                float: right;
+            }
+
+            /**
+             * Don't allow main content images to push things around
+             */
+            main img {
+                max-width: 100%;
+            }
+
+            footer .tagline {
+                font-size: smaller;
+                line-height: 1.3;
+                text-align: right;
+            }
+
+        </style>
+        <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
+<style>
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Forum', sans-serif;
+        font-weight: bold;
+    }
+
+    #index-banner {
+        font-family: 'Forum', sans-serif;
+        height: 300px;
+        position: relative;
+    }
+    #index-banner:before, #index-banner:after {
+        width: 60px;
+        height: 300px;
+        content: url(/Statocles/theme/images/column.png);
+    }
+    #index-banner:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #index-banner:after {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    #index-banner h1 {
+        padding-top: 1em;
+        text-transform: uppercase;
+        font-size: 72px;
+        text-align: center;
+    }
+    #index-banner h1 small {
+        display: block;
+        font-size: 24px;
+    }
+
+</style>
+
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-default navbar-static-top" role="navigation">
+                <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button class="navbar-toggle" data-target="#top-navbar-collapse-1" data-toggle="collapse" type="button">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="/Statocles/">Statocles</a>
+                    </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="top-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li><a href="/Statocles/blog">Blog</a></li>
+                            <li><a href="/Statocles/pod">Docs</a></li>
+                            <li><a href="http://github.com/preaction/Statocles">Code</a></li>
+                            <li><a href="http://github.com/preaction/Statocles/issues">Bugs</a></li>
+                            <li><a href="http://metacpan.org/pod/Statocles">CPAN</a></li>
+                            <li><a href="https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">IRC</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <a href="https://github.com/preaction/Statocles"><img alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; z-index: 1000; border: 0;"></a>
+
+        </header>
+        <div class="main container">
+            <div class="row">
+
+    <div class="col-md-9">
+        <main>
+            <header>
+                <h1>Release v0.033</h1>
+                <p class="tags">Tags:
+                    <a href="/Statocles/blog/tag/release/index.html" rel="tag">release</a>
+                </p>
+                <aside>
+                    <p><time datetime="2015-01-11">
+                        Posted on 2015-01-11
+                    </time>
+                    by preaction</p>
+                </aside>
+            </header>
+            <section id="section-1">
+                <p>Just some minor bugfixes in this release: The <code>--date</code> option when making a new blog
+post finally works, and when writing a new post while the daemon is running, the site
+will be updated as expected.</p>
+
+<p>Full changelog below.</p>
+
+            </section>
+            <section id="section-2">
+                <ul>
+<li><a href="https://github.com/preaction/Statocles/commit/2a82545b25faabf7b658a389116628d5fa1a673d">fix unable to set date for blog post from command</a> (<a href="https://github.com/preaction/Statocles/issues/198">#198</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/c89b5b233b2db9a859ce60adf7a1d2c9616c2079">build a new temp site for each command test</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/d7bed7836f799ddf9579a4197b2608ffbae33103">remove root dotfiles and root ini files from dist</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/449dac496af7fb96a25b249709f73a66b96bbbb5">switch to dzil Git::GatherDir</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/cf4a725cb21fee4000df58a6561dfb1fa87e27a2">add new blog posts to store so auto-build works</a> (<a href="https://github.com/preaction/Statocles/issues/183">#183</a>, <a href="https://github.com/preaction/Statocles/issues/180">#180</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/158e8fef4196c5203aae104ee873d67703e5fe0f">&quot;now&quot; is easily mistaken for &quot;not&quot; in test diag</a></li>
+</ul>
+
+            </section>
+        </main>
+    </div>
+
+    <div class="col-md-3">
+        
+        <nav id="tags">
+            <h1>Tags</h1>
+            <ul class="list-inline">
+                <li><a href="/Statocles/blog/tag/release/index.html">release</a></li>
+            </ul>
+        </nav>
+    </div>
+
+</div>
+
+        </div>
+        <footer>
+            
+            <div class="container tagline">
+                <a href="http://preaction.github.io/Statocles">Made with Statocles</a><br>
+                <a href="http://www.perl.org">Powered by Perl</a>
+            </div>
+        </footer>
+    </body>
+</html>

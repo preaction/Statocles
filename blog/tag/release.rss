@@ -5,7 +5,27 @@
         <link>http://preaction.github.io/Statocles/blog/tag/release/index.html</link>
         <atom:link href="http://preaction.github.io/Statocles/blog/tag/release.rss" rel="self" type="application/rss+xml" />
         <description>Blog feed of Statocles</description>
-        <generator>Statocles 0.032</generator>
+        <generator>Statocles </generator>
+        <item>
+            <title>Release v0.033</title>
+            <link>http://preaction.github.io/Statocles/blog/2015/01/11/release-v0.033.html</link>
+            <guid>http://preaction.github.io/Statocles/blog/2015/01/11/release-v0.033.html</guid>
+            <description><![CDATA[
+                <p>Just some minor bugfixes in this release: The <code>--date</code> option when making a new blog
+post finally works, and when writing a new post while the daemon is running, the site
+will be updated as expected.</p>
+
+<p>Full changelog below.</p>
+
+                    <p><a href="http://preaction.github.io/Statocles/blog/2015/01/11/release-v0.033.html#section-2">Continue reading...</a></p>
+                <p>Tags:
+                    <a href="/blog/tag/release/index.html">release</a>
+                </p>
+            ]]></description>
+            <pubDate>
+                Sun, 11 Jan 2015 00:00:00 -0600
+            </pubDate>
+        </item>
         <item>
             <title>Release v0.032</title>
             <link>http://preaction.github.io/Statocles/blog/2015/01/04/release-v0.032.html</link>
@@ -118,35 +138,6 @@ development easier.</p>
             ]]></description>
             <pubDate>
                 Mon, 22 Dec 2014 00:00:00 -0600
-            </pubDate>
-        </item>
-        <item>
-            <title>Release v0.028</title>
-            <link>http://preaction.github.io/Statocles/blog/2014/12/14/release-v0.028.html</link>
-            <guid>http://preaction.github.io/Statocles/blog/2014/12/14/release-v0.028.html</guid>
-            <description><![CDATA[
-                <p>This release adds automatic rebuilding of the site when changes are made (OSX
-only, so far). We're now using Mojo::Log for logging (instead of a hacked up
-<code>diag()</code> sub).</p>
-
-<p>A breaking change to applications: The <code>index()</code> method is no longer used by
-the site to determine what is the front page of the app, appropriate to
-transform into the front page of the site. Now, the first item returned by
-<code>pages()</code> must be the index page. This reduces the number of methods
-applications need, and made it easier to implement the automatic rebuilding.</p>
-
-<p>Finally, some much-needed cleanup as part of the automatic rebuilding feature.
-Still plenty of cleanup to go.</p>
-
-<p>Full changelog:</p>
-
-                    <p><a href="http://preaction.github.io/Statocles/blog/2014/12/14/release-v0.028.html#section-2">Continue reading...</a></p>
-                <p>Tags:
-                    <a href="/blog/tag/release/index.html">release</a>
-                </p>
-            ]]></description>
-            <pubDate>
-                Sun, 14 Dec 2014 00:00:00 -0600
             </pubDate>
         </item>
     </channel>
