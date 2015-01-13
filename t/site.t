@@ -261,6 +261,36 @@ subtest 'site urls' => sub {
     };
 };
 
+subtest 'error messages' => sub {
+
+    subtest 'index_app does not give any pages' => sub {
+        my $tmpdir = tempdir;
+        $tmpdir->child( 'static' )->mkpath;
+        my $static = Statocles::App::Static->new(
+            store => $tmpdir->child( qw( static ) ),
+            url_root => '/static',
+        );
+
+        $tmpdir->child( 'build' )->mkpath;
+        $tmpdir->child( 'deploy' )->mkpath;
+
+        my $site = Statocles::Site->new(
+            title => 'Test Site',
+            theme => $SHARE_DIR->child( 'theme' ),
+            apps => {
+                static => $static,
+            },
+            build_store => $tmpdir->child( 'build' ),
+            deploy_store => $tmpdir->child( 'deploy' ),
+            base_url => 'http://example.com',
+            index => 'static',
+        );
+
+        throws_ok { $site->build } qr{ERROR: Index app "static" did not generate any pages};
+    };
+
+};
+
 done_testing;
 
 sub test_site {

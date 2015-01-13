@@ -211,6 +211,10 @@ sub write {
 
         my @app_pages = $app->pages;
         if ( $self->index eq $app_name ) {
+
+            die sprintf 'ERROR: Index app "%s" did not generate any pages' . "\n", $self->index
+                unless @app_pages;
+
             # Rename the app's page so that we don't get two pages with identical
             # content, which is bad for SEO
             $app_pages[0]->path( '/index.html' );
