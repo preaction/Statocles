@@ -60,8 +60,20 @@ L<template|Statocles::Template> object.
 
 sub read {
     my ( $self, $app, $template ) = @_;
-    my $path = Path::Tiny->new( $app, $template . ".ep" );
-    my $content = $self->store->read_file( $path );
+    $template .= '.ep';
+    my $path = Path::Tiny->new( $app, $template );
+
+    my $content = eval { $self->store->read_file( $path ); };
+    if ( $@ ) {
+        if ( blessed $@ && $@->isa( 'Path::Tiny::Error' ) && $@->{op} =~ /^open/ ) {
+            die sprintf 'ERROR: Template "%s/%s" does not exist in theme directory "%s"' . "\n",
+                $app, $template, $self->store->path;
+        }
+        else {
+            die $@;
+        }
+    }
+
     return Statocles::Template->new(
         path => $path,
         content => $content,

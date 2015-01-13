@@ -130,4 +130,17 @@ subtest 'theme caching' => sub {
     isnt refaddr $theme->template( site => 'sitemap.xml' ), refaddr $tmpl, 'new object created';
 };
 
+subtest 'error messages' => sub {
+
+    subtest 'template not found' => sub {
+        my $theme = Statocles::Theme->new(
+            store => '::default',
+        );
+        my $theme_path = $theme->store->path->stringify;
+        throws_ok { $theme->template( DOES_NOT_EXIST => 'does_not_exist.html' ) }
+            qr{ERROR: Template "DOES_NOT_EXIST/does_not_exist\.html\.ep" does not exist in theme directory "\Q$theme_path\E"};
+    };
+
+};
+
 done_testing;
