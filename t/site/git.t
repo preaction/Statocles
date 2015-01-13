@@ -54,15 +54,30 @@ subtest 'site writes application' => sub {
             ok !$workdir->child( $page->path )->exists, $page->path . ' is not in master branch';
         }
 
+        my $master_commit_id = $git->run( 'rev-parse' => 'HEAD' );
+
         _git_run( $git, checkout => $site->deploy_branch );
 
         my $log = $git->run( log => -u => -n => 1 );
         like $log, qr{Site update};
         unlike $log, qr{NEWFILE};
 
-        for my $page ( $site->app( 'blog' )->pages ) {
-            ok $workdir->child( $page->path )->exists, $page->path . ' is in deploy branch';
-        }
+        my $prev_log = $git->run( 'log' );
+        unlike $prev_log, qr{$master_commit_id}, 'does not contain master commit';
+
+        subtest 'files are correct' => sub {
+            for my $page ( $site->app( 'blog' )->pages ) {
+                ok $workdir->child( $page->path )->exists,
+                    'page ' . $page->path . ' is in deploy branch';
+            }
+
+            for my $doc ( @{ $site->app( 'blog' )->store->documents } ) {
+                my $doc_path = $doc->path;
+                ok !$site->app( 'blog' )->store->path->child( $doc_path )->exists,
+                    'document ' . $doc_path . ' is not in deploy branch';
+            }
+        };
+
         _git_run( $git, checkout => 'master' );
 
         subtest 'deploy performs git push' => sub {

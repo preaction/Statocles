@@ -49,7 +49,9 @@ sub deploy {
     };
 
     if ( !_has_branch( $git, $self->deploy_branch ) ) {
-        _git_run( $git, checkout => -b => $self->deploy_branch );
+        # Create a new, orphan branch
+        _git_run( $git, checkout => '--orphan', $self->deploy_branch );
+        _git_run( $git, 'rm', '-r', '-f', $deploy_dir );
     }
     else {
         _git_run( $git, checkout => $self->deploy_branch );
