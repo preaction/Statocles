@@ -15,6 +15,20 @@ has site => (
     isa => InstanceOf['Statocles::Site'],
 );
 
+=attr data
+
+A hash of arbitrary data available to theme templates. This is a good place to
+put extra structured data like social network links or make easy customizations
+to themes like header image URLs.
+
+=cut
+
+has data => (
+    is => 'ro',
+    isa => HashRef,
+    default => sub { {} },
+);
+
 1;
 __END__
 

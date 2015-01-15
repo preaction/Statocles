@@ -157,6 +157,7 @@ sub pages {
                 layout => $self->site->theme->template( site => 'layout.html' ),
                 template => $self->site->theme->template( perldoc => 'pod.html' ),
                 content => "$dom",
+                app => $self,
             );
         }
         else {
@@ -168,6 +169,7 @@ sub pages {
                 layout => $self->site->theme->template( site => 'layout.html' ),
                 template => $self->site->theme->template( perldoc => 'pod.html' ),
                 content => "$dom",
+                app => $self,
             );
 
         }

@@ -102,6 +102,10 @@ subtest 'perldoc pages' => sub {
 
             ok $dom->at( 'a[href="/pod/My/Internal.html"]' ), 'internal link exists';
             ok $dom->at( 'a[href="https://metacpan.org/pod/External"]' ), 'external link exists';
+
+            if ( ok $node = $dom->at( 'footer #app-info' ) ) {
+                is $node->text, 'This is the app info', 'app-info is correct';
+            }
         },
 
         '/pod/My/Internal.html' => sub {
@@ -122,6 +126,10 @@ subtest 'perldoc pages' => sub {
             }
 
             ok $dom->at( 'a[href="/pod/index.html"]' ), 'internal link to index page';
+
+            if ( ok $node = $dom->at( 'footer #app-info' ) ) {
+                is $node->text, 'This is the app info', 'app-info is correct';
+            }
         },
 
     );
@@ -133,6 +141,9 @@ subtest 'perldoc pages' => sub {
             modules => [qw( My My:: )],
             index_module => 'My',
             site => $site,
+            data => {
+                info => 'This is the app info',
+            },
         );
 
         test_pages( $site, $app, @page_tests );
@@ -148,6 +159,9 @@ subtest 'perldoc pages' => sub {
                     modules => [qw( My My:: )],
                     index_module => 'My',
                     site => $site,
+                    data => {
+                        info => 'This is the app info',
+                    },
                     weave => 1,
                     weave_config => $SHARE_DIR->child( qw( app perldoc weaver.ini ) ),
                 );
@@ -162,6 +176,9 @@ subtest 'perldoc pages' => sub {
             modules => [qw( My My:: )],
             index_module => 'My',
             site => $site,
+            data => {
+                info => 'This is the app info',
+            },
             weave => 1,
             weave_config => $SHARE_DIR->child( qw( app perldoc weaver.ini ) ),
         );

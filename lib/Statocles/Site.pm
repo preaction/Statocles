@@ -129,6 +129,20 @@ has deploy_store => (
     coerce => Store->coercion,
 );
 
+=attr data
+
+A hash of arbitrary data available to theme templates. This is a good place to
+put extra structured data like social network links or make easy customizations
+to themes like header image URLs.
+
+=cut
+
+has data => (
+    is => 'ro',
+    isa => HashRef,
+    default => sub { {} },
+);
+
 =attr log
 
 A L<Mojo::Log> object to write logs to. Defaults to STDERR.

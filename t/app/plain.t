@@ -30,6 +30,9 @@ subtest 'pages' => sub {
         url_root => '/',
         site => $site,
         store => $SHARE_DIR->child( qw( app plain ) ),
+        data => {
+            info => "This is some info",
+        },
     );
 
     test_pages(
@@ -48,6 +51,10 @@ subtest 'pages' => sub {
                 is $node->attr( 'href' ), '/foo/index.html';
             }
 
+            if ( ok $node = $dom->at( 'footer #app-info' ) ) {
+                is $node->text, $app->data->{info}, 'app-info is correct';
+            }
+
         },
 
         '/foo/index.html' => sub {
@@ -64,6 +71,9 @@ subtest 'pages' => sub {
                 is $node->attr( 'href' ), '/index.html';
             }
 
+            if ( ok $node = $dom->at( 'footer #app-info' ) ) {
+                is $node->text, $app->data->{info}, 'app-info is correct';
+            }
         },
 
         '/foo/other.html' => sub {
@@ -80,6 +90,9 @@ subtest 'pages' => sub {
                 is $node->attr( 'href' ), '/index.html';
             }
 
+            if ( ok $node = $dom->at( 'footer #app-info' ) ) {
+                is $node->text, $app->data->{info}, 'app-info is correct';
+            }
         },
 
         '/foo/utf8.html' => sub {
@@ -95,6 +108,9 @@ subtest 'pages' => sub {
                 is $node->text, "\x{2603}"
             }
 
+            if ( ok $node = $dom->at( 'footer #app-info' ) ) {
+                is $node->text, $app->data->{info}, 'app-info is correct';
+            }
         },
     );
 };

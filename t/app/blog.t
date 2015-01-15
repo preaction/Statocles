@@ -46,6 +46,9 @@ subtest 'pages' => sub {
         page_size => 2,
         # Remove from the index all posts tagged "better", unless they're tagged "more"
         index_tags => [ '-better', '+more', '+error message' ],
+        data => {
+            info => 'This is the app info',
+        },
     );
 
     my @page_tests = (
@@ -81,6 +84,10 @@ subtest 'pages' => sub {
                     /blog/index.rss
                 ) ),
                 'feeds list is available';
+
+            if ( ok my $node = $dom->at( 'footer #app-info' ) ) {
+                is $node->text, $app->data->{info}, 'app-info is correct';
+            }
         },
 
         '/blog/page-2.html' => sub {
@@ -113,6 +120,10 @@ subtest 'pages' => sub {
                     /blog/index.rss
                 ) ),
                 'feeds list is available';
+
+            if ( ok my $node = $dom->at( 'footer #app-info' ) ) {
+                is $node->text, $app->data->{info}, 'app-info is correct';
+            }
         },
 
         # Index feeds
@@ -208,6 +219,10 @@ subtest 'pages' => sub {
                     /blog/tag/better.rss
                 ) ),
                 'feeds list is available';
+
+            if ( ok my $node = $dom->at( 'footer #app-info' ) ) {
+                is $node->text, $app->data->{info}, 'app-info is correct';
+            }
         },
 
         '/blog/tag/better/page-2.html' => sub {
@@ -240,6 +255,10 @@ subtest 'pages' => sub {
                     /blog/tag/better.rss
                 ) ),
                 'feeds list is available';
+
+            if ( ok my $node = $dom->at( 'footer #app-info' ) ) {
+                is $node->text, $app->data->{info}, 'app-info is correct';
+            }
         },
 
         '/blog/tag/error-message/index.html' => sub {
@@ -272,6 +291,10 @@ subtest 'pages' => sub {
                     /blog/tag/error-message.rss
                 ) ),
                 'feeds list is available';
+
+            if ( ok my $node = $dom->at( 'footer #app-info' ) ) {
+                is $node->text, $app->data->{info}, 'app-info is correct';
+            }
         },
 
         '/blog/tag/more/index.html' => sub {
@@ -304,6 +327,10 @@ subtest 'pages' => sub {
                     /blog/tag/more.rss
                 ) ),
                 'feeds list is available';
+
+            if ( ok my $node = $dom->at( 'footer #app-info' ) ) {
+                is $node->text, $app->data->{info}, 'app-info is correct';
+            }
         },
 
         '/blog/tag/even-more-tags/index.html' => sub {
@@ -336,6 +363,10 @@ subtest 'pages' => sub {
                     /blog/tag/even-more-tags.rss
                 ) ),
                 'feeds list is available';
+
+            if ( ok my $node = $dom->at( 'footer #app-info' ) ) {
+                is $node->text, $app->data->{info}, 'app-info is correct';
+            }
         },
 
         # Tag feeds
@@ -605,6 +636,10 @@ subtest 'pages' => sub {
                 'http://blogs.perl.org/preaction/404.html';
             is $dom->at( '.crosspost a em' )->text, 'First Post';
             is $dom->at( '.crosspost a' )->text, 'on blogs.perl.org.';
+
+            if ( ok my $node = $dom->at( 'footer #app-info' ) ) {
+                is $node->text, $app->data->{info}, 'app-info is correct';
+            }
         },
 
         '/blog/2014/04/30/plug.html' => sub {
@@ -619,6 +654,10 @@ subtest 'pages' => sub {
                 [ '/blog/tag/better/index.html' ];
 
             ok !scalar $dom->find( '.crosspost' )->each, 'no crosspost';
+
+            if ( ok my $node = $dom->at( 'footer #app-info' ) ) {
+                is $node->text, $app->data->{info}, 'app-info is correct';
+            }
         },
 
         '/blog/2014/05/22/(regex)[name].file.html' => sub {
@@ -636,6 +675,10 @@ subtest 'pages' => sub {
                 );
 
             ok !scalar $dom->find( '.crosspost' )->each, 'no crosspost';
+
+            if ( ok my $node = $dom->at( 'footer #app-info' ) ) {
+                is $node->text, $app->data->{info}, 'app-info is correct';
+            }
         },
 
         '/blog/2014/06/02/more_tags.html' => sub {
@@ -658,6 +701,10 @@ subtest 'pages' => sub {
                 'http://blogs.perl.org/preaction/404.html';
             is $dom->at( '.crosspost a em' )->text, 'More Tags';
             is $dom->at( '.crosspost a' )->text, 'on blogs.perl.org.';
+
+            if ( ok my $node = $dom->at( 'footer #app-info' ) ) {
+                is $node->text, $app->data->{info}, 'app-info is correct';
+            }
         },
 
         # Does not show /blog/9999/12/31/forever-is-a-long-time.html

@@ -46,6 +46,7 @@ sub pages {
         $url =~ s/[.]markdown$/.html/;
 
         my $page = Statocles::Page::Document->new(
+            app => $self,
             path => join( '/', $self->url_root, $url ),
             document => $doc,
             layout => $self->site->theme->template( site => 'layout.html' ),

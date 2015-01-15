@@ -340,6 +340,9 @@ sub test_site {
         build_store => $tmpdir->child( 'build' ),
         deploy_store => $tmpdir->child( 'deploy' ),
         base_url => 'http://example.com',
+        data => {
+            profile_url => '/profile',
+        },
         %site_args,
     );
 
@@ -382,6 +385,12 @@ sub test_content {
                 @nav_expect = map {; { title => $_->{title}, href => join "", $base_path, $_->{href} } } @nav_expect;
             }
             cmp_deeply \@nav_got, \@nav_expect or diag explain \@nav_got;
+        }
+
+        if ( $path =~ /[.]html$/ && ok my $footer_link = $got_dom->at( 'footer a' ) ) {
+            is $footer_link->attr( 'href' ),
+                join( "", $base_path, $site->data->{profile_url} ),
+                'data is correct and rewritten for site root';
         }
 
     };
