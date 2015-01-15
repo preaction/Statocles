@@ -25,6 +25,8 @@ subtest 'site writes application' => sub {
                 my $content = do { local $/; <$fh> };
                 ok $tmpdir->child( 'build', $page->path )->slurp_raw eq $content,
                     $page->path . ' content is correct';
+                ok !$tmpdir->child( 'deploy', $page->path )->exists,
+                    $page->path . ' is not deployed';
             }
         };
 
@@ -52,7 +54,7 @@ subtest 'site writes application' => sub {
             for my $page ( $site->app( 'static' )->pages ) {
                 my $fh = $page->render;
                 my $content = do { local $/; <$fh> };
-                ok $tmpdir->child( 'build', $page->path )->slurp_raw eq $content,
+                ok $tmpdir->child( 'deploy', $page->path )->slurp_raw eq $content,
                     $page->path . ' content is correct';
             }
         };
