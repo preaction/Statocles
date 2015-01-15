@@ -28,6 +28,16 @@ subtest 'site writes application' => sub {
             }
         };
 
+        subtest 'check theme' => sub {
+            my $iter = $site->theme->store->find_files;
+            while ( my $theme_file = $iter->() ) {
+                ok $tmpdir->child( 'build', 'theme', $theme_file )->exists,
+                    'theme file ' . $theme_file . 'exists in build dir';
+                ok !$tmpdir->child( 'deploy', 'theme', $theme_file )->exists,
+                    'theme file ' . $theme_file . 'not in deploy dir';
+            }
+        };
+
     };
 
     subtest 'deploy' => sub {
@@ -44,6 +54,14 @@ subtest 'site writes application' => sub {
                 my $content = do { local $/; <$fh> };
                 ok $tmpdir->child( 'build', $page->path )->slurp_raw eq $content,
                     $page->path . ' content is correct';
+            }
+        };
+
+        subtest 'check theme' => sub {
+            my $iter = $site->theme->store->find_files;
+            while ( my $theme_file = $iter->() ) {
+                ok $tmpdir->child( 'deploy', 'theme', $theme_file )->exists,
+                    'theme file ' . $theme_file . 'exists in deploy dir';
             }
         };
 

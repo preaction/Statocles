@@ -256,6 +256,14 @@ sub write {
     # We should do more with this later...
     my $robots_tmpl = $self->theme->template( site => 'robots.txt' );
     $store->write_file( 'robots.txt', $robots_tmpl->render( site => $self ) );
+
+    # Add the theme
+    my $theme_iter = $self->theme->store->find_files();
+    while ( my $theme_file = $theme_iter->() ) {
+        my $fh = $self->theme->store->open_file( $theme_file );
+        $store->write_file( Path::Tiny->new( 'theme', $theme_file ), $fh );
+    }
+
 }
 
 =method url( path )
