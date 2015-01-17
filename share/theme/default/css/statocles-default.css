@@ -1,0 +1,100 @@
+
+.navbar {
+    overflow: hidden;
+    border-bottom: 1px solid #bbb;
+    color: #777;
+}
+
+.navbar a {
+    color: #777;
+    text-decoration: none;
+}
+
+.navbar a:hover {
+    color: #1EAEDB;
+}
+
+.navbar .brand {
+    font-size: 18px;
+    line-height: 20px;
+    margin-right: 0.5em;
+}
+
+.navbar ul {
+    list-style: none;
+    display: inline-block;
+    margin: 1em 0;
+}
+
+.navbar li {
+    display: inline-block;
+    padding: 0 1em;
+    margin: 0;
+}
+
+h1 {
+    font-size: 3.5em;
+}
+
+ol.list-inline li, ul.list-inline li {
+    display: inline-block;
+}
+
+main header h1 {
+    border-bottom: 1px solid #045578;
+}
+
+main header h1 a {
+    text-decoration: none;
+}
+
+header aside {
+    margin-top: 0;
+    font-size: 12pt;
+}
+
+/** Add a line when using the "Continue reading..." link */
+section:target {
+    padding-top: 0.5em;
+    border-top: 2px dashed #777;
+}
+
+/** Don't allow <pre> to push too much */
+pre {
+    max-width: 100%;
+    overflow-x: scroll;
+}
+
+.tags {
+    float: right;
+}
+
+/**
+ * Don't allow main content images to push things around
+ */
+main img {
+    max-width: 100%;
+}
+
+footer .tagline {
+    font-size: smaller;
+    line-height: 1.3;
+    text-align: right;
+}
+
+ul.pager {
+    list-style: none;
+}
+
+.pager .prev {
+    float: left;
+}
+
+.pager .next {
+    float: right;
+}
+
+.button.disabled {
+    cursor: not-allowed;
+}
+

@@ -1,6 +1,6 @@
 <div class="row">
 
-    <div class="col-md-9">
+    <div class="two-thirds column">
         <main>
             <header>
                 <h1><%= $doc->title %></h1>
@@ -16,16 +16,13 @@
                     by <%= $doc->author %></p>
                 </aside>
                 % if ( $doc->links->{crosspost} ) {
-                <div class="alert alert-info">
-                    <p>Originally posted as:</p>
-                    <ul>
+                <p>Originally posted as:
                     % for my $link ( @{ $doc->links->{crosspost} } ) {
-                        <li><a class="alert-link" href="<%= $link->{href} %>">
+                        <a class="alert-link" href="<%= $link->{href} %>">
                             <em><%= $doc->title %></em> on <%= $link->{title} %>.
-                        </a></li>
+                        </a>
                     % }
-                    </ul>
-                </div>
+                </p>
                 % }
             </header>
             % my @sections = $self->sections;
@@ -37,7 +34,7 @@
         </main>
     </div>
 
-    <div class="col-md-3">
+    <div class="one-third column">
         %= include 'site/sidebar_before.html'
         <nav id="tags">
             <h1>Tags</h1>
