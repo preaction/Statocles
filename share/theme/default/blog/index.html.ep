@@ -1,7 +1,7 @@
 
 <div class="row">
 
-    <div class="two-thirds column">
+    <div class="nine columns">
         <main>
 
             % for my $page ( @$pages ) {
@@ -48,23 +48,23 @@
         <ul class="pager">
             <li class="prev">
                 <a class="button <%= $self->next ? 'button-primary' : 'disabled' %>"
-                    rel="next" href="<%= $self->next %>"
+                    rel="next" href="<%= $self->next // '' %>"
                 >
                     &larr; Older
                 </a>
             </li>
             <li class="next">
                 <a class="button <%= $self->prev ? 'button-primary' : 'disabled' %>"
-                    rel="prev" href="<%= $self->prev %>"
+                    rel="prev" href="<%= $self->prev // '' %>"
                 >
-                    &larr; Newer
+                    Newer &rarr;
                 </a>
             </li>
         </ul>
 
     </div>
 
-    <div class="one-third column sidebar">
+    <div class="three columns sidebar">
         %= include 'site/sidebar_before.html'
         <h1>Tags</h1>
         <ul class="list-inline">

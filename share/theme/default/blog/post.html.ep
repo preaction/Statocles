@@ -1,6 +1,6 @@
 <div class="row">
 
-    <div class="two-thirds column">
+    <div class="nine columns">
         <main>
             <header>
                 <h1><%= $doc->title %></h1>
@@ -34,7 +34,7 @@
         </main>
     </div>
 
-    <div class="one-third column">
+    <div class="three columns">
         %= include 'site/sidebar_before.html'
         <nav id="tags">
             <h1>Tags</h1>

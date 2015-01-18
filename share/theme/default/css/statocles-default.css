@@ -1,4 +1,93 @@
 
+/************************************************
+ * Basic style
+ ************************************************/
+
+h1 {
+    font-size: 3.5em;
+}
+
+h2 {
+    font-size: 2.75em;
+}
+
+h3 {
+    font-size: 2.25em;
+}
+
+h4 {
+    font-size: 1.75em;
+}
+
+h5 {
+    font-size: 1.3em;
+}
+
+code {
+    /* Only pre should set nowrap */
+    white-space: normal;
+}
+
+.button.disabled {
+    cursor: not-allowed;
+}
+
+main header h1 {
+    border-bottom: 1px solid #045578;
+}
+
+main header h1 a {
+    text-decoration: none;
+}
+
+header aside {
+    margin-top: 0;
+    font-size: 12pt;
+}
+
+/** Add a line when using the "Continue reading..." link */
+section:target {
+    padding-top: 0.5em;
+    border-top: 2px dashed #777;
+}
+
+/** Don't allow <pre> to push too much */
+pre {
+    max-width: 100%;
+    overflow-x: scroll;
+}
+
+/**
+ * Don't allow main content images to push things around
+ */
+main img {
+    max-width: 100%;
+}
+
+footer .tagline {
+    font-size: smaller;
+    line-height: 1.3;
+    text-align: right;
+}
+
+/************************************************
+ * Classes
+ ************************************************/
+
+ol.list-inline, ul.list-inline {
+    margin: 0;
+}
+
+ol.list-inline li, ul.list-inline li {
+    display: inline-block;
+    margin: 0;
+}
+
+/************************************************
+ * Widgets
+ ************************************************/
+
+/** Navbar widget */
 .navbar {
     overflow: hidden;
     border-bottom: 1px solid #bbb;
@@ -32,56 +121,29 @@
     margin: 0;
 }
 
-h1 {
-    font-size: 3.5em;
+/** Sidebar widget */
+.sidebar h1 {
+    font-size: 2.25em;
 }
 
-ol.list-inline li, ul.list-inline li {
-    display: inline-block;
+.sidebar h2 {
+    font-size: 1.75em;
 }
 
-main header h1 {
-    border-bottom: 1px solid #045578;
+.sidebar h3 {
+    font-size: 1.3em;
 }
 
-main header h1 a {
-    text-decoration: none;
+.sidebar h4 {
+    font-size: 1.1em;
 }
 
-header aside {
-    margin-top: 0;
-    font-size: 12pt;
+.sidebar h5 {
+    font-size: 1em;
 }
 
-/** Add a line when using the "Continue reading..." link */
-section:target {
-    padding-top: 0.5em;
-    border-top: 2px dashed #777;
-}
 
-/** Don't allow <pre> to push too much */
-pre {
-    max-width: 100%;
-    overflow-x: scroll;
-}
-
-.tags {
-    float: right;
-}
-
-/**
- * Don't allow main content images to push things around
- */
-main img {
-    max-width: 100%;
-}
-
-footer .tagline {
-    font-size: smaller;
-    line-height: 1.3;
-    text-align: right;
-}
-
+/** Pager widget */
 ul.pager {
     list-style: none;
 }
@@ -94,7 +156,12 @@ ul.pager {
     float: right;
 }
 
-.button.disabled {
-    cursor: not-allowed;
+/************************************************
+ * Applications
+ */
+
+/** Blog */
+.tags {
+    float: right;
 }
 
