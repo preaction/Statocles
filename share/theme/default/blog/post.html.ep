@@ -34,7 +34,7 @@
         </main>
     </div>
 
-    <div class="three columns">
+    <div class="three columns sidebar">
         %= include 'site/sidebar_before.html'
         <nav id="tags">
             <h1>Tags</h1>
