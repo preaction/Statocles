@@ -1,8 +1,35 @@
 
 use Statocles::Base 'Test';
-use Statocles::Types qw( LinkHash );
+use Statocles::Types qw( LinkArray LinkHash );
 
 subtest 'Link types' => sub {
+
+    subtest 'LinkArray' => sub {
+        subtest 'arrayref of hashrefs' => sub {
+            my $link_array = LinkArray->coercion->( [
+                {
+                    text => 'link one',
+                    href => 'http://example.com',
+                },
+                {
+                    text => 'link two',
+                    href => 'http://example.net',
+                },
+            ] );
+
+            cmp_deeply $link_array, [
+                Statocles::Link->new(
+                    text => 'link one',
+                    href => 'http://example.com',
+                ),
+                Statocles::Link->new(
+                    text => 'link two',
+                    href => 'http://example.net',
+                ),
+            ];
+
+        };
+    };
 
     subtest 'LinkHash' => sub {
 
