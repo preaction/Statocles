@@ -83,6 +83,11 @@ ol.list-inline li, ul.list-inline li {
     margin: 0;
 }
 
+img.u-pull-left, img.u-pull-right {
+    /* Give some padding so the text isn't too close */
+    padding: 0.2em;
+}
+
 /************************************************
  * Widgets
  ************************************************/
