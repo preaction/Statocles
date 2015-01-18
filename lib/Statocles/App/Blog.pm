@@ -213,7 +213,7 @@ sub post_pages {
         my @tags;
         for my $tag ( @{ $doc->tags } ) {
             push @tags, Statocles::Link->new(
-                title => $tag,
+                text => $tag,
                 href => $self->_tag_url( $tag ),
             );
         }
@@ -243,12 +243,12 @@ This includes all the relevant L<feed pages|Statocles::Page::Feed>.
 
 my %FEEDS = (
     rss => {
-        title => 'RSS',
+        text => 'RSS',
         type => 'application/rss+xml',
         template => 'index.rss',
     },
     atom => {
-        title => 'Atom',
+        text => 'Atom',
         type => 'application/atom+xml',
         template => 'index.atom',
     },
@@ -295,7 +295,7 @@ sub index {
         );
         push @feed_pages, $page;
         push @feed_links, Statocles::Link->new(
-            title => $FEEDS{ $feed }{ title },
+            text => $FEEDS{ $feed }{ text },
             href => $page->path->stringify,
             type => $page->type,
         );
@@ -349,7 +349,7 @@ sub tag_pages {
             );
             push @feed_pages, $page;
             push @feed_links, Statocles::Link->new(
-                title => $FEEDS{ $feed }{ title },
+                text => $FEEDS{ $feed }{ text },
                 href => $page->path->stringify,
                 type => $page->type,
             );
@@ -383,10 +383,10 @@ sub pages {
 
 =method tags()
 
-Get a set of hashrefs suitable for creating a list of tag links. The hashrefs
-contain the following keys:
+Get a set of L<link objects|Statocles::Link> suitable for creating a list of
+tag links. The common attributes are:
 
-    title => 'The tag text'
+    text => 'The tag text'
     href => 'The URL to the tag page'
 
 =cut
@@ -394,7 +394,7 @@ contain the following keys:
 sub tags {
     my ( $self ) = @_;
     my %tagged_docs = $self->_tag_docs( @{ $self->_post_pages } );
-    return map {; { title => $_, href => $self->_tag_url( $_ ), } }
+    return map {; Statocles::Link->new( text => $_, href => $self->_tag_url( $_ ) ) }
         sort keys %tagged_docs
 }
 

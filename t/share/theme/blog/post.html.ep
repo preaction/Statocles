@@ -3,8 +3,8 @@
         <h1><%= $doc->title %></h1>
 
         <p class="tags">Tags:
-        % for my $tag ( @{ $self->tags } ) {
-            <a href="<%= $tag->{href} %>" rel="tag"><%= $tag->{title} %></a>
+        % for my $link ( $self->tags ) {
+            <a href="<%= $link->href %>" rel="tag"><%= $link->text %></a>
         % }
         </p>
 
@@ -42,8 +42,8 @@
 <nav id="tags">
     <h1>Tags</h1>
     <ul class="list-inline">
-    % for my $tag ( $app->tags ) {
-        <li><a href="<%= $tag->{href} %>"><%= $tag->{title} %></a></li>
+    % for my $link ( $app->tags ) {
+        <li><a href="<%= $link->href %>"><%= $link->text %></a></li>
     % }
     </ul>
 </nav>

@@ -11,8 +11,8 @@
                     <h1><a href="<%= $page->path %>"><%= $doc->title %></a></h1>
 
                     <p class="tags">Tags:
-                    % for my $tag ( @{ $page->tags } ) {
-                        <a href="<%= $tag->{href} %>" rel="tag"><%= $tag->{title} %></a>
+                    % for my $tag ( $page->tags ) {
+                        <a href="<%= $tag->href %>" rel="tag"><%= $tag->text %></a>
                     % }
                     </p>
 
@@ -69,7 +69,7 @@
         <h1>Tags</h1>
         <ul class="list-inline">
         % for my $tag ( $app->tags ) {
-            <li><a href="<%= $tag->{href} %>"><%= $tag->{title} %></a></li>
+            <li><a href="<%= $tag->href %>"><%= $tag->text %></a></li>
         % }
         </ul>
         % if ( my @links = $self->links( 'feed' ) ) {

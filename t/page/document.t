@@ -161,14 +161,14 @@ subtest 'page tags' => sub {
             },
         ],
         template => <<'ENDTEMPLATE',
-% for my $link ( @{ $self->tags } ) {
-<%= $link->{title} %>: <%= $link->{href} %>
+% for my $link ( $self->tags ) {
+<%= $link->title %>: <%= $link->href %>
 % }
 ENDTEMPLATE
     );
 
     my $output = $page->render;
-    my $expect = join "\n", ( map { join ": ", $_->{title}, $_->{href} } @{ $page->tags } ), "", "";
+    my $expect = join "\n", ( map { join ": ", $_->title, $_->href } $page->tags ), "", "";
     eq_or_diff $output, $expect;
 
     subtest 'default' => sub {
@@ -176,8 +176,8 @@ ENDTEMPLATE
             document => $doc,
             path => '/path/to/page.html',
             template => <<'ENDTEMPLATE',
-% for my $link ( @{ $self->tags } ) {
-<%= $link->{title} %>: <%= $link->{href} %>
+% for my $link ( $self->tags ) {
+<%= $link->title %>: <%= $link->href %>
 % }
 ENDTEMPLATE
         );

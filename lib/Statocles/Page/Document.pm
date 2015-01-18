@@ -28,11 +28,12 @@ most important attributes are:
 
 =cut
 
-has tags => (
+has _tags => (
     is => 'ro',
     isa => LinkArray,
     default => sub { [] },
     coerce => LinkArray->coercion,
+    init_arg => 'tags',
 );
 
 has '+_links' => (
@@ -90,6 +91,17 @@ sub last_modified {
         return $dt;
     }
     return $self->document->last_modified;
+}
+
+=method tags()
+
+Get the list of tags for this page.
+
+=cut
+
+sub tags {
+    my ( $self ) = @_;
+    return @{ $self->_tags };
 }
 
 1;
