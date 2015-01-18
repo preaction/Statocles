@@ -81,12 +81,32 @@ subtest 'site index and navigation' => sub {
                     href => '/index.html',
                 },
                 {
-                    title => 'About',
+                    title => 'About Us',
                     href => '/about.html',
+                    text => 'About',
                 },
             ],
         },
     );
+
+    subtest 'nav( NAME ) method' => sub {
+        my @links = $site->nav( 'main' );
+        cmp_deeply \@links, [
+            methods(
+                title => 'Blog',
+                href => '/index.html',
+                text => 'Blog',
+            ),
+            methods(
+                title => 'About Us',
+                href => '/about.html',
+                text => 'About',
+            ),
+        ];
+
+        cmp_deeply [ $site->nav( 'MISSING' ) ], [], 'missing nav returns empty list';
+    };
+
     my $blog = $site->app( 'blog' );
     my $page = ( $blog->pages )[0];
 
@@ -379,10 +399,14 @@ sub test_content {
         }
 
         if ( $got_dom->at( 'nav' ) ) {
-            my @nav_got    = $got_dom->at('nav')->find( 'a' )->map( sub { { href => $_->attr( 'href' ), title => $_->text } } )->each;
-            my @nav_expect = @{ $site->nav->{ 'main' } };
+            my @nav_got = $got_dom->at('nav')->find( 'a' )
+                        ->map( sub { Statocles::Link->new_from_element( $_ ) } )
+                        ->each;
+            my @nav_expect = $site->nav( 'main' );
             if ( $base_path =~ /\S/ ) {
-                @nav_expect = map {; { title => $_->{title}, href => join "", $base_path, $_->{href} } } @nav_expect;
+                for my $link ( @nav_expect ) {
+                    $link->href( join "", $base_path, $link->href );
+                }
             }
             cmp_deeply \@nav_got, \@nav_expect or diag explain \@nav_got;
         }

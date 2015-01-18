@@ -1,7 +1,10 @@
 package Statocles::Types;
 # ABSTRACT: Type constraints and coercions for Statocles
 
-use Type::Library -base, -declare => qw( Store Theme );
+use strict;
+use warnings;
+use feature qw( :5.10 );
+use Type::Library -base, -declare => qw( Store Theme Link LinkArray LinkHash );
 use Type::Utils -all;
 use Types::Standard -types;
 
@@ -13,9 +16,24 @@ class_type Theme, { class => "Statocles::Theme" };
 coerce Theme, from Str, via { Statocles::Theme->new( store => $_ ) };
 coerce Theme, from InstanceOf['Path::Tiny'], via { Statocles::Theme->new( store => $_ ) };
 
+class_type Link, { class => "Statocles::Link" };
+coerce Link, from HashRef, via { Statocles::Link->new( $_ ) };
+
+declare LinkArray, as ArrayRef[Link], coerce => 1;
+declare LinkHash, as HashRef[LinkArray], coerce => 1;
+coerce LinkHash, from HashRef[ArrayRef[HashRef]],
+    via {
+        my %hash = %$_;
+        my $out = {
+            ( map {; $_ => [ map { Statocles::Link->new( $_ ) } @{ $hash{$_} } ] } keys %hash ),
+        };
+        return $out;
+    };
+
 # Down here to resolve circular dependencies
 require Statocles::Store::File;
 require Statocles::Theme;
+require Statocles::Link;
 
 1;
 __END__
@@ -33,6 +51,19 @@ __END__
     has theme => (
         isa => Theme,
         coerce => Theme->coercion,
+    );
+
+    has link => (
+        isa => Link,
+        coerce => Link->coercion,
+    );
+    has links => (
+        isa => LinkArray,
+        coerce => LinkArray->coercion,
+    );
+    has nav => (
+        isa => LinkHash,
+        coerce => LinkHash->coercion,
     );
 
 =head1 DESCRIPTION
@@ -58,3 +89,21 @@ This can be coerced from any L<Path::Tiny> object or any String, which will be
 used as the L<store attribute|Statocles::Theme/store> (which will then be given
 to the Store's path attribute).
 
+=head2 Link
+
+A L<Statocles::Link> object.
+
+This can be coerced from any HashRef.
+
+=head2 LinkArray
+
+An arrayref of L<Statocles::Link> objects.
+
+This can be coerced from any ArrayRef of HashRefs.
+
+=head2 LinkHash
+
+A hashref of arrayrefs of L<Statocles::Link> objects. Useful for the named links like
+L<site navigation|Statocles::Site/nav>.
+
+This can be coerced from any HashRef of ArrayRef of HashRefs.

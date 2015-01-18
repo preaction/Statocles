@@ -17,11 +17,11 @@
             <nav class="navbar">
                 <div class="container">
                     <a class="brand" href="/"><%= $site->title %></a>
-                    % if ( $site->nav->{main} ) {
+                    % if ( my @nav_links = $site->nav( 'main' ) ) {
                     <ul>
-                        % for my $nav ( @{ $site->nav->{main} } ) {
+                        % for my $nav ( @nav_links ) {
                         <li>
-                            <a href="<%= $nav->{href} %>"><%= $nav->{title} %></a>
+                            <a href="<%= $nav->href %>"><%= $nav->text %></a>
                         </li>
                         % }
                     </ul>

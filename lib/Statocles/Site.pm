@@ -92,10 +92,12 @@ are defined by your L<theme|Statocles::Theme>. For example:
 
 =cut
 
-has nav => (
+has _nav => (
     is => 'ro',
-    isa => HashRef[ArrayRef[HashRef[Str]]],
+    isa => LinkHash,
+    coerce => LinkHash->coercion,
     default => sub { {} },
+    init_arg => 'nav',
 );
 
 =attr build_store
@@ -181,6 +183,22 @@ Get the app with the given C<name>.
 sub app {
     my ( $self, $name ) = @_;
     return $self->apps->{ $name };
+}
+
+=method nav( name )
+
+Get the list of links for the given nav. Each link is a L<Statocles::Link> object.
+
+    title - The title of the link
+    href - The href of the link
+
+If the named nav does not exist, returns an empty list.
+
+=cut
+
+sub nav {
+    my ( $self, $name ) = @_;
+    return $self->_nav->{ $name } ? @{ $self->_nav->{ $name } } : ();
 }
 
 =method build
