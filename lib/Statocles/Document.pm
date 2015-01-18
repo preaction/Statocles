@@ -77,26 +77,20 @@ relationship.
 
     crosspost - The same document posted to another web site
 
-Each category contains an arrayref of hashrefs with the following keys:
+Each category contains an arrayref of hashrefs of L<link objects|Statocles::Link>.
+See the L<Statocles::Link|Statocles::Link> documentation for a full list of
+supported attributes. The most common attributes are:
 
-    title - The title of the link
+    text - The text of the link
     href - The URL for the link
 
 =cut
 
 has links => (
     is => 'rw',
-    isa => HashRef[ArrayRef[HashRef]],
+    isa => LinkHash,
     default => sub { +{} },
-    coerce => sub {
-        # Normalize to arrays
-        for my $category ( keys %{$_[0]} ) {
-            if ( ref $_[0]{$category} ne 'ARRAY' ) {
-                $_[0]{$category} = [ $_[0]{$category} ];
-            }
-        }
-        return $_[0];
-    },
+    coerce => LinkHash->coercion,
 );
 
 =attr last_modified

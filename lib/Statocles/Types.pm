@@ -19,10 +19,10 @@ coerce Theme, from InstanceOf['Path::Tiny'], via { Statocles::Theme->new( store 
 class_type Link, { class => "Statocles::Link" };
 coerce Link, from HashRef, via { Statocles::Link->new( $_ ) };
 
-declare LinkArray, as ArrayRef[Link];
+declare LinkArray, as ArrayRef[Link], coerce => 1;
 coerce LinkArray, from ArrayRef[HashRef],
     via {
-        [ map { Statocles::Link->new( %$_ ) } @$_ ]
+        [ map { Statocles::Link->new( $_ ) } @$_ ];
     };
 
 declare LinkHash, as HashRef[LinkArray], coerce => 1;

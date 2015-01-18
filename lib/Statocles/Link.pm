@@ -54,6 +54,18 @@ has rel => (
     isa => Str,
 );
 
+=attr type
+
+The MIME type of the resource being linked to. Sets the C<type> attribute for C<link>
+tags.
+
+=cut
+
+has type => (
+    is => 'ro',
+    isa => Str,
+);
+
 sub BUILD {
     my ( $self ) = @_;
     # Either text or title must be set, so that we can set the text

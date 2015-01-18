@@ -20,18 +20,23 @@ has document => (
 
 =attr tags
 
-The tag links for this document. An array of link hashes with the following
-keys:
+The tag links for this document. An array of L<link objects|Statocles::Link>. The
+most important attributes are:
 
-    title   - The title of the link
+    text    - The text of the link
     href    - The page of the link
 
 =cut
 
 has tags => (
     is => 'ro',
-    isa => ArrayRef[HashRef],
+    isa => LinkArray,
     default => sub { [] },
+    coerce => LinkArray->coercion,
+);
+
+has '+_links' => (
+    default => sub { $_[0]->document->links },
 );
 
 =method content

@@ -47,18 +47,24 @@ has published => (
 A hash of arrays of links to pages related to this page. Possible keys:
 
     feed        - Feed pages related to this page
+    crosspost   - Alternate versions of this page posted to other sites
 
-Each item in the array is a hash with the following keys:
+Each item in the array is a L<link object|Statocles::Link>. The most common
+attributes are:
 
+    text        - The text of the link
     href        - The page for the link
     type        - The MIME type of the link, optional
 
 =cut
 
-has links => (
+has _links => (
     is => 'ro',
-    isa => HashRef[ArrayRef[HashRef]],
-    default => sub { {} },
+    isa => LinkHash,
+    lazy => 1,
+    default => sub { +{} },
+    coercion => LinkHash->coercion,
+    init_arg => 'links',
 );
 
 =attr markdown
@@ -172,6 +178,18 @@ sub render {
         $self->vars,
         content => $content,
     );
+}
+
+=method links( KEY )
+
+Get the links set for the given key. See L<the links attribute|/links> for some
+commonly-used keys. Returns a list of L<link objects|Statocles::Link>.
+
+=cut
+
+sub links {
+    my ( $self, $name ) = @_;
+    return $self->_links->{ $name } ? @{ $self->_links->{ $name } } : ();
 }
 
 1;

@@ -212,10 +212,10 @@ sub post_pages {
 
         my @tags;
         for my $tag ( @{ $doc->tags } ) {
-            push @tags, {
+            push @tags, Statocles::Link->new(
                 title => $tag,
                 href => $self->_tag_url( $tag ),
-            };
+            );
         }
 
         push @pages, Statocles::Page::Document->new(
@@ -294,16 +294,16 @@ sub index {
             template => $self->site->theme->template( blog => $FEEDS{$feed}{template} ),
         );
         push @feed_pages, $page;
-        push @feed_links, {
+        push @feed_links, Statocles::Link->new(
             title => $FEEDS{ $feed }{ title },
-            href => $page->path,
+            href => $page->path->stringify,
             type => $page->type,
-        };
+        );
     }
 
     # Add the feeds to all the pages
     for my $page ( @pages ) {
-        $page->links->{feed} = \@feed_links;
+        $page->_links->{feed} = \@feed_links;
     }
 
     return ( @pages, @feed_pages );
@@ -348,16 +348,16 @@ sub tag_pages {
                 template => $self->site->theme->template( blog => $FEEDS{$feed}{template} ),
             );
             push @feed_pages, $page;
-            push @feed_links, {
+            push @feed_links, Statocles::Link->new(
                 title => $FEEDS{ $feed }{ title },
-                href => $page->path,
+                href => $page->path->stringify,
                 type => $page->type,
-            };
+            );
         }
 
         # Add the feeds to all the pages
         for my $page ( @tag_pages ) {
-            $page->links->{feed} = \@feed_links;
+            $page->_links->{feed} = \@feed_links;
         }
 
         push @pages, @tag_pages, @feed_pages;
