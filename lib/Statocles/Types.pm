@@ -30,6 +30,15 @@ coerce LinkHash, from HashRef[ArrayRef[HashRef]],
         return $out;
     };
 
+coerce LinkHash, from HashRef[HashRef],
+    via {
+        my %hash = %$_;
+        my $out = {
+            ( map {; $_ => [ Statocles::Link->new( $hash{$_} ) ] } keys %hash ),
+        };
+        return $out;
+    };
+
 # Down here to resolve circular dependencies
 require Statocles::Store::File;
 require Statocles::Theme;
