@@ -3,7 +3,7 @@ title: First Post
 author: preaction
 last_modified: 2014-04-30 06:50:35
 links:
-    crosspost:
+    alternate:
         -   title: blogs.perl.org
             href: http://blogs.perl.org/preaction/404.html
 ---

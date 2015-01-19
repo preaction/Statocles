@@ -631,11 +631,11 @@ subtest 'pages' => sub {
             is $dom->at( '.author' )->text, 'preaction';
             ok !scalar $dom->find( 'header .tags a' )->each, 'no tags';
 
-            # crosspost, blogs.perl.org, http://blogs.perl.org/preaction/404.html
-            is $dom->at( '.crosspost a' )->attr( 'href' ),
+            # alternate, blogs.perl.org, http://blogs.perl.org/preaction/404.html
+            is $dom->at( '.alternate a' )->attr( 'href' ),
                 'http://blogs.perl.org/preaction/404.html';
-            is $dom->at( '.crosspost a em' )->text, 'First Post';
-            is $dom->at( '.crosspost a' )->text, 'on blogs.perl.org.';
+            is $dom->at( '.alternate a em' )->text, 'First Post';
+            is $dom->at( '.alternate a' )->text, 'on blogs.perl.org.';
 
             if ( ok my $node = $dom->at( 'footer #app-info' ) ) {
                 is $node->text, $app->data->{info}, 'app-info is correct';
@@ -653,7 +653,7 @@ subtest 'pages' => sub {
             cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
                 [ '/blog/tag/better/index.html' ];
 
-            ok !scalar $dom->find( '.crosspost' )->each, 'no crosspost';
+            ok !scalar $dom->find( '.alternate' )->each, 'no alternate';
 
             if ( ok my $node = $dom->at( 'footer #app-info' ) ) {
                 is $node->text, $app->data->{info}, 'app-info is correct';
@@ -674,7 +674,7 @@ subtest 'pages' => sub {
                     '/blog/tag/error-message/index.html',
                 );
 
-            ok !scalar $dom->find( '.crosspost' )->each, 'no crosspost';
+            ok !scalar $dom->find( '.alternate' )->each, 'no alternate';
 
             if ( ok my $node = $dom->at( 'footer #app-info' ) ) {
                 is $node->text, $app->data->{info}, 'app-info is correct';
@@ -696,11 +696,11 @@ subtest 'pages' => sub {
                     '/blog/tag/even-more-tags/index.html',
                 );
 
-            # crosspost, blogs.perl.org, http://blogs.perl.org/preaction/404.html
-            is $dom->at( '.crosspost a' )->attr( 'href' ),
+            # alternate, blogs.perl.org, http://blogs.perl.org/preaction/404.html
+            is $dom->at( '.alternate a' )->attr( 'href' ),
                 'http://blogs.perl.org/preaction/404.html';
-            is $dom->at( '.crosspost a em' )->text, 'More Tags';
-            is $dom->at( '.crosspost a' )->text, 'on blogs.perl.org.';
+            is $dom->at( '.alternate a em' )->text, 'More Tags';
+            is $dom->at( '.alternate a' )->text, 'on blogs.perl.org.';
 
             if ( ok my $node = $dom->at( 'footer #app-info' ) ) {
                 is $node->text, $app->data->{info}, 'app-info is correct';

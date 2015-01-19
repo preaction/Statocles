@@ -75,7 +75,7 @@ Related links for this document. Links are used to build relationships
 to other web addresses. Link categories are named based on their
 relationship.
 
-    crosspost - The same document posted to another web site
+    alternate - The same document posted to another web site
 
 Each category contains an arrayref of hashrefs of L<link objects|Statocles::Link>.
 See the L<Statocles::Link|Statocles::Link> documentation for a full list of

@@ -19,9 +19,9 @@
             <description><![CDATA[
                 % my @sections = $p->sections;
                 <%= $sections[0] %>
-                % if ( $p->links( 'crosspost' ) ) {
+                % if ( $p->links( 'alternate' ) ) {
                     <ul>
-                    % for my $link ( $p->links( 'crosspost' ) ) {
+                    % for my $link ( $p->links( 'alternate' ) ) {
                         <li><a href="<%= $link->href %>">
                             Continue reading <em><%= $p->title %></em> on <%= $link->title %>...
                         </a></li>

@@ -47,7 +47,7 @@ has published => (
 A hash of arrays of links to pages related to this page. Possible keys:
 
     feed        - Feed pages related to this page
-    crosspost   - Alternate versions of this page posted to other sites
+    alternate   - Alternate versions of this page posted to other sites
 
 Each item in the array is a L<link object|Statocles::Link>. The most common
 attributes are:

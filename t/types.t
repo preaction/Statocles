@@ -65,14 +65,14 @@ subtest 'Link types' => sub {
 
             subtest 'hashref of hashrefs (single link)' => sub {
                 my $link_hash = LinkHash->coercion->( {
-                    crosspost => {
+                    alternate => {
                         text => 'link one',
                         href => 'http://example.com',
                     },
                 } );
 
                 cmp_deeply $link_hash, {
-                    crosspost => [
+                    alternate => [
                         Statocles::Link->new(
                             text => 'link one',
                             href => 'http://example.com',

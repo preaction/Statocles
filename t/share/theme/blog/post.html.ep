@@ -15,11 +15,11 @@
             by <span class="author"><%= $self->author %></span></p>
         </aside>
 
-        % if ( $self->links( 'crosspost' ) ) {
-        <div class="alert alert-info crosspost">
+        % if ( $self->links( 'alternate' ) ) {
+        <div class="alert alert-info alternate">
             <p>Originally posted as:</p>
             <ul>
-            % for my $link ( $self->links( 'crosspost' ) ) {
+            % for my $link ( $self->links( 'alternate' ) ) {
                 <li><a class="alert-link" href="<%= $link->href %>">
                     <em><%= $self->title %></em> on <%= $link->title %>.
                 </a></li>

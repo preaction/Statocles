@@ -43,12 +43,12 @@ my @exp_docs = (
     ),
 
     Statocles::Document->new(
-        path => '/links/crosspost_single.markdown',
+        path => '/links/alternate_single.markdown',
         title => 'Linked Document',
         author => 'preaction',
-        content => "This document has a single crosspost link\n",
+        content => "This document has a single alternate link\n",
         links => {
-            crosspost => [
+            alternate => [
                 {
                     title => 'blogs.perl.org',
                     href => 'http://blogs.perl.org/preaction/404.html',
