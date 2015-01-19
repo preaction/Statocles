@@ -3,6 +3,21 @@ package Statocles::Store;
 
 use Statocles::Base 'Role';
 
+=attr base_url
+
+The base URL for this Store when deploying. Site URLs will be automatically
+rewritten to be based on this URL.
+
+This allows you to have different versions of the site deployed to different
+URLs.
+
+=cut
+
+has base_url => (
+    is => 'ro',
+    isa => Str,
+);
+
 1;
 __END__
 

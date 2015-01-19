@@ -21,6 +21,8 @@ has title => (
 
 The base URL of the site, including protocol and domain. Used mostly for feeds.
 
+This can be overridden by L<base_url in Store|Statocles::Store/base_url>.
+
 =cut
 
 has base_url => (
@@ -160,6 +162,13 @@ has log => (
     },
 );
 
+# The current store we're writing to
+has _write_store => (
+    is => 'rw',
+    isa => ConsumerOf['Statocles::Store'],
+    clearer => '_clear_write_store',
+);
+
 =method BUILD
 
 Register this site as the global site.
@@ -231,6 +240,8 @@ Write the application to the given L<store|Statocles::Store>.
 
 sub write {
     my ( $self, $store ) = @_;
+    $self->_write_store( $store );
+
     my $apps = $self->apps;
     my @pages;
     my %args = (
@@ -256,8 +267,8 @@ sub write {
     }
 
     # Rewrite page content to add base URL
-    my $base_path = Mojo::URL->new( $self->base_url )->path;
-    $base_path =~ s{/$}{};
+    my $base_url = $store->base_url || $self->base_url;
+    my $base_path = Mojo::URL->new( $base_url )->path;
     for my $page ( @pages ) {
         my $content = $page->render( %args );
 
@@ -296,6 +307,7 @@ sub write {
         $store->write_file( Path::Tiny->new( 'theme', $theme_file ), $fh );
     }
 
+    $self->_clear_write_store;
 }
 
 =method url( path )
@@ -306,7 +318,9 @@ Get the full URL to the given path by prepending the C<base_url>.
 
 sub url {
     my ( $self, $path ) = @_;
-    my $base = $self->base_url;
+    my $base    = $self->_write_store && $self->_write_store->base_url
+                ? $self->_write_store->base_url
+                : $self->base_url;
     # Remove the / from both sides of the join so we don't double up
     $base =~ s{/$}{};
     $path =~ s{^/}{};

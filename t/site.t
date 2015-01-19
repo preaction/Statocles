@@ -256,17 +256,53 @@ subtest 'site urls' => sub {
            'http://example.com/folder/blog/2014/01/01/a-page.html';
     };
 
+    subtest 'stores with base_url' => sub {
+        my $tmpdir = tempdir;
+        my $site = test_site( $tmpdir,
+            build_store => {
+                base_url => 'http://example.com/build',
+            },
+            deploy_store => {
+                base_url => 'http://example.com/',
+            },
+            base_url => '',
+        );
+
+        is $site->url( '/index.html' ), '/index.html';
+        is $site->url( '/blog/2014/01/01/a-page.html' ), '/blog/2014/01/01/a-page.html';
+
+        subtest 'current writing store overrides site base url' => sub {
+            subtest 'build_store' => sub {
+                $site->_write_store( $site->build_store );
+                is $site->url( '/index.html' ), 'http://example.com/build/index.html';
+                is $site->url( '/blog/2014/01/01/a-page.html' ), 'http://example.com/build/blog/2014/01/01/a-page.html';
+            };
+
+            subtest 'deploy_store' => sub {
+                $site->_write_store( $site->deploy_store );
+                is $site->url( '/index.html' ), 'http://example.com/index.html';
+                is $site->url( '/blog/2014/01/01/a-page.html' ), 'http://example.com/blog/2014/01/01/a-page.html';
+            };
+
+        };
+    };
+
     subtest 'base URL with folder rewrites content' => sub {
         my $tmpdir = tempdir;
         my $site = test_site( $tmpdir,
-            base_url => 'http://example.com/folder',
+            build_store => {
+                base_url => 'http://example.com/build',
+            },
+            deploy_store => {
+                base_url => 'http://example.com/deploy',
+            },
         );
 
         subtest 'build' => sub {
             $site->build;
 
             for my $page ( $site->app( 'blog' )->pages ) {
-                subtest 'page content: ' . $page->path => test_content( $tmpdir, $site, $page, build => $page->path );
+                subtest 'page content: ' . $page->path => test_content( $tmpdir, $site, $page, build => $page->path, $site->build_store );
                 ok !$tmpdir->child( 'deploy', $page->path )->exists, 'not deployed yet';
             }
 
@@ -285,7 +321,7 @@ subtest 'site urls' => sub {
             $site->deploy;
 
             for my $page ( $site->app( 'blog' )->pages ) {
-                subtest 'page content: ' . $page->path => test_content( $tmpdir, $site, $page, deploy => $page->path );
+                subtest 'page content: ' . $page->path => test_content( $tmpdir, $site, $page, deploy => $page->path, $site->deploy_store );
             }
 
             subtest 'check static content' => sub {
@@ -350,6 +386,19 @@ sub test_site {
     $tmpdir->child( 'build' )->mkpath;
     $tmpdir->child( 'deploy' )->mkpath;
 
+    my $build_store
+        = Statocles::Store::File->new(
+            path => $tmpdir->child( 'build' ),
+            %{ delete $site_args{build_store} || {} },
+        );
+
+    my $deploy_store
+        = Statocles::Store::File->new(
+            path => $tmpdir->child( 'deploy' ),
+            %{ delete $site_args{deploy_store} || {} },
+        );
+
+
     my $site = Statocles::Site->new(
         title => 'Test Site',
         theme => $SHARE_DIR->child( 'theme' ),
@@ -357,8 +406,8 @@ sub test_site {
             blog => $blog,
             static => $static,
         },
-        build_store => $tmpdir->child( 'build' ),
-        deploy_store => $tmpdir->child( 'deploy' ),
+        build_store => $build_store,
+        deploy_store => $deploy_store,
         base_url => 'http://example.com',
         data => {
             profile_url => '/profile',
@@ -374,8 +423,8 @@ sub test_site {
 }
 
 sub test_content {
-    my ( $tmpdir, $site, $page, $dir, $file ) = @_;
-    my $base_url = Mojo::URL->new( $site->base_url );
+    my ( $tmpdir, $site, $page, $dir, $file, $store ) = @_;
+    my $base_url = Mojo::URL->new( $store ? $store->base_url : $site->base_url );
     my $base_path = $base_url->path;
     $base_path =~ s{/$}{};
 
