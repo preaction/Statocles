@@ -18,6 +18,32 @@ has document => (
     required => 1,
 );
 
+=attr title
+
+The title of the page.
+
+=cut
+
+has title => (
+    is => 'ro',
+    isa => Str,
+    lazy => 1,
+    default => sub { $_[0]->document->title },
+);
+
+=attr author
+
+The author of the page.
+
+=cut
+
+has author => (
+    is => 'ro',
+    isa => Str,
+    lazy => 1,
+    default => sub { $_[0]->document->author },
+);
+
 =attr tags
 
 The tag links for this document. An array of L<link objects|Statocles::Link>. The

@@ -1,6 +1,6 @@
 <main>
     <header>
-        <h1><%= $doc->title %></h1>
+        <h1><%= $self->title %></h1>
 
         <p class="tags">Tags:
         % for my $link ( $self->tags ) {
@@ -12,16 +12,16 @@
             <p><time datetime="<%= $self->published->strftime('%Y-%m-%d') %>">
                 Posted on <%= $self->published->strftime('%Y-%m-%d') %>
             </time>
-            by <span class="author"><%= $doc->author %></span></p>
+            by <span class="author"><%= $self->author %></span></p>
         </aside>
 
-        % if ( $doc->links->{crosspost} ) {
+        % if ( $self->links( 'crosspost' ) ) {
         <div class="alert alert-info crosspost">
             <p>Originally posted as:</p>
             <ul>
-            % for my $link ( @{ $doc->links->{crosspost} } ) {
-                <li><a class="alert-link" href="<%= $link->{href} %>">
-                    <em><%= $doc->title %></em> on <%= $link->{title} %>.
+            % for my $link ( $self->links( 'crosspost' ) ) {
+                <li><a class="alert-link" href="<%= $link->href %>">
+                    <em><%= $self->title %></em> on <%= $link->title %>.
                 </a></li>
             % }
             </ul>

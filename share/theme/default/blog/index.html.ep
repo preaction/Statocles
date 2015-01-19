@@ -5,10 +5,9 @@
         <main>
 
             % for my $page ( @$pages ) {
-            % my $doc = $page->document;
             <article>
                 <header>
-                    <h1><a href="<%= $page->path %>"><%= $doc->title %></a></h1>
+                    <h1><a href="<%= $page->path %>"><%= $page->title %></a></h1>
 
                     <p class="tags">Tags:
                     % for my $tag ( $page->tags ) {
@@ -20,14 +19,14 @@
                         <p><time datetime="<%= $page->published->strftime('%Y-%m-%d') %>">
                             Posted on <%= $page->published->strftime('%Y-%m-%d') %>
                         </time>
-                        by <%= $doc->author %></p>
+                        by <%= $page->author %></p>
                     </aside>
 
-                    % if ( $doc->links->{crosspost} ) {
+                    % if ( $page->links( 'crosspost' ) ) {
                     <p>Originally posted as:
-                        % for my $link ( @{ $doc->links->{crosspost} } ) {
-                            <a href="<%= $link->{href} %>">
-                                <em><%= $doc->title %></em> on <%= $link->{title} %>.
+                        % for my $link ( $page->links( 'crosspost' ) ) {
+                            <a href="<%= $link->href %>">
+                                <em><%= $page->title %></em> on <%= $link->title %>.
                             </a>
                         % }
                     </p>
@@ -38,7 +37,7 @@
                 <%= $sections[0] %>
 
                 % if ( @sections > 1 ) {
-                    <p><a href="<%= $page->path %>#section-2">Continue reading <%= $doc->title %>...</a></p>
+                    <p><a href="<%= $page->path %>#section-2">Continue reading <%= $page->title %>...</a></p>
                 % }
 
             </article>
