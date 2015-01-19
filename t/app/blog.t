@@ -66,7 +66,7 @@ subtest 'pages' => sub {
                 'first page has 2 latest post paths';
 
             cmp_deeply [ $dom->find( '.author' )->map( 'text' )->each ],
-                [ ( 'preaction' ) x 2 ],
+                [ 'preaction' ],
                 'author is correct';
 
             cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
@@ -152,7 +152,7 @@ subtest 'pages' => sub {
                 'atom feed has 2 latest post titles';
 
             cmp_deeply [ $dom->find( 'entry author name' )->map( 'text' )->each ],
-                [ ( 'preaction' ) x 2 ],
+                [ 'preaction' ],
                 'author is correct';
 
             cmp_deeply [ $dom->find( 'entry content' )->map( attr => 'type' )->each ],
@@ -201,7 +201,7 @@ subtest 'pages' => sub {
                 'first "better" page has 2 latest post paths';
 
             cmp_deeply [ $dom->find( '.author' )->map( 'text' )->each ],
-                [ ( 'preaction' ) x 2 ],
+                [ 'preaction' ],
                 'author is correct';
 
             cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
@@ -308,9 +308,7 @@ subtest 'pages' => sub {
                 [ '/blog/2014/06/02/more_tags.html', ],
                 '"more" page has 1 post url';
 
-            cmp_deeply [ $dom->find( '.author' )->map( 'text' )->each ],
-                [ 'preaction' ],
-                'author is correct';
+            ok !$dom->at( '.author' ), 'no author for this post';
 
             cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
                 bag( qw(
@@ -344,9 +342,7 @@ subtest 'pages' => sub {
                 [ '/blog/2014/06/02/more_tags.html', ],
                 '"even more tags" page has 1 post url';
 
-            cmp_deeply [ $dom->find( '.author' )->map( 'text' )->each ],
-                [ 'preaction' ],
-                'author is correct';
+            ok !$dom->at( '.author' ), 'no author for this post';
 
             cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
                 bag( qw(
@@ -397,7 +393,7 @@ subtest 'pages' => sub {
                 'atom feed has 2 latest post titles';
 
             cmp_deeply [ $dom->find( 'entry author name' )->map( 'text' )->each ],
-                [ ( 'preaction' ) x 2 ],
+                [ 'preaction' ],
                 'author is correct';
 
             cmp_deeply [ $dom->find( 'entry content' )->map( attr => 'type' )->each ],
@@ -523,9 +519,7 @@ subtest 'pages' => sub {
                 [ 'More Tags' ],
                 'atom feed has correct post titles';
 
-            cmp_deeply [ $dom->find( 'entry author name' )->map( 'text' )->each ],
-                [ 'preaction' ],
-                'author is correct';
+            ok !$dom->at( '.author' ), 'no author for this post';
 
             cmp_deeply [ $dom->find( 'entry content' )->map( attr => 'type' )->each ],
                 [ 'html' ],
@@ -586,9 +580,7 @@ subtest 'pages' => sub {
                 [ 'More Tags' ],
                 'atom feed has correct post titles';
 
-            cmp_deeply [ $dom->find( 'entry author name' )->map( 'text' )->each ],
-                [ 'preaction' ],
-                'author is correct';
+            ok !$dom->at( '.author' ), 'no author for this post';
 
             cmp_deeply [ $dom->find( 'entry content' )->map( attr => 'type' )->each ],
                 [ 'html' ],
@@ -685,7 +677,7 @@ subtest 'pages' => sub {
             my ( $html, $dom ) = @_;
 
             is $dom->at( 'header h1' )->text, 'More Tags';
-            is $dom->at( '.author' )->text, 'preaction';
+            ok !$dom->at( '.author' ), 'no author for this page';
 
             cmp_deeply [ $dom->find( '.tags a' )->map( 'text' )->each ],
                 bag( 'more', 'better', 'even more tags' );
@@ -815,7 +807,6 @@ subtest 'commands' => sub {
                     my $doc = $app->store->read_document( $doc_path->relative( $tmpdir->child('blog') ) );
                     cmp_deeply $doc, {
                         title => 'This is a Title',
-                        author => undef,
                         tags => undef,
                         last_modified => isa( 'Time::Piece' ),
                         content => <<'ENDMARKDOWN',
@@ -825,7 +816,6 @@ ENDMARKDOWN
                     my $dt_str = $doc->{last_modified}->strftime( '%Y-%m-%d %H:%M:%S' );
                     eq_or_diff $doc_path->slurp, <<ENDCONTENT;
 ---
-author: ~
 last_modified: $dt_str
 tags: ~
 title: This is a Title
@@ -855,7 +845,6 @@ ENDCONTENT
                     my $doc = $app->store->read_document( $doc_path->relative( $tmpdir->child( 'blog' ) ) );
                     cmp_deeply $doc, {
                         title => 'This is a Title',
-                        author => undef,
                         tags => undef,
                         last_modified => isa( 'Time::Piece' ),
                         content => <<'ENDMARKDOWN',
@@ -865,7 +854,6 @@ ENDMARKDOWN
                     my $dt_str = $doc->{last_modified}->strftime( '%Y-%m-%d %H:%M:%S' );
                     eq_or_diff $doc_path->slurp, <<ENDCONTENT;
 ---
-author: ~
 last_modified: $dt_str
 tags: ~
 title: This is a Title
@@ -913,7 +901,6 @@ ENDCONTENT
                     my $doc = $app->store->read_document( $doc_path->relative( $tmpdir->child('blog') ) );
                     cmp_deeply $doc, {
                         title => 'This is a Title for stdin',
-                        author => undef,
                         tags => undef,
                         last_modified => isa( 'Time::Piece' ),
                         content => <<'ENDMARKDOWN',

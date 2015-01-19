@@ -13,7 +13,10 @@
                     <p><time datetime="<%= $self->published->strftime('%Y-%m-%d') %>">
                         Posted on <%= $self->published->strftime('%Y-%m-%d') %>
                     </time>
-                    by <%= $self->author %></p>
+                    % if ( $self->author ) {
+                        by <%= $self->author %>
+                    % }
+                    </p>
                 </aside>
                 % if ( $self->links( 'crosspost' ) ) {
                 <p>Originally posted as:

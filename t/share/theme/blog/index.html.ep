@@ -1,7 +1,9 @@
 % for my $page ( @$pages ) {
     <article>
         <h1><a href="<%= $page->path %>"><%= $page->title %></a></h1>
+        % if ( $page->author ) {
         <span class="author"><%= $page->author %></span>
+        % }
         <div class="content">
             % my @sections = $page->sections;
             <%= $sections[0] %>

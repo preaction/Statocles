@@ -87,7 +87,6 @@ users get exactly what they need to run.
 =cut
 
 our $default_post = {
-    author => undef,
     tags => undef,
     content => <<'ENDCONTENT',
 Markdown content goes here.

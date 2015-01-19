@@ -41,7 +41,7 @@ has author => (
     is => 'ro',
     isa => Str,
     lazy => 1,
-    default => sub { $_[0]->document->author },
+    default => sub { $_[0]->document->author || '' },
 );
 
 =attr tags

@@ -9,23 +9,22 @@ $Statocles::SITE = Statocles::Site->new(
 
 my %args = (
     title => 'Title',
-    author => 'Author',
     content => 'Content',
     extra => 'Extra',
 );
 
 subtest 'template string' => sub {
     my $t = Statocles::Template->new(
-        content => '<%= $title %> <%= $author %> <%= $content %>',
+        content => '<%= $title %> <%= $content %>',
     );
-    is $t->render( %args ), "Title Author Content\n";
+    is $t->render( %args ), "Title Content\n";
 };
 
 subtest 'template from file' => sub {
     my $t = Statocles::Template->new(
         path => $SHARE_DIR->child( 'tmpl', 'page.html.ep' ),
     );
-    is $t->render( %args ), "Title Author Content\n";
+    is $t->render( %args ), "Title Content\n";
 };
 
 subtest 'invalid template coercions' => sub {
@@ -50,7 +49,7 @@ subtest 'template include' => sub {
             path => $SHARE_DIR->child( 'tmpl', 'include_with_template.html.ep' ),
             store => $SHARE_DIR->child( 'tmpl' ),
         );
-        is $tmpl->render( %args ), "INCLUDE Title\n ENDINCLUDE Title Author Content\n";
+        is $tmpl->render( %args ), "INCLUDE Title\n ENDINCLUDE Title Content\n";
     };
 
     subtest 'include a plain HTML file' => sub {
@@ -58,7 +57,7 @@ subtest 'template include' => sub {
             path => $SHARE_DIR->child( 'tmpl', 'include_with_html.html.ep' ),
             store => $SHARE_DIR->child( 'tmpl' ),
         );
-        is $tmpl->render( %args ), "INCLUDE INCLUDEDHTML\n ENDINCLUDE Title Author Content\n";
+        is $tmpl->render( %args ), "INCLUDE INCLUDEDHTML\n ENDINCLUDE Title Content\n";
     };
 
     subtest 'missing include dies' => sub {

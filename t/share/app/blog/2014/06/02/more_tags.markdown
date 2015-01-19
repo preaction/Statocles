@@ -1,6 +1,5 @@
 ---
 title: More Tags
-author: preaction
 tags: more, better, even more tags
 last_modified: 2014-06-02 15:34:32
 links:

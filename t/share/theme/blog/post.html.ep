@@ -12,7 +12,10 @@
             <p><time datetime="<%= $self->published->strftime('%Y-%m-%d') %>">
                 Posted on <%= $self->published->strftime('%Y-%m-%d') %>
             </time>
-            by <span class="author"><%= $self->author %></span></p>
+            % if ( $self->author ) {
+            by <span class="author"><%= $self->author %></span>
+            % }
+            </p>
         </aside>
 
         % if ( $self->links( 'alternate' ) ) {

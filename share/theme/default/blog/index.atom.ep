@@ -10,7 +10,9 @@
     <entry>
         <id><%= $site->url( $p->path ) %></id>
         <title><%= $p->title %></title>
+        % if ( $p->author ) {
         <author><name><%= $p->author %></name></author>
+        % }
         <link rel="alternate" href="<%= $site->url( $p->path ) %>" />
         <content type="html"><![CDATA[
             % my @sections = $p->sections;

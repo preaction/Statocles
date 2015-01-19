@@ -12,7 +12,9 @@
 
         <id><%= $site->url( $p->path ) %></id>
         <title><%= $p->title %></title>
+        % if ( $p->author ) {
         <author><name><%= $p->author %></name></author>
+        % }
         <link rel="alternate" href="<%= $site->url( $p->path ) %>" />
         <updated><%= $p->published->strftime('%Y-%m-%dT%H:%M:%SZ') %></updated>
 

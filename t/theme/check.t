@@ -23,7 +23,6 @@ my @documents = (
     Statocles::Document->new(
         path => 'DUMMY',
         title => 'Title Two',
-        author => 'preaction',
         content => 'Content Two',
     ),
 );
