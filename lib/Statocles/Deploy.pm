@@ -6,7 +6,7 @@ use Statocles::Base 'Role';
 =method deploy( FROM_STORE, MESSAGE )
 
 Deploy the site, copying from the given L<store object|Statocles::Store>, optionally
-committing with the given message.
+committing with the given message. Returns a list of file paths deployed.
 
 This must be implemented by the composing class.
 
@@ -25,6 +25,10 @@ otherwise.
 =head1 SEE ALSO
 
 =over 4
+
+=item L<Statocles::Deploy::File>
+
+=item L<Statocles::Deploy::Git>
 
 =item L<Statocles::Store>
 

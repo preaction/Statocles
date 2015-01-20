@@ -2,22 +2,13 @@ package Statocles::Deploy::Git;
 # ABSTRACT: Deploy a site to a Git repository
 
 use Statocles::Base 'Class';
-with 'Statocles::Deploy';
+extends 'Statocles::Deploy::File';
 
 use Git::Repository;
 
 =attr path
 
 The path to the Git work tree, the root of the repository.
-
-=cut
-
-has path => (
-    is => 'ro',
-    isa => Dir,
-    coerce => Dir->coercion,
-    required => 1,
-);
 
 =attr branch
 
@@ -34,12 +25,12 @@ has branch => (
 
 =method deploy( FROM_STORE, MESSAGE )
 
-Deploy the site, copying from the given store.
+Deploy the site, copying from the given store. Returns the files deployed.
 
 =cut
 
-sub deploy {
-    my ( $self, $from_store, $message ) = @_;
+around 'deploy' => sub {
+    my ( $orig, $self, $from_store, $message ) = @_;
 
     my $deploy_dir = $self->path;
     my $git = Git::Repository->new( work_tree => "$deploy_dir" );
@@ -56,19 +47,7 @@ sub deploy {
     }
 
     # Copy the files
-    my @files;
-    my $iter = $from_store->find_files;
-    while ( my $path = $iter->() ) {
-        # Git versions before 1.7.4.1 require a relative path to 'git add'
-        push @files, $path->relative( "/" )->stringify;
-
-        # XXX Implement a friendlier way to copy files from Stores
-        my $in_fh = $from_store->open_file( $path );
-        my $out_fh = $self->path->child( $path )->openw_raw;
-        while ( my $line = <$in_fh> ) {
-            $out_fh->print( $line );
-        }
-    }
+    my @files = $self->$orig( $from_store, $message );
 
     # Commit the files
     _git_run( $git, add => @files );
@@ -80,8 +59,8 @@ sub deploy {
     # Tidy up
     _git_run( $git, checkout => $current_branch );
 
-    return;
-}
+    return @files;
+};
 
 sub _git_run {
     my ( $git, @args ) = @_;
