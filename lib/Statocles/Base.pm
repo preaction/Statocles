@@ -22,7 +22,7 @@ our @IMPORT_MODULES = (
 
 my @class_modules = (
     'Types::Standard' => [qw( :all )],
-    'Types::Path::Tiny' => [qw( Path AbsPath )],
+    'Types::Path::Tiny' => [qw( Path AbsPath Dir )],
     'Statocles::Types' => [qw( :all )],
 );
 
