@@ -54,15 +54,17 @@ my %WriteMakefileArgs = (
   "TEST_REQUIRES" => {
     "Capture::Tiny" => 0,
     "Dir::Self" => 0,
-    "Test::Compile" => 0,
+    "File::Spec" => 0,
+    "IO::Handle" => 0,
+    "IPC::Open3" => 0,
     "Test::Deep" => 0,
     "Test::Differences" => 0,
     "Test::Exception" => 0,
     "Test::More" => "1.001005"
   },
-  "VERSION" => "0.033",
+  "VERSION" => "0.034",
   "test" => {
-    "TESTS" => "t/*.t t/app/*.t t/bin/*.t t/page/*.t t/site/*.t t/store/*.t t/theme/*.t"
+    "TESTS" => "t/*.t t/app/*.t t/bin/*.t t/deploy/*.t t/page/*.t t/store/*.t t/theme/*.t"
   }
 );
 
@@ -76,7 +78,10 @@ my %FallbackPrereqs = (
   "File::Copy::Recursive" => 0,
   "File::Share" => 0,
   "File::ShareDir::Install" => "0.06",
+  "File::Spec" => 0,
   "Git::Repository" => 0,
+  "IO::Handle" => 0,
+  "IPC::Open3" => 0,
   "Import::Base" => "0.009",
   "List::MoreUtils" => 0,
   "Module::Build" => "0.3601",
@@ -84,7 +89,6 @@ my %FallbackPrereqs = (
   "Moo::Lax" => 0,
   "Path::Tiny" => "0.054",
   "Pod::Usage::Return" => 0,
-  "Test::Compile" => 0,
   "Test::Deep" => 0,
   "Test::Differences" => 0,
   "Test::Exception" => 0,

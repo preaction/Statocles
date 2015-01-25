@@ -1,6 +1,45 @@
 Changelog for Statocles
 
-0.033 2015-01-12T03:04:42
+0.034 2015-01-25T06:15:51
+ - add dzil plugin for prereqs and compile tests
+ - add features and install instructions on home page
+ - update Statocles site for new default theme
+ - update Statocles site for new Git deploy
+ - remove deploy path from the daemon
+ - do not try to find the t directory from lib
+ - remove circular dependency creating infinite loop
+ - add see also sections for theme help
+ - add theme help file
+ - explicitly require ".ep" when including templates
+ - add deploy object to site
+ - make sure to create the directory before deploying
+ - reduce duplication between Git and File deploy
+ - add a file deploy for deploying to the filesystem
+ - add deploy class to deploy a site
+ - add base_url to Store for per-deploy base URLs
+ - make author optional
+ - rename "crosspost" to "alternate"
+ - remove all uses of document in templates
+ - change tags to Link objects
+ - change page links and tags into Link objects
+ - fix coercion for links array
+ - allow single link to be normalized into an array
+ - add nav method to get site nav links
+ - add Link object to represent <a> and <link> tags
+ - add missing sidebar example code
+ - add some padding around floated images
+ - fix sidebar different from blog list to blog post
+ - rearrange style guide to organize by usage
+ - add new default theme based on skeleton.css
+ - add data attribute to site and app
+ - fix deploy test to test deploy directory
+ - add theme to deployed site at /theme
+ - add better error message when template not found
+ - ensure index app generates a page
+ - create orphan branch when deploying
+ - add release v0.033 announcement
+
+0.033 2015-01-12T03:04:42Z
  - fix unable to set date for blog post from command
  - build a new temp site for each command test
  - remove root dotfiles and root ini files from dist
