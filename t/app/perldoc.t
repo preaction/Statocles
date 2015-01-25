@@ -129,13 +129,64 @@ subtest 'perldoc pages' => sub {
             }
         },
 
+        '/pod/command.html' => sub {
+            my ( $html, $dom ) = @_;
+            # XXX: Find the layout and template
+            my $node;
+
+            if ( ok $node = $dom->at( 'h1#NAME' ) ) {
+                is $node->text, 'NAME';
+            }
+
+            if ( ok $node = $dom->at( 'h1#NAME + p' ) ) {
+                is $node->text, 'command.pl - A command-line program with POD';
+            }
+
+            if ( ok $node = $dom->at( 'h1#SYNOPSIS + pre code' ) ) {
+                like $node->text, qr{command[.]pl -h};
+            }
+
+            ok $dom->at( 'a[href="/pod/command.html"]' ), 'internal link to same page';
+
+            if ( ok $node = $dom->at( 'footer #app-info' ) ) {
+                is $node->text, 'This is the app info', 'app-info is correct';
+            }
+        },
+
+        '/pod/shellcmd.html' => sub {
+            my ( $html, $dom ) = @_;
+            # XXX: Find the layout and template
+            my $node;
+
+            if ( ok $node = $dom->at( 'h1#NAME' ) ) {
+                is $node->text, 'NAME';
+            }
+
+            if ( ok $node = $dom->at( 'h1#NAME + p' ) ) {
+                is $node->text, 'shellcmd - A command without an extension';
+            }
+
+            if ( ok $node = $dom->at( 'h1#SYNOPSIS + pre code' ) ) {
+                like $node->text, qr{shellcmd -h};
+            }
+
+            ok $dom->at( 'a[href="/pod/shellcmd.html"]' ), 'internal link to same page';
+
+            if ( ok $node = $dom->at( 'footer #app-info' ) ) {
+                is $node->text, 'This is the app info', 'app-info is correct';
+            }
+        },
+
     );
 
     subtest 'without Pod::Weaver' => sub {
         my $app = Statocles::App::Perldoc->new(
             url_root => '/pod',
-            inc => [ $SHARE_DIR->child( qw( app perldoc lib ) ) ],
-            modules => [qw( My My:: )],
+            inc => [
+                $SHARE_DIR->child( qw( app perldoc lib ) ),
+                $SHARE_DIR->child( qw( app perldoc bin ) ),
+            ],
+            modules => [qw( My My:: command shellcmd )],
             index_module => 'My',
             site => $site,
             data => {
@@ -152,8 +203,11 @@ subtest 'perldoc pages' => sub {
             subtest 'missing Pod::Weaver throws error' => sub {
                 my $app = Statocles::App::Perldoc->new(
                     url_root => '/pod',
-                    inc => [ $SHARE_DIR->child( qw( app perldoc lib-weaver ) ) ],
-                    modules => [qw( My My:: )],
+                    inc => [
+                        $SHARE_DIR->child( qw( app perldoc lib-weaver ) ),
+                        $SHARE_DIR->child( qw( app perldoc bin-weaver ) ),
+                    ],
+                    modules => [qw( My My:: command shellcmd )],
                     index_module => 'My',
                     site => $site,
                     data => {
@@ -169,8 +223,11 @@ subtest 'perldoc pages' => sub {
 
         my $app = Statocles::App::Perldoc->new(
             url_root => '/pod',
-            inc => [ $SHARE_DIR->child( qw( app perldoc lib-weaver ) ) ],
-            modules => [qw( My My:: )],
+            inc => [
+                $SHARE_DIR->child( qw( app perldoc lib-weaver ) ),
+                $SHARE_DIR->child( qw( app perldoc bin-weaver ) ),
+            ],
+            modules => [qw( My My:: command shellcmd )],
             index_module => 'My',
             site => $site,
             data => {

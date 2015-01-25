@@ -107,7 +107,17 @@ sub pages {
             %modules,
             %{ Pod::Simple::Search->new->inc(0)->limit_re( qr{^$glob} )->survey( @dirs ) },
         );
+
+        # Also check for exact matches, for strange extensions
+        for my $dir ( @dirs ) {
+            my @glob_parts = split /::/, $glob;
+            my $path = Path::Tiny->new( $dir, @glob_parts );
+            if ( $path->is_file ) {
+                $modules{ $glob } = "$path";
+            }
+        }
     }
+
 
     #; use Data::Dumper;
     #; say Dumper \%modules;

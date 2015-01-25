@@ -1,0 +1,14 @@
+#!/usr/bin/env perl
+
+=head1 NAME
+
+shellcmd - A command without an extension
+
+=head1 SYNOPSIS
+
+    shellcmd -h
+    shellcmd -v
+
+=head1 DESCRIPTION
+
+This is a command whose POD should be available from L<shellcmd>.
