@@ -5,6 +5,7 @@ use Statocles::Template;
 use Cwd qw( getcwd );
 use Scalar::Util qw( refaddr );
 my $SHARE_DIR = path( __DIR__, 'share' );
+build_test_site();
 
 subtest 'attributes' => sub {
     subtest 'store is required' => sub {

@@ -34,12 +34,6 @@ our %IMPORT_BUNDLES = (
         'Statocles::Test' => [qw( test_constructor test_pages build_test_site )],
         'Statocles::Site',
         sub { $Statocles::VERSION = 0.001; return }, # Set version normally done via dzil
-        sub {
-            no warnings 'once';
-            require Statocles::Test;
-            $Statocles::SITE = Statocles::Test::build_test_site();
-            return;
-        },
     ],
 
     Class => [
