@@ -172,13 +172,9 @@ sub main {
             $index = $base . $index;
         }
 
-        unshift @{ $self->static->paths },
-            $self->site->build_store->path,
-            # Add the deploy for non-Statocles content
-            # This won't work in certain situations, like a Git repo on another branch, but
-            # this is convenience until we can track image directories and other non-generated
-            # content.
-            $self->site->deploy->path;
+        # Add the build dir to the list of static paths for mojolicious to
+        # search
+        unshift @{ $self->static->paths }, $self->site->build_store->path;
 
         # Watch for filesystem events and rebuild the site Right now this only
         # works on OSX. We should spin this off into Mojo::IOLoop::FSEvents and

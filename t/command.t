@@ -377,6 +377,7 @@ subtest 'run the http daemon' => sub {
     isa_ok $app, 'Statocles::Command::_MOJOAPP';
 
     ok $tmp->child( 'build_site', 'index.html' )->exists, 'site was built';
+    ok !$tmp->child( 'deploy_site', 'index.html' )->exists, 'site was not deployed';
 
     subtest 'Mojolicious app' => sub {
         subtest 'root site' => sub {
