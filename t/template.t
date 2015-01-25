@@ -63,7 +63,7 @@ subtest 'template include' => sub {
         );
         throws_ok {
             $tmpl->render( %args );
-        } qr{Error in template: Can not find include "included_template[.]html" in store};
+        } qr{Error in template: Can not find include "included_template[.]html[.]ep" in store};
     };
 };
 

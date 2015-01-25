@@ -126,15 +126,16 @@ sub _include {
     }
 
     my $store = $self->store;
-    if ( $store->has_file( "$name.ep" ) ) {
-        my $inner_tmpl = __PACKAGE__->new(
-            path => "$name.ep",
-            content => $store->read_file( "$name.ep" ),
-            store => $store,
-        );
-        return $inner_tmpl->render( %$vars );
-    }
-    elsif ( $store->has_file( $name ) ) {
+    if ( $store->has_file( $name ) ) {
+        if ( $name =~ /[.]ep$/ ) {
+            my $inner_tmpl = __PACKAGE__->new(
+                path => "$name",
+                content => $store->read_file( "$name" ),
+                store => $store,
+            );
+            return $inner_tmpl->render( %$vars );
+        }
+
         return $store->read_file( $name );
     }
 
