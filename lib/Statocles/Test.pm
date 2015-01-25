@@ -6,7 +6,29 @@ use Test::More;
 use Test::Exception;
 use Test::Deep;
 use base qw( Exporter );
-our @EXPORT_OK = qw( test_constructor test_pages );
+our @EXPORT_OK = qw( test_constructor test_pages build_test_site );
+
+=sub build_test_site( %site_args )
+
+Build a site for testing. The build and deploy will be set correctly to temporary
+directories. C<%site_args> will be given to the L<Statocles::Site|Statocles::Site>
+constructor.
+
+=cut
+
+sub build_test_site {
+    my ( %site_args ) = @_;
+    require Statocles::Site;
+
+    return Statocles::Site->new(
+        title => 'Example Site',
+        base_url => 'http://example.com/',
+        build_store => Path::Tiny->tempdir,
+        deploy => Path::Tiny->tempdir,
+        theme => Path::Tiny->new( __FILE__ )->parent(3)->child( 't', 'share', 'theme' ),
+        %site_args,
+    );
+}
 
 =sub test_constructor( class, args )
 

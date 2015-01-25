@@ -6,11 +6,6 @@ use Cwd qw( getcwd );
 use Scalar::Util qw( refaddr );
 my $SHARE_DIR = path( __DIR__, 'share' );
 
-$Statocles::SITE = Statocles::Site->new(
-    build_store => '.',
-    theme => $SHARE_DIR->child( 'theme' ),
-);
-
 subtest 'attributes' => sub {
     subtest 'store is required' => sub {
         throws_ok { Statocles::Theme->new( ) } qr/store/ or diag $@;

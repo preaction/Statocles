@@ -3,6 +3,7 @@ use Statocles::Base 'Test';
 use Statocles::Site;
 use Statocles::App::Blog;
 use Statocles::App::Static;
+use Statocles::Deploy::File;
 use Mojo::DOM;
 use Mojo::URL;
 my $SHARE_DIR = path( __DIR__, 'share' );
@@ -259,10 +260,7 @@ subtest 'site urls' => sub {
     subtest 'stores with base_url' => sub {
         my $tmpdir = tempdir;
         my $site = test_site( $tmpdir,
-            build_store => {
-                base_url => 'http://example.com/build',
-            },
-            deploy_store => {
+            deploy => {
                 base_url => 'http://example.com/',
             },
             base_url => '',
@@ -271,29 +269,17 @@ subtest 'site urls' => sub {
         is $site->url( '/index.html' ), '/index.html';
         is $site->url( '/blog/2014/01/01/a-page.html' ), '/blog/2014/01/01/a-page.html';
 
-        subtest 'current writing store overrides site base url' => sub {
-            subtest 'build_store' => sub {
-                $site->_write_store( $site->build_store );
-                is $site->url( '/index.html' ), 'http://example.com/build/index.html';
-                is $site->url( '/blog/2014/01/01/a-page.html' ), 'http://example.com/build/blog/2014/01/01/a-page.html';
-            };
-
-            subtest 'deploy_store' => sub {
-                $site->_write_store( $site->deploy_store );
-                is $site->url( '/index.html' ), 'http://example.com/index.html';
-                is $site->url( '/blog/2014/01/01/a-page.html' ), 'http://example.com/blog/2014/01/01/a-page.html';
-            };
-
+        subtest 'current writing deploy overrides site base url' => sub {
+            $site->_write_deploy( $site->deploy );
+            is $site->url( '/index.html' ), 'http://example.com/index.html';
+            is $site->url( '/blog/2014/01/01/a-page.html' ), 'http://example.com/blog/2014/01/01/a-page.html';
         };
     };
 
     subtest 'base URL with folder rewrites content' => sub {
         my $tmpdir = tempdir;
         my $site = test_site( $tmpdir,
-            build_store => {
-                base_url => 'http://example.com/build',
-            },
-            deploy_store => {
+            deploy => {
                 base_url => 'http://example.com/deploy',
             },
         );
@@ -302,7 +288,7 @@ subtest 'site urls' => sub {
             $site->build;
 
             for my $page ( $site->app( 'blog' )->pages ) {
-                subtest 'page content: ' . $page->path => test_content( $tmpdir, $site, $page, build => $page->path, $site->build_store );
+                subtest 'page content: ' . $page->path => test_content( $tmpdir, $site, $page, build => $page->path );
                 ok !$tmpdir->child( 'deploy', $page->path )->exists, 'not deployed yet';
             }
 
@@ -321,7 +307,7 @@ subtest 'site urls' => sub {
             $site->deploy;
 
             for my $page ( $site->app( 'blog' )->pages ) {
-                subtest 'page content: ' . $page->path => test_content( $tmpdir, $site, $page, deploy => $page->path, $site->deploy_store );
+                subtest 'page content: ' . $page->path => test_content( $tmpdir, $site, $page, deploy => $page->path, $site->deploy );
             }
 
             subtest 'check static content' => sub {
@@ -357,7 +343,7 @@ subtest 'error messages' => sub {
                 static => $static,
             },
             build_store => $tmpdir->child( 'build' ),
-            deploy_store => $tmpdir->child( 'deploy' ),
+            deploy => $tmpdir->child( 'deploy' ),
             base_url => 'http://example.com',
             index => 'static',
         );
@@ -392,10 +378,10 @@ sub test_site {
             %{ delete $site_args{build_store} || {} },
         );
 
-    my $deploy_store
-        = Statocles::Store::File->new(
+    my $deploy
+        = Statocles::Deploy::File->new(
             path => $tmpdir->child( 'deploy' ),
-            %{ delete $site_args{deploy_store} || {} },
+            %{ delete $site_args{deploy} || {} },
         );
 
 
@@ -407,7 +393,7 @@ sub test_site {
             static => $static,
         },
         build_store => $build_store,
-        deploy_store => $deploy_store,
+        deploy => $deploy,
         base_url => 'http://example.com',
         data => {
             profile_url => '/profile',
@@ -423,8 +409,8 @@ sub test_site {
 }
 
 sub test_content {
-    my ( $tmpdir, $site, $page, $dir, $file, $store ) = @_;
-    my $base_url = Mojo::URL->new( $store ? $store->base_url : $site->base_url );
+    my ( $tmpdir, $site, $page, $dir, $file, $deploy ) = @_;
+    my $base_url = Mojo::URL->new( $deploy ? $deploy->base_url : $site->base_url );
     my $base_path = $base_url->path;
     $base_path =~ s{/$}{};
 

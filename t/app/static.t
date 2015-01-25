@@ -5,10 +5,7 @@ use Statocles::App::Static;
 use Mojo::DOM;
 
 my $SHARE_DIR = path( __DIR__ )->parent->child( 'share' );
-my $site = Statocles::Site->new(
-    title => 'Test site',
-    build_store => '.',
-    deploy_store => '.',
+my $site = build_test_site(
     theme => $SHARE_DIR->child( 'theme' ),
 );
 

@@ -4,7 +4,6 @@ my $SHARE_DIR = path( __DIR__, 'share' );
 use FindBin;
 use Capture::Tiny qw( capture );
 use Statocles::Command;
-use Statocles::Site;
 use File::Copy::Recursive qw( dircopy );
 use Mojo::IOLoop;
 use Test::Mojo;
@@ -38,7 +37,7 @@ sub build_temp_site {
         },
 
         deploy => {
-            class => 'Statocles::Store::File',
+            class => 'Statocles::Deploy::File',
             args => {
                 path => $tmp->child( 'deploy_site' ),
             },
@@ -77,7 +76,7 @@ sub build_temp_site {
                 title => 'Site Title',
                 index => 'blog',
                 build_store => { '$ref' => 'build' },
-                deploy_store => { '$ref' => 'deploy' },
+                deploy => { '$ref' => 'deploy' },
                 theme => { '$ref' => 'theme' },
                 apps => {
                     blog => { '$ref' => 'blog' },
@@ -94,7 +93,7 @@ sub build_temp_site {
         },
 
         deploy_foo => {
-            class => 'Statocles::Store::File',
+            class => 'Statocles::Deploy::File',
             args => {
                 path => $tmp->child( 'deploy_foo' ),
             },
@@ -107,7 +106,7 @@ sub build_temp_site {
                 title => 'Site Foo',
                 index => 'blog',
                 build_store => { '$ref' => 'build_foo' },
-                deploy_store => { '$ref' => 'deploy_foo' },
+                deploy => { '$ref' => 'deploy_foo' },
                 theme => { '$ref' => 'theme' },
                 apps => {
                     blog => { '$ref' => 'blog' },

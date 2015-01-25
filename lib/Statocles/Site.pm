@@ -2,6 +2,7 @@ package Statocles::Site;
 # ABSTRACT: An entire, configured website
 
 use Statocles::Base 'Class';
+use Scalar::Util qw( blessed );
 use Mojo::URL;
 use Mojo::DOM;
 use Mojo::Log;
@@ -21,7 +22,7 @@ has title => (
 
 The base URL of the site, including protocol and domain. Used mostly for feeds.
 
-This can be overridden by L<base_url in Store|Statocles::Store/base_url>.
+This can be overridden by L<base_url in Deploy|Statocles::Deploy/base_url>.
 
 =cut
 
@@ -117,20 +118,28 @@ has build_store => (
     coerce => Store->coercion,
 );
 
-=attr deploy_store
+=attr deploy
 
-The L<store|Statocles::Store> object to use for C<deploy()>. Defaults to L<build_store>.
-This is intended to be the production deployment of the site. A build gets promoted
-to production by using the C<deploy> command.
+The L<deploy object|Statocles::Deploy> to use for C<deploy()>. This is
+intended to be the production deployment of the site. A build gets promoted to
+production by using the C<deploy> command.
 
 =cut
 
-has deploy_store => (
+has _deploy => (
     is => 'ro',
-    isa => Store,
-    lazy => 1,
-    default => sub { $_[0]->build_store },
-    coerce => Store->coercion,
+    isa => ConsumerOf['Statocles::Deploy'],
+    required => 1,
+    init_arg => 'deploy',
+    coerce => sub {
+        if ( ( blessed $_[0] && $_[0]->isa( 'Path::Tiny' ) ) || !ref $_[0] ) {
+            require Statocles::Deploy::File;
+            return Statocles::Deploy::File->new(
+                path => $_[0],
+            );
+        }
+        return $_[0];
+    },
 );
 
 =attr data
@@ -162,11 +171,11 @@ has log => (
     },
 );
 
-# The current store we're writing to
-has _write_store => (
+# The current deploy we're writing to
+has _write_deploy => (
     is => 'rw',
-    isa => ConsumerOf['Statocles::Store'],
-    clearer => '_clear_write_store',
+    isa => ConsumerOf['Statocles::Deploy'],
+    clearer => '_clear_write_deploy',
 );
 
 =method BUILD
@@ -218,30 +227,8 @@ Build the site in its build location
 
 sub build {
     my ( $self ) = @_;
-    $self->write( $self->build_store );
-}
 
-=method deploy
-
-Write each application to its destination.
-
-=cut
-
-sub deploy {
-    my ( $self ) = @_;
-    $self->write( $self->deploy_store );
-}
-
-=method write( store )
-
-Write the application to the given L<store|Statocles::Store>.
-
-=cut
-
-sub write {
-    my ( $self, $store ) = @_;
-    $self->_write_store( $store );
-
+    my $store = $self->build_store;
     my $apps = $self->apps;
     my @pages;
     my %args = (
@@ -267,8 +254,12 @@ sub write {
     }
 
     # Rewrite page content to add base URL
-    my $base_url = $store->base_url || $self->base_url;
+    my $base_url = $self->base_url;
+    if ( $self->_write_deploy ) {
+        $base_url = $self->_write_deploy->base_url || $base_url;
+    }
     my $base_path = Mojo::URL->new( $base_url )->path;
+
     for my $page ( @pages ) {
         my $content = $page->render( %args );
 
@@ -306,8 +297,20 @@ sub write {
         my $fh = $self->theme->store->open_file( $theme_file );
         $store->write_file( Path::Tiny->new( 'theme', $theme_file ), $fh );
     }
+}
 
-    $self->_clear_write_store;
+=method deploy
+
+Deploy the site to its destination.
+
+=cut
+
+sub deploy {
+    my ( $self ) = @_;
+    $self->_write_deploy( $self->_deploy );
+    $self->build;
+    $self->_deploy->deploy( $self->build_store );
+    $self->_clear_write_deploy;
 }
 
 =method url( path )
@@ -318,8 +321,8 @@ Get the full URL to the given path by prepending the C<base_url>.
 
 sub url {
     my ( $self, $path ) = @_;
-    my $base    = $self->_write_store && $self->_write_store->base_url
-                ? $self->_write_store->base_url
+    my $base    = $self->_write_deploy && $self->_write_deploy->base_url
+                ? $self->_write_deploy->base_url
                 : $self->base_url;
     # Remove the / from both sides of the join so we don't double up
     $base =~ s{/$}{};

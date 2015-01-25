@@ -174,11 +174,11 @@ sub main {
 
         unshift @{ $self->static->paths },
             $self->site->build_store->path,
-            # Add the deploy store for non-Statocles content
+            # Add the deploy for non-Statocles content
             # This won't work in certain situations, like a Git repo on another branch, but
             # this is convenience until we can track image directories and other non-generated
             # content.
-            $self->site->deploy_store->path;
+            $self->site->deploy->path;
 
         # Watch for filesystem events and rebuild the site Right now this only
         # works on OSX. We should spin this off into Mojo::IOLoop::FSEvents and

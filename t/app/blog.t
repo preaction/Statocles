@@ -5,13 +5,9 @@ use Capture::Tiny qw( capture );
 use Statocles::App::Blog;
 my $SHARE_DIR = path( __DIR__ )->parent->child( 'share' );
 
-my $site = Statocles::Site->new(
-    title => 'Example Site',
-    base_url => 'http://example.com/',
-    build_store => '.',
+my $site = build_test_site(
     theme => $SHARE_DIR->child( 'theme' ),
 );
-local $Statocles::VERSION = '0.001';
 
 subtest 'constructor' => sub {
     my %required = (
