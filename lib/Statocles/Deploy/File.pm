@@ -34,7 +34,7 @@ sub deploy {
 
         # XXX Implement a friendlier way to copy files from Stores
         my $in_fh = $from_store->open_file( $path );
-        my $out_fh = $self->path->child( $path )->openw_raw;
+        my $out_fh = $self->path->child( $path )->touchpath->openw_raw;
         while ( my $line = <$in_fh> ) {
             $out_fh->print( $line );
         }
