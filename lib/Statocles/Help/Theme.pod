@@ -103,3 +103,13 @@ directory so that you can edit it as you need.
     # Bundle the default theme
     statocles bundle theme default
 
+=head1 SEE ALSO
+
+=over 4
+
+=item L<Statocles::Theme>
+
+=item L<Statocles::Template>
+
+=back
+

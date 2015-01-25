@@ -186,3 +186,12 @@ be available as a simple scalar:
         ]
     );
 
+=head1 SEE ALSO
+
+=over 4
+
+=item L<Statocles::Help::Theme>
+
+=item L<Statocles::Theme>
+
+=back

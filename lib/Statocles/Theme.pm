@@ -117,3 +117,12 @@ files into L<template objects|Statocles::Template>.
 When the L</store> is read, the templates inside are organized based on
 their name and their parent directory.
 
+=head1 SEE ALSO
+
+=over 4
+
+=item L<Statocles::Help::Theme>
+
+=item L<Statocles::Template>
+
+=back
