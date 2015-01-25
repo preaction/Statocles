@@ -3,8 +3,15 @@ theme:
     args:
         store: site/theme
 
+gh_pages:
+    class: Statocles::Deploy::Git
+    args:
+        base_url: http://preaction.github.io/Statocles
+        path: '.'
+        branch: gh-pages
+
 site:
-    class: Statocles::Site::Git
+    class: Statocles::Site
     args:
         title: Statocles
         base_url: http://preaction.github.io/Statocles/
@@ -23,8 +30,8 @@ site:
                 - title: IRC
                   href: 'https://chat.mibbit.com/?channel=%23statocles&server=irc.perl.org'
         build_store: 'site/_build'
-        deploy_store: '.'
-        deploy_branch: gh-pages
+        deploy:
+            $ref: gh_pages
         index: page
         theme:
             $ref: theme
