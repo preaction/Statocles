@@ -117,6 +117,12 @@ sub main {
         my $what = $argv[1];
         if ( $what eq 'theme' ) {
             my $theme_name = $argv[2];
+            if ( !$theme_name ) {
+                say STDERR "ERROR: No theme name!";
+                say STDERR "\nUsage:\n\tstatocles bundle theme <name>";
+                return 1;
+            }
+
             my $theme_root = Path::Tiny->new( dist_dir( 'Statocles' ), 'theme', $theme_name );
             my $site_root = Path::Tiny->new( $opt{config} )->parent;
             my $theme_dest = $site_root->child(qw( share theme ), $theme_name );

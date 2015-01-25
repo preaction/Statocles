@@ -592,6 +592,21 @@ subtest 'bundle the necessary components' => sub {
                 $SHARE_DIR->parent->parent->child( @site_layout )->slurp_utf8;
             is $tmp->child( @site_footer )->slurp_utf8, 'SITE FOOTER';
         };
+
+        subtest 'errors' => sub {
+            subtest 'no theme name to bundle' => sub {
+                my @args = (
+                    '--config' => "$config_fn",
+                    bundle => 'theme',
+                );
+                my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+                isnt $exit, 0;
+                ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
+                like $err, qr{ERROR: No theme name!}, 'error message';
+                like $err, qr{Usage:}, 'incorrect usage gets usage info';
+            };
+
+        };
     };
 };
 
