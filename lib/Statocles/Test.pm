@@ -177,3 +177,7 @@ sub test_pages {
 1;
 __END__
 
+=head1 DESCRIPTION
+
+This module provides some common test routines for Statocles tests.
+

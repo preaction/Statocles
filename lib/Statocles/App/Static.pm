@@ -55,4 +55,7 @@ sub pages {
 1;
 __END__
 
+=head1 DESCRIPTION
 
+This L<Statocles::App|Statocles::App> manages static content with no processing,
+perfect for images, stylesheets, scripts, or already-built HTML.

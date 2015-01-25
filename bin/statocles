@@ -24,6 +24,11 @@ __END__
 
 =head1 DESCRIPTION
 
+The Statocles command-line interface. This command manages Statocles
+sites: building, testing, and deploying.
+
+This command also helps to manage content in Statocles apps.
+
 =head1 ARGUMENTS
 
 =head2 <command>

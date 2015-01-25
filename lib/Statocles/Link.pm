@@ -89,4 +89,18 @@ sub new_from_element {
 }
 
 1;
+__END__
+
+=head1 SYNOPSIS
+
+    my $link = Statocles::Link->new( text => 'Foo', href => 'http://example.com' );
+    say $link->href;
+    say $link->text;
+
+    say sprintf '<a href="%s">%s</a>', $link->href, $link->text;
+
+=head1 DESCRIPTION
+
+This object encapsulates a link (either an C<a> or C<link> tag in HTML). These objects
+are friendly for templates and can provide some sanity checks.
 
