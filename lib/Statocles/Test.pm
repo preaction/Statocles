@@ -14,6 +14,8 @@ Build a site for testing. The build and deploy will be set correctly to temporar
 directories. C<%site_args> will be given to the L<Statocles::Site|Statocles::Site>
 constructor.
 
+You must provide a C<theme> (probably using the one in C<t/share/theme>).
+
 =cut
 
 sub build_test_site {
@@ -25,7 +27,6 @@ sub build_test_site {
         base_url => 'http://example.com/',
         build_store => Path::Tiny->tempdir,
         deploy => Path::Tiny->tempdir,
-        theme => Path::Tiny->new( __FILE__ )->parent(3)->child( 't', 'share', 'theme' ),
         %site_args,
     );
 }

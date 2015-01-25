@@ -2,7 +2,7 @@
 use Statocles::Base 'Test';
 use Statocles::Template;
 my $SHARE_DIR = path( __DIR__, 'share' );
-build_test_site();
+build_test_site( theme => $SHARE_DIR->child( 'theme' ) );
 
 my %args = (
     title => 'Title',

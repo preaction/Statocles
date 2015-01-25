@@ -5,7 +5,7 @@ use Statocles::Page::Document;
 use File::Copy::Recursive qw( dircopy );
 use Capture::Tiny qw( capture );
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
-build_test_site();
+build_test_site( theme => $SHARE_DIR->child( 'theme' ) );
 
 my $DT_FORMAT = '%Y-%m-%d %H:%M:%S';
 
