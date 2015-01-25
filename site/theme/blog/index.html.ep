@@ -1,80 +1,86 @@
 
 <div class="row">
 
-    <div class="col-md-9">
+    <div class="nine columns">
         <main>
+
             % for my $page ( @$pages ) {
-            % my $doc = $page->document;
             <article>
                 <header>
-                    <h1><a href="<%= $page->path %>"><%= $doc->title %></a></h1>
+                    <h1><a href="<%= $page->path %>"><%= $page->title %></a></h1>
+
                     <p class="tags">Tags:
-                    % for my $tag ( @{ $page->tags } ) {
-                        <a href="<%= $tag->{href} %>" rel="tag"><%= $tag->{title} %></a>
+                    % for my $tag ( $page->tags ) {
+                        <a href="<%= $tag->href %>" rel="tag"><%= $tag->text %></a>
                     % }
                     </p>
+
                     <aside>
                         <p><time datetime="<%= $page->published->strftime('%Y-%m-%d') %>">
                             Posted on <%= $page->published->strftime('%Y-%m-%d') %>
                         </time>
-                        by <%= $doc->author %></p>
-                    </aside>
-                    % if ( $doc->links->{crosspost} ) {
-                    <div class="alert alert-info">
-                        <p>Originally posted as:</p>
-                        <ul>
-                        % for my $link ( @{ $doc->links->{crosspost} } ) {
-                            <li><a class="alert-link" href="<%= $link->{href} %>">
-                                <em><%= $doc->title %></em> on <%= $link->{title} %>.
-                            </a></li>
+                        % if ( $page->author ) {
+                            by <%= $page->author %>
                         % }
-                        </ul>
-                    </div>
+                        </p>
+                    </aside>
+
+                    % if ( $page->links( 'crosspost' ) ) {
+                    <p>Originally posted as:
+                        % for my $link ( $page->links( 'crosspost' ) ) {
+                            <a href="<%= $link->href %>">
+                                <em><%= $page->title %></em> on <%= $link->title %>.
+                            </a>
+                        % }
+                    </p>
                     % }
                 </header>
+
                 % my @sections = $page->sections;
                 <%= $sections[0] %>
+
                 % if ( @sections > 1 ) {
-                    <p><a href="<%= $page->path %>#section-2">Continue reading <%= $doc->title %>...</a></p>
+                    <p><a href="<%= $page->path %>#section-2">Continue reading <%= $page->title %>...</a></p>
                 % }
+
             </article>
             % }
         </main>
+
         <ul class="pager">
-            <li class="previous <%= !$self->next ? 'disabled' : '' %>">
-                % if ( $self->next ) {
-                <a rel="next" href="<%= $self->next %>">&larr; Older</a>
-                % }
-                % else {
-                <span>&larr; Older</span>
-                % }
+            <li class="prev">
+                <a class="button <%= $self->next ? 'button-primary' : 'disabled' %>"
+                    rel="next" href="<%= $self->next // '' %>"
+                >
+                    &larr; Older
+                </a>
             </li>
-            <li class="next <%= !$self->prev ? 'disabled' : '' %>">
-                % if ( $self->prev ) {
-                <a rel="prev" href="<%= $self->prev %>">Newer &rarr;</a>
-                % }
-                % else {
-                <span>Newer &rarr;</span>
-                % }
+            <li class="next">
+                <a class="button <%= $self->prev ? 'button-primary' : 'disabled' %>"
+                    rel="prev" href="<%= $self->prev // '' %>"
+                >
+                    Newer &rarr;
+                </a>
             </li>
         </ul>
+
     </div>
 
-    <div class="sidebar col-md-3">
+    <div class="three columns sidebar">
         %= include 'site/sidebar_before.html'
         <h1>Tags</h1>
         <ul class="list-inline">
         % for my $tag ( $app->tags ) {
-            <li><a href="<%= $tag->{href} %>"><%= $tag->{title} %></a></li>
+            <li><a href="<%= $tag->href %>"><%= $tag->text %></a></li>
         % }
         </ul>
-        % if ( $self->links->{feed} ) {
+        % if ( my @links = $self->links( 'feed' ) ) {
         <h1>Feeds</h1>
         <ul class="list-inline">
-            % for my $link ( @{ $self->links->{feed} } ) {
+            % for my $link ( @links ) {
             <li>
-                <a href="<%= $link->{href} %>" rel="alternate" type="<%= $link->{type} %>">
-                    <%= $link->{title} %>
+                <a href="<%= $link->href %>" rel="alternate" type="<%= $link->type %>">
+                    <%= $link->text %>
                 </a>
             </li>
             % }

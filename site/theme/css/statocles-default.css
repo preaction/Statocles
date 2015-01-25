@@ -1,0 +1,172 @@
+
+/************************************************
+ * Basic style
+ ************************************************/
+
+h1 {
+    font-size: 3.5em;
+}
+
+h2 {
+    font-size: 2.75em;
+}
+
+h3 {
+    font-size: 2.25em;
+}
+
+h4 {
+    font-size: 1.75em;
+}
+
+h5 {
+    font-size: 1.3em;
+}
+
+code {
+    /* Only pre should set nowrap */
+    white-space: normal;
+}
+
+.button.disabled {
+    cursor: not-allowed;
+}
+
+main header h1 {
+    border-bottom: 1px solid #045578;
+}
+
+main header h1 a {
+    text-decoration: none;
+}
+
+header aside {
+    margin-top: 0;
+    font-size: 12pt;
+}
+
+/** Add a line when using the "Continue reading..." link */
+section:target {
+    padding-top: 0.5em;
+    border-top: 2px dashed #777;
+}
+
+/** Don't allow <pre> to push too much */
+pre {
+    max-width: 100%;
+    overflow-x: scroll;
+}
+
+/**
+ * Don't allow main content images to push things around
+ */
+main img {
+    max-width: 100%;
+}
+
+footer .tagline {
+    font-size: smaller;
+    line-height: 1.3;
+    text-align: right;
+}
+
+/************************************************
+ * Classes
+ ************************************************/
+
+ol.list-inline, ul.list-inline {
+    margin: 0;
+}
+
+ol.list-inline li, ul.list-inline li {
+    display: inline-block;
+    margin: 0;
+}
+
+img.u-pull-left, img.u-pull-right {
+    /* Give some padding so the text isn't too close */
+    padding: 0.2em;
+}
+
+/************************************************
+ * Widgets
+ ************************************************/
+
+/** Navbar widget */
+.navbar {
+    overflow: hidden;
+    border-bottom: 1px solid #bbb;
+    color: #777;
+}
+
+.navbar a {
+    color: #777;
+    text-decoration: none;
+}
+
+.navbar a:hover {
+    color: #1EAEDB;
+}
+
+.navbar .brand {
+    font-size: 18px;
+    line-height: 20px;
+    margin-right: 0.5em;
+}
+
+.navbar ul {
+    list-style: none;
+    display: inline-block;
+    margin: 1em 0;
+}
+
+.navbar li {
+    display: inline-block;
+    padding: 0 1em;
+    margin: 0;
+}
+
+/** Sidebar widget */
+.sidebar h1 {
+    font-size: 2.25em;
+}
+
+.sidebar h2 {
+    font-size: 1.75em;
+}
+
+.sidebar h3 {
+    font-size: 1.3em;
+}
+
+.sidebar h4 {
+    font-size: 1.1em;
+}
+
+.sidebar h5 {
+    font-size: 1em;
+}
+
+
+/** Pager widget */
+ul.pager {
+    list-style: none;
+}
+
+.pager .prev {
+    float: left;
+}
+
+.pager .next {
+    float: right;
+}
+
+/************************************************
+ * Applications
+ */
+
+/** Blog */
+.tags {
+    float: right;
+}
+
