@@ -82,35 +82,43 @@
         <div class="main container">
             <h1 id="NAME">NAME</h1>
 
-<p>Statocles::App::Plain - Plain documents made into pages with no extras</p>
-
-<h1 id="SYNOPSIS">SYNOPSIS</h1>
-
-<pre><code>    my $app = Statocles::App::Plain-&gt;new(
-        url_root =&gt; &#39;/&#39;,
-        store =&gt; &#39;share/root&#39;,
-    );
-    my @pages = $app-&gt;pages;</code></pre>
+<p>Statocles::Deploy::Git - Deploy a site to a Git repository</p>
 
 <h1 id="DESCRIPTION">DESCRIPTION</h1>
 
-<p>This application builds simple pages based on <a href="/Statocles/pod/Statocles/Document.html">documents</a>. Use this to have basic informational pages like &quot;About Us&quot; and &quot;Contact Us&quot;.</p>
+<p>This class allows a site to be deployed to a Git repository.</p>
+
+<p>This class extends <a href="/Statocles/pod/Statocles/Store/File.html">Statocles::Store::File</a>.</p>
 
 <h1 id="ATTRIBUTES">ATTRIBUTES</h1>
 
-<h2 id="url_root">url_root</h2>
+<h2 id="path">path</h2>
 
-<p>The root URL for this application. Required.</p>
+<p>The path to the Git work tree, the root of the repository.</p>
 
-<h2 id="store">store</h2>
+<h2 id="branch">branch</h2>
 
-<p>The <a href="/Statocles/pod/Statocles/Store.html">store</a> containing this app&#39;s documents. Required.</p>
+<p>The Git branch to deploy to. Defaults to &quot;master&quot;. If you&#39;re building a Github Pages site for a project, you probably want to use the &quot;gh-pages&quot; branch.</p>
 
 <h1 id="METHODS">METHODS</h1>
 
-<h2 id="pages">pages</h2>
+<h2 id="deploy-FROM_STORE-MESSAGE">deploy( FROM_STORE, MESSAGE )</h2>
 
-<p>Get the <a href="/Statocles/pod/Statocles/Page.html">pages</a> for this app.</p>
+<p>Deploy the site, copying from the given store. Returns the files deployed.</p>
+
+<h1 id="SEE-ALSO">SEE ALSO</h1>
+
+<dl>
+
+<dt><a href="/Statocles/pod/Statocles/Store/File.html">Statocles::Store::File</a></dt>
+<dd>
+
+</dd>
+<dt><a href="/Statocles/pod/Statocles/Deploy.html">Statocles::Deploy</a></dt>
+<dd>
+
+</dd>
+</dl>
 
 
 

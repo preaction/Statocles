@@ -1,58 +1,10 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
-        <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap-theme.min.css" rel="stylesheet">
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
         <title>Statocles</title>
-        <style type="text/css">
-            main header h1
-            {
-                border-bottom: 4px solid #045578;
-            }
-            header aside {
-                margin-top: 0;
-                font-size: 12pt;
-            }
-            .sidebar h1 {
-                font-size: 14pt;
-            }
-
-            /** Add a line when using the "Continue reading..." link */
-            section:target {
-                padding-top: 0.5em;
-                border-top: 4px solid #045578;
-            }
-
-            /** Don't allow <pre> to push too much */
-            pre {
-                max-width: 100%;
-                overflow-x: scroll;
-            }
-
-            /** <code> is used for input and output, so let it wrap */
-            code {
-                white-space: normal;
-            }
-
-            .tags {
-                float: right;
-            }
-
-            /**
-             * Don't allow main content images to push things around
-             */
-            main img {
-                max-width: 100%;
-            }
-
-            footer .tagline {
-                font-size: smaller;
-                line-height: 1.3;
-                text-align: right;
-            }
-
-        </style>
         <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
 <style>
     h1, h2, h3, h4, h5, h6 {
@@ -64,6 +16,8 @@
         font-family: 'Forum', sans-serif;
         height: 300px;
         position: relative;
+        margin-bottom: 1em;
+        border-bottom: 1px solid #777
     }
     #index-banner:before, #index-banner:after {
         width: 60px;
@@ -97,29 +51,29 @@
     </head>
     <body>
         <header>
-            <nav class="navbar navbar-default navbar-static-top" role="navigation">
+            <nav class="navbar">
                 <div class="container">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                    <div class="navbar-header">
-                        <button class="navbar-toggle" data-target="#top-navbar-collapse-1" data-toggle="collapse" type="button">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <a class="navbar-brand" href="/Statocles/">Statocles</a>
-                    </div>
-                    <!-- Collect the nav links, forms, and other content for toggling -->
-                    <div class="collapse navbar-collapse" id="top-navbar-collapse-1">
-                        <ul class="nav navbar-nav">
-                            <li><a href="/Statocles/blog">Blog</a></li>
-                            <li><a href="/Statocles/pod">Docs</a></li>
-                            <li><a href="http://github.com/preaction/Statocles">Code</a></li>
-                            <li><a href="http://github.com/preaction/Statocles/issues">Bugs</a></li>
-                            <li><a href="http://metacpan.org/pod/Statocles">CPAN</a></li>
-                            <li><a href="https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">IRC</a></li>
-                        </ul>
-                    </div>
+                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <ul>
+                        <li>
+                            <a href="/Statocles/blog">Blog</a>
+                        </li>
+                        <li>
+                            <a href="/Statocles/pod">Docs</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles">Code</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles/issues">Bugs</a>
+                        </li>
+                        <li>
+                            <a href="http://metacpan.org/pod/Statocles">CPAN</a>
+                        </li>
+                        <li>
+                            <a href="https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">IRC</a>
+                        </li>
+                    </ul>
                 </div>
             </nav>
             <a href="https://github.com/preaction/Statocles"><img alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; z-index: 1000; border: 0;"></a>
@@ -162,17 +116,25 @@
 
 <p>We put our blog app under the root URL <code>/blog</code>. All pages that come from this app will start with <code>/blog</code> (except the index page, we&#39;ll move that to <code>/index.html</code>, later).</p>
 
-<h2 id="A-Destination">A Destination</h2>
+<h2 id="Destinations">Destinations</h2>
 
-<p>Before we can generate pages, we need a place to put them. Statocles needs two places, a build directory (a staging area), and a deploy directory (the final destination for the site).</p>
+<p>Before we can generate pages, we need a place to put them. Statocles needs two places, a build directory (a staging area), and a deploy object (the final destination for the site).</p>
 
-<p>For our site, we will make a <code>build</code> directory for our staging area, where we can verify that our site looks correct before we deploy. Our deploy will happen in the root directory of our site (<code>.</code>). This is good for a GitHub Pages site.</p>
+<p>For our site, we will make a <code>build</code> directory for our staging area, where we can verify that our site looks correct before we deploy.</p>
 
-<p>Make sure both of these directories exist:</p>
+<p>Make sure this directory exists:</p>
 
 <pre><code>    $ mkdir build</code></pre>
 
-<p>Though stores are usually just directories, they could also perform an SFTP or FTP or transfer the pages to a CDN (I think I have some evolution to do here).</p>
+<p>For our destination, we need to build a <a href="/Statocles/pod/Statocles/Deploy.html">deploy object</a> for Git repositories using <a href="/Statocles/pod/Statocles/Deploy/Git.html">Statocles::Deploy::Git</a>. Our deploy object will copy files from the <code>build</code> directory into the Git repository. Our deploy will happen in the root directory of our site (<code>.</code>). This is good for a GitHub Pages site.</p>
+
+<pre><code>    github_deploy:
+        class: Statocles::Deploy::Git
+        args:
+            path: .
+            branch: gh-pages</code></pre>
+
+<p>Though we are going to deploy to Git, we could also deploy to SFTP or FTP or transfer the pages to a CDN.</p>
 
 <h2 id="A-Theme">A Theme</h2>
 
@@ -183,15 +145,15 @@
 <p>Now that we&#39;re ready, we can tie it all together. A <a href="/Statocles/pod/Statocles/Site.html">site</a> is a collection of apps that build and deploy to the same place. The special <a href="/Statocles/pod/Statocles/Site/Git.html">git site</a> knows how to deploy to git repositories.</p>
 
 <pre><code>    site:
-        class: Statocles::Site::Git
+        class: Statocles::Site
         args:
             theme: &#39;::default&#39;
             apps:
                 blog:
                     $ref: blog_app
             build_store: &#39;build&#39;
-            deploy_store: &#39;.&#39;
-            deploy_branch: master
+            deploy:
+                $ref: github_deploy
             title: My Site
             index: blog
             nav:
@@ -203,9 +165,9 @@
 
 <p>When adding apps to our site, we give them a name (in this case <code>blog</code>) so that we can refer to them on the command-line (later).</p>
 
-<p>Just like the blog store, the <code>build_store</code> and <code>deploy_store</code> will magically create a Statocles::Store::File object from the path string.</p>
+<p>Just like the blog store, the <code>build_store</code> will magically create a Statocles::Store::File object from the path string.</p>
 
-<p>The git branch we want to deploy to is <code>master</code>. As part of the default template, we can provide a site <code>title</code>.</p>
+<p>As part of the default template, we can provide a site <code>title</code>.</p>
 
 <p>The <code>index</code> attribute gives the name of the app to use as our index page. Since we only have one app, we can only give it the <code>blog</code>. Whatever main page the blog app defines will be moved to the main site index <code>/index.html</code>.</p>
 
@@ -220,15 +182,23 @@
         args:
             url_root: /blog
             store: &#39;blog&#39;
+
+    github_deploy:
+        class: Statocles::Deploy::Git
+        args:
+            path: .
+            branch: gh-pages
+
     site:
-        class: Statocles::Site::Git
+        class: Statocles::Site
         args:
             theme: &#39;::default&#39;
             apps:
                 blog:
                     $ref: blog_app
             build_store: &#39;build&#39;
-            deploy_store: &#39;.&#39;
+            deploy:
+                $ref: github_deploy
             title: My Site
             index: blog
             nav:
@@ -288,7 +258,7 @@
 
 <pre><code>    $ statocles deploy</code></pre>
 
-<p>Running the <code>deploy</code> command will, in the case of the git site, commit the updated pages to the git repository. <code>deploy</code> will try to do a <code>git push</code> automatically, so your changes are now live on Github Pages!</p>
+<p>Running the <code>deploy</code> command will, in the case of the Git deploy, commit the updated pages to the Git repository. <code>deploy</code> will try to do a <code>git push</code> automatically, so your changes are now live on Github Pages!</p>
 
 <h1 id="Adding-More-Apps">Adding More Apps</h1>
 
@@ -382,6 +352,12 @@
 
     static_app:
 
+    github_deploy:
+        class: Statocles::Deploy::Git
+        args:
+            path: .
+            branch: gh-pages
+
     site:
         class: Statocles::Site::Git
         args:
@@ -395,7 +371,8 @@
                     $ref: static_app
 
             build_store: &#39;build&#39;
-            deploy_store: &#39;.&#39;
+            deploy:
+                $ref: github_deploy
 
             title: My Site
             index: blog

@@ -7,6 +7,47 @@
         <description>Blog feed of Statocles</description>
         <generator>Statocles </generator>
         <item>
+            <title>Release v0.034</title>
+            <link>http://preaction.github.io/Statocles/blog/2015/01/25/release-v0.034.html</link>
+            <guid>http://preaction.github.io/Statocles/blog/2015/01/25/release-v0.034.html</guid>
+            <description><![CDATA[
+                <p>Lots of breaking changes in this release, in our ramp-up to the <a href="https://github.com/preaction/Statocles/milestones/beta">beta
+announcement</a>.</p>
+
+<p>The biggest change in this release is the new <a href="/pod/Statocles/Deploy.html">Deploy object</a>.
+The deploy object handles deploying the site to a folder or a Git repository. Future
+possibilities include rsync or FTP, or any command at all.</p>
+
+<p><em>NOTE:</em> This change breaks your site.yml file, so please read <a href="/pod/Statocles/Help/Setup.html">the setup help
+file</a> to fix it.</p>
+
+<p>Some major theme changes were also added, and a new default theme (using <a href="http://getskeleton.com">the
+Skeleton CSS library</a>) was added, removing the need for
+Bootstrap (too big) from a CDN.</p>
+
+<p>The theme is now always deployed with the site, always taking the <code>/theme</code> URL
+path. This allows you to add extra files, CSS, JavaScript, and otherwise, to your
+theme.</p>
+
+<p>The template variables were cleaned up to remove a lot of hashrefs and arrayrefs in favor
+of methods and objects, giving us some type checking and cleaner template code.</p>
+
+<p>There are now generic <code>data</code> attributes on the Site and App objects so you can add
+any random data you want that can then be used in the templates. Expect upcoming
+themes to make good use of this feature!</p>
+
+<p>Full changelog continues below.</p>
+
+                    <p><a href="http://preaction.github.io/Statocles/blog/2015/01/25/release-v0.034.html#section-2">Continue reading...</a></p>
+                <p>Tags:
+                    <a href="/blog/tag/release/index.html">release</a>
+                </p>
+            ]]></description>
+            <pubDate>
+                Sun, 25 Jan 2015 00:00:00 -0600
+            </pubDate>
+        </item>
+        <item>
             <title>Release v0.033</title>
             <link>http://preaction.github.io/Statocles/blog/2015/01/11/release-v0.033.html</link>
             <guid>http://preaction.github.io/Statocles/blog/2015/01/11/release-v0.033.html</guid>
@@ -109,35 +150,6 @@ the following:</p>
             ]]></description>
             <pubDate>
                 Tue, 23 Dec 2014 00:00:00 -0600
-            </pubDate>
-        </item>
-        <item>
-            <title>Release v0.029</title>
-            <link>http://preaction.github.io/Statocles/blog/2014/12/22/release-v0.029.html</link>
-            <guid>http://preaction.github.io/Statocles/blog/2014/12/22/release-v0.029.html</guid>
-            <description><![CDATA[
-                <p>This release adds support for static files to the Store and a new app for
-adding static files to your site.</p>
-
-<p>Since Statocles is meant to be used with a command line, you can now redirect
-input into the "blog post" command. This makes it easy to write scripts that
-generate markdown and use them with the blog.</p>
-
-<p>The Statocles website also got a bit of a facelift, and that revealed a bunch more
-bugs to fix.</p>
-
-<p>There was also a lot of test cleanup in this release, to make future
-development easier.</p>
-
-<p>Full changelog:</p>
-
-                    <p><a href="http://preaction.github.io/Statocles/blog/2014/12/22/release-v0.029.html#section-2">Continue reading...</a></p>
-                <p>Tags:
-                    <a href="/blog/tag/release/index.html">release</a>
-                </p>
-            ]]></description>
-            <pubDate>
-                Mon, 22 Dec 2014 00:00:00 -0600
             </pubDate>
         </item>
     </channel>

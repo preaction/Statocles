@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <title>Statocles</title>
+        <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
+<style>
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Forum', sans-serif;
+        font-weight: bold;
+    }
+
+    #index-banner {
+        font-family: 'Forum', sans-serif;
+        height: 300px;
+        position: relative;
+        margin-bottom: 1em;
+        border-bottom: 1px solid #777
+    }
+    #index-banner:before, #index-banner:after {
+        width: 60px;
+        height: 300px;
+        content: url(/Statocles/theme/images/column.png);
+    }
+    #index-banner:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #index-banner:after {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    #index-banner h1 {
+        padding-top: 1em;
+        text-transform: uppercase;
+        font-size: 72px;
+        text-align: center;
+    }
+    #index-banner h1 small {
+        display: block;
+        font-size: 24px;
+    }
+
+</style>
+
+    </head>
+    <body>
+        <header>
+            <nav class="navbar">
+                <div class="container">
+                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <ul>
+                        <li>
+                            <a href="/Statocles/blog">Blog</a>
+                        </li>
+                        <li>
+                            <a href="/Statocles/pod">Docs</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles">Code</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles/issues">Bugs</a>
+                        </li>
+                        <li>
+                            <a href="http://metacpan.org/pod/Statocles">CPAN</a>
+                        </li>
+                        <li>
+                            <a href="https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">IRC</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <a href="https://github.com/preaction/Statocles"><img alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; z-index: 1000; border: 0;"></a>
+
+        </header>
+        <div class="main container">
+            <h1 id="NAME">NAME</h1>
+
+<p>Statocles::Help::Theme - A guide to making Statocles themes</p>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>A Theme is the &quot;View&quot; class of Statocles. Themes build <a href="/Statocles/pod/Statocles/Template.html">Statocles::Template</a> objects that apps can then attach to a page. Each template has a category and a name. The category usually maps to the application name, or &quot;site&quot; for global site templates. Themes get their templates from a <a href="/Statocles/pod/Statocles/Store.html">Statocles::Store</a>.</p>
+
+<h1 id="Writing-a-Template">Writing a Template</h1>
+
+<p>The default <a href="/Statocles/pod/Statocles/Theme.html">Statocles::Theme</a> uses <a href="https://metacpan.org/pod/Mojo::Template">Mojo::Template</a>, the template class from <a href="https://metacpan.org/pod/Mojolicious">Mojolicious</a>. In the template, there are a few directives that allow you to evaluate Perl code, which is why the templates are also called &quot;.ep&quot; for Embedded Perl.</p>
+
+<pre><code>    # A single leading % means the rest of the line is Perl
+    % if ( $self-&gt;path eq &#39;/index.html&#39; ) {
+
+    # A leading %= means replace with the return value
+    %= $self-&gt;path
+
+    # Inline code can be wrapped in &lt;% ... %&gt;
+    # &lt;%= ... %&gt; is replaced with the return value
+    My name is &lt;%= $self-&gt;name %&gt;
+
+    # Comments are %# and &lt;%# %&gt;
+    %# This is in the template, but not the result
+    &lt;%# A comment %&gt;</code></pre>
+
+<h2 id="Template-Variables">Template Variables</h2>
+
+<p>When an application assembles a <a href="/Statocles/pod/Statocles/Page.html">page object</a>, it sets values inside. The page then gives those values to the template. The common values in every template are:</p>
+
+<pre><code>    $self   - The current L&lt;Statocles::Page|Statocles::Page&gt; object
+    $site   - The current L&lt;Statocles::Site|Statocles::Site&gt; object
+    $app    - The current L&lt;Statocles::App|Statocles::App&gt; object</code></pre>
+
+<p>These objects hold all the data we need to render the page.</p>
+
+<h2 id="Helpers">Helpers</h2>
+
+<p>Helpers are extra functions available to the template.</p>
+
+<dl>
+
+<dt>include</dt>
+<dd>
+
+<p>The <code>include</code> helper allows you to include another template or file. The include will be searched for in the theme directory.</p>
+
+<pre><code>    # Include a template, passing the same variables as the current template
+    %= include &quot;site/before_header.html.ep&quot;
+
+    # Include a file without template processing
+    %= include &quot;site/before_header.html&quot;</code></pre>
+
+<p>If the included path ends with &quot;.ep&quot;, it is treated as a template. Otherwise, it&#39;s just written directly with no processing.</p>
+
+</dd>
+</dl>
+
+<h1 id="Layouts">Layouts</h1>
+
+<p>When a page object is built, it is given a template and a layout. The layout is a special template called <code>layout.html.ep</code> in the <code>site</code> category that wraps the content from the template, allowing a consistent site style in a single place.</p>
+
+<p>The layout generally adds the site&#39;s scaffolding: &lt;html&gt;, &lt;head&gt;, &lt;body&gt;, scripts and stylesheets, header and footer.</p>
+
+<p>The layout gets the exact same template variables that the current page&#39;s template gets, so you have the current page (<code>$self</code>), current site (<code>$site</code>), and current app (<code>$app</code>), in case you need it for the layout.</p>
+
+<h1 id="Stylesheets-and-Scripts">Stylesheets and Scripts</h1>
+
+<p>A site&#39;s theme is deployed to the &quot;/theme&quot; path. If a theme needs extra files, like stylesheets, scripts, and images, they can be added to the theme&#39;s directory and referenced in the HTML from &quot;/theme&quot;.</p>
+
+<pre><code>    # Reference a stylesheet in theme/css/normalize.css
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;/theme/css/normalize.css&quot; /&gt;</code></pre>
+
+<h1 id="Default-Themes">Default Themes</h1>
+
+<p>There is a default theme included with Statocles, with more on the way. The default theme uses <a href="http://getskeleton.com">the Skeleton CSS boilerplate</a> to build a simple, clean starting point for your own theme.</p>
+
+<h1 id="Bundling-Themes">Bundling Themes</h1>
+
+<p>It is unlikely that the default themes will do things exactly as you need. So, Statocles has a command to copy one of the default themes into your site directory so that you can edit it as you need.</p>
+
+<pre><code>    # Bundle the default theme
+    statocles bundle theme default</code></pre>
+
+<h1 id="SEE-ALSO">SEE ALSO</h1>
+
+<dl>
+
+<dt><a href="/Statocles/pod/Statocles/Theme.html">Statocles::Theme</a></dt>
+<dd>
+
+</dd>
+<dt><a href="/Statocles/pod/Statocles/Template.html">Statocles::Template</a></dt>
+<dd>
+
+</dd>
+</dl>
+
+
+
+        </div>
+        <footer>
+            
+            <div class="container tagline">
+                <a href="http://preaction.github.io/Statocles">Made with Statocles</a><br>
+                <a href="http://www.perl.org">Powered by Perl</a>
+            </div>
+        </footer>
+    </body>
+</html>

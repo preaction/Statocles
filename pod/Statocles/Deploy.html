@@ -82,35 +82,45 @@
         <div class="main container">
             <h1 id="NAME">NAME</h1>
 
-<p>Statocles::App::Plain - Plain documents made into pages with no extras</p>
-
-<h1 id="SYNOPSIS">SYNOPSIS</h1>
-
-<pre><code>    my $app = Statocles::App::Plain-&gt;new(
-        url_root =&gt; &#39;/&#39;,
-        store =&gt; &#39;share/root&#39;,
-    );
-    my @pages = $app-&gt;pages;</code></pre>
+<p>Statocles::Deploy - Base role for ways to deploy a site</p>
 
 <h1 id="DESCRIPTION">DESCRIPTION</h1>
 
-<p>This application builds simple pages based on <a href="/Statocles/pod/Statocles/Document.html">documents</a>. Use this to have basic informational pages like &quot;About Us&quot; and &quot;Contact Us&quot;.</p>
+<p>A Statocles::Deploy deploys a site to a destination, like Git, SFTP, or otherwise.</p>
 
 <h1 id="ATTRIBUTES">ATTRIBUTES</h1>
 
-<h2 id="url_root">url_root</h2>
+<h2 id="base_url">base_url</h2>
 
-<p>The root URL for this application. Required.</p>
+<p>The base URL for this deploy. Site URLs will be automatically rewritten to be based on this URL.</p>
 
-<h2 id="store">store</h2>
-
-<p>The <a href="/Statocles/pod/Statocles/Store.html">store</a> containing this app&#39;s documents. Required.</p>
+<p>This allows you to have different versions of the site deployed to different URLs.</p>
 
 <h1 id="METHODS">METHODS</h1>
 
-<h2 id="pages">pages</h2>
+<h2 id="deploy-FROM_STORE-MESSAGE">deploy( FROM_STORE, MESSAGE )</h2>
 
-<p>Get the <a href="/Statocles/pod/Statocles/Page.html">pages</a> for this app.</p>
+<p>Deploy the site, copying from the given <a href="/Statocles/pod/Statocles/Store.html">store object</a>, optionally committing with the given message. Returns a list of file paths deployed.</p>
+
+<p>This must be implemented by the composing class.</p>
+
+<h1 id="SEE-ALSO">SEE ALSO</h1>
+
+<dl>
+
+<dt><a href="/Statocles/pod/Statocles/Deploy/File.html">Statocles::Deploy::File</a></dt>
+<dd>
+
+</dd>
+<dt><a href="/Statocles/pod/Statocles/Deploy/Git.html">Statocles::Deploy::Git</a></dt>
+<dd>
+
+</dd>
+<dt><a href="/Statocles/pod/Statocles/Store.html">Statocles::Store</a></dt>
+<dd>
+
+</dd>
+</dl>
 
 
 
