@@ -54,14 +54,6 @@ C<site>.
 
 Display diagnostic information:
 
-=over
-
-=item *
-
-Reading and writing files
-
-=back
-
 =head2 -h | --help
 
 Display this help file
