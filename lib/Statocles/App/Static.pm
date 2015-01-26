@@ -41,8 +41,15 @@ sub pages {
 
     my @pages;
     my $iter = $self->store->find_files;
-    while ( my $path = $iter->() ) {
+    FILE: while ( my $path = $iter->() ) {
+        # Check for hidden files and folders
         next if $path->basename =~ /^[.]/;
+        my $parent = $path->parent;
+        while ( !$parent->is_rootdir ) {
+            next FILE if $parent->basename =~ /^[.]/;
+            $parent = $parent->parent;
+        }
+
         push @pages, Statocles::Page::File->new(
             path => $path,
             fh => $self->store->open_file( $path ),
