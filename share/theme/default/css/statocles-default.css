@@ -28,6 +28,16 @@ code {
     white-space: normal;
 }
 
+/* Fix <p> inside <li> leaving the list bullet on its own line in Firefox */
+ul {
+    list-style: circle outside;
+    margin-left: 1.4em;
+}
+ol {
+    list-style: decimal outside;
+    margin-left: 1.4em;
+}
+
 .button.disabled {
     cursor: not-allowed;
 }
