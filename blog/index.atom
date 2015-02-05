@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://preaction.github.io/Statocles/blog/index.html</id>
     <title>Statocles</title>
-    <updated>2015-01-25T00:35:12Z</updated>
+    <updated>2015-02-04T21:10:35Z</updated>
     <link href="http://preaction.github.io/Statocles/blog/index.atom" rel="self" />
     <link href="http://preaction.github.io/Statocles/blog/index.html" rel="alternate" />
-    <generator version="">Statocles</generator>
+    <generator version="0.035">Statocles</generator>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2015/01/25/release-v0.034.html</id>
         <title>Release v0.034</title>
@@ -44,7 +44,7 @@ themes to make good use of this feature!</p>
             </p>
         ]]></content>
         <updated>2015-01-25T00:00:00Z</updated>
-        <category term="Statocles::Link=HASH(0x7ff7804174b0)" />
+        <category term="Statocles::Link=HASH(0x7fc2c97a5928)" />
     </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2015/01/11/release-v0.033.html</id>
@@ -64,7 +64,7 @@ will be updated as expected.</p>
             </p>
         ]]></content>
         <updated>2015-01-11T00:00:00Z</updated>
-        <category term="Statocles::Link=HASH(0x7ff780416360)" />
+        <category term="Statocles::Link=HASH(0x7fc2cd8d33b0)" />
     </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2015/01/04/release-v0.032.html</id>
@@ -91,7 +91,7 @@ some locale problems.</p>
             </p>
         ]]></content>
         <updated>2015-01-04T00:00:00Z</updated>
-        <category term="Statocles::Link=HASH(0x7ff780415930)" />
+        <category term="Statocles::Link=HASH(0x7fc2cd8d2af8)" />
     </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2014/12/25/release-v0.031.html</id>
@@ -115,7 +115,7 @@ installed on most of the platforms that people use.</p>
             </p>
         ]]></content>
         <updated>2014-12-25T00:00:00Z</updated>
-        <category term="Statocles::Link=HASH(0x7ff780414c58)" />
+        <category term="Statocles::Link=HASH(0x7fc2c97a57a8)" />
     </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2014/12/23/release-v0.030.html</id>
@@ -149,7 +149,7 @@ the following:</p>
             </p>
         ]]></content>
         <updated>2014-12-23T00:00:00Z</updated>
-        <category term="Statocles::Link=HASH(0x7ff7801a52d0)" />
+        <category term="Statocles::Link=HASH(0x7fc2c97a5190)" />
     </entry>
 </feed>
 

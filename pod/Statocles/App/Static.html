@@ -82,61 +82,27 @@
         <div class="main container">
             <h1 id="NAME">NAME</h1>
 
-<p>Statocles::Test - Common test routines for Statocles</p>
+<p>Statocles::App::Static - Manage static files like CSS, JS, images, and other untemplated content</p>
 
 <h1 id="DESCRIPTION">DESCRIPTION</h1>
 
-<p>This module provides some common test routines for Statocles tests.</p>
+<p>This <a href="/Statocles/pod/Statocles/App.html">Statocles::App</a> manages static content with no processing, perfect for images, stylesheets, scripts, or already-built HTML.</p>
 
-<h1 id="SUBROUTINES">SUBROUTINES</h1>
+<h1 id="ATTRIBUTES">ATTRIBUTES</h1>
 
-<h2 id="build_test_site-site_args">build_test_site( %site_args )</h2>
+<h2 id="url_root">url_root</h2>
 
-<p>Build a site for testing. The build and deploy will be set correctly to temporary directories. <code>%site_args</code> will be given to the <a href="/Statocles/pod/Statocles/Site.html">Statocles::Site</a> constructor.</p>
+<p>The root URL for this application. Required.</p>
 
-<p>You must provide a <code>theme</code> (probably using the one in <code>t/share/theme</code>).</p>
+<h2 id="store">store</h2>
 
-<h2 id="test_constructor-class-args">test_constructor( class, args )</h2>
+<p>The <a href="/Statocles/pod/Statocles/Store.html">store</a> containing this app&#39;s files. Required.</p>
 
-<p>Test an object constructor. <code>class</code> is the class to test. <code>args</code> is a list of name/value pairs with the following keys:</p>
+<h1 id="METHODS">METHODS</h1>
 
-<dl>
+<h2 id="pages">pages</h2>
 
-<dt>required</dt>
-<dd>
-
-<p>A set of name/value pairs for required arguments. These will be tested to ensure they are required. They will be added to every attempt to construct an object.</p>
-
-</dd>
-<dt>default</dt>
-<dd>
-
-<p>A set of name/value pairs for default arguments. These will be tested to ensure they are set to the correct defaults.</p>
-
-</dd>
-</dl>
-
-<h2 id="test_pages-site-app-tests">test_pages( site, app, tests )</h2>
-
-<p>Test the pages of the given app. <code>tests</code> is a set of pairs of <code>path</code> =&gt; <code>callback</code> to test the pages returned by the app.</p>
-
-<p>The <code>callback</code> will be given two arguments:</p>
-
-<dl>
-
-<dt><code>output</code></dt>
-<dd>
-
-<p>The output of the rendered page.</p>
-
-</dd>
-<dt><code>dom</code></dt>
-<dd>
-
-<p>If the page is HTML, a <a href="https://metacpan.org/pod/Mojo::DOM">Mojo::DOM</a> object ready for testing.</p>
-
-</dd>
-</dl>
+<p>Get the <a href="/Statocles/pod/Statocles/Page.html">pages</a> for this app.</p>
 
 
 
