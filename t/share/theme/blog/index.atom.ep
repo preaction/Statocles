@@ -44,7 +44,7 @@
         ]]></content>
 
         % for my $t ( $p->tags ) {
-            <category term="<%= $t %>" />
+            <category term="<%= $t->text %>" />
         % }
     </entry>
     % }

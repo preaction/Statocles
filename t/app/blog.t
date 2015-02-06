@@ -154,6 +154,10 @@ subtest 'pages' => sub {
             cmp_deeply [ $dom->find( 'entry content' )->map( attr => 'type' )->each ],
                 [ ( 'html' ) x 2 ],
                 'content type is correct';
+
+            cmp_deeply [ $dom->find( 'entry category' )->map( attr => 'term' )->each ],
+                [ 'more', 'better', 'even more tags', 'better', 'error message' ],
+                'categories are correct';
         },
 
         '/blog/index.rss' => sub {
