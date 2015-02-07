@@ -21,6 +21,15 @@ if ( $ENV{ NO_CLEANUP } ) {
 
 *_git_run = \&Statocles::Deploy::Git::_git_run;
 
+subtest 'constructor' => sub {
+    test_constructor(
+        'Statocles::Deploy::Git',
+        default => {
+            path => Path::Tiny->new( '.' ),
+        },
+    );
+};
+
 subtest 'deploy' => sub {
     my $tmpdir = tempdir( @temp_args );
     diag "TMP: " . $tmpdir if @temp_args;
