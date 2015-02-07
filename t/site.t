@@ -8,6 +8,19 @@ use Mojo::DOM;
 use Mojo::URL;
 my $SHARE_DIR = path( __DIR__, 'share' );
 
+subtest 'constructor' => sub {
+    test_constructor(
+        'Statocles::Site',
+        required => {
+            build_store => '.',
+            deploy => '.',
+        },
+        default => {
+            theme => Statocles::Theme->new( store => '::default' ),
+        },
+    );
+};
+
 subtest 'site writes application' => sub {
     my $tmpdir = tempdir;
     my $site = test_site( $tmpdir );

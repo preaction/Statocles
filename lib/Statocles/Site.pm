@@ -40,8 +40,10 @@ The L<theme|Statocles::Theme> for this site. All apps share the same theme.
 has theme => (
     is => 'ro',
     isa => Theme,
-    required => 1,
     coerce => Theme->coercion,
+    default => sub {
+        Statocles::Theme->new( store => '::default' );
+    },
 );
 
 =attr apps
