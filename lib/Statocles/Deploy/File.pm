@@ -14,7 +14,7 @@ has path => (
     is => 'ro',
     isa => Dir,
     coerce => Dir->coercion,
-    required => 1,
+    default => sub { Path::Tiny->new( '.' ) },
 );
 
 =method deploy( FROM_STORE, MESSAGE )

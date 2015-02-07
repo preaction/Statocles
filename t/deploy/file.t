@@ -13,6 +13,14 @@ my $build_store = Statocles::Store::File->new(
     path => $SHARE_DIR->child( qw( deploy ) ),
 );
 
+subtest 'constructor' => sub {
+    test_constructor(
+        'Statocles::Deploy::File',
+        default => {
+            path => Path::Tiny->new( '.' ),
+        },
+    );
+};
 
 subtest 'deploy' => sub {
     my $tmpdir = tempdir( @temp_args );
