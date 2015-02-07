@@ -116,8 +116,22 @@ also the store the C<daemon> command reads to serve the site.
 has build_store => (
     is => 'ro',
     isa => Store,
-    required => 1,
-    coerce => Store->coercion,
+    default => sub {
+        my $path = '.statocles-build';
+        if ( !-d $path ) {
+            # Automatically make the build directory
+            mkdir $path;
+        }
+        return Store->coercion->( $path );
+    },
+    coerce => sub {
+        my ( $arg ) = @_;
+        if ( !ref $arg && !-d $arg ) {
+            # Automatically make the build directory
+            mkdir $arg;
+        }
+        return Store->coercion->( $arg );
+    },
 );
 
 =attr deploy
