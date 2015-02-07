@@ -5,6 +5,8 @@ my $SHARE_DIR = path( __DIR__ )->parent->child( 'share' );
 use Statocles::Document;
 use Statocles::Page::Document;
 use Text::Markdown;
+use Statocles::Site;
+my $site = Statocles::Site->new( deploy => tempdir );
 
 my $doc = Statocles::Document->new(
     path => '/path/to/document.markdown',
@@ -38,6 +40,7 @@ subtest 'constructor' => sub {
             document => $doc,
         },
         default => {
+            site => $Statocles::SITE,
             search_change_frequency => 'weekly',
             search_priority => 0.5,
             layout => sub {
@@ -185,6 +188,42 @@ ENDTEMPLATE
         lives_ok { $output = $page->render };
         is $output, "\n";
     };
+};
+
+subtest 'page includes' => sub {
+    my $site = Statocles::Site->new(
+        theme => $SHARE_DIR->child( 'theme' ),
+        deploy => tempdir,
+    );
+
+    my $doc = Statocles::Document->new(
+        path => '/path/to/document.markdown',
+        title => 'Page Title',
+        content => <<'MARKDOWN',
+# Subtitle
+
+This is a paragraph of markdown.
+
+%= include "include/test.markdown.ep", title => $self->title
+MARKDOWN
+    );
+
+    my $page = Statocles::Page::Document->new(
+        document => $doc,
+        path => '/path/to/page.html',
+    );
+
+    my $expect = <<'ENDHTML';
+<h1>Subtitle</h1>
+
+<p>This is a paragraph of markdown.</p>
+
+<h1>Page Title</h1>
+
+
+ENDHTML
+
+    eq_or_diff $page->render, $expect;
 };
 
 done_testing;

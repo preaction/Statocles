@@ -10,10 +10,11 @@ The content of the page, already rendered to HTML.
 
 =cut
 
-has content => (
+has _content => (
     is => 'ro',
     isa => Str,
     required => 1,
+    init_arg => 'content',
 );
 
 =attr last_modified
@@ -28,17 +29,14 @@ has last_modified => (
     default => sub { Time::Piece->new },
 );
 
-=method vars
+=method content
 
-Get the template variables for this page.
+Get the content for this page.
 
 =cut
 
-sub vars {
-    my ( $self ) = @_;
-    return (
-        content => $self->content,
-    );
+sub content {
+    return $_[0]->_content;
 }
 
 1;

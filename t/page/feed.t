@@ -5,6 +5,8 @@ use Statocles::Document;
 use Statocles::Page::List;
 use Statocles::Page::Feed;
 
+my $site = Statocles::Site->new( deploy => tempdir );
+
 my @pages = (
     Statocles::Page::Document->new(
         published => Time::Piece->strptime( '2014-06-04', '%Y-%m-%d' ),

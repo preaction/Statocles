@@ -66,15 +66,19 @@ has '+_links' => (
     default => sub { $_[0]->document->links },
 );
 
-=method content
+=method content( vars )
 
-Generate the document HTML by converting Markdown.
+Generate the document HTML by processing template directives and converting
+Markdown. C<vars> is a set of name-value pairs to give to the template.
 
 =cut
 
 sub content {
-    my ( $self ) = @_;
-    return $self->markdown->markdown( $self->document->content );
+    my ( $self, %vars ) = @_;
+    my $content = $self->document->content;
+    my $tmpl = $self->site->theme->build_template( $self->path, $content );
+    my $rendered = $tmpl->render( %vars, $self->vars );
+    return $self->markdown->markdown( $rendered );
 }
 
 =method vars
@@ -86,7 +90,6 @@ Get the template variables for this page.
 sub vars {
     my ( $self ) = @_;
     return (
-        content => $self->content,
         doc => $self->document,
     );
 }

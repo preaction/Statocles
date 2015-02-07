@@ -5,7 +5,18 @@ use Statocles::Base 'Role';
 use Statocles::Template;
 use Text::Markdown;
 
-requires 'vars';
+=attr site
+
+The site this page is part of.
+
+=cut
+
+has site => (
+    is => 'ro',
+    isa => InstanceOf['Statocles::Site'],
+    lazy => 1,
+    default => sub { $Statocles::SITE },
+);
 
 =attr app
 
@@ -156,6 +167,14 @@ has search_priority => (
     default => sub { 0.5 },
 );
 
+=method vars
+
+Get extra template variables for this page
+
+=cut
+
+sub vars { }
+
 =method render
 
 Render the page, using the L<template|Statocles::Page/template> and wrapping
@@ -165,18 +184,21 @@ with the L<layout|Statocles::Page/layout>.
 
 sub render {
     my ( $self, %args ) = @_;
-    my $content = $self->template->render(
+    my %vars = (
         %args,
         self => $self,
         app => $self->app,
         $self->vars,
     );
+
+    my $content = $self->template->render(
+        ( $self->can( 'content' ) ? ( content => $self->content( %vars ) ) : () ),
+        %vars,
+    );
+
     return $self->layout->render(
-        %args,
-        self => $self,
-        app => $self->app,
-        $self->vars,
         content => $content,
+        %vars,
     );
 }
 
