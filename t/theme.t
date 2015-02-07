@@ -123,7 +123,7 @@ subtest 'template from raw content' => sub {
 
     my $content = <<'ENDTMPL';
 <h1><%= $title %></h1>
-%= include 'include/test.markdown.ep'
+%= include 'include/test.markdown.ep', title => "Other Title"
 ENDTMPL
 
     my %vars = (
@@ -132,7 +132,7 @@ ENDTMPL
 
     my $expect = <<'ENDHTML';
 <h1>Page Title</h1>
-<h1>Page Title</h1>
+<h1>Other Title</h1>
 
 ENDHTML
 

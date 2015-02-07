@@ -49,6 +49,14 @@ subtest 'template include' => sub {
         is $tmpl->render( %args ), "INCLUDE Title\n ENDINCLUDE Title Content\n";
     };
 
+    subtest 'include with arguments' => sub {
+        my $tmpl = Statocles::Template->new(
+            path => $SHARE_DIR->child( 'tmpl', 'include_with_template_args.html.ep' ),
+            store => $SHARE_DIR->child( 'tmpl' ),
+        );
+        eq_or_diff $tmpl->render( %args ), "INCLUDE New Title\n ENDINCLUDE Title Content\n";
+    };
+
     subtest 'include a plain HTML file' => sub {
         my $tmpl = Statocles::Template->new(
             path => $SHARE_DIR->child( 'tmpl', 'include_with_html.html.ep' ),

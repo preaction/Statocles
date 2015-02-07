@@ -120,7 +120,7 @@ sub _prelude {
 
 # Find and include the given file. If it's a template, give it the given vars
 sub _include {
-    my ( $self, $vars, $name ) = @_;
+    my ( $self, $vars, $name, %args ) = @_;
     if ( !$self->has_store ) {
         die qq{Can not include: No store!};
     }
@@ -133,7 +133,7 @@ sub _include {
                 content => $store->read_file( "$name" ),
                 store => $store,
             );
-            return $inner_tmpl->render( %$vars );
+            return $inner_tmpl->render( %$vars, %args );
         }
 
         return $store->read_file( $name );
