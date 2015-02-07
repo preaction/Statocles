@@ -86,7 +86,7 @@ subtest 'pages' => sub {
             }
         },
 
-        '/blog/page-2.html' => sub {
+        '/blog/page/2/index.html' => sub {
             my ( $html, $dom ) = @_;
 
             cmp_deeply [ $dom->find( 'h1 a' )->map( 'text' )->each ],
@@ -225,7 +225,7 @@ subtest 'pages' => sub {
             }
         },
 
-        '/blog/tag/better/page-2.html' => sub {
+        '/blog/tag/better/page/2/index.html' => sub {
             my ( $html, $dom ) = @_;
 
             cmp_deeply [ $dom->find( 'h1 a' )->map( 'text' )->each ],
