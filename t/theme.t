@@ -116,6 +116,30 @@ subtest 'templates from directory' => sub {
     };
 };
 
+subtest 'template from raw content' => sub {
+    my $theme = Statocles::Theme->new(
+        store => $SHARE_DIR->child( 'theme' ),
+    );
+
+    my $content = <<'ENDTMPL';
+<h1><%= $title %></h1>
+%= include 'include/test.markdown.ep'
+ENDTMPL
+
+    my %vars = (
+        title => 'Page Title',
+    );
+
+    my $expect = <<'ENDHTML';
+<h1>Page Title</h1>
+<h1>Page Title</h1>
+
+ENDHTML
+
+    my $tmpl = $theme->build_template( "test/path.html", $content );
+    eq_or_diff $tmpl->render( %vars ), $expect;
+};
+
 subtest 'theme caching' => sub {
     my $theme = Statocles::Theme->new(
         store => '::default',

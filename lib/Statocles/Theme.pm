@@ -74,6 +74,18 @@ sub read {
         }
     }
 
+    return $self->build_template( $path, $content );
+}
+
+=method build_template( $path, $content  )
+
+Build a new L<Statocles::Template> object with the given C<path> and C<content>.
+
+=cut
+
+sub build_template {
+    my ( $self, $path, $content ) = @_;
+
     return Statocles::Template->new(
         path => $path,
         content => $content,
