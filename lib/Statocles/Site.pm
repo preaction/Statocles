@@ -86,7 +86,7 @@ are defined by your L<theme|Statocles::Theme>. For example:
         main => [
             {
                 title => 'Blog',
-                href => '/blog/index.html',
+                href => '/blog',
             },
             {
                 title => 'Contact',
@@ -340,10 +340,15 @@ sub url {
     my $base    = $self->_write_deploy && $self->_write_deploy->base_url
                 ? $self->_write_deploy->base_url
                 : $self->base_url;
+
+    # Remove index.html from the end of the path, since it's redundant
+    $path =~ s{/index[.]html$}{};
+
     # Remove the / from both sides of the join so we don't double up
     $base =~ s{/$}{};
     $path =~ s{^/}{};
-    return join "/", $base, $path;
+
+    return join "/", $base, ( $path || !$base ? ( $path ) : () );
 }
 
 1;

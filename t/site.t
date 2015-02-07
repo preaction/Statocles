@@ -184,13 +184,13 @@ subtest 'sitemap.xml and robots.txt' => sub {
         '/blog/2014/04/30/plug.html' => '2014-04-30',
         '/blog/2014/05/22/(regex)[name].file.html' => '2014-05-22',
         '/blog/2014/06/02/more_tags.html' => '2014-06-02',
-        '/index.html' => '2014-06-02',
+        '' => '2014-06-02',
         '/blog/page-2.html' => '2014-06-02',
-        '/blog/tag/more/index.html' => '2014-06-02',
-        '/blog/tag/better/index.html' => '2014-06-02',
+        '/blog/tag/more' => '2014-06-02',
+        '/blog/tag/better' => '2014-06-02',
         '/blog/tag/better/page-2.html' => '2014-06-02',
-        '/blog/tag/error-message/index.html' => '2014-05-22',
-        '/blog/tag/even-more-tags/index.html' => '2014-06-02',
+        '/blog/tag/error-message' => '2014-05-22',
+        '/blog/tag/even-more-tags' => '2014-06-02',
     );
 
     my @posts = qw(
@@ -200,15 +200,14 @@ subtest 'sitemap.xml and robots.txt' => sub {
         /blog/2014/06/02/more_tags.html
     );
 
-    my @lists = qw(
-        /index.html
+    my @lists = ( '', qw(
         /blog/page-2.html
-        /blog/tag/more/index.html
-        /blog/tag/better/index.html
+        /blog/tag/more
+        /blog/tag/better
         /blog/tag/better/page-2.html
-        /blog/tag/error-message/index.html
-        /blog/tag/even-more-tags/index.html
-    );
+        /blog/tag/error-message
+        /blog/tag/even-more-tags
+    ) );
 
     my @expect = (
         ( # List pages
@@ -275,10 +274,12 @@ subtest 'site urls' => sub {
             base_url => 'http://example.com/',
         );
 
-        is $site->url( '/index.html' ),
-           'http://example.com/index.html';
         is $site->url( '/blog/2014/01/01/a-page.html' ),
            'http://example.com/blog/2014/01/01/a-page.html';
+        subtest 'index.html is removed' => sub {
+            is $site->url( '/index.html' ),
+               'http://example.com';
+        };
     };
 
     subtest 'domain and folder' => sub {
@@ -287,10 +288,12 @@ subtest 'site urls' => sub {
             base_url => 'http://example.com/folder',
         );
 
-        is $site->url( '/index.html' ),
-           'http://example.com/folder/index.html';
         is $site->url( '/blog/2014/01/01/a-page.html' ),
            'http://example.com/folder/blog/2014/01/01/a-page.html';
+        subtest 'index.html is removed' => sub {
+            is $site->url( '/index.html' ),
+               'http://example.com/folder';
+        };
     };
 
     subtest 'stores with base_url' => sub {
@@ -302,13 +305,17 @@ subtest 'site urls' => sub {
             base_url => '',
         );
 
-        is $site->url( '/index.html' ), '/index.html';
         is $site->url( '/blog/2014/01/01/a-page.html' ), '/blog/2014/01/01/a-page.html';
+        subtest 'index.html is removed' => sub {
+            is $site->url( '/index.html' ), '/';
+        };
 
         subtest 'current writing deploy overrides site base url' => sub {
             $site->_write_deploy( $site->deploy );
-            is $site->url( '/index.html' ), 'http://example.com/index.html';
             is $site->url( '/blog/2014/01/01/a-page.html' ), 'http://example.com/blog/2014/01/01/a-page.html';
+            subtest 'index.html is removed' => sub {
+                is $site->url( '/index.html' ), 'http://example.com';
+            };
         };
     };
 

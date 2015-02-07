@@ -67,10 +67,10 @@ subtest 'pages' => sub {
 
             cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
                 bag( qw(
-                    /blog/tag/better/index.html
-                    /blog/tag/error-message/index.html
-                    /blog/tag/more/index.html
-                    /blog/tag/even-more-tags/index.html
+                    /blog/tag/better
+                    /blog/tag/error-message
+                    /blog/tag/more
+                    /blog/tag/even-more-tags
                 ) ),
                 'tag list is available';
 
@@ -103,10 +103,10 @@ subtest 'pages' => sub {
 
             cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
                 bag( qw(
-                    /blog/tag/better/index.html
-                    /blog/tag/error-message/index.html
-                    /blog/tag/more/index.html
-                    /blog/tag/even-more-tags/index.html
+                    /blog/tag/better
+                    /blog/tag/error-message
+                    /blog/tag/more
+                    /blog/tag/even-more-tags
                 ) ),
                 'tag list is available';
 
@@ -126,12 +126,12 @@ subtest 'pages' => sub {
         '/blog/index.atom' => sub {
             my ( $atom, $dom ) = @_;
 
-            is $dom->at( 'feed > id' )->text, 'http://example.com/blog/index.html';
+            is $dom->at( 'feed > id' )->text, 'http://example.com/blog';
             is $dom->at( 'feed > title' )->text, 'Example Site';
             like $dom->at( 'feed > updated' )->text, qr{^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z};
 
             is $dom->at( 'feed > link[rel=self]' )->attr( 'href' ), 'http://example.com/blog/index.atom';
-            is $dom->at( 'feed > link[rel=alternate]' )->attr( 'href' ), 'http://example.com/blog/index.html';
+            is $dom->at( 'feed > link[rel=alternate]' )->attr( 'href' ), 'http://example.com/blog';
 
             is $dom->at( 'feed > generator' )->text, 'Statocles';
             is $dom->at( 'feed > generator' )->attr( 'version' ), $Statocles::VERSION;
@@ -164,7 +164,7 @@ subtest 'pages' => sub {
             my ( $rss, $dom ) = @_;
 
             is $dom->at( 'channel > title' )->text, 'Example Site';
-            is $dom->at( 'channel > link' )->text, 'http://example.com/blog/index.html';
+            is $dom->at( 'channel > link' )->text, 'http://example.com/blog';
             is $dom->at( 'channel > description' )->text, 'Blog feed of Example Site';
 
             is $dom->at( 'channel > link[rel=self]' )->attr( 'href' ),
@@ -206,10 +206,10 @@ subtest 'pages' => sub {
 
             cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
                 bag( qw(
-                    /blog/tag/better/index.html
-                    /blog/tag/error-message/index.html
-                    /blog/tag/more/index.html
-                    /blog/tag/even-more-tags/index.html
+                    /blog/tag/better
+                    /blog/tag/error-message
+                    /blog/tag/more
+                    /blog/tag/even-more-tags
                 ) ),
                 'tag list is available';
 
@@ -242,10 +242,10 @@ subtest 'pages' => sub {
 
             cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
                 bag( qw(
-                    /blog/tag/better/index.html
-                    /blog/tag/error-message/index.html
-                    /blog/tag/more/index.html
-                    /blog/tag/even-more-tags/index.html
+                    /blog/tag/better
+                    /blog/tag/error-message
+                    /blog/tag/more
+                    /blog/tag/even-more-tags
                 ) ),
                 'tag list is available';
 
@@ -278,10 +278,10 @@ subtest 'pages' => sub {
 
             cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
                 bag( qw(
-                    /blog/tag/better/index.html
-                    /blog/tag/error-message/index.html
-                    /blog/tag/more/index.html
-                    /blog/tag/even-more-tags/index.html
+                    /blog/tag/better
+                    /blog/tag/error-message
+                    /blog/tag/more
+                    /blog/tag/even-more-tags
                 ) ),
                 'tag list is available';
 
@@ -312,10 +312,10 @@ subtest 'pages' => sub {
 
             cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
                 bag( qw(
-                    /blog/tag/better/index.html
-                    /blog/tag/error-message/index.html
-                    /blog/tag/more/index.html
-                    /blog/tag/even-more-tags/index.html
+                    /blog/tag/better
+                    /blog/tag/error-message
+                    /blog/tag/more
+                    /blog/tag/even-more-tags
                 ) ),
                 'tag list is available';
 
@@ -346,10 +346,10 @@ subtest 'pages' => sub {
 
             cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
                 bag( qw(
-                    /blog/tag/better/index.html
-                    /blog/tag/error-message/index.html
-                    /blog/tag/more/index.html
-                    /blog/tag/even-more-tags/index.html
+                    /blog/tag/better
+                    /blog/tag/error-message
+                    /blog/tag/more
+                    /blog/tag/even-more-tags
                 ) ),
                 'tag list is available';
 
@@ -369,14 +369,14 @@ subtest 'pages' => sub {
         '/blog/tag/better.atom' => sub {
             my ( $atom, $dom ) = @_;
 
-            is $dom->at( 'feed > id' )->text, 'http://example.com/blog/tag/better/index.html';
+            is $dom->at( 'feed > id' )->text, 'http://example.com/blog/tag/better';
             is $dom->at( 'feed > title' )->text, 'Example Site';
             like $dom->at( 'feed > updated' )->text, qr{^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z};
 
             is $dom->at( 'feed > link[rel=self]' )->attr( 'href' ),
                 'http://example.com/blog/tag/better.atom';
             is $dom->at( 'feed > link[rel=alternate]' )->attr( 'href' ),
-                'http://example.com/blog/tag/better/index.html';
+                'http://example.com/blog/tag/better';
 
             is $dom->at( 'feed > generator' )->text, 'Statocles';
             is $dom->at( 'feed > generator' )->attr( 'version' ), $Statocles::VERSION;
@@ -405,7 +405,7 @@ subtest 'pages' => sub {
             my ( $rss, $dom ) = @_;
 
             is $dom->at( 'channel > title' )->text, 'Example Site';
-            is $dom->at( 'channel > link' )->text, 'http://example.com/blog/tag/better/index.html';
+            is $dom->at( 'channel > link' )->text, 'http://example.com/blog/tag/better';
             is $dom->at( 'channel > description' )->text, 'Blog feed of Example Site';
 
             is $dom->at( 'channel > link[rel=self]' )->attr( 'href' ),
@@ -433,7 +433,7 @@ subtest 'pages' => sub {
             my ( $atom, $dom ) = @_;
 
             is $dom->at( 'feed > id' )->text,
-                'http://example.com/blog/tag/error-message/index.html';
+                'http://example.com/blog/tag/error-message';
             is $dom->at( 'feed > title' )->text, 'Example Site';
             like $dom->at( 'feed > updated' )->text,
                 qr{^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z};
@@ -441,7 +441,7 @@ subtest 'pages' => sub {
             is $dom->at( 'feed > link[rel=self]' )->attr( 'href' ),
                 'http://example.com/blog/tag/error-message.atom';
             is $dom->at( 'feed > link[rel=alternate]' )->attr( 'href' ),
-                'http://example.com/blog/tag/error-message/index.html';
+                'http://example.com/blog/tag/error-message';
 
             is $dom->at( 'feed > generator' )->text, 'Statocles';
             is $dom->at( 'feed > generator' )->attr( 'version' ), $Statocles::VERSION;
@@ -469,7 +469,7 @@ subtest 'pages' => sub {
             my ( $rss, $dom ) = @_;
 
             is $dom->at( 'channel > title' )->text, 'Example Site';
-            is $dom->at( 'channel > link' )->text, 'http://example.com/blog/tag/error-message/index.html';
+            is $dom->at( 'channel > link' )->text, 'http://example.com/blog/tag/error-message';
             is $dom->at( 'channel > description' )->text, 'Blog feed of Example Site';
 
             is $dom->at( 'channel > link[rel=self]' )->attr( 'href' ),
@@ -496,7 +496,7 @@ subtest 'pages' => sub {
             my ( $atom, $dom ) = @_;
 
             is $dom->at( 'feed > id' )->text,
-                'http://example.com/blog/tag/more/index.html';
+                'http://example.com/blog/tag/more';
             is $dom->at( 'feed > title' )->text, 'Example Site';
             like $dom->at( 'feed > updated' )->text,
                 qr{^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z};
@@ -504,7 +504,7 @@ subtest 'pages' => sub {
             is $dom->at( 'feed > link[rel=self]' )->attr( 'href' ),
                 'http://example.com/blog/tag/more.atom';
             is $dom->at( 'feed > link[rel=alternate]' )->attr( 'href' ),
-                'http://example.com/blog/tag/more/index.html';
+                'http://example.com/blog/tag/more';
 
             is $dom->at( 'feed > generator' )->text, 'Statocles';
             is $dom->at( 'feed > generator' )->attr( 'version' ), $Statocles::VERSION;
@@ -530,7 +530,7 @@ subtest 'pages' => sub {
             my ( $rss, $dom ) = @_;
 
             is $dom->at( 'channel > title' )->text, 'Example Site';
-            is $dom->at( 'channel > link' )->text, 'http://example.com/blog/tag/more/index.html';
+            is $dom->at( 'channel > link' )->text, 'http://example.com/blog/tag/more';
             is $dom->at( 'channel > description' )->text, 'Blog feed of Example Site';
 
             is $dom->at( 'channel > link[rel=self]' )->attr( 'href' ),
@@ -557,7 +557,7 @@ subtest 'pages' => sub {
             my ( $atom, $dom ) = @_;
 
             is $dom->at( 'feed > id' )->text,
-                'http://example.com/blog/tag/even-more-tags/index.html';
+                'http://example.com/blog/tag/even-more-tags';
             is $dom->at( 'feed > title' )->text, 'Example Site';
             like $dom->at( 'feed > updated' )->text,
                 qr{^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z};
@@ -565,7 +565,7 @@ subtest 'pages' => sub {
             is $dom->at( 'feed > link[rel=self]' )->attr( 'href' ),
                 'http://example.com/blog/tag/even-more-tags.atom';
             is $dom->at( 'feed > link[rel=alternate]' )->attr( 'href' ),
-                'http://example.com/blog/tag/even-more-tags/index.html';
+                'http://example.com/blog/tag/even-more-tags';
 
             is $dom->at( 'feed > generator' )->text, 'Statocles';
             is $dom->at( 'feed > generator' )->attr( 'version' ), $Statocles::VERSION;
@@ -592,7 +592,7 @@ subtest 'pages' => sub {
 
             is $dom->at( 'channel > title' )->text, 'Example Site';
             is $dom->at( 'channel > link' )->text,
-                'http://example.com/blog/tag/even-more-tags/index.html';
+                'http://example.com/blog/tag/even-more-tags';
             is $dom->at( 'channel > description' )->text, 'Blog feed of Example Site';
 
             is $dom->at( 'channel > link[rel=self]' )->attr( 'href' ),
@@ -643,7 +643,7 @@ subtest 'pages' => sub {
             cmp_deeply [ $dom->find( '.tags a' )->map( 'text' )->each ],
                 [ 'better' ];
             cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
-                [ '/blog/tag/better/index.html' ];
+                [ '/blog/tag/better' ];
 
             ok !scalar $dom->find( '.alternate' )->each, 'no alternate';
 
@@ -662,8 +662,8 @@ subtest 'pages' => sub {
                 bag( 'better', 'error message' );
             cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
                 bag(
-                    '/blog/tag/better/index.html',
-                    '/blog/tag/error-message/index.html',
+                    '/blog/tag/better',
+                    '/blog/tag/error-message',
                 );
 
             ok !scalar $dom->find( '.alternate' )->each, 'no alternate';
@@ -683,9 +683,9 @@ subtest 'pages' => sub {
                 bag( 'more', 'better', 'even more tags' );
             cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
                 bag(
-                    '/blog/tag/more/index.html',
-                    '/blog/tag/better/index.html',
-                    '/blog/tag/even-more-tags/index.html',
+                    '/blog/tag/more',
+                    '/blog/tag/better',
+                    '/blog/tag/even-more-tags',
                 );
 
             # alternate, blogs.perl.org, http://blogs.perl.org/preaction/404.html

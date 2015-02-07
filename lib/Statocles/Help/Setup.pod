@@ -50,7 +50,7 @@ L<Statocles blog app|Statocles::App::Blog>:
 
 We put our blog app under the root URL C</blog>. All pages that come from this
 app will start with C</blog> (except the index page, we'll move that to
-C</index.html>, later).
+C</>, later).
 
 =head2 Destinations
 
@@ -109,7 +109,7 @@ site|Statocles::Site::Git> knows how to deploy to git repositories.
             nav:
                 main:
                     - title: Blog
-                      href: /index.html
+                      href: /
 
 We define our theme with the string C<::default>, which will get magically
 coerced into a L<theme object|Statocles::Theme>.
@@ -124,7 +124,7 @@ As part of the default template, we can provide a site C<title>.
 
 The C<index> attribute gives the name of the app to use as our index page.
 Since we only have one app, we can only give it the C<blog>. Whatever main page
-the blog app defines will be moved to the main site index C</index.html>.
+the blog app defines will be moved to the main site index C</>.
 
 Finally, we can define a C<nav> list, again giving a name: C<main>. The
 default template uses the C<main> nav across the top.
@@ -161,7 +161,7 @@ your own site.
             nav:
                 main:
                     - title: Blog
-                      href: /index.html
+                      href: /
 
 B<NOTE:> One of the most useful things about using a dependency injection
 module is that you can easily plug-in your own classes. If you want to use your
@@ -314,7 +314,7 @@ Now we should probably make a link in our main nav to the new about page:
             nav:
                 main:
                     - title: Blog
-                      href: /index.html
+                      href: /
                     - title: About
                       href: /about.html
 
@@ -365,7 +365,7 @@ Along with the blog app and our other settings, here is our new, complete site.y
             nav:
                 main:
                     - title: Blog
-                      href: /index.html
+                      href: /
                     - title: About
                       href: /about.html
 
