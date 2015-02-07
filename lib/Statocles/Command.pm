@@ -161,6 +161,7 @@ sub main {
     # We could fix this in the future by moving this out into its own module,
     # that is only loaded after we are done passing @ARGV into main(), above.
     use Mojo::Base 'Mojolicious';
+    use File::Share qw( dist_dir );
     has 'site';
 
     sub startup {
@@ -201,7 +202,11 @@ sub main {
                 }
             }
 
-            push @{ $watches{ $self->site->theme->store->path } }, $self->site->theme;
+            # Watch the theme, but not built-in themes
+            my $theme_path = $self->site->theme->store->path;
+            if ( !Path::Tiny->new( dist_dir( 'Statocles' ) )->subsumes( $theme_path ) ) {
+                push @{ $watches{ $theme_path } }, $self->site->theme;
+            }
 
             require Mojo::IOLoop::Stream;
             my $ioloop = Mojo::IOLoop->singleton;
