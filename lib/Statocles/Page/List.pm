@@ -91,10 +91,15 @@ sub paginate {
     for my $i ( 0..$#sets ) {
         my $path = $index && $i == 0 ? $index : sprintf( $path_format, $i + 1 );
         my $prev = $index && $i == 1 ? $index : sprintf( $path_format, $i );
+        my $next = $i != $#sets ? sprintf( $path_format, $i + 2 ) : '';
+
+        # Remove index.html from link URLs
+        s{/index[.]html$}{} for ( $prev, $next );
+
         push @retval, $class->new(
             path => $path,
             pages => [ @{$pages}[ @{ $sets[$i] } ] ],
-            ( $i != $#sets ? ( next => sprintf( $path_format, $i + 2 ) ) : () ),
+            ( $next ? ( next => $next ) : () ),
             ( $i > 0 ? ( prev => $prev ) : () ),
             published => $pages->[0]->last_modified,
             %args,

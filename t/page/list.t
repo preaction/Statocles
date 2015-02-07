@@ -179,6 +179,7 @@ subtest 'pagination' => sub {
                 'all paginated pages have the same last modified';
         };
     };
+
     subtest 'with index' => sub {
         subtest 'multiple pages' => sub {
             my @paged_lists = Statocles::Page::List->paginate(
@@ -199,7 +200,7 @@ subtest 'pagination' => sub {
                     path => '/blog/page-2.html',
                     pages => [ $pages[1] ],
                     next => '/blog/page-3.html',
-                    prev => '/blog/index.html',
+                    prev => '/blog',
                     published => $pages[0]->last_modified,
                 ),
                 Statocles::Page::List->new(
@@ -216,6 +217,64 @@ subtest 'pagination' => sub {
         subtest 'single page' => sub {
             my @paged_lists = Statocles::Page::List->paginate(
                 path => '/blog/page-%i.html',
+                index => '/blog/index.html',
+                pages => \@pages,
+                after => scalar @pages,
+            );
+
+            my @exp_pages = (
+                Statocles::Page::List->new(
+                    path => '/blog/index.html',
+                    pages => [ @pages ],
+                    published => $pages[0]->last_modified,
+                ),
+            );
+
+            cmp_deeply \@paged_lists, \@exp_pages,
+                or diag explain \@paged_lists, \@exp_pages;
+            cmp_deeply \@paged_lists,
+                array_each( methods( last_modified => $pages[0]->last_modified ) ),
+                'all paginated pages have the same last modified';
+        };
+    };
+
+    subtest 'with directories' => sub {
+        subtest 'multiple pages' => sub {
+            my @paged_lists = Statocles::Page::List->paginate(
+                path => '/blog/page/%i/index.html',
+                pages => \@pages,
+                after => 1,
+                index => '/blog/index.html',
+            );
+
+            my @exp_pages = (
+                Statocles::Page::List->new(
+                    path => '/blog/index.html',
+                    pages => [ $pages[0] ],
+                    next => '/blog/page/2',
+                    published => $pages[0]->last_modified,
+                ),
+                Statocles::Page::List->new(
+                    path => '/blog/page/2/index.html',
+                    pages => [ $pages[1] ],
+                    next => '/blog/page/3',
+                    prev => '/blog',
+                    published => $pages[0]->last_modified,
+                ),
+                Statocles::Page::List->new(
+                    path => '/blog/page/3/index.html',
+                    pages => [ $pages[2] ],
+                    prev => '/blog/page/2',
+                    published => $pages[0]->last_modified,
+                ),
+            );
+
+            cmp_deeply \@paged_lists, \@exp_pages,
+                or diag explain \@paged_lists, \@exp_pages;
+        };
+        subtest 'single page' => sub {
+            my @paged_lists = Statocles::Page::List->paginate(
+                path => '/blog/page/%i/index.html',
                 index => '/blog/index.html',
                 pages => \@pages,
                 after => scalar @pages,
