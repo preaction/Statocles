@@ -1,0 +1,159 @@
+# PODNAME: Statocles::Help::Deploy
+# ABSTRACT: How to deploy a Statocles site
+
+=head1 DESCRIPTION
+
+This document describes various ways to deploy a Statocles site.
+
+=head1 Github Pages
+
+By far the easiest way is to deploy to a L<Github Pages|http://pages.github.com>
+site (though you can L<make your own Git-based deployment|/"Custom Git Deploy">
+as well).
+
+=head2 user.github.io
+
+To make a user site, accessed at http://user.github.io, you need to create a
+repository called "<user>.github.io", replacing <user> with your username.
+
+Once you have that, you can start your Statocles site. Your deploy is
+configured very simply, with the default branch of "master" being correct:
+
+    # site.yml
+    gh_deploy:
+        class: Statocles::Deploy::Git
+
+    site:
+        class: Statocles::Site
+        args:
+            deploy: { $ref: gh_deploy }
+
+=head2 user.github.io/project
+
+If you have an existing project that you want to add a Github Pages site to,
+you can do so by creating a branch named "gh-pages". Create the branch as an
+orphan branch so that you don't attach yourself to the regular history of the
+project. Leaving the branch attached to the main history can make things a bit
+more complicated if that history needs to change, but git will also show the
+branches as related in a graph (which they are not).
+
+    $ git checkout -b --orphan gh-pages
+    $ git reset --hard 'HEAD'
+    $ git add .gitignore
+    $ git commit -m'starting github pages site'
+    $ git checkout master
+
+Now we just have to configure a Git deploy to point to our "gh-pages" branch.
+
+    # site.yml
+    gh_deploy:
+        class: Statocles::Deploy::Git
+        args:
+            branch: gh-pages
+
+    site:
+        class: Statocles::Site
+        args:
+            deploy: { $ref: gh_deploy }
+
+=head1 Custom Git Deploy
+
+To create a Github-Pages-like deploy without hosting on Github, you need a few things:
+
+=over 4
+
+=item 1
+
+A bare repository to push to
+
+=item 2
+
+A git hook to check out the site's files
+
+=back
+
+To set up a bare repository to push to, I recommend
+L<gitolite|http://gitolite.com>. Gitolite manages git repositories for you,
+making it easy to add/remove them.
+
+If you do not want to use gitolite, you can probably just use SSH:
+
+    $ ssh example.com
+    $ mkdir www.example.com
+    $ cd www.example.com
+    $ git init --bare
+
+Before we're done on the server, we need to add our git hook. Since a bare repo
+doesn't have a working copy of the files, the hook is going to check out the
+site's HTML files into a directory we specify (we'll use
+C</var/www/www.example.com> for this example... dot com)
+
+    $ mkdir /var/www/www.example.com
+    $ echo "GIT_WORK_TREE=/var/www/www.example.com git checkout -f" > hooks/post-receive
+    $ chmod +x hooks/post-receive
+    $ exit
+
+Now that the bare repository is ready, you can deploy your site. First, we add
+the remote manually:
+
+    $ git remote add deploy ssh://example.com/www.example.com.git
+
+Now we can set up our Deploy object:
+
+    # site.yml
+    git_deploy:
+        class: Statocles::Deploy::Git
+        args:
+            remote: deploy
+
+And give it to our site:
+
+    # site.yml
+    site:
+        class: Statocles::Site
+        args:
+            deploy: { $ref: git_deploy }
+
+Now when we run C<statocles deploy>, our repository will be updated and so will
+our web root C</var/www/www.example.com>.
+
+=begin comment
+
+# XXX: Make Statocles::Deploy::Command for this!
+
+=head1 Deploy Command
+
+Any command can be used to deploy a Statocles site with
+L<Statocles::Deploy::Command>. If you use C<rsync> or C<sftp> or C<scp> or C<ftp>, you
+can deploy your Statocles site.
+
+To deploy via rsync, set up your command like so:
+
+    # site.yml
+    rsync_deploy:
+        class: Statocles::Deploy::Command
+        args:
+            command: 'rsync -avz www.example.com:/var/www/www.example.com'
+
+By default, the build directory will get appended to the command, so the full
+command that will be run is:
+
+    $ rsync -avz example.com:/var/www/www.example.com .statocles-build
+
+If you need to put the build directory somewhere other than the end of the
+command, you can use C<{}> to indicate where the build directory should be
+placed.
+
+    # site.yml
+    cp_deploy:
+        class: Statocles::Deploy::Command
+        args:
+            command: 'cp -R {}/* /var/www/www.example.com'
+
+=end comment
+
+=head1 Custom Deploy Module
+
+If none of these work for you, you can build your own deploy module. See
+L<Statocles::Deploy> for details.
+

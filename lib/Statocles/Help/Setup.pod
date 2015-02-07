@@ -372,3 +372,11 @@ Along with the blog app and our other settings, here is our new, complete site.y
 If we're satisfied with our new About page, we can deploy our site with
 C<statocles deploy>.
 
+=head1 SEE ALSO
+
+=over 4
+
+=item L<How to deploy a Statocles site|Statocles::Help::Deploy>
+
+=back
+
