@@ -23,6 +23,18 @@ has branch => (
     default => sub { 'master' },
 );
 
+=attr remote
+
+The name of the remote to deploy to. Defaults to 'origin'.
+
+=cut
+
+has remote => (
+    is => 'ro',
+    isa => Str,
+    default => sub { 'origin' },
+);
+
 =method deploy( FROM_STORE, MESSAGE )
 
 Deploy the site, copying from the given store. Returns the files deployed.
@@ -52,8 +64,8 @@ around 'deploy' => sub {
     # Commit the files
     _git_run( $git, add => @files );
     _git_run( $git, commit => -m => $message || "Site update" );
-    if ( _has_remote( $git, 'origin' ) ) {
-        _git_run( $git, push => origin => $self->branch );
+    if ( _has_remote( $git, $self->remote ) ) {
+        _git_run( $git, push => $self->remote => $self->branch );
     }
 
     # Tidy up

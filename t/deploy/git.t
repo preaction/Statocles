@@ -41,10 +41,6 @@ subtest 'deploy' => sub {
     # Changed/added files not in the build directory do not get added
     $workdir->child( 'NEWFILE' )->spew( 'test' );
 
-    # Origin must be on a different branch in order for push to work
-    _git_run( $remotegit, branch => 'safe' );
-    _git_run( $remotegit, checkout => 'safe' );
-
     $deploy->deploy( $build_store );
 
     is current_branch( $git ), 'master', 'deploy leaves us on the branch we came from';
@@ -84,10 +80,38 @@ subtest 'deploy' => sub {
     };
 };
 
+subtest 'deploy to specific remote' => sub {
+    my $tmpdir = tempdir( @temp_args );
+    diag "TMP: " . $tmpdir if @temp_args;
+
+    my ( $deploy, $build_store, $workdir, $remotedir )
+        = make_deploy( $tmpdir, branch => 'master', remote => 'deploy' );
+
+    my $remotework = $tmpdir->child( 'remote_work' );
+    $remotework->mkpath;
+
+    my $git = Git::Repository->new( work_tree => "$workdir" );
+    my $remotegit = Git::Repository->new( git_dir => "$remotedir", work_tree => "$remotework" );
+
+    $deploy->deploy( $build_store );
+
+    my $master_commit_id = $git->run( 'rev-parse' => 'HEAD' );
+
+    _git_run( $remotegit, checkout => '-f' );
+    my $file_iter = $build_store->find_files;
+    while ( my $file = $file_iter->() ) {
+        ok $remotework->child( $file->path )->exists, $file->path . ' deployed';
+    }
+};
+
+
 done_testing;
 
 sub make_deploy {
-    my ( $tmpdir ) = @_;
+    my ( $tmpdir, %args ) = @_;
+
+    $args{ remote } ||= "origin";
+    $args{ branch } ||= "gh-pages";
 
     my $workdir = $tmpdir->child( 'workdir' );
     $workdir->mkpath;
@@ -101,12 +125,12 @@ sub make_deploy {
     chdir $cwd;
 
     chdir $remotedir;
-    Git::Repository->run( "init" );
+    Git::Repository->run( "init", '--bare' );
     chdir $cwd;
 
     my $remotegit = Git::Repository->new( work_tree => "$remotedir" );
     my $workgit = Git::Repository->new( work_tree => "$workdir" );
-    _git_run( $workgit, remote => add => origin => "$remotedir" );
+    _git_run( $workgit, remote => add => $args{remote} => "$remotedir" );
 
     # Set some config so Git knows who we are (and doesn't complain)
     for my $git ( $workgit, $remotegit ) {
@@ -119,7 +143,7 @@ sub make_deploy {
         or die "Could not copy directory: $!";
     _git_run( $remotegit, add => 'blog' );
     _git_run( $remotegit, commit => -m => 'Initial commit' );
-    _git_run( $workgit, pull => origin => 'master' );
+    _git_run( $workgit, pull => $args{remote} => 'master' );
 
     my $build_store = Statocles::Store::File->new(
         path => $SHARE_DIR->child( qw( deploy ) ),
@@ -127,7 +151,8 @@ sub make_deploy {
 
     my $deploy = Statocles::Deploy::Git->new(
         path => $workdir,
-        branch => 'gh-pages',
+        branch => $args{branch},
+        remote => $args{remote},
     );
 
     return ( $deploy, $build_store, $workdir, $remotedir );
