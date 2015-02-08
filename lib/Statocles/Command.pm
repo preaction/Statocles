@@ -119,13 +119,19 @@ sub main {
             my $theme_name = $argv[2];
             if ( !$theme_name ) {
                 say STDERR "ERROR: No theme name!";
-                say STDERR "\nUsage:\n\tstatocles bundle theme <name>";
+                say STDERR "\nUsage:\n\tstatocles bundle theme <name> <destination>";
                 return 1;
             }
 
+            if ( !$argv[3] ) {
+                say STDERR "ERROR: Must give a destination directory!";
+                say STDERR "\nUsage:\n\tstatocles bundle theme <name> <destination>";
+                return 1;
+            }
+            my $theme_dest = Path::Tiny->new( $argv[3] );
+
             my $theme_root = Path::Tiny->new( dist_dir( 'Statocles' ), 'theme', $theme_name );
             my $site_root = Path::Tiny->new( $opt{config} )->parent;
-            my $theme_dest = $site_root->child(qw( share theme ), $theme_name );
             my $iter = $theme_root->iterator({ recurse => 1 });
             while ( my $path = $iter->() ) {
                 next unless $path->is_file;
@@ -137,8 +143,8 @@ sub main {
                 $dest->parent->mkpath;
                 $path->copy( $dest );
             }
-            say qq{Theme "$theme_name" written to "share/theme/$theme_name"};
-            say qq{Make sure to update "$opt{config}"};
+            say qq{Theme "$theme_name" written to "$theme_dest"};
+            say qq(Make sure to update "$opt{config}");
         }
     }
     else {
