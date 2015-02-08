@@ -241,12 +241,12 @@ subtest 'sitemap.xml and robots.txt' => sub {
         my @urls = $dom->at('urlset')->children->map( $to_href )->each;
         cmp_deeply \@urls, bag( @expect ) or diag explain \@urls;
         cmp_deeply
-            [ $tmpdir->child( 'build', 'robots.txt' )->lines ],
+            [ grep { /\S/ } $tmpdir->child( 'build', 'robots.txt' )->lines ],
             [
                 "Sitemap: http://example.com/sitemap.xml\n",
                 "User-Agent: *\n",
                 "Disallow:\n",
-            ];
+            ] or diag explain [ $tmpdir->child( 'build', 'robots.txt' )->lines ];
         ok !$tmpdir->child( 'deploy', 'sitemap.xml' )->exists, 'not deployed yet';
         ok !$tmpdir->child( 'deploy', 'robots.txt' )->exists, 'not deployed yet';
     };
@@ -258,12 +258,12 @@ subtest 'sitemap.xml and robots.txt' => sub {
         my @urls = $dom->at('urlset')->children->map( $to_href )->each;
         cmp_deeply \@urls, bag( @expect ) or diag explain \@urls;
         cmp_deeply
-            [ $tmpdir->child( 'deploy', 'robots.txt' )->lines ],
+            [ grep { /\S/ } $tmpdir->child( 'deploy', 'robots.txt' )->lines ],
             [
                 "Sitemap: http://example.com/sitemap.xml\n",
                 "User-Agent: *\n",
                 "Disallow:\n",
-            ];
+            ] or diag explain [ $tmpdir->child( 'build', 'robots.txt' )->lines ];
     };
 };
 
