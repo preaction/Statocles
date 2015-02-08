@@ -28,6 +28,8 @@ fills multiple roles relating to reading and writing files. Right now, we need
 it to hold on to our blog posts. We'll put our blog posts in the C<blog>
 directory.
 
+    $ mkdir blog
+
 The L<blog application|Statocles::App::Blog> will use this store to add new
 blog posts and build web pages from the documents in the C<blog> directory.
 More on that later.
@@ -42,6 +44,7 @@ a L<file store object|Statocles::Store::File>.
 Since we're building a blog site, we'll use the
 L<Statocles blog app|Statocles::App::Blog>:
 
+    # site.yml
     blog_app:
         class: Statocles::App::Blog
         args:
@@ -52,56 +55,42 @@ We put our blog app under the root URL C</blog>. All pages that come from this
 app will start with C</blog> (except the index page, we'll move that to
 C</>, later).
 
-=head2 Destinations
+=head2 A Deploy
 
-Before we can generate pages, we need a place to put them. Statocles needs two
-places, a build directory (a staging area), and a deploy object (the final
-destination for the site).
+To deploy our site to Github, we need to build a L<deploy
+object|Statocles::Deploy> for Git repositories using
+L<Statocles::Deploy::Git|Statocles::Deploy::Git>. Our deploy object will copy
+our built pages into the Git repository and commit them. Our deploy will happen
+in the root directory of our site on the C<gh-pages> branch.
 
-For our site, we will make a C<build> directory for our staging area, where we
-can verify that our site looks correct before we deploy.
-
-Make sure this directory exists:
-
-    $ mkdir build
-
-For our destination, we need to build a L<deploy object|Statocles::Deploy> for
-Git repositories using L<Statocles::Deploy::Git|Statocles::Deploy::Git>. Our
-deploy object will copy files from the C<build> directory into the Git
-repository. Our deploy will happen in the root directory of our site (C<.>).
-This is good for a GitHub Pages site.
-
+    # site.yml
     github_deploy:
         class: Statocles::Deploy::Git
         args:
-            path: .
             branch: gh-pages
 
 Though we are going to deploy to Git, we could also deploy to SFTP or FTP or
-transfer the pages to a CDN.
+transfer the pages to a CDN. See L<Statocles::Help::Deploy> for more information.
 
 =head2 A Theme
 
-Last thing we need before we can build our site is a theme. A theme
-(L<Statocles::Theme|Statocles::Theme>) builds and parses templates into
-L<Statocles::Template|Statocles::Template> objects. We'll use the Statocles
-default theme, included with the module. The special C<::default> string will
-look in the Statocles C<share/theme> directory.
+We could set up a theme (L<Statocles::Theme|Statocles::Theme>) to change how
+our site looks, but for now, we'll use the C<default> theme included with
+Statocles. See L<Statocle::Help::Theme> for information on how to change and
+customize your theme.
 
 =head2 A Site
 
 Now that we're ready, we can tie it all together. A L<site|Statocles::Site> is
-a collection of apps that build and deploy to the same place. The special L<git
-site|Statocles::Site::Git> knows how to deploy to git repositories.
+a collection of apps that build and deploy to the same place.
 
+    # site.yml
     site:
         class: Statocles::Site
         args:
-            theme: '::default'
             apps:
                 blog:
                     $ref: blog_app
-            build_store: 'build'
             deploy:
                 $ref: github_deploy
             title: My Site
@@ -111,14 +100,8 @@ site|Statocles::Site::Git> knows how to deploy to git repositories.
                     - title: Blog
                       href: /
 
-We define our theme with the string C<::default>, which will get magically
-coerced into a L<theme object|Statocles::Theme>.
-
 When adding apps to our site, we give them a name (in this case C<blog>) so
 that we can refer to them on the command-line (later).
-
-Just like the blog store, the C<build_store> will magically create a
-Statocles::Store::File object from the path string.
 
 As part of the default template, we can provide a site C<title>.
 
@@ -134,6 +117,7 @@ default template uses the C<main> nav across the top.
 Combine it all together and you get this. Feel free to copy and paste to start
 your own site.
 
+    # site.yml
     blog_app:
         class: Statocles::App::Blog
         args:
@@ -143,17 +127,14 @@ your own site.
     github_deploy:
         class: Statocles::Deploy::Git
         args:
-            path: .
             branch: gh-pages
 
     site:
         class: Statocles::Site
         args:
-            theme: '::default'
             apps:
                 blog:
                     $ref: blog_app
-            build_store: 'build'
             deploy:
                 $ref: github_deploy
             title: My Site
@@ -202,9 +183,9 @@ automatically open on the newly-created document.
 
     $ statocles build
 
-Running the C<build> command will write all our pages to the C<build> store,
-which points to the C<build> directory. We can open up this directory and look
-at the files to make sure that our deploy will be correct.
+Running the C<build> command will write all our pages to the
+C<.statocles-build> directory. We can open up this directory and look at the
+files to make sure that our deploy will be correct.
 
 =head2 Test The Site
 
@@ -251,6 +232,7 @@ root directory of our repository, C<.>. Finally, we'll need a URL root. Since
 we're using the root directory for our documents, we'll use the root URL for
 our destination C</>.
 
+    # site.yml
     plain_app:
         class: Statocles::App::Plain
         args:
@@ -266,6 +248,7 @@ Lastly, we wanted a place to put any file at all. No processing. No templates.
 Just a simple copy from one store to another. For this one, we'll put
 everything in the C</static> directory, and give a URL root to match.
 
+    # site.yml
     static_app:
         class: Statocles::App::Static
         args:
@@ -276,6 +259,7 @@ everything in the C</static> directory, and give a URL root to match.
 
 To enable the new apps, we just need to add them to the site's C<apps>.
 
+    # site.yml
     site:
         class: Statocles::Site::Git
         args:
@@ -286,6 +270,14 @@ To enable the new apps, we just need to add them to the site's C<apps>.
                     $ref: plain_app
                 static:
                     $ref: static_app
+            deploy:
+                $ref: github_deploy
+            title: My Site
+            index: blog
+            nav:
+                main:
+                    - title: Blog
+                      href: /
 
 =head2 Add Plain Content
 
@@ -301,16 +293,25 @@ Create a file named C<about.markdown> with the following content:
 
     This is a personal website!
 
-Then, run C<statocles build>. The C<about.markdown> turns into C<about.html> in
-our C<build/> directory.
+Then, run C<statocles daemon> to test the new page.
 
 Now we should probably make a link in our main nav to the new about page:
 
+    # site.yml
     site:
         class: Statocles::Site::Git
         args:
-            # ... [redacted]
-
+            apps:
+                blog:
+                    $ref: blog_app
+                plain:
+                    $ref: plain_app
+                static:
+                    $ref: static_app
+            deploy:
+                $ref: github_deploy
+            title: My Site
+            index: blog
             nav:
                 main:
                     - title: Blog
@@ -324,6 +325,7 @@ Now, if we run C<statocles build> again, we can see the link in our header.
 
 Along with the blog app and our other settings, here is our new, complete site.yml:
 
+    # site.yml
     blog_app:
         class: Statocles::App::Blog
         args:
@@ -337,17 +339,19 @@ Along with the blog app and our other settings, here is our new, complete site.y
             store: '.'
 
     static_app:
+        class: Statocles::App::Static
+        args:
+            url_root: '/static'
+            store: 'static'
 
     github_deploy:
         class: Statocles::Deploy::Git
         args:
-            path: .
             branch: gh-pages
 
     site:
         class: Statocles::Site::Git
         args:
-            theme: '::default'
             apps:
                 blog:
                     $ref: blog_app
@@ -356,7 +360,6 @@ Along with the blog app and our other settings, here is our new, complete site.y
                 static:
                     $ref: static_app
 
-            build_store: 'build'
             deploy:
                 $ref: github_deploy
 
@@ -377,6 +380,8 @@ C<statocles deploy>.
 =over 4
 
 =item L<How to deploy a Statocles site|Statocles::Help::Deploy>
+
+=item L<How to customize a Statocles theme|Statocles::Help::Theme>
 
 =back
 
