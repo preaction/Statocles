@@ -100,6 +100,8 @@
 
 <p>So we need a place to put our source documents. A <a href="/Statocles/pod/Statocles/Store.html">store</a> fills multiple roles relating to reading and writing files. Right now, we need it to hold on to our blog posts. We&#39;ll put our blog posts in the <code>blog</code> directory.</p>
 
+<pre><code>    $ mkdir blog</code></pre>
+
 <p>The <a href="/Statocles/pod/Statocles/App/Blog.html">blog application</a> will use this store to add new blog posts and build web pages from the documents in the <code>blog</code> directory. More on that later.</p>
 
 <h2 id="An-App">An App</h2>
@@ -108,50 +110,42 @@
 
 <p>Since we&#39;re building a blog site, we&#39;ll use the <a href="/Statocles/pod/Statocles/App/Blog.html">Statocles blog app</a>:</p>
 
-<pre><code>    blog_app:
+<pre><code>    # site.yml
+    blog_app:
         class: Statocles::App::Blog
         args:
             url_root: /blog
             store: &#39;blog&#39;</code></pre>
 
-<p>We put our blog app under the root URL <code>/blog</code>. All pages that come from this app will start with <code>/blog</code> (except the index page, we&#39;ll move that to <code>/index.html</code>, later).</p>
+<p>We put our blog app under the root URL <code>/blog</code>. All pages that come from this app will start with <code>/blog</code> (except the index page, we&#39;ll move that to <code>/</code>, later).</p>
 
-<h2 id="Destinations">Destinations</h2>
+<h2 id="A-Deploy">A Deploy</h2>
 
-<p>Before we can generate pages, we need a place to put them. Statocles needs two places, a build directory (a staging area), and a deploy object (the final destination for the site).</p>
+<p>To deploy our site to Github, we need to build a <a href="/Statocles/pod/Statocles/Deploy.html">deploy object</a> for Git repositories using <a href="/Statocles/pod/Statocles/Deploy/Git.html">Statocles::Deploy::Git</a>. Our deploy object will copy our built pages into the Git repository and commit them. Our deploy will happen in the root directory of our site on the <code>gh-pages</code> branch.</p>
 
-<p>For our site, we will make a <code>build</code> directory for our staging area, where we can verify that our site looks correct before we deploy.</p>
-
-<p>Make sure this directory exists:</p>
-
-<pre><code>    $ mkdir build</code></pre>
-
-<p>For our destination, we need to build a <a href="/Statocles/pod/Statocles/Deploy.html">deploy object</a> for Git repositories using <a href="/Statocles/pod/Statocles/Deploy/Git.html">Statocles::Deploy::Git</a>. Our deploy object will copy files from the <code>build</code> directory into the Git repository. Our deploy will happen in the root directory of our site (<code>.</code>). This is good for a GitHub Pages site.</p>
-
-<pre><code>    github_deploy:
+<pre><code>    # site.yml
+    github_deploy:
         class: Statocles::Deploy::Git
         args:
-            path: .
             branch: gh-pages</code></pre>
 
-<p>Though we are going to deploy to Git, we could also deploy to SFTP or FTP or transfer the pages to a CDN.</p>
+<p>Though we are going to deploy to Git, we could also deploy to SFTP or FTP or transfer the pages to a CDN. See <a href="/Statocles/pod/Statocles/Help/Deploy.html">Statocles::Help::Deploy</a> for more information.</p>
 
 <h2 id="A-Theme">A Theme</h2>
 
-<p>Last thing we need before we can build our site is a theme. A theme (<a href="/Statocles/pod/Statocles/Theme.html">Statocles::Theme</a>) builds and parses templates into <a href="/Statocles/pod/Statocles/Template.html">Statocles::Template</a> objects. We&#39;ll use the Statocles default theme, included with the module. The special <code>::default</code> string will look in the Statocles <code>share/theme</code> directory.</p>
+<p>We could set up a theme (<a href="/Statocles/pod/Statocles/Theme.html">Statocles::Theme</a>) to change how our site looks, but for now, we&#39;ll use the <code>default</code> theme included with Statocles. See <a href="https://metacpan.org/pod/Statocle::Help::Theme">Statocle::Help::Theme</a> for information on how to change and customize your theme.</p>
 
 <h2 id="A-Site">A Site</h2>
 
-<p>Now that we&#39;re ready, we can tie it all together. A <a href="/Statocles/pod/Statocles/Site.html">site</a> is a collection of apps that build and deploy to the same place. The special <a href="/Statocles/pod/Statocles/Site/Git.html">git site</a> knows how to deploy to git repositories.</p>
+<p>Now that we&#39;re ready, we can tie it all together. A <a href="/Statocles/pod/Statocles/Site.html">site</a> is a collection of apps that build and deploy to the same place.</p>
 
-<pre><code>    site:
+<pre><code>    # site.yml
+    site:
         class: Statocles::Site
         args:
-            theme: &#39;::default&#39;
             apps:
                 blog:
                     $ref: blog_app
-            build_store: &#39;build&#39;
             deploy:
                 $ref: github_deploy
             title: My Site
@@ -159,17 +153,13 @@
             nav:
                 main:
                     - title: Blog
-                      href: /index.html</code></pre>
-
-<p>We define our theme with the string <code>::default</code>, which will get magically coerced into a <a href="/Statocles/pod/Statocles/Theme.html">theme object</a>.</p>
+                      href: /</code></pre>
 
 <p>When adding apps to our site, we give them a name (in this case <code>blog</code>) so that we can refer to them on the command-line (later).</p>
 
-<p>Just like the blog store, the <code>build_store</code> will magically create a Statocles::Store::File object from the path string.</p>
-
 <p>As part of the default template, we can provide a site <code>title</code>.</p>
 
-<p>The <code>index</code> attribute gives the name of the app to use as our index page. Since we only have one app, we can only give it the <code>blog</code>. Whatever main page the blog app defines will be moved to the main site index <code>/index.html</code>.</p>
+<p>The <code>index</code> attribute gives the name of the app to use as our index page. Since we only have one app, we can only give it the <code>blog</code>. Whatever main page the blog app defines will be moved to the main site index <code>/</code>.</p>
 
 <p>Finally, we can define a <code>nav</code> list, again giving a name: <code>main</code>. The default template uses the <code>main</code> nav across the top.</p>
 
@@ -177,7 +167,8 @@
 
 <p>Combine it all together and you get this. Feel free to copy and paste to start your own site.</p>
 
-<pre><code>    blog_app:
+<pre><code>    # site.yml
+    blog_app:
         class: Statocles::App::Blog
         args:
             url_root: /blog
@@ -186,17 +177,14 @@
     github_deploy:
         class: Statocles::Deploy::Git
         args:
-            path: .
             branch: gh-pages
 
     site:
         class: Statocles::Site
         args:
-            theme: &#39;::default&#39;
             apps:
                 blog:
                     $ref: blog_app
-            build_store: &#39;build&#39;
             deploy:
                 $ref: github_deploy
             title: My Site
@@ -204,7 +192,7 @@
             nav:
                 main:
                     - title: Blog
-                      href: /index.html</code></pre>
+                      href: /</code></pre>
 
 <p><b>NOTE:</b> One of the most useful things about using a dependency injection module is that you can easily plug-in your own classes. If you want to use your own template format, you can build your own Statocles::Theme class that provides a different kind of Statocles::Template object and use that instead. If you want to use your own document format, you can make your own Statocles::Store class that reads from a database.</p>
 
@@ -236,7 +224,7 @@
 
 <pre><code>    $ statocles build</code></pre>
 
-<p>Running the <code>build</code> command will write all our pages to the <code>build</code> store, which points to the <code>build</code> directory. We can open up this directory and look at the files to make sure that our deploy will be correct.</p>
+<p>Running the <code>build</code> command will write all our pages to the <code>.statocles-build</code> directory. We can open up this directory and look at the files to make sure that our deploy will be correct.</p>
 
 <h2 id="Test-The-Site">Test The Site</h2>
 
@@ -270,7 +258,8 @@
 
 <p>Like the blog, we need a store to find our documents. This time, we&#39;ll use the root directory of our repository, <code>.</code>. Finally, we&#39;ll need a URL root. Since we&#39;re using the root directory for our documents, we&#39;ll use the root URL for our destination <code>/</code>.</p>
 
-<pre><code>    plain_app:
+<pre><code>    # site.yml
+    plain_app:
         class: Statocles::App::Plain
         args:
             url_root: &#39;/&#39;
@@ -282,7 +271,8 @@
 
 <p>Lastly, we wanted a place to put any file at all. No processing. No templates. Just a simple copy from one store to another. For this one, we&#39;ll put everything in the <code>/static</code> directory, and give a URL root to match.</p>
 
-<pre><code>    static_app:
+<pre><code>    # site.yml
+    static_app:
         class: Statocles::App::Static
         args:
             url_root: &#39;/static&#39;
@@ -292,7 +282,8 @@
 
 <p>To enable the new apps, we just need to add them to the site&#39;s <code>apps</code>.</p>
 
-<pre><code>    site:
+<pre><code>    # site.yml
+    site:
         class: Statocles::Site::Git
         args:
             apps:
@@ -301,7 +292,15 @@
                 plain:
                     $ref: plain_app
                 static:
-                    $ref: static_app</code></pre>
+                    $ref: static_app
+            deploy:
+                $ref: github_deploy
+            title: My Site
+            index: blog
+            nav:
+                main:
+                    - title: Blog
+                      href: /</code></pre>
 
 <h2 id="Add-Plain-Content">Add Plain Content</h2>
 
@@ -316,19 +315,29 @@
 
     This is a personal website!</code></pre>
 
-<p>Then, run <code>statocles build</code>. The <code>about.markdown</code> turns into <code>about.html</code> in our <code>build/</code> directory.</p>
+<p>Then, run <code>statocles daemon</code> to test the new page.</p>
 
 <p>Now we should probably make a link in our main nav to the new about page:</p>
 
-<pre><code>    site:
+<pre><code>    # site.yml
+    site:
         class: Statocles::Site::Git
         args:
-            # ... [redacted]
-
+            apps:
+                blog:
+                    $ref: blog_app
+                plain:
+                    $ref: plain_app
+                static:
+                    $ref: static_app
+            deploy:
+                $ref: github_deploy
+            title: My Site
+            index: blog
             nav:
                 main:
                     - title: Blog
-                      href: /index.html
+                      href: /
                     - title: About
                       href: /about.html</code></pre>
 
@@ -338,7 +347,8 @@
 
 <p>Along with the blog app and our other settings, here is our new, complete site.yml:</p>
 
-<pre><code>    blog_app:
+<pre><code>    # site.yml
+    blog_app:
         class: Statocles::App::Blog
         args:
             url_root: /blog
@@ -351,17 +361,19 @@
             store: &#39;.&#39;
 
     static_app:
+        class: Statocles::App::Static
+        args:
+            url_root: &#39;/static&#39;
+            store: &#39;static&#39;
 
     github_deploy:
         class: Statocles::Deploy::Git
         args:
-            path: .
             branch: gh-pages
 
     site:
         class: Statocles::Site::Git
         args:
-            theme: &#39;::default&#39;
             apps:
                 blog:
                     $ref: blog_app
@@ -370,7 +382,6 @@
                 static:
                     $ref: static_app
 
-            build_store: &#39;build&#39;
             deploy:
                 $ref: github_deploy
 
@@ -379,11 +390,25 @@
             nav:
                 main:
                     - title: Blog
-                      href: /index.html
+                      href: /
                     - title: About
                       href: /about.html</code></pre>
 
 <p>If we&#39;re satisfied with our new About page, we can deploy our site with <code>statocles deploy</code>.</p>
+
+<h1 id="SEE-ALSO">SEE ALSO</h1>
+
+<dl>
+
+<dt><a href="/Statocles/pod/Statocles/Help/Deploy.html">How to deploy a Statocles site</a></dt>
+<dd>
+
+</dd>
+<dt><a href="/Statocles/pod/Statocles/Help/Theme.html">How to customize a Statocles theme</a></dt>
+<dd>
+
+</dd>
+</dl>
 
 
 

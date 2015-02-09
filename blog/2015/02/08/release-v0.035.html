@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <title>Statocles</title>
+        <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
+<style>
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Forum', sans-serif;
+        font-weight: bold;
+    }
+
+    #index-banner {
+        font-family: 'Forum', sans-serif;
+        height: 300px;
+        position: relative;
+        margin-bottom: 1em;
+        border-bottom: 1px solid #777
+    }
+    #index-banner:before, #index-banner:after {
+        width: 60px;
+        height: 300px;
+        content: url(/Statocles/theme/images/column.png);
+    }
+    #index-banner:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #index-banner:after {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    #index-banner h1 {
+        padding-top: 1em;
+        text-transform: uppercase;
+        font-size: 72px;
+        text-align: center;
+    }
+    #index-banner h1 small {
+        display: block;
+        font-size: 24px;
+    }
+
+</style>
+
+    </head>
+    <body>
+        <header>
+            <nav class="navbar">
+                <div class="container">
+                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <ul>
+                        <li>
+                            <a href="/Statocles/blog">Blog</a>
+                        </li>
+                        <li>
+                            <a href="/Statocles/pod">Docs</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles">Code</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles/issues">Bugs</a>
+                        </li>
+                        <li>
+                            <a href="http://metacpan.org/pod/Statocles">CPAN</a>
+                        </li>
+                        <li>
+                            <a href="https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">IRC</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <a href="https://github.com/preaction/Statocles"><img alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; z-index: 1000; border: 0;"></a>
+
+        </header>
+        <div class="main container">
+            <div class="row">
+
+    <div class="nine columns">
+        <main>
+            <header>
+                <h1>Release v0.035</h1>
+                <p class="tags">Tags:
+                    <a href="/Statocles/blog/tag/release/index.html" rel="tag">release</a>
+                </p>
+                <aside>
+                    <p><time datetime="2015-02-08">
+                        Posted on 2015-02-08
+                    </time>
+                    </p>
+                </aside>
+            </header>
+            <section id="section-1">
+                <p>Almost ready for the beta announcement now! Only <a href="https://github.com/preaction/Statocles/milestones/beta">a few issues remain before we
+can announce beta</a>.</p>
+
+<p>Content is now always processed through the template parser. This lets us have
+includes in the content, so we can have widget templates or plugins that generate
+related posts for example. This is a new feature, so I&#39;m excited to see what can
+be done with it.</p>
+
+<p>There was some cleanup on the URLs we generate: Directories are being preferred
+to files, so that the URLs are a bit easier to read. <code>/blog/page-2.html</code> is now
+<code>/blog/page/2</code>, and <code>/blog/tag/mytag/page-2.html</code> is now
+<code>/blog/tag/mytag/page/2</code></p>
+
+<p>A new help file was added, <a href="/Statocles/pod/Statocles/Help/Deploy.html">all about deploying
+Statocles</a>. As part of that, a lot of defaults were
+updated to be more intuitive: The build directory gets automatically created, and the
+default build directory is set to <code>.statocles-build</code>.</p>
+
+<p>A bunch of things were fixed for Windows development, along with a nasty
+platform difference in <code>strftime()</code>.</p>
+
+<p>The <code>bundle theme</code> command is now actually useful and allows you to specify
+where you want the theme to be copied. So now, if you want to customize the
+default theme, you can <code>statocles bundle theme default mytheme</code> to copy the
+default theme to the <code>mytheme</code> directory.</p>
+
+<p>Full changelog below</p>
+
+            </section>
+            <section id="section-2">
+                <ul>
+<li><a href="https://github.com/preaction/Statocles/commit/7914da68a0fa459f579f92bdc0cd734e78427bb8">update Mojolicious to 5.57 for improved map()</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/8bfdb3303610d7f20ba4de004c6cc9b01c6ade4a">make <code>bundle theme</code> copy to given directory</a> (<a href="https://github.com/preaction/Statocles/issues/204">#204</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/d360f60855d70e75de9a26e847cf3de887878a55">fix extra blank line in robots.txt test</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/99f22208d6f4a2618e08a1c370f5da77701f1f07">ignore vim swap files on windows</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/2b18785227261446bd42bbf860038db3383f87a6">fix strftime for Windows</a> (<a href="https://github.com/preaction/Statocles/issues/185">#185</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/856dab4dde08a3d4d3bc5bccecc5aa33cdddf95b">fix test reading files without utf-8 flag</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/2d5dcb363a90d5686736cd96ea54449dbc0bce07">redo the setup help for new defaults</a> (<a href="https://github.com/preaction/Statocles/issues/231">#231</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/d689f0b8fb3a9cd7e940d2be62cf0e6c227cb3ef">make blog pagination use directories</a> (<a href="https://github.com/preaction/Statocles/issues/240">#240</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/6e10fb0798784e4a5d289ff47b54e340c52a7cca">allow list pages to consist of directories</a> (<a href="https://github.com/preaction/Statocles/issues/240">#240</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/69c02e13ae5114589bc7c70e7c4b72d8017fa036">automatically remove &quot;index.html&quot; from URLs</a> (<a href="https://github.com/preaction/Statocles/issues/165">#165</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/b31d9a2dfc47cefdff14733f3c365a47e2b9e3da">update Beam::Wire to fix warning on perl 5.20</a> (<a href="https://github.com/preaction/Statocles/issues/190">#190</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/5833756f9374c6edeebbf2b0497ce4dab3373f7b">process document content as a template</a> (<a href="https://github.com/preaction/Statocles/issues/213">#213</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/22883c4384fc32c95016302f2c81657f029e348c">allow arguments to included templates</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/98e88f85c0943043e7499abadaa8159280b6f8eb">add a theme method to build template from string</a> (<a href="https://github.com/preaction/Statocles/issues/213">#213</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/56bbac55fce2fbb00803c5741ca686a16b5cc375">do not watch built-in theme dirs for changes</a> (<a href="https://github.com/preaction/Statocles/issues/182">#182</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/8586a527a57654e9ead7dd8c8a265dd4edcf36d7">add deploy help documentation</a> (<a href="https://github.com/preaction/Statocles/issues/211">#211</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/7b1219746450cff080ff928871c7ba854d97d6f4">add remote attr to git deploy</a> (<a href="https://github.com/preaction/Statocles/issues/236">#236</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/d353fca53df9846593d9955e7f9628c72f1b8dd0">test that git deploy&#39;s path has a default</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/0d9b5b5a05c1cfcbe517bd4f4ed3d2670d67966b">set a default build dir and auto-create it</a> (<a href="https://github.com/preaction/Statocles/issues/233">#233</a>, <a href="https://github.com/preaction/Statocles/issues/234">#234</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/1bf5f448db1c9ed22c405f890f633fb8bca96fb8">make site theme default to bundled default theme</a> (<a href="https://github.com/preaction/Statocles/issues/235">#235</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/d357bd03948f0edd4bcca2ef9853fb9f6be6626c">make file deploy default to the current directory</a> (<a href="https://github.com/preaction/Statocles/issues/237">#237</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/0327f5d2aa6a62a98f9a4fed5ad0d47712980dae">Merge pull request #232 from vlet/master</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/5c295a3e34898745bbb6e2c5019b102d31cf3184">fix categories in atom feed</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/42883c3fb85e809e1b78f35ed522d711c18b7489">fix default theme list bullets on a separate line</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/c6e84f34b316dc685b81f155d9b7f41b7d0de624">fix static app builds hidden directories like .git</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/9fcd3d67249b769434c2efeb76be01ef81f216c1">show an error if no theme name given to bundle</a> (<a href="https://github.com/preaction/Statocles/issues/203">#203</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/f71814711efdfded9065838d92536af9fab1c272">allow pod from things without .pm, .pl, or .pod</a> (<a href="https://github.com/preaction/Statocles/issues/206">#206</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/304dabe75d21132717f8ec414e6333cbae52fa1d">add missing DESCRIPTION to some modules</a></li>
+</ul>
+
+            </section>
+        </main>
+    </div>
+
+    <div class="three columns sidebar">
+        
+        <nav id="tags">
+            <h1>Tags</h1>
+            <ul class="list-inline">
+                <li><a href="/Statocles/blog/tag/release/index.html">release</a></li>
+            </ul>
+        </nav>
+    </div>
+
+</div>
+
+        </div>
+        <footer>
+            
+            <div class="container tagline">
+                <a href="http://preaction.github.io/Statocles">Made with Statocles</a><br>
+                <a href="http://www.perl.org">Powered by Perl</a>
+            </div>
+        </footer>
+    </body>
+</html>
