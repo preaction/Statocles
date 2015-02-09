@@ -32,14 +32,14 @@ my %WriteMakefileArgs = (
   "MIN_PERL_VERSION" => "5.010",
   "NAME" => "Statocles",
   "PREREQ_PM" => {
-    "Beam::Wire" => 0,
+    "Beam::Wire" => "1.010",
     "Encode" => 0,
     "File::Copy::Recursive" => 0,
     "File::Share" => 0,
     "Git::Repository" => 0,
     "Import::Base" => "0.009",
     "List::MoreUtils" => 0,
-    "Mojolicious" => "5.41",
+    "Mojolicious" => "5.57",
     "Moo::Lax" => 0,
     "Path::Tiny" => "0.054",
     "Pod::Usage::Return" => 0,
@@ -62,7 +62,7 @@ my %WriteMakefileArgs = (
     "Test::Exception" => 0,
     "Test::More" => "1.001005"
   },
-  "VERSION" => "0.034",
+  "VERSION" => "0.035",
   "test" => {
     "TESTS" => "t/*.t t/app/*.t t/bin/*.t t/deploy/*.t t/page/*.t t/store/*.t t/theme/*.t"
   }
@@ -70,7 +70,7 @@ my %WriteMakefileArgs = (
 
 
 my %FallbackPrereqs = (
-  "Beam::Wire" => 0,
+  "Beam::Wire" => "1.010",
   "Capture::Tiny" => 0,
   "Dir::Self" => 0,
   "Encode" => 0,
@@ -85,7 +85,7 @@ my %FallbackPrereqs = (
   "Import::Base" => "0.009",
   "List::MoreUtils" => 0,
   "Module::Build" => "0.3601",
-  "Mojolicious" => "5.41",
+  "Mojolicious" => "5.57",
   "Moo::Lax" => 0,
   "Path::Tiny" => "0.054",
   "Pod::Usage::Return" => 0,

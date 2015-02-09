@@ -4,7 +4,7 @@ Statocles - A static site generator
 
 # VERSION
 
-version 0.034
+version 0.035
 
 # STATUS
 
@@ -137,9 +137,11 @@ them at [https://staticsitegenerators.net](https://staticsitegenerators.net).
 
 Doug Bell <preaction@cpan.org>
 
-# CONTRIBUTOR
+# CONTRIBUTORS
 
-tadegenban <youyouken@126.com>
+- Doug Bell <preaction@users.noreply.github.com>
+- tadegenban <youyouken@126.com>
+- Vladimir Lettiev <thecrux@gmail.com>
 
 # COPYRIGHT AND LICENSE
 

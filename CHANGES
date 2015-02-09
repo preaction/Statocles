@@ -1,6 +1,38 @@
 Changelog for Statocles
 
-0.034 2015-01-25T06:15:51
+0.035 2015-02-09T02:51:15
+ - update Mojolicious to 5.57 for improved map()
+ - fix extra blank line in robots.txt test
+ - ignore vim swap files on windows
+ - fix strftime for Windows
+ - fix test reading files without utf-8 flag
+ - make `bundle theme` copy to given directory
+ - redo the setup help for new defaults
+ - make blog pagination use directories
+ - allow list pages to consist of directories
+ - automatically remove "index.html" from URLs
+ - update Beam::Wire to fix warning on perl 5.20
+ - process document content as a template
+ - allow arguments to included templates
+ - add a theme method to build template from string
+ - do not watch built-in theme dirs for changes
+ - add deploy help documentation
+ - add remote attr to git deploy
+ - test that git deploy's path has a default
+ - set a default build dir and auto-create it
+ - make site theme default to bundled default theme
+ - make file deploy default to the current directory
+ - add test to check categories in atom feed
+ - fix categories in atom feed
+ - fix default theme list bullets on a separate line
+ - fix static app builds hidden directories like .git
+ - show an error if no theme name given to bundle
+ - allow pod from things without .pm, .pl, or .pod
+ - add missing DESCRIPTION to some modules
+ - remove spurious doc lines
+ - add release v0.034 announcement
+
+0.034 2015-01-25T06:15:51Z
  - add dzil plugin for prereqs and compile tests
  - add features and install instructions on home page
  - update Statocles site for new default theme

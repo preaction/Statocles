@@ -2,7 +2,7 @@ NAME
     Statocles - A static site generator
 
 VERSION
-    version 0.034
+    version 0.035
 
 SYNOPSIS
         # !!! Read the Getting Started guide to set up a site.yml config file
@@ -132,8 +132,12 @@ SEE ALSO
 AUTHOR
     Doug Bell <preaction@cpan.org>
 
-CONTRIBUTOR
-    tadegenban <youyouken@126.com>
+CONTRIBUTORS
+    *   Doug Bell <preaction@users.noreply.github.com>
+
+    *   tadegenban <youyouken@126.com>
+
+    *   Vladimir Lettiev <thecrux@gmail.com>
 
 COPYRIGHT AND LICENSE
     This software is copyright (c) 2015 by Doug Bell.

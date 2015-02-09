@@ -20,7 +20,7 @@ my %module_build_args = (
     "Doug Bell <preaction\@cpan.org>"
   ],
   "dist_name" => "Statocles",
-  "dist_version" => "0.034",
+  "dist_version" => "0.035",
   "license" => "perl",
   "module_name" => "Statocles",
   "recommends" => {
@@ -30,14 +30,14 @@ my %module_build_args = (
   },
   "recursive_test_files" => 1,
   "requires" => {
-    "Beam::Wire" => 0,
+    "Beam::Wire" => "1.010",
     "Encode" => 0,
     "File::Copy::Recursive" => 0,
     "File::Share" => 0,
     "Git::Repository" => 0,
     "Import::Base" => "0.009",
     "List::MoreUtils" => 0,
-    "Mojolicious" => "5.41",
+    "Mojolicious" => "5.57",
     "Moo::Lax" => 0,
     "Path::Tiny" => "0.054",
     "Pod::Usage::Return" => 0,
