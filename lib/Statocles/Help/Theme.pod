@@ -50,21 +50,21 @@ Some examples of files you can safely edit are:
 
 =over 4
 
-=item site/head_after.html
+=item site/head_after.html.ep
 
 This include is after all the default C<E<lt>headE<gt>> content. You can add
 links to new scripts and stylesheets here.
 
-=item site/header_after.html
+=item site/header_after.html.ep
 
 This include is after the nav bar and page header. You can add banners and such
 here.
 
-=item site/footer.html
+=item site/footer.html.ep
 
 The entire site footer is up to you to edit.
 
-=item site/sidebar_before.html
+=item site/sidebar_before.html.ep
 
 If the page has a sidebar, this include will be placed before it.
 

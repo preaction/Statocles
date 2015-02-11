@@ -67,7 +67,7 @@
     </div>
 
     <div class="three columns sidebar">
-        %= include 'site/sidebar_before.html'
+        %= include 'site/sidebar_before.html.ep'
         <h1>Tags</h1>
         <ul class="list-inline">
         % for my $tag ( $app->tags ) {

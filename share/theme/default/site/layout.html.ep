@@ -8,7 +8,7 @@
         % for my $link ( $self->links( 'feed' ) ) {
         <link rel="alternate" href="<%= $link->href %>" type="<%= $link->type %>" />
         % }
-        %= include 'site/head_after.html'
+        %= include 'site/head_after.html.ep'
     </head>
     <body>
         <header>
@@ -26,13 +26,13 @@
                     % }
                 </div>
             </nav>
-            %= include 'site/header_after.html'
+            %= include 'site/header_after.html.ep'
         </header>
         <div class="main container">
             <%= $content %>
         </div>
         <footer>
-            %= include 'site/footer.html'
+            %= include 'site/footer.html.ep'
             <div class="container tagline">
                 <a href="http://preaction.github.io/Statocles">Made with Statocles</a><br/>
                 <a href="http://www.perl.org">Powered by Perl</a>
