@@ -61,8 +61,18 @@ around 'deploy' => sub {
     # Copy the files
     my @files = $self->$orig( $from_store, $message );
 
+    # Check to see which files were changed
+    my @status_lines = $git->run(
+        status => '--porcelain', '--ignore-submodules', '--untracked-files',
+    );
+    my %in_status;
+    for my $line ( @status_lines ) {
+        my ( $status, $path ) = $line =~ /^\s*(\S+)\s+(.+)$/;
+        $in_status{ $path } = $status;
+    }
+
     # Commit the files
-    _git_run( $git, add => @files );
+    _git_run( $git, add => grep { $in_status{ $_ } } @files );
     _git_run( $git, commit => -m => $message || "Site update" );
     if ( _has_remote( $git, $self->remote ) ) {
         _git_run( $git, push => $self->remote => $self->branch );

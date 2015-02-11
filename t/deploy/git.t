@@ -104,6 +104,78 @@ subtest 'deploy to specific remote' => sub {
     }
 };
 
+subtest 'deploy with submodules and ignored files' => sub {
+    my $tmpdir = tempdir( @temp_args );
+    diag "TMP: " . $tmpdir if @temp_args;
+
+    my ( $deploy, $build_store, $workdir, $remotedir )
+        = make_deploy( $tmpdir, branch => 'master' );
+
+    my $git = Git::Repository->new( work_tree => "$workdir" );
+
+    # Add a submodule to the repo
+    # Git before 1.6.4 does not allow directory as argument to "init"
+    my $cwd = cwd;
+    my $submoduledir = $tmpdir->child('submodule');
+    $submoduledir->mkpath;
+    chdir $submoduledir;
+    Git::Repository->run( "init" );
+    chdir $cwd;
+    my $submodule = Git::Repository->new( work_tree => $submoduledir->stringify );
+    # Add something to pull from the submodule
+    $submoduledir->child( 'README' )->spew( 'Do not commit!' );
+    $submodule->run( add => 'README' );
+    $submodule->run( commit => '-m' => 'add README' );
+
+    _git_run( $git, submodule => add => "$submoduledir" );
+    _git_run( $git, commit => '-m' => 'add submodule' );
+
+    # Add a gitignore to the repo
+    $workdir->child( '.gitignore' )->spew( ".DS_Store\n*.swp\n" );
+    $workdir->child( '.DS_Store' )->spew( 'Do not commit!' );
+    $workdir->child( 'test.swp' )->spew( 'Do not commit!' );
+    _git_run( $git, add => '.gitignore' );
+    _git_run( $git, commit => '-m' => 'add gitignore' );
+    _git_run( $git, push => origin => 'master' );
+
+    # Add the same files to the build store, so that when they're deployed,
+    # they would cause an error if added to the repository
+    my $build_dir = $tmpdir->child( 'build' );
+    $build_dir->mkpath;
+    dircopy( $SHARE_DIR->child( qw( deploy ) )->stringify, $build_dir->stringify )
+        or die "Could not copy directory: $!";
+    $build_store = Statocles::Store::File->new( path => $build_dir );
+    $build_dir->child( 'test.swp' )->spew( 'ERROR!' );
+    $build_dir->child( '.DS_Store' )->spew( 'ERROR!' );
+    $build_dir->child( 'submodule' => 'README' )->touchpath->spew( 'ERROR!' );
+
+    lives_ok {
+        $deploy->deploy( $build_store );
+    } 'deploy succeeds';
+
+    my $master_commit_id = $git->run( 'rev-parse' => 'HEAD' );
+
+    my $remotework = $tmpdir->child( 'remote_work' );
+    $remotework->mkpath;
+    my $remotegit = Git::Repository->new( git_dir => "$remotedir", work_tree => "$remotework" );
+
+    _git_run( $remotegit, checkout => '-f' );
+    my $file_iter = $build_store->find_files;
+    while ( my $file = $file_iter->() ) {
+        # Ignored files do not get deployed
+        if ( $file eq '/.DS_Store' || $file eq '/test.swp' ) {
+            ok !$remotework->child( $file->path )->exists, $file->path . ' not deployed';
+        }
+        elsif ( $file =~ m{/submodule} ) {
+            ok !$remotework->child( $file->path )->exists, $file->path . ' not deployed';
+        }
+        else {
+            ok $remotework->child( $file->path )->exists, $file->path . ' deployed';
+        }
+    }
+};
+
+
 
 done_testing;
 
