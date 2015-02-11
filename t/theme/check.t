@@ -123,6 +123,7 @@ for my $theme_dir ( @theme_dirs ) {
         while ( my $path = $iter->() ) {
             next unless $path->is_file;
             next unless $path->basename =~ /[.]ep$/;
+            next unless $path->stat->size > 0;
             my $tmpl = Statocles::Template->new(
                 path => $path,
                 store => $theme_dir,
