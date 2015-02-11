@@ -38,9 +38,9 @@
             % }
             </p>
         ]]></content>
-        <updated><%= $p->published->strftime('%Y-%m-%dT%H:%M:%SZ') %></updated>
+        <updated><%= $p->last_modified->strftime('%Y-%m-%dT%H:%M:%SZ') %></updated>
         % for my $t ( $p->tags ) {
-        <category term="<%= $t %>" />
+        <category term="<%= $t->text %>" />
         % }
     </entry>
     % }
