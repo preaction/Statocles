@@ -1,0 +1,42 @@
+<link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css" />
+<style>
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Forum', sans-serif;
+        font-weight: bold;
+    }
+
+    #index-banner {
+        font-family: 'Forum', sans-serif;
+        height: 300px;
+        position: relative;
+        margin-bottom: 1em;
+        border-bottom: 1px solid #777
+    }
+    #index-banner:before, #index-banner:after {
+        width: 60px;
+        height: 300px;
+        content: url(/Statocles/theme/images/column.png);
+    }
+    #index-banner:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #index-banner:after {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    #index-banner h1 {
+        padding-top: 1em;
+        text-transform: uppercase;
+        font-size: 72px;
+        text-align: center;
+    }
+    #index-banner h1 small {
+        display: block;
+        font-size: 24px;
+    }
+
+</style>

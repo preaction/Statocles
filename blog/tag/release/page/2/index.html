@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <title>Statocles</title>
+        <link href="/Statocles/blog/tag/release.atom" rel="alternate" type="application/atom+xml">
+        <link href="/Statocles/blog/tag/release.rss" rel="alternate" type="application/rss+xml">
+        <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
+<style>
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Forum', sans-serif;
+        font-weight: bold;
+    }
+
+    #index-banner {
+        font-family: 'Forum', sans-serif;
+        height: 300px;
+        position: relative;
+        margin-bottom: 1em;
+        border-bottom: 1px solid #777
+    }
+    #index-banner:before, #index-banner:after {
+        width: 60px;
+        height: 300px;
+        content: url(/Statocles/theme/images/column.png);
+    }
+    #index-banner:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #index-banner:after {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    #index-banner h1 {
+        padding-top: 1em;
+        text-transform: uppercase;
+        font-size: 72px;
+        text-align: center;
+    }
+    #index-banner h1 small {
+        display: block;
+        font-size: 24px;
+    }
+
+</style>
+
+    </head>
+    <body>
+        <header>
+            <nav class="navbar">
+                <div class="container">
+                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <ul>
+                        <li>
+                            <a href="/Statocles/blog">Blog</a>
+                        </li>
+                        <li>
+                            <a href="/Statocles/pod">Docs</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles">Code</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles/issues">Bugs</a>
+                        </li>
+                        <li>
+                            <a href="http://metacpan.org/pod/Statocles">CPAN</a>
+                        </li>
+                        <li>
+                            <a href="https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">IRC</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <a href="https://github.com/preaction/Statocles"><img alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; z-index: 1000; border: 0;"></a>
+
+        </header>
+        <div class="main container">
+            
+<div class="row">
+
+    <div class="nine columns">
+        <main>
+
+            <article>
+                <header>
+                    <h1><a href="/Statocles/blog/2014/12/25/release-v0.031.html">Release v0.031</a></h1>
+
+                    <p class="tags">Tags:
+                        <a href="/Statocles/blog/tag/release" rel="tag">release</a>
+                    </p>
+
+                    <aside>
+                        <p><time datetime="2014-12-25">
+                            Posted on 2014-12-25
+                        </time>
+                            by preaction
+                        </p>
+                    </aside>
+
+                </header>
+
+                <p><a href="http://cpantesters.org">CPAN Testers</a> (the best part of CPAN) revealed a bunch
+of bugs causing test failures that would prevent Statocles from being
+installed. This has demonstrated the value of writing robust test suites.
+Before we can announce a beta, we need to make sure that Statocles can be
+installed on most of the platforms that people use.</p>
+
+<p>This release fixes most of the problems that CPAN Testers have revealed.</p>
+
+<p>Full changelog below:</p>
+
+
+                    <p><a href="/Statocles/blog/2014/12/25/release-v0.031.html#section-2">Continue reading Release v0.031...</a></p>
+
+            </article>
+            <article>
+                <header>
+                    <h1><a href="/Statocles/blog/2014/12/23/release-v0.030.html">Release v0.030</a></h1>
+
+                    <p class="tags">Tags:
+                        <a href="/Statocles/blog/tag/release" rel="tag">release</a>
+                    </p>
+
+                    <aside>
+                        <p><time datetime="2014-12-23">
+                            Posted on 2014-12-23
+                        </time>
+                            by preaction
+                        </p>
+                    </aside>
+
+                </header>
+
+                <p>With the push towards a useful public beta, I made some breaking changes in
+this release:</p>
+
+<ul>
+<li>All our documents now have the file extention &quot;.markdown&quot; and not &quot;.yml&quot;.
+They are not YAML files, they&#39;re Markdown files with optional YAML at the top.</li>
+<li>If the document has YAML, the document must start with &quot;---&quot;.</li>
+<li>Plain YAML files are no longer allowed.</li>
+<li>The plain file store is now called Statocles::Store::File, which means your
+site&#39;s config file may need to change.</li>
+</ul>
+
+<p>If you need to change all your files from &quot;.yml&quot; to &quot;.markdown&quot;, you can use
+the following:</p>
+
+<pre><code>find site -name &#39;*.yml&#39; | rename -s &#39;.yml&#39; &#39;.markdown&#39;
+</code></pre>
+
+<p>Full changelog:</p>
+
+
+                    <p><a href="/Statocles/blog/2014/12/23/release-v0.030.html#section-2">Continue reading Release v0.030...</a></p>
+
+            </article>
+            <article>
+                <header>
+                    <h1><a href="/Statocles/blog/2014/12/22/release-v0.029.html">Release v0.029</a></h1>
+
+                    <p class="tags">Tags:
+                        <a href="/Statocles/blog/tag/release" rel="tag">release</a>
+                    </p>
+
+                    <aside>
+                        <p><time datetime="2014-12-22">
+                            Posted on 2014-12-22
+                        </time>
+                            by preaction
+                        </p>
+                    </aside>
+
+                </header>
+
+                <p>This release adds support for static files to the Store and a new app for
+adding static files to your site.</p>
+
+<p>Since Statocles is meant to be used with a command line, you can now redirect
+input into the &quot;blog post&quot; command. This makes it easy to write scripts that
+generate markdown and use them with the blog.</p>
+
+<p>The Statocles website also got a bit of a facelift, and that revealed a bunch more
+bugs to fix.</p>
+
+<p>There was also a lot of test cleanup in this release, to make future
+development easier.</p>
+
+<p>Full changelog:</p>
+
+
+                    <p><a href="/Statocles/blog/2014/12/22/release-v0.029.html#section-2">Continue reading Release v0.029...</a></p>
+
+            </article>
+            <article>
+                <header>
+                    <h1><a href="/Statocles/blog/2014/12/14/release-v0.028.html">Release v0.028</a></h1>
+
+                    <p class="tags">Tags:
+                        <a href="/Statocles/blog/tag/release" rel="tag">release</a>
+                    </p>
+
+                    <aside>
+                        <p><time datetime="2014-12-14">
+                            Posted on 2014-12-14
+                        </time>
+                            by preaction
+                        </p>
+                    </aside>
+
+                </header>
+
+                <p>This release adds automatic rebuilding of the site when changes are made (OSX
+only, so far). We&#39;re now using Mojo::Log for logging (instead of a hacked up
+<code>diag()</code> sub).</p>
+
+<p>A breaking change to applications: The <code>index()</code> method is no longer used by
+the site to determine what is the front page of the app, appropriate to
+transform into the front page of the site. Now, the first item returned by
+<code>pages()</code> must be the index page. This reduces the number of methods
+applications need, and made it easier to implement the automatic rebuilding.</p>
+
+<p>Finally, some much-needed cleanup as part of the automatic rebuilding feature.
+Still plenty of cleanup to go.</p>
+
+<p>Full changelog:</p>
+
+
+                    <p><a href="/Statocles/blog/2014/12/14/release-v0.028.html#section-2">Continue reading Release v0.028...</a></p>
+
+            </article>
+            <article>
+                <header>
+                    <h1><a href="/Statocles/blog/2014/12/08/release-v0.027.html">Release v0.027</a></h1>
+
+                    <p class="tags">Tags:
+                        <a href="/Statocles/blog/tag/release" rel="tag">release</a>
+                    </p>
+
+                    <aside>
+                        <p><time datetime="2014-12-08">
+                            Posted on 2014-12-08
+                        </time>
+                            by preaction
+                        </p>
+                    </aside>
+
+                </header>
+
+                <p>This release fixes some issues that would prevent Statocles from installing. I may have
+finally fixed <a href="https://github.com/preaction/Statocles/issues/110">the Win32 test failure that has been plaguing me!</a></p>
+
+<p>Full changelog:</p>
+
+
+                    <p><a href="/Statocles/blog/2014/12/08/release-v0.027.html#section-2">Continue reading Release v0.027...</a></p>
+
+            </article>
+        </main>
+
+        <ul class="pager">
+            <li class="prev">
+                <a class="button button-primary" href="/Statocles/blog/tag/release/page/3" rel="next">
+                    ← Older
+                </a>
+            </li>
+            <li class="next">
+                <a class="button button-primary" href="/Statocles/blog/tag/release" rel="prev">
+                    Newer →
+                </a>
+            </li>
+        </ul>
+
+    </div>
+
+    <div class="three columns sidebar">
+        
+        <h1>Tags</h1>
+        <ul class="list-inline">
+            <li><a href="/Statocles/blog/tag/release">release</a></li>
+        </ul>
+        <h1>Feeds</h1>
+        <ul class="list-inline">
+            <li>
+                <a href="/Statocles/blog/tag/release.atom" rel="alternate" type="application/atom+xml">
+                    Atom
+                </a>
+            </li>
+            <li>
+                <a href="/Statocles/blog/tag/release.rss" rel="alternate" type="application/rss+xml">
+                    RSS
+                </a>
+            </li>
+        </ul>
+    </div>
+
+</div>
+
+        </div>
+        <footer>
+            
+            <div class="container tagline">
+                <a href="http://preaction.github.io/Statocles">Made with Statocles</a><br>
+                <a href="http://www.perl.org">Powered by Perl</a>
+            </div>
+        </footer>
+    </body>
+</html>

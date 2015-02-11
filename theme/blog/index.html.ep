@@ -16,8 +16,8 @@
                     </p>
 
                     <aside>
-                        <p><time datetime="<%= $page->published->strftime('%Y-%m-%d') %>">
-                            Posted on <%= $page->published->strftime('%Y-%m-%d') %>
+                        <p><time datetime="<%= $page->last_modified->strftime('%Y-%m-%d') %>">
+                            Posted on <%= $page->last_modified->strftime('%Y-%m-%d') %>
                         </time>
                         % if ( $page->author ) {
                             by <%= $page->author %>
@@ -67,7 +67,7 @@
     </div>
 
     <div class="three columns sidebar">
-        %= include 'site/sidebar_before.html'
+        %= include 'site/sidebar_before.html.ep'
         <h1>Tags</h1>
         <ul class="list-inline">
         % for my $tag ( $app->tags ) {

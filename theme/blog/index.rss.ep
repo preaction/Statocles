@@ -41,7 +41,7 @@
                 </p>
             ]]></description>
             <pubDate>
-                <%= $p->published->strftime('%a, %d %b %Y %T %z') %>
+                <%= $p->last_modified->strftime('%a, %d %b %Y %H:%M:%S ') . sprintf q{%+05d}, $p->last_modified->tzoffset / 36 %>
             </pubDate>
         </item>
         % }

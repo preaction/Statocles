@@ -90,10 +90,49 @@
 
             <article>
                 <header>
+                    <h1><a href="/Statocles/blog/2015/02/11/release-v0.036.html">Release v0.036</a></h1>
+
+                    <p class="tags">Tags:
+                        <a href="/Statocles/blog/tag/release" rel="tag">release</a>
+                    </p>
+
+                    <aside>
+                        <p><time datetime="2015-02-11">
+                            Posted on 2015-02-11
+                        </time>
+                        </p>
+                    </aside>
+
+                </header>
+
+                <p>A couple fixes and a couple breaking changes in this release:</p>
+
+<p>The biggest fix is that now we check for ignored files or submodule files before
+trying to deploy to a Git repository. This should fix a lot of issues with deploying.</p>
+
+<p>All pages now have a <code>last_modified</code> field, which has an appropriate default.
+Also, all the default includes are now templates, so you can use template
+variables inside them.  This breaks all existing themes, so make sure to
+re-bundle your theme with <code>statocles bundle theme</code>.</p>
+
+<p>Some getting started information was added to <a href="/Statocles/pod/Statocles/Help/Theme.html">the Theme
+guide</a>. In short, the best way to make your own
+theme is to start from one of the existing themes.</p>
+
+<p>Finally, the static app now works correctly when it is not at the root of the site.</p>
+
+<p>Full changelog below.</p>
+
+
+                    <p><a href="/Statocles/blog/2015/02/11/release-v0.036.html#section-2">Continue reading Release v0.036...</a></p>
+
+            </article>
+            <article>
+                <header>
                     <h1><a href="/Statocles/blog/2015/02/08/release-v0.035.html">Release v0.035</a></h1>
 
                     <p class="tags">Tags:
-                        <a href="/Statocles/blog/tag/release/index.html" rel="tag">release</a>
+                        <a href="/Statocles/blog/tag/release" rel="tag">release</a>
                     </p>
 
                     <aside>
@@ -142,7 +181,7 @@ default theme to the <code>mytheme</code> directory.</p>
                     <h1><a href="/Statocles/blog/2015/01/25/release-v0.034.html">Release v0.034</a></h1>
 
                     <p class="tags">Tags:
-                        <a href="/Statocles/blog/tag/release/index.html" rel="tag">release</a>
+                        <a href="/Statocles/blog/tag/release" rel="tag">release</a>
                     </p>
 
                     <aside>
@@ -190,7 +229,7 @@ themes to make good use of this feature!</p>
                     <h1><a href="/Statocles/blog/2015/01/11/release-v0.033.html">Release v0.033</a></h1>
 
                     <p class="tags">Tags:
-                        <a href="/Statocles/blog/tag/release/index.html" rel="tag">release</a>
+                        <a href="/Statocles/blog/tag/release" rel="tag">release</a>
                     </p>
 
                     <aside>
@@ -218,7 +257,7 @@ will be updated as expected.</p>
                     <h1><a href="/Statocles/blog/2015/01/04/release-v0.032.html">Release v0.032</a></h1>
 
                     <p class="tags">Tags:
-                        <a href="/Statocles/blog/tag/release/index.html" rel="tag">release</a>
+                        <a href="/Statocles/blog/tag/release" rel="tag">release</a>
                     </p>
 
                     <aside>
@@ -248,43 +287,11 @@ some locale problems.</p>
                     <p><a href="/Statocles/blog/2015/01/04/release-v0.032.html#section-2">Continue reading Release v0.032...</a></p>
 
             </article>
-            <article>
-                <header>
-                    <h1><a href="/Statocles/blog/2014/12/25/release-v0.031.html">Release v0.031</a></h1>
-
-                    <p class="tags">Tags:
-                        <a href="/Statocles/blog/tag/release/index.html" rel="tag">release</a>
-                    </p>
-
-                    <aside>
-                        <p><time datetime="2014-12-25">
-                            Posted on 2014-12-25
-                        </time>
-                            by preaction
-                        </p>
-                    </aside>
-
-                </header>
-
-                <p><a href="http://cpantesters.org">CPAN Testers</a> (the best part of CPAN) revealed a bunch
-of bugs causing test failures that would prevent Statocles from being
-installed. This has demonstrated the value of writing robust test suites.
-Before we can announce a beta, we need to make sure that Statocles can be
-installed on most of the platforms that people use.</p>
-
-<p>This release fixes most of the problems that CPAN Testers have revealed.</p>
-
-<p>Full changelog below:</p>
-
-
-                    <p><a href="/Statocles/blog/2014/12/25/release-v0.031.html#section-2">Continue reading Release v0.031...</a></p>
-
-            </article>
         </main>
 
         <ul class="pager">
             <li class="prev">
-                <a class="button button-primary" href="/Statocles/blog/tag/release/page-2.html" rel="next">
+                <a class="button button-primary" href="/Statocles/blog/tag/release/page/2" rel="next">
                     ← Older
                 </a>
             </li>
@@ -301,7 +308,7 @@ installed on most of the platforms that people use.</p>
         
         <h1>Tags</h1>
         <ul class="list-inline">
-            <li><a href="/Statocles/blog/tag/release/index.html">release</a></li>
+            <li><a href="/Statocles/blog/tag/release">release</a></li>
         </ul>
         <h1>Feeds</h1>
         <ul class="list-inline">

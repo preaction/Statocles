@@ -10,8 +10,8 @@
                 % }
                 </p>
                 <aside>
-                    <p><time datetime="<%= $self->published->strftime('%Y-%m-%d') %>">
-                        Posted on <%= $self->published->strftime('%Y-%m-%d') %>
+                    <p><time datetime="<%= $self->last_modified->strftime('%Y-%m-%d') %>">
+                        Posted on <%= $self->last_modified->strftime('%Y-%m-%d') %>
                     </time>
                     % if ( $self->author ) {
                         by <%= $self->author %>
@@ -38,7 +38,7 @@
     </div>
 
     <div class="three columns sidebar">
-        %= include 'site/sidebar_before.html'
+        %= include 'site/sidebar_before.html.ep'
         <nav id="tags">
             <h1>Tags</h1>
             <ul class="list-inline">

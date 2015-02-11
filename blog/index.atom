@@ -1,11 +1,42 @@
 <?xml version="1.0"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>http://preaction.github.io/Statocles/blog/index.html</id>
+    <id>http://preaction.github.io/Statocles/blog</id>
     <title>Statocles</title>
-    <updated>2015-02-08T21:06:44Z</updated>
+    <updated>2015-02-11T00:35:45Z</updated>
     <link href="http://preaction.github.io/Statocles/blog/index.atom" rel="self" />
-    <link href="http://preaction.github.io/Statocles/blog/index.html" rel="alternate" />
+    <link href="http://preaction.github.io/Statocles/blog" rel="alternate" />
     <generator version="0.035">Statocles</generator>
+    <entry>
+        <id>http://preaction.github.io/Statocles/blog/2015/02/11/release-v0.036.html</id>
+        <title>Release v0.036</title>
+        <link href="http://preaction.github.io/Statocles/blog/2015/02/11/release-v0.036.html" rel="alternate" />
+        <content type="html"><![CDATA[
+            <p>A couple fixes and a couple breaking changes in this release:</p>
+
+<p>The biggest fix is that now we check for ignored files or submodule files before
+trying to deploy to a Git repository. This should fix a lot of issues with deploying.</p>
+
+<p>All pages now have a <code>last_modified</code> field, which has an appropriate default.
+Also, all the default includes are now templates, so you can use template
+variables inside them.  This breaks all existing themes, so make sure to
+re-bundle your theme with <code>statocles bundle theme</code>.</p>
+
+<p>Some getting started information was added to <a href="/pod/Statocles/Help/Theme.html">the Theme
+guide</a>. In short, the best way to make your own
+theme is to start from one of the existing themes.</p>
+
+<p>Finally, the static app now works correctly when it is not at the root of the site.</p>
+
+<p>Full changelog below.</p>
+
+                <p><a href="http://preaction.github.io/Statocles/blog/2015/02/11/release-v0.036.html#section-2">Continue reading...</a></p>
+            <p>Tags:
+                <a href="/blog/tag/release">release</a>
+            </p>
+        ]]></content>
+        <updated>2015-02-11T00:00:00Z</updated>
+        <category term="release" />
+    </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2015/02/08/release-v0.035.html</id>
         <title>Release v0.035</title>
@@ -41,11 +72,11 @@ default theme to the <code>mytheme</code> directory.</p>
 
                 <p><a href="http://preaction.github.io/Statocles/blog/2015/02/08/release-v0.035.html#section-2">Continue reading...</a></p>
             <p>Tags:
-                <a href="/blog/tag/release/index.html">release</a>
+                <a href="/blog/tag/release">release</a>
             </p>
         ]]></content>
         <updated>2015-02-08T00:00:00Z</updated>
-        <category term="Statocles::Link=HASH(0x7fc5a8388590)" />
+        <category term="release" />
     </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2015/01/25/release-v0.034.html</id>
@@ -81,11 +112,11 @@ themes to make good use of this feature!</p>
 
                 <p><a href="http://preaction.github.io/Statocles/blog/2015/01/25/release-v0.034.html#section-2">Continue reading...</a></p>
             <p>Tags:
-                <a href="/blog/tag/release/index.html">release</a>
+                <a href="/blog/tag/release">release</a>
             </p>
         ]]></content>
         <updated>2015-01-25T00:00:00Z</updated>
-        <category term="Statocles::Link=HASH(0x7fc5a83881e8)" />
+        <category term="release" />
     </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2015/01/11/release-v0.033.html</id>
@@ -101,11 +132,11 @@ will be updated as expected.</p>
 
                 <p><a href="http://preaction.github.io/Statocles/blog/2015/01/11/release-v0.033.html#section-2">Continue reading...</a></p>
             <p>Tags:
-                <a href="/blog/tag/release/index.html">release</a>
+                <a href="/blog/tag/release">release</a>
             </p>
         ]]></content>
         <updated>2015-01-11T00:00:00Z</updated>
-        <category term="Statocles::Link=HASH(0x7fc5a8387e40)" />
+        <category term="release" />
     </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2015/01/04/release-v0.032.html</id>
@@ -128,35 +159,11 @@ some locale problems.</p>
 
                 <p><a href="http://preaction.github.io/Statocles/blog/2015/01/04/release-v0.032.html#section-2">Continue reading...</a></p>
             <p>Tags:
-                <a href="/blog/tag/release/index.html">release</a>
+                <a href="/blog/tag/release">release</a>
             </p>
         ]]></content>
         <updated>2015-01-04T00:00:00Z</updated>
-        <category term="Statocles::Link=HASH(0x7fc5a8387a98)" />
-    </entry>
-    <entry>
-        <id>http://preaction.github.io/Statocles/blog/2014/12/25/release-v0.031.html</id>
-        <title>Release v0.031</title>
-        <author><name>preaction</name></author>
-        <link href="http://preaction.github.io/Statocles/blog/2014/12/25/release-v0.031.html" rel="alternate" />
-        <content type="html"><![CDATA[
-            <p><a href="http://cpantesters.org">CPAN Testers</a> (the best part of CPAN) revealed a bunch
-of bugs causing test failures that would prevent Statocles from being
-installed. This has demonstrated the value of writing robust test suites.
-Before we can announce a beta, we need to make sure that Statocles can be
-installed on most of the platforms that people use.</p>
-
-<p>This release fixes most of the problems that CPAN Testers have revealed.</p>
-
-<p>Full changelog below:</p>
-
-                <p><a href="http://preaction.github.io/Statocles/blog/2014/12/25/release-v0.031.html#section-2">Continue reading...</a></p>
-            <p>Tags:
-                <a href="/blog/tag/release/index.html">release</a>
-            </p>
-        ]]></content>
-        <updated>2014-12-25T00:00:00Z</updated>
-        <category term="Statocles::Link=HASH(0x7fc5a83876f0)" />
+        <category term="release" />
     </entry>
 </feed>
 
