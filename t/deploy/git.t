@@ -118,10 +118,7 @@ subtest 'deploy with submodules and ignored files' => sub {
     my $cwd = cwd;
     my $submoduledir = $tmpdir->child('submodule');
     $submoduledir->mkpath;
-    chdir $submoduledir;
-    Git::Repository->run( "init" );
-    chdir $cwd;
-    my $submodule = Git::Repository->new( work_tree => $submoduledir->stringify );
+    my $submodule = make_git( $submoduledir );
     # Add something to pull from the submodule
     $submoduledir->child( 'README' )->spew( 'Do not commit!' );
     $submodule->run( add => 'README' );
@@ -179,6 +176,24 @@ subtest 'deploy with submodules and ignored files' => sub {
 
 done_testing;
 
+sub make_git {
+    my ( $dir, %args ) = @_;
+
+    # Git before 1.6.4 does not allow directory as argument to "init"
+    my $cwd = cwd;
+    chdir $dir;
+    Git::Repository->run( "init", ( $args{bare} ? ( '--bare' ) : () ) );
+    chdir $cwd;
+
+    my $git = Git::Repository->new( work_tree => "$dir" );
+
+    # Set some config so Git knows who we are (and doesn't complain)
+    _git_run( $git, config => 'user.name' => 'Statocles Test User' );
+    _git_run( $git, config => 'user.email' => 'statocles@example.com' );
+
+    return $git;
+}
+
 sub make_deploy {
     my ( $tmpdir, %args ) = @_;
 
@@ -190,25 +205,9 @@ sub make_deploy {
     my $remotedir = $tmpdir->child( 'remotedir' );
     $remotedir->mkpath;
 
-    # Git before 1.6.4 does not allow directory as argument to "init"
-    my $cwd = cwd;
-    chdir $workdir;
-    Git::Repository->run( "init" );
-    chdir $cwd;
-
-    chdir $remotedir;
-    Git::Repository->run( "init", '--bare' );
-    chdir $cwd;
-
-    my $remotegit = Git::Repository->new( work_tree => "$remotedir" );
-    my $workgit = Git::Repository->new( work_tree => "$workdir" );
+    my $remotegit = make_git( $remotedir, bare => 1 );
+    my $workgit = make_git( $workdir );
     _git_run( $workgit, remote => add => $args{remote} => "$remotedir" );
-
-    # Set some config so Git knows who we are (and doesn't complain)
-    for my $git ( $workgit, $remotegit ) {
-        _git_run( $git, config => 'user.name' => 'Statocles Test User' );
-        _git_run( $git, config => 'user.email' => 'statocles@example.com' );
-    }
 
     # Copy the store into the repository, so we have something to commit
     dircopy( $SHARE_DIR->child( qw( app blog ) )->stringify, $remotedir->child( 'blog' )->stringify )
