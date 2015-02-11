@@ -1,6 +1,20 @@
 Changelog for Statocles
 
-0.035 2015-02-09T02:51:15
+0.036 2015-02-11T06:28:21
+ - fix test expecting an include that was renamed
+ - do not check include hooks in theme sanity test
+ - fix empty template includes warning about undef
+ - update statocles site theme from default theme
+ - make all default includes into templates
+ - add getting started help to the theme guide
+ - update the site theme from the default theme
+ - change page published to last_modified
+ - make sure to configure all git repos we create
+ - fix static app doesn't work with a url root
+ - do not deploy ignored files or submodule files
+ - add release v0.035 announcement
+
+0.035 2015-02-09T02:51:15Z
  - update Mojolicious to 5.57 for improved map()
  - fix extra blank line in robots.txt test
  - ignore vim swap files on windows
