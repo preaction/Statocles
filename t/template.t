@@ -65,6 +65,17 @@ subtest 'template include' => sub {
         is $tmpl->render( %args ), "INCLUDE INCLUDEDHTML\n ENDINCLUDE Title Content\n";
     };
 
+    subtest 'empty include' => sub {
+        my $tmpl = Statocles::Template->new(
+            path => $SHARE_DIR->child( 'tmpl', 'include_with_empty.html.ep' ),
+            store => $SHARE_DIR->child( 'tmpl' ),
+        );
+        my @warn;
+        local $SIG{__WARN__} = sub { push @warn, @_ };
+        eq_or_diff $tmpl->render( %args ), "INCLUDE  ENDINCLUDE Title Content\n";
+        ok !@warn, 'no warnings from empty include' or diag explain \@warn;
+    };
+
     subtest 'missing include dies' => sub {
         my $tmpl = Statocles::Template->new(
             path => $SHARE_DIR->child( 'tmpl', 'include_with_template.html.ep' ),

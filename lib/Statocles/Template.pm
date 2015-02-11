@@ -133,7 +133,7 @@ sub _include {
                 content => $store->read_file( "$name" ),
                 store => $store,
             );
-            return $inner_tmpl->render( %$vars, %args );
+            return $inner_tmpl->render( %$vars, %args ) || '';
         }
 
         return $store->read_file( $name );
