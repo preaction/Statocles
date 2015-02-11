@@ -598,7 +598,7 @@ subtest 'bundle the necessary components' => sub {
             bundle => theme => 'default', "$theme_dir"
         );
         my @site_layout = qw( theme site layout.html.ep );
-        my @site_footer = qw( theme site footer.html );
+        my @site_footer = qw( theme site footer.html.ep );
 
         subtest 'first time creates directories' => sub {
             my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
