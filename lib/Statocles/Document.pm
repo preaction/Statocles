@@ -102,6 +102,7 @@ The date/time this document was last modified.
 has last_modified => (
     is => 'rw',
     isa => InstanceOf['Time::Piece'],
+    predicate => 'has_last_modified',
 );
 
 1;

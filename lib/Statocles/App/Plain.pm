@@ -50,7 +50,6 @@ sub pages {
             path => join( '/', $self->url_root, $url ),
             document => $doc,
             layout => $self->site->theme->template( site => 'layout.html' ),
-            published => Time::Piece->new,
         );
 
         if ( $url eq 'index.html' ) {

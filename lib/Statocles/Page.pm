@@ -42,15 +42,17 @@ has path => (
     required => 1,
 );
 
-=attr published
+=attr last_modified
 
-The publish date/time of this page. A L<Time::Piece> object.
+The last modified date/time of this page. A L<Time::Piece> object.
 
 =cut
 
-has published => (
+has last_modified => (
     is => 'ro',
     isa => InstanceOf['Time::Piece'],
+    lazy => 1,
+    default => sub { Time::Piece->new },
 );
 
 =attr links

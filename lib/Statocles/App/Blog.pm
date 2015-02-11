@@ -223,7 +223,7 @@ sub post_pages {
             template => $self->site->theme->template( blog => 'post.html' ),
             document => $doc,
             path => $path,
-            published => Time::Piece->strptime( $date, '%Y-%m-%d' ),
+            last_modified => $doc->has_last_modified ? $doc->last_modified : Time::Piece->strptime( $date, '%Y-%m-%d' ),
             tags => \@tags,
         );
     }

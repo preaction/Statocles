@@ -17,18 +17,6 @@ has _content => (
     init_arg => 'content',
 );
 
-=attr last_modified
-
-The last modified time of the page.
-
-=cut
-
-has last_modified => (
-    is => 'ro',
-    isa => InstanceOf['Time::Piece'],
-    default => sub { Time::Piece->new },
-);
-
 =method content
 
 Get the content for this page.

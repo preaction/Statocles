@@ -44,6 +44,20 @@ has author => (
     default => sub { $_[0]->document->author || '' },
 );
 
+=attr last_modified
+
+Get the last modified date of this page by checking the document.
+
+=cut
+
+has '+last_modified' => (
+    lazy => 1,
+    default => sub {
+        my ( $self ) = @_;
+        $self->document->last_modified || Time::Piece->new;
+    },
+);
+
 =attr tags
 
 The tag links for this document. An array of L<link objects|Statocles::Link>. The
@@ -105,21 +119,6 @@ sub sections {
     my ( $self ) = @_;
     my @sections = split /\n---\n/, $self->document->content;
     return map { $self->markdown->markdown( $_ ) } @sections;
-}
-
-=method last_modified
-
-Get the last modified date of this page by checking the document or using the page's
-publish date.
-
-=cut
-
-sub last_modified {
-    my ( $self ) = @_;
-    if ( my $dt = $self->published ) {
-        return $dt;
-    }
-    return $self->document->last_modified;
 }
 
 =method tags()

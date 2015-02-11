@@ -34,6 +34,21 @@ has [qw( next prev )] => (
     coerce => Path->coercion,
 );
 
+=attr last_modified
+
+Get the last modified date of this list. By default, this is the last modified date
+of the first page in the list of pages.
+
+=cut
+
+has '+last_modified' => (
+    lazy => 1,
+    default => sub {
+        my ( $self ) = @_;
+        $self->pages->[0]->last_modified;
+    },
+);
+
 =attr search_change_frequency
 
 Override the default L<search_change_frequency|Statocles::Page/search_change_frequency>
@@ -101,7 +116,7 @@ sub paginate {
             pages => [ @{$pages}[ @{ $sets[$i] } ] ],
             ( $next ? ( next => $next ) : () ),
             ( $i > 0 ? ( prev => $prev ) : () ),
-            published => $pages->[0]->last_modified,
+            last_modified => $pages->[0]->last_modified,
             %args,
         );
     }
@@ -120,18 +135,6 @@ sub vars {
     return (
         pages => $self->pages,
     );
-}
-
-=method last_modified
-
-Get the last modified date of this page. This will be the most recent last modified
-date of the pages inside this page.
-
-=cut
-
-sub last_modified {
-    my ( $self ) = @_;
-    return $self->published || max map { $_->last_modified } @{ $self->pages };
 }
 
 1;

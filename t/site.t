@@ -180,7 +180,7 @@ subtest 'sitemap.xml and robots.txt' => sub {
     };
 
     my %page_mod = (
-        '/blog/2014/04/23/slug.html' => '2014-04-23',
+        '/blog/2014/04/23/slug.html' => '2014-04-30',
         '/blog/2014/04/30/plug.html' => '2014-04-30',
         '/blog/2014/05/22/(regex)[name].file.html' => '2014-05-22',
         '/blog/2014/06/02/more_tags.html' => '2014-06-02',
@@ -256,7 +256,7 @@ subtest 'sitemap.xml and robots.txt' => sub {
         my $dom = Mojo::DOM->new( $tmpdir->child( 'deploy', 'sitemap.xml' )->slurp );
         is $dom->at('urlset')->type, 'urlset';
         my @urls = $dom->at('urlset')->children->map( $to_href )->each;
-        cmp_deeply \@urls, bag( @expect ) or diag explain \@urls;
+        cmp_deeply \@urls, bag( @expect ) or diag explain \@urls, \@expect;
         cmp_deeply
             [ grep { /\S/ } $tmpdir->child( 'deploy', 'robots.txt' )->lines ],
             [

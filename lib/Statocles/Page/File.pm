@@ -16,18 +16,6 @@ has fh => (
     required => 1,
 );
 
-=attr last_modified
-
-The last modified time of the page.
-
-=cut
-
-has last_modified => (
-    is => 'ro',
-    isa => InstanceOf['Time::Piece'],
-    default => sub { Time::Piece->new },
-);
-
 =method vars
 
 Dies. This page has no templates and no template variables.

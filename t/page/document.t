@@ -62,7 +62,7 @@ subtest 'page last modified overridden by published date' => sub {
     my $page = Statocles::Page::Document->new(
         document => $doc,
         path => '/path/to/page.html',
-        published => $tp,
+        last_modified => $tp,
     );
 
     isa_ok $page->last_modified, 'Time::Piece';
@@ -75,16 +75,16 @@ subtest 'template string' => sub {
     my $page = Statocles::Page::Document->new(
         document => $doc,
         path => '/path/to/page.html',
-        published => $tp,
+        last_modified => $tp,
         template => join( ' ',
-            ( map { "<\%= \$self->$_ \%>" } qw( published path ) ),
+            ( map { "<\%= \$self->$_ \%>" } qw( last_modified path ) ),
             ( map { "<\%= \$doc->$_ \%>" } qw( title author ) ),
             '<%= $content %>',
         ),
     );
 
     my $output = $page->render;
-    my $expect = join " ", $page->published, $page->path, $doc->title, $doc->author,
+    my $expect = join " ", $page->last_modified, $page->path, $doc->title, $doc->author,
         $md->markdown( $doc->content ) . "\n\n";
     eq_or_diff $output, $expect;
 };

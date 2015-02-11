@@ -8,7 +8,7 @@ my $site = Statocles::Site->new( deploy => tempdir );
 
 my @pages = (
     Statocles::Page::Document->new(
-        published => Time::Piece->strptime( '2014-06-04', '%Y-%m-%d' ),
+        last_modified => Time::Piece->strptime( '2014-06-04', '%Y-%m-%d' ),
         path => '/blog/2014/06/04/blug.html',
         document => Statocles::Document->new(
             path => '/2014/06/04/blug.markdown',
@@ -18,7 +18,7 @@ my @pages = (
         ),
     ),
     Statocles::Page::Document->new(
-        published => Time::Piece->strptime( '2014-04-30', '%Y-%m-%d' ),
+        last_modified => Time::Piece->strptime( '2014-04-30', '%Y-%m-%d' ),
         path => '/blog/2014/04/30/page.html',
         document => Statocles::Document->new(
             path => '/2014/04/30/page.markdown',
@@ -28,7 +28,7 @@ my @pages = (
         ),
     ),
     Statocles::Page::Document->new(
-        published => Time::Piece->strptime( '2014-04-23', '%Y-%m-%d' ),
+        last_modified => Time::Piece->strptime( '2014-04-23', '%Y-%m-%d' ),
         path => '/blog/2014/04/23/slug.html',
         document => Statocles::Document->new(
             path => '/2014/04/23/slug.markdown',
@@ -74,7 +74,7 @@ subtest 'extra args' => sub {
 <%= $site %>
 % for my $page ( @$pages ) {
 % my $doc = $page->document;
-<%= $page->published %> <%= $page->path %> <%= $doc->title %> <%= $doc->author %> <%= $page->content %>
+<%= $page->last_modified %> <%= $page->path %> <%= $doc->title %> <%= $doc->author %> <%= $page->content %>
 % }
 <%= $self->prev %>
 <%= $self->next %>
@@ -85,7 +85,7 @@ ENDTEMPLATE
                 . join( "\n",
                     map {
                         join( " ",
-                            $_->published, $_->path, $_->document->title,
+                            $_->last_modified, $_->path, $_->document->title,
                             $_->document->author, $_->content,
                         )
                     }
@@ -134,20 +134,20 @@ subtest 'pagination' => sub {
                     path => '/blog/page-1.html',
                     pages => [ $pages[0] ],
                     next => '/blog/page-2.html',
-                    published => $pages[0]->last_modified,
+                    last_modified => $pages[0]->last_modified,
                 ),
                 Statocles::Page::List->new(
                     path => '/blog/page-2.html',
                     pages => [ $pages[1] ],
                     next => '/blog/page-3.html',
                     prev => '/blog/page-1.html',
-                    published => $pages[0]->last_modified,
+                    last_modified => $pages[0]->last_modified,
                 ),
                 Statocles::Page::List->new(
                     path => '/blog/page-3.html',
                     pages => [ $pages[2] ],
                     prev => '/blog/page-2.html',
-                    published => $pages[0]->last_modified,
+                    last_modified => $pages[0]->last_modified,
                 ),
             );
 
@@ -168,7 +168,7 @@ subtest 'pagination' => sub {
                 Statocles::Page::List->new(
                     path => '/blog/page-1.html',
                     pages => [ @pages ],
-                    published => $pages[0]->last_modified,
+                    last_modified => $pages[0]->last_modified,
                 ),
             );
 
@@ -194,20 +194,20 @@ subtest 'pagination' => sub {
                     path => '/blog/index.html',
                     pages => [ $pages[0] ],
                     next => '/blog/page-2.html',
-                    published => $pages[0]->last_modified,
+                    last_modified => $pages[0]->last_modified,
                 ),
                 Statocles::Page::List->new(
                     path => '/blog/page-2.html',
                     pages => [ $pages[1] ],
                     next => '/blog/page-3.html',
                     prev => '/blog',
-                    published => $pages[0]->last_modified,
+                    last_modified => $pages[0]->last_modified,
                 ),
                 Statocles::Page::List->new(
                     path => '/blog/page-3.html',
                     pages => [ $pages[2] ],
                     prev => '/blog/page-2.html',
-                    published => $pages[0]->last_modified,
+                    last_modified => $pages[0]->last_modified,
                 ),
             );
 
@@ -226,7 +226,7 @@ subtest 'pagination' => sub {
                 Statocles::Page::List->new(
                     path => '/blog/index.html',
                     pages => [ @pages ],
-                    published => $pages[0]->last_modified,
+                    last_modified => $pages[0]->last_modified,
                 ),
             );
 
@@ -252,20 +252,20 @@ subtest 'pagination' => sub {
                     path => '/blog/index.html',
                     pages => [ $pages[0] ],
                     next => '/blog/page/2',
-                    published => $pages[0]->last_modified,
+                    last_modified => $pages[0]->last_modified,
                 ),
                 Statocles::Page::List->new(
                     path => '/blog/page/2/index.html',
                     pages => [ $pages[1] ],
                     next => '/blog/page/3',
                     prev => '/blog',
-                    published => $pages[0]->last_modified,
+                    last_modified => $pages[0]->last_modified,
                 ),
                 Statocles::Page::List->new(
                     path => '/blog/page/3/index.html',
                     pages => [ $pages[2] ],
                     prev => '/blog/page/2',
-                    published => $pages[0]->last_modified,
+                    last_modified => $pages[0]->last_modified,
                 ),
             );
 
@@ -284,7 +284,7 @@ subtest 'pagination' => sub {
                 Statocles::Page::List->new(
                     path => '/blog/index.html',
                     pages => [ @pages ],
-                    published => $pages[0]->last_modified,
+                    last_modified => $pages[0]->last_modified,
                 ),
             );
 
