@@ -9,6 +9,67 @@ a page. Each template has a category and a name. The category usually maps to
 the application name, or "site" for global site templates. Themes get their
 templates from a L<Statocles::Store|Statocles::Store>.
 
+=head1 Default Themes
+
+There is a default theme included with Statocles, with more on the way. The
+default theme uses L<the Skeleton CSS boilerplate|http://getskeleton.com> to
+build a simple, clean starting point for your own theme.
+
+=head1 Editing a Theme
+
+=head2 Start From the Default Theme
+
+It is unlikely that the default themes will do things exactly as you need. So,
+Statocles has a command to copy one of the default themes into your site
+directory so that you can edit it as you need.
+
+    # Bundle the default theme
+    $ statocles bundle theme default site/theme
+    Theme "default" written to "site/theme"
+    Make sure to update "site.yml"
+
+This command will copy the "default" Statocles theme into the "site/theme" directory.
+Now we need to update our C<site.yml> to point to our new theme:
+
+    # site.yml
+    site:
+        class: Statocles::Site
+        args:
+            theme: site/theme
+
+=head1 Minor Theme Adjustments
+
+If you only want to edit some minor things, such as the stylesheets, but want to get
+any new fixes from the default theme you bundled, you can safely edit any of the
+default includes, which start out as completely empty files.
+
+If you have edited the default includes, the C<bundle theme> command will not update
+them.
+
+Some examples of files you can safely edit are:
+
+=over 4
+
+=item site/head_after.html
+
+This include is after all the default C<E<lt>headE<gt>> content. You can add
+links to new scripts and stylesheets here.
+
+=item site/header_after.html
+
+This include is after the nav bar and page header. You can add banners and such
+here.
+
+=item site/footer.html
+
+The entire site footer is up to you to edit.
+
+=item site/sidebar_before.html
+
+If the page has a sidebar, this include will be placed before it.
+
+=back
+
 =head1 Writing a Template
 
 The default L<Statocles::Theme|Statocles::Theme> uses
@@ -87,21 +148,6 @@ directory and referenced in the HTML from "/theme".
 
     # Reference a stylesheet in theme/css/normalize.css
     <link rel="stylesheet" href="/theme/css/normalize.css" />
-
-=head1 Default Themes
-
-There is a default theme included with Statocles, with more on the way. The
-default theme uses L<the Skeleton CSS boilerplate|http://getskeleton.com> to
-build a simple, clean starting point for your own theme.
-
-=head1 Bundling Themes
-
-It is unlikely that the default themes will do things exactly as you need. So,
-Statocles has a command to copy one of the default themes into your site
-directory so that you can edit it as you need.
-
-    # Bundle the default theme
-    statocles bundle theme default
 
 =head1 SEE ALSO
 
