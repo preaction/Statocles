@@ -51,7 +51,7 @@ sub pages {
         }
 
         push @pages, Statocles::Page::File->new(
-            path => $path,
+            path => join( "/", $self->url_root, $path ),
             fh => $self->store->open_file( $path ),
         );
     }

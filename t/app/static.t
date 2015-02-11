@@ -23,14 +23,7 @@ subtest 'constructor' => sub {
 
 subtest 'pages' => sub {
 
-    my $app = Statocles::App::Static->new(
-        url_root => '/',
-        store => $SHARE_DIR->child( qw( app static ) ),
-    );
-
-    test_pages(
-        $site, $app, { noindex => 1 },
-
+    my %pages = (
         '/static.txt' => sub {
             my ( $text ) = @_;
             eq_or_diff $text, $SHARE_DIR->child( qw( app static static.txt ) )->slurp_utf8;
@@ -40,8 +33,28 @@ subtest 'pages' => sub {
             my ( $text ) = @_;
             eq_or_diff $text, $SHARE_DIR->child( qw( app static static.markdown ) )->slurp_utf8;
         },
-
     );
+
+    my $app = Statocles::App::Static->new(
+        url_root => '/',
+        store => $SHARE_DIR->child( qw( app static ) ),
+    );
+
+    test_pages( $site, $app, { noindex => 1 }, %pages );
+
+    subtest 'non-root app' => sub {
+        my $app = Statocles::App::Static->new(
+            url_root => '/nonroot',
+            store => $SHARE_DIR->child( qw( app static ) ),
+        );
+
+        test_pages(
+            $site, $app, { noindex => 1 },
+
+            ( map {; "/nonroot$_" => $pages{ $_ } } keys %pages ),
+        );
+
+    };
 };
 
 done_testing;
