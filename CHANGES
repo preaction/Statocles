@@ -1,6 +1,10 @@
 Changelog for Statocles
 
-0.036 2015-02-11T06:28:21
+0.037 2015-02-13T02:37:55
+ - possibly fix cpantesters reports about submodule
+ - add release v0.036 announcement
+
+0.036 2015-02-11T06:28:21Z
  - fix test expecting an include that was renamed
  - do not check include hooks in theme sanity test
  - fix empty template includes warning about undef
