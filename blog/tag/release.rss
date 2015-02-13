@@ -5,7 +5,28 @@
         <link>http://preaction.github.io/Statocles/blog/tag/release</link>
         <atom:link href="http://preaction.github.io/Statocles/blog/tag/release.rss" rel="self" type="application/rss+xml" />
         <description>Blog feed of Statocles</description>
-        <generator>Statocles 0.035</generator>
+        <generator>Statocles 0.036</generator>
+        <item>
+            <title>Release v0.037</title>
+            <link>http://preaction.github.io/Statocles/blog/2015/02/12/release-v0.037.html</link>
+            <guid>http://preaction.github.io/Statocles/blog/2015/02/12/release-v0.037.html</guid>
+            <description><![CDATA[
+                <p>A short release to potentially fix some possible installation problems, reported
+by CPAN Testers.</p>
+
+<ul>
+<li><a href="https://github.com/preaction/Statocles/commit/08924fd7172ae45ee15bae3f740764b840011dee">possibly fix cpantesters reports about submodule</a> (<a href="https://github.com/preaction/Statocles/issues/245">#245</a>)</li>
+</ul>
+
+                    <p><a href="http://preaction.github.io/Statocles/blog/2015/02/12/release-v0.037.html#section-2">Continue reading...</a></p>
+                <p>Tags:
+                    <a href="/blog/tag/release">release</a>
+                </p>
+            ]]></description>
+            <pubDate>
+                Thu, 12 Feb 2015 20:39:50 +0000
+            </pubDate>
+        </item>
         <item>
             <title>Release v0.036</title>
             <link>http://preaction.github.io/Statocles/blog/2015/02/11/release-v0.036.html</link>
@@ -35,7 +56,7 @@ theme is to start from one of the existing themes.</p>
                 </p>
             ]]></description>
             <pubDate>
-                Wed, 11 Feb 2015 00:00:00 +0000
+                Wed, 11 Feb 2015 00:30:04 +0000
             </pubDate>
         </item>
         <item>
@@ -118,7 +139,7 @@ themes to make good use of this feature!</p>
                 </p>
             ]]></description>
             <pubDate>
-                Sun, 25 Jan 2015 00:00:00 +0000
+                Sun, 25 Jan 2015 00:19:48 +0000
             </pubDate>
         </item>
         <item>
@@ -138,34 +159,7 @@ will be updated as expected.</p>
                 </p>
             ]]></description>
             <pubDate>
-                Sun, 11 Jan 2015 00:00:00 +0000
-            </pubDate>
-        </item>
-        <item>
-            <title>Release v0.032</title>
-            <link>http://preaction.github.io/Statocles/blog/2015/01/04/release-v0.032.html</link>
-            <guid>http://preaction.github.io/Statocles/blog/2015/01/04/release-v0.032.html</guid>
-            <description><![CDATA[
-                <p>Another major breaking change in this version: Theme is now an attribute of a site,
-not an app. The per-app theme was too much flexibility, and made it very difficult
-to add theme collateral like scripts, stylesheets, and images.</p>
-
-<p>The robots.txt is now a template, which allows you to overwrite it with new contents.
-The Mac::FSEvents module, which we use to watch the filesystem on OSX, is now a
-prereq for OSX users.</p>
-
-<p>Finally, some tests were updated with more diagnostics information, to track down
-some locale problems.</p>
-
-<p>Full changelog below:</p>
-
-                    <p><a href="http://preaction.github.io/Statocles/blog/2015/01/04/release-v0.032.html#section-2">Continue reading...</a></p>
-                <p>Tags:
-                    <a href="/blog/tag/release">release</a>
-                </p>
-            ]]></description>
-            <pubDate>
-                Sun, 04 Jan 2015 00:00:00 +0000
+                Sun, 11 Jan 2015 21:07:19 +0000
             </pubDate>
         </item>
     </channel>
