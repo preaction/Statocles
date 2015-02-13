@@ -124,7 +124,7 @@ subtest 'deploy with submodules and ignored files' => sub {
     $submodule->run( add => 'README' );
     $submodule->run( commit => '-m' => 'add README' );
 
-    _git_run( $git, submodule => add => "$submoduledir" );
+    _git_run( $git, submodule => add => "file://$submoduledir" );
     _git_run( $git, commit => '-m' => 'add submodule' );
 
     # Add a gitignore to the repo
