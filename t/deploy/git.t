@@ -76,6 +76,7 @@ subtest 'deploy' => sub {
         while ( my $file = $file_iter->() ) {
             ok $remotedir->child( $file->path )->exists, $file->path . ' deployed';
         }
+        ok !$remotedir->child( 'README' )->exists, 'gh-pages branch is orphan and clean';
     };
 };
 
@@ -96,7 +97,7 @@ subtest 'deploy to specific remote' => sub {
 
     my $master_commit_id = $git->run( 'rev-parse' => 'HEAD' );
 
-    _git_run( $remotegit, checkout => '-f' );
+    _git_run( $remotegit, checkout => '-f', 'master' );
     my $file_iter = $build_store->find_files;
     while ( my $file = $file_iter->() ) {
         ok $remotework->child( $file->path )->exists, $file->path . ' deployed';
@@ -211,6 +212,11 @@ sub make_deploy {
     dircopy( $SHARE_DIR->child( qw( app blog ) )->stringify, $remotedir->child( 'blog' )->stringify )
         or die "Could not copy directory: $!";
     _git_run( $remotegit, add => 'blog' );
+
+    # Also add a file not in the store, to test that we create an orphan branch
+    $remotedir->child( "README" )->spew( "Repository readme, not in deploy branch" );
+    _git_run( $remotegit, add => 'README' );
+
     _git_run( $remotegit, commit => -m => 'Initial commit' );
     _git_run( $workgit, pull => $args{remote} => 'master' );
 

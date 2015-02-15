@@ -53,7 +53,7 @@ around 'deploy' => sub {
         # Create a new, orphan branch
         # Orphan branches were introduced in git 1.7.2
         _git_run( $git, checkout => '--orphan', $self->branch );
-        _git_run( $git, 'rm', '-r', '-f', $deploy_dir );
+        _git_run( $git, 'rm', '-r', '-f', '.' );
     }
     else {
         _git_run( $git, checkout => $self->branch );
