@@ -1,6 +1,14 @@
 Changelog for Statocles
 
-0.037 2015-02-13T02:37:55
+0.038 2015-02-15T05:49:09
+ - fix git-rm compatibility with 1.7.2
+ - fix error adding submodule in test
+ - upgrade git requirement to 1.7.2
+ - fix git version tests to work on Travis
+ - add extra tests for git versions
+ - add release v0.037 announcement
+
+0.037 2015-02-13T02:37:55Z
  - possibly fix cpantesters reports about submodule
  - add release v0.036 announcement
 
