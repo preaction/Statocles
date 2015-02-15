@@ -7,6 +7,30 @@
         <description>Blog feed of Statocles</description>
         <generator>Statocles 0.036</generator>
         <item>
+            <title>Release v0.038</title>
+            <link>http://preaction.github.io/Statocles/blog/2015/02/14/release-v0.038.html</link>
+            <guid>http://preaction.github.io/Statocles/blog/2015/02/14/release-v0.038.html</guid>
+            <description><![CDATA[
+                <p>With a new way to quickly build old git versions, this release fixes compatibility
+with Git 1.7.</p>
+
+<p>Unfortunately, we had to increase our minimum supported version of Git to
+1.7.2, in order to get <code>git status --porcelain</code> and orphan branches. Neither of
+these are that big of a deal-breaker, so in theory we could support some
+slightly older versions of git.</p>
+
+<p>Full changelog below:</p>
+
+                    <p><a href="http://preaction.github.io/Statocles/blog/2015/02/14/release-v0.038.html#section-2">Continue reading...</a></p>
+                <p>Tags:
+                    <a href="/blog/tag/release">release</a>
+                </p>
+            ]]></description>
+            <pubDate>
+                Sat, 14 Feb 2015 23:53:41 +0000
+            </pubDate>
+        </item>
+        <item>
             <title>Release v0.037</title>
             <link>http://preaction.github.io/Statocles/blog/2015/02/12/release-v0.037.html</link>
             <guid>http://preaction.github.io/Statocles/blog/2015/02/12/release-v0.037.html</guid>
@@ -140,26 +164,6 @@ themes to make good use of this feature!</p>
             ]]></description>
             <pubDate>
                 Sun, 25 Jan 2015 00:19:48 +0000
-            </pubDate>
-        </item>
-        <item>
-            <title>Release v0.033</title>
-            <link>http://preaction.github.io/Statocles/blog/2015/01/11/release-v0.033.html</link>
-            <guid>http://preaction.github.io/Statocles/blog/2015/01/11/release-v0.033.html</guid>
-            <description><![CDATA[
-                <p>Just some minor bugfixes in this release: The <code>--date</code> option when making a new blog
-post finally works, and when writing a new post while the daemon is running, the site
-will be updated as expected.</p>
-
-<p>Full changelog below.</p>
-
-                    <p><a href="http://preaction.github.io/Statocles/blog/2015/01/11/release-v0.033.html#section-2">Continue reading...</a></p>
-                <p>Tags:
-                    <a href="/blog/tag/release">release</a>
-                </p>
-            ]]></description>
-            <pubDate>
-                Sun, 11 Jan 2015 21:07:19 +0000
             </pubDate>
         </item>
     </channel>

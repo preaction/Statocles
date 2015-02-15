@@ -2,10 +2,33 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://preaction.github.io/Statocles/blog/tag/release</id>
     <title>Statocles</title>
-    <updated>2015-02-12T20:40:48Z</updated>
+    <updated>2015-02-14T23:57:26Z</updated>
     <link href="http://preaction.github.io/Statocles/blog/tag/release.atom" rel="self" />
     <link href="http://preaction.github.io/Statocles/blog/tag/release" rel="alternate" />
     <generator version="0.036">Statocles</generator>
+    <entry>
+        <id>http://preaction.github.io/Statocles/blog/2015/02/14/release-v0.038.html</id>
+        <title>Release v0.038</title>
+        <link href="http://preaction.github.io/Statocles/blog/2015/02/14/release-v0.038.html" rel="alternate" />
+        <content type="html"><![CDATA[
+            <p>With a new way to quickly build old git versions, this release fixes compatibility
+with Git 1.7.</p>
+
+<p>Unfortunately, we had to increase our minimum supported version of Git to
+1.7.2, in order to get <code>git status --porcelain</code> and orphan branches. Neither of
+these are that big of a deal-breaker, so in theory we could support some
+slightly older versions of git.</p>
+
+<p>Full changelog below:</p>
+
+                <p><a href="http://preaction.github.io/Statocles/blog/2015/02/14/release-v0.038.html#section-2">Continue reading...</a></p>
+            <p>Tags:
+                <a href="/blog/tag/release">release</a>
+            </p>
+        ]]></content>
+        <updated>2015-02-14T23:53:41Z</updated>
+        <category term="release" />
+    </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2015/02/12/release-v0.037.html</id>
         <title>Release v0.037</title>
@@ -136,26 +159,6 @@ themes to make good use of this feature!</p>
             </p>
         ]]></content>
         <updated>2015-01-25T00:19:48Z</updated>
-        <category term="release" />
-    </entry>
-    <entry>
-        <id>http://preaction.github.io/Statocles/blog/2015/01/11/release-v0.033.html</id>
-        <title>Release v0.033</title>
-        <author><name>preaction</name></author>
-        <link href="http://preaction.github.io/Statocles/blog/2015/01/11/release-v0.033.html" rel="alternate" />
-        <content type="html"><![CDATA[
-            <p>Just some minor bugfixes in this release: The <code>--date</code> option when making a new blog
-post finally works, and when writing a new post while the daemon is running, the site
-will be updated as expected.</p>
-
-<p>Full changelog below.</p>
-
-                <p><a href="http://preaction.github.io/Statocles/blog/2015/01/11/release-v0.033.html#section-2">Continue reading...</a></p>
-            <p>Tags:
-                <a href="/blog/tag/release">release</a>
-            </p>
-        ]]></content>
-        <updated>2015-01-11T21:07:19Z</updated>
         <category term="release" />
     </entry>
 </feed>
