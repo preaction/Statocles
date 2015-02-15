@@ -122,7 +122,11 @@ subtest 'deploy with submodules and ignored files' => sub {
     $submodule->run( add => 'README' );
     $submodule->run( commit => '-m' => 'add README' );
 
-    _git_run( $git, submodule => add => "file://$submoduledir" );
+    # Git::Repository sets the "GIT_WORK_TREE" envvar, which makes most
+    # submodule commands fail, so we have to unset it.
+    _git_run( $git, submodule => add => "file://$submoduledir",
+        { env => { GIT_WORK_TREE => undef } }
+    );
     _git_run( $git, commit => '-m' => 'add submodule' );
 
     # Add a gitignore to the repo
