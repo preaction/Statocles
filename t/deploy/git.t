@@ -1,14 +1,13 @@
 
 use Statocles::Base 'Test';
+use Statocles::Deploy::Git;
 BEGIN {
-    my $git_version = ( split ' ', `git --version` )[-1];
+    my $git_version = Statocles::Deploy::Git->_git_version;
     plan skip_all => 'Git not installed' unless $git_version;
     diag "Git version: $git_version";
-    my $v = sprintf '%i.%03i%03i', split /[.]/, $git_version;
-    plan skip_all => 'Git 1.5 or higher required' unless $v >= 1.005;
+    plan skip_all => 'Git 1.7.2 or higher required' unless $git_version >= 1.007002;
 };
 
-use Statocles::Deploy::Git;
 use Statocles::App::Blog;
 use File::Copy::Recursive qw( dircopy );
 
@@ -114,7 +113,6 @@ subtest 'deploy with submodules and ignored files' => sub {
     my $git = Git::Repository->new( work_tree => "$workdir" );
 
     # Add a submodule to the repo
-    # Git before 1.6.4 does not allow directory as argument to "init"
     my $cwd = cwd;
     my $submoduledir = $tmpdir->child('submodule');
     $submoduledir->mkpath;
@@ -179,11 +177,7 @@ done_testing;
 sub make_git {
     my ( $dir, %args ) = @_;
 
-    # Git before 1.6.4 does not allow directory as argument to "init"
-    my $cwd = cwd;
-    chdir $dir;
-    Git::Repository->run( "init", ( $args{bare} ? ( '--bare' ) : () ) );
-    chdir $cwd;
+    Git::Repository->run( "init", ( $args{bare} ? ( '--bare' ) : () ), "$dir" );
 
     my $git = Git::Repository->new( work_tree => "$dir" );
 

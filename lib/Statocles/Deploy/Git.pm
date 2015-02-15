@@ -51,6 +51,7 @@ around 'deploy' => sub {
     my $current_branch = _current_branch( $git );
     if ( !_has_branch( $git, $self->branch ) ) {
         # Create a new, orphan branch
+        # Orphan branches were introduced in git 1.7.2
         _git_run( $git, checkout => '--orphan', $self->branch );
         _git_run( $git, 'rm', '-r', '-f', $deploy_dir );
     }
@@ -62,9 +63,11 @@ around 'deploy' => sub {
     my @files = $self->$orig( $from_store, $message );
 
     # Check to see which files were changed
+    # --porcelain was added in 1.7.0
     my @status_lines = $git->run(
         status => '--porcelain', '--ignore-submodules', '--untracked-files',
     );
+
     my %in_status;
     for my $line ( @status_lines ) {
         my ( $status, $path ) = $line =~ /^\s*(\S+)\s+(.+)$/;
@@ -114,6 +117,13 @@ sub _has_branch {
 sub _has_remote {
     my ( $git, $remote ) = @_;
     return !!grep { $_ eq $remote } map { s/^[\*\s]\s+//; $_ } $git->run( 'remote' );
+}
+
+sub _git_version {
+    my $git_version = ( split ' ', `git --version` )[-1];
+    return unless $git_version;
+    my $v = sprintf '%i.%03i%03i', split /[.]/, $git_version;
+    return $v;
 }
 
 1;
