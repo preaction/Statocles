@@ -36,13 +36,6 @@ __END__
     # Deploy the site
     statocles deploy
 
-=head1 GUIDES
-
-=head2 GETTING STARTED
-
-To get started with your own Statocle site, see
-L<the Statocles setup help in Statocles::Help::Setup|Statocles::Help::Setup>.
-
 =head1 DESCRIPTION
 
 Statocles is an application for building static web pages from a set of plain
@@ -55,7 +48,9 @@ develop rich web content using basic text-based tools.
 
 =item *
 
-A simple format combining YAML and Markdown for editing site content.
+A simple format based on
+L<Markdown|http://daringfireball.net/projects/markdown/> for editing site
+content.
 
 =item *
 
@@ -91,7 +86,7 @@ Post-dated blog posts to appear automatically when the date is passed.
 
 =item *
 
-Customizable L<templates|Statocles::Template> using L<the Mojolicious template
+Customizable L<themes|Statocles::Theme> using L<the Mojolicious template
 language|Mojo::Template#SYNTAX>.
 
 =item *
@@ -104,87 +99,27 @@ SEO-friendly features such as L<sitemaps (sitemap.xml)|http://www.sitemaps.org>.
 
 =back
 
-=head1 OVERVIEW
 
-=head2 DOCUMENTS
+=head1 GUIDES
 
-A L<document|Statocles::Document> is the main content of the site. The user does
-all the work with documents: adding, editing, and removing documents.
+=head2 GETTING STARTED
 
-The default store reads documents in a combined YAML and Markdown format,
-easily editable with any text editor. A sample document looks like:
+To get started with your own Statocle site, see
+L<the Statocles setup help in Statocles::Help::Setup|Statocles::Help::Setup>.
 
-    ---
-    title: This is a title
-    author: preaction
-    ---
-    # This is the markdown content
+=head2 THEMING
 
-    This is a paragraph
+To change how your Statocles site looks, see L<Statocles::Help::Theme>.
 
-This is the same format that L<Jekyll|http://jekyllrb.com> uses. The document
-format is described in the L<Statocles::Store::File> documentation under
-L<Frontmatter Document Format|Statocles::Store::File/"Frontmatter Document Format">.
+=head2 DEPLOYING
 
-=head2 PAGES
+To deploy your Statocles site to a Git repository, or any remote server, see
+L<Statocles::Help::Deploy>.
 
-A L<Statocles::Page> is rendered HTML ready to be sent to a user. Statocles
-generates pages from the documents that the user provides. One document may
-generate multiple pages, and pages may have multiple formats like HTML or RSS.
+=head2 DEVELOPING
 
-=over 4
-
-=item L<Statocles::Page::Document>
-
-This page renders a single document. This is used for the main page of a blog
-post, for example.
-
-=item L<Statocles::Page::List>
-
-This page renders a list of other pages (not documents). This is used for index
-pages.
-
-=item L<Statocles::Page::Feed>
-
-This page renders an alternate version of a list page, like an RSS or Atom feed.
-
-=back
-
-=head2 APPLICATIONS
-
-An application is the module that will take the documents the user provides and
-turn them into the pages that can be written out to the filesystem.
-
-=over 4
-
-=item L<Statocles::App::Blog>
-
-A simple blogging application.
-
-=back
-
-=head2 SITES
-
-A L<Statocles::Site> manages a bunch of applications, writing and deploying the
-resulting pages.
-
-Deploying the site may involve a simple file copy, but it could also involve a
-Git repository, an FTP site, or a database.
-
-=over 4
-
-=item L<Statocles::Site::Git>
-
-A simple Git repository site.
-
-=back
-
-=head2 STORES
-
-A L<Statocles::Store> reads and writes documents and pages. The default store
-(L<Statocles::Store::File>) reads documents in YAML and writes pages to a file,
-but stores could read documents as JSON, or from a Mongo database, and write
-pages to a database, or whereever you want!
+To develop custom Statocles applications, custom ways to deploy, custom template
+languages, or other extensions, see L<Statocles::Help::Develop>.
 
 =head1 SEE ALSO
 

@@ -1,0 +1,154 @@
+# PODNAME: Statocles::Help::Develop
+# ABSTRACT: How Statocles works and how to write Statocles modules
+
+=head1 DESCRIPTION
+
+This is a high-level overview of how Statocles works: Which modules are responsible
+for which tasks.
+
+=head1 OVERVIEW
+
+Statocles has a small workflow:
+
+=over 4
+
+=item *
+
+User creates L<Documents|Statocles::Document>.
+
+=item *
+
+L<Stores|Statocles::Store> read and write documents.
+
+=item *
+
+L<Applications|Statocles::App> use Stores to read documents and create
+L<Pages|Statocles::Page>.
+
+=item *
+
+L<Sites|Statocles::Site> collect a set of Applications.
+
+=item *
+
+Sites have a L<Themes|Statocles::Theme> that builds
+L<Templates|Statocles::Template> that are given to Pages.
+
+=item *
+
+Finally, the Site writes the Page to a L<Deploy|Statocles::Deploy>.
+
+=back
+
+=head1 DOCUMENTS
+
+A L<document|Statocles::Document> is the main content of the site. The user does
+all the work with documents: adding, editing, and removing documents.
+
+The default store reads documents in a Markdown format with a YAML header,
+easily editable with any text editor. A sample document looks like:
+
+    ---
+    title: This is a title
+    author: preaction
+    ---
+    # This is the markdown content
+
+    This is a paragraph
+
+The document format is described in the L<Statocles::Store::File> documentation
+under L<Frontmatter Document Format|Statocles::Store::File/"Frontmatter
+Document Format">.
+
+=head1 STORES
+
+A L<Statocles::Store> reads and writes documents and pages. The default store
+reads documents in YAML and writes pages to a file, but stores could read
+documents as JSON, or from a Mongo database, and write pages to a database, or
+whereever you want!
+
+=over 4
+
+=item L<Statocles::Store::File>
+
+Read documents from the filesystem.
+
+=back
+
+=head1 APPLICATIONS
+
+An application is the module that will take the documents the user provides and
+turn them into the pages that can be written out to the filesystem.
+
+=over 4
+
+=item L<Statocles::App::Plain>
+
+Plain markdown documents are turned into pages with no special arrangement.
+
+=item L<Statocles::App::Blog>
+
+A simple blogging application.
+
+=item L<Statocles::App::Static>
+
+Static files, like images and other site collateral, are copied into the site
+with no processing whatsoever.
+
+=back
+
+=head1 PAGES
+
+A L<Statocles::Page> is rendered HTML ready to be sent to a user. Statocles
+Applications generate pages from the documents that the user provides. One
+document may generate multiple pages, and pages may have multiple formats like
+HTML or RSS.
+
+=over 4
+
+=item L<Statocles::Page::Document>
+
+This page renders a single document. This is used for the main page of a blog
+post, for example.
+
+=item L<Statocles::Page::List>
+
+This page renders a list of other pages (not documents). This is used for index
+pages.
+
+=item L<Statocles::Page::Feed>
+
+This page renders an alternate version of a list page, like an RSS or Atom feed.
+
+=back
+
+=head1 SITES
+
+A L<Statocles::Site> manages a bunch of applications, writing and deploying the
+resulting pages.
+
+=head1 THEMES
+
+A L<Statocles::Theme> creates L<Statocles::Template> objects using L<Mojo::Template>.
+
+If you want to use Template Toolkit or Text::Xslate, you would create a new
+Theme class that provides a different Template object.
+
+=head1 DEPLOYS
+
+Deploying the site may involve a simple file copy, but it could also involve a
+Git repository, an FTP site, or a database.
+
+=over 4
+
+=item L<Statocles::Deploy::File>
+
+Copy the site's files to a given local path.
+
+=item L<Statocles::Deploy::Git>
+
+Copy the files to a git repository and push them out. This is how a Github Pages
+site is deployed.
+
+=back
+
