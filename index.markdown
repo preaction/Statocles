@@ -8,6 +8,26 @@ title: Home
 Statocles is a minimal web content management system with a focus on easy editing
 with any plain text editor.
 
+<div class="row" style="display: table">
+    <div class="one-half column" style="display: table-cell">
+        Markdown and YAML...
+        <pre style="margin-top: 0"><code style="white-space: pre-wrap">---
+title: Home
+---
+# Welcome
+
+My name is *Housemoon* and this is [a website](http://example.com)
+</code></pre>
+    </div>
+    <div class="one-half column" style="display: table-cell">
+        Becomes HTML...
+        <div style="background: #F1F1F1; border: 1px solid #E1E1E1; border-radius: 4px; padding: 1rem 1.5rem; margin: 0 0.2rem;">
+            <h1>Welcome</h1>
+            <p>My name is <strong>Housemoon</strong> and this is <a href="#">a website</a></p>
+        </div>
+    </div>
+</div>
+
 ## Features
 
 * A simple format combining YAML and Markdown for editing site content.

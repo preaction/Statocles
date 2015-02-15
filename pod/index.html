@@ -109,7 +109,7 @@
 
 <ul>
 
-<li><p>A simple format combining YAML and Markdown for editing site content.</p>
+<li><p>A simple format based on <a href="http://daringfireball.net/projects/markdown/">Markdown</a> for editing site content.</p>
 
 </li>
 <li><p>A command-line application for building, deploying, and editing the site.</p>
@@ -137,7 +137,7 @@
 </ul>
 
 </li>
-<li><p>Customizable <a href="/Statocles/pod/Statocles/Template.html">templates</a> using <a href="https://metacpan.org/pod/Mojo::Template#SYNTAX">the Mojolicious template language</a>.</p>
+<li><p>Customizable <a href="/Statocles/pod/Statocles/Theme.html">themes</a> using <a href="https://metacpan.org/pod/Mojo::Template#SYNTAX">the Mojolicious template language</a>.</p>
 
 </li>
 <li><p>A clean default theme using <a href="http://getbootstrap.com">Twitter Bootstrap</a>.</p>
@@ -154,83 +154,17 @@
 
 <p>To get started with your own Statocle site, see <a href="/Statocles/pod/Statocles/Help/Setup.html">the Statocles setup help in Statocles::Help::Setup</a>.</p>
 
-<h1 id="OVERVIEW">OVERVIEW</h1>
+<h2 id="THEMING">THEMING</h2>
 
-<h2 id="DOCUMENTS">DOCUMENTS</h2>
+<p>To change how your Statocles site looks, see <a href="/Statocles/pod/Statocles/Help/Theme.html">Statocles::Help::Theme</a>.</p>
 
-<p>A <a href="/Statocles/pod/Statocles/Document.html">document</a> is the main content of the site. The user does all the work with documents: adding, editing, and removing documents.</p>
+<h2 id="DEPLOYING">DEPLOYING</h2>
 
-<p>The default store reads documents in a combined YAML and Markdown format, easily editable with any text editor. A sample document looks like:</p>
+<p>To deploy your Statocles site to a Git repository, or any remote server, see <a href="/Statocles/pod/Statocles/Help/Deploy.html">Statocles::Help::Deploy</a>.</p>
 
-<pre><code>    ---
-    title: This is a title
-    author: preaction
-    ---
-    # This is the markdown content
+<h2 id="DEVELOPING">DEVELOPING</h2>
 
-    This is a paragraph</code></pre>
-
-<p>This is the same format that <a href="http://jekyllrb.com">Jekyll</a> uses. The document format is described in the <a href="/Statocles/pod/Statocles/Store/File.html">Statocles::Store::File</a> documentation under <a href="/Statocles/pod/Statocles/Store/File#Frontmatter-Document-Format.html">Frontmatter Document Format</a>.</p>
-
-<h2 id="PAGES">PAGES</h2>
-
-<p>A <a href="/Statocles/pod/Statocles/Page.html">Statocles::Page</a> is rendered HTML ready to be sent to a user. Statocles generates pages from the documents that the user provides. One document may generate multiple pages, and pages may have multiple formats like HTML or RSS.</p>
-
-<dl>
-
-<dt><a href="/Statocles/pod/Statocles/Page/Document.html">Statocles::Page::Document</a></dt>
-<dd>
-
-<p>This page renders a single document. This is used for the main page of a blog post, for example.</p>
-
-</dd>
-<dt><a href="/Statocles/pod/Statocles/Page/List.html">Statocles::Page::List</a></dt>
-<dd>
-
-<p>This page renders a list of other pages (not documents). This is used for index pages.</p>
-
-</dd>
-<dt><a href="/Statocles/pod/Statocles/Page/Feed.html">Statocles::Page::Feed</a></dt>
-<dd>
-
-<p>This page renders an alternate version of a list page, like an RSS or Atom feed.</p>
-
-</dd>
-</dl>
-
-<h2 id="APPLICATIONS">APPLICATIONS</h2>
-
-<p>An application is the module that will take the documents the user provides and turn them into the pages that can be written out to the filesystem.</p>
-
-<dl>
-
-<dt><a href="/Statocles/pod/Statocles/App/Blog.html">Statocles::App::Blog</a></dt>
-<dd>
-
-<p>A simple blogging application.</p>
-
-</dd>
-</dl>
-
-<h2 id="SITES">SITES</h2>
-
-<p>A <a href="/Statocles/pod/Statocles/Site.html">Statocles::Site</a> manages a bunch of applications, writing and deploying the resulting pages.</p>
-
-<p>Deploying the site may involve a simple file copy, but it could also involve a Git repository, an FTP site, or a database.</p>
-
-<dl>
-
-<dt><a href="/Statocles/pod/Statocles/Site/Git.html">Statocles::Site::Git</a></dt>
-<dd>
-
-<p>A simple Git repository site.</p>
-
-</dd>
-</dl>
-
-<h2 id="STORES">STORES</h2>
-
-<p>A <a href="/Statocles/pod/Statocles/Store.html">Statocles::Store</a> reads and writes documents and pages. The default store (<a href="/Statocles/pod/Statocles/Store/File.html">Statocles::Store::File</a>) reads documents in YAML and writes pages to a file, but stores could read documents as JSON, or from a Mongo database, and write pages to a database, or whereever you want!</p>
+<p>To develop custom Statocles applications, custom ways to deploy, custom template languages, or other extensions, see <a href="/Statocles/pod/Statocles/Help/Develop.html">Statocles::Help::Develop</a>.</p>
 
 <h1 id="SEE-ALSO">SEE ALSO</h1>
 

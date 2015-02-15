@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <title>Statocles</title>
+        <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
+<style>
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Forum', sans-serif;
+        font-weight: bold;
+    }
+
+    #index-banner {
+        font-family: 'Forum', sans-serif;
+        height: 300px;
+        position: relative;
+        margin-bottom: 1em;
+        border-bottom: 1px solid #777
+    }
+    #index-banner:before, #index-banner:after {
+        width: 60px;
+        height: 300px;
+        content: url(/Statocles/theme/images/column.png);
+    }
+    #index-banner:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #index-banner:after {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    #index-banner h1 {
+        padding-top: 1em;
+        text-transform: uppercase;
+        font-size: 72px;
+        text-align: center;
+    }
+    #index-banner h1 small {
+        display: block;
+        font-size: 24px;
+    }
+
+</style>
+
+    </head>
+    <body>
+        <header>
+            <nav class="navbar">
+                <div class="container">
+                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <ul>
+                        <li>
+                            <a href="/Statocles/blog">Blog</a>
+                        </li>
+                        <li>
+                            <a href="/Statocles/pod">Docs</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles">Code</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles/issues">Bugs</a>
+                        </li>
+                        <li>
+                            <a href="http://metacpan.org/pod/Statocles">CPAN</a>
+                        </li>
+                        <li>
+                            <a href="https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">IRC</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <a href="https://github.com/preaction/Statocles"><img alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; z-index: 1000; border: 0;"></a>
+
+        </header>
+        <div class="main container">
+            <h1 id="NAME">NAME</h1>
+
+<p>Statocles::Help::Develop - How Statocles works and how to write Statocles modules</p>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>This is a high-level overview of how Statocles works: Which modules are responsible for which tasks.</p>
+
+<h1 id="OVERVIEW">OVERVIEW</h1>
+
+<p>Statocles has a small workflow:</p>
+
+<ul>
+
+<li><p>User creates <a href="/Statocles/pod/Statocles/Document.html">Documents</a>.</p>
+
+</li>
+<li><p><a href="/Statocles/pod/Statocles/Store.html">Stores</a> read and write documents.</p>
+
+</li>
+<li><p><a href="/Statocles/pod/Statocles/App.html">Applications</a> use Stores to read documents and create <a href="/Statocles/pod/Statocles/Page.html">Pages</a>.</p>
+
+</li>
+<li><p><a href="/Statocles/pod/Statocles/Site.html">Sites</a> collect a set of Applications.</p>
+
+</li>
+<li><p>Sites have a <a href="/Statocles/pod/Statocles/Theme.html">Themes</a> that builds <a href="/Statocles/pod/Statocles/Template.html">Templates</a> that are given to Pages.</p>
+
+</li>
+<li><p>Finally, the Site writes the Page to a <a href="/Statocles/pod/Statocles/Deploy.html">Deploy</a>.</p>
+
+</li>
+</ul>
+
+<h1 id="DOCUMENTS">DOCUMENTS</h1>
+
+<p>A <a href="/Statocles/pod/Statocles/Document.html">document</a> is the main content of the site. The user does all the work with documents: adding, editing, and removing documents.</p>
+
+<p>The default store reads documents in a Markdown format with a YAML header, easily editable with any text editor. A sample document looks like:</p>
+
+<pre><code>    ---
+    title: This is a title
+    author: preaction
+    ---
+    # This is the markdown content
+
+    This is a paragraph</code></pre>
+
+<p>The document format is described in the <a href="/Statocles/pod/Statocles/Store/File.html">Statocles::Store::File</a> documentation under <a href="/Statocles/pod/Statocles/Store/File#Frontmatter-Document-Format.html">Frontmatter Document Format</a>.</p>
+
+<h1 id="STORES">STORES</h1>
+
+<p>A <a href="/Statocles/pod/Statocles/Store.html">Statocles::Store</a> reads and writes documents and pages. The default store reads documents in YAML and writes pages to a file, but stores could read documents as JSON, or from a Mongo database, and write pages to a database, or whereever you want!</p>
+
+<dl>
+
+<dt><a href="/Statocles/pod/Statocles/Store/File.html">Statocles::Store::File</a></dt>
+<dd>
+
+<p>Read documents from the filesystem.</p>
+
+</dd>
+</dl>
+
+<h1 id="APPLICATIONS">APPLICATIONS</h1>
+
+<p>An application is the module that will take the documents the user provides and turn them into the pages that can be written out to the filesystem.</p>
+
+<dl>
+
+<dt><a href="/Statocles/pod/Statocles/App/Plain.html">Statocles::App::Plain</a></dt>
+<dd>
+
+<p>Plain markdown documents are turned into pages with no special arrangement.</p>
+
+</dd>
+<dt><a href="/Statocles/pod/Statocles/App/Blog.html">Statocles::App::Blog</a></dt>
+<dd>
+
+<p>A simple blogging application.</p>
+
+</dd>
+<dt><a href="/Statocles/pod/Statocles/App/Static.html">Statocles::App::Static</a></dt>
+<dd>
+
+<p>Static files, like images and other site collateral, are copied into the site with no processing whatsoever.</p>
+
+</dd>
+</dl>
+
+<h1 id="PAGES">PAGES</h1>
+
+<p>A <a href="/Statocles/pod/Statocles/Page.html">Statocles::Page</a> is rendered HTML ready to be sent to a user. Statocles Applications generate pages from the documents that the user provides. One document may generate multiple pages, and pages may have multiple formats like HTML or RSS.</p>
+
+<dl>
+
+<dt><a href="/Statocles/pod/Statocles/Page/Document.html">Statocles::Page::Document</a></dt>
+<dd>
+
+<p>This page renders a single document. This is used for the main page of a blog post, for example.</p>
+
+</dd>
+<dt><a href="/Statocles/pod/Statocles/Page/List.html">Statocles::Page::List</a></dt>
+<dd>
+
+<p>This page renders a list of other pages (not documents). This is used for index pages.</p>
+
+</dd>
+<dt><a href="/Statocles/pod/Statocles/Page/Feed.html">Statocles::Page::Feed</a></dt>
+<dd>
+
+<p>This page renders an alternate version of a list page, like an RSS or Atom feed.</p>
+
+</dd>
+</dl>
+
+<h1 id="SITES">SITES</h1>
+
+<p>A <a href="/Statocles/pod/Statocles/Site.html">Statocles::Site</a> manages a bunch of applications, writing and deploying the resulting pages.</p>
+
+<h1 id="THEMES">THEMES</h1>
+
+<p>A <a href="/Statocles/pod/Statocles/Theme.html">Statocles::Theme</a> creates <a href="/Statocles/pod/Statocles/Template.html">Statocles::Template</a> objects using <a href="https://metacpan.org/pod/Mojo::Template">Mojo::Template</a>.</p>
+
+<p>If you want to use Template Toolkit or Text::Xslate, you would create a new Theme class that provides a different Template object.</p>
+
+<h1 id="DEPLOYS">DEPLOYS</h1>
+
+<p>Deploying the site may involve a simple file copy, but it could also involve a Git repository, an FTP site, or a database.</p>
+
+<dl>
+
+<dt><a href="/Statocles/pod/Statocles/Deploy/File.html">Statocles::Deploy::File</a></dt>
+<dd>
+
+<p>Copy the site&#39;s files to a given local path.</p>
+
+</dd>
+<dt><a href="/Statocles/pod/Statocles/Deploy/Git.html">Statocles::Deploy::Git</a></dt>
+<dd>
+
+<p>Copy the files to a git repository and push them out. This is how a Github Pages site is deployed.</p>
+
+</dd>
+</dl>
+
+
+
+        </div>
+        <footer>
+            
+            <div class="container tagline">
+                <a href="http://preaction.github.io/Statocles">Made with Statocles</a><br>
+                <a href="http://www.perl.org">Powered by Perl</a>
+            </div>
+        </footer>
+    </body>
+</html>
