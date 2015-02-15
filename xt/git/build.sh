@@ -7,6 +7,7 @@ fi
 
 VERSION=$1
 cd git
-git checkout $1
-make clean && ./configure --prefix="$(pwd)/../versions/$1" --without-gtk --without-tcltk --without-gui && make && make install
+git checkout $1 || exit 1
+make clean && make configure && ./configure --prefix="$(pwd)/../versions/$1" --without-gtk --without-tcltk --without-gui --without-git-gui && make && make install
+git checkout master
 cd -
