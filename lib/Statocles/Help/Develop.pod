@@ -99,10 +99,10 @@ with no processing whatsoever.
 
 =head1 PAGES
 
-A L<Statocles::Page> is rendered HTML ready to be sent to a user. Statocles
-Applications generate pages from the documents that the user provides. One
-document may generate multiple pages, and pages may have multiple formats like
-HTML or RSS.
+A L<Statocles::Page> is collected information ready to be rendered into HTML
+(or whatever). Statocles Applications generate pages from the documents that
+the user provides. One document may generate multiple pages, and pages may have
+multiple formats like HTML or RSS.
 
 =over 4
 
@@ -120,12 +120,25 @@ pages.
 
 This page renders an alternate version of a list page, like an RSS or Atom feed.
 
+=item L<Statocles::Page::Plain>
+
+This page adds a layout, but does not require a document. Good if you've already
+got HTML.
+
+=item L<Statocles::Page::File>
+
+This page is used for non-rendered static files like images. No processing is
+done.
+
 =back
 
 =head1 SITES
 
 A L<Statocles::Site> manages a bunch of applications, writing and deploying the
 resulting pages.
+
+The site controls the entire workflow, reading pages from the applications and
+writing them to the appropriate deploy.
 
 =head1 THEMES
 
