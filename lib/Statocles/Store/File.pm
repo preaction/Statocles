@@ -126,10 +126,15 @@ sub read_document {
     my ( $self, $path ) = @_;
     site->log->debug( "Read document: " . $path );
     my $full_path = $self->path->child( $path );
-    my @lines = $full_path->lines_utf8;
+    my $doc = $self->_parse_frontmatter( $full_path );
+    return $self->_thaw_document( $doc );
+}
 
+sub _parse_frontmatter {
+    my ( $self, $path ) = @_;
     my $doc;
 
+    my @lines = $path->lines_utf8;
     if ( $lines[0] =~ /^---/ ) {
         shift @lines;
 
@@ -138,7 +143,7 @@ sub read_document {
 
         # If we did not find the marker between YAML and Markdown
         if ( $i < 0 ) {
-            die "Could not find end of front matter (---) in '$full_path'\n";
+            die "Could not find end of front matter (---) in '$path'\n";
         }
 
         # Before the marker is YAML
@@ -146,7 +151,7 @@ sub read_document {
             $doc = YAML::Load( join "", splice @lines, 0, $i );
         };
         if ( $@ ) {
-            die "Error parsing YAML in '$full_path'\n$@";
+            die "Error parsing YAML in '$path'\n$@";
         }
 
         # Remove the last '---' mark
@@ -155,7 +160,7 @@ sub read_document {
 
     $doc->{content} = join "", @lines;
 
-    return $self->_thaw_document( $doc );
+    return $doc;
 }
 
 sub _thaw_document {
