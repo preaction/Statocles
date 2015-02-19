@@ -11,8 +11,8 @@ The biggest change in this release is the new [Deploy object](/pod/Statocles/Dep
 The deploy object handles deploying the site to a folder or a Git repository. Future
 possibilities include rsync or FTP, or any command at all.
 
-*NOTE:* This change breaks your site.yml file, so please read [the setup help
-file](/pod/Statocles/Help/Setup.html) to fix it.
+*NOTE:* This change breaks your site.yml file, so please read [the config help
+file](/pod/Statocles/Help/Config.html) to fix it.
 
 Some major theme changes were also added, and a new default theme (using [the
 Skeleton CSS library](http://getskeleton.com)) was added, removing the need for

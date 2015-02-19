@@ -105,7 +105,7 @@ SEO-friendly features such as L<sitemaps (sitemap.xml)|http://www.sitemaps.org>.
 =head2 GETTING STARTED
 
 To get started with your own Statocle site, see
-L<the Statocles setup help in Statocles::Help::Setup|Statocles::Help::Setup>.
+L<the Statocles config help in Statocles::Help::Config|Statocles::Help::Config>.
 
 =head2 THEMING
 

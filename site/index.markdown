@@ -51,5 +51,5 @@ Install the latest version of Statocles:
 
 ## Getting Started
 
-Build a basic site using [the Statocles Setup tutorial](/pod/Statocles/Help/Setup.html).
+Build a basic site using [the Statocles Config guide](/pod/Statocles/Help/Config.html).
 
