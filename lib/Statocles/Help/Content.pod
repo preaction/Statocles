@@ -1,4 +1,5 @@
 # PODNAME: Statocles::Help::Content
+# ABSTRACT: How to use Statocles to write content
 
 =head1 DESCRIPTION
 

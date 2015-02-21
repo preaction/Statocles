@@ -21,7 +21,7 @@ __END__
 
 =head1 SYNOPSIS
 
-    # !!! Read the Getting Started guide to set up a site.yml config file
+    # !!! Read the Statocles::Help guide to set up a site.yml config file
 
     # Create a new blog post
     export EDITOR=vim
@@ -99,33 +99,11 @@ SEO-friendly features such as L<sitemaps (sitemap.xml)|http://www.sitemaps.org>.
 
 =back
 
+=head1 GETTING STARTED
 
-=head1 GUIDES
-
-=head2 GETTING STARTED
-
-To get started with your own Statocle site, see
-L<the Statocles config help in Statocles::Help::Config|Statocles::Help::Config>.
-
-=head2 THEMING
-
-To change how your Statocles site looks, see L<Statocles::Help::Theme>.
-
-=head2 DEPLOYING
-
-To deploy your Statocles site to a Git repository, or any remote server, see
-L<Statocles::Help::Deploy>.
-
-=head2 DEVELOPING
-
-To develop custom Statocles applications, custom ways to deploy, custom template
-languages, or other extensions, see L<Statocles::Help::Develop>.
+To get started with Statocles, L<consult the Statocles::Help guides|Statocles::Help>.
 
 =head1 SEE ALSO
 
 For news and documentation, L<visit the Statocles website at
 http://preaction.github.io/Statocles|http://preaction.github.io/Statocles>.
-
-There are static site generators written in other languages. See a big list of
-them at L<https://staticsitegenerators.net>.
-
