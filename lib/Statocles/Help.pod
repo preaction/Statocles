@@ -3,10 +3,14 @@
 
 =head1 GUIDES
 
-=head2 GETTING STARTED
+=head2 CONFIGURATION
 
 To get started with your own Statocle site, see
 L<the Statocles config help in Statocles::Help::Config|Statocles::Help::Config>.
+
+=head2 CONTENT
+
+To use Statocles to manage content, see L<Statocles::Help::Content>.
 
 =head2 THEMING
 
