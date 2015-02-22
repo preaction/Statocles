@@ -35,6 +35,7 @@ This command also helps to manage content in Statocles apps.
 
 The command to run. Available commands:
 
+    create                      - Create a new site
     build                       - Build the site
     daemon                      - Run an HTTP daemon to test the site
     deploy                      - Deploy the site

@@ -1,0 +1,41 @@
+site:
+    class: 'Statocles::Site'
+    args:
+        title: 'My Statocles Site'
+        nav:
+            main:
+                - title: 'Blog'
+                  href: '/'
+        theme: { '$ref': 'theme' }
+        apps:
+            blog: { '$ref': 'blog_app' }
+            page: { '$ref': 'page_app' }
+            static: { '$ref': 'static_app' }
+        index: 'blog'
+        deploy: { '$ref': 'deploy' }
+
+blog_app:
+    class: 'Statocles::App::Blog'
+    args:
+        store: 'blog'
+        url_root: '/blog'
+
+page_app:
+    class: 'Statocles::App::Blog'
+    args:
+        store: 'page'
+        url_root: '/page'
+
+static_app:
+    class: 'Statocles::App::Blog'
+    args:
+        store: 'static'
+        url_root: '/static'
+
+theme:
+    class: 'Statocles::Theme'
+    args:
+        store: '::default'
+
+deploy:
+    class: ~

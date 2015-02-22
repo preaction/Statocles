@@ -1,0 +1,82 @@
+flavor: |-
+    Welcome to Statocles!
+
+    First, select a flavor. The flavor determines which applications will be
+    configured by default.
+
+    1) Blog
+
+    This flavor puts a blog as the main page, though you may add other pages
+    later.
+
+    2) Project
+
+    This flavor puts a plain Markdown file as the main page and adds a blog
+    for release announcements.
+
+    0) None
+
+    No applications will be preconfigured. You can add applications later.
+    See Statocles::Help::Config for details.
+
+bundle_theme: |-
+    Statocles comes with a default theme based on the Skeleton CSS library.
+    If you want, I can copy this default theme into the current directory so
+    that you can customize it to your liking.
+
+    You can always copy or restore the default theme later using the
+    "statocles bundle" command.
+
+deploy_class: |-
+    Statocles can deploy your site in multiple ways.
+
+    1) Git
+
+    Statocles will commit your site to a Git repository and push to a remote
+
+    2) Copy files
+
+    Statocles will copy your site to another directory for your web server
+    to serve.
+
+    0) None
+
+    Don't set up a deploy yet. "statocles deploy" will just write the site
+    to the current directory. You can set up a deploy later. See
+    Statocles::Help::Deploy for details.
+
+git_branch: |-
+    Since you're making a Git deploy, what branch would you like to deploy
+    to?
+
+    If you're making a Github Pages User site, this should be "master".
+
+    If you're making a Github Pages Project site, this should be "gh-pages".
+
+    Otherwise, the default is probably best, and you can always change it
+    later.
+
+deploy_path: |-
+    Since you're doing a file deploy, where would you like to copy the
+    files? If you're already running a webserver, you can deploy to the
+    server's document root.
+
+finish: |-
+    Alright! Your "site.yml" configuration file has been created and you're
+    ready to go!
+
+    To create a blog post, use the "statocles blog post" command. This will
+    create a new blog post in the "blog" directory.
+
+    To add new plain pages, create ".markdown" files inside the "page"
+    directory.
+
+    For static content, add files to the "static" directory.
+
+    To learn about editing content, see Statocles::Help::Content.
+
+    If you have any problems, report them on the Statocles website:
+    http://preaction.github.io/Statocles
+
+    Thanks for using Statocles!
+

@@ -51,6 +51,12 @@ sub main {
 
     my $method = $argv[0];
     return pod2usage("ERROR: Missing command") unless $method;
+
+    # Create site does not require a config file
+    if ( $method eq 'create' ) {
+        return $class->new->create_site( \@argv, \%opt );
+    }
+
     if ( !-e $opt{config} ) {
         warn sprintf qq{ERROR: Could not find config file "\%s"\n}, $opt{config};
         return 1;
@@ -128,22 +134,9 @@ sub main {
                 say STDERR "\nUsage:\n\tstatocles bundle theme <name> <destination>";
                 return 1;
             }
-            my $theme_dest = Path::Tiny->new( $argv[3] );
 
-            my $theme_root = Path::Tiny->new( dist_dir( 'Statocles' ), 'theme', $theme_name );
-            my $site_root = Path::Tiny->new( $opt{config} )->parent;
-            my $iter = $theme_root->iterator({ recurse => 1 });
-            while ( my $path = $iter->() ) {
-                next unless $path->is_file;
-                my $relative = $path->relative( $theme_root );
-                my $dest = $theme_dest->child( $relative );
-                # Don't overwrite site-customized hooks
-                next if ( $path->stat->size == 0 && $dest->exists );
-                $dest->remove if $dest->exists;
-                $dest->parent->mkpath;
-                $path->copy( $dest );
-            }
-            say qq{Theme "$theme_name" written to "$theme_dest"};
+            $cmd->bundle_theme( $theme_name, $argv[3] );
+            say qq{Theme "$theme_name" written to "$argv[3]"};
             say qq(Make sure to update "$opt{config}");
         }
     }
@@ -153,6 +146,119 @@ sub main {
     }
 
     return 0;
+}
+
+sub create_site {
+    my ( $self, $argv, $opt ) = @_;
+
+    my %answer;
+
+    my $create_dir = Path::Tiny->new( dist_dir( 'Statocles' ) )->child( 'create' );
+    my $question = YAML::Load( $create_dir->child( 'script.yml' )->slurp_utf8 );
+    my %prompt = (
+        flavor => 'Which flavor of site would you like? ([1], 2, 0)',
+        bundle_theme => 'Do you want to bundle the theme? ([Y]/n)',
+        deploy_class => 'How would you like to deploy? ([1], 2, 0)',
+        git_branch => 'What branch? [master]',
+        deploy_path => 'Where to deploy the site? (default: current directory)',
+    );
+
+    print "\n", $question->{flavor};
+    print "\n", "\n", $prompt{flavor}, " ";
+    chomp( $answer{flavor} = <STDIN> );
+    until ( $answer{flavor} =~ /^[120]*$/ ) {
+        print $prompt{flavor}, " ";
+        chomp( $answer{flavor} = <STDIN> );
+    }
+    $answer{flavor} = 1 if $answer{flavor} eq '';
+
+    print "\n", "\n", $question->{bundle_theme};
+    print "\n", "\n", $prompt{bundle_theme}, " ";
+    chomp( $answer{bundle_theme} = <STDIN> );
+    until ( $answer{bundle_theme} =~ /^[yn]*$/i ) {
+        print $prompt{bundle_theme}, " ";
+        chomp( $answer{bundle_theme} = <STDIN> );
+    }
+    $answer{bundle_theme} = "y" if $answer{bundle_theme} eq '';
+
+    print "\n", "\n", $question->{deploy_class};
+    print "\n", "\n", $prompt{deploy_class}, " ";
+    chomp( $answer{deploy_class} = <STDIN> );
+    until ( $answer{deploy_class} =~ /^[120]*$/i ) {
+        print $prompt{deploy_class}, " ";
+        chomp( $answer{deploy_class} = <STDIN> );
+    }
+    $answer{deploy_class} = 1 if $answer{deploy_class} eq '';
+
+    if ( $answer{deploy_class} == 1 ) {
+        # Git deploy questions
+        print "\n", "\n", $question->{git_branch};
+        print "\n", "\n", $prompt{git_branch}, " ";
+        chomp( $answer{git_branch} = <STDIN> );
+        $answer{git_branch} ||= "master";
+    }
+    elsif ( $answer{deploy_class} == 2 ) {
+        # File deploy questions
+        print "\n", "\n", $question->{deploy_path};
+        print "\n", "\n", $prompt{deploy_path}, " ";
+        chomp( $answer{deploy_path} = <STDIN> );
+        $answer{deploy_path} ||= '.';
+    }
+
+    ### Build the site
+    my ( $site ) = YAML::Load( $create_dir->child( 'site.yml' )->slurp_utf8 );
+
+    if ( $answer{flavor} == 1 ) {
+        $site->{site}{args}{index} = "blog";
+        $site->{site}{args}{nav}{main}[0]{href} = "/";
+    }
+    elsif ( $answer{flavor} == 2 ) {
+        $site->{site}{args}{index} = "page";
+        $site->{site}{args}{nav}{main}[0]{href} = "/blog";
+    }
+
+    if ( lc $answer{bundle_theme} eq 'y' ) {
+        $self->bundle_theme( 'default', 'theme' );
+        $site->{theme}{args}{store} = 'theme';
+    }
+
+    if ( $answer{deploy_class} == 1 ) {
+        $site->{deploy}{class} = 'Statocles::Deploy::Git';
+        $site->{deploy}{args}{branch} = $answer{git_branch};
+    }
+    elsif ( $answer{deploy_class} == 2 ) {
+        $site->{deploy}{class} = 'Statocles::Deploy::File';
+        $site->{deploy}{args}{path} = $answer{deploy_path};
+    }
+    else {
+        # We need a deploy in order to create a Site object
+        $site->{deploy}{class} = 'Statocles::Deploy::File';
+        $site->{deploy}{args}{path} = '.';
+    }
+
+    Path::Tiny->new( '.' )->child( 'site.yml' )->spew_utf8( YAML::Dump( $site ) );
+
+    ### DONE!
+    print "\n", "\n", $question->{finish}, "\n", "\n";
+    return 0;
+}
+
+sub bundle_theme {
+    my ( $self, $name, $dir ) = @_;
+    my $theme_dest = Path::Tiny->new( $dir );
+    my $theme_root = Path::Tiny->new( dist_dir( 'Statocles' ), 'theme', $name );
+
+    my $iter = $theme_root->iterator({ recurse => 1 });
+    while ( my $path = $iter->() ) {
+        next unless $path->is_file;
+        my $relative = $path->relative( $theme_root );
+        my $dest = $theme_dest->child( $relative );
+        # Don't overwrite site-customized hooks
+        next if ( $path->stat->size == 0 && $dest->exists );
+        $dest->remove if $dest->exists;
+        $dest->parent->mkpath;
+        $path->copy( $dest );
+    }
 }
 
 {
