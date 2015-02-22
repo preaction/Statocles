@@ -91,7 +91,7 @@ language|Mojo::Template#SYNTAX>.
 
 =item *
 
-A clean default theme using L<Twitter Bootstrap|http://getbootstrap.com>.
+A clean default theme using L<the Skeleton CSS library|http://getskeleton.com>.
 
 =item *
 
