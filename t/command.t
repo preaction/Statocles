@@ -329,7 +329,7 @@ subtest 'delegate to app command' => sub {
     ok !$err, 'nothing on stderr' or diag "STDERR: $err";
     is $exit, 0;
     like $out, qr{\QNew post at:}, 'contains new post';
-    my $post = $tmp->child( qw( blog 2014 01 01 new-post.markdown ) );
+    my $post = $tmp->child( qw( blog 2014 01 01 new-post index.markdown ) );
     ok $post->exists, 'correct post file exists';
 };
 

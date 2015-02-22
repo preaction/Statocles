@@ -164,7 +164,7 @@ ENDHELP
             # I can see no good way to test this automatically
             my $slug = lc $title || "new post";
             $slug =~ s/\s+/-/g;
-            my $path = Path::Tiny->new( @date_parts, "$slug.markdown" );
+            my $path = Path::Tiny->new( @date_parts, $slug, "index.markdown" );
             my $tmp_path = $self->store->write_document( $path => \%doc );
             system $ENV{EDITOR}, $tmp_path;
             %doc = %{ $self->store->read_document( $path ) };
@@ -174,7 +174,7 @@ ENDHELP
 
         my $slug = lc $title;
         $slug =~ s/\s+/-/g;
-        my $path = Path::Tiny->new( @date_parts, "$slug.markdown" );
+        my $path = Path::Tiny->new( @date_parts, $slug, "index.markdown" );
         my $full_path = $self->store->write_document( $path => \%doc );
         say "New post at: $full_path";
 

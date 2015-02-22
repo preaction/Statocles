@@ -796,7 +796,8 @@ subtest 'commands' => sub {
                     sprintf( '%04i', $year + 1900 ),
                     sprintf( '%02i', $mon + 1 ),
                     sprintf( '%02i', $day ),
-                    'this-is-a-title.markdown',
+                    'this-is-a-title',
+                    'index.markdown',
                 );
 
                 subtest 'run the command' => sub {
@@ -834,7 +835,7 @@ ENDCONTENT
                 local $ENV{EDITOR}; # We can't very well open vim...
 
                 my $doc_path = $tmpdir->child(
-                    'blog', '2014', '04', '01', 'this-is-a-title.markdown',
+                    'blog', '2014', '04', '01', 'this-is-a-title', 'index.markdown',
                 );
 
                 subtest 'run the command' => sub {
@@ -877,7 +878,8 @@ ENDCONTENT
                     sprintf( '%04i', $year + 1900 ),
                     sprintf( '%02i', $mon + 1 ),
                     sprintf( '%02i', $day ),
-                    'this-is-a-title-for-stdin.markdown',
+                    'this-is-a-title-for-stdin',
+                    'index.markdown',
                 );
 
                 subtest 'run the command' => sub {
