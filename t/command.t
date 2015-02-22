@@ -240,8 +240,8 @@ sub test_site {
         ok !$err, "no errors/warnings on stderr (verbose: $verbose)" or diag $err;
         ok $root->child( 'index.html' )->exists, 'index file exists';
         ok $root->child( 'sitemap.xml' )->exists, 'sitemap.xml exists';
-        ok $root->child( 'blog', '2014', '04', '23', 'slug.html' )->exists;
-        ok $root->child( 'blog', '2014', '04', '30', 'plug.html' )->exists;
+        ok $root->child( 'blog', '2014', '04', '23', 'slug', 'index.html' )->exists;
+        ok $root->child( 'blog', '2014', '04', '30', 'plug', 'index.html' )->exists;
         if ( $verbose ) {
             subtest 'verbose output is verbose' => sub {
                 like $out, qr{Write file: /index[.]html};
@@ -423,7 +423,7 @@ subtest 'run the http daemon' => sub {
                 subtest 'watch for filesystem events' => sub {
 
                     subtest 'content store' => sub {
-                        my $path = Path::Tiny->new( qw( 2014 06 02 more_tags.markdown ) );
+                        my $path = Path::Tiny->new( qw( 2014 04 23 slug index.markdown ) );
                         my $store = $t->app->site->app( 'blog' )->store;
                         my $doc = $store->read_document( $path );
                         $doc->{content} = "This is some new content for our blog!";

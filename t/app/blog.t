@@ -94,7 +94,7 @@ subtest 'pages' => sub {
                 'second page has earliest post';
 
             cmp_deeply [ $dom->find( 'h1 a' )->map( attr => 'href' )->each ],
-                [ '/blog/2014/04/23/slug.html', ],
+                [ '/blog/2014/04/23/slug', ],
                 'second page has earliest post';
 
             cmp_deeply [ $dom->find( '.author' )->map( 'text' )->each ],
@@ -233,7 +233,7 @@ subtest 'pages' => sub {
                 'second "better" page has earlier post title';
 
             cmp_deeply [ $dom->find( 'h1 a' )->map( attr => 'href' )->each ],
-                [ '/blog/2014/04/30/plug.html' ],
+                [ '/blog/2014/04/30/plug' ],
                 'second "better" page has earlier post url';
 
             cmp_deeply [ $dom->find( '.author' )->map( 'text' )->each ],
@@ -616,7 +616,7 @@ subtest 'pages' => sub {
         },
 
         # Post pages
-        '/blog/2014/04/23/slug.html' => sub {
+        '/blog/2014/04/23/slug/index.html' => sub {
             my ( $html, $dom ) = @_;
 
             is $dom->at( 'header h1' )->text, 'First Post';
@@ -635,7 +635,7 @@ subtest 'pages' => sub {
             }
         },
 
-        '/blog/2014/04/30/plug.html' => sub {
+        '/blog/2014/04/30/plug/index.html' => sub {
             my ( $html, $dom ) = @_;
 
             is $dom->at( 'header h1' )->text, 'Second Post';
@@ -704,7 +704,7 @@ subtest 'pages' => sub {
             }
         },
 
-        # Does not show /blog/9999/12/31/forever-is-a-long-time.html
+        # Does not show /blog/9999/12/31/forever-is-a-long-time/index.html
         # Does not show /blog/draft/a-draft-post.html
     );
 

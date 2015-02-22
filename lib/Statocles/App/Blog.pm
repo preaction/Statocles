@@ -203,7 +203,7 @@ sub post_pages {
         $path =~ s{/{2,}}{/}g;
         $path =~ s{[.]\w+$}{.html};
 
-        my @date_parts = $path =~ m{/(\d{4})/(\d{2})/(\d{2})/[^/]+$};
+        my @date_parts = $path =~ m{/(\d{4})/(\d{2})/(\d{2})/[^/]+(?:/index[.]html)?$};
         next unless @date_parts;
         my $date = join "-", @date_parts;
 
@@ -412,6 +412,23 @@ sub _tag_url {
     my ( $self, $tag ) = @_;
     $tag =~ s/\s+/-/g;
     return join "/", $self->url_root, "tag", $tag;
+}
+
+=method page_url( page )
+
+Return the absolute URL to this page, removing the "/index.html" if necessary.
+
+=cut
+
+# XXX This is TERRIBLE. We need to do this better. Perhaps a "url()" helper in the
+# template? And a full_url() helper? Or perhaps the template knows whether it should
+# use absolute (/whatever) or full (http://www.example.com/whatever) URLs?
+
+sub page_url {
+    my ( $self, $page ) = @_;
+    my $url = "".$page->path;
+    $url =~ s{/index[.]html$}{};
+    return $url;
 }
 
 1;
