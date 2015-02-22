@@ -51,5 +51,12 @@ Install the latest version of Statocles:
 
 ## Getting Started
 
-Build a basic site using [the Statocles Config guide](/pod/Statocles/Help/Config.html).
+Create a site using the `create` command:
+
+    mkdir www.example.com
+    cd www.example.com
+    statocles create
+
+See [the Statocles Setup guide](/pod/Statocles/Help/Setup.html) for more
+information.
 
