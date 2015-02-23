@@ -107,6 +107,7 @@ img.u-pull-left, img.u-pull-right {
     overflow: hidden;
     border-bottom: 1px solid #bbb;
     color: #777;
+    margin-bottom: 1em;
 }
 
 .navbar a {

@@ -172,7 +172,7 @@
 
 <h1 id="PAGES">PAGES</h1>
 
-<p>A <a href="/Statocles/pod/Statocles/Page.html">Statocles::Page</a> is rendered HTML ready to be sent to a user. Statocles Applications generate pages from the documents that the user provides. One document may generate multiple pages, and pages may have multiple formats like HTML or RSS.</p>
+<p>A <a href="/Statocles/pod/Statocles/Page.html">Statocles::Page</a> is collected information ready to be rendered into HTML (or whatever). Statocles Applications generate pages from the documents that the user provides. One document may generate multiple pages, and pages may have multiple formats like HTML or RSS.</p>
 
 <dl>
 
@@ -194,11 +194,25 @@
 <p>This page renders an alternate version of a list page, like an RSS or Atom feed.</p>
 
 </dd>
+<dt><a href="/Statocles/pod/Statocles/Page/Plain.html">Statocles::Page::Plain</a></dt>
+<dd>
+
+<p>This page adds a layout, but does not require a document. Good if you&#39;ve already got HTML.</p>
+
+</dd>
+<dt><a href="/Statocles/pod/Statocles/Page/File.html">Statocles::Page::File</a></dt>
+<dd>
+
+<p>This page is used for non-rendered static files like images. No processing is done.</p>
+
+</dd>
 </dl>
 
 <h1 id="SITES">SITES</h1>
 
 <p>A <a href="/Statocles/pod/Statocles/Site.html">Statocles::Site</a> manages a bunch of applications, writing and deploying the resulting pages.</p>
+
+<p>The site controls the entire workflow, reading pages from the applications and writing them to the appropriate deploy.</p>
 
 <h1 id="THEMES">THEMES</h1>
 

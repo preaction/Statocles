@@ -5,7 +5,34 @@
         <link>http://preaction.github.io/Statocles/blog/tag/release</link>
         <atom:link href="http://preaction.github.io/Statocles/blog/tag/release.rss" rel="self" type="application/rss+xml" />
         <description>Blog feed of Statocles</description>
-        <generator>Statocles 0.036</generator>
+        <generator>Statocles 0.039</generator>
+        <item>
+            <title>Statocles Beta (Release v0.039)</title>
+            <link>http://preaction.github.io/Statocles/blog/2015/02/22/statocles-beta-(release-v0.039)</link>
+            <guid>http://preaction.github.io/Statocles/blog/2015/02/22/statocles-beta-(release-v0.039)</guid>
+            <description><![CDATA[
+                <p>This is it! The beta milestone is complete!</p>
+
+<p>This release adds the "create" command to easily create new Statocles sites.</p>
+
+<p>Blog posts are now directories, which will allow us (in the future) to have
+images and other documents inside. The breaking part of this change was made now,
+and future additions will be made as beta progresses.</p>
+
+<p>There were a couple reorganizations of the documentation and tests to make them
+easier to understand.</p>
+
+<p>Full changelog below:</p>
+
+                    <p><a href="http://preaction.github.io/Statocles/blog/2015/02/22/statocles-beta-(release-v0.039)#section-2">Continue reading...</a></p>
+                <p>Tags:
+                    <a href="/blog/tag/release">release</a>
+                </p>
+            ]]></description>
+            <pubDate>
+                Sun, 22 Feb 2015 19:57:07 +0000
+            </pubDate>
+        </item>
         <item>
             <title>Release v0.038</title>
             <link>http://preaction.github.io/Statocles/blog/2015/02/14/release-v0.038.html</link>
@@ -123,47 +150,6 @@ default theme to the <code>mytheme</code> directory.</p>
             ]]></description>
             <pubDate>
                 Sun, 08 Feb 2015 00:00:00 +0000
-            </pubDate>
-        </item>
-        <item>
-            <title>Release v0.034</title>
-            <link>http://preaction.github.io/Statocles/blog/2015/01/25/release-v0.034.html</link>
-            <guid>http://preaction.github.io/Statocles/blog/2015/01/25/release-v0.034.html</guid>
-            <description><![CDATA[
-                <p>Lots of breaking changes in this release, in our ramp-up to the <a href="https://github.com/preaction/Statocles/milestones/beta">beta
-announcement</a>.</p>
-
-<p>The biggest change in this release is the new <a href="/pod/Statocles/Deploy.html">Deploy object</a>.
-The deploy object handles deploying the site to a folder or a Git repository. Future
-possibilities include rsync or FTP, or any command at all.</p>
-
-<p><em>NOTE:</em> This change breaks your site.yml file, so please read <a href="/pod/Statocles/Help/Setup.html">the setup help
-file</a> to fix it.</p>
-
-<p>Some major theme changes were also added, and a new default theme (using <a href="http://getskeleton.com">the
-Skeleton CSS library</a>) was added, removing the need for
-Bootstrap (too big) from a CDN.</p>
-
-<p>The theme is now always deployed with the site, always taking the <code>/theme</code> URL
-path. This allows you to add extra files, CSS, JavaScript, and otherwise, to your
-theme.</p>
-
-<p>The template variables were cleaned up to remove a lot of hashrefs and arrayrefs in favor
-of methods and objects, giving us some type checking and cleaner template code.</p>
-
-<p>There are now generic <code>data</code> attributes on the Site and App objects so you can add
-any random data you want that can then be used in the templates. Expect upcoming
-themes to make good use of this feature!</p>
-
-<p>Full changelog continues below.</p>
-
-                    <p><a href="http://preaction.github.io/Statocles/blog/2015/01/25/release-v0.034.html#section-2">Continue reading...</a></p>
-                <p>Tags:
-                    <a href="/blog/tag/release">release</a>
-                </p>
-            ]]></description>
-            <pubDate>
-                Sun, 25 Jan 2015 00:19:48 +0000
             </pubDate>
         </item>
     </channel>

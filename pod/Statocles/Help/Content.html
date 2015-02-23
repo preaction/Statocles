@@ -82,79 +82,50 @@
         <div class="main container">
             <h1 id="NAME">NAME</h1>
 
-<p>Statocles - A static site generator</p>
-
-<h1 id="SYNOPSIS">SYNOPSIS</h1>
-
-<pre><code>    # !!! Read the Statocles::Help guide to set up a site.yml config file
-
-    # Create a new blog post
-    export EDITOR=vim
-    statocles blog post
-
-    # Build the site
-    statocles build
-
-    # Test the site in a local web browser
-    statocles daemon
-
-    # Deploy the site
-    statocles deploy</code></pre>
+<p>Statocles::Help::Content - How to use Statocles to write content</p>
 
 <h1 id="DESCRIPTION">DESCRIPTION</h1>
 
-<p>Statocles is an application for building static web pages from a set of plain YAML and Markdown files. It is designed to make it as simple as possible to develop rich web content using basic text-based tools.</p>
+<p>This guide describes how to use <a href="https://metacpan.org/pod/statocles">the statocles command</a> to manage site content, build, test, and deploy the site.</p>
 
-<h2 id="FEATURES">FEATURES</h2>
+<h2 id="Create-A-Blog-Post">Create A Blog Post</h2>
 
-<ul>
+<p>Remember when we gave our blog app a name? Now we can use that name to access the blog&#39;s command-line commands. To create a new blog post, we can use the <code>post</code> command:</p>
 
-<li><p>A simple format based on <a href="http://daringfireball.net/projects/markdown/">Markdown</a> for editing site content.</p>
+<pre><code>    $ statocles blog post My First Post
+    New post at: blog/2014/06/04/my-first-post.markdown</code></pre>
 
-</li>
-<li><p>A command-line application for building, deploying, and editing the site.</p>
+<p>Everything after <code>post</code> will be used as the title of the post.</p>
 
-</li>
-<li><p>A simple daemon to display a test site before it goes live.</p>
+<p>If you have the <code>EDITOR</code> environment variable set, your editor will automatically open on the newly-created document.</p>
 
-</li>
-<li><p>A <a href="/Statocles/pod/Statocles/App/Blog#FEATURES.html">blogging application</a> with</p>
+<h2 id="Build-The-Site">Build The Site</h2>
 
-<ul>
+<pre><code>    $ statocles build</code></pre>
 
-<li><p>RSS and Atom syndication feeds.</p>
+<p>Running the <code>build</code> command will write all our pages to the <code>.statocles-build</code> directory. We can open up this directory and look at the files to make sure that our deploy will be correct.</p>
 
-</li>
-<li><p>Tags to organize blog posts. Tags have their own custom feeds.</p>
+<h2 id="Test-The-Site">Test The Site</h2>
 
-</li>
-<li><p>Crosspost links to direct users to a syndicated blog.</p>
+<pre><code>    $ statocles daemon
+    Listening on http://*:3000</code></pre>
 
-</li>
-<li><p>Post-dated blog posts to appear automatically when the date is passed.</p>
+<p>Run the <code>daemon</code> command to start an HTTP server to view your built site. This will automatically build the site, so if you forgot to run <code>build</code>, don&#39;t worry.</p>
 
-</li>
-</ul>
+<p>If you edit any content, running <code>build</code> again will update the site. On Mac OS X, editing any content will automatically rebuild the site.</p>
 
-</li>
-<li><p>Customizable <a href="/Statocles/pod/Statocles/Theme.html">themes</a> using <a href="https://metacpan.org/pod/Mojo::Template#SYNTAX">the Mojolicious template language</a>.</p>
+<h2 id="Commit-Your-Changes">Commit Your Changes</h2>
 
-</li>
-<li><p>A clean default theme using <a href="http://getskeleton.com">the Skeleton CSS library</a>.</p>
+<pre><code>    $ git add blog/2014/06/04/my-first-post.markdown
+    $ git commit -m&#39;My first post&#39;</code></pre>
 
-</li>
-<li><p>SEO-friendly features such as <a href="http://www.sitemaps.org">sitemaps (sitemap.xml)</a>.</p>
+<p>Once the build looks good, we&#39;ll want to commit our changes. The major feature of having a website in a git repository is change tracking.</p>
 
-</li>
-</ul>
+<h2 id="Deploy-The-Site">Deploy The Site</h2>
 
-<h1 id="GETTING-STARTED">GETTING STARTED</h1>
+<pre><code>    $ statocles deploy</code></pre>
 
-<p>To get started with Statocles, <a href="/Statocles/pod/Statocles/Help.html">consult the Statocles::Help guides</a>.</p>
-
-<h1 id="SEE-ALSO">SEE ALSO</h1>
-
-<p>For news and documentation, <a href="http://preaction.github.io/Statocles">visit the Statocles website at http://preaction.github.io/Statocles</a>.</p>
+<p>Running the <code>deploy</code> command will, in the case of the Git deploy, commit the updated pages to the Git repository. <code>deploy</code> will try to do a <code>git push</code> automatically, so your changes are now live on Github Pages!</p>
 
 
 

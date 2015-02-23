@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <title>Statocles</title>
+        <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
+<style>
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Forum', sans-serif;
+        font-weight: bold;
+    }
+
+    #index-banner {
+        font-family: 'Forum', sans-serif;
+        height: 300px;
+        position: relative;
+        margin-bottom: 1em;
+        border-bottom: 1px solid #777
+    }
+    #index-banner:before, #index-banner:after {
+        width: 60px;
+        height: 300px;
+        content: url(/Statocles/theme/images/column.png);
+    }
+    #index-banner:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #index-banner:after {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    #index-banner h1 {
+        padding-top: 1em;
+        text-transform: uppercase;
+        font-size: 72px;
+        text-align: center;
+    }
+    #index-banner h1 small {
+        display: block;
+        font-size: 24px;
+    }
+
+</style>
+
+    </head>
+    <body>
+        <header>
+            <nav class="navbar">
+                <div class="container">
+                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <ul>
+                        <li>
+                            <a href="/Statocles/blog">Blog</a>
+                        </li>
+                        <li>
+                            <a href="/Statocles/pod">Docs</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles">Code</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles/issues">Bugs</a>
+                        </li>
+                        <li>
+                            <a href="http://metacpan.org/pod/Statocles">CPAN</a>
+                        </li>
+                        <li>
+                            <a href="https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">IRC</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <a href="https://github.com/preaction/Statocles"><img alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; z-index: 1000; border: 0;"></a>
+
+        </header>
+        <div class="main container">
+            <div class="row">
+
+    <div class="nine columns">
+        <main>
+            <header>
+                <h1>Statocles Beta (Release v0.039)</h1>
+                <p class="tags">Tags:
+                    <a href="/Statocles/blog/tag/release" rel="tag">release</a>
+                </p>
+                <aside>
+                    <p><time datetime="2015-02-22">
+                        Posted on 2015-02-22
+                    </time>
+                    </p>
+                </aside>
+            </header>
+            <section id="section-1">
+                <p>This is it! The beta milestone is complete!</p>
+
+<p>This release adds the &quot;create&quot; command to easily create new Statocles sites.</p>
+
+<p>Blog posts are now directories, which will allow us (in the future) to have
+images and other documents inside. The breaking part of this change was made now,
+and future additions will be made as beta progresses.</p>
+
+<p>There were a couple reorganizations of the documentation and tests to make them
+easier to understand.</p>
+
+<p>Full changelog below:</p>
+
+            </section>
+            <section id="section-2">
+                <ul>
+<li><a href="https://github.com/preaction/Statocles/commit/7775bc6f8e83e113ebdec18778ec6c219b29d107">normalize the default log level to warn</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/a5abff731d7a207f7c999f36de000afa73051a5c">rearrange tests into small, feature-sized chunks</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/c142dd83e5d959f58e6ef4a99cbb9397d58801ec">create new blog posts in directories</a> (<a href="https://github.com/preaction/Statocles/issues/239">#239</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/e9be65ec64687d497149f776e4f2a958e25e54d3">allow blog posts to be directories</a> (<a href="https://github.com/preaction/Statocles/issues/239">#239</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/b94550ab7a7ebe8204e7ddc4dd64fa5c42753df6">organize core and non-core deps</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/0675a7eb6dd020e59293e36e1b31cf15cc54d150">add create command example to website</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/8ffaf939e216e4e62dd6ee414d5556e3c6de4900">fix note about default theme using skeleton</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/ce252e546ce2cdb02da9edcb43d828003e2854c5">add note about create command to Setup guide</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/c06a75a5a7a666179c5190629377dbb4a97be7e0">add site &quot;create&quot; command</a> (<a href="https://github.com/preaction/Statocles/issues/28">#28</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/01140f81af3e042e957872fa259bd9fdb261f7b6">add link to content guide</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/78bc4d5aa935f73880c6db722e4d7cd24e198fe7">reorganize guides and add Statocles::Help</a> (<a href="https://github.com/preaction/Statocles/issues/253">#253</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/1916925c74f94a080caa2b2972a0e953c2766691">split the Setup guide into Config and Content</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/3a58a277fb41ea2dbd78465cb2d778131787cd3e">fix navbar too close to main page content</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/a125716301fd93a80cdecc79885a3912cbec2e69">break parsing a frontmatter file into its own sub</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/e069c8a18c8b17ad3bba26b5a73a3171f2c82a26">clarify the docs on Pages and what a Site is</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/b77d61ca34117fe84826e942845c1b9658d2da62">split the main doc into the Develop guide</a> (<a href="https://github.com/preaction/Statocles/issues/242">#242</a>)</li>
+</ul>
+
+            </section>
+        </main>
+    </div>
+
+    <div class="three columns sidebar">
+        
+        <nav id="tags">
+            <h1>Tags</h1>
+            <ul class="list-inline">
+                <li><a href="/Statocles/blog/tag/release">release</a></li>
+            </ul>
+        </nav>
+    </div>
+
+</div>
+
+        </div>
+        <footer>
+            
+            <div class="container tagline">
+                <a href="http://preaction.github.io/Statocles">Made with Statocles</a><br>
+                <a href="http://www.perl.org">Powered by Perl</a>
+            </div>
+        </footer>
+    </body>
+</html>

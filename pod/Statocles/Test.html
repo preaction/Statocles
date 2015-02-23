@@ -96,6 +96,12 @@
 
 <p>You must provide a <code>theme</code> (probably using the one in <code>t/share/theme</code>).</p>
 
+<h2 id="build_test_site_apps-share_dir-site_args">build_test_site_apps( $share_dir, %site_args )</h2>
+
+<p>Build a site for testing, with some apps. Returns the site, the build dir, and the deploy dir.</p>
+
+<pre><code>    my ( $site, $build_dir, $deploy_dir ) = build_test_site_apps( $share_dir, %site_args );</code></pre>
+
 <h2 id="test_constructor-class-args">test_constructor( class, args )</h2>
 
 <p>Test an object constructor. <code>class</code> is the class to test. <code>args</code> is a list of name/value pairs with the following keys:</p>
@@ -137,6 +143,10 @@
 
 </dd>
 </dl>
+
+<h2 id="build_temp_site">build_temp_site</h2>
+
+<p>Build a config file so we can test config loading and still use temporary directories</p>
 
 
 
