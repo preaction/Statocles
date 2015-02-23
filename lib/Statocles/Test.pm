@@ -5,8 +5,13 @@ use Statocles::Base;
 use Test::More;
 use Test::Exception;
 use Test::Deep;
+use File::Copy::Recursive qw( dircopy );
+
 use base qw( Exporter );
-our @EXPORT_OK = qw( test_constructor test_pages build_test_site );
+our @EXPORT_OK = qw(
+    test_constructor test_pages build_test_site build_test_site_apps
+    build_temp_site
+);
 
 =sub build_test_site( %site_args )
 
@@ -21,13 +26,72 @@ You must provide a C<theme> (probably using the one in C<t/share/theme>).
 sub build_test_site {
     my ( %site_args ) = @_;
     require Statocles::Site;
+    require Statocles::Store::File;
+    require Statocles::Deploy::File;
+
+    my $store   = $site_args{build_store}
+                ? Statocles::Store::File->new( delete $site_args{build_store} )
+                : Path::Tiny->tempdir
+                ;
+
+    my $deploy  = $site_args{deploy}
+                ? Statocles::Deploy::File->new( delete $site_args{deploy} )
+                : Path::Tiny->tempdir
+                ;
 
     return Statocles::Site->new(
         title => 'Example Site',
         base_url => 'http://example.com/',
-        build_store => Path::Tiny->tempdir,
-        deploy => Path::Tiny->tempdir,
+        build_store => $store,
+        deploy => $deploy,
         %site_args,
+    );
+}
+
+=sub build_test_site_apps( $share_dir, %site_args )
+
+Build a site for testing, with some apps. Returns the site, the build dir, and the
+deploy dir.
+
+    my ( $site, $build_dir, $deploy_dir ) = build_test_site_apps( $share_dir, %site_args );
+
+=cut
+
+sub build_test_site_apps {
+    my ( $share_dir, %site_args ) = @_;
+
+    my $build_dir = Path::Tiny->tempdir;
+    my $deploy_dir = Path::Tiny->tempdir;
+
+    $site_args{build_store}{path} = $build_dir;
+    $site_args{deploy}{path} = $deploy_dir;
+
+    require Statocles::App::Blog;
+    my $blog = Statocles::App::Blog->new(
+        store => $share_dir->child( qw( app blog ) ),
+        url_root => '/blog',
+        page_size => 2,
+    );
+
+    require Statocles::App::Static;
+    my $static = Statocles::App::Static->new(
+        store => $share_dir->child( qw( app static ) ),
+        url_root => '/static',
+    );
+
+    return (
+        build_test_site(
+            theme => $share_dir->child( 'theme' ),
+            apps => {
+                blog => $blog,
+                static => $static,
+            },
+            build_store => delete $site_args{build_store},
+            deploy => delete $site_args{deploy},
+            %site_args,
+        ),
+        $build_dir,
+        $deploy_dir,
     );
 }
 
@@ -172,6 +236,124 @@ sub test_pages {
     }
 
     ok !@warnings, "no warnings!" or diag join "\n", @warnings;
+}
+
+=sub build_temp_site
+
+Build a config file so we can test config loading and still use
+temporary directories
+
+=cut
+
+sub build_temp_site {
+    my ( $share_dir ) = @_;
+
+    my $tmp = Path::Tiny->tempdir;
+    dircopy $share_dir->child( qw( app blog ) )->stringify, $tmp->child( 'blog' )->stringify;
+    dircopy $share_dir->child( 'theme' )->stringify, $tmp->child( 'theme' )->stringify;
+    $tmp->child( 'build_site' )->mkpath;
+    $tmp->child( 'deploy_site' )->mkpath;
+    $tmp->child( 'build_foo' )->mkpath;
+    $tmp->child( 'deploy_foo' )->mkpath;
+
+    my $config = {
+        theme => {
+            class => 'Statocles::Theme',
+            args => {
+                store => $tmp->child( 'theme' ),
+            },
+        },
+
+        build => {
+            class => 'Statocles::Store::File',
+            args => {
+                path => $tmp->child( 'build_site' ),
+            },
+        },
+
+        deploy => {
+            class => 'Statocles::Deploy::File',
+            args => {
+                path => $tmp->child( 'deploy_site' ),
+            },
+        },
+
+        blog => {
+            'class' => 'Statocles::App::Blog',
+            'args' => {
+                store => {
+                    '$class' => 'Statocles::Store::File',
+                    '$args' => {
+                        path => $tmp->child( 'blog' ),
+                    },
+                },
+                url_root => '/blog',
+            },
+        },
+
+        plain => {
+            'class' => 'Statocles::App::Plain',
+            'args' => {
+                store => {
+                    '$class' => 'Statocles::Store::File',
+                    '$args' => {
+                        path => "$tmp",
+                    },
+                },
+                url_root => '/',
+            },
+        },
+
+        site => {
+            class => 'Statocles::Site',
+            args => {
+                base_url => 'http://example.com',
+                title => 'Site Title',
+                index => 'blog',
+                build_store => { '$ref' => 'build' },
+                deploy => { '$ref' => 'deploy' },
+                theme => { '$ref' => 'theme' },
+                apps => {
+                    blog => { '$ref' => 'blog' },
+                    plain => { '$ref' => 'plain' },
+                },
+            },
+        },
+
+        build_foo => {
+            class => 'Statocles::Store::File',
+            args => {
+                path => $tmp->child( 'build_foo' ),
+            },
+        },
+
+        deploy_foo => {
+            class => 'Statocles::Deploy::File',
+            args => {
+                path => $tmp->child( 'deploy_foo' ),
+            },
+        },
+
+        site_foo => {
+            class => 'Statocles::Site',
+            args => {
+                base_url => 'http://example.net',
+                title => 'Site Foo',
+                index => 'blog',
+                build_store => { '$ref' => 'build_foo' },
+                deploy => { '$ref' => 'deploy_foo' },
+                theme => '::default',
+                apps => {
+                    blog => { '$ref' => 'blog' },
+                    plain => { '$ref' => 'plain' },
+                },
+            },
+        },
+    };
+
+    my $config_fn = $tmp->child( 'site.yml' );
+    YAML::DumpFile( $config_fn, $config );
+    return ( $tmp, $config_fn, $config );
 }
 
 1;

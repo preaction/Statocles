@@ -4,6 +4,7 @@ package Statocles::Theme;
 use Statocles::Base 'Class';
 use File::Share qw( dist_dir );
 use Scalar::Util qw( blessed );
+use Statocles::Template;
 
 =attr store
 
