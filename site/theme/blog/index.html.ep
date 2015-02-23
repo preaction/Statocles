@@ -7,7 +7,7 @@
             % for my $page ( @$pages ) {
             <article>
                 <header>
-                    <h1><a href="<%= $page->path %>"><%= $page->title %></a></h1>
+                    <h1><a href="<%= $app->page_url( $page ) %>"><%= $page->title %></a></h1>
 
                     <p class="tags">Tags:
                     % for my $tag ( $page->tags ) {
@@ -40,7 +40,7 @@
                 <%= $sections[0] %>
 
                 % if ( @sections > 1 ) {
-                    <p><a href="<%= $page->path %>#section-2">Continue reading <%= $page->title %>...</a></p>
+                    <p><a href="<%= $app->page_url( $page ) %>#section-2">Continue reading <%= $page->title %>...</a></p>
                 % }
 
             </article>
