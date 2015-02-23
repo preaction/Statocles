@@ -25,6 +25,7 @@ local $ENV{MOJO_LOG_LEVEL} = 'info'; # But sometimes this isn't set?
 my @args = (
     '--config' => "$config_fn",
     'daemon',
+    '-v', # watch lines are now behind -v
 );
 
 my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
@@ -34,12 +35,10 @@ my $store_path = $app->site->app( 'blog' )->store->path;
 my $theme_path = $app->site->theme->store->path;
 
 if ( eval { require Mac::FSEvents; 1; } ) {
-    like $err, qr{Watching for changes in '$store_path'}, 'watch is reported';
-    like $err, qr{Watching for changes in '$theme_path'}, 'watch is reported';
+    like $out, qr{Watching for changes in '$store_path'}, 'watch is reported';
+    like $out, qr{Watching for changes in '$theme_path'}, 'watch is reported';
 }
-else {
-    ok !$err, 'nothing on stderr' or diag "STDERR: $err";
-}
+ok !$err, 'nothing on stderr' or diag "STDERR: $err";
 
 is $exit, 0;
 like $out, qr{\QListening on http://127.0.0.1:$port\E\n},
@@ -67,6 +66,7 @@ subtest 'do not watch the built-in themes' => sub {
             '--config' => "$config_fn",
             '--site' => 'site_foo',
             'daemon',
+            '-v',
         );
 
         my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
@@ -74,8 +74,8 @@ subtest 'do not watch the built-in themes' => sub {
 
         my $store_path = $app->site->app( 'blog' )->store->path;
         my $theme_path = $app->site->theme->store->path;
-        like $err, qr{Watching for changes in '$store_path'}, 'watch is reported';
-        unlike $err, qr{Watching for changes in '$theme_path'}, 'watch is not reported';
+        like $out, qr{Watching for changes in '$store_path'}, 'watch is reported';
+        unlike $out, qr{Watching for changes in '$theme_path'}, 'watch is not reported';
     }
     else {
         pass "No test - Mac::FSEvents not installed";

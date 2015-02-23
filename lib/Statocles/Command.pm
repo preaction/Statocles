@@ -3,11 +3,13 @@ package Statocles::Command;
 
 use Statocles::Base 'Class';
 use Scalar::Util qw( blessed );
-use Getopt::Long qw( GetOptionsFromArray :config pass_through );
+use Getopt::Long qw( GetOptionsFromArray :config pass_through bundling no_auto_abbrev );
 use Pod::Usage::Return qw( pod2usage );
 use File::Share qw( dist_dir );
 use File::Copy::Recursive qw( dircopy );
 use Beam::Wire;
+
+my @VERBOSE = ( "warn", "info", "debug", "trace" );
 
 =attr site
 
@@ -78,7 +80,7 @@ sub main {
 
     if ( $opt{verbose} ) {
         $cmd->site->log->handle( \*STDOUT );
-        $cmd->site->log->level( 'debug' );
+        $cmd->site->log->level( $VERBOSE[ $opt{verbose} ] );
     }
 
     if ( grep { $_ eq $method } qw( build deploy ) ) {

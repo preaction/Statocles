@@ -183,7 +183,7 @@ has log => (
     isa => InstanceOf['Mojo::Log'],
     lazy => 1,
     default => sub {
-        Mojo::Log->new( level => 'info' );
+        Mojo::Log->new( level => 'warn' );
     },
 );
 
