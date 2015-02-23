@@ -4,7 +4,7 @@ Statocles - A static site generator
 
 # VERSION
 
-version 0.038
+version 0.039
 
 # STATUS
 
@@ -12,7 +12,7 @@ version 0.038
 
 # SYNOPSIS
 
-    # !!! Read the Getting Started guide to set up a site.yml config file
+    # !!! Read the Statocles::Help guide to set up a site.yml config file
 
     # Create a new blog post
     export EDITOR=vim
@@ -35,7 +35,9 @@ develop rich web content using basic text-based tools.
 
 ## FEATURES
 
-- A simple format combining YAML and Markdown for editing site content.
+- A simple format based on
+[Markdown](http://daringfireball.net/projects/markdown/) for editing site
+content.
 - A command-line application for building, deploying, and editing the site.
 - A simple daemon to display a test site before it goes live.
 - A [blogging application](https://metacpan.org/pod/Statocles::App::Blog#FEATURES) with
@@ -43,95 +45,19 @@ develop rich web content using basic text-based tools.
     - Tags to organize blog posts. Tags have their own custom feeds.
     - Crosspost links to direct users to a syndicated blog.
     - Post-dated blog posts to appear automatically when the date is passed.
-- Customizable [templates](https://metacpan.org/pod/Statocles::Template) using [the Mojolicious template
+- Customizable [themes](https://metacpan.org/pod/Statocles::Theme) using [the Mojolicious template
 language](https://metacpan.org/pod/Mojo::Template#SYNTAX).
-- A clean default theme using [Twitter Bootstrap](http://getbootstrap.com).
+- A clean default theme using [the Skeleton CSS library](http://getskeleton.com).
 - SEO-friendly features such as [sitemaps (sitemap.xml)](http://www.sitemaps.org).
 
-# GUIDES
+# GETTING STARTED
 
-## GETTING STARTED
-
-To get started with your own Statocle site, see
-[the Statocles setup help in Statocles::Help::Setup](https://metacpan.org/pod/Statocles::Help::Setup).
-
-# OVERVIEW
-
-## DOCUMENTS
-
-A [document](https://metacpan.org/pod/Statocles::Document) is the main content of the site. The user does
-all the work with documents: adding, editing, and removing documents.
-
-The default store reads documents in a combined YAML and Markdown format,
-easily editable with any text editor. A sample document looks like:
-
-    ---
-    title: This is a title
-    author: preaction
-    ---
-    # This is the markdown content
-
-    This is a paragraph
-
-This is the same format that [Jekyll](http://jekyllrb.com) uses. The document
-format is described in the [Statocles::Store::File](https://metacpan.org/pod/Statocles::Store::File) documentation under
-[Frontmatter Document Format](https://metacpan.org/pod/Statocles::Store::File#Frontmatter-Document-Format).
-
-## PAGES
-
-A [Statocles::Page](https://metacpan.org/pod/Statocles::Page) is rendered HTML ready to be sent to a user. Statocles
-generates pages from the documents that the user provides. One document may
-generate multiple pages, and pages may have multiple formats like HTML or RSS.
-
-- [Statocles::Page::Document](https://metacpan.org/pod/Statocles::Page::Document)
-
-    This page renders a single document. This is used for the main page of a blog
-    post, for example.
-
-- [Statocles::Page::List](https://metacpan.org/pod/Statocles::Page::List)
-
-    This page renders a list of other pages (not documents). This is used for index
-    pages.
-
-- [Statocles::Page::Feed](https://metacpan.org/pod/Statocles::Page::Feed)
-
-    This page renders an alternate version of a list page, like an RSS or Atom feed.
-
-## APPLICATIONS
-
-An application is the module that will take the documents the user provides and
-turn them into the pages that can be written out to the filesystem.
-
-- [Statocles::App::Blog](https://metacpan.org/pod/Statocles::App::Blog)
-
-    A simple blogging application.
-
-## SITES
-
-A [Statocles::Site](https://metacpan.org/pod/Statocles::Site) manages a bunch of applications, writing and deploying the
-resulting pages.
-
-Deploying the site may involve a simple file copy, but it could also involve a
-Git repository, an FTP site, or a database.
-
-- [Statocles::Site::Git](https://metacpan.org/pod/Statocles::Site::Git)
-
-    A simple Git repository site.
-
-## STORES
-
-A [Statocles::Store](https://metacpan.org/pod/Statocles::Store) reads and writes documents and pages. The default store
-([Statocles::Store::File](https://metacpan.org/pod/Statocles::Store::File)) reads documents in YAML and writes pages to a file,
-but stores could read documents as JSON, or from a Mongo database, and write
-pages to a database, or whereever you want!
+To get started with Statocles, [consult the Statocles::Help guides](https://metacpan.org/pod/Statocles::Help).
 
 # SEE ALSO
 
 For news and documentation, [visit the Statocles website at
 http://preaction.github.io/Statocles](http://preaction.github.io/Statocles).
-
-There are static site generators written in other languages. See a big list of
-them at [https://staticsitegenerators.net](https://staticsitegenerators.net).
 
 # AUTHOR
 
@@ -139,7 +65,6 @@ Doug Bell <preaction@cpan.org>
 
 # CONTRIBUTORS
 
-- Doug Bell <preaction@users.noreply.github.com>
 - tadegenban <youyouken@126.com>
 - Vladimir Lettiev <thecrux@gmail.com>
 

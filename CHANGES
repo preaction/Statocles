@@ -1,6 +1,27 @@
 Changelog for Statocles
 
-0.038 2015-02-15T05:49:09
+0.039 2015-02-23T01:50:24
+ - normalize the default log level to warn
+ - rearrange tests into small, feature-sized chunks
+ - create new blog posts in directories
+ - allow blog posts to be directories
+ - organize core and non-core deps
+ - add create command example to website
+ - fix note about default theme using skeleton
+ - add note about create command to Setup guide
+ - add site "create" command
+ - add link to content guide
+ - reorganize guides and add Statocles::Help
+ - split the Setup guide into Config and Content
+ - fix navbar too close to main page content
+ - break parsing a frontmatter file into its own sub
+ - clarify the docs on Pages and what a Site is
+ - add example of markdown to html to website
+ - split the main doc into the Develop guide
+ - fix me showing up in the contributors list
+ - add release v0.038 announcement
+
+0.038 2015-02-15T05:49:09Z
  - fix git-rm compatibility with 1.7.2
  - fix error adding submodule in test
  - upgrade git requirement to 1.7.2

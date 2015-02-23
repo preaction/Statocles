@@ -57,14 +57,15 @@ my %WriteMakefileArgs = (
     "File::Spec" => 0,
     "IO::Handle" => 0,
     "IPC::Open3" => 0,
+    "Storable" => 0,
     "Test::Deep" => 0,
     "Test::Differences" => 0,
     "Test::Exception" => 0,
     "Test::More" => "1.001005"
   },
-  "VERSION" => "0.038",
+  "VERSION" => "0.039",
   "test" => {
-    "TESTS" => "t/*.t t/app/*.t t/bin/*.t t/deploy/*.t t/page/*.t t/store/*.t t/theme/*.t"
+    "TESTS" => "t/*.t t/app/*.t t/app/blog/*.t t/app/perldoc/*.t t/app/plain/*.t t/app/static/*.t t/bin/*.t t/command/*.t t/deploy/*.t t/page/*.t t/site/*.t t/store/file/*.t t/theme/*.t"
   }
 );
 
@@ -89,6 +90,7 @@ my %FallbackPrereqs = (
   "Moo::Lax" => 0,
   "Path::Tiny" => "0.054",
   "Pod::Usage::Return" => 0,
+  "Storable" => 0,
   "Test::Deep" => 0,
   "Test::Differences" => 0,
   "Test::Exception" => 0,
