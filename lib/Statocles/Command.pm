@@ -244,7 +244,15 @@ sub create_site {
         $site->{deploy}{args}{path} = '.';
     }
 
-    Path::Tiny->new( '.' )->child( 'site.yml' )->spew_utf8( YAML::Dump( $site ) );
+    my $root = Path::Tiny->new( '.' );
+    $root->child( 'site.yml' )->spew_utf8( YAML::Dump( $site ) );
+
+    # Make required store directories
+    for my $app ( map { $_->{'$ref'} } values %{ $site->{site}{args}{apps} } ) {
+        my $path = $site->{$app}{args}{store};
+        next unless $path;
+        $root->child( $path )->mkpath;
+    }
 
     ### DONE!
     print "\n", "\n", $question->{finish}, "\n", "\n";

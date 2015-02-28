@@ -34,6 +34,9 @@ subtest 'create a site' => sub {
             $expect_config,
             'config is complete and correct';
 
+        ok $tmp->child( 'blog' )->is_dir, 'blog dir exists';
+        ok $tmp->child( 'static' )->is_dir, 'static dir exists';
+        ok $tmp->child( 'page' )->is_dir, 'page dir exists';
         ok $tmp->child( 'theme' )->is_dir, 'theme dir exists';
 
         chdir $cwd;
@@ -65,6 +68,9 @@ subtest 'create a site' => sub {
             $expect_config,
             'config is complete and correct';
 
+        ok $tmp->child( 'blog' )->is_dir, 'blog dir exists';
+        ok $tmp->child( 'static' )->is_dir, 'static dir exists';
+        ok $tmp->child( 'page' )->is_dir, 'page dir exists';
         ok !$tmp->child( 'theme' )->exists, 'theme dir does not exists';
 
         chdir $cwd;
@@ -94,6 +100,9 @@ subtest 'create a site' => sub {
             $expect_config,
             'config is complete and correct';
 
+        ok $tmp->child( 'blog' )->is_dir, 'blog dir exists';
+        ok $tmp->child( 'static' )->is_dir, 'static dir exists';
+        ok $tmp->child( 'page' )->is_dir, 'page dir exists';
         ok !$tmp->child( 'theme' )->exists, 'theme dir does not exists';
 
         chdir $cwd;
