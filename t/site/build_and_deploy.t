@@ -20,9 +20,11 @@ sub test_page_content {
 subtest 'build' => sub {
     $site->build;
 
+    my @pages;
     for my $page ( $site->app( 'blog' )->pages, $site->app( 'static' )->pages ) {
         ok $build_dir->child( $page->path )->exists, $page->path . ' built';
         ok !$deploy_dir->child( $page->path )->exists, $page->path . ' not deployed yet';
+        push @pages, $page->path;
     }
 
     subtest 'check static content' => sub {
@@ -33,16 +35,28 @@ subtest 'build' => sub {
                 $page->path . ' content is correct';
             ok !$deploy_dir->child( $page->path )->exists,
                 $page->path . ' is not deployed';
+            push @pages, $page->path;
         }
     };
 
     subtest 'check theme' => sub {
         my $iter = $site->theme->store->find_files;
         while ( my $theme_file = $iter->() ) {
-            ok $build_dir->child( 'theme', $theme_file )->exists,
+            my $path = path( 'theme' => $theme_file );
+            ok $build_dir->child( $path )->exists,
                 'theme file ' . $theme_file . 'exists in build dir';
-            ok !$deploy_dir->child( 'theme', $theme_file )->exists,
+            ok !$deploy_dir->child( $path )->exists,
                 'theme file ' . $theme_file . 'not in deploy dir';
+            push @pages, $path;
+        }
+    };
+
+    subtest 'build deletes files before building' => sub {
+        $build_dir->child( 'DELETE_ME' )->spew( "This should be deleted" );
+        $site->build;
+        ok !$build_dir->child( 'DELETE_ME' )->exists, 'unbuilt file is deleted';
+        for my $path ( @pages ) {
+            ok $build_dir->child( $path )->exists, $path . ' built';
         }
     };
 

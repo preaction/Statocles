@@ -245,6 +245,10 @@ sub build {
     my ( $self ) = @_;
 
     my $store = $self->build_store;
+
+    # Remove all pages from the build directory first
+    $_->remove_tree for $store->path->children;
+
     my $apps = $self->apps;
     my @pages;
     my %args = (
