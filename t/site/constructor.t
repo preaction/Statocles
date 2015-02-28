@@ -14,14 +14,15 @@ my %required = (
 );
 
 # We need this to make the store to check the default
-mkdir '.statocles-build';
+mkdir '.statocles';
+mkdir '.statocles/build';
 
 test_constructor(
     'Statocles::Site',
     required => \%required,
     default => {
         theme => Statocles::Theme->new( store => '::default' ),
-        build_store => Statocles::Store::File->new( path => '.statocles-build' ),
+        build_store => Statocles::Store::File->new( path => '.statocles/build' ),
     },
 );
 
@@ -32,10 +33,13 @@ subtest 'build dir gets created automatically' => sub {
     chdir $tmp;
 
     lives_ok { Statocles::Site->new( %required ) };
-    ok -d '.statocles-build', 'directory was created';
+    ok -d '.statocles/build', 'directory was created';
 
     lives_ok { Statocles::Site->new( build_store => 'builddir', %required ) };
     ok -d 'builddir', 'directory was created';
+
+    lives_ok { Statocles::Site->new( build_store => 'some/deep/build/dir', %required ) };
+    ok -d 'some/deep/build/dir', 'directory was created';
 
     chdir $cwd;
 };

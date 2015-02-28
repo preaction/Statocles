@@ -117,10 +117,10 @@ has build_store => (
     is => 'ro',
     isa => Store,
     default => sub {
-        my $path = '.statocles-build';
-        if ( !-d $path ) {
+        my $path = Path::Tiny->new( '.statocles', 'build' );
+        if ( !$path->is_dir ) {
             # Automatically make the build directory
-            mkdir $path;
+            $path->mkpath;
         }
         return Store->coercion->( $path );
     },
@@ -128,7 +128,7 @@ has build_store => (
         my ( $arg ) = @_;
         if ( !ref $arg && !-d $arg ) {
             # Automatically make the build directory
-            mkdir $arg;
+            Path::Tiny->new( $arg )->mkpath;
         }
         return Store->coercion->( $arg );
     },
