@@ -281,6 +281,8 @@ sub index {
         layout => $self->site->theme->template( site => 'layout.html' ),
     );
 
+    return unless @pages; # Only build feeds if we have pages
+
     my $index = $pages[0];
     my @feed_pages;
     my @feed_links;

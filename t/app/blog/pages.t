@@ -708,4 +708,15 @@ subtest 'different locale' => sub {
     setlocale( LC_TIME, "" );
 };
 
+subtest 'blog with no pages is still built' => sub {
+    my $app = Statocles::App::Blog->new(
+        store => tempdir,
+        site => $site,
+        url_root => '/blog',
+    );
+    my @pages;
+    lives_ok { @pages = $app->pages };
+    cmp_deeply \@pages, [];
+};
+
 done_testing;
