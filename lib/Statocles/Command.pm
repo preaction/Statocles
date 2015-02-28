@@ -144,6 +144,12 @@ sub main {
     }
     else {
         my $app_name = $method;
+        my $app = $cmd->site->apps->{ $app_name };
+
+        if ( !$app ) {
+            return pod2usage("ERROR: Unknown command or app '$app_name'");
+        }
+
         return $cmd->site->apps->{ $app_name }->command( @argv );
     }
 

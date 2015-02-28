@@ -18,6 +18,16 @@ subtest 'no command specified' => sub {
     isnt $exit, 0;
 };
 
+subtest 'unknown command specified' => sub {
+    my ( $out, $err, $exit ) = capture { Statocles::Command->main( 'daemin' ) };
+    ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
+    like $err, qr{ERROR: Unknown command or app 'daemin'};
+    like $err, qr{statocles -h},
+        'reports pod from bin/statocles, not Statocles::Command';
+    isnt $exit, 0;
+};
+
+
 subtest 'config file missing' => sub {
     subtest 'no site.yml found' => sub {
         my $tempdir = tempdir;
