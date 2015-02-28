@@ -6,6 +6,7 @@ my $SHARE_DIR = path( __DIR__ )->parent->parent->child( 'share' );
 
 my $site = build_test_site(
     theme => $SHARE_DIR->child( 'theme' ),
+    base_url => 'http://example.com/',
 );
 
 my $app = Statocles::App::Blog->new(

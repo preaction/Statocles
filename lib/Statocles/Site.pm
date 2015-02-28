@@ -29,6 +29,7 @@ This can be overridden by L<base_url in Deploy|Statocles::Deploy/base_url>.
 has base_url => (
     is => 'ro',
     isa => Str,
+    default => sub { '/' },
 );
 
 =attr theme

@@ -107,7 +107,7 @@ subtest 'deploy' => sub {
 subtest 'base URL with folder rewrites content' => sub {
     my ( $site, $build_dir, $deploy_dir ) = build_test_site_apps(
         $SHARE_DIR,
-        base_url => '/',
+        base_url => '/', # The default
         deploy => {
             base_url => 'http://example.com/deploy/',
         },

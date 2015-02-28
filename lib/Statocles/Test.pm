@@ -41,7 +41,6 @@ sub build_test_site {
 
     return Statocles::Site->new(
         title => 'Example Site',
-        base_url => 'http://example.com/',
         build_store => $store,
         deploy => $deploy,
         %site_args,
@@ -307,7 +306,6 @@ sub build_temp_site {
         site => {
             class => 'Statocles::Site',
             args => {
-                base_url => 'http://example.com',
                 title => 'Site Title',
                 index => 'blog',
                 build_store => { '$ref' => 'build' },
@@ -337,7 +335,6 @@ sub build_temp_site {
         site_foo => {
             class => 'Statocles::Site',
             args => {
-                base_url => 'http://example.net',
                 title => 'Site Foo',
                 index => 'blog',
                 build_store => { '$ref' => 'build_foo' },
