@@ -5,6 +5,16 @@
 
 This document describes various ways to deploy a Statocles site.
 
+=head2 C<base_url>
+
+Both the site and every deploy can have a C<base_url>, which should be set
+to the full URL the site will be deployed to, like C<http://example.com/> or
+C<http://example.com/path>.
+
+Any time a full URL is needed, the C<base_url> will be used to create one. Even better,
+if there is a C</path>, all internal links will be rewritten to prepend the C</path>,
+making it easy to move a site to a different URL path.
+
 =head1 Github Pages
 
 By far the easiest way is to deploy to a L<Github Pages|http://pages.github.com>
@@ -43,13 +53,15 @@ branches as related in a graph (which they are not).
     $ git commit -m'starting github pages site'
     $ git checkout master
 
-Now we just have to configure a Git deploy to point to our "gh-pages" branch.
+Now we just have to configure a Git deploy to point to our "gh-pages" branch,
+and make sure to rewrite our page URLs to the right directory.
 
     # site.yml
     gh_deploy:
         class: Statocles::Deploy::Git
         args:
             branch: gh-pages
+            base_url: http://user.github.io/project
 
     site:
         class: Statocles::Site
