@@ -8,40 +8,6 @@ use YAML;
 subtest 'create a site' => sub {
     my $cwd = cwd;
 
-    subtest 'basic blog site with git' => sub {
-        my $tmp = tempdir;
-        chdir $tmp;
-
-        my $in = $SHARE_DIR->child( qw( create basic_blog_in.txt ) )->openr_utf8;
-        local *STDIN = $in;
-
-        my @args = ( 'create' );
-        my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
-
-        is $exit, 0;
-        ok !$err, 'nothing on stderr' or diag "STDERR: $err";
-        eq_or_diff $out, $SHARE_DIR->child( qw( create basic_blog_out.txt ) )->slurp_utf8;
-
-        ok $tmp->child( 'site.yml' )->is_file, 'site.yml file exists';
-        my $expect_config = site_config();
-
-        $expect_config->{deploy}{class} = 'Statocles::Deploy::Git';
-        $expect_config->{deploy}{args}{branch} = 'master';
-        $expect_config->{theme}{args}{store} = 'theme';
-
-        cmp_deeply
-            YAML::Load( $tmp->child( 'site.yml' )->slurp_utf8 ),
-            $expect_config,
-            'config is complete and correct';
-
-        ok $tmp->child( 'blog' )->is_dir, 'blog dir exists';
-        ok $tmp->child( 'static' )->is_dir, 'static dir exists';
-        ok $tmp->child( 'page' )->is_dir, 'page dir exists';
-        ok $tmp->child( 'theme' )->is_dir, 'theme dir exists';
-
-        chdir $cwd;
-    };
-
     subtest 'project site with file deploy' => sub {
         my $tmp = tempdir;
         chdir $tmp;
@@ -109,6 +75,98 @@ subtest 'create a site' => sub {
     };
 
     chdir $cwd;
+};
+
+subtest 'git deploy' => sub {
+    if ( !eval { require Statocles::Deploy::Git; 1 } ) {
+        pass "No test: Statocles::Deploy::Git failed to load: $@";
+        return;
+    }
+
+    my $git_version = Statocles::Deploy::Git->_git_version;
+    diag "Git version: $git_version";
+    if ( $git_version < 1.007002 ) {
+        pass "No test: Git 1.7.2 or higher required";
+        return;
+    }
+
+    require Git::Repository;
+    my $cwd = cwd;
+
+    subtest 'basic blog site with git' => sub {
+        my $tmp = tempdir;
+        chdir $tmp;
+
+        my $in = $SHARE_DIR->child( qw( create basic_blog_in.txt ) )->openr_utf8;
+        local *STDIN = $in;
+
+        my @args = ( 'create' );
+        my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+
+        is $exit, 0;
+        ok !$err, 'nothing on stderr' or diag "STDERR: $err";
+        eq_or_diff $out, $SHARE_DIR->child( qw( create basic_blog_out.txt ) )->slurp_utf8;
+
+        ok $tmp->child( 'site.yml' )->is_file, 'site.yml file exists';
+        my $expect_config = site_config();
+
+        $expect_config->{deploy}{class} = 'Statocles::Deploy::Git';
+        $expect_config->{deploy}{args}{branch} = 'master';
+        $expect_config->{theme}{args}{store} = 'theme';
+
+        cmp_deeply
+            YAML::Load( $tmp->child( 'site.yml' )->slurp_utf8 ),
+            $expect_config,
+            'config is complete and correct';
+
+        ok $tmp->child( 'blog' )->is_dir, 'blog dir exists';
+        ok $tmp->child( 'static' )->is_dir, 'static dir exists';
+        ok $tmp->child( 'page' )->is_dir, 'page dir exists';
+        ok $tmp->child( 'theme' )->is_dir, 'theme dir exists';
+
+        ok $tmp->child( '.git' )->is_dir, 'git repository created';
+
+        chdir $cwd;
+    };
+
+    subtest 'init in existing git repo' => sub {
+        my $tmp = tempdir;
+        chdir $tmp;
+
+        Git::Repository->run( 'init' );
+
+        my $in = $SHARE_DIR->child( qw( create basic_blog_in.txt ) )->openr_utf8;
+        local *STDIN = $in;
+
+        my @args = ( 'create' );
+        my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+
+        is $exit, 0;
+        ok !$err, 'nothing on stderr' or diag "STDERR: $err";
+        eq_or_diff $out, $SHARE_DIR->child( qw( create basic_blog_out.txt ) )->slurp_utf8;
+
+        ok $tmp->child( 'site.yml' )->is_file, 'site.yml file exists';
+        my $expect_config = site_config();
+
+        $expect_config->{deploy}{class} = 'Statocles::Deploy::Git';
+        $expect_config->{deploy}{args}{branch} = 'master';
+        $expect_config->{theme}{args}{store} = 'theme';
+
+        cmp_deeply
+            YAML::Load( $tmp->child( 'site.yml' )->slurp_utf8 ),
+            $expect_config,
+            'config is complete and correct';
+
+        ok $tmp->child( 'blog' )->is_dir, 'blog dir exists';
+        ok $tmp->child( 'static' )->is_dir, 'static dir exists';
+        ok $tmp->child( 'page' )->is_dir, 'page dir exists';
+        ok $tmp->child( 'theme' )->is_dir, 'theme dir exists';
+
+        ok $tmp->child( '.git' )->is_dir, 'git repository still exists';
+
+        chdir $cwd;
+    };
+
 };
 
 done_testing;

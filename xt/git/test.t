@@ -14,8 +14,10 @@ for my $version ( $bin->child( 'versions' )->children ) {
     my $exit;
     subtest 'Git version: ' . $version => sub {
         local $ENV{PATH} = "$version/bin:$ENV{PATH}";
-        ( my $output, $exit ) = capture_merged { system $^X, 't/deploy/git.t' };
-        is $exit, 0, 'test passed' or diag $output;
+        for my $t ( qw( t/deploy/git.t t/command/create.t ) ) {
+            ( my $output, $exit ) = capture_merged { system $^X, $t };
+            is $exit, 0, "test '$t' passed" or diag $output;
+        }
     };
     last if $exit;
 }

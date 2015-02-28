@@ -214,6 +214,9 @@ sub create_site {
     }
 
     ### Build the site
+    my $cwd = cwd;
+    my $root = Path::Tiny->new( '.' );
+    chdir $root;
     my ( $site ) = YAML::Load( $create_dir->child( 'site.yml' )->slurp_utf8 );
 
     if ( $answer{flavor} == 1 ) {
@@ -233,6 +236,12 @@ sub create_site {
     if ( $answer{deploy_class} == 1 ) {
         $site->{deploy}{class} = 'Statocles::Deploy::Git';
         $site->{deploy}{args}{branch} = $answer{git_branch};
+
+        # Create the git repo
+        require Git::Repository;
+        # Running init more than once is apparently completely safe, so we don't
+        # even have to check before we run it
+        Git::Repository->run( 'init' );
     }
     elsif ( $answer{deploy_class} == 2 ) {
         $site->{deploy}{class} = 'Statocles::Deploy::File';
@@ -244,7 +253,6 @@ sub create_site {
         $site->{deploy}{args}{path} = '.';
     }
 
-    my $root = Path::Tiny->new( '.' );
     $root->child( 'site.yml' )->spew_utf8( YAML::Dump( $site ) );
 
     # Make required store directories
@@ -256,6 +264,8 @@ sub create_site {
 
     ### DONE!
     print "\n", "\n", $question->{finish}, "\n", "\n";
+    chdir $cwd;
+
     return 0;
 }
 
