@@ -9,11 +9,26 @@ my ( $site, $build_dir, $deploy_dir ) = build_test_site_apps( $SHARE_DIR );
 
 sub test_page_content {
     my ( $site, $page, $dir ) = @_;
+    my $elem;
     my $path = $dir->child( $page->path );
     my $got_dom = Mojo::DOM->new( $path->slurp );
 
-    if ( $got_dom->at('title') ) {
-        like $got_dom->at('title')->text, qr{@{[$site->title]}}, 'page contains site title ' . $site->title;
+    if ( ok $elem = $got_dom->at('title'), 'has title' ) {
+        like $elem->text, qr{@{[$site->title]}}, 'page contains site title ' . $site->title;
+    }
+
+}
+
+sub test_base_url {
+    my ( $base_url, $page, $dir ) = @_;
+    my $elem;
+    my $path = $dir->child( $page->path );
+    my $got_dom = Mojo::DOM->new( $path->slurp );
+
+    if ( ok $elem = $got_dom->at( 'head > link' ), 'has stylesheet' ) {
+        my $site_path = Mojo::URL->new( $base_url )->path;
+        $site_path =~ s{/$}{};
+        is $elem->attr( 'href' ), $site_path . '/theme/css/normalize.css';
     }
 }
 
@@ -92,8 +107,9 @@ subtest 'deploy' => sub {
 subtest 'base URL with folder rewrites content' => sub {
     my ( $site, $build_dir, $deploy_dir ) = build_test_site_apps(
         $SHARE_DIR,
+        base_url => '/',
         deploy => {
-            base_url => 'http://example.com/deploy',
+            base_url => 'http://example.com/deploy/',
         },
     );
 
@@ -103,6 +119,12 @@ subtest 'base URL with folder rewrites content' => sub {
         for my $page ( $site->app( 'blog' )->pages ) {
             subtest 'page content: ' . $page->path
                 => \&test_page_content, $site, $page, $build_dir;
+
+            if ( $page->path =~ /[.]html$/ ) {
+                subtest 'base url: ' . $page->path
+                    => \&test_base_url, '/', $page, $build_dir;
+            }
+
             ok !$deploy_dir->child( $page->path )->exists, 'not deployed yet';
         }
 
@@ -123,6 +145,11 @@ subtest 'base URL with folder rewrites content' => sub {
         for my $page ( $site->app( 'blog' )->pages ) {
             subtest 'page content: ' . $page->path
                 => \&test_page_content, $site, $page, $deploy_dir;
+
+            if ( $page->path =~ /[.]html$/ ) {
+                subtest 'base url: ' . $page->path
+                    => \&test_base_url, 'http://example.com/deploy', $page, $deploy_dir;
+            }
         }
 
         subtest 'check static content' => sub {

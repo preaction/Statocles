@@ -279,6 +279,7 @@ sub build {
         $base_url = $self->_write_deploy->base_url || $base_url;
     }
     my $base_path = Mojo::URL->new( $base_url )->path;
+    $base_path =~ s{/$}{};
 
     for my $page ( @pages ) {
         my $content = $page->render( %args );

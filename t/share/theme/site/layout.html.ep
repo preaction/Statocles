@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="stylesheet" href="/theme/css/normalize.css" />
         <title><%= $site->title %></title>
     </head>
     <body>
