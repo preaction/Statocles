@@ -138,7 +138,7 @@ sub site_config {
         },
 
         page_app => {
-            class => 'Statocles::App::Blog',
+            class => 'Statocles::App::Plain',
             args => {
                 store => 'page',
                 url_root => '/page',
@@ -146,7 +146,7 @@ sub site_config {
         },
 
         static_app => {
-            class => 'Statocles::App::Blog',
+            class => 'Statocles::App::Static',
             args => {
                 store => 'static',
                 url_root => '/static',

@@ -21,13 +21,13 @@ blog_app:
         url_root: '/blog'
 
 page_app:
-    class: 'Statocles::App::Blog'
+    class: 'Statocles::App::Plain'
     args:
         store: 'page'
         url_root: '/page'
 
 static_app:
-    class: 'Statocles::App::Blog'
+    class: 'Statocles::App::Static'
     args:
         store: 'static'
         url_root: '/static'
