@@ -111,7 +111,7 @@ sub render {
 sub _prelude {
     my ( $self, @vars ) = @_;
     return join " ",
-        'use strict; use warnings;',
+        'use strict; use warnings; no warnings "ambiguous";',
         'my $vars = shift;',
         map( { "my \$$_ = \$vars->{'$_'};" } @vars ),
         ;

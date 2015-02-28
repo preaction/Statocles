@@ -81,9 +81,11 @@ my @expect = (
 subtest 'build' => sub {
     $site->build;
     my $dom = Mojo::DOM->new( $build_dir->child( 'sitemap.xml' )->slurp );
-    is $dom->at('urlset')->type, 'urlset';
-    my @urls = $dom->at('urlset')->children->map( $to_href )->each;
-    cmp_deeply \@urls, bag( @expect ) or diag explain \@urls;
+    if ( ok my $elem = $dom->at('urlset'), 'urlset exists' ) {;
+        my @urls = $dom->at('urlset')->children->map( $to_href )->each;
+        cmp_deeply \@urls, bag( @expect ) or diag explain \@urls, \@expect;
+    }
+
     cmp_deeply
         [ grep { /\S/ } $build_dir->child( 'robots.txt' )->lines ],
         [
@@ -98,9 +100,11 @@ subtest 'build' => sub {
 subtest 'deploy' => sub {
     $site->deploy;
     my $dom = Mojo::DOM->new( $deploy_dir->child( 'sitemap.xml' )->slurp );
-    is $dom->at('urlset')->type, 'urlset';
-    my @urls = $dom->at('urlset')->children->map( $to_href )->each;
-    cmp_deeply \@urls, bag( @expect ) or diag explain \@urls, \@expect;
+    if ( ok my $elem = $dom->at('urlset'), 'urlset exists' ) {;
+        my @urls = $dom->at('urlset')->children->map( $to_href )->each;
+        cmp_deeply \@urls, bag( @expect ) or diag explain \@urls, \@expect;
+    }
+
     cmp_deeply
         [ grep { /\S/ } $deploy_dir->child( 'robots.txt' )->lines ],
         [

@@ -354,16 +354,14 @@ sub bundle_theme {
 
                     my $rebuild;
                     REBUILD:
-                    while ( $reactor->is_readable( $handle ) ) {
-                        for my $event ( $fs->read_events ) {
-                            if ( $event->path =~ /^\Q$build_dir/ ) {
-                                next;
-                            }
-
-                            $self->log->info( "Path '" . $event->path . "' changed... Rebuilding" );
-                            $_->clear for @{ $watches{ $path } };
-                            $rebuild = 1;
+                    for my $event ( $fs->read_events ) {
+                        if ( $event->path =~ /^\Q$build_dir/ ) {
+                            next;
                         }
+
+                        $self->log->info( "Path '" . $event->path . "' changed... Rebuilding" );
+                        $_->clear for @{ $watches{ $path } };
+                        $rebuild = 1;
                     }
 
                     if ( $rebuild ) {
