@@ -8,4 +8,8 @@ links:
         title: blogs.perl.org
         href: http://blogs.perl.org/preaction/404.html
 ---
-Body content
+[Body Content](/does_not_exist)
+
+![](/does_not_exist.jpg)
+
+[relative](does_not_exist)

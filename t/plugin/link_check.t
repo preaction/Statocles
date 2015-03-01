@@ -1,0 +1,26 @@
+
+use Statocles::Base 'Test';
+use Statocles::Plugin::LinkCheck;
+my $SHARE_DIR = path( __DIR__, '..', 'share' );
+
+subtest 'check links' => sub {
+    my ( $site, $build_dir, $deploy_dir ) = build_test_site_apps( $SHARE_DIR );
+    my $plugin = Statocles::Plugin::LinkCheck->new;
+    $site->on( 'build', sub { $plugin->check_pages( @_ ) } );
+
+    $site->build;
+
+    my $page = '/blog/2014/06/02/more_tags.html';
+
+    cmp_deeply $site->log->history,
+        bag(
+            [ ignore(), 'warn', re(qr{\QURL broken on $page: '/does_not_exist.jpg' not found}) ],
+            [ ignore(), 'warn', re(qr{\QURL broken on $page: '/does_not_exist' not found}) ],
+            [ ignore(), 'warn', re(qr{\QURL broken on $page: '/blog/2014/06/02/does_not_exist' not found}) ],
+        ),
+        'broken links found'
+            or diag explain $site->log->history;
+
+};
+
+done_testing;
