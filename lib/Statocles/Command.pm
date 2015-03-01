@@ -242,6 +242,7 @@ sub create_site {
         # Running init more than once is apparently completely safe, so we don't
         # even have to check before we run it
         Git::Repository->run( 'init' );
+        $root->child( '.gitignore' )->append( "\n.statocles\n" );
     }
     elsif ( $answer{deploy_class} == 2 ) {
         $site->{deploy}{class} = 'Statocles::Deploy::File';

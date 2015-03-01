@@ -125,6 +125,10 @@ subtest 'git deploy' => sub {
         ok $tmp->child( 'theme' )->is_dir, 'theme dir exists';
 
         ok $tmp->child( '.git' )->is_dir, 'git repository created';
+        eq_or_diff $tmp->child( '.gitignore' )->slurp,
+            qq{\n.statocles\n},
+            'gitignore is created',
+            ;
 
         chdir $cwd;
     };
@@ -134,6 +138,7 @@ subtest 'git deploy' => sub {
         chdir $tmp;
 
         Git::Repository->run( 'init' );
+        $tmp->child( '.gitignore' )->spew( "some\n\nexisting\npaths\n" );
 
         my $in = $SHARE_DIR->child( qw( create basic_blog_in.txt ) )->openr_utf8;
         local *STDIN = $in;
@@ -163,6 +168,10 @@ subtest 'git deploy' => sub {
         ok $tmp->child( 'theme' )->is_dir, 'theme dir exists';
 
         ok $tmp->child( '.git' )->is_dir, 'git repository still exists';
+        eq_or_diff $tmp->child( '.gitignore' )->slurp,
+            qq{some\n\nexisting\npaths\n\n.statocles\n},
+            'gitignore is added to',
+            ;
 
         chdir $cwd;
     };
