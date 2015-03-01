@@ -1,11 +1,13 @@
 package Statocles::Site;
 # ABSTRACT: An entire, configured website
 
-use Statocles::Base 'Class';
+use Statocles::Base 'Class', 'Emitter';
 use Scalar::Util qw( blessed );
 use Mojo::URL;
 use Mojo::DOM;
 use Mojo::Log;
+use Statocles::Page::Plain;
+use Statocles::Page::File;
 
 =attr title
 
@@ -238,7 +240,7 @@ sub nav {
 
 =method build
 
-Build the site in its build location
+Build the site in its build location.
 
 =cut
 
@@ -306,19 +308,37 @@ sub build {
     # html files only
     my @indexed_pages = grep { $_->path =~ /[.]html?$/ } @pages;
     my $tmpl = $self->theme->template( site => 'sitemap.xml' );
-    $store->write_file( 'sitemap.xml', $tmpl->render( site => $self, pages => \@indexed_pages ) );
+    my $sitemap = Statocles::Page::Plain->new(
+        path => '/sitemap.xml',
+        content => $tmpl->render( site => $self, pages => \@indexed_pages ),
+    );
+    push @pages, $sitemap;
+    $store->write_file( 'sitemap.xml', $sitemap->render );
 
     # robots.txt is the best way for crawlers to automatically discover sitemap.xml
     # We should do more with this later...
     my $robots_tmpl = $self->theme->template( site => 'robots.txt' );
-    $store->write_file( 'robots.txt', $robots_tmpl->render( site => $self ) );
+    my $robots = Statocles::Page::Plain->new(
+        path => '/robots.txt',
+        content => $robots_tmpl->render( site => $self ),
+    );
+    push @pages, $robots;
+    $store->write_file( 'robots.txt', $robots->render );
 
     # Add the theme
     my $theme_iter = $self->theme->store->find_files();
     while ( my $theme_file = $theme_iter->() ) {
         my $fh = $self->theme->store->open_file( $theme_file );
+        push @pages, Statocles::Page::File->new(
+            path => join( '/', '', 'theme', $theme_file ),
+            fh => $fh,
+        );
         $store->write_file( Path::Tiny->new( 'theme', $theme_file ), $fh );
     }
+
+    $self->emit( build => class => 'Statocles::Event::Pages', pages => \@pages );
+
+    return;
 }
 
 =method deploy
