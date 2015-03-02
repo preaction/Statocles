@@ -1,5 +1,9 @@
 site:
     class: 'Statocles::Site'
+    on:
+        - build:
+            $class: 'Statocles::Plugin::LinkCheck'
+            $method: 'check_pages'
     args:
         title: 'My Statocles Site'
         nav:

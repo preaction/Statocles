@@ -203,6 +203,14 @@ sub site_config {
                 index => 'blog',
                 deploy => { '$ref' => 'deploy' },
             },
+            on => [
+                {
+                    build => {
+                        '$class' => 'Statocles::Plugin::LinkCheck',
+                        '$method' => 'check_pages',
+                    },
+                },
+            ],
         },
 
         blog_app => {
