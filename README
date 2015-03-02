@@ -2,7 +2,7 @@ NAME
     Statocles - A static site generator
 
 VERSION
-    version 0.039
+    version 0.040
 
 SYNOPSIS
         # !!! Read the Statocles::Help guide to set up a site.yml config file

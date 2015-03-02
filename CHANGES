@@ -1,6 +1,29 @@
 Changelog for Statocles
 
-0.039 2015-02-23T01:50:24
+0.040 2015-03-02T06:01:48
+ - fix linkcheck synopsis for new wire config syntax
+ - add documentation for events and plugins
+ - add linkcheck plugin to Statocles website
+ - add LinkCheck plugin to the default site creator
+ - add LinkCheck plugin to check links and images
+ - add build event hook to site
+ - remove unnecessary includes in tests
+ - add '.statocles' to gitignore automatically
+ - fix blog with no pages doesn't build
+ - init the git repo when creating a git-based site
+ - upgrade to Mojolicious 6.0
+ - add note about base_url to deploy guide
+ - set a sane default base url
+ - fix base_url of / breaks links
+ - create the app store directories in create command
+ - fix create command creates wrong apps
+ - move default build dir to .statocles/build
+ - fix unknown command gives strange error
+ - remove all files from build dir before building
+ - add release v0.039 announcement
+ - add theme fixes from latest Statocles release
+
+0.039 2015-02-23T01:50:24Z
  - normalize the default log level to warn
  - rearrange tests into small, feature-sized chunks
  - create new blog posts in directories
