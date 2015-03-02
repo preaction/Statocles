@@ -55,9 +55,9 @@ sub check_pages {
     site:
         class: Statocles::Site
         on:
-            build:
-                - $class: Statocles::Plugin::LinkCheck
-                  $method: check_pages
+            - build:
+                $class: Statocles::Plugin::LinkCheck
+                $method: check_pages
 
 =head1 DESCRIPTION
 
