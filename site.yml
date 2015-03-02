@@ -66,3 +66,9 @@ site:
                 $args:
                     store: site/blog
                     url_root: /blog
+
+    on:
+        - build:
+            $class: Statocles::Plugin::LinkCheck
+            $method: check_pages
+
