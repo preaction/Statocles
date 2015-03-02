@@ -186,7 +186,7 @@
 
 <h2 id="build">build</h2>
 
-<p>Build the site in its build location</p>
+<p>Build the site in its build location.</p>
 
 <h2 id="deploy1">deploy</h2>
 
@@ -195,6 +195,16 @@
 <h2 id="url-path">url( path )</h2>
 
 <p>Get the full URL to the given path by prepending the <code>base_url</code>.</p>
+
+<h1 id="EVENTS">EVENTS</h1>
+
+<p>The site object exposes the following events.</p>
+
+<h2 id="build1">build</h2>
+
+<p>This event is fired after the site has been built and the pages written to the <code>build_store</code>.</p>
+
+<p>The event will be a <a href="/Statocles/pod/Statocles/Event#Statocles/Event/Pages.html">Statocles::Event::Pages</a> object containing all the pages built by the site.</p>
 
 
 

@@ -90,6 +90,48 @@
 
             <article>
                 <header>
+                    <h1><a href="/Statocles/blog/2014/12/23/release-v0.030.html">Release v0.030</a></h1>
+
+                    <p class="tags">Tags:
+                        <a href="/Statocles/blog/tag/release" rel="tag">release</a>
+                    </p>
+
+                    <aside>
+                        <p><time datetime="2014-12-23">
+                            Posted on 2014-12-23
+                        </time>
+                            by preaction
+                        </p>
+                    </aside>
+
+                </header>
+
+                <p>With the push towards a useful public beta, I made some breaking changes in
+this release:</p>
+
+<ul>
+<li>All our documents now have the file extention &quot;.markdown&quot; and not &quot;.yml&quot;.
+They are not YAML files, they&#39;re Markdown files with optional YAML at the top.</li>
+<li>If the document has YAML, the document must start with &quot;---&quot;.</li>
+<li>Plain YAML files are no longer allowed.</li>
+<li>The plain file store is now called Statocles::Store::File, which means your
+site&#39;s config file may need to change.</li>
+</ul>
+
+<p>If you need to change all your files from &quot;.yml&quot; to &quot;.markdown&quot;, you can use
+the following:</p>
+
+<pre><code>find site -name &#39;*.yml&#39; | rename -s &#39;.yml&#39; &#39;.markdown&#39;
+</code></pre>
+
+<p>Full changelog:</p>
+
+
+                    <p><a href="/Statocles/blog/2014/12/23/release-v0.030.html#section-2">Continue reading Release v0.030...</a></p>
+
+            </article>
+            <article>
+                <header>
                     <h1><a href="/Statocles/blog/2014/12/22/release-v0.029.html">Release v0.029</a></h1>
 
                     <p class="tags">Tags:

@@ -240,6 +240,22 @@
 </dd>
 </dl>
 
+<h1 id="PLUGINS">PLUGINS</h1>
+
+<p>Plugins are used to respond to events in the Statocles workflow. For example, when a site is built, an event is fired containing all the built pages. Then, the <a href="/Statocles/pod/Statocles/Plugin/LinkCheck.html">Statocles::Plugin::LinkCheck</a> plugin can search all the pages for broken links.</p>
+
+<p>Any class can be a plugin, it just needs a method. The event listener is wired up using the configuration file:</p>
+
+<pre><code>    # site.yml
+    site:
+        class: Statocles::Site
+        on:
+            - build:
+                $class: Statocles::Plugin::LinkCheck
+                $method: check_pages</code></pre>
+
+<p>When the <code>build</code> event fires, the LinkCheck method <code>check_pages</code> will be called, with the event object given as the argument.</p>
+
 
 
         </div>
