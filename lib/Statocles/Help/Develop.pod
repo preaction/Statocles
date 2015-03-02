@@ -165,3 +165,24 @@ site is deployed.
 
 =back
 
+=head1 PLUGINS
+
+Plugins are used to respond to events in the Statocles workflow. For example,
+when a site is built, an event is fired containing all the built pages. Then,
+the L<Statocles::Plugin::LinkCheck> plugin can search all the pages for broken
+links.
+
+Any class can be a plugin, it just needs a method. The event listener is wired
+up using the configuration file:
+
+    # site.yml
+    site:
+        class: Statocles::Site
+        on:
+            - build:
+                $class: Statocles::Plugin::LinkCheck
+                $method: check_pages
+
+When the C<build> event fires, the LinkCheck method C<check_pages> will be called,
+with the event object given as the argument.
+

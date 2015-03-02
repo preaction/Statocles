@@ -399,3 +399,16 @@ __END__
 
 A Statocles::Site is a collection of L<applications|Statocles::App>.
 
+=head1 EVENTS
+
+The site object exposes the following events.
+
+=head2 build
+
+This event is fired after the site has been built and the pages written to the
+C<build_store>.
+
+The event will be a
+L<Statocles::Event::Pages|Statocles::Event/Statocles::Event::Pages> object
+containing all the pages built by the site.
+
