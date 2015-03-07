@@ -146,7 +146,6 @@ ENDHELP
         my %doc = (
             %$default_post,
             title => $title,
-            date => Time::Piece->new,
         );
 
         # Read post content on STDIN
