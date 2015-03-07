@@ -21,7 +21,10 @@ __END__
 
 =head1 SYNOPSIS
 
-    # !!! Read the Statocles::Help guide to set up a site.yml config file
+    # Create a new site
+    mkdir www.example.com
+    cd www.example.com
+    statocles create
 
     # Create a new blog post
     export EDITOR=vim

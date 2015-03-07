@@ -6,6 +6,9 @@
 This document describes how to set up a simple blog web site suitable to
 be deployed to GitHub Pages using Statocles.
 
+This document explains how to build a configuration file without using
+the C<statocles create> command.
+
 =head1 Building site.yml - The Main Configuration File
 
 Statocles uses L<Beam::Wire|Beam::Wire>, a dependency-injection module, for
