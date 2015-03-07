@@ -1,0 +1,11 @@
+site:
+    class: Statocles::Site
+    args:
+        title: Bad App Reference
+        deploy: '.'
+        theme: '::default'
+        index: page
+        apps:
+
+            page:
+                $ref: missing_object

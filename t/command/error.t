@@ -95,4 +95,18 @@ subtest 'site object missing' => sub {
 
 };
 
+subtest 'site object broken' => sub {
+    subtest 'reference missing' => sub {
+        my $config = $SHARE_DIR->child( config => 'bad_ref.yml' );
+
+        my ( $out, $err, $exit ) = capture {
+            Statocles::Command->main( '--config', "$config", 'build' )
+        };
+        ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
+        like $err, qr{\QERROR: Could not create site object "site": \E.*missing_object}
+            or diag $err;
+        isnt $exit, 0;
+    };
+};
+
 done_testing;

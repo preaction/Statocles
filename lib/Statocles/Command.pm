@@ -69,8 +69,13 @@ sub main {
 
     if ( $@ ) {
         if ( blessed $@ && $@->isa( 'Beam::Wire::Exception::NotFound' ) ) {
-            warn sprintf qq{ERROR: Could not find site named "%s" in config file "%s"\n},
-                $opt{site}, $opt{config};
+            if ( $@->name eq $opt{site} ) {
+                warn sprintf qq{ERROR: Could not find site named "%s" in config file "%s"\n},
+                    $opt{site}, $opt{config};
+            }
+            else {
+                warn sprintf qq{ERROR: Could not create site object "%s": %s\n}, $opt{site}, $@;
+            }
             return 1;
         }
         die $@;
