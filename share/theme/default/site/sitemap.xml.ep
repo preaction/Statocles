@@ -5,7 +5,7 @@
         <loc><%= $site->url( $page->path ) %></loc>
         <changefreq><%= $page->search_change_frequency %></changefreq>
         <priority><%= $page->search_priority %></priority>
-        <lastmod><%= $page->last_modified->strftime( '%Y-%m-%d' ) %></lastmod>
+        <lastmod><%= $page->date->strftime( '%Y-%m-%d' ) %></lastmod>
     </url>
 % }
 </urlset>

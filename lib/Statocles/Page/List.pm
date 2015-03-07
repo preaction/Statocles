@@ -34,18 +34,18 @@ has [qw( next prev )] => (
     coerce => Path->coercion,
 );
 
-=attr last_modified
+=attr date
 
-Get the last modified date of this list. By default, this is the last modified date
-of the first page in the list of pages.
+Get the date of this list. By default, this is the latest date of the first
+page in the list of pages.
 
 =cut
 
-has '+last_modified' => (
+has '+date' => (
     lazy => 1,
     default => sub {
         my ( $self ) = @_;
-        $self->pages->[0]->last_modified;
+        $self->pages->[0]->date;
     },
 );
 
@@ -116,7 +116,7 @@ sub paginate {
             pages => [ @{$pages}[ @{ $sets[$i] } ] ],
             ( $next ? ( next => $next ) : () ),
             ( $i > 0 ? ( prev => $prev ) : () ),
-            last_modified => $pages->[0]->last_modified,
+            date => $pages->[0]->date,
             %args,
         );
     }

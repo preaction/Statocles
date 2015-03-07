@@ -206,7 +206,7 @@ sub test_pages {
         ok $page->DOES( 'Statocles::Page' ), 'must be a Statocles::Page';
 
         if ( !$page->isa( 'Statocles::Page::Feed' ) ) {
-            isa_ok $page->last_modified, 'Time::Piece', 'must set a last_modified';
+            isa_ok $page->date, 'Time::Piece', 'must set a date';
         }
 
         if ( !$page_tests{ $page->path } ) {

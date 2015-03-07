@@ -86,15 +86,15 @@ subtest 'post' => sub {
                 cmp_deeply $doc, {
                     title => 'This is a Title',
                     tags => undef,
-                    last_modified => isa( 'Time::Piece' ),
+                    date => isa( 'Time::Piece' ),
                     content => <<'ENDMARKDOWN',
 Markdown content goes here.
 ENDMARKDOWN
                 };
-                my $dt_str = $doc->{last_modified}->strftime( '%Y-%m-%d %H:%M:%S' );
+                my $dt_str = $doc->{date}->strftime( '%Y-%m-%d %H:%M:%S' );
                 eq_or_diff $doc_path->slurp, <<ENDCONTENT;
 ---
-last_modified: $dt_str
+date: $dt_str
 tags: ~
 title: This is a Title
 ---
@@ -124,15 +124,15 @@ ENDCONTENT
                 cmp_deeply $doc, {
                     title => 'This is a Title',
                     tags => undef,
-                    last_modified => isa( 'Time::Piece' ),
+                    date => isa( 'Time::Piece' ),
                     content => <<'ENDMARKDOWN',
 Markdown content goes here.
 ENDMARKDOWN
                 };
-                my $dt_str = $doc->{last_modified}->strftime( '%Y-%m-%d %H:%M:%S' );
+                my $dt_str = $doc->{date}->strftime( '%Y-%m-%d %H:%M:%S' );
                 eq_or_diff $doc_path->slurp, <<ENDCONTENT;
 ---
-last_modified: $dt_str
+date: $dt_str
 tags: ~
 title: This is a Title
 ---
@@ -181,7 +181,7 @@ ENDCONTENT
                 cmp_deeply $doc, {
                     title => 'This is a Title for stdin',
                     tags => undef,
-                    last_modified => isa( 'Time::Piece' ),
+                    date => isa( 'Time::Piece' ),
                     content => <<'ENDMARKDOWN',
 This is content from STDIN
 ENDMARKDOWN

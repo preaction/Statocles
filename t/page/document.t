@@ -13,7 +13,7 @@ my $doc = Statocles::Document->new(
     title => 'Page Title',
     author => 'preaction',
     tags => [qw( foo bar baz )],
-    last_modified => Time::Piece->new( time - 600 ),
+    date => Time::Piece->new( time - 600 ),
     content => <<'MARKDOWN',
 # Subtitle
 
@@ -51,22 +51,22 @@ subtest 'constructor' => sub {
                 isa_ok $_, 'Statocles::Template';
                 is $_->content, '<%= $content %>';
             },
-            last_modified => $doc->last_modified,
+            date => $doc->date,
         },
     );
 
 };
 
-subtest 'page last modified overridden by published date' => sub {
+subtest 'page date overridden by published date' => sub {
     my $tp = Time::Piece->new;
     my $page = Statocles::Page::Document->new(
         document => $doc,
         path => '/path/to/page.html',
-        last_modified => $tp,
+        date => $tp,
     );
 
-    isa_ok $page->last_modified, 'Time::Piece';
-    is $page->last_modified->datetime, $tp->datetime;
+    isa_ok $page->date, 'Time::Piece';
+    is $page->date->datetime, $tp->datetime;
 };
 
 subtest 'template string' => sub {
@@ -75,16 +75,16 @@ subtest 'template string' => sub {
     my $page = Statocles::Page::Document->new(
         document => $doc,
         path => '/path/to/page.html',
-        last_modified => $tp,
+        date => $tp,
         template => join( ' ',
-            ( map { "<\%= \$self->$_ \%>" } qw( last_modified path ) ),
+            ( map { "<\%= \$self->$_ \%>" } qw( date path ) ),
             ( map { "<\%= \$doc->$_ \%>" } qw( title author ) ),
             '<%= $content %>',
         ),
     );
 
     my $output = $page->render;
-    my $expect = join " ", $page->last_modified, $page->path, $doc->title, $doc->author,
+    my $expect = join " ", $page->date, $page->path, $doc->title, $doc->author,
         $md->markdown( $doc->content ) . "\n\n";
     eq_or_diff $output, $expect;
 };

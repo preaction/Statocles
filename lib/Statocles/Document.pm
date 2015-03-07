@@ -93,16 +93,17 @@ has links => (
     coerce => LinkHash->coercion,
 );
 
-=attr last_modified
+=attr date
 
-The date/time this document was last modified.
+The date/time this document is for. For pages, this is the last modified date.
+For blog posts, this is the post's date.
 
 =cut
 
-has last_modified => (
+has date => (
     is => 'rw',
     isa => InstanceOf['Time::Piece'],
-    predicate => 'has_last_modified',
+    predicate => 'has_date',
 );
 
 1;

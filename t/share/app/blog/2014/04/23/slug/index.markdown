@@ -1,7 +1,7 @@
 ---
 title: First Post
 author: preaction
-last_modified: 2014-04-30 06:50:35
+date: 2014-04-30 06:50:35
 links:
     alternate:
         -   title: blogs.perl.org

@@ -1,6 +1,6 @@
 ---
+date: 2014-06-05 00:00:00
 foo: bar
-last_modified: 2014-06-05 00:00:00
 tags:
     - one
     - two and three

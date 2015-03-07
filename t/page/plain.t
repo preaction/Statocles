@@ -14,7 +14,7 @@ subtest 'constructor' => sub {
         default => {
             search_change_frequency => 'weekly',
             search_priority => 0.5,
-            last_modified => sub {
+            date => sub {
                 isa_ok $_, 'Time::Piece';
             },
         },

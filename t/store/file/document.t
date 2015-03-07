@@ -25,16 +25,16 @@ my @exp_docs = (
         path => '/datetime.markdown',
         title => 'Datetime Document',
         author => 'preaction',
-        last_modified => Time::Piece->strptime( '2014-04-30 15:34:32', $DT_FORMAT ),
-        content => "Parses date/time for last_modified\n",
+        date => Time::Piece->strptime( '2014-04-30 15:34:32', $DT_FORMAT ),
+        content => "Parses date/time for date\n",
     ),
 
     Statocles::Document->new(
         path => '/date.markdown',
         title => 'Date Document',
         author => 'preaction',
-        last_modified => Time::Piece->strptime( '2014-04-30', '%Y-%m-%d' ),
-        content => "Parses date only for last_modified\n",
+        date => Time::Piece->strptime( '2014-04-30', '%Y-%m-%d' ),
+        content => "Parses date only for date\n",
     ),
 
     Statocles::Document->new(
@@ -150,7 +150,7 @@ subtest 'bad documents' => sub {
             path => $SHARE_DIR->child( qw( store error bad-dates ) ),
         );
         throws_ok { $store->documents }
-            qr{Could not parse last_modified '11/12/2014'[.] Does not match '\Q$DT_FORMAT\E' or '%Y-%m-%d'};
+            qr{Could not parse date '11/12/2014'[.] Does not match '\Q$DT_FORMAT\E' or '%Y-%m-%d'};
     };
 
 };
@@ -168,7 +168,7 @@ subtest 'write document' => sub {
         foo => 'bar',
         content => "# \x{2603} This is some content\n\nAnd a paragraph\n",
         tags => [ 'one', 'two and three', 'four' ],
-        last_modified => $tp,
+        date => $tp,
     };
 
     subtest 'disallow absolute paths' => sub {

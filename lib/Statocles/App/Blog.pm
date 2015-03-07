@@ -146,7 +146,7 @@ ENDHELP
         my %doc = (
             %$default_post,
             title => $title,
-            last_modified => Time::Piece->new,
+            date => Time::Piece->new,
         );
 
         # Read post content on STDIN
@@ -223,7 +223,7 @@ sub post_pages {
             template => $self->site->theme->template( blog => 'post.html' ),
             document => $doc,
             path => $path,
-            last_modified => $doc->has_last_modified ? $doc->last_modified : Time::Piece->strptime( $date, '%Y-%m-%d' ),
+            date => $doc->has_date ? $doc->date : Time::Piece->strptime( $date, '%Y-%m-%d' ),
             tags => \@tags,
         );
     }

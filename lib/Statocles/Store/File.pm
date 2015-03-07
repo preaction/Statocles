@@ -165,21 +165,21 @@ sub _parse_frontmatter {
 
 sub _thaw_document {
     my ( $self, $doc ) = @_;
-    if ( exists $doc->{last_modified} ) {
+    if ( exists $doc->{date} ) {
 
         my $dt;
         eval {
-            $dt = Time::Piece->strptime( $doc->{last_modified}, $DATETIME_FORMAT );
+            $dt = Time::Piece->strptime( $doc->{date}, $DATETIME_FORMAT );
         };
 
         if ( $@ ) {
             eval {
-                $dt = Time::Piece->strptime( $doc->{last_modified}, $DATE_FORMAT );
+                $dt = Time::Piece->strptime( $doc->{date}, $DATE_FORMAT );
             };
 
             if ( $@ ) {
-                die sprintf "Could not parse last_modified '%s'. Does not match '%s' or '%s'",
-                    $doc->{last_modified},
+                die sprintf "Could not parse date '%s'. Does not match '%s' or '%s'",
+                    $doc->{date},
                     $DATETIME_FORMAT,
                     $DATE_FORMAT,
                     ;
@@ -187,7 +187,7 @@ sub _thaw_document {
 
         }
 
-        $doc->{last_modified} = $dt;
+        $doc->{date} = $dt;
     }
     return $doc;
 }
@@ -222,8 +222,8 @@ sub write_document {
 
 sub _freeze_document {
     my ( $self, $doc ) = @_;
-    if ( exists $doc->{last_modified} ) {
-        $doc->{last_modified} = $doc->{last_modified}->strftime( $DATETIME_FORMAT );
+    if ( exists $doc->{date} ) {
+        $doc->{date} = $doc->{date}->strftime( $DATETIME_FORMAT );
     }
     return $doc;
 }

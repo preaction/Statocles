@@ -44,17 +44,17 @@ has author => (
     default => sub { $_[0]->document->author || '' },
 );
 
-=attr last_modified
+=attr date
 
-Get the last modified date of this page by checking the document.
+Get the date of this page by checking the document.
 
 =cut
 
-has '+last_modified' => (
+has '+date' => (
     lazy => 1,
     default => sub {
         my ( $self ) = @_;
-        $self->document->last_modified || Time::Piece->new;
+        $self->document->date || Time::Piece->new;
     },
 );
 

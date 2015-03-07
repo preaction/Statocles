@@ -47,7 +47,7 @@ my %page = (
     document => Statocles::Page::Document->new(
         path => 'document.html',
         document => $documents[0],
-        last_modified => Time::Piece->new,
+        date => Time::Piece->new,
     ),
 );
 

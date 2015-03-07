@@ -595,7 +595,7 @@ my @page_tests = (
 
         is $dom->at( 'header h1' )->text, 'First Post';
         is $dom->at( '.author' )->text, 'preaction';
-        is $dom->at( 'aside time' )->attr( 'datetime' ), '2014-04-30', 'last_modified from document';
+        is $dom->at( 'aside time' )->attr( 'datetime' ), '2014-04-30', 'date from document';
         ok !scalar $dom->find( 'header .tags a' )->each, 'no tags';
 
         # alternate, blogs.perl.org, http://blogs.perl.org/preaction/404.html
@@ -614,7 +614,7 @@ my @page_tests = (
 
         is $dom->at( 'header h1' )->text, 'Second Post';
         is $dom->at( '.author' )->text, 'preaction';
-        is $dom->at( 'aside time' )->attr( 'datetime' ), '2014-04-30', 'last_modified from document';
+        is $dom->at( 'aside time' )->attr( 'datetime' ), '2014-04-30', 'date from document';
 
         cmp_deeply [ $dom->find( '.tags a' )->map( 'text' )->each ],
             [ 'better' ];
@@ -634,7 +634,7 @@ my @page_tests = (
         is $dom->at( 'header h1' )->text, 'Regex violating Post';
         is $dom->at( '.author' )->text, 'preaction';
         is $dom->at( 'aside time' )->attr( 'datetime' ), '2014-05-22',
-            'post date from location. document has no last_modified';
+            'post date from location. document has no date';
 
         cmp_deeply [ $dom->find( '.tags a' )->map( 'text' )->each ],
             bag( 'better', 'error message' );
@@ -656,7 +656,7 @@ my @page_tests = (
 
         is $dom->at( 'header h1' )->text, 'More Tags';
         ok !$dom->at( '.author' ), 'no author for this page';
-        is $dom->at( 'aside time' )->attr( 'datetime' ), '2014-06-02', 'last_modified from document';
+        is $dom->at( 'aside time' )->attr( 'datetime' ), '2014-06-02', 'date from path';
 
         cmp_deeply [ $dom->find( '.tags a' )->map( 'text' )->each ],
             bag( 'more', 'better', 'even more tags' );

@@ -42,13 +42,13 @@ has path => (
     required => 1,
 );
 
-=attr last_modified
+=attr date
 
-The last modified date/time of this page. A L<Time::Piece> object.
+The date of this page. Used for last updated date and blog post dates.
 
 =cut
 
-has last_modified => (
+has date => (
     is => 'ro',
     isa => InstanceOf['Time::Piece'],
     lazy => 1,

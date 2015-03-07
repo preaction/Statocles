@@ -1,6 +1,9 @@
 % for my $page ( @$pages ) {
     <article>
     <h1><a href="<%= $app->page_url( $page ) %>"><%= $page->title %></a></h1>
+        <time datetime="<%= $self->date->strftime('%Y-%m-%d') %>">
+            Posted on <%= $self->date->strftime('%Y-%m-%d') %>
+        </time>
         % if ( $page->author ) {
         <span class="author"><%= $page->author %></span>
         % }
