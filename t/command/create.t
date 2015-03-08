@@ -315,7 +315,7 @@ sub site_config {
                 {
                     build => {
                         '$class' => 'Statocles::Plugin::LinkCheck',
-                        '$method' => 'check_pages',
+                        '$sub' => 'check_pages',
                     },
                 },
             ],

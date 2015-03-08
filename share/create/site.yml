@@ -3,7 +3,7 @@ site:
     on:
         - build:
             $class: 'Statocles::Plugin::LinkCheck'
-            $method: 'check_pages'
+            $sub: 'check_pages'
     args:
         title: 'My Statocles Site'
         nav:
