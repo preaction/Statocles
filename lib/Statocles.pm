@@ -22,9 +22,7 @@ __END__
 =head1 SYNOPSIS
 
     # Create a new site
-    mkdir www.example.com
-    cd www.example.com
-    statocles create
+    statocles create www.example.com
 
     # Create a new blog post
     export EDITOR=vim

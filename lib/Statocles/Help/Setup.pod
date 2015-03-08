@@ -7,9 +7,7 @@ This document describes how to get started using Statocles.
 
 =head1 CREATE COMMAND
 
-To use the site create command, make a directory for your new site
-C<www.example.com>, change into that directory (C<cd www.example.com>), and run
-C<statocles create>.
+To use the site create command, run C<statocles create www.example.com>.
 
 =head1 CONFIGURATION
 

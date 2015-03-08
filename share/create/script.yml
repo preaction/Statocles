@@ -27,6 +27,14 @@ bundle_theme: |-
     You can always copy or restore the default theme later using the
     "statocles bundle" command.
 
+base_url: |-
+    Statocles builds some URLs based on the full URL of the site (feeds,
+    most importantly).
+
+    If the site's URL contains a path, Statocles will rewrite all the
+    internal links to use the folder. This way, you can quickly change the
+    site base URL, re-deploy and everything will just work.
+
 deploy_class: |-
     Statocles can deploy your site in multiple ways.
 

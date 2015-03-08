@@ -51,7 +51,7 @@ sub main {
         return 0;
     }
 
-    my $method = $argv[0];
+    my $method = shift @argv;
     return pod2usage("ERROR: Missing command") unless $method;
 
     # Create site does not require a config file
@@ -127,23 +127,23 @@ sub main {
         Mojo::IOLoop->start;
     }
     elsif ( $method eq 'bundle' ) {
-        my $what = $argv[1];
+        my $what = $argv[0];
         if ( $what eq 'theme' ) {
-            my $theme_name = $argv[2];
+            my $theme_name = $argv[1];
             if ( !$theme_name ) {
                 say STDERR "ERROR: No theme name!";
                 say STDERR "\nUsage:\n\tstatocles bundle theme <name> <destination>";
                 return 1;
             }
 
-            if ( !$argv[3] ) {
+            if ( !$argv[2] ) {
                 say STDERR "ERROR: Must give a destination directory!";
                 say STDERR "\nUsage:\n\tstatocles bundle theme <name> <destination>";
                 return 1;
             }
 
-            $cmd->bundle_theme( $theme_name, $argv[3] );
-            say qq{Theme "$theme_name" written to "$argv[3]"};
+            $cmd->bundle_theme( $theme_name, $argv[2] );
+            say qq{Theme "$theme_name" written to "$argv[2]"};
             say qq(Make sure to update "$opt{config}");
         }
     }
@@ -155,7 +155,7 @@ sub main {
             return pod2usage("ERROR: Unknown command or app '$app_name'");
         }
 
-        return $cmd->site->apps->{ $app_name }->command( @argv );
+        return $cmd->site->apps->{ $app_name }->command( $app_name, @argv );
     }
 
     return 0;
@@ -165,12 +165,27 @@ sub create_site {
     my ( $self, $argv, $opt ) = @_;
 
     my %answer;
+    my $site_root = '.';
+
+    # Allow the user to set the base URL and the site folder as an argument
+    if ( @$argv ) {
+        my $base = $argv->[0];
+        if ( $base =~ m{^https?://(.+)} ) {
+            $answer{base_url} = $base;
+            $site_root = $argv->[1] || $1;
+        }
+        else {
+            $answer{base_url} = "http://$base";
+            $site_root = $argv->[1] || $base;
+        }
+    }
 
     my $create_dir = Path::Tiny->new( dist_dir( 'Statocles' ) )->child( 'create' );
     my $question = YAML::Load( $create_dir->child( 'script.yml' )->slurp_utf8 );
     my %prompt = (
         flavor => 'Which flavor of site would you like? ([1], 2, 0)',
         bundle_theme => 'Do you want to bundle the theme? ([Y]/n)',
+        base_url => 'What is the URL where the site will be deployed?',
         deploy_class => 'How would you like to deploy? ([1], 2, 0)',
         git_branch => 'What branch? [master]',
         deploy_path => 'Where to deploy the site? (default: current directory)',
@@ -193,6 +208,15 @@ sub create_site {
         chomp( $answer{bundle_theme} = <STDIN> );
     }
     $answer{bundle_theme} = "y" if $answer{bundle_theme} eq '';
+
+    if ( !$answer{base_url} ) {
+        print "\n", "\n", $question->{base_url};
+        print "\n", "\n", $prompt{base_url}, " ";
+        chomp( $answer{base_url} = <STDIN> );
+        if ( $answer{base_url} !~ m{^https?://} ) {
+            $answer{base_url} = "http://$answer{base_url}";
+        }
+    }
 
     print "\n", "\n", $question->{deploy_class};
     print "\n", "\n", $prompt{deploy_class}, " ";
@@ -220,8 +244,8 @@ sub create_site {
 
     ### Build the site
     my $cwd = cwd;
-    my $root = Path::Tiny->new( '.' );
-    chdir $root;
+    my $root = Path::Tiny->new( $site_root );
+    $root->mkpath;
     my ( $site ) = YAML::Load( $create_dir->child( 'site.yml' )->slurp_utf8 );
 
     if ( $answer{flavor} == 1 ) {
@@ -234,8 +258,14 @@ sub create_site {
     }
 
     if ( lc $answer{bundle_theme} eq 'y' ) {
+        chdir $root;
         $self->bundle_theme( 'default', 'theme' );
+        chdir $cwd;
         $site->{theme}{args}{store} = 'theme';
+    }
+
+    if ( $answer{base_url} ) {
+        $site->{site}{args}{base_url} = $answer{base_url};
     }
 
     if ( $answer{deploy_class} == 1 ) {
@@ -246,7 +276,9 @@ sub create_site {
         require Git::Repository;
         # Running init more than once is apparently completely safe, so we don't
         # even have to check before we run it
+        chdir $root;
         Git::Repository->run( 'init' );
+        chdir $cwd;
         $root->child( '.gitignore' )->append( "\n.statocles\n" );
     }
     elsif ( $answer{deploy_class} == 2 ) {
@@ -270,7 +302,6 @@ sub create_site {
 
     ### DONE!
     print "\n", "\n", $question->{finish}, "\n", "\n";
-    chdir $cwd;
 
     return 0;
 }
