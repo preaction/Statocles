@@ -1,6 +1,16 @@
 Changelog for Statocles
 
-0.040 2015-03-02T06:01:48
+0.041 2015-03-09T04:13:32
+ - fix deprecated event handler config
+ - change $method in event handler to $sub
+ - set the base url using the site creator
+ - remove date from the default blog post
+ - change last_modified to "date"
+ - fix error when site object has a bad reference
+ - mention the "create" command where appropriate
+ - add release v0.040 announcement
+
+0.040 2015-03-02T06:01:48Z
  - fix linkcheck synopsis for new wire config syntax
  - add documentation for events and plugins
  - add linkcheck plugin to Statocles website

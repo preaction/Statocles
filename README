@@ -2,10 +2,11 @@ NAME
     Statocles - A static site generator
 
 VERSION
-    version 0.040
+    version 0.041
 
 SYNOPSIS
-        # !!! Read the Statocles::Help guide to set up a site.yml config file
+        # Create a new site
+        statocles create www.example.com
 
         # Create a new blog post
         export EDITOR=vim
