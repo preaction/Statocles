@@ -16,8 +16,8 @@
                     </p>
 
                     <aside>
-                        <p><time datetime="<%= $page->last_modified->strftime('%Y-%m-%d') %>">
-                            Posted on <%= $page->last_modified->strftime('%Y-%m-%d') %>
+                        <p><time datetime="<%= $page->date->strftime('%Y-%m-%d') %>">
+                            Posted on <%= $page->date->strftime('%Y-%m-%d') %>
                         </time>
                         % if ( $page->author ) {
                             by <%= $page->author %>

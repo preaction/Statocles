@@ -5,6 +5,8 @@
         <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
         <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
         <title>Statocles</title>
+        <link href="/Statocles/blog/tag/release.atom" rel="alternate" type="application/atom+xml">
+        <link href="/Statocles/blog/tag/release.rss" rel="alternate" type="application/rss+xml">
         <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
 <style>
     h1, h2, h3, h4, h5, h6 {
@@ -80,84 +82,97 @@
 
         </header>
         <div class="main container">
-            <h1 id="NAME">NAME</h1>
+            
+<div class="row">
 
-<p>Statocles - A static site generator</p>
+    <div class="nine columns">
+        <main>
 
-<h1 id="SYNOPSIS">SYNOPSIS</h1>
+            <article>
+                <header>
+                    <h1><a href="/Statocles/blog/2014/12/07/statocles-initial-public-(alpha)-release.html">Statocles Initial Public (alpha) Release</a></h1>
 
-<pre><code>    # Create a new site
-    statocles create www.example.com
+                    <p class="tags">Tags:
+                        <a href="/Statocles/blog/tag/release" rel="tag">release</a>
+                    </p>
 
-    # Create a new blog post
-    export EDITOR=vim
-    statocles blog post
+                    <aside>
+                        <p><time datetime="2014-12-07">
+                            Posted on 2014-12-07
+                        </time>
+                            by preaction
+                        </p>
+                    </aside>
 
-    # Build the site
-    statocles build
+                </header>
 
-    # Test the site in a local web browser
-    statocles daemon
+                <p>Though Statocles has been on CPAN for months, this is the first time I&#39;m announcing its
+availability to the world!</p>
 
-    # Deploy the site
-    statocles deploy</code></pre>
+<p>Statocles is a CMS for building static HTML websites. The goals of this app are to make
+it easy to edit content via any text editor [1].</p>
 
-<h1 id="DESCRIPTION">DESCRIPTION</h1>
-
-<p>Statocles is an application for building static web pages from a set of plain YAML and Markdown files. It is designed to make it as simple as possible to develop rich web content using basic text-based tools.</p>
-
-<h2 id="FEATURES">FEATURES</h2>
-
-<ul>
-
-<li><p>A simple format based on <a href="http://daringfireball.net/projects/markdown/">Markdown</a> for editing site content.</p>
-
-</li>
-<li><p>A command-line application for building, deploying, and editing the site.</p>
-
-</li>
-<li><p>A simple daemon to display a test site before it goes live.</p>
-
-</li>
-<li><p>A <a href="/Statocles/pod/Statocles/App/Blog#FEATURES.html">blogging application</a> with</p>
+<p>This initial release includes:</p>
 
 <ul>
-
-<li><p>RSS and Atom syndication feeds.</p>
-
-</li>
-<li><p>Tags to organize blog posts. Tags have their own custom feeds.</p>
-
-</li>
-<li><p>Crosspost links to direct users to a syndicated blog.</p>
-
-</li>
-<li><p>Post-dated blog posts to appear automatically when the date is passed.</p>
-
-</li>
+<li>A blog app</li>
+<li>Plain pages, for things like About Us and Contact Us</li>
+<li>A POD renderer for documentation of Perl projects</li>
 </ul>
 
-</li>
-<li><p>Customizable <a href="/Statocles/pod/Statocles/Theme.html">themes</a> using <a href="https://metacpan.org/pod/Mojo::Template#SYNTAX">the Mojolicious template language</a>.</p>
+<p>This site is generated with Statocles, and so is <a href="http://preaction.github.io">my blog</a>.</p>
 
-</li>
-<li><p>A clean default theme using <a href="http://getskeleton.com">the Skeleton CSS library</a>.</p>
+<h2>Getting Started</h2>
 
-</li>
-<li><p>SEO-friendly features such as <a href="http://www.sitemaps.org">sitemaps (sitemap.xml)</a>.</p>
+<p><a href="http://metacpan.org/pod/Statocles">Get Statocles from CPAN</a> and <a href="/Statocles/pod/Statocles/Help/Setup.html">follow the Statocles
+Setup guide</a>. If you have any issues, report them on
+<a href="https://github.com/preaction/Statocles">the Statocles Githup Repo</a>. If you have questions,
+<a href="https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">join us on IRC on irc.perl.org #statocles</a>!</p>
 
-</li>
-</ul>
-
-<h1 id="GETTING-STARTED">GETTING STARTED</h1>
-
-<p>To get started with Statocles, <a href="/Statocles/pod/Statocles/Help.html">consult the Statocles::Help guides</a>.</p>
-
-<h1 id="SEE-ALSO">SEE ALSO</h1>
-
-<p>For news and documentation, <a href="http://preaction.github.io/Statocles">visit the Statocles website at http://preaction.github.io/Statocles</a>.</p>
+<p>[1]: A future project will make Statocles content editable with a web interface</p>
 
 
+
+            </article>
+        </main>
+
+        <ul class="pager">
+            <li class="prev">
+                <a class="button disabled" href="" rel="next">
+                    ← Older
+                </a>
+            </li>
+            <li class="next">
+                <a class="button button-primary" href="/Statocles/blog/tag/release/page/3" rel="prev">
+                    Newer →
+                </a>
+            </li>
+        </ul>
+
+    </div>
+
+    <div class="three columns sidebar">
+        
+        <h1>Tags</h1>
+        <ul class="list-inline">
+            <li><a href="/Statocles/blog/tag/release">release</a></li>
+        </ul>
+        <h1>Feeds</h1>
+        <ul class="list-inline">
+            <li>
+                <a href="/Statocles/blog/tag/release.atom" rel="alternate" type="application/atom+xml">
+                    Atom
+                </a>
+            </li>
+            <li>
+                <a href="/Statocles/blog/tag/release.rss" rel="alternate" type="application/rss+xml">
+                    RSS
+                </a>
+            </li>
+        </ul>
+    </div>
+
+</div>
 
         </div>
         <footer>

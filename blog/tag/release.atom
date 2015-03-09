@@ -2,10 +2,40 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://preaction.github.io/Statocles/blog/tag/release</id>
     <title>Statocles</title>
-    <updated>2015-03-02T00:34:41Z</updated>
+    <updated>2015-03-08T23:30:16Z</updated>
     <link href="http://preaction.github.io/Statocles/blog/tag/release.atom" rel="self" />
     <link href="http://preaction.github.io/Statocles/blog/tag/release" rel="alternate" />
-    <generator version="0.040">Statocles</generator>
+    <generator version="0.041">Statocles</generator>
+    <entry>
+        <id>http://preaction.github.io/Statocles/blog/2015/03/08/release-v0.041</id>
+        <title>Release v0.041</title>
+        <link href="http://preaction.github.io/Statocles/blog/2015/03/08/release-v0.041" rel="alternate" />
+        <content type="html"><![CDATA[
+            <p>A slight breaking change in this release: The "last modified" date is no longer being
+used in the blog. Instead, the date shown is only the slug date, which makes the date
+more accurate when pre-dating posts.</p>
+
+<p>The <code>last_modified</code> attribute is now simply called <code>date</code>, which makes it a bit more
+general-purpose. This means that you'll need to re-bundle your templates.</p>
+
+<p>A change to <a href="http://metacpan.org/pod/Beam::Wire">Beam::Wire</a> means a change to Statocles
+config files: <code>$method</code> in the event handlers is now <code>$sub</code>, so if you have configured
+the LinkCheck plugin, you'll get a deprecation warning from Beam::Wire.</p>
+
+<p>The site creator now allows you to set the <code>base_url</code>, since that's required for
+Statocles to work properly. It also, if given a site as an argument, creates the
+site's directory.</p>
+
+<p>Full changelog below:</p>
+
+                <p><a href="http://preaction.github.io/Statocles/blog/2015/03/08/release-v0.041#section-2">Continue reading...</a></p>
+            <p>Tags:
+                <a href="/blog/tag/release">release</a>
+            </p>
+        ]]></content>
+        <updated>2015-03-08T00:00:00Z</updated>
+        <category term="release" />
+    </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2015/03/02/release-v0.040</id>
         <title>Release v0.040</title>
@@ -34,7 +64,7 @@ changes that we needed to fix in Statocles. We now require 6.0.</p>
                 <a href="/blog/tag/release">release</a>
             </p>
         ]]></content>
-        <updated>2015-03-02T00:05:10Z</updated>
+        <updated>2015-03-02T00:00:00Z</updated>
         <category term="release" />
     </entry>
     <entry>
@@ -60,7 +90,7 @@ easier to understand.</p>
                 <a href="/blog/tag/release">release</a>
             </p>
         ]]></content>
-        <updated>2015-02-22T19:57:07Z</updated>
+        <updated>2015-02-22T00:00:00Z</updated>
         <category term="release" />
     </entry>
     <entry>
@@ -83,7 +113,7 @@ slightly older versions of git.</p>
                 <a href="/blog/tag/release">release</a>
             </p>
         ]]></content>
-        <updated>2015-02-14T23:53:41Z</updated>
+        <updated>2015-02-14T00:00:00Z</updated>
         <category term="release" />
     </entry>
     <entry>
@@ -103,38 +133,7 @@ by CPAN Testers.</p>
                 <a href="/blog/tag/release">release</a>
             </p>
         ]]></content>
-        <updated>2015-02-12T20:39:50Z</updated>
-        <category term="release" />
-    </entry>
-    <entry>
-        <id>http://preaction.github.io/Statocles/blog/2015/02/11/release-v0.036.html</id>
-        <title>Release v0.036</title>
-        <link href="http://preaction.github.io/Statocles/blog/2015/02/11/release-v0.036.html" rel="alternate" />
-        <content type="html"><![CDATA[
-            <p>A couple fixes and a couple breaking changes in this release:</p>
-
-<p>The biggest fix is that now we check for ignored files or submodule files before
-trying to deploy to a Git repository. This should fix a lot of issues with deploying.</p>
-
-<p>All pages now have a <code>last_modified</code> field, which has an appropriate default.
-Also, all the default includes are now templates, so you can use template
-variables inside them.  This breaks all existing themes, so make sure to
-re-bundle your theme with <code>statocles bundle theme</code>.</p>
-
-<p>Some getting started information was added to <a href="/pod/Statocles/Help/Theme.html">the Theme
-guide</a>. In short, the best way to make your own
-theme is to start from one of the existing themes.</p>
-
-<p>Finally, the static app now works correctly when it is not at the root of the site.</p>
-
-<p>Full changelog below.</p>
-
-                <p><a href="http://preaction.github.io/Statocles/blog/2015/02/11/release-v0.036.html#section-2">Continue reading...</a></p>
-            <p>Tags:
-                <a href="/blog/tag/release">release</a>
-            </p>
-        ]]></content>
-        <updated>2015-02-11T00:30:04Z</updated>
+        <updated>2015-02-12T00:00:00Z</updated>
         <category term="release" />
     </entry>
 </feed>

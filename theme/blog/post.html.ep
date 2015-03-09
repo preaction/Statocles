@@ -10,8 +10,8 @@
                 % }
                 </p>
                 <aside>
-                    <p><time datetime="<%= $self->last_modified->strftime('%Y-%m-%d') %>">
-                        Posted on <%= $self->last_modified->strftime('%Y-%m-%d') %>
+                    <p><time datetime="<%= $self->date->strftime('%Y-%m-%d') %>">
+                        Posted on <%= $self->date->strftime('%Y-%m-%d') %>
                     </time>
                     % if ( $self->author ) {
                         by <%= $self->author %>

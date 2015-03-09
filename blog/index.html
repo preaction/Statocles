@@ -90,6 +90,44 @@
 
             <article>
                 <header>
+                    <h1><a href="/Statocles/blog/2015/03/08/release-v0.041">Release v0.041</a></h1>
+
+                    <p class="tags">Tags:
+                        <a href="/Statocles/blog/tag/release" rel="tag">release</a>
+                    </p>
+
+                    <aside>
+                        <p><time datetime="2015-03-08">
+                            Posted on 2015-03-08
+                        </time>
+                        </p>
+                    </aside>
+
+                </header>
+
+                <p>A slight breaking change in this release: The &quot;last modified&quot; date is no longer being
+used in the blog. Instead, the date shown is only the slug date, which makes the date
+more accurate when pre-dating posts.</p>
+
+<p>The <code>last_modified</code> attribute is now simply called <code>date</code>, which makes it a bit more
+general-purpose. This means that you&#39;ll need to re-bundle your templates.</p>
+
+<p>A change to <a href="http://metacpan.org/pod/Beam::Wire">Beam::Wire</a> means a change to Statocles
+config files: <code>$method</code> in the event handlers is now <code>$sub</code>, so if you have configured
+the LinkCheck plugin, you&#39;ll get a deprecation warning from Beam::Wire.</p>
+
+<p>The site creator now allows you to set the <code>base_url</code>, since that&#39;s required for
+Statocles to work properly. It also, if given a site as an argument, creates the
+site&#39;s directory.</p>
+
+<p>Full changelog below:</p>
+
+
+                    <p><a href="/Statocles/blog/2015/03/08/release-v0.041#section-2">Continue reading Release v0.041...</a></p>
+
+            </article>
+            <article>
+                <header>
                     <h1><a href="/Statocles/blog/2015/03/02/release-v0.040">Release v0.040</a></h1>
 
                     <p class="tags">Tags:
@@ -217,45 +255,6 @@ by CPAN Testers.</p>
 </ul>
 
 
-
-            </article>
-            <article>
-                <header>
-                    <h1><a href="/Statocles/blog/2015/02/11/release-v0.036.html">Release v0.036</a></h1>
-
-                    <p class="tags">Tags:
-                        <a href="/Statocles/blog/tag/release" rel="tag">release</a>
-                    </p>
-
-                    <aside>
-                        <p><time datetime="2015-02-11">
-                            Posted on 2015-02-11
-                        </time>
-                        </p>
-                    </aside>
-
-                </header>
-
-                <p>A couple fixes and a couple breaking changes in this release:</p>
-
-<p>The biggest fix is that now we check for ignored files or submodule files before
-trying to deploy to a Git repository. This should fix a lot of issues with deploying.</p>
-
-<p>All pages now have a <code>last_modified</code> field, which has an appropriate default.
-Also, all the default includes are now templates, so you can use template
-variables inside them.  This breaks all existing themes, so make sure to
-re-bundle your theme with <code>statocles bundle theme</code>.</p>
-
-<p>Some getting started information was added to <a href="/Statocles/pod/Statocles/Help/Theme.html">the Theme
-guide</a>. In short, the best way to make your own
-theme is to start from one of the existing themes.</p>
-
-<p>Finally, the static app now works correctly when it is not at the root of the site.</p>
-
-<p>Full changelog below.</p>
-
-
-                    <p><a href="/Statocles/blog/2015/02/11/release-v0.036.html#section-2">Continue reading Release v0.036...</a></p>
 
             </article>
         </main>
