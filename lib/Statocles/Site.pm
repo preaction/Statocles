@@ -276,6 +276,12 @@ sub build {
         push @pages, @app_pages;
     }
 
+    $self->emit(
+        'before_build_write',
+        class => 'Statocles::Event::Pages',
+        pages => \@pages,
+    );
+
     # Rewrite page content to add base URL
     my $base_url = $self->base_url;
     if ( $self->_write_deploy ) {
@@ -402,6 +408,17 @@ A Statocles::Site is a collection of L<applications|Statocles::App>.
 =head1 EVENTS
 
 The site object exposes the following events.
+
+=head2 before_build_write
+
+This event is fired after the pages have been built by the apps, but before
+any page is written to the C<build_store>.
+
+You can use this event to add new pages or edit the pages already created.
+
+The event will be a
+L<Statocles::Event::Pages|Statocles::Event/Statocles::Event::Pages> object
+containing all the pages built by the apps.
 
 =head2 build
 
