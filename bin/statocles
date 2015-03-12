@@ -2,6 +2,12 @@
 # ABSTRACT: Run Statocles commands
 package statocles;
 
+use Statocles::Base;
+use Encode qw( decode );
+use Encode::Locale;
+use open qw( :std :locale );
+use POSIX qw( setlocale LC_ALL );
+
 # Mojolicious::Commands currently calls GetOptions and clobbers a few of
 # our command-line options. Since I don't want to rely on the envvars
 # that get set in that process, we'll do this little dance here.
@@ -10,7 +16,13 @@ package statocles;
 # module, which loads Mojolicious, which loads Mojolicious::Commands, which
 # calls GetOptions on @ARGV
 my @argv;
-BEGIN { @argv = @ARGV };
+BEGIN { @argv = map { decode( locale => $_ ) } @ARGV };
+
+binmode STDIN, ":encoding(locale)";
+binmode STDOUT, ":encoding(locale)";
+binmode STDERR, ":encoding(locale)";
+say "statocles Locale: " . setlocale( LC_ALL ) . "\n";
+say for @argv;
 
 use Statocles::Command;
 exit Statocles::Command->main( @argv );

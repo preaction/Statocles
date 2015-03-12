@@ -48,6 +48,8 @@ sub main {
 
     if ( $opt{version} ) {
         say "Statocles version $Statocles::Command::VERSION (Perl $^V)";
+        require POSIX;
+        say "Locale: " . POSIX::setlocale( POSIX::LC_CTYPE );
         return 0;
     }
 
