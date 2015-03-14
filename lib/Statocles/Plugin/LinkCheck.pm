@@ -4,6 +4,24 @@ package Statocles::Plugin::LinkCheck;
 use Statocles::Base 'Class';
 use Mojo::DOM;
 
+=attr ignore
+
+An array of URL patterns to ignore. These are interpreted as regular expressions,
+and are anchored to the beginning of the URL.
+
+For example:
+
+    /broken     will match "/broken.html" "/broken/page.html" but not "/page/broken"
+    .*/broken   will match "/broken.html" "/broken/page.html" and "/page/broken"
+
+=cut
+
+has ignore => (
+    is => 'ro',
+    isa => ArrayRef[Str],
+    default => sub { [] },
+);
+
 =method check_pages( event )
 
 Check the pages inside the given
@@ -40,6 +58,7 @@ sub check_pages {
     for my $link_url ( keys %links ) {
         $link_url .= 'index.html' if $link_url =~ m{/$};
         next if $page_paths{ $link_url } || $page_paths{ "$link_url/index.html" };
+        next if grep { $link_url =~ /^$_/ } @{ $self->ignore };
         for my $page_url ( keys %{ $links{ $link_url } } ) {
             $event->emitter->log->warn( "URL broken on $page_url: '$link_url' not found" );
         }
