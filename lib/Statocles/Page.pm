@@ -3,7 +3,6 @@ package Statocles::Page;
 
 use Statocles::Base 'Role';
 use Statocles::Template;
-use Text::Markdown;
 
 =attr site
 
@@ -82,14 +81,17 @@ has _links => (
 
 =attr markdown
 
-The L<Text::Markdown> object to render document Markdown.
+The markdown object to render document Markdown. Defaults to L<the markdown
+attribute from the Site object|Statocles::Site/markdown>.
+
+Any object with a "markdown" method will work.
 
 =cut
 
 has markdown => (
     is => 'ro',
-    isa => InstanceOf['Text::Markdown'],
-    default => sub { Text::Markdown->new },
+    isa => HasMethods['markdown'],
+    default => sub { $_[0]->site->markdown },
 );
 
 =attr template

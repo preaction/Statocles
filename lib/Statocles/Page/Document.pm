@@ -3,7 +3,6 @@ package Statocles::Page::Document;
 
 use Statocles::Base 'Class';
 with 'Statocles::Page';
-use Text::Markdown;
 use Statocles::Template;
 
 =attr document

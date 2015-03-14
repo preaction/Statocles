@@ -3,6 +3,7 @@ package Statocles::Site;
 
 use Statocles::Base 'Class', 'Emitter';
 use Scalar::Util qw( blessed );
+use Text::Markdown;
 use Mojo::URL;
 use Mojo::DOM;
 use Mojo::Log;
@@ -188,6 +189,21 @@ has log => (
     default => sub {
         Mojo::Log->new( level => 'warn' );
     },
+);
+
+=attr markdown
+
+The Text::Markdown object to use to turn Markdown into HTML. Defaults to a
+plain Text::Markdown object.
+
+Any object with a "markdown" method will work here.
+
+=cut
+
+has markdown => (
+    is => 'ro',
+    isa => HasMethods['markdown'],
+    default => sub { Text::Markdown->new },
 );
 
 # The current deploy we're writing to

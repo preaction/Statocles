@@ -3,6 +3,7 @@ use Statocles::Base 'Test';
 my $SHARE_DIR = path( __DIR__ )->parent->child( 'share' );
 
 use Statocles::Page::Plain;
+my $site = Statocles::Site->new( deploy => tempdir );
 
 subtest 'constructor' => sub {
     test_constructor(
