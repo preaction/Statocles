@@ -2,10 +2,40 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://preaction.github.io/Statocles/blog/tag/release</id>
     <title>Statocles</title>
-    <updated>2015-03-08T23:30:16Z</updated>
+    <updated>2015-03-16T02:42:00Z</updated>
     <link href="http://preaction.github.io/Statocles/blog/tag/release.atom" rel="self" />
     <link href="http://preaction.github.io/Statocles/blog/tag/release" rel="alternate" />
-    <generator version="0.041">Statocles</generator>
+    <generator version="0.042">Statocles</generator>
+    <entry>
+        <id>http://preaction.github.io/Statocles/blog/2015/03/16/release-v0.042</id>
+        <title>Release v0.042</title>
+        <link href="http://preaction.github.io/Statocles/blog/2015/03/16/release-v0.042" rel="alternate" />
+        <content type="html"><![CDATA[
+            <p>A slow week, but some needed features:</p>
+
+<p>The LinkCheck plugin now supports an <code>ignore</code> attribute, in case there are
+links that aren't managed by Statocles (like having Github project links in a
+Github user/organization site).</p>
+
+<p>A new <code>before_build_write</code> event was added to the Site object, so that plugins
+can edit pages after the App creates them, and even add pages to the site.</p>
+
+<p>The Site object now has full control over the Markdown object that turns
+Markdown into HTML, which lets you use the other attributes of
+<a href="http://metacpan.org/pod/Text::Markdown">Text::Markdown</a>, or even use
+<a href="http://metacpan.org/pod/Text::MultiMarkdown">Text::MultiMarkdown</a> or any
+object that exposes a <code>markdown</code> method.</p>
+
+<p>Full changelog below:</p>
+
+                <p><a href="http://preaction.github.io/Statocles/blog/2015/03/16/release-v0.042#section-2">Continue reading...</a></p>
+            <p>Tags:
+                <a href="/blog/tag/release">release</a>
+            </p>
+        ]]></content>
+        <updated>2015-03-16T00:00:00Z</updated>
+        <category term="release" />
+    </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2015/03/08/release-v0.041</id>
         <title>Release v0.041</title>
@@ -114,26 +144,6 @@ slightly older versions of git.</p>
             </p>
         ]]></content>
         <updated>2015-02-14T00:00:00Z</updated>
-        <category term="release" />
-    </entry>
-    <entry>
-        <id>http://preaction.github.io/Statocles/blog/2015/02/12/release-v0.037.html</id>
-        <title>Release v0.037</title>
-        <link href="http://preaction.github.io/Statocles/blog/2015/02/12/release-v0.037.html" rel="alternate" />
-        <content type="html"><![CDATA[
-            <p>A short release to potentially fix some possible installation problems, reported
-by CPAN Testers.</p>
-
-<ul>
-<li><a href="https://github.com/preaction/Statocles/commit/08924fd7172ae45ee15bae3f740764b840011dee">possibly fix cpantesters reports about submodule</a> (<a href="https://github.com/preaction/Statocles/issues/245">#245</a>)</li>
-</ul>
-
-                <p><a href="http://preaction.github.io/Statocles/blog/2015/02/12/release-v0.037.html#section-2">Continue reading...</a></p>
-            <p>Tags:
-                <a href="/blog/tag/release">release</a>
-            </p>
-        ]]></content>
-        <updated>2015-02-12T00:00:00Z</updated>
         <category term="release" />
     </entry>
 </feed>

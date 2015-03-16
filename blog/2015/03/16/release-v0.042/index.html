@@ -80,42 +80,63 @@
 
         </header>
         <div class="main container">
-            <h1 id="NAME">NAME</h1>
+            <div class="row">
 
-<p>Statocles::Plugin::LinkCheck - Check links and images for validity during build</p>
+    <div class="nine columns">
+        <main>
+            <header>
+                <h1>Release v0.042</h1>
+                <p class="tags">Tags:
+                    <a href="/Statocles/blog/tag/release" rel="tag">release</a>
+                </p>
+                <aside>
+                    <p><time datetime="2015-03-16">
+                        Posted on 2015-03-16
+                    </time>
+                    </p>
+                </aside>
+            </header>
+            <section id="section-1">
+                <p>A slow week, but some needed features:</p>
 
-<h1 id="SYNOPSIS">SYNOPSIS</h1>
+<p>The LinkCheck plugin now supports an <code>ignore</code> attribute, in case there are
+links that aren&#39;t managed by Statocles (like having Github project links in a
+Github user/organization site).</p>
 
-<pre><code>    # site.yml
-    site:
-        class: Statocles::Site
-        on:
-            - build:
-                $class: Statocles::Plugin::LinkCheck
-                $method: check_pages</code></pre>
+<p>A new <code>before_build_write</code> event was added to the Site object, so that plugins
+can edit pages after the App creates them, and even add pages to the site.</p>
 
-<h1 id="DESCRIPTION">DESCRIPTION</h1>
+<p>The Site object now has full control over the Markdown object that turns
+Markdown into HTML, which lets you use the other attributes of
+<a href="http://metacpan.org/pod/Text::Markdown">Text::Markdown</a>, or even use
+<a href="http://metacpan.org/pod/Text::MultiMarkdown">Text::MultiMarkdown</a> or any
+object that exposes a <code>markdown</code> method.</p>
 
-<p>This plugin checks all of the links and images to ensure they exist. If something is missing, this plugin will write a warning to the screen.</p>
+<p>Full changelog below:</p>
 
-<h1 id="ATTRIBUTES">ATTRIBUTES</h1>
+            </section>
+            <section id="section-2">
+                <ul>
+<li><a href="https://github.com/preaction/Statocles/commit/ab1c87ee34b55a3f411604e2eb760c39096e3864">add markdown attribute to the Site object</a> (<a href="https://github.com/preaction/Statocles/issues/258">#258</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/d2d98bbd25a75866a829c5bd5010ba6aa6b4528c">add ignore patterns to LinkCheck plugin</a> (<a href="https://github.com/preaction/Statocles/issues/272">#272</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/fd745999e44dae83f91072edb071d45820f46d61">add before_build_write event for site object</a> (<a href="https://github.com/preaction/Statocles/issues/279">#279</a>)</li>
+</ul>
 
-<h2 id="ignore">ignore</h2>
+            </section>
+        </main>
+    </div>
 
-<p>An array of URL patterns to ignore. These are interpreted as regular expressions, and are anchored to the beginning of the URL.</p>
+    <div class="three columns sidebar">
+        
+        <nav id="tags">
+            <h1>Tags</h1>
+            <ul class="list-inline">
+                <li><a href="/Statocles/blog/tag/release">release</a></li>
+            </ul>
+        </nav>
+    </div>
 
-<p>For example:</p>
-
-<pre><code>    /broken     will match &quot;/broken.html&quot; &quot;/broken/page.html&quot; but not &quot;/page/broken&quot;
-    .*/broken   will match &quot;/broken.html&quot; &quot;/broken/page.html&quot; and &quot;/page/broken&quot;</code></pre>
-
-<h1 id="METHODS">METHODS</h1>
-
-<h2 id="check_pages-event">check_pages( event )</h2>
-
-<p>Check the pages inside the given <a href="/Statocles/pod/Statocles/Event/Pages.html">Statocles::Event::Pages</a> event.</p>
-
-
+</div>
 
         </div>
         <footer>

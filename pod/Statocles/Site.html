@@ -165,6 +165,12 @@
 
 <p>A <a href="https://metacpan.org/pod/Mojo::Log">Mojo::Log</a> object to write logs to. Defaults to STDERR.</p>
 
+<h2 id="markdown">markdown</h2>
+
+<p>The Text::Markdown object to use to turn Markdown into HTML. Defaults to a plain Text::Markdown object.</p>
+
+<p>Any object with a &quot;markdown&quot; method will work here.</p>
+
 <h1 id="METHODS">METHODS</h1>
 
 <h2 id="BUILD">BUILD</h2>
@@ -199,6 +205,14 @@
 <h1 id="EVENTS">EVENTS</h1>
 
 <p>The site object exposes the following events.</p>
+
+<h2 id="before_build_write">before_build_write</h2>
+
+<p>This event is fired after the pages have been built by the apps, but before any page is written to the <code>build_store</code>.</p>
+
+<p>You can use this event to add new pages or edit the pages already created.</p>
+
+<p>The event will be a <a href="/Statocles/pod/Statocles/Event#Statocles/Event/Pages.html">Statocles::Event::Pages</a> object containing all the pages built by the apps.</p>
 
 <h2 id="build1">build</h2>
 
