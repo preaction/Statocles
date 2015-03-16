@@ -1,6 +1,13 @@
 Changelog for Statocles
 
-0.041 2015-03-09T04:13:32
+0.042 2015-03-16T07:26:25
+ - add markdown attribute to the Site object
+ - add ignore patterns to LinkCheck plugin
+ - add before_build_write event for site object
+ - add release v0.041 announcement
+ - update theme from default theme
+
+0.041 2015-03-09T04:13:32Z
  - fix deprecated event handler config
  - change $method in event handler to $sub
  - set the base url using the site creator
