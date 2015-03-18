@@ -208,7 +208,7 @@ To enable the new apps, we just need to add them to the site's C<apps>.
 
     # site.yml
     site:
-        class: Statocles::Site::Git
+        class: Statocles::Site
         args:
             apps:
                 blog:
@@ -246,7 +246,7 @@ Now we should probably make a link in our main nav to the new about page:
 
     # site.yml
     site:
-        class: Statocles::Site::Git
+        class: Statocles::Site
         args:
             apps:
                 blog:
@@ -297,7 +297,7 @@ Along with the blog app and our other settings, here is our new, complete site.y
             branch: gh-pages
 
     site:
-        class: Statocles::Site::Git
+        class: Statocles::Site
         args:
             apps:
                 blog:
