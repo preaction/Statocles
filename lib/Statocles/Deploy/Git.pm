@@ -8,7 +8,8 @@ use Git::Repository;
 
 =attr path
 
-The path to the Git work tree, the root of the repository.
+The path to deploy to. Must be the root of the Git repository, or a directory
+inside of the Git repository.
 
 =attr branch
 
@@ -45,7 +46,19 @@ around 'deploy' => sub {
     my ( $orig, $self, $from_store, $message ) = @_;
 
     my $deploy_dir = $self->path;
-    my $git = Git::Repository->new( work_tree => "$deploy_dir" );
+
+    # Find the repository root
+    my $root = Path::Tiny->new( "$deploy_dir" ); # clone
+    until ( $root->child( '.git' )->exists || $root->is_rootdir ) {
+        $root = $root->parent;
+    }
+    if ( !$root->child( '.git' )->exists ) {
+        die qq{Deploy path "$deploy_dir" is not in a git repository\n};
+    }
+    my $rel_path = $deploy_dir->relative( $root );
+    #; say "Relative: $rel_path";
+
+    my $git = Git::Repository->new( work_tree => "$root" );
 
     # Switch to the right branch
     my $current_branch = _current_branch( $git );
@@ -74,8 +87,18 @@ around 'deploy' => sub {
         $in_status{ $path } = $status;
     }
 
+    #; use Data::Dumper;
+    #; say Dumper \%in_status;
+
     # Commit the files
-    _git_run( $git, add => grep { $in_status{ $_ } } @files );
+    @files    = grep { $in_status{ $_ } }
+                map { Path::Tiny->new( $rel_path, $_ ) }
+                @files;
+
+    #; say "Committing: " . Dumper \@files;
+    return if !@files;
+
+    _git_run( $git, add => @files );
     _git_run( $git, commit => -m => $message || "Site update" );
     if ( _has_remote( $git, $self->remote ) ) {
         _git_run( $git, push => $self->remote => $self->branch );

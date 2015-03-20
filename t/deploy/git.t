@@ -175,7 +175,54 @@ subtest 'deploy with submodules and ignored files' => sub {
     }
 };
 
+subtest 'deploy to subdirectory in git repo' => sub {
+    my $tmpdir = tempdir( @temp_args );
+    diag "TMP: " . $tmpdir if @temp_args;
 
+    my ( undef, $build_store, $workdir, $remotedir )
+        = make_deploy( $tmpdir, branch => 'master', remote => 'origin' );
+
+    $workdir->child( 'subdir' )->mkpath;
+
+    my $deploy = Statocles::Deploy::Git->new(
+        path => $workdir->child( 'subdir' ),
+    );
+
+    my $remotework = $tmpdir->child( 'remote_work' );
+    $remotework->mkpath;
+
+    my $git = Git::Repository->new( work_tree => "$workdir" );
+    my $remotegit = Git::Repository->new( git_dir => "$remotedir", work_tree => "$remotework" );
+
+    $deploy->deploy( $build_store );
+
+    my $master_commit_id = $git->run( 'rev-parse' => 'HEAD' );
+
+    _git_run( $remotegit, checkout => '-f', 'master' );
+    my $file_iter = $build_store->find_files;
+    while ( my $file = $file_iter->() ) {
+        ok $remotework->child( 'subdir' )->child( $file->path )->exists, 'subdir ' . $file->path . ' deployed';
+    }
+
+};
+
+subtest 'errors' => sub {
+    subtest 'not in a git repo' => sub {
+        my $tmpdir = tempdir;
+
+        my ( undef, $build_store, undef, undef )
+            = make_deploy( $tmpdir );
+
+        my $not_git_path = tempdir;
+        my $deploy = Statocles::Deploy::Git->new(
+            path => $not_git_path,
+        );
+
+        throws_ok { $deploy->deploy( $build_store ) }
+            qr{Deploy path "$not_git_path" is not in a git repository\n};
+
+    };
+};
 
 done_testing;
 
