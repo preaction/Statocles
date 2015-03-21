@@ -99,6 +99,10 @@ my %app_vars = (
             %common_vars,
             content => 'Fake content',
         },
+        'source.html.ep' => {
+            %common_vars,
+            content => 'Fake content',
+        },
     },
     site => {
         'layout.html.ep' => {

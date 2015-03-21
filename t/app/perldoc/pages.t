@@ -122,7 +122,33 @@ subtest 'without Pod::Weaver' => sub {
         },
     );
 
-    test_pages( $site, $app, @page_tests );
+    test_pages(
+        $site, $app, @page_tests,
+
+        '/pod/My.src.html' => sub {
+            my ( $html, $dom ) = @_;
+            eq_or_diff $dom->at( 'pre' )->text,
+                $SHARE_DIR->child( qw( app perldoc lib My.pm ) )->slurp_utf8;
+        },
+
+        '/pod/My/Internal.src.html' => sub {
+            my ( $html, $dom ) = @_;
+            eq_or_diff $dom->at( 'pre' )->text,
+                $SHARE_DIR->child( qw( app perldoc lib My Internal.pm ) )->slurp_utf8;
+        },
+
+        '/pod/command.src.html' => sub {
+            my ( $html, $dom ) = @_;
+            eq_or_diff $dom->at( 'pre' )->text,
+                $SHARE_DIR->child( qw( app perldoc bin command.pl ) )->slurp_utf8;
+        },
+
+        '/pod/shellcmd.src.html' => sub {
+            my ( $html, $dom ) = @_;
+            eq_or_diff $dom->at( 'pre' )->text,
+                $SHARE_DIR->child( qw( app perldoc bin shellcmd ) )->slurp_utf8;
+        },
+    );
 };
 
 subtest 'with Pod::Weaver' => sub {
@@ -165,7 +191,34 @@ subtest 'with Pod::Weaver' => sub {
         weave_config => $SHARE_DIR->child( qw( app perldoc weaver.ini ) ),
     );
 
-    test_pages( $site, $app, @page_tests );
+    test_pages(
+        $site, $app, @page_tests,
+
+        '/pod/My.src.html' => sub {
+            my ( $html, $dom ) = @_;
+            eq_or_diff $dom->at( 'pre' )->text,
+                $SHARE_DIR->child( qw( app perldoc lib-weaver My.pm ) )->slurp_utf8;
+        },
+
+        '/pod/My/Internal.src.html' => sub {
+            my ( $html, $dom ) = @_;
+            eq_or_diff $dom->at( 'pre' )->text,
+                $SHARE_DIR->child( qw( app perldoc lib-weaver My Internal.pm ) )->slurp_utf8;
+        },
+
+        '/pod/command.src.html' => sub {
+            my ( $html, $dom ) = @_;
+            eq_or_diff $dom->at( 'pre' )->text,
+                $SHARE_DIR->child( qw( app perldoc bin-weaver command.pl ) )->slurp_utf8;
+        },
+
+        '/pod/shellcmd.src.html' => sub {
+            my ( $html, $dom ) = @_;
+            eq_or_diff $dom->at( 'pre' )->text,
+                $SHARE_DIR->child( qw( app perldoc bin-weaver shellcmd ) )->slurp_utf8;
+        },
+
+    );
 };
 
 done_testing;

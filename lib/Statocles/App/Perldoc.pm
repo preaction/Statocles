@@ -170,6 +170,18 @@ sub pages {
             );
 
         }
+
+        # Add the source as a text file
+        my $source_url = "$module.src.html";
+        $source_url =~ s{::}{/}g;
+        push @pages, Statocles::Page::Plain->new(
+            path => $source_url,
+            layout => $self->site->theme->template( site => 'layout.html' ),
+            template => $self->site->theme->template( perldoc => 'source.html' ),
+            content => Path::Tiny->new( $path )->slurp,
+            app => $self,
+        );
+
     }
 
     return @pages;
