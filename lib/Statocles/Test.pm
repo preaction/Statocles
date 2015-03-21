@@ -65,26 +65,29 @@ sub build_test_site_apps {
     $site_args{build_store}{path} = $build_dir;
     $site_args{deploy}{path} = $deploy_dir;
 
-    require Statocles::App::Blog;
-    my $blog = Statocles::App::Blog->new(
-        store => $share_dir->child( qw( app blog ) ),
-        url_root => '/blog',
-        page_size => 2,
-    );
+    if ( !$site_args{apps} ) {
+        require Statocles::App::Blog;
+        my $blog = Statocles::App::Blog->new(
+            store => $share_dir->child( qw( app blog ) ),
+            url_root => '/blog',
+            page_size => 2,
+        );
 
-    require Statocles::App::Static;
-    my $static = Statocles::App::Static->new(
-        store => $share_dir->child( qw( app static ) ),
-        url_root => '/static',
-    );
+        require Statocles::App::Static;
+        my $static = Statocles::App::Static->new(
+            store => $share_dir->child( qw( app static ) ),
+            url_root => '/static',
+        );
+
+        $site_args{apps} = {
+            blog => $blog,
+            static => $static,
+        };
+    }
 
     return (
         build_test_site(
             theme => $share_dir->child( 'theme' ),
-            apps => {
-                blog => $blog,
-                static => $static,
-            },
             build_store => delete $site_args{build_store},
             deploy => delete $site_args{deploy},
             %site_args,
