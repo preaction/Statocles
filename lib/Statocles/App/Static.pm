@@ -2,20 +2,8 @@ package Statocles::App::Static;
 # ABSTRACT: Manage static files like CSS, JS, images, and other untemplated content
 
 use Statocles::Base 'Class';
-extends 'Statocles::App';
 use Statocles::Page::File;
-
-=attr url_root
-
-The root URL for this application. Required.
-
-=cut
-
-has url_root => (
-    is => 'ro',
-    isa => Str,
-    required => 1,
-);
+with 'Statocles::App';
 
 =attr store
 
@@ -51,7 +39,7 @@ sub pages {
         }
 
         push @pages, Statocles::Page::File->new(
-            path => join( "/", $self->url_root, $path ),
+            path => $path,
             fh => $self->store->open_file( $path ),
         );
     }

@@ -2,21 +2,9 @@ package Statocles::App::Plain;
 # ABSTRACT: Plain documents made into pages with no extras
 
 use Statocles::Base 'Class';
-extends 'Statocles::App';
 use List::Util qw( first );
 use Statocles::Page::Document;
-
-=attr url_root
-
-The root URL for this application. Required.
-
-=cut
-
-has url_root => (
-    is => 'ro',
-    isa => Str,
-    required => 1,
-);
+with 'Statocles::App';
 
 =attr store
 
@@ -47,7 +35,7 @@ sub pages {
 
         my $page = Statocles::Page::Document->new(
             app => $self,
-            path => join( '/', $self->url_root, $url ),
+            path => $url,
             document => $doc,
             layout => $self->site->theme->template( site => 'layout.html' ),
         );

@@ -25,7 +25,7 @@ The application this page came from, so we can give it to the templates.
 
 has app => (
     is => 'ro',
-    isa => InstanceOf['Statocles::App'],
+    isa => ConsumerOf['Statocles::App'],
 );
 
 =attr path

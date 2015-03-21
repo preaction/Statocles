@@ -2,25 +2,12 @@ package Statocles::App::Perldoc;
 # ABSTRACT: Render documentation for Perl modules
 
 use Statocles::Base 'Class';
-extends 'Statocles::App';
 use Statocles::Page::Plain;
 use Scalar::Util qw( blessed );
 use List::MoreUtils qw( any );
 use Pod::Simple::Search;
 use Pod::Simple::XHTML;
-
-=attr url_root
-
-The URL root of this application. All pages from this app will be under this
-root. Use this to ensure two apps do not try to write the same path.
-
-=cut
-
-has url_root => (
-    is => 'ro',
-    isa => Str,
-    required => 1,
-);
+with 'Statocles::App';
 
 =attr inc
 
@@ -157,13 +144,13 @@ sub pages {
                     $new_href = join '/', split /::/, $href;
                     $new_href .= '.html';
                 }
-                $node->attr( href => join '/', $self->url_root, $new_href );
+                $node->attr( href => $self->url( $new_href ) );
             }
         }
 
         if ( $module eq $self->index_module ) {
             unshift @pages, Statocles::Page::Plain->new(
-                path => join( '/', $self->url_root, 'index.html' ),
+                path => join( '/', 'index.html' ),
                 layout => $self->site->theme->template( site => 'layout.html' ),
                 template => $self->site->theme->template( perldoc => 'pod.html' ),
                 content => "$dom",
@@ -175,7 +162,7 @@ sub pages {
             $page_url =~ s{::}{/}g;
 
             push @pages, Statocles::Page::Plain->new(
-                path => join( '/', $self->url_root, $page_url ),
+                path => join( '/', $page_url ),
                 layout => $self->site->theme->template( site => 'layout.html' ),
                 template => $self->site->theme->template( perldoc => 'pod.html' ),
                 content => "$dom",

@@ -59,7 +59,7 @@ that can be used later.
 
 has apps => (
     is => 'ro',
-    isa => HashRef[InstanceOf['Statocles::App']],
+    isa => HashRef[ConsumerOf['Statocles::App']],
     default => sub { {} },
 );
 

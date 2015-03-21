@@ -8,7 +8,7 @@ use Statocles::Page::Document;
 use Statocles::Page::List;
 use Statocles::Page::Feed;
 
-extends 'Statocles::App';
+with 'Statocles::App';
 
 =attr store
 
@@ -20,19 +20,6 @@ has store => (
     is => 'ro',
     isa => Store,
     coerce => Store->coercion,
-    required => 1,
-);
-
-=attr url_root
-
-The URL root of this application. All pages from this app will be under this
-root. Use this to ensure two apps do not try to write the same path.
-
-=cut
-
-has url_root => (
-    is => 'ro',
-    isa => Str,
     required => 1,
 );
 
@@ -198,7 +185,7 @@ sub post_pages {
     my $today = Time::Piece->new->ymd;
     my @pages;
     for my $doc ( @{ $self->store->documents } ) {
-        my $path = join "/", $self->url_root, $doc->path;
+        my $path = $doc->path;
         $path =~ s{/{2,}}{/}g;
         $path =~ s{[.]\w+$}{.html};
 
@@ -210,9 +197,9 @@ sub post_pages {
 
         my @tags;
         for my $tag ( @{ $doc->tags } ) {
-            push @tags, Statocles::Link->new(
+            push @tags, $self->link(
                 text => $tag,
-                href => $self->_tag_url( $tag ),
+                href => join( "/", 'tag', $self->_tag_url( $tag ) ),
             );
         }
 
@@ -271,8 +258,8 @@ sub index {
 
     my @pages = Statocles::Page::List->paginate(
         after => $self->page_size,
-        path => join( "/", $self->url_root, 'page/%i/index.html' ),
-        index => join( "/", $self->url_root, 'index.html' ),
+        path => 'page/%i/index.html',
+        index => 'index.html',
         # Sorting by path just happens to also sort by date
         pages => [ sort { $b->path cmp $a->path } @index_post_pages ],
         app => $self,
@@ -290,11 +277,11 @@ sub index {
             app => $self,
             type => $FEEDS{ $feed }{ type },
             page => $index,
-            path => join( "/", $self->url_root, 'index.' . $feed ),
+            path => 'index.' . $feed,
             template => $self->site->theme->template( blog => $FEEDS{$feed}{template} ),
         );
         push @feed_pages, $page;
-        push @feed_links, Statocles::Link->new(
+        push @feed_links, $self->link(
             text => $FEEDS{ $feed }{ text },
             href => $page->path->stringify,
             type => $page->type,
@@ -324,8 +311,8 @@ sub tag_pages {
     for my $tag ( keys %tagged_docs ) {
         my @tag_pages = Statocles::Page::List->paginate(
             after => $self->page_size,
-            path => join( "/", $self->url_root, 'tag', $tag, 'page/%i/index.html' ),
-            index => join( "/", $self->_tag_url( $tag ), 'index.html' ),
+            path => join( "/", 'tag', $self->_tag_url( $tag ), 'page/%i/index.html' ),
+            index => join( "/", 'tag', $self->_tag_url( $tag ), 'index.html' ),
             # Sorting by path just happens to also sort by date
             pages => [ sort { $b->path cmp $a->path } @{ $tagged_docs{ $tag } } ],
             app => $self,
@@ -337,18 +324,17 @@ sub tag_pages {
         my @feed_pages;
         my @feed_links;
         for my $feed ( sort keys %FEEDS ) {
-            my $tag_file = $tag . '.' . $feed;
-            $tag_file =~ s/\s+/-/g;
+            my $tag_file = $self->_tag_url( $tag ) . '.' . $feed;
 
             my $page = Statocles::Page::Feed->new(
                 type => $FEEDS{ $feed }{ type },
                 app => $self,
                 page => $index,
-                path => join( "/", $self->url_root, 'tag', $tag_file ),
+                path => join( "/", 'tag', $tag_file ),
                 template => $self->site->theme->template( blog => $FEEDS{$feed}{template} ),
             );
             push @feed_pages, $page;
-            push @feed_links, Statocles::Link->new(
+            push @feed_links, $self->link(
                 text => $FEEDS{ $feed }{ text },
                 href => $page->path->stringify,
                 type => $page->type,
@@ -394,7 +380,7 @@ tag links. The common attributes are:
 sub tags {
     my ( $self ) = @_;
     my %tagged_docs = $self->_tag_docs( @{ $self->_post_pages } );
-    return map {; Statocles::Link->new( text => $_, href => $self->_tag_url( $_ ) ) }
+    return map {; $self->link( text => $_, href => join( "/", 'tag', $self->_tag_url( $_ ) ) ) }
         sort keys %tagged_docs
 }
 
@@ -412,7 +398,7 @@ sub _tag_docs {
 sub _tag_url {
     my ( $self, $tag ) = @_;
     $tag =~ s/\s+/-/g;
-    return join "/", $self->url_root, "tag", $tag;
+    return $tag;
 }
 
 =method page_url( page )
