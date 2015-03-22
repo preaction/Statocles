@@ -130,7 +130,7 @@ for my $theme_dir ( @theme_dirs ) {
             next unless $path->stat->size > 0;
             my $tmpl = Statocles::Template->new(
                 path => $path,
-                store => $theme_dir,
+                include_stores => $theme_dir,
             );
             my $name = $path->basename;
             my $app = $path->parent->basename;

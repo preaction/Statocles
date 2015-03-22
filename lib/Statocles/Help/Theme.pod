@@ -15,38 +15,14 @@ There is a default theme included with Statocles, with more on the way. The
 default theme uses L<the Skeleton CSS boilerplate|http://getskeleton.com> to
 build a simple, clean starting point for your own theme.
 
-=head1 Editing a Theme
+=head1 Making Minor Adjustments
 
-=head2 Start From the Default Theme
+=head2 Include Stores
 
-It is unlikely that the default themes will do things exactly as you need. So,
-Statocles has a command to copy one of the default themes into your site
-directory so that you can edit it as you need.
+Before going to editing the entire theme, you can change the theme includes
+by adding L<include_stores|Statocles::Theme/include_stores>.
 
-    # Bundle the default theme
-    $ statocles bundle theme default site/theme
-    Theme "default" written to "site/theme"
-    Make sure to update "site.yml"
-
-This command will copy the "default" Statocles theme into the "site/theme" directory.
-Now we need to update our C<site.yml> to point to our new theme:
-
-    # site.yml
-    site:
-        class: Statocles::Site
-        args:
-            theme: site/theme
-
-=head1 Minor Theme Adjustments
-
-If you only want to edit some minor things, such as the stylesheets, but want to get
-any new fixes from the default theme you bundled, you can safely edit any of the
-default includes, which start out as completely empty files.
-
-If you have edited the default includes, the C<bundle theme> command will not update
-them.
-
-Some examples of files you can safely edit are:
+Some examples of files you can edit are:
 
 =over 4
 
@@ -69,6 +45,28 @@ The entire site footer is up to you to edit.
 If the page has a sidebar, this include will be placed before it.
 
 =back
+
+=head1 Editing a Theme
+
+=head2 Start From the Default Theme
+
+It is unlikely that the default themes will do things exactly as you need. So,
+Statocles has a command to copy one of the default themes into your site
+directory so that you can edit it as you need.
+
+    # Bundle the default theme
+    $ statocles bundle theme default site/theme
+    Theme "default" written to "site/theme"
+    Make sure to update "site.yml"
+
+This command will copy the "default" Statocles theme into the "site/theme" directory.
+Now we need to update our C<site.yml> to point to our new theme:
+
+    # site.yml
+    site:
+        class: Statocles::Site
+        args:
+            theme: site/theme
 
 =head1 Writing a Template
 

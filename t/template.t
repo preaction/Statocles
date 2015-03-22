@@ -44,7 +44,7 @@ subtest 'template include' => sub {
     subtest 'include another template' => sub {
         my $tmpl = Statocles::Template->new(
             path => $SHARE_DIR->child( 'tmpl', 'include_with_template.html.ep' ),
-            store => $SHARE_DIR->child( 'tmpl' ),
+            include_stores => $SHARE_DIR->child( 'tmpl' ),
         );
         is $tmpl->render( %args ), "INCLUDE Title\n ENDINCLUDE Title Content\n";
     };
@@ -52,7 +52,7 @@ subtest 'template include' => sub {
     subtest 'include with arguments' => sub {
         my $tmpl = Statocles::Template->new(
             path => $SHARE_DIR->child( 'tmpl', 'include_with_template_args.html.ep' ),
-            store => $SHARE_DIR->child( 'tmpl' ),
+            include_stores => $SHARE_DIR->child( 'tmpl' ),
         );
         eq_or_diff $tmpl->render( %args ), "INCLUDE New Title\n ENDINCLUDE Title Content\n";
     };
@@ -60,7 +60,7 @@ subtest 'template include' => sub {
     subtest 'include a plain HTML file' => sub {
         my $tmpl = Statocles::Template->new(
             path => $SHARE_DIR->child( 'tmpl', 'include_with_html.html.ep' ),
-            store => $SHARE_DIR->child( 'tmpl' ),
+            include_stores => $SHARE_DIR->child( 'tmpl' ),
         );
         is $tmpl->render( %args ), "INCLUDE INCLUDEDHTML\n ENDINCLUDE Title Content\n";
     };
@@ -68,7 +68,7 @@ subtest 'template include' => sub {
     subtest 'empty include' => sub {
         my $tmpl = Statocles::Template->new(
             path => $SHARE_DIR->child( 'tmpl', 'include_with_empty.html.ep' ),
-            store => $SHARE_DIR->child( 'tmpl' ),
+            include_stores => $SHARE_DIR->child( 'tmpl' ),
         );
         my @warn;
         local $SIG{__WARN__} = sub { push @warn, @_ };
@@ -79,11 +79,11 @@ subtest 'template include' => sub {
     subtest 'missing include dies' => sub {
         my $tmpl = Statocles::Template->new(
             path => $SHARE_DIR->child( 'tmpl', 'include_with_template.html.ep' ),
-            store => $SHARE_DIR,
+            include_stores => $SHARE_DIR,
         );
         throws_ok {
             $tmpl->render( %args );
-        } qr{Error in template: Can not find include "included_template[.]html[.]ep" in store};
+        } qr{Error in template: Can not find include "included_template[.]html[.]ep"};
     };
 };
 

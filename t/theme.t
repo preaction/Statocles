@@ -23,6 +23,7 @@ sub read_templates {
         path => $tmpl_fn->relative( $dir ),
         content => $tmpl_fn->slurp_utf8,
         store => $store,
+        include_stores => [ $store ],
     );
 
     my $index_fn = $dir->child( 'blog', 'index.html.ep' );
@@ -30,6 +31,7 @@ sub read_templates {
         path => $index_fn->relative( $dir ),
         content => $index_fn->slurp_utf8,
         store => $store,
+        include_stores => [ $store ],
     );
 
     my $rss_fn = $dir->child( 'blog', 'index.rss.ep' );
@@ -37,6 +39,7 @@ sub read_templates {
         path => $rss_fn->relative( $dir ),
         content => $rss_fn->slurp_utf8,
         store => $store,
+        include_stores => [ $store ],
     );
 
     my $atom_fn = $dir->child( 'blog', 'index.atom.ep' );
@@ -44,6 +47,7 @@ sub read_templates {
         path => $atom_fn->relative( $dir ),
         content => $atom_fn->slurp_utf8,
         store => $store,
+        include_stores => [ $store ],
     );
 
     my $layout_fn = $dir->child( 'site', 'layout.html.ep' );
@@ -51,6 +55,7 @@ sub read_templates {
         path => $layout_fn->relative( $dir ),
         content => $layout_fn->slurp_utf8,
         store => $store,
+        include_stores => [ $store ],
     );
 
     return (
@@ -148,6 +153,37 @@ subtest 'theme caching' => sub {
     my $tmpl = $theme->template( site => 'sitemap.xml' );
     $theme->clear;
     isnt refaddr $theme->template( site => 'sitemap.xml' ), refaddr $tmpl, 'new object created';
+};
+
+subtest 'include_stores' => sub {
+    my $theme = Statocles::Theme->new(
+        store => '::default',
+        include_stores => [
+            $SHARE_DIR->child( 'theme_include' ),
+        ],
+    );
+
+    my $content = <<'ENDTMPL';
+<h1><%= $title %></h1>
+%= include 'include/in_include_store.markdown.ep'
+%= include 'include/in_both.markdown.ep'
+ENDTMPL
+
+    my %vars = (
+        title => 'Page Title',
+    );
+
+    my $expect = <<'ENDHTML';
+<h1>Page Title</h1>
+# In Include Store
+
+# In Both
+
+ENDHTML
+
+    my $tmpl = $theme->build_template( "test/path.html", $content );
+    eq_or_diff $tmpl->render( %vars ), $expect;
+
 };
 
 subtest 'error messages' => sub {

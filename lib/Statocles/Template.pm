@@ -36,17 +36,23 @@ has path => (
     },
 );
 
-=attr store
+=attr include_stores
 
-A store to use for includes. Optional.
+One or more stores to use for includes. Optional.
 
 =cut
 
-has store => (
+has include_stores => (
     is => 'ro',
-    isa => Store,
-    predicate => 'has_store',
-    coerce => Store->coercion,
+    isa => ArrayRef[Store],
+    default => sub { [] },
+    coerce => sub {
+        my ( $thing ) = @_;
+        if ( ref $thing eq 'ARRAY' ) {
+            return [ map { Store->coercion->( $_ ) } @$thing ];
+        }
+        return [ Store->coercion->( $thing ) ];
+    },
 );
 
 =method BUILDARGS( )
@@ -121,25 +127,23 @@ sub _prelude {
 # Find and include the given file. If it's a template, give it the given vars
 sub _include {
     my ( $self, $vars, $name, %args ) = @_;
-    if ( !$self->has_store ) {
-        die qq{Can not include: No store!};
-    }
 
-    my $store = $self->store;
-    if ( $store->has_file( $name ) ) {
-        if ( $name =~ /[.]ep$/ ) {
-            my $inner_tmpl = __PACKAGE__->new(
-                path => "$name",
-                content => $store->read_file( "$name" ),
-                store => $store,
-            );
-            return $inner_tmpl->render( %$vars, %args ) || '';
+    for my $store ( @{ $self->include_stores } ) {
+        if ( $store->has_file( $name ) ) {
+            if ( $name =~ /[.]ep$/ ) {
+                my $inner_tmpl = __PACKAGE__->new(
+                    path => "$name",
+                    content => $store->read_file( "$name" ),
+                    store => $store,
+                );
+                return $inner_tmpl->render( %$vars, %args ) || '';
+            }
+
+            return $store->read_file( $name );
         }
-
-        return $store->read_file( $name );
     }
 
-    die qq{Can not find include "$name" in store "$store"};
+    die qq{Can not find include "$name"};
 }
 
 =method coercion

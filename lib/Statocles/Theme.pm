@@ -22,6 +22,26 @@ has store => (
     required => 1,
 );
 
+=attr include_stores
+
+An array of L<stores|Statocles::Store> to look for includes. The L</store> is
+added at the end of this list.
+
+=cut
+
+has include_stores => (
+    is => 'ro',
+    isa => ArrayRef[Store],
+    default => sub { [] },
+    coerce => sub {
+        my ( $thing ) = @_;
+        if ( ref $thing eq 'ARRAY' ) {
+            return [ map { Store->coercion->( $_ ) } @$thing ];
+        }
+        return [ Store->coercion->( $thing ) ];
+    },
+);
+
 =attr _templates
 
 The cached template objects for this theme.
@@ -90,7 +110,7 @@ sub build_template {
     return Statocles::Template->new(
         path => $path,
         content => $content,
-        store => $self->store,
+        include_stores => [ @{ $self->include_stores }, $self->store ],
     );
 }
 

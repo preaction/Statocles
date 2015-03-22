@@ -23,7 +23,10 @@ Which flavor of site would you like? ([1], 2, 0)
 
 Statocles comes with a default theme based on the Skeleton CSS library.
 If you want, I can copy this default theme into the current directory so
-that you can customize it to your liking.
+that you can fully customize it to your liking.
+
+Instead, you can make some minor alterations in content and color using
+"include_stores". See Statocles::Help::Theme for more information.
 
 You can always copy or restore the default theme later using the
 "statocles bundle" command.
