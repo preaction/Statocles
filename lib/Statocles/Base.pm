@@ -40,12 +40,12 @@ our %IMPORT_BUNDLES = (
     ],
 
     Class => [
-        '<Moo::Lax',
+        '<Moo',
         @class_modules,
     ],
 
     Role => [
-        '<Moo::Role::Lax',
+        '<Moo::Role',
         @class_modules,
     ],
 
@@ -112,7 +112,7 @@ The class bundle makes your package into a class and includes:
 
 =over 4
 
-=item L<Moo::Lax>
+=item L<Moo>
 
 =item L<Types::Standard> ':all'
 
@@ -128,7 +128,7 @@ The role bundle makes your package into a role and includes:
 
 =over 4
 
-=item L<Moo::Role::Lax>
+=item L<Moo::Role>
 
 =item L<Types::Standard> ':all'
 
