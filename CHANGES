@@ -1,6 +1,18 @@
 Changelog for Statocles
 
-0.042 2015-03-16T07:26:25
+0.043 2015-03-23T05:15:00
+ - upgrade to Moo 2 and remove Moo::Lax
+ - add include_stores to add include dirs to Theme
+ - add source to perldoc app
+ - move url_root into Statocles::App
+ - make files less important than generated pages
+ - warn when multiple apps create the same page
+ - allow passing apps in to test setup routine
+ - add deploy to a subdir inside a git repository
+ - Just fix some old  document
+ - add release v0.042 announcement
+
+0.042 2015-03-16T07:26:25Z
  - add markdown attribute to the Site object
  - add ignore patterns to LinkCheck plugin
  - add before_build_write event for site object

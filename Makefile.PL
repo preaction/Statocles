@@ -41,7 +41,7 @@ my %WriteMakefileArgs = (
     "Import::Base" => "0.009",
     "List::MoreUtils" => 0,
     "Mojolicious" => "6.0",
-    "Moo::Lax" => 0,
+    "Moo" => "2.000001",
     "Path::Tiny" => "0.060",
     "Pod::Usage::Return" => 0,
     "Text::Markdown" => 0,
@@ -64,7 +64,7 @@ my %WriteMakefileArgs = (
     "Test::Exception" => 0,
     "Test::More" => "1.001005"
   },
-  "VERSION" => "0.042",
+  "VERSION" => "0.043",
   "test" => {
     "TESTS" => "t/*.t t/app/*.t t/app/blog/*.t t/app/perldoc/*.t t/app/plain/*.t t/app/static/*.t t/bin/*.t t/command/*.t t/deploy/*.t t/page/*.t t/plugin/*.t t/site/*.t t/store/file/*.t t/theme/*.t"
   }
@@ -89,7 +89,7 @@ my %FallbackPrereqs = (
   "List::MoreUtils" => 0,
   "Module::Build" => "0.3601",
   "Mojolicious" => "6.0",
-  "Moo::Lax" => 0,
+  "Moo" => "2.000001",
   "Path::Tiny" => "0.060",
   "Pod::Usage::Return" => 0,
   "Storable" => 0,
