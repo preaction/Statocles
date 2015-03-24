@@ -82,7 +82,7 @@
         <div class="main container">
             <h1 id="NAME">NAME</h1>
 
-<p>Statocles::App - Base class for Statocles applications</p>
+<p>Statocles::App - Base role for Statocles applications</p>
 
 <h1 id="DESCRIPTION">DESCRIPTION</h1>
 
@@ -97,6 +97,24 @@
 <h2 id="data">data</h2>
 
 <p>A hash of arbitrary data available to theme templates. This is a good place to put extra structured data like social network links or make easy customizations to themes like header image URLs.</p>
+
+<h2 id="url_root">url_root</h2>
+
+<p>The URL root of this application. All pages from this app will be under this root. Use this to ensure two apps do not try to write the same path.</p>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="pages">pages()</h2>
+
+<p>Get the pages for this app. Must return a list of <a href="/Statocles/pod/Statocles/Page.html">Statocles::Page</a> objects, with the index page (the page intended to be the entry page) first.</p>
+
+<h2 id="url-url">url( $url )</h2>
+
+<p>Get a URL to a page in this application. Prepends the <a href="#url_root">&quot;url_root&quot;</a> if necessary. Strips &quot;index.html&quot; if possible.</p>
+
+<h2 id="link-args">link( %args )</h2>
+
+<p>Create a link to a page in this application. <code>%args</code> are attributes to be given to <a href="/Statocles/pod/Statocles/Link.html">Statocles::Link</a> constructor.</p>
 
 
 
