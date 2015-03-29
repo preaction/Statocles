@@ -67,6 +67,8 @@ site:
                     store: site/blog
                     url_root: /blog
 
+        data:
+            google_analytics_id: 'UA-61295159-3'
     on:
         - build:
             $class: Statocles::Plugin::LinkCheck
