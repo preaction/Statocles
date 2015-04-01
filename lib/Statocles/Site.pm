@@ -221,6 +221,11 @@ Register this site as the global site.
 
 sub BUILD {
     my ( $self ) = @_;
+
+    if ( $self->index && !$self->app( $self->index ) ) {
+        die sprintf 'ERROR: Index app "%s" does not exist', $self->index;
+    }
+
     $Statocles::SITE = $self;
     for my $app ( values %{ $self->apps } ) {
         $app->site( $self );

@@ -32,6 +32,18 @@ subtest 'deploy' => sub {
 
 subtest 'error messages' => sub {
 
+    subtest 'index_app does not exist' => sub {
+        throws_ok {
+            Statocles::Site->new(
+                title => 'Example Site',
+                build_store => tempdir,
+                deploy => tempdir,
+                index => 'DOES_NOT_EXIST',
+            );
+        } qr{ERROR: Index app "DOES_NOT_EXIST" does not exist};
+    };
+
+
     subtest 'index_app does not give any pages' => sub {
         # Empty Static app
         my $tmpdir = tempdir;
