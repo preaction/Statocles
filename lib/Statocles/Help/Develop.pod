@@ -181,7 +181,7 @@ up using the configuration file:
         on:
             - build:
                 $class: Statocles::Plugin::LinkCheck
-                $method: check_pages
+                $sub: check_pages
 
 When the C<build> event fires, the LinkCheck method C<check_pages> will be called,
 with the event object given as the argument.
