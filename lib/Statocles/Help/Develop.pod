@@ -186,3 +186,35 @@ up using the configuration file:
 When the C<build> event fires, the LinkCheck method C<check_pages> will be called,
 with the event object given as the argument.
 
+=head1 ROLES
+
+If you want to add some custom behavior to any of the site's objects, the
+configuration file (L<made with Beam::Wire|Beam::Wire>) allows you to compose
+one or more L<roles|Moo::Role> into the objects in your site.
+
+    # lib/My/Readme.pm
+    package My::Readme;
+
+    use Moo::Role;
+    around build => sub {
+        my ( $orig, $self, @args ) = @_;
+
+        # Call the original build method
+        my @pages = $orig->$self( @args );
+
+        # Add a readme file
+        push @pages, Statocles::Page::Plain->new(
+            path => '/README',
+            content => 'Please read me!',
+        );
+
+        return @pages;
+    };
+
+    # site.yml
+    site:
+        class: Statocles::Site
+        with: 'My::Readme'
+
+Using roles can help change behaviors that are otherwise not available to
+L<plugins|/PLUGINS>.
