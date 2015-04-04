@@ -100,6 +100,46 @@ ENDCONTENT
             };
         };
 
+        subtest 'special characters in title' => sub {
+            local $ENV{EDITOR}; # We can't very well open vim...
+            my ( undef, undef, undef, $day, $mon, $year ) = localtime;
+            my $doc_path = $tmpdir->child(
+                'blog',
+                sprintf( '%04i', $year + 1900 ),
+                sprintf( '%02i', $mon + 1 ),
+                sprintf( '%02i', $day ),
+                'special-characters-a-retrospective-2-the-return',
+                'index.markdown',
+            );
+
+            subtest 'run the command' => sub {
+                my @args = qw{ blog post Special Characters: A Retrospective (2) - The Return};
+                my ( $out, $err, $exit ) = capture { $app->command( @args ) };
+                ok !$err, 'nothing on stdout';
+                is $exit, 0;
+                like $out, qr{New post at: \Q$doc_path},
+                    'contains blog post document path';
+            };
+
+            subtest 'check the generated document' => sub {
+                my $doc = $app->store->read_document( $doc_path->relative( $tmpdir->child('blog') ) );
+                cmp_deeply $doc, {
+                    title => 'Special Characters: A Retrospective (2) - The Return',
+                    tags => undef,
+                    content => <<'ENDMARKDOWN',
+Markdown content goes here.
+ENDMARKDOWN
+                };
+                eq_or_diff $doc_path->slurp, <<ENDCONTENT;
+---
+tags: ~
+title: 'Special Characters: A Retrospective (2) - The Return'
+---
+Markdown content goes here.
+ENDCONTENT
+            };
+        };
+
         subtest 'custom date' => sub {
             local $ENV{EDITOR}; # We can't very well open vim...
 

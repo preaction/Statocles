@@ -148,8 +148,7 @@ ENDHELP
 
         if ( $ENV{EDITOR} ) {
             # I can see no good way to test this automatically
-            my $slug = lc $title || "new post";
-            $slug =~ s/\s+/-/g;
+            my $slug = $self->make_slug( $title || "new post" );
             my $path = Path::Tiny->new( @date_parts, $slug, "index.markdown" );
             my $tmp_path = $self->store->write_document( $path => \%doc );
             system $ENV{EDITOR}, $tmp_path;
@@ -158,8 +157,7 @@ ENDHELP
             $title = $doc{title};
         }
 
-        my $slug = lc $title;
-        $slug =~ s/\s+/-/g;
+        my $slug = $self->make_slug( $title );
         my $path = Path::Tiny->new( @date_parts, $slug, "index.markdown" );
         my $full_path = $self->store->write_document( $path => \%doc );
         say "New post at: $full_path";
@@ -172,6 +170,18 @@ ENDHELP
     }
 
     return 0;
+}
+
+=method make_slug( $title )
+
+Given a post title, remove special characters to create a slug.
+
+=cut
+
+sub make_slug {
+    my ( $self, $slug ) = @_;
+    $slug =~ s/[\W]+/-/g;
+    return lc $slug;
 }
 
 =method post_pages()
