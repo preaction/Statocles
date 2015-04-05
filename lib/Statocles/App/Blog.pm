@@ -104,8 +104,28 @@ sub command {
             'date:s',
         );
 
-        my $title = join " ", @argv[1..$#argv];
-        if ( !$ENV{EDITOR} && !$title ) {
+        my %doc = (
+            %$default_post,
+            title => join " ", @argv[1..$#argv],
+        );
+
+        # Read post content on STDIN
+        if ( !-t *STDIN ) {
+            my $content = do { local $/; <STDIN> };
+            %doc = (
+                %doc,
+                $self->store->parse_frontmatter( "<STDIN>", $content ),
+            );
+
+            # Re-open STDIN as the TTY so that the editor (vim) can use it
+            # XXX Is this also a problem on Windows?
+            if ( -e '/dev/tty' ) {
+                close STDIN;
+                open STDIN, '/dev/tty';
+            }
+        }
+
+        if ( !$ENV{EDITOR} && !$doc{title} ) {
             say STDERR <<"ENDHELP";
 Title is required when \$EDITOR is not set.
 
@@ -130,34 +150,17 @@ ENDHELP
             sprintf( '%02i', $day ),
         );
 
-        my %doc = (
-            %$default_post,
-            title => $title,
-        );
-
-        # Read post content on STDIN
-        if ( !-t *STDIN ) {
-            $doc{content} = do { local $/; <STDIN> };
-            # Re-open STDIN as the TTY so that the editor (vim) can use it
-            # XXX Is this also a problem on Windows?
-            if ( -e '/dev/tty' ) {
-                close STDIN;
-                open STDIN, '/dev/tty';
-            }
-        }
-
         if ( $ENV{EDITOR} ) {
             # I can see no good way to test this automatically
-            my $slug = $self->make_slug( $title || "new post" );
+            my $slug = $self->make_slug( $doc{title} || "new post" );
             my $path = Path::Tiny->new( @date_parts, $slug, "index.markdown" );
             my $tmp_path = $self->store->write_document( $path => \%doc );
             system $ENV{EDITOR}, $tmp_path;
             %doc = %{ $self->store->read_document( $path ) };
             $self->store->path->child( $path )->remove;
-            $title = $doc{title};
         }
 
-        my $slug = $self->make_slug( $title );
+        my $slug = $self->make_slug( $doc{title} );
         my $path = Path::Tiny->new( @date_parts, $slug, "index.markdown" );
         my $full_path = $self->store->write_document( $path => \%doc );
         say "New post at: $full_path";

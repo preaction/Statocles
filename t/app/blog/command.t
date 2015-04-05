@@ -182,52 +182,110 @@ ENDCONTENT
         };
 
         subtest 'content from STDIN' => sub {
-            local $ENV{EDITOR}; # We can't very well open vim...
+            subtest 'without frontmatter' => sub {
+                local $ENV{EDITOR}; # We can't very well open vim...
 
-            my ( undef, undef, undef, $day, $mon, $year ) = localtime;
-            my $doc_path = $tmpdir->child(
-                'blog',
-                sprintf( '%04i', $year + 1900 ),
-                sprintf( '%02i', $mon + 1 ),
-                sprintf( '%02i', $day ),
-                'this-is-a-title-for-stdin',
-                'index.markdown',
-            );
+                my ( undef, undef, undef, $day, $mon, $year ) = localtime;
+                my $doc_path = $tmpdir->child(
+                    'blog',
+                    sprintf( '%04i', $year + 1900 ),
+                    sprintf( '%02i', $mon + 1 ),
+                    sprintf( '%02i', $day ),
+                    'this-is-a-title-for-stdin',
+                    'index.markdown',
+                );
 
-            subtest 'run the command' => sub {
-                diag -t *STDIN
-                    ? "Before test: STDIN is interactive"
-                    : "Before test: STDIN is not interactive";
-
-                open my $stdin, '<', \"This is content from STDIN\n";
-                local *STDIN = $stdin;
-
-                my @args = qw( blog post This is a Title for stdin );
-                my ( $out, $err, $exit ) = capture { $app->command( @args ) };
-                ok !$err, 'nothing on stdout' or diag $err;
-                is $exit, 0;
-                like $out, qr{New post at: \Q$doc_path},
-                    'contains blog post document path';
-
-                if ( -e '/dev/tty' ) {
+                subtest 'run the command' => sub {
                     diag -t *STDIN
-                        ? "After test: STDIN is interactive"
-                        : "After Test: STDIN is not interactive";
-                }
-            };
+                        ? "Before test: STDIN is interactive"
+                        : "Before test: STDIN is not interactive";
 
-            subtest 'check the generated document' => sub {
-                my $path = $doc_path->relative( $tmpdir->child('blog') );
-                my $doc = $app->store->read_document( $path );
-                cmp_deeply $doc, Statocles::Document->new(
-                    path => $path,
-                    title => 'This is a Title for stdin',
-                    tags => undef,
-                    content => <<'ENDMARKDOWN',
+                    open my $stdin, '<', \"This is content from STDIN\n";
+                    local *STDIN = $stdin;
+
+                    my @args = qw( blog post This is a Title for stdin );
+                    my ( $out, $err, $exit ) = capture { $app->command( @args ) };
+                    ok !$err, 'nothing on stdout' or diag $err;
+                    is $exit, 0;
+                    like $out, qr{New post at: \Q$doc_path},
+                        'contains blog post document path';
+
+                    if ( -e '/dev/tty' ) {
+                        diag -t *STDIN
+                            ? "After test: STDIN is interactive"
+                            : "After Test: STDIN is not interactive";
+                    }
+                };
+
+                subtest 'check the generated document' => sub {
+                    my $path = $doc_path->relative( $tmpdir->child('blog') );
+                    my $doc = $app->store->read_document( $path );
+                    cmp_deeply $doc, Statocles::Document->new(
+                        path => $path,
+                        title => 'This is a Title for stdin',
+                        tags => undef,
+                        content => <<'ENDMARKDOWN',
 This is content from STDIN
 ENDMARKDOWN
-                );
+                    );
+                };
             };
+
+            subtest 'with frontmatter' => sub {
+                local $ENV{EDITOR}; # We can't very well open vim...
+
+                my ( undef, undef, undef, $day, $mon, $year ) = localtime;
+                my $doc_path = $tmpdir->child(
+                    'blog',
+                    sprintf( '%04i', $year + 1900 ),
+                    sprintf( '%02i', $mon + 1 ),
+                    sprintf( '%02i', $day ),
+                    'this-is-frontmatter',
+                    'index.markdown',
+                );
+
+                subtest 'run the command' => sub {
+                    diag -t *STDIN
+                        ? "Before test: STDIN is interactive"
+                        : "Before test: STDIN is not interactive";
+
+                    open my $stdin, '<', \<<ENDSTDIN;
+---
+title: This is Frontmatter
+tags: one, two
+---
+This is content from STDIN
+ENDSTDIN
+                    local *STDIN = $stdin;
+
+                    my @args = qw( blog post );
+                    my ( $out, $err, $exit ) = capture { $app->command( @args ) };
+                    ok !$err, 'nothing on stdout' or diag $err;
+                    is $exit, 0;
+                    like $out, qr{New post at: \Q$doc_path},
+                        'contains blog post document path';
+
+                    if ( -e '/dev/tty' ) {
+                        diag -t *STDIN
+                            ? "After test: STDIN is interactive"
+                            : "After Test: STDIN is not interactive";
+                    }
+                };
+
+                subtest 'check the generated document' => sub {
+                    my $path = $doc_path->relative( $tmpdir->child('blog') );
+                    my $doc = $app->store->read_document( $path );
+                    cmp_deeply $doc, Statocles::Document->new(
+                        path => $path,
+                        title => 'This is Frontmatter',
+                        tags => [qw( one two )],
+                        content => <<'ENDMARKDOWN',
+This is content from STDIN
+ENDMARKDOWN
+                    );
+                };
+            };
+
         };
 
     };
