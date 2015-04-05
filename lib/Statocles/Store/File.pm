@@ -92,8 +92,7 @@ sub read_documents {
         next unless $self->_is_owned_path( $path );
         if ( $path =~ /[.]markdown$/ ) {
             my $rel_path = rootdir->child( $path->relative( $root_path ) );
-            my $data = $self->read_document( $rel_path );
-            push @docs, Statocles::Document->new( path => $rel_path, %$data );
+            push @docs, $self->read_document( $rel_path );
         }
     }
     return \@docs;
@@ -117,8 +116,7 @@ sub _is_owned_path {
 =method read_document( path )
 
 Read a single L<document|Statocles::Document> in Markdown with optional YAML
-frontmatter and return a datastructure suitable to be given to
-L<Statocles::Document|Statocles::Document>.
+frontmatter.
 
 =cut
 
@@ -126,8 +124,9 @@ sub read_document {
     my ( $self, $path ) = @_;
     site->log->debug( "Read document: " . $path );
     my $full_path = $self->path->child( $path );
-    my %doc = $self->parse_document( $full_path, $full_path->slurp_utf8 );
-    return \%doc;
+    my $doc = $self->parse_document( $full_path, $full_path->slurp_utf8 );
+    $doc->path( $path );
+    return $doc;
 }
 
 =method parse_document( $from, $content )
@@ -193,7 +192,7 @@ sub parse_document {
         $doc->{date} = $dt;
     }
 
-    return %$doc;
+    return Statocles::Document->new( %$doc );
 }
 
 =method write_document( $path, $doc )

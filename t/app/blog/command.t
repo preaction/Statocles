@@ -82,14 +82,16 @@ subtest 'post' => sub {
             };
 
             subtest 'check the generated document' => sub {
-                my $doc = $app->store->read_document( $doc_path->relative( $tmpdir->child('blog') ) );
-                cmp_deeply $doc, {
+                my $path = $doc_path->relative( $tmpdir->child('blog') );
+                my $doc = $app->store->read_document( $path );
+                cmp_deeply $doc, Statocles::Document->new(
+                    path => $path,
                     title => 'This is a Title',
                     tags => undef,
                     content => <<'ENDMARKDOWN',
 Markdown content goes here.
 ENDMARKDOWN
-                };
+                );
                 eq_or_diff $doc_path->slurp, <<ENDCONTENT;
 ---
 tags: ~
@@ -122,14 +124,16 @@ ENDCONTENT
             };
 
             subtest 'check the generated document' => sub {
-                my $doc = $app->store->read_document( $doc_path->relative( $tmpdir->child('blog') ) );
-                cmp_deeply $doc, {
+                my $path = $doc_path->relative( $tmpdir->child('blog') );
+                my $doc = $app->store->read_document( $path );
+                cmp_deeply $doc, Statocles::Document->new(
+                    path => $path,
                     title => 'Special Characters: A Retrospective (2) - The Return',
                     tags => undef,
                     content => <<'ENDMARKDOWN',
 Markdown content goes here.
 ENDMARKDOWN
-                };
+                );
                 eq_or_diff $doc_path->slurp, <<ENDCONTENT;
 ---
 tags: ~
@@ -150,21 +154,23 @@ ENDCONTENT
             subtest 'run the command' => sub {
                 my @args = qw( blog post --date 2014-4-1 This is a Title );
                 my ( $out, $err, $exit ) = capture { $app->command( @args ) };
-                ok !$err, 'nothing on stdout';
+                ok !$err, 'nothing on stdout' or diag $err;
                 is $exit, 0;
                 like $out, qr{New post at: \Q$doc_path},
                     'contains blog post document path';
             };
 
             subtest 'check the generated document' => sub {
-                my $doc = $app->store->read_document( $doc_path->relative( $tmpdir->child( 'blog' ) ) );
-                cmp_deeply $doc, {
+                my $path = $doc_path->relative( $tmpdir->child( 'blog' ) );
+                my $doc = $app->store->read_document( $path );
+                cmp_deeply $doc, Statocles::Document->new(
+                    path => $path,
                     title => 'This is a Title',
                     tags => undef,
                     content => <<'ENDMARKDOWN',
 Markdown content goes here.
 ENDMARKDOWN
-                };
+                );
                 eq_or_diff $doc_path->slurp, <<ENDCONTENT;
 ---
 tags: ~
@@ -198,7 +204,7 @@ ENDCONTENT
 
                 my @args = qw( blog post This is a Title for stdin );
                 my ( $out, $err, $exit ) = capture { $app->command( @args ) };
-                ok !$err, 'nothing on stdout';
+                ok !$err, 'nothing on stdout' or diag $err;
                 is $exit, 0;
                 like $out, qr{New post at: \Q$doc_path},
                     'contains blog post document path';
@@ -211,14 +217,16 @@ ENDCONTENT
             };
 
             subtest 'check the generated document' => sub {
-                my $doc = $app->store->read_document( $doc_path->relative( $tmpdir->child('blog') ) );
-                cmp_deeply $doc, {
+                my $path = $doc_path->relative( $tmpdir->child('blog') );
+                my $doc = $app->store->read_document( $path );
+                cmp_deeply $doc, Statocles::Document->new(
+                    path => $path,
                     title => 'This is a Title for stdin',
                     tags => undef,
                     content => <<'ENDMARKDOWN',
 This is content from STDIN
 ENDMARKDOWN
-                };
+                );
             };
         };
 

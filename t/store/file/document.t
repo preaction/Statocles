@@ -8,16 +8,12 @@ build_test_site( theme => $SHARE_DIR->child( 'theme' ) );
 
 my $DT_FORMAT = '%Y-%m-%d %H:%M:%S';
 
-my %required_attrs = (
-    path => '/required.markdown',
-    title => 'Required Document',
-    author => 'preaction',
-    content => "No optional things in here, at all!\n",
-);
-
 my @exp_docs = (
     Statocles::Document->new(
-        %required_attrs,
+        path => '/required.markdown',
+        title => 'Required Document',
+        author => 'preaction',
+        content => "No optional things in here, at all!\n",
     ),
 
     Statocles::Document->new(
@@ -115,9 +111,10 @@ subtest 'parse document from content' => sub {
         path => tempdir,
     );
     my $path = $SHARE_DIR->child( qw( store docs required.markdown ) );
-    my %expect = %required_attrs;
-    delete $expect{path};
-    cmp_deeply { $store->parse_document( $path, $path->slurp_utf8 ) }, \%expect;
+    my %exp_doc = %{$exp_docs[0]};
+    delete $exp_doc{path}; # Path cannot be added by parse_document
+    my $exp_doc = Statocles::Document->new( %exp_doc );
+    cmp_deeply $store->parse_document( $path, $path->slurp_utf8 ), $exp_doc;
 };
 
 subtest 'read with relative directory' => sub {
@@ -197,8 +194,9 @@ subtest 'write document' => sub {
 
         my $full_path = $store->write_document( 'example.markdown' => $doc  );
         is $full_path, $store->path->child( 'example.markdown' );
-        cmp_deeply $store->read_document( 'example.markdown' ), $doc
-            or diag explain $store->read_document( 'example.markdown' );
+        cmp_deeply $store->read_document( 'example.markdown' ),
+            Statocles::Document->new( path => 'example.markdown', %$doc )
+                or diag explain $store->read_document( 'example.markdown' );
         eq_or_diff path( $full_path )->slurp_utf8,
             $SHARE_DIR->child( qw( store write doc.markdown ) )->slurp_utf8;
 
@@ -213,7 +211,7 @@ subtest 'write document' => sub {
         my $path = path(qw( blog 2014 05 28 example.markdown ));
         my $full_path = $store->write_document( $path => $doc );
         is $full_path, $tmpdir->child( $path );
-        cmp_deeply $store->read_document( $path ), $doc;
+        cmp_deeply $store->read_document( $path ), Statocles::Document->new( path => $path, %$doc );
         eq_or_diff path( $full_path )->slurp_utf8,
             $SHARE_DIR->child( qw( store write doc.markdown ) )->slurp_utf8;
 
