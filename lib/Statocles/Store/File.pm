@@ -126,15 +126,23 @@ sub read_document {
     my ( $self, $path ) = @_;
     site->log->debug( "Read document: " . $path );
     my $full_path = $self->path->child( $path );
-    my $doc = $self->_parse_frontmatter( $full_path );
-    return $self->_thaw_document( $doc );
+    my %doc = $self->parse_document( $full_path, $full_path->slurp_utf8 );
+    return \%doc;
 }
 
-sub _parse_frontmatter {
-    my ( $self, $path ) = @_;
+=method parse_document( $from, $content )
+
+Parse a document with YAML frontmatter. $from is a string identifying where the
+content comes from (a path or other identifier). $content is the content to
+parse for frontmatter.
+
+=cut
+
+sub parse_document {
+    my ( $self, $from, $content ) = @_;
     my $doc;
 
-    my @lines = $path->lines_utf8;
+    my @lines = split /\n/, $content;
     if ( $lines[0] =~ /^---/ ) {
         shift @lines;
 
@@ -143,28 +151,23 @@ sub _parse_frontmatter {
 
         # If we did not find the marker between YAML and Markdown
         if ( $i < 0 ) {
-            die "Could not find end of front matter (---) in '$path'\n";
+            die "Could not find end of front matter (---) in '$from'\n";
         }
 
         # Before the marker is YAML
         eval {
-            $doc = YAML::Load( join "", splice @lines, 0, $i );
+            $doc = YAML::Load( join "\n", splice( @lines, 0, $i ), "" );
         };
         if ( $@ ) {
-            die "Error parsing YAML in '$path'\n$@";
+            die "Error parsing YAML in '$from'\n$@";
         }
 
         # Remove the last '---' mark
         shift @lines;
     }
 
-    $doc->{content} = join "", @lines;
+    $doc->{content} = join "\n", @lines, "";
 
-    return $doc;
-}
-
-sub _thaw_document {
-    my ( $self, $doc ) = @_;
     if ( exists $doc->{date} ) {
 
         my $dt;
@@ -189,7 +192,8 @@ sub _thaw_document {
 
         $doc->{date} = $dt;
     }
-    return $doc;
+
+    return %$doc;
 }
 
 =method write_document( $path, $doc )

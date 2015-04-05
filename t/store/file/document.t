@@ -8,12 +8,16 @@ build_test_site( theme => $SHARE_DIR->child( 'theme' ) );
 
 my $DT_FORMAT = '%Y-%m-%d %H:%M:%S';
 
+my %required_attrs = (
+    path => '/required.markdown',
+    title => 'Required Document',
+    author => 'preaction',
+    content => "No optional things in here, at all!\n",
+);
+
 my @exp_docs = (
     Statocles::Document->new(
-        path => '/required.markdown',
-        title => 'Required Document',
-        author => 'preaction',
-        content => "No optional things in here, at all!\n",
+        %required_attrs,
     ),
 
     Statocles::Document->new(
@@ -104,6 +108,16 @@ subtest 'read documents' => sub {
         # Re-read them from disk
         cmp_deeply $store->documents, bag( @exp_docs ) or diag explain $store->documents;
     };
+};
+
+subtest 'parse document from content' => sub {
+    my $store = Statocles::Store::File->new(
+        path => tempdir,
+    );
+    my $path = $SHARE_DIR->child( qw( store docs required.markdown ) );
+    my %expect = %required_attrs;
+    delete $expect{path};
+    cmp_deeply { $store->parse_document( $path, $path->slurp_utf8 ) }, \%expect;
 };
 
 subtest 'read with relative directory' => sub {
