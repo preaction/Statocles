@@ -8,12 +8,16 @@ build_test_site( theme => $SHARE_DIR->child( 'theme' ) );
 
 my $DT_FORMAT = '%Y-%m-%d %H:%M:%S';
 
+my %required_attrs = (
+    title => 'Required Document',
+    author => 'preaction',
+    content => "No optional things in here, at all!\n",
+);
+
 my @exp_docs = (
     Statocles::Document->new(
         path => '/required.markdown',
-        title => 'Required Document',
-        author => 'preaction',
-        content => "No optional things in here, at all!\n",
+        %required_attrs,
     ),
 
     Statocles::Document->new(
@@ -113,15 +117,12 @@ subtest 'read documents' => sub {
     };
 };
 
-subtest 'parse document from content' => sub {
+subtest 'parse frontmatter from content' => sub {
     my $store = Statocles::Store::File->new(
         path => tempdir,
     );
     my $path = $SHARE_DIR->child( qw( store docs required.markdown ) );
-    my %exp_doc = %{$exp_docs[0]};
-    delete $exp_doc{path}; # Path cannot be added by parse_document
-    my $exp_doc = Statocles::Document->new( %exp_doc );
-    cmp_deeply $store->parse_document( $path, $path->slurp_utf8 ), $exp_doc;
+    cmp_deeply { $store->parse_frontmatter( $path, $path->slurp_utf8 ) }, \%required_attrs;
 };
 
 subtest 'read with relative directory' => sub {

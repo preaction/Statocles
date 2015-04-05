@@ -124,12 +124,11 @@ sub read_document {
     my ( $self, $path ) = @_;
     site->log->debug( "Read document: " . $path );
     my $full_path = $self->path->child( $path );
-    my $doc = $self->parse_document( $full_path, $full_path->slurp_utf8 );
-    $doc->path( $path );
-    return $doc;
+    my %doc = $self->parse_frontmatter( $full_path, $full_path->slurp_utf8 );
+    return Statocles::Document->new( %doc, path => $path );
 }
 
-=method parse_document( $from, $content )
+=method parse_frontmatter( $from, $content )
 
 Parse a document with YAML frontmatter. $from is a string identifying where the
 content comes from (a path or other identifier). $content is the content to
@@ -137,7 +136,7 @@ parse for frontmatter.
 
 =cut
 
-sub parse_document {
+sub parse_frontmatter {
     my ( $self, $from, $content ) = @_;
     my $doc;
 
@@ -192,7 +191,7 @@ sub parse_document {
         $doc->{date} = $dt;
     }
 
-    return Statocles::Document->new( %$doc );
+    return %$doc;
 }
 
 =method write_document( $path, $doc )
