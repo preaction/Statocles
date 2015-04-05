@@ -22,6 +22,13 @@ my @exp_docs = (
     ),
 
     Statocles::Document->new(
+        path => '/path.markdown',
+        title => 'Document with path inside',
+        author => 'preaction',
+        content => "The path is in the file, and it must be ignored.\n",
+    ),
+
+    Statocles::Document->new(
         path => '/datetime.markdown',
         title => 'Datetime Document',
         author => 'preaction',
