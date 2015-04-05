@@ -62,6 +62,7 @@ has tags => (
     isa => ArrayRef,
     default => sub { [] },
     coerce => sub {
+        return [] unless $_[0];
         if ( !ref $_[0] ) {
             return [ split /\s*,\s*/, $_[0] ];
         }
