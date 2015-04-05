@@ -195,41 +195,58 @@ Get the individual post Statocles::Page objects.
 
 sub post_pages {
     my ( $self ) = @_;
-    my $today = Time::Piece->new->ymd;
-    my @pages;
-    for my $doc ( @{ $self->store->documents } ) {
-        my $path = $doc->path;
-        $path =~ s{/{2,}}{/}g;
-        $path =~ s{[.]\w+$}{.html};
+    my @pages = map { $self->_make_post_page( $_ ) } $self->_sorted_docs;
+    $self->_post_pages( [ @pages ] );
+    return @pages;
+}
 
-        my @date_parts = $path =~ m{/(\d{4})/(\d{2})/(\d{2})/[^/]+(?:/index[.]html)?$};
+# Return the post docs sorted by date, pruning any docs that are after
+# the current date
+sub _sorted_docs {
+    my ( $self ) = @_;
+
+    my $today = Time::Piece->new->ymd;
+    my @doc_dates;
+    for my $doc ( @{ $self->store->documents } ) {
+        my @date_parts = $doc->path =~ m{/(\d{4})/(\d{2})/(\d{2})/[^/]+(?:/index[.]markdown)?$};
         next unless @date_parts;
         my $date = join "-", @date_parts;
 
         next if $date gt $today;
 
-        my @tags;
-        for my $tag ( @{ $doc->tags } ) {
-            push @tags, $self->link(
-                text => $tag,
-                href => join( "/", 'tag', $self->_tag_url( $tag ) ),
-            );
-        }
+        push @doc_dates, [ $doc, $date ];
+    }
 
-        push @pages, Statocles::Page::Document->new(
-            app => $self,
-            layout => $self->site->theme->template( site => 'layout.html' ),
-            template => $self->site->theme->template( blog => 'post.html' ),
-            document => $doc,
-            path => $path,
-            date => $doc->has_date ? $doc->date : Time::Piece->strptime( $date, '%Y-%m-%d' ),
-            tags => \@tags,
+    return map { $_->[0] } sort { $b->[1] cmp $a->[1] } @doc_dates;
+}
+
+sub _make_post_page {
+    my ( $self, $doc ) = @_;
+
+    my $path = $doc->path;
+    $path =~ s{/{2,}}{/}g;
+    $path =~ s{[.]\w+$}{.html};
+
+    my @date_parts = $doc->path =~ m{/(\d{4})/(\d{2})/(\d{2})/[^/]+(?:/index[.]markdown)?$};
+    my $date = join "-", @date_parts;
+
+    my @tags;
+    for my $tag ( @{ $doc->tags } ) {
+        push @tags, $self->link(
+            text => $tag,
+            href => join( "/", 'tag', $self->_tag_url( $tag ) ),
         );
     }
 
-    $self->_post_pages( [ @pages ] );
-
-    return @pages;
+    return Statocles::Page::Document->new(
+        app => $self,
+        layout => $self->site->theme->template( site => 'layout.html' ),
+        template => $self->site->theme->template( blog => 'post.html' ),
+        document => $doc,
+        path => $path,
+        date => $doc->has_date ? $doc->date : Time::Piece->strptime( $date, '%Y-%m-%d' ),
+        tags => \@tags,
+    );
 }
 
 =method index()
@@ -412,6 +429,28 @@ sub _tag_url {
     my ( $self, $tag ) = @_;
     $tag =~ s/\s+/-/g;
     return $tag;
+}
+
+=method recent_posts( $count )
+
+Get the last $count recent posts for this blog. Useful for templates and site
+index pages.
+
+=cut
+
+sub recent_posts {
+    my ( $self, $count ) = @_;
+
+    my $today = Time::Piece->new->ymd;
+    my @pages;
+    my @docs = $self->_sorted_docs;
+    for my $doc ( @docs[0..$count-1] ) {
+        my $page = $self->_make_post_page( $doc );
+        $page->path( join "/", $self->url_root, $page->path );
+        push @pages, $page;
+    }
+
+    return @pages;
 }
 
 =method page_url( page )
