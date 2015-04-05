@@ -225,8 +225,14 @@ sub write_document {
 
 sub _freeze_document {
     my ( $self, $doc ) = @_;
+    delete $doc->{path}; # Path should not be in the document
     if ( exists $doc->{date} ) {
         $doc->{date} = $doc->{date}->strftime( $DATETIME_FORMAT );
+    }
+    if ( exists $doc->{links} ) {
+        if ( !keys %{ $doc->{links} } ) {
+            delete $doc->{links};
+        }
     }
     return $doc;
 }

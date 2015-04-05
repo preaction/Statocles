@@ -219,6 +219,27 @@ subtest 'write document' => sub {
             or diag "Got warnings: \n\t" . join "\n\t", @warnings;
     };
 
+    subtest 'allow Document objects' => sub {
+        my @warnings;
+        local $SIG{__WARN__} = sub { push @warnings, $_[0] };
+
+        my $doc_obj = Statocles::Document->new(
+            path => 'example.markdown',
+            %$doc,
+        );
+
+        my $full_path = $store->write_document( 'doc_obj.markdown' => $doc_obj );
+        is $full_path, $store->path->child( 'doc_obj.markdown' );
+        cmp_deeply $store->read_document( 'doc_obj.markdown' ),
+            Statocles::Document->new( path => 'doc_obj.markdown', %$doc )
+                or diag explain $store->read_document( 'doc_obj.markdown' );
+        eq_or_diff path( $full_path )->slurp_utf8,
+            $SHARE_DIR->child( qw( store write doc_obj.markdown ) )->slurp_utf8;
+
+        ok !@warnings, 'no warnings from write'
+            or diag "Got warnings: \n\t" . join "\n\t", @warnings;
+    };
+
 };
 
 subtest 'removing a store reveals formerly-ignored files' => sub {
