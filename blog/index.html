@@ -48,6 +48,10 @@
         font-size: 24px;
     }
 
+    #index-banner .latest-release {
+        text-align: center;
+    }
+
 </style>
 
     </head>
@@ -88,6 +92,57 @@
     <div class="nine columns">
         <main>
 
+            <article>
+                <header>
+                    <h1><a href="/Statocles/blog/2015/04/06/release-v0.044">Release v0.044</a></h1>
+
+                    <p class="tags">Tags:
+                        <a href="/Statocles/blog/tag/release" rel="tag">release</a>
+                    </p>
+
+                    <aside>
+                        <p><time datetime="2015-04-06">
+                            Posted on 2015-04-06
+                        </time>
+                        </p>
+                    </aside>
+
+                </header>
+
+                <p>A few small features, and some small breaking changes in this release.</p>
+
+<p>The <code>read_document</code> and <code>write_document</code> method of
+<a href="/Statocles/pod/Statocles/Store/File.html">Statocles::Store::File</a> now use
+<a href="/Statocles/pod/Statocles/Document.html">Statocles::Document</a> instead of plain hashrefs.
+It was weird to have one method (<code>read_documents</code> with an <code>s</code>) get document
+objects, and everything else use hashes. The important
+serialization/deserialization routines are in Statocles::Document, so it is
+likely that more changes will happen around these APIs in the future.</p>
+
+<p>Because of the above change, Stores now have a way to read a document from a string.
+So, when a blog post is read from <code>&lt;STDIN&gt;</code>, it can contain tags, links, and other
+fields, instead of just content.</p>
+
+<p>Some fixes to blog slugs to remove any non-word characters, and also reduce
+every replacement to a single dash (<code>-</code>), instead of having multiple dashes.
+This only affects new posts, not existing posts, so if you want to fix your
+current posts, you must fix them manually.</p>
+
+<p>An upgrade to <a href="http://metacpan.org/pod/Beam::Wire">Beam::Wire</a> now allows you
+to compose roles in the Statocles configuration file, so additional behavior
+can be added to existing applications. See <a href="/Statocles/pod/Statocles/Help/Develop.html">the Develop
+Guide</a> for more information.</p>
+
+<p>Finally, <a href="/Statocles/pod/Statocles/App/Blog.html">the Blog app</a> now has a <code>recent_posts()</code>
+method that can be used in templates and markdown to display the most recent
+posts in a blog.</p>
+
+<p>Full changelog is below.</p>
+
+
+                    <p><a href="/Statocles/blog/2015/04/06/release-v0.044#section-2">Continue reading Release v0.044...</a></p>
+
+            </article>
             <article>
                 <header>
                     <h1><a href="/Statocles/blog/2015/03/24/release-v0.043">Release v0.043</a></h1>
@@ -247,45 +302,11 @@ changes that we needed to fix in Statocles. We now require 6.0.</p>
                     <p><a href="/Statocles/blog/2015/03/02/release-v0.040#section-2">Continue reading Release v0.040...</a></p>
 
             </article>
-            <article>
-                <header>
-                    <h1><a href="/Statocles/blog/2015/02/22/statocles-beta-(release-v0.039)">Statocles Beta (Release v0.039)</a></h1>
-
-                    <p class="tags">Tags:
-                        <a href="/Statocles/blog/tag/release" rel="tag">release</a>
-                    </p>
-
-                    <aside>
-                        <p><time datetime="2015-02-22">
-                            Posted on 2015-02-22
-                        </time>
-                        </p>
-                    </aside>
-
-                </header>
-
-                <p>This is it! The beta milestone is complete!</p>
-
-<p>This release adds the &quot;create&quot; command to easily create new Statocles sites.</p>
-
-<p>Blog posts are now directories, which will allow us (in the future) to have
-images and other documents inside. The breaking part of this change was made now,
-and future additions will be made as beta progresses.</p>
-
-<p>There were a couple reorganizations of the documentation and tests to make them
-easier to understand.</p>
-
-<p>Full changelog below:</p>
-
-
-                    <p><a href="/Statocles/blog/2015/02/22/statocles-beta-(release-v0.039)#section-2">Continue reading Statocles Beta (Release v0.039)...</a></p>
-
-            </article>
         </main>
 
         <ul class="pager">
             <li class="prev">
-                <a class="button button-primary" href="/Statocles/blog/page/2" rel="next">
+                <a class="button button-primary" href="page/2" rel="next">
                     ← Older
                 </a>
             </li>

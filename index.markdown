@@ -3,6 +3,14 @@ title: Home
 ---
 <div id="index-banner">
 <h1>Statocles <small>Static, App-capable Websites</small></h1>
+<div class="latest-release">
+    % my ( $latest ) = $site->app( 'blog' )->recent_posts( 1 );
+    % my ( $version ) = $latest->title =~ /(v\d+[.]\d+(?:[.]\d+)?)/;
+    <a href="<%= $latest->path %>">
+        Latest release: <%= $version %>
+        (<date><%= $latest->date->strftime( '%Y-%m-%d' ) %></date>)
+    </a>
+</div>
 </div>
 
 Statocles is a minimal web content management system with a focus on easy editing

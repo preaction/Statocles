@@ -46,6 +46,10 @@
         font-size: 24px;
     }
 
+    #index-banner .latest-release {
+        text-align: center;
+    }
+
 </style>
 
     </head>
@@ -122,7 +126,11 @@
 
 <h2 id="read_document-path">read_document( path )</h2>
 
-<p>Read a single <a href="/Statocles/pod/Statocles/Document.html">document</a> in Markdown with optional YAML frontmatter and return a datastructure suitable to be given to <a href="/Statocles/pod/Statocles/Document.html">Statocles::Document</a>.</p>
+<p>Read a single <a href="/Statocles/pod/Statocles/Document.html">document</a> in Markdown with optional YAML frontmatter.</p>
+
+<h2 id="parse_frontmatter-from-content">parse_frontmatter( $from, $content )</h2>
+
+<p>Parse a document with YAML frontmatter. $from is a string identifying where the content comes from (a path or other identifier). $content is the content to parse for frontmatter.</p>
 
 <h2 id="write_document-path-doc">write_document( $path, $doc )</h2>
 

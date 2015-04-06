@@ -46,6 +46,10 @@
         font-size: 24px;
     }
 
+    #index-banner .latest-release {
+        text-align: center;
+    }
+
 </style>
 
     </head>
@@ -252,9 +256,39 @@
         on:
             - build:
                 $class: Statocles::Plugin::LinkCheck
-                $method: check_pages</code></pre>
+                $sub: check_pages</code></pre>
 
 <p>When the <code>build</code> event fires, the LinkCheck method <code>check_pages</code> will be called, with the event object given as the argument.</p>
+
+<h1 id="ROLES">ROLES</h1>
+
+<p>If you want to add some custom behavior to any of the site&#39;s objects, the configuration file (<a href="https://metacpan.org/pod/Beam::Wire">made with Beam::Wire</a>) allows you to compose one or more <a href="https://metacpan.org/pod/Moo::Role">roles</a> into the objects in your site.</p>
+
+<pre><code>    # lib/My/Readme.pm
+    package My::Readme;
+
+    use Moo::Role;
+    around build =&gt; sub {
+        my ( $orig, $self, @args ) = @_;
+
+        # Call the original build method
+        my @pages = $orig-&gt;$self( @args );
+
+        # Add a readme file
+        push @pages, Statocles::Page::Plain-&gt;new(
+            path =&gt; &#39;/README&#39;,
+            content =&gt; &#39;Please read me!&#39;,
+        );
+
+        return @pages;
+    };
+
+    # site.yml
+    site:
+        class: Statocles::Site
+        with: &#39;My::Readme&#39;</code></pre>
+
+<p>Using roles can help change behaviors that are otherwise not available to <a href="#PLUGINS">plugins</a>.</p>
 
 
 

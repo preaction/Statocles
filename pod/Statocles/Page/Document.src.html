@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <title>Statocles</title>
+        <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
+<style>
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Forum', sans-serif;
+        font-weight: bold;
+    }
+
+    #index-banner {
+        font-family: 'Forum', sans-serif;
+        height: 300px;
+        position: relative;
+        margin-bottom: 1em;
+        border-bottom: 1px solid #777
+    }
+    #index-banner:before, #index-banner:after {
+        width: 60px;
+        height: 300px;
+        content: url(/Statocles/theme/images/column.png);
+    }
+    #index-banner:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #index-banner:after {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    #index-banner h1 {
+        padding-top: 1em;
+        text-transform: uppercase;
+        font-size: 72px;
+        text-align: center;
+    }
+    #index-banner h1 small {
+        display: block;
+        font-size: 24px;
+    }
+
+    #index-banner .latest-release {
+        text-align: center;
+    }
+
+</style>
+
+    </head>
+    <body>
+        <header>
+            <nav class="navbar">
+                <div class="container">
+                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <ul>
+                        <li>
+                            <a href="/Statocles/blog">Blog</a>
+                        </li>
+                        <li>
+                            <a href="/Statocles/pod">Docs</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles">Code</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles/issues">Bugs</a>
+                        </li>
+                        <li>
+                            <a href="http://metacpan.org/pod/Statocles">CPAN</a>
+                        </li>
+                        <li>
+                            <a href="https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">IRC</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <a href="https://github.com/preaction/Statocles"><img alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; z-index: 1000; border: 0;"></a>
+
+        </header>
+        <div class="main container">
+            <pre>package Statocles::Page::Document;
+# ABSTRACT: Render documents into HTML
+
+use Statocles::Base &#39;Class&#39;;
+with &#39;Statocles::Page&#39;;
+use Statocles::Template;
+
+=attr document
+
+The L&lt;document|Statocles::Document&gt; this page will render.
+
+=cut
+
+has document =&gt; (
+    is =&gt; &#39;ro&#39;,
+    isa =&gt; InstanceOf[&#39;Statocles::Document&#39;],
+    required =&gt; 1,
+);
+
+=attr title
+
+The title of the page.
+
+=cut
+
+has title =&gt; (
+    is =&gt; &#39;ro&#39;,
+    isa =&gt; Str,
+    lazy =&gt; 1,
+    default =&gt; sub { $_[0]-&gt;document-&gt;title },
+);
+
+=attr author
+
+The author of the page.
+
+=cut
+
+has author =&gt; (
+    is =&gt; &#39;ro&#39;,
+    isa =&gt; Str,
+    lazy =&gt; 1,
+    default =&gt; sub { $_[0]-&gt;document-&gt;author || &#39;&#39; },
+);
+
+=attr date
+
+Get the date of this page by checking the document.
+
+=cut
+
+has &#39;+date&#39; =&gt; (
+    lazy =&gt; 1,
+    default =&gt; sub {
+        my ( $self ) = @_;
+        $self-&gt;document-&gt;date || Time::Piece-&gt;new;
+    },
+);
+
+=attr tags
+
+The tag links for this document. An array of L&lt;link objects|Statocles::Link&gt;. The
+most important attributes are:
+
+    text    - The text of the link
+    href    - The page of the link
+
+=cut
+
+has _tags =&gt; (
+    is =&gt; &#39;ro&#39;,
+    isa =&gt; LinkArray,
+    default =&gt; sub { [] },
+    coerce =&gt; LinkArray-&gt;coercion,
+    init_arg =&gt; &#39;tags&#39;,
+);
+
+has &#39;+_links&#39; =&gt; (
+    default =&gt; sub { $_[0]-&gt;document-&gt;links },
+);
+
+=method content( vars )
+
+Generate the document HTML by processing template directives and converting
+Markdown. C&lt;vars&gt; is a set of name-value pairs to give to the template.
+
+=cut
+
+sub content {
+    my ( $self, %vars ) = @_;
+    my $content = $self-&gt;document-&gt;content;
+    my $tmpl = $self-&gt;site-&gt;theme-&gt;build_template( $self-&gt;path, $content );
+    my $rendered = $tmpl-&gt;render( %vars, $self-&gt;vars );
+    return $self-&gt;markdown-&gt;markdown( $rendered );
+}
+
+=method vars
+
+Get the template variables for this page.
+
+=cut
+
+sub vars {
+    my ( $self ) = @_;
+    return (
+        doc =&gt; $self-&gt;document,
+    );
+}
+
+=method sections
+
+Get a list of content divided into sections. The Markdown &quot;---&quot; marker divides
+sections.
+
+=cut
+
+sub sections {
+    my ( $self ) = @_;
+    my @sections = split /\n---\n/, $self-&gt;document-&gt;content;
+    return map { $self-&gt;markdown-&gt;markdown( $_ ) } @sections;
+}
+
+=method tags()
+
+Get the list of tags for this page.
+
+=cut
+
+sub tags {
+    my ( $self ) = @_;
+    return @{ $self-&gt;_tags };
+}
+
+1;
+__END__
+
+=head1 DESCRIPTION
+
+This page class takes a single L&lt;document|Statocles::Document&gt; and renders it as HTML.
+</pre>
+
+        </div>
+        <footer>
+            <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61295159-3', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+            <div class="container tagline">
+                <a href="http://preaction.github.io/Statocles">Made with Statocles</a><br>
+                <a href="http://www.perl.org">Powered by Perl</a>
+            </div>
+        </footer>
+    </body>
+</html>

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <title>Statocles</title>
+        <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
+<style>
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Forum', sans-serif;
+        font-weight: bold;
+    }
+
+    #index-banner {
+        font-family: 'Forum', sans-serif;
+        height: 300px;
+        position: relative;
+        margin-bottom: 1em;
+        border-bottom: 1px solid #777
+    }
+    #index-banner:before, #index-banner:after {
+        width: 60px;
+        height: 300px;
+        content: url(/Statocles/theme/images/column.png);
+    }
+    #index-banner:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #index-banner:after {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    #index-banner h1 {
+        padding-top: 1em;
+        text-transform: uppercase;
+        font-size: 72px;
+        text-align: center;
+    }
+    #index-banner h1 small {
+        display: block;
+        font-size: 24px;
+    }
+
+    #index-banner .latest-release {
+        text-align: center;
+    }
+
+</style>
+
+    </head>
+    <body>
+        <header>
+            <nav class="navbar">
+                <div class="container">
+                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <ul>
+                        <li>
+                            <a href="/Statocles/blog">Blog</a>
+                        </li>
+                        <li>
+                            <a href="/Statocles/pod">Docs</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles">Code</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles/issues">Bugs</a>
+                        </li>
+                        <li>
+                            <a href="http://metacpan.org/pod/Statocles">CPAN</a>
+                        </li>
+                        <li>
+                            <a href="https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">IRC</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <a href="https://github.com/preaction/Statocles"><img alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; z-index: 1000; border: 0;"></a>
+
+        </header>
+        <div class="main container">
+            <pre>package Statocles::Base;
+# ABSTRACT: Base module for Statocles modules
+
+use strict;
+use warnings;
+use base &#39;Import::Base&#39;;
+
+our @IMPORT_MODULES = (
+    sub {
+        # Disable spurious warnings on platforms that Net::DNS::Native does not
+        # support. We don&#39;t use this much mojo
+        $ENV{MOJO_NO_NDN} = 1;
+        return;
+    },
+    strict =&gt; [],
+    warnings =&gt; [],
+    feature =&gt; [qw( :5.10 )],
+    &#39;Path::Tiny&#39; =&gt; [qw( rootdir cwd )],
+    &#39;Time::Piece&#39;,
+    &#39;Statocles&#39;,
+);
+
+my @class_modules = (
+    &#39;Types::Standard&#39; =&gt; [qw( :all )],
+    &#39;Types::Path::Tiny&#39; =&gt; [qw( Path AbsPath Dir )],
+    &#39;Statocles::Types&#39; =&gt; [qw( :all )],
+);
+
+our %IMPORT_BUNDLES = (
+    Test =&gt; [
+        qw( Test::More Test::Deep Test::Differences Test::Exception ),
+        &#39;Dir::Self&#39; =&gt; [qw( __DIR__ )],
+        &#39;Path::Tiny&#39; =&gt; [qw( path tempdir cwd )],
+        &#39;Statocles::Test&#39; =&gt; [qw(
+            test_constructor test_pages build_test_site build_test_site_apps
+            build_temp_site
+        )],
+        &#39;Statocles::Site&#39;,
+        sub { $Statocles::VERSION = 0.001; return }, # Set version normally done via dzil
+    ],
+
+    Class =&gt; [
+        &#39;&lt;Moo&#39;,
+        @class_modules,
+    ],
+
+    Role =&gt; [
+        &#39;&lt;Moo::Role&#39;,
+        @class_modules,
+    ],
+
+    Emitter =&gt; [
+        &#39;Statocles::Event&#39;,
+        sub {
+            my ( $bundles, $args ) = @_;
+            Moo::Role-&gt;apply_role_to_package( $args-&gt;{package}, &#39;Beam::Emitter&#39; );
+            return;
+        },
+    ],
+);
+
+1;
+__END__
+
+=head1 SYNOPSIS
+
+    package MyModule;
+    use Statocles::Base;
+
+    use Statocles::Base &#39;Class&#39;;
+    use Statocles::Base &#39;Role&#39;;
+    use Statocles::Base &#39;Test&#39;;
+
+=head1 DESCRIPTION
+
+This is the base module that all Statocles modules should use.
+
+=head1 MODULES
+
+This module always imports the following into your namespace:
+
+=over
+
+=item L&lt;Statocles&gt;
+
+The base module is imported to make sure that L&lt;File::Share&gt; can find the right
+share directory.
+
+=item L&lt;strict&gt;
+
+=item L&lt;warnings&gt;
+
+=item L&lt;feature&gt;
+
+Currently the 5.10 feature bundle
+
+=item L&lt;Path::Tiny&gt; qw( path rootdir )
+
+We do a lot of work with the filesystem.
+
+=item L&lt;Time::Piece&gt;
+
+=back
+
+=head1 BUNDLES
+
+The following bundles are available. You may import one or more of these by name.
+
+=head2 Class
+
+The class bundle makes your package into a class and includes:
+
+=over 4
+
+=item L&lt;Moo&gt;
+
+=item L&lt;Types::Standard&gt; &#39;:all&#39;
+
+=item L&lt;Types::Path::Tiny&gt; &#39;:all&#39;
+
+=item L&lt;Statocles::Types&gt; &#39;:all&#39;
+
+=back
+
+=head2 Role
+
+The role bundle makes your package into a role and includes:
+
+=over 4
+
+=item L&lt;Moo::Role&gt;
+
+=item L&lt;Types::Standard&gt; &#39;:all&#39;
+
+=item L&lt;Types::Path::Tiny&gt; &#39;:all&#39;
+
+=item L&lt;Statocles::Types&gt; &#39;:all&#39;
+
+=back
+
+=head2 Test
+
+The test bundle includes:
+
+=over 4
+
+=item L&lt;Test::More&gt;
+
+=item L&lt;Test::Deep&gt;
+
+=item L&lt;Test::Differences&gt;
+
+=item L&lt;Test::Exception&gt;
+
+=item L&lt;Dir::Self&gt; &#39;__DIR__&#39;
+
+=item L&lt;Path::Tiny&gt; &#39;path&#39;, &#39;tempdir&#39;
+
+=item L&lt;Statocles::Test&gt;
+
+Some common test routines for Statocles.
+
+=item L&lt;Statocles::Site&gt;
+
+In order to have logging, a site object must be created.
+
+=back
+
+=head1 SEE ALSO
+
+=over
+
+=item L&lt;Import::Base&gt;
+
+=back
+</pre>
+
+        </div>
+        <footer>
+            <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61295159-3', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+            <div class="container tagline">
+                <a href="http://preaction.github.io/Statocles">Made with Statocles</a><br>
+                <a href="http://www.perl.org">Powered by Perl</a>
+            </div>
+        </footer>
+    </body>
+</html>

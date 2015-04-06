@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <title>Statocles</title>
+        <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
+<style>
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Forum', sans-serif;
+        font-weight: bold;
+    }
+
+    #index-banner {
+        font-family: 'Forum', sans-serif;
+        height: 300px;
+        position: relative;
+        margin-bottom: 1em;
+        border-bottom: 1px solid #777
+    }
+    #index-banner:before, #index-banner:after {
+        width: 60px;
+        height: 300px;
+        content: url(/Statocles/theme/images/column.png);
+    }
+    #index-banner:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #index-banner:after {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    #index-banner h1 {
+        padding-top: 1em;
+        text-transform: uppercase;
+        font-size: 72px;
+        text-align: center;
+    }
+    #index-banner h1 small {
+        display: block;
+        font-size: 24px;
+    }
+
+    #index-banner .latest-release {
+        text-align: center;
+    }
+
+</style>
+
+    </head>
+    <body>
+        <header>
+            <nav class="navbar">
+                <div class="container">
+                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <ul>
+                        <li>
+                            <a href="/Statocles/blog">Blog</a>
+                        </li>
+                        <li>
+                            <a href="/Statocles/pod">Docs</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles">Code</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles/issues">Bugs</a>
+                        </li>
+                        <li>
+                            <a href="http://metacpan.org/pod/Statocles">CPAN</a>
+                        </li>
+                        <li>
+                            <a href="https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">IRC</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <a href="https://github.com/preaction/Statocles"><img alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; z-index: 1000; border: 0;"></a>
+
+        </header>
+        <div class="main container">
+            <pre>package Statocles::Test;
+# ABSTRACT: Common test routines for Statocles
+
+use Statocles::Base;
+use Test::More;
+use Test::Exception;
+use Test::Deep;
+use File::Copy::Recursive qw( dircopy );
+
+use base qw( Exporter );
+our @EXPORT_OK = qw(
+    test_constructor test_pages build_test_site build_test_site_apps
+    build_temp_site
+);
+
+=sub build_test_site( %site_args )
+
+Build a site for testing. The build and deploy will be set correctly to temporary
+directories. C&lt;%site_args&gt; will be given to the L&lt;Statocles::Site|Statocles::Site&gt;
+constructor.
+
+You must provide a C&lt;theme&gt; (probably using the one in C&lt;t/share/theme&gt;).
+
+=cut
+
+sub build_test_site {
+    my ( %site_args ) = @_;
+    require Statocles::Site;
+    require Statocles::Store::File;
+    require Statocles::Deploy::File;
+
+    my $store   = $site_args{build_store}
+                ? Statocles::Store::File-&gt;new( delete $site_args{build_store} )
+                : Path::Tiny-&gt;tempdir
+                ;
+
+    my $deploy  = $site_args{deploy}
+                ? Statocles::Deploy::File-&gt;new( delete $site_args{deploy} )
+                : Path::Tiny-&gt;tempdir
+                ;
+
+    return Statocles::Site-&gt;new(
+        title =&gt; &#39;Example Site&#39;,
+        build_store =&gt; $store,
+        deploy =&gt; $deploy,
+        %site_args,
+    );
+}
+
+=sub build_test_site_apps( $share_dir, %site_args )
+
+Build a site for testing, with some apps. Returns the site, the build dir, and the
+deploy dir.
+
+    my ( $site, $build_dir, $deploy_dir ) = build_test_site_apps( $share_dir, %site_args );
+
+=cut
+
+sub build_test_site_apps {
+    my ( $share_dir, %site_args ) = @_;
+
+    my $build_dir = Path::Tiny-&gt;tempdir;
+    my $deploy_dir = Path::Tiny-&gt;tempdir;
+
+    $site_args{build_store}{path} = $build_dir;
+    $site_args{deploy}{path} = $deploy_dir;
+
+    if ( !$site_args{apps} ) {
+        require Statocles::App::Blog;
+        my $blog = Statocles::App::Blog-&gt;new(
+            store =&gt; $share_dir-&gt;child( qw( app blog ) ),
+            url_root =&gt; &#39;/blog&#39;,
+            page_size =&gt; 2,
+        );
+
+        require Statocles::App::Static;
+        my $static = Statocles::App::Static-&gt;new(
+            store =&gt; $share_dir-&gt;child( qw( app static ) ),
+            url_root =&gt; &#39;/static&#39;,
+        );
+
+        $site_args{apps} = {
+            blog =&gt; $blog,
+            static =&gt; $static,
+        };
+    }
+
+    return (
+        build_test_site(
+            theme =&gt; $share_dir-&gt;child( &#39;theme&#39; ),
+            build_store =&gt; delete $site_args{build_store},
+            deploy =&gt; delete $site_args{deploy},
+            %site_args,
+        ),
+        $build_dir,
+        $deploy_dir,
+    );
+}
+
+=sub test_constructor( class, args )
+
+Test an object constructor. C&lt;class&gt; is the class to test. C&lt;args&gt; is a list of
+name/value pairs with the following keys:
+
+=over 4
+
+=item required
+
+A set of name/value pairs for required arguments. These will be tested to ensure they
+are required. They will be added to every attempt to construct an object.
+
+=item default
+
+A set of name/value pairs for default arguments. These will be tested to ensure they
+are set to the correct defaults.
+
+=back
+
+=cut
+
+sub test_constructor {
+    my ( $class, %args ) = @_;
+
+    my %required = $args{required} ? ( %{ $args{required} } ) : ();
+    my %defaults = $args{default} ? ( %{ $args{default} } ) : ();
+
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+
+    subtest $class . &#39; constructor&#39; =&gt; sub {
+        isa_ok $class-&gt;new( %required ), $class,
+            &#39;constructor works with all required args&#39;;
+
+        if ( $args{required} ) {
+            subtest &#39;required attributes&#39; =&gt; sub {
+                for my $key ( keys %required ) {
+                    dies_ok {
+                        $class-&gt;new(
+                            map {; $_ =&gt; $required{ $_ } } grep { $_ ne $key } keys %required,
+                        );
+                    } $key . &#39; is required&#39;;
+                }
+            };
+        }
+
+        if ( $args{default} ) {
+            subtest &#39;attribute defaults&#39; =&gt; sub {
+                my $obj = $class-&gt;new( %required );
+                for my $key ( keys %defaults ) {
+                    if ( ref $defaults{ $key } eq &#39;CODE&#39; ) {
+                        local $_ = $obj-&gt;$key;
+                        subtest &quot;$key default value&quot; =&gt; $defaults{ $key };
+                    }
+                    else {
+                        cmp_deeply $obj-&gt;$key, $defaults{ $key }, &quot;$key default value&quot;;
+                    }
+                }
+            };
+        }
+
+    };
+}
+
+=sub test_pages( site, app, tests )
+
+Test the pages of the given app. C&lt;tests&gt; is a set of pairs of C&lt;path&gt; =&gt; C&lt;callback&gt;
+to test the pages returned by the app.
+
+The C&lt;callback&gt; will be given two arguments:
+
+=over
+
+=item C&lt;output&gt;
+
+The output of the rendered page.
+
+=item C&lt;dom&gt;
+
+If the page is HTML, a L&lt;Mojo::DOM&gt; object ready for testing.
+
+=back
+
+=cut
+
+sub test_pages {
+    my ( $site, $app ) = ( shift, shift );
+
+    my %opt;
+    if ( ref $_[0] eq &#39;HASH&#39; ) {
+        %opt = %{ +shift };
+    }
+
+    my ( $index_path, $index_test, %page_tests ) = @_;
+    $page_tests{ $index_path } = $index_test;
+
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+
+    my @warnings;
+    local $SIG{__WARN__} = sub { push @warnings, $_[0] };
+
+    my @pages = $app-&gt;pages;
+
+    is scalar @pages, scalar keys %page_tests, &#39;correct number of pages&#39;;
+
+    if ( !$opt{noindex} ) {
+        is $pages[0]-&gt;path, $index_path, &#39;index page must come first&#39;;
+    }
+
+    for my $page ( @pages ) {
+        ok $page-&gt;DOES( &#39;Statocles::Page&#39; ), &#39;must be a Statocles::Page&#39;;
+
+        if ( !$page-&gt;isa( &#39;Statocles::Page::Feed&#39; ) ) {
+            isa_ok $page-&gt;date, &#39;Time::Piece&#39;, &#39;must set a date&#39;;
+        }
+
+        if ( !$page_tests{ $page-&gt;path } ) {
+            fail &quot;No tests found for page: &quot; . $page-&gt;path;
+            next;
+        }
+
+        my $output = $page-&gt;render( site =&gt; $site );
+        # Handle filehandles from render
+        if ( ref $output eq &#39;GLOB&#39; ) {
+            $output = do { local $/; &lt;$output&gt; };
+        }
+
+        if ( $page-&gt;path =~ /[.](?:html|rss|atom)$/ ) {
+            my $dom = Mojo::DOM-&gt;new( $output );
+            fail &quot;Could not parse dom&quot; unless $dom;
+            subtest &#39;html content: &#39; . $page-&gt;path, $page_tests{ $page-&gt;path }, $output, $dom;
+        }
+        elsif ( $page_tests{ $page-&gt;path } ) {
+            subtest &#39;text content: &#39; . $page-&gt;path, $page_tests{ $page-&gt;path }, $output;
+        }
+        else {
+            fail &quot;Unknown page: &quot; . $page-&gt;path;
+        }
+
+    }
+
+    ok !@warnings, &quot;no warnings!&quot; or diag join &quot;\n&quot;, @warnings;
+}
+
+=sub build_temp_site
+
+Build a config file so we can test config loading and still use
+temporary directories
+
+=cut
+
+sub build_temp_site {
+    my ( $share_dir ) = @_;
+
+    my $tmp = Path::Tiny-&gt;tempdir;
+    dircopy $share_dir-&gt;child( qw( app blog ) )-&gt;stringify, $tmp-&gt;child( &#39;blog&#39; )-&gt;stringify;
+    dircopy $share_dir-&gt;child( &#39;theme&#39; )-&gt;stringify, $tmp-&gt;child( &#39;theme&#39; )-&gt;stringify;
+    $tmp-&gt;child( &#39;build_site&#39; )-&gt;mkpath;
+    $tmp-&gt;child( &#39;deploy_site&#39; )-&gt;mkpath;
+    $tmp-&gt;child( &#39;build_foo&#39; )-&gt;mkpath;
+    $tmp-&gt;child( &#39;deploy_foo&#39; )-&gt;mkpath;
+
+    my $config = {
+        theme =&gt; {
+            class =&gt; &#39;Statocles::Theme&#39;,
+            args =&gt; {
+                store =&gt; $tmp-&gt;child( &#39;theme&#39; ),
+            },
+        },
+
+        build =&gt; {
+            class =&gt; &#39;Statocles::Store::File&#39;,
+            args =&gt; {
+                path =&gt; $tmp-&gt;child( &#39;build_site&#39; ),
+            },
+        },
+
+        deploy =&gt; {
+            class =&gt; &#39;Statocles::Deploy::File&#39;,
+            args =&gt; {
+                path =&gt; $tmp-&gt;child( &#39;deploy_site&#39; ),
+            },
+        },
+
+        blog =&gt; {
+            &#39;class&#39; =&gt; &#39;Statocles::App::Blog&#39;,
+            &#39;args&#39; =&gt; {
+                store =&gt; {
+                    &#39;$class&#39; =&gt; &#39;Statocles::Store::File&#39;,
+                    &#39;$args&#39; =&gt; {
+                        path =&gt; $tmp-&gt;child( &#39;blog&#39; ),
+                    },
+                },
+                url_root =&gt; &#39;/blog&#39;,
+            },
+        },
+
+        plain =&gt; {
+            &#39;class&#39; =&gt; &#39;Statocles::App::Plain&#39;,
+            &#39;args&#39; =&gt; {
+                store =&gt; {
+                    &#39;$class&#39; =&gt; &#39;Statocles::Store::File&#39;,
+                    &#39;$args&#39; =&gt; {
+                        path =&gt; &quot;$tmp&quot;,
+                    },
+                },
+                url_root =&gt; &#39;/&#39;,
+            },
+        },
+
+        site =&gt; {
+            class =&gt; &#39;Statocles::Site&#39;,
+            args =&gt; {
+                title =&gt; &#39;Site Title&#39;,
+                index =&gt; &#39;blog&#39;,
+                build_store =&gt; { &#39;$ref&#39; =&gt; &#39;build&#39; },
+                deploy =&gt; { &#39;$ref&#39; =&gt; &#39;deploy&#39; },
+                theme =&gt; { &#39;$ref&#39; =&gt; &#39;theme&#39; },
+                apps =&gt; {
+                    blog =&gt; { &#39;$ref&#39; =&gt; &#39;blog&#39; },
+                    plain =&gt; { &#39;$ref&#39; =&gt; &#39;plain&#39; },
+                },
+            },
+        },
+
+        build_foo =&gt; {
+            class =&gt; &#39;Statocles::Store::File&#39;,
+            args =&gt; {
+                path =&gt; $tmp-&gt;child( &#39;build_foo&#39; ),
+            },
+        },
+
+        deploy_foo =&gt; {
+            class =&gt; &#39;Statocles::Deploy::File&#39;,
+            args =&gt; {
+                path =&gt; $tmp-&gt;child( &#39;deploy_foo&#39; ),
+            },
+        },
+
+        site_foo =&gt; {
+            class =&gt; &#39;Statocles::Site&#39;,
+            args =&gt; {
+                title =&gt; &#39;Site Foo&#39;,
+                index =&gt; &#39;blog&#39;,
+                build_store =&gt; { &#39;$ref&#39; =&gt; &#39;build_foo&#39; },
+                deploy =&gt; { &#39;$ref&#39; =&gt; &#39;deploy_foo&#39; },
+                theme =&gt; &#39;::default&#39;,
+                apps =&gt; {
+                    blog =&gt; { &#39;$ref&#39; =&gt; &#39;blog&#39; },
+                    plain =&gt; { &#39;$ref&#39; =&gt; &#39;plain&#39; },
+                },
+            },
+        },
+    };
+
+    my $config_fn = $tmp-&gt;child( &#39;site.yml&#39; );
+    YAML::DumpFile( $config_fn, $config );
+    return ( $tmp, $config_fn, $config );
+}
+
+1;
+__END__
+
+=head1 DESCRIPTION
+
+This module provides some common test routines for Statocles tests.
+
+</pre>
+
+        </div>
+        <footer>
+            <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61295159-3', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+            <div class="container tagline">
+                <a href="http://preaction.github.io/Statocles">Made with Statocles</a><br>
+                <a href="http://www.perl.org">Powered by Perl</a>
+            </div>
+        </footer>
+    </body>
+</html>

@@ -46,6 +46,10 @@
         font-size: 24px;
     }
 
+    #index-banner .latest-release {
+        text-align: center;
+    }
+
 </style>
 
     </head>
@@ -139,6 +143,10 @@
 
 <p>Run a command on this app. The app name is used to build the help, so users get exactly what they need to run.</p>
 
+<h2 id="make_slug-title">make_slug( $title )</h2>
+
+<p>Given a post title, remove special characters to create a slug.</p>
+
 <h2 id="post_pages">post_pages()</h2>
 
 <p>Get the individual post Statocles::Page objects.</p>
@@ -161,6 +169,10 @@
 
 <pre><code>    text =&gt; &#39;The tag text&#39;
     href =&gt; &#39;The URL to the tag page&#39;</code></pre>
+
+<h2 id="recent_posts-count">recent_posts( $count )</h2>
+
+<p>Get the last $count recent posts for this blog. Useful for templates and site index pages.</p>
 
 <h2 id="page_url-page">page_url( page )</h2>
 

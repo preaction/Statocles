@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <title>Statocles</title>
+        <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
+<style>
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Forum', sans-serif;
+        font-weight: bold;
+    }
+
+    #index-banner {
+        font-family: 'Forum', sans-serif;
+        height: 300px;
+        position: relative;
+        margin-bottom: 1em;
+        border-bottom: 1px solid #777
+    }
+    #index-banner:before, #index-banner:after {
+        width: 60px;
+        height: 300px;
+        content: url(/Statocles/theme/images/column.png);
+    }
+    #index-banner:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #index-banner:after {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    #index-banner h1 {
+        padding-top: 1em;
+        text-transform: uppercase;
+        font-size: 72px;
+        text-align: center;
+    }
+    #index-banner h1 small {
+        display: block;
+        font-size: 24px;
+    }
+
+    #index-banner .latest-release {
+        text-align: center;
+    }
+
+</style>
+
+    </head>
+    <body>
+        <header>
+            <nav class="navbar">
+                <div class="container">
+                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <ul>
+                        <li>
+                            <a href="/Statocles/blog">Blog</a>
+                        </li>
+                        <li>
+                            <a href="/Statocles/pod">Docs</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles">Code</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles/issues">Bugs</a>
+                        </li>
+                        <li>
+                            <a href="http://metacpan.org/pod/Statocles">CPAN</a>
+                        </li>
+                        <li>
+                            <a href="https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">IRC</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <a href="https://github.com/preaction/Statocles"><img alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; z-index: 1000; border: 0;"></a>
+
+        </header>
+        <div class="main container">
+            <pre>package Statocles::Command;
+# ABSTRACT: The statocles command-line interface
+
+use Statocles::Base &#39;Class&#39;;
+use Scalar::Util qw( blessed );
+use Getopt::Long qw( GetOptionsFromArray :config pass_through bundling no_auto_abbrev );
+use Pod::Usage::Return qw( pod2usage );
+use File::Share qw( dist_dir );
+use File::Copy::Recursive qw( dircopy );
+use Beam::Wire;
+
+my @VERBOSE = ( &quot;warn&quot;, &quot;info&quot;, &quot;debug&quot;, &quot;trace&quot; );
+
+=attr site
+
+The L&lt;site|Statocles::Site&gt; we&#39;re working with.
+
+=cut
+
+has site =&gt; (
+    is =&gt; &#39;ro&#39;,
+    isa =&gt; InstanceOf[&#39;Statocles::Site&#39;],
+);
+
+=method main( @argv )
+
+Run the command given in @argv. See L&lt;statocles&gt; for a list of commands and
+options.
+
+=cut
+
+sub main {
+    my ( $class, @argv ) = @_;
+
+    my %opt = (
+        config =&gt; &#39;site.yml&#39;,
+        site =&gt; &#39;site&#39;,
+        verbose =&gt; 0,
+    );
+    GetOptionsFromArray( \@argv, \%opt,
+        &#39;config:s&#39;,
+        &#39;site:s&#39;,
+        &#39;help|h&#39;,
+        &#39;version&#39;,
+        &#39;verbose|v+&#39;,
+    );
+    return pod2usage(0) if $opt{help};
+
+    if ( $opt{version} ) {
+        say &quot;Statocles version $Statocles::Command::VERSION (Perl $^V)&quot;;
+        return 0;
+    }
+
+    my $method = shift @argv;
+    return pod2usage(&quot;ERROR: Missing command&quot;) unless $method;
+
+    # Create site does not require a config file
+    if ( $method eq &#39;create&#39; ) {
+        return $class-&gt;new-&gt;create_site( \@argv, \%opt );
+    }
+
+    if ( !-e $opt{config} ) {
+        warn sprintf qq{ERROR: Could not find config file &quot;\%s&quot;\n}, $opt{config};
+        return 1;
+    }
+
+    my $wire = Beam::Wire-&gt;new( file =&gt; $opt{config} );
+    my $site = eval { $wire-&gt;get( $opt{site} ) };
+
+    if ( $@ ) {
+        if ( blessed $@ &amp;&amp; $@-&gt;isa( &#39;Beam::Wire::Exception::NotFound&#39; ) ) {
+            if ( $@-&gt;name eq $opt{site} ) {
+                warn sprintf qq{ERROR: Could not find site named &quot;%s&quot; in config file &quot;%s&quot;\n},
+                    $opt{site}, $opt{config};
+            }
+            else {
+                warn sprintf qq{ERROR: Could not create site object &quot;%s&quot;: %s\n}, $opt{site}, $@;
+            }
+            return 1;
+        }
+        die $@;
+    }
+
+    my $cmd = $class-&gt;new( site =&gt; $site );
+
+    if ( $opt{verbose} ) {
+        $cmd-&gt;site-&gt;log-&gt;handle( \*STDOUT );
+        $cmd-&gt;site-&gt;log-&gt;level( $VERBOSE[ $opt{verbose} ] );
+    }
+
+    if ( grep { $_ eq $method } qw( build deploy ) ) {
+        $cmd-&gt;site-&gt;$method;
+        return 0;
+    }
+    elsif ( $method eq &#39;apps&#39; ) {
+        my $apps = $cmd-&gt;site-&gt;apps;
+        for my $app_name ( keys %{ $apps } ) {
+            my $app = $apps-&gt;{$app_name};
+            my $root = $app-&gt;url_root;
+            my $class = ref $app;
+            say &quot;$app_name ($root -- $class)&quot;;
+        }
+        return 0;
+    }
+    elsif ( $method eq &#39;daemon&#39; ) {
+        # Build the site first no matter what.  We may end up watching for
+        # future changes, but assume they meant to build first
+        $cmd-&gt;site-&gt;build;
+
+        require Mojo::Server::Daemon;
+        our $daemon = Mojo::Server::Daemon-&gt;new(
+            silent =&gt; 1,
+            app =&gt; Statocles::Command::_MOJOAPP-&gt;new(
+                site =&gt; $cmd-&gt;site,
+            ),
+        );
+
+        # Using start() instead of run() so we can stop() inside the tests
+        $daemon-&gt;start;
+
+        # Find the port we&#39;re listening on
+        my $id = $daemon-&gt;acceptors-&gt;[0];
+        my $handle = $daemon-&gt;ioloop-&gt;acceptor( $id )-&gt;handle;
+        say &quot;Listening on &quot; . sprintf( &#39;http://%s:%d&#39;, $handle-&gt;sockhost || &#39;127.0.0.1&#39;, $handle-&gt;sockport );
+
+        # Give control to the IOLoop
+        Mojo::IOLoop-&gt;start;
+    }
+    elsif ( $method eq &#39;bundle&#39; ) {
+        my $what = $argv[0];
+        if ( $what eq &#39;theme&#39; ) {
+            my $theme_name = $argv[1];
+            if ( !$theme_name ) {
+                say STDERR &quot;ERROR: No theme name!&quot;;
+                say STDERR &quot;\nUsage:\n\tstatocles bundle theme &lt;name&gt; &lt;destination&gt;&quot;;
+                return 1;
+            }
+
+            if ( !$argv[2] ) {
+                say STDERR &quot;ERROR: Must give a destination directory!&quot;;
+                say STDERR &quot;\nUsage:\n\tstatocles bundle theme &lt;name&gt; &lt;destination&gt;&quot;;
+                return 1;
+            }
+
+            $cmd-&gt;bundle_theme( $theme_name, $argv[2] );
+            say qq{Theme &quot;$theme_name&quot; written to &quot;$argv[2]&quot;};
+            say qq(Make sure to update &quot;$opt{config}&quot;);
+        }
+    }
+    else {
+        my $app_name = $method;
+        my $app = $cmd-&gt;site-&gt;apps-&gt;{ $app_name };
+
+        if ( !$app ) {
+            return pod2usage(&quot;ERROR: Unknown command or app &#39;$app_name&#39;&quot;);
+        }
+
+        return $cmd-&gt;site-&gt;apps-&gt;{ $app_name }-&gt;command( $app_name, @argv );
+    }
+
+    return 0;
+}
+
+sub create_site {
+    my ( $self, $argv, $opt ) = @_;
+
+    my %answer;
+    my $site_root = &#39;.&#39;;
+
+    # Allow the user to set the base URL and the site folder as an argument
+    if ( @$argv ) {
+        my $base = $argv-&gt;[0];
+        if ( $base =~ m{^https?://(.+)} ) {
+            $answer{base_url} = $base;
+            $site_root = $argv-&gt;[1] || $1;
+        }
+        else {
+            $answer{base_url} = &quot;http://$base&quot;;
+            $site_root = $argv-&gt;[1] || $base;
+        }
+    }
+
+    my $create_dir = Path::Tiny-&gt;new( dist_dir( &#39;Statocles&#39; ) )-&gt;child( &#39;create&#39; );
+    my $question = YAML::Load( $create_dir-&gt;child( &#39;script.yml&#39; )-&gt;slurp_utf8 );
+    my %prompt = (
+        flavor =&gt; &#39;Which flavor of site would you like? ([1], 2, 0)&#39;,
+        bundle_theme =&gt; &#39;Do you want to bundle the theme? ([Y]/n)&#39;,
+        base_url =&gt; &#39;What is the URL where the site will be deployed?&#39;,
+        deploy_class =&gt; &#39;How would you like to deploy? ([1], 2, 0)&#39;,
+        git_branch =&gt; &#39;What branch? [master]&#39;,
+        deploy_path =&gt; &#39;Where to deploy the site? (default: current directory)&#39;,
+    );
+
+    print &quot;\n&quot;, $question-&gt;{flavor};
+    print &quot;\n&quot;, &quot;\n&quot;, $prompt{flavor}, &quot; &quot;;
+    chomp( $answer{flavor} = &lt;STDIN&gt; );
+    until ( $answer{flavor} =~ /^[120]*$/ ) {
+        print $prompt{flavor}, &quot; &quot;;
+        chomp( $answer{flavor} = &lt;STDIN&gt; );
+    }
+    $answer{flavor} = 1 if $answer{flavor} eq &#39;&#39;;
+
+    print &quot;\n&quot;, &quot;\n&quot;, $question-&gt;{bundle_theme};
+    print &quot;\n&quot;, &quot;\n&quot;, $prompt{bundle_theme}, &quot; &quot;;
+    chomp( $answer{bundle_theme} = &lt;STDIN&gt; );
+    until ( $answer{bundle_theme} =~ /^[yn]*$/i ) {
+        print $prompt{bundle_theme}, &quot; &quot;;
+        chomp( $answer{bundle_theme} = &lt;STDIN&gt; );
+    }
+    $answer{bundle_theme} = &quot;y&quot; if $answer{bundle_theme} eq &#39;&#39;;
+
+    if ( !$answer{base_url} ) {
+        print &quot;\n&quot;, &quot;\n&quot;, $question-&gt;{base_url};
+        print &quot;\n&quot;, &quot;\n&quot;, $prompt{base_url}, &quot; &quot;;
+        chomp( $answer{base_url} = &lt;STDIN&gt; );
+        if ( $answer{base_url} !~ m{^https?://} ) {
+            $answer{base_url} = &quot;http://$answer{base_url}&quot;;
+        }
+    }
+
+    print &quot;\n&quot;, &quot;\n&quot;, $question-&gt;{deploy_class};
+    print &quot;\n&quot;, &quot;\n&quot;, $prompt{deploy_class}, &quot; &quot;;
+    chomp( $answer{deploy_class} = &lt;STDIN&gt; );
+    until ( $answer{deploy_class} =~ /^[120]*$/i ) {
+        print $prompt{deploy_class}, &quot; &quot;;
+        chomp( $answer{deploy_class} = &lt;STDIN&gt; );
+    }
+    $answer{deploy_class} = 1 if $answer{deploy_class} eq &#39;&#39;;
+
+    if ( $answer{deploy_class} == 1 ) {
+        # Git deploy questions
+        print &quot;\n&quot;, &quot;\n&quot;, $question-&gt;{git_branch};
+        print &quot;\n&quot;, &quot;\n&quot;, $prompt{git_branch}, &quot; &quot;;
+        chomp( $answer{git_branch} = &lt;STDIN&gt; );
+        $answer{git_branch} ||= &quot;master&quot;;
+    }
+    elsif ( $answer{deploy_class} == 2 ) {
+        # File deploy questions
+        print &quot;\n&quot;, &quot;\n&quot;, $question-&gt;{deploy_path};
+        print &quot;\n&quot;, &quot;\n&quot;, $prompt{deploy_path}, &quot; &quot;;
+        chomp( $answer{deploy_path} = &lt;STDIN&gt; );
+        $answer{deploy_path} ||= &#39;.&#39;;
+    }
+
+    ### Build the site
+    my $cwd = cwd;
+    my $root = Path::Tiny-&gt;new( $site_root );
+    $root-&gt;mkpath;
+    my ( $site ) = YAML::Load( $create_dir-&gt;child( &#39;site.yml&#39; )-&gt;slurp_utf8 );
+
+    if ( $answer{flavor} == 1 ) {
+        $site-&gt;{site}{args}{index} = &quot;blog&quot;;
+        $site-&gt;{site}{args}{nav}{main}[0]{href} = &quot;/&quot;;
+    }
+    elsif ( $answer{flavor} == 2 ) {
+        $site-&gt;{site}{args}{index} = &quot;page&quot;;
+        $site-&gt;{site}{args}{nav}{main}[0]{href} = &quot;/blog&quot;;
+    }
+
+    if ( lc $answer{bundle_theme} eq &#39;y&#39; ) {
+        chdir $root;
+        $self-&gt;bundle_theme( &#39;default&#39;, &#39;theme&#39; );
+        chdir $cwd;
+        $site-&gt;{theme}{args}{store} = &#39;theme&#39;;
+    }
+
+    if ( $answer{base_url} ) {
+        $site-&gt;{site}{args}{base_url} = $answer{base_url};
+    }
+
+    if ( $answer{deploy_class} == 1 ) {
+        $site-&gt;{deploy}{class} = &#39;Statocles::Deploy::Git&#39;;
+        $site-&gt;{deploy}{args}{branch} = $answer{git_branch};
+
+        # Create the git repo
+        require Git::Repository;
+        # Running init more than once is apparently completely safe, so we don&#39;t
+        # even have to check before we run it
+        chdir $root;
+        Git::Repository-&gt;run( &#39;init&#39; );
+        chdir $cwd;
+        $root-&gt;child( &#39;.gitignore&#39; )-&gt;append( &quot;\n.statocles\n&quot; );
+    }
+    elsif ( $answer{deploy_class} == 2 ) {
+        $site-&gt;{deploy}{class} = &#39;Statocles::Deploy::File&#39;;
+        $site-&gt;{deploy}{args}{path} = $answer{deploy_path};
+    }
+    else {
+        # We need a deploy in order to create a Site object
+        $site-&gt;{deploy}{class} = &#39;Statocles::Deploy::File&#39;;
+        $site-&gt;{deploy}{args}{path} = &#39;.&#39;;
+    }
+
+    $root-&gt;child( &#39;site.yml&#39; )-&gt;spew_utf8( YAML::Dump( $site ) );
+
+    # Make required store directories
+    for my $app ( map { $_-&gt;{&#39;$ref&#39;} } values %{ $site-&gt;{site}{args}{apps} } ) {
+        my $path = $site-&gt;{$app}{args}{store};
+        next unless $path;
+        $root-&gt;child( $path )-&gt;mkpath;
+    }
+
+    ### DONE!
+    print &quot;\n&quot;, &quot;\n&quot;, $question-&gt;{finish}, &quot;\n&quot;, &quot;\n&quot;;
+
+    return 0;
+}
+
+sub bundle_theme {
+    my ( $self, $name, $dir ) = @_;
+    my $theme_dest = Path::Tiny-&gt;new( $dir );
+    my $theme_root = Path::Tiny-&gt;new( dist_dir( &#39;Statocles&#39; ), &#39;theme&#39;, $name );
+
+    my $iter = $theme_root-&gt;iterator({ recurse =&gt; 1 });
+    while ( my $path = $iter-&gt;() ) {
+        next unless $path-&gt;is_file;
+        my $relative = $path-&gt;relative( $theme_root );
+        my $dest = $theme_dest-&gt;child( $relative );
+        # Don&#39;t overwrite site-customized hooks
+        next if ( $path-&gt;stat-&gt;size == 0 &amp;&amp; $dest-&gt;exists );
+        $dest-&gt;remove if $dest-&gt;exists;
+        $dest-&gt;parent-&gt;mkpath;
+        $path-&gt;copy( $dest );
+    }
+}
+
+{
+    package # Do not index this
+        Statocles::Command::_MOJOAPP;
+
+    # Currently, as of Mojolicious 5.12, loading the Mojolicious module here
+    # will load the Mojolicious::Commands module, which calls GetOptions, which
+    # will remove -h, --help, -m, and -s from @ARGV. We fix this by copying
+    # @ARGV in bin/statocles before we call Statocles::Command.
+    #
+    # We could fix this in the future by moving this out into its own module,
+    # that is only loaded after we are done passing @ARGV into main(), above.
+    use Mojo::Base &#39;Mojolicious&#39;;
+    use File::Share qw( dist_dir );
+    has &#39;site&#39;;
+
+    sub startup {
+        my ( $self ) = @_;
+        $self-&gt;log( $self-&gt;site-&gt;log );
+
+        my $base;
+        if ( $self-&gt;site-&gt;base_url ) {
+            $base = Mojo::URL-&gt;new( $self-&gt;site-&gt;base_url )-&gt;path-&gt;to_string;
+            $base =~ s{/$}{};
+        }
+
+        my $index = &quot;/index.html&quot;;
+        if ( $base ) {
+            $index = $base . $index;
+        }
+
+        # Add the build dir to the list of static paths for mojolicious to
+        # search
+        unshift @{ $self-&gt;static-&gt;paths }, $self-&gt;site-&gt;build_store-&gt;path;
+
+        # Watch for filesystem events and rebuild the site Right now this only
+        # works on OSX. We should spin this off into Mojo::IOLoop::FSEvents and
+        # make it work cross-platform, including a pure-Perl fallback
+        my $can_watch = eval { require Mac::FSEvents; 1 };
+        if ( !$can_watch &amp;&amp; $^O =~ /darwin/ ) {
+            say &quot;To watch for filesystem changes and automatically rebuild the site, &quot;,
+                &quot;install the Mac::FSEvents module from CPAN&quot;;
+        }
+
+        if ( $can_watch ) {
+
+            # Collect the paths to watch
+            my %watches = ();
+            for my $app ( values %{ $self-&gt;site-&gt;apps } ) {
+                if ( $app-&gt;can( &#39;store&#39; ) ) {
+                    push @{ $watches{ $app-&gt;store-&gt;path } }, $app-&gt;store;
+                }
+            }
+
+            # Watch the theme, but not built-in themes
+            my $theme_path = $self-&gt;site-&gt;theme-&gt;store-&gt;path;
+            if ( !Path::Tiny-&gt;new( dist_dir( &#39;Statocles&#39; ) )-&gt;subsumes( $theme_path ) ) {
+                push @{ $watches{ $theme_path } }, $self-&gt;site-&gt;theme;
+            }
+
+            require Mojo::IOLoop::Stream;
+            my $ioloop = Mojo::IOLoop-&gt;singleton;
+            my $build_dir = $self-&gt;site-&gt;build_store-&gt;path-&gt;realpath;
+
+            for my $path ( keys %watches ) {
+                $self-&gt;log-&gt;info( &quot;Watching for changes in &#39;$path&#39;&quot; );
+
+                my $fs = Mac::FSEvents-&gt;new( {
+                    path =&gt; &quot;$path&quot;,
+                    latency =&gt; 1.0,
+                } );
+
+                my $handle = $fs-&gt;watch;
+                $ioloop-&gt;reactor-&gt;io( $handle, sub {
+                    my ( $reactor, $writable ) = @_;
+
+                    my $rebuild;
+                    REBUILD:
+                    for my $event ( $fs-&gt;read_events ) {
+                        if ( $event-&gt;path =~ /^\Q$build_dir/ ) {
+                            next;
+                        }
+
+                        $self-&gt;log-&gt;info( &quot;Path &#39;&quot; . $event-&gt;path . &quot;&#39; changed... Rebuilding&quot; );
+                        $_-&gt;clear for @{ $watches{ $path } };
+                        $rebuild = 1;
+                    }
+
+                    if ( $rebuild ) {
+                        $self-&gt;site-&gt;build;
+                    }
+                } );
+                $ioloop-&gt;reactor-&gt;watch( $handle, 1, 0 );
+            }
+
+            $self-&gt;log-&gt;info( &quot;Ignoring changes in &#39;$build_dir&#39;&quot; );
+        }
+
+        my $serve_static = sub {
+            my ( $c ) = @_;
+            my $path = Mojo::Path-&gt;new( $c-&gt;stash-&gt;{path} );
+
+            # Taint check the path, just in case someone uses this &quot;dev&quot; tool to
+            # serve real content
+            return $c-&gt;render( status =&gt; 400, text =&gt; &quot;You didn&#39;t say the magic word&quot; )
+                if $path-&gt;canonicalize-&gt;parts-&gt;[0] eq &#39;..&#39;;
+
+            my $asset = $self-&gt;static-&gt;file( $path );
+            if ( !$asset ) {
+                # Check for index.html
+                $path = Mojo::Path-&gt;new( $c-&gt;stash-&gt;{path} . &quot;/index.html&quot; );
+                $asset = $self-&gt;static-&gt;file( $path );
+            }
+
+            if ( !$asset ) {
+                return $c-&gt;render( status =&gt; 404, text =&gt; &#39;Not found&#39; );
+            }
+
+            # The static helper will choose the right content type and charset
+            return $c-&gt;reply-&gt;static( $path );
+        };
+
+        if ( $base ) {
+            $self-&gt;routes-&gt;get( &#39;/&#39;, sub {
+                my ( $c ) = @_;
+                $c-&gt;redirect_to( $base );
+            } );
+            $self-&gt;routes-&gt;get( $base . &#39;/*path&#39; )-&gt;to( path =&gt; &#39;index.html&#39;, cb =&gt; $serve_static );
+        }
+        else {
+            $self-&gt;routes-&gt;get( &#39;/*path&#39; )-&gt;to( path =&gt; &#39;index.html&#39;, cb =&gt; $serve_static );
+        }
+
+    }
+
+}
+
+1;
+__END__
+
+=head1 SYNOPSIS
+
+    use Statocles::Command;
+    exit Statocles::Command-&gt;main( @ARGV );
+
+=head1 DESCRIPTION
+
+This module implements the Statocles command-line interface.
+
+=head1 SEE ALSO
+
+=over 4
+
+=item L&lt;statocles&gt;
+
+The documentation for the command-line application.
+
+=back
+</pre>
+
+        </div>
+        <footer>
+            <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61295159-3', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+            <div class="container tagline">
+                <a href="http://preaction.github.io/Statocles">Made with Statocles</a><br>
+                <a href="http://www.perl.org">Powered by Perl</a>
+            </div>
+        </footer>
+    </body>
+</html>

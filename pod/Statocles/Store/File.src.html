@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <title>Statocles</title>
+        <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
+<style>
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Forum', sans-serif;
+        font-weight: bold;
+    }
+
+    #index-banner {
+        font-family: 'Forum', sans-serif;
+        height: 300px;
+        position: relative;
+        margin-bottom: 1em;
+        border-bottom: 1px solid #777
+    }
+    #index-banner:before, #index-banner:after {
+        width: 60px;
+        height: 300px;
+        content: url(/Statocles/theme/images/column.png);
+    }
+    #index-banner:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #index-banner:after {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    #index-banner h1 {
+        padding-top: 1em;
+        text-transform: uppercase;
+        font-size: 72px;
+        text-align: center;
+    }
+    #index-banner h1 small {
+        display: block;
+        font-size: 24px;
+    }
+
+    #index-banner .latest-release {
+        text-align: center;
+    }
+
+</style>
+
+    </head>
+    <body>
+        <header>
+            <nav class="navbar">
+                <div class="container">
+                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <ul>
+                        <li>
+                            <a href="/Statocles/blog">Blog</a>
+                        </li>
+                        <li>
+                            <a href="/Statocles/pod">Docs</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles">Code</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles/issues">Bugs</a>
+                        </li>
+                        <li>
+                            <a href="http://metacpan.org/pod/Statocles">CPAN</a>
+                        </li>
+                        <li>
+                            <a href="https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">IRC</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <a href="https://github.com/preaction/Statocles"><img alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; z-index: 1000; border: 0;"></a>
+
+        </header>
+        <div class="main container">
+            <pre>package Statocles::Store::File;
+# ABSTRACT: A store made up of plain files
+
+use Statocles::Base &#39;Class&#39;;
+with &#39;Statocles::Store&#39;;
+use Scalar::Util qw( weaken blessed );
+use Statocles::Document;
+use YAML;
+use List::MoreUtils qw( firstidx );
+use File::Spec::Functions qw( splitdir );
+
+my $DATETIME_FORMAT = &#39;%Y-%m-%d %H:%M:%S&#39;;
+my $DATE_FORMAT = &#39;%Y-%m-%d&#39;;
+
+# A hash of PATH =&gt; COUNT for all the open store paths. Stores are not allowed to
+# discover the files or documents of other stores (unless the two stores have the same
+# path)
+my %FILE_STORES = ();
+
+=attr path
+
+The path to the directory containing the L&lt;documents|Statocles::Document&gt;.
+
+=cut
+
+has path =&gt; (
+    is =&gt; &#39;ro&#39;,
+    isa =&gt; AbsPath,
+    coerce =&gt; AbsPath-&gt;coercion,
+    required =&gt; 1,
+);
+
+=attr documents
+
+All the L&lt;documents|Statocles::Document&gt; currently read by this store.
+
+=method clear()
+
+Clear the cached documents in this Store.
+
+=cut
+
+has documents =&gt; (
+    is =&gt; &#39;rw&#39;,
+    isa =&gt; ArrayRef[InstanceOf[&#39;Statocles::Document&#39;]],
+    lazy =&gt; 1,
+    builder =&gt; &#39;read_documents&#39;,
+    clearer =&gt; &#39;clear&#39;,
+);
+
+# Cache our realpath in case it disappears before we get demolished
+has _realpath =&gt; (
+    is =&gt; &#39;ro&#39;,
+    isa =&gt; Path,
+    lazy =&gt; 1,
+    default =&gt; sub { $_[0]-&gt;path-&gt;realpath },
+);
+
+sub BUILD {
+    my ( $self ) = @_;
+    if ( !$self-&gt;path-&gt;exists ) {
+        die sprintf &quot;Store path &#39;%s&#39; does not exist&quot;, $self-&gt;path-&gt;stringify;
+    }
+    elsif ( !$self-&gt;path-&gt;is_dir ) {
+        die sprintf &quot;Store path &#39;%s&#39; is not a directory&quot;, $self-&gt;path-&gt;stringify;
+    }
+
+    $FILE_STORES{ $self-&gt;_realpath }++;
+}
+
+sub DEMOLISH {
+    my ( $self, $in_global_destruction ) = @_;
+    return if $in_global_destruction; # We&#39;re ending, we don&#39;t need to care anymore
+    if ( --$FILE_STORES{ $self-&gt;_realpath } &lt;= 0 ) {
+        delete $FILE_STORES{ $self-&gt;_realpath };
+    }
+}
+
+=method read_documents()
+
+Read the directory C&lt;path&gt; and create the L&lt;document|Statocles::Document&gt; objects inside.
+
+=cut
+
+sub read_documents {
+    my ( $self ) = @_;
+    my $root_path = $self-&gt;path;
+    my @docs;
+    my $iter = $root_path-&gt;iterator( { recurse =&gt; 1, follow_symlinks =&gt; 1 } );
+    while ( my $path = $iter-&gt;() ) {
+        next unless $path-&gt;is_file;
+        next unless $self-&gt;_is_owned_path( $path );
+        if ( $path =~ /[.]markdown$/ ) {
+            my $rel_path = rootdir-&gt;child( $path-&gt;relative( $root_path ) );
+            push @docs, $self-&gt;read_document( $rel_path );
+        }
+    }
+    return \@docs;
+}
+
+sub _is_owned_path {
+    my ( $self, $path ) = @_;
+    my $self_path = $self-&gt;_realpath;
+    $path = $path-&gt;realpath;
+    my $dir = $path-&gt;parent;
+    for my $store_path ( keys %FILE_STORES ) {
+        # This is us!
+        next if $store_path eq $self_path;
+        # If our store is contained inside this store&#39;s path, we win
+        next if $self_path =~ /^\Q$store_path/;
+        return 0 if $path =~ /^\Q$store_path/;
+    }
+    return 1;
+}
+
+=method read_document( path )
+
+Read a single L&lt;document|Statocles::Document&gt; in Markdown with optional YAML
+frontmatter.
+
+=cut
+
+sub read_document {
+    my ( $self, $path ) = @_;
+    site-&gt;log-&gt;debug( &quot;Read document: &quot; . $path );
+    my $full_path = $self-&gt;path-&gt;child( $path );
+    my %doc = $self-&gt;parse_frontmatter( $full_path, $full_path-&gt;slurp_utf8 );
+    return Statocles::Document-&gt;new( %doc, path =&gt; $path );
+}
+
+=method parse_frontmatter( $from, $content )
+
+Parse a document with YAML frontmatter. $from is a string identifying where the
+content comes from (a path or other identifier). $content is the content to
+parse for frontmatter.
+
+=cut
+
+sub parse_frontmatter {
+    my ( $self, $from, $content ) = @_;
+    my $doc;
+
+    my @lines = split /\n/, $content;
+    if ( $lines[0] =~ /^---/ ) {
+        shift @lines;
+
+        # The next --- is the end of the YAML frontmatter
+        my $i = firstidx { /^---/ } @lines;
+
+        # If we did not find the marker between YAML and Markdown
+        if ( $i &lt; 0 ) {
+            die &quot;Could not find end of front matter (---) in &#39;$from&#39;\n&quot;;
+        }
+
+        # Before the marker is YAML
+        eval {
+            $doc = YAML::Load( join &quot;\n&quot;, splice( @lines, 0, $i ), &quot;&quot; );
+        };
+        if ( $@ ) {
+            die &quot;Error parsing YAML in &#39;$from&#39;\n$@&quot;;
+        }
+
+        # Remove the last &#39;---&#39; mark
+        shift @lines;
+    }
+
+    $doc-&gt;{content} = join &quot;\n&quot;, @lines, &quot;&quot;;
+
+    if ( exists $doc-&gt;{date} ) {
+
+        my $dt;
+        eval {
+            $dt = Time::Piece-&gt;strptime( $doc-&gt;{date}, $DATETIME_FORMAT );
+        };
+
+        if ( $@ ) {
+            eval {
+                $dt = Time::Piece-&gt;strptime( $doc-&gt;{date}, $DATE_FORMAT );
+            };
+
+            if ( $@ ) {
+                die sprintf &quot;Could not parse date &#39;%s&#39;. Does not match &#39;%s&#39; or &#39;%s&#39;&quot;,
+                    $doc-&gt;{date},
+                    $DATETIME_FORMAT,
+                    $DATE_FORMAT,
+                    ;
+            }
+
+        }
+
+        $doc-&gt;{date} = $dt;
+    }
+
+    return %$doc;
+}
+
+=method write_document( $path, $doc )
+
+Write a L&lt;document|Statocles::Document&gt; to the store. Returns the full path to
+the newly-updated document.
+
+The document is written in Frontmatter format.
+
+=cut
+
+sub write_document {
+    my ( $self, $path, $doc ) = @_;
+    $path = Path-&gt;coercion-&gt;( $path ); # Allow stringified paths, $path =&gt; $doc
+    if ( $path-&gt;is_absolute ) {
+        die &quot;Cannot write document &#39;$path&#39;: Path must not be absolute&quot;;
+    }
+    site-&gt;log-&gt;debug( &quot;Write document: &quot; . $path );
+
+    $doc = { %{ $doc } }; # Shallow copy for safety
+    my $content = delete( $doc-&gt;{content} ) // &#39;&#39;;
+    my $header = YAML::Dump( $self-&gt;_freeze_document( $doc ) );
+    chomp $header;
+
+    my $full_path = $self-&gt;path-&gt;child( $path );
+    $full_path-&gt;touchpath-&gt;spew_utf8( join &quot;\n&quot;, $header, &#39;---&#39;, $content );
+
+    return $full_path;
+}
+
+sub _freeze_document {
+    my ( $self, $doc ) = @_;
+    delete $doc-&gt;{path}; # Path should not be in the document
+    if ( exists $doc-&gt;{date} ) {
+        $doc-&gt;{date} = $doc-&gt;{date}-&gt;strftime( $DATETIME_FORMAT );
+    }
+    if ( exists $doc-&gt;{links} ) {
+        if ( !keys %{ $doc-&gt;{links} } ) {
+            delete $doc-&gt;{links};
+        }
+    }
+    return $doc;
+}
+
+=method read_file( $path )
+
+Read the file from the given C&lt;path&gt;.
+
+=cut
+
+sub read_file {
+    my ( $self, $path ) = @_;
+    site-&gt;log-&gt;debug( &quot;Read file: &quot; . $path );
+    return $self-&gt;path-&gt;child( $path )-&gt;slurp_utf8;
+}
+
+=method has_file( $path )
+
+Returns true if a file exists with the given C&lt;path&gt;.
+
+NOTE: This should not be used to check for directories, as not all stores have
+directories.
+
+=cut
+
+sub has_file {
+    my ( $self, $path ) = @_;
+    return $self-&gt;path-&gt;child( $path )-&gt;is_file;
+}
+
+=method find_files()
+
+Returns an iterator that, when called, produces a single path suitable to be passed
+to L&lt;read_file&gt;.
+
+=cut
+
+sub find_files {
+    my ( $self ) = @_;
+    my $iter = $self-&gt;path-&gt;iterator({ recurse =&gt; 1 });
+    return sub {
+        my $path = $iter-&gt;();
+        return unless $path; # iterator exhausted
+        $path = $iter-&gt;() while $path &amp;&amp; ( $path-&gt;is_dir || !$self-&gt;_is_owned_path( $path ) );
+        return unless $path; # iterator exhausted
+        return $path-&gt;relative( $self-&gt;path )-&gt;absolute( &#39;/&#39; );
+    };
+}
+
+=method open_file( $path )
+
+Open the file with the given path. Returns a filehandle.
+
+The filehandle opened is using raw bytes, not UTF-8 characters.
+
+=cut
+
+sub open_file {
+    my ( $self, $path ) = @_;
+    return $self-&gt;path-&gt;child( $path )-&gt;openr_raw;
+}
+
+=method write_file( $path, $content )
+
+Write the given C&lt;content&gt; to the given C&lt;path&gt;. This is mostly used to write
+out L&lt;page objects|Statocles::Page&gt;.
+
+C&lt;content&gt; may be a simple string or a filehandle. If given a string, will
+write the string using UTF-8 characters. If given a filehandle, will write out
+the raw bytes read from it with no special encoding.
+
+=cut
+
+sub write_file {
+    my ( $self, $path, $content ) = @_;
+    site-&gt;log-&gt;debug( &quot;Write file: &quot; . $path );
+    my $full_path = $self-&gt;path-&gt;child( $path );
+
+    if ( ref $content eq &#39;GLOB&#39; ) {
+        my $fh = $full_path-&gt;touchpath-&gt;openw_raw;
+        while ( my $line = &lt;$content&gt; ) {
+            $fh-&gt;print( $line );
+        }
+    }
+    else {
+        $full_path-&gt;touchpath-&gt;spew_utf8( $content );
+    }
+
+    return;
+}
+
+1;
+__END__
+
+=head1 DESCRIPTION
+
+This store reads/writes files from the filesystem.
+
+=head2 Frontmatter Document Format
+
+Documents are formatted with a YAML document on top, and Markdown content
+on the bottom, like so:
+
+    ---
+    title: This is a title
+    author: preaction
+    ---
+    # This is the markdown content
+    
+    This is a paragraph
+
+</pre>
+
+        </div>
+        <footer>
+            <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61295159-3', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+            <div class="container tagline">
+                <a href="http://preaction.github.io/Statocles">Made with Statocles</a><br>
+                <a href="http://www.perl.org">Powered by Perl</a>
+            </div>
+        </footer>
+    </body>
+</html>
