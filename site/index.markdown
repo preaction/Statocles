@@ -61,9 +61,7 @@ Install the latest version of Statocles:
 
 Create a site using the `create` command:
 
-    mkdir www.example.com
-    cd www.example.com
-    statocles create
+    statocles create www.example.com
 
 See [the Statocles Setup guide](/pod/Statocles/Help/Setup.html) for more
 information.
