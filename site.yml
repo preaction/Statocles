@@ -29,7 +29,6 @@ site:
                   href: 'http://metacpan.org/pod/Statocles'
                 - title: IRC
                   href: 'https://chat.mibbit.com/?channel=%23statocles&server=irc.perl.org'
-        build_store: 'site/_build'
         deploy:
             $ref: gh_pages
         index: page

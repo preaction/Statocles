@@ -3,8 +3,7 @@
 *.tar.gz
 *~
 /Statocles-*
-/site/_build
-/site/_deploy
+/.statocles
 
 ; Don't store the git repo and built versions
 /xt/git/git
