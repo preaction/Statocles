@@ -1,6 +1,24 @@
 Changelog for Statocles
 
-0.043 2015-03-23T05:15:00
+0.044 2015-04-06T05:49:07
+ - fix tadegenban showing in contributors list twice
+ - add recent posts method to the blog
+ - add test with path field inside document
+ - allow document objects to be written via Store
+ - read documents on STDIN when adding blog posts
+ - fix warning if tags are missing
+ - change parse_document to parse_frontmatter
+ - change read_document to return the Document object
+ - add method to parse a document from a string
+ - fix blog slugs to remove nonword characters
+ - fix example plugin config for Beam::Wire changes
+ - describe using config to compose roles
+ - add exception when index app does not exist
+ - add google analytics
+ - move template tests into a folder
+ - add Release v0.043 announcement
+
+0.043 2015-03-23T05:15:00Z
  - upgrade to Moo 2 and remove Moo::Lax
  - add include_stores to add include dirs to Theme
  - add source to perldoc app

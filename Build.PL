@@ -20,7 +20,7 @@ my %module_build_args = (
     "Doug Bell <preaction\@cpan.org>"
   ],
   "dist_name" => "Statocles",
-  "dist_version" => "0.043",
+  "dist_version" => "0.044",
   "license" => "perl",
   "module_name" => "Statocles",
   "recommends" => {
@@ -31,7 +31,7 @@ my %module_build_args = (
   "recursive_test_files" => 1,
   "requires" => {
     "Beam::Emitter" => "0.007",
-    "Beam::Wire" => "1.012",
+    "Beam::Wire" => "1.013",
     "Encode" => 0,
     "File::Copy::Recursive" => 0,
     "File::Share" => 0,

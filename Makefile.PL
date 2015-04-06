@@ -33,7 +33,7 @@ my %WriteMakefileArgs = (
   "NAME" => "Statocles",
   "PREREQ_PM" => {
     "Beam::Emitter" => "0.007",
-    "Beam::Wire" => "1.012",
+    "Beam::Wire" => "1.013",
     "Encode" => 0,
     "File::Copy::Recursive" => 0,
     "File::Share" => 0,
@@ -64,16 +64,16 @@ my %WriteMakefileArgs = (
     "Test::Exception" => 0,
     "Test::More" => "1.001005"
   },
-  "VERSION" => "0.043",
+  "VERSION" => "0.044",
   "test" => {
-    "TESTS" => "t/*.t t/app/*.t t/app/blog/*.t t/app/perldoc/*.t t/app/plain/*.t t/app/static/*.t t/bin/*.t t/command/*.t t/deploy/*.t t/page/*.t t/plugin/*.t t/site/*.t t/store/file/*.t t/theme/*.t"
+    "TESTS" => "t/*.t t/app/*.t t/app/blog/*.t t/app/perldoc/*.t t/app/plain/*.t t/app/static/*.t t/bin/*.t t/command/*.t t/deploy/*.t t/page/*.t t/plugin/*.t t/site/*.t t/store/file/*.t t/template/*.t t/theme/*.t"
   }
 );
 
 
 my %FallbackPrereqs = (
   "Beam::Emitter" => "0.007",
-  "Beam::Wire" => "1.012",
+  "Beam::Wire" => "1.013",
   "Capture::Tiny" => 0,
   "Dir::Self" => 0,
   "Encode" => 0,

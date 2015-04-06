@@ -1,5 +1,5 @@
 requires "Beam::Emitter" => "0.007";
-requires "Beam::Wire" => "1.012";
+requires "Beam::Wire" => "1.013";
 requires "Encode" => "0";
 requires "File::Copy::Recursive" => "0";
 requires "File::Share" => "0";
