@@ -37,7 +37,7 @@ The command to run. Available commands:
 
     create <url>                - Create a new site
     build                       - Build the site
-    daemon                      - Run an HTTP daemon to test the site
+    daemon [-p <port>]          - Run an HTTP daemon to test the site
     deploy                      - Deploy the site
     bundle theme <name> <dir>   - Bundle a theme in the given directory
     apps                        - List the applications in this site
@@ -55,6 +55,10 @@ The configuration file is a L<Beam::Wire> container file.
 
 The site to use, which is the name of an object in the config file. Defaults to
 C<site>.
+
+=head2 -p <port>
+
+When running the daemon, choose which port to listen on. Defaults to C<3000>.
 
 =head2 -v | --verbose
 

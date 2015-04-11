@@ -38,6 +38,7 @@ sub main {
         verbose => 0,
     );
     GetOptionsFromArray( \@argv, \%opt,
+        'port|p=i',
         'config:s',
         'site:s',
         'help|h',
@@ -114,6 +115,10 @@ sub main {
                 site => $cmd->site,
             ),
         );
+
+        if ( $opt{port} ) {
+            $daemon->listen([ "http://*:$opt{port}" ]);
+        }
 
         # Using start() instead of run() so we can stop() inside the tests
         $daemon->start;
