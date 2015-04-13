@@ -30,4 +30,19 @@ subtest 'recent_posts' => sub {
     ];
 };
 
+subtest 'posts with given tag' => sub {
+
+    subtest 'single tag (not enough posts)' => sub {
+        my @pages = $app->recent_posts( 2, tags => 'more' );
+        cmp_deeply \@pages, [
+            methods(
+                path => Path::Tiny->new(
+                    qw{ blog 2014 06 02 more_tags.html }
+                )->absolute( '/' ),
+            ),
+        ] or diag explain [ map { $_->path } @pages ];
+    };
+
+};
+
 done_testing;

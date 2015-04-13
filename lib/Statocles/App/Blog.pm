@@ -431,23 +431,36 @@ sub _tag_url {
     return $tag;
 }
 
-=method recent_posts( $count )
+=method recent_posts( $count, %filter )
 
 Get the last $count recent posts for this blog. Useful for templates and site
 index pages.
 
+%filter is an optional set of filters to apply to only show recent posts
+matching the given criteria. The following filters are available:
+
+    tags        -> (string) Only show posts with the given tag
+
 =cut
 
 sub recent_posts {
-    my ( $self, $count ) = @_;
+    my ( $self, $count, %filter ) = @_;
 
     my $today = Time::Piece->new->ymd;
     my @pages;
     my @docs = $self->_sorted_docs;
-    for my $doc ( @docs[0..$count-1] ) {
+    DOC: for my $doc ( @docs ) {
+        QUERY: for my $attr ( keys %filter ) {
+            my $value = $filter{ $attr };
+            if ( $attr eq 'tags' ) {
+                next DOC unless grep { $_ eq $value } @{ $doc->tags };
+            }
+        }
+
         my $page = $self->_make_post_page( $doc );
         $page->path( join "/", $self->url_root, $page->path );
         push @pages, $page;
+        last if @pages >= $count;
     }
 
     return @pages;
