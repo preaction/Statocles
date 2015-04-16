@@ -12,3 +12,7 @@ links:
 ![](/does_not_exist.jpg)
 
 [relative](does_not_exist)
+
+[Broken link with URL encoding](/images/with%20spaces.png)
+
+[Working link with URL encoding](/blog/2014/05/22/%28regex%29%5Bname%5D.file.html)

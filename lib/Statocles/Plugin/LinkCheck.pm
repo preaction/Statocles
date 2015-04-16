@@ -3,6 +3,7 @@ package Statocles::Plugin::LinkCheck;
 
 use Statocles::Base 'Class';
 use Mojo::DOM;
+use Mojo::Util qw( url_escape url_unescape );
 
 =attr ignore
 
@@ -48,7 +49,7 @@ sub check_pages {
                     if ( $url !~ m{^/} ) {
                         $url = $page->path->parent->child( $url );
                     }
-                    $links{ $url }{ $page->path }++;
+                    $links{ url_unescape $url }{ $page->path }++;
 
                 }
             }

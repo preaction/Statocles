@@ -16,6 +16,7 @@ subtest 'check links' => sub {
         bag(
             [ ignore(), 'warn', re(qr{\QURL broken on $page: '/does_not_exist.jpg' not found}) ],
             [ ignore(), 'warn', re(qr{\QURL broken on $page: '/does_not_exist' not found}) ],
+            [ ignore(), 'warn', re(qr{\QURL broken on $page: '/images/with spaces.png' not found}) ],
             [ ignore(), 'warn', re(qr{\QURL broken on $page: '/blog/2014/06/02/does_not_exist' not found}) ],
         ),
         'broken links found'
@@ -40,6 +41,7 @@ subtest 'ignore patterns' => sub {
 
         cmp_deeply $site->log->history,
             bag(
+                [ ignore(), 'warn', re(qr{\QURL broken on $page: '/images/with spaces.png' not found}) ],
                 [ ignore(), 'warn', re(qr{\QURL broken on $page: '/blog/2014/06/02/does_not_exist' not found}) ],
             ),
             'broken links found'
@@ -51,6 +53,7 @@ subtest 'ignore patterns' => sub {
         my $plugin = Statocles::Plugin::LinkCheck->new(
             ignore => [
                 '.*/does_not_exist',
+                '.*/with spaces[.]png',
             ]
         );
         $site->on( 'build', sub { $plugin->check_pages( @_ ) } );
