@@ -151,6 +151,10 @@
 
 <p>Get the individual post Statocles::Page objects.</p>
 
+<h2 id="post_files">post_files()</h2>
+
+<p>Get all the post collateral files.</p>
+
 <h2 id="index">index()</h2>
 
 <p>Get the index page (a <a href="/Statocles/pod/Statocles/Page/List.html">list page</a>) for this application. This includes all the relevant <a href="/Statocles/pod/Statocles/Page/Feed.html">feed pages</a>.</p>
@@ -170,9 +174,13 @@
 <pre><code>    text =&gt; &#39;The tag text&#39;
     href =&gt; &#39;The URL to the tag page&#39;</code></pre>
 
-<h2 id="recent_posts-count">recent_posts( $count )</h2>
+<h2 id="recent_posts-count-filter">recent_posts( $count, %filter )</h2>
 
 <p>Get the last $count recent posts for this blog. Useful for templates and site index pages.</p>
+
+<p>%filter is an optional set of filters to apply to only show recent posts matching the given criteria. The following filters are available:</p>
+
+<pre><code>    tags        -&gt; (string) Only show posts with the given tag</code></pre>
 
 <h2 id="page_url-page">page_url( page )</h2>
 

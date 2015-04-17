@@ -89,6 +89,7 @@
 
 use Statocles::Base &#39;Class&#39;;
 use Mojo::DOM;
+use Mojo::Util qw( url_escape url_unescape );
 
 =attr ignore
 
@@ -134,7 +135,7 @@ sub check_pages {
                     if ( $url !~ m{^/} ) {
                         $url = $page-&gt;path-&gt;parent-&gt;child( $url );
                     }
-                    $links{ $url }{ $page-&gt;path }++;
+                    $links{ url_unescape $url }{ $page-&gt;path }++;
 
                 }
             }

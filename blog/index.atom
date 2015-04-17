@@ -2,10 +2,41 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://preaction.github.io/Statocles/blog</id>
     <title>Statocles</title>
-    <updated>2015-04-06T01:24:28Z</updated>
+    <updated>2015-04-16T23:27:21Z</updated>
     <link href="http://preaction.github.io/Statocles/blog/index.atom" rel="self" />
     <link href="http://preaction.github.io/Statocles/blog" rel="alternate" />
     <generator version="0.044">Statocles</generator>
+    <entry>
+        <id>http://preaction.github.io/Statocles/blog/2015/04/16/release-v0-045</id>
+        <title>Release v0.045</title>
+        <link href="http://preaction.github.io/Statocles/blog/2015/04/16/release-v0-045" rel="alternate" />
+        <content type="html"><![CDATA[
+            <p>A couple small changes in this release:</p>
+
+<p>Blog posts are now allowed to have images inside the post directory. This makes
+it a lot easier to add images to blogs. You don't need to configure a global
+<code>/images</code> directory. You can put your image in <code>/blog/YYYY/MM/DD/post-title</code>.
+Even better, you get to refer to it in your post as <code>![](image.jpg)</code>.</p>
+
+<p>The <a href="/pod/Statocles/Plugin/LinkCheck.html">link check plugin</a> now correctly finds
+links the URL encoded characters.</p>
+
+<p>The recent posts helper now allows filtering by tag, if, for example, you want to
+display only the last <code>release</code> blog and not any other blog post.</p>
+
+<p><code>statocles daemon</code> now allows setting <code>-p &lt;port&gt;</code>, in case port 3000 is in-use, or
+you need to run multiple instances.</p>
+
+<p>Full changelog below:</p>
+
+                <p><a href="http://preaction.github.io/Statocles/blog/2015/04/16/release-v0-045#section-2">Continue reading...</a></p>
+            <p>Tags:
+                <a href="/blog/tag/release">release</a>
+            </p>
+        ]]></content>
+        <updated>2015-04-16T00:00:00Z</updated>
+        <category term="release" />
+    </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2015/04/06/release-v0.044</id>
         <title>Release v0.044</title>
@@ -143,37 +174,6 @@ site's directory.</p>
             </p>
         ]]></content>
         <updated>2015-03-08T00:00:00Z</updated>
-        <category term="release" />
-    </entry>
-    <entry>
-        <id>http://preaction.github.io/Statocles/blog/2015/03/02/release-v0.040</id>
-        <title>Release v0.040</title>
-        <link href="http://preaction.github.io/Statocles/blog/2015/03/02/release-v0.040" rel="alternate" />
-        <content type="html"><![CDATA[
-            <p>The biggest new thing in this release is the new <a href="/pod/Statocles/Plugin/LinkCheck.html">LinkCheck
-plugin</a> that checks all the pages for
-broken links and images. This introduces a new event-handling API into
-Statocles, which will be called Plugins. See <a href="/pod/Statocles/Help/Develop.html">the developer
-docs</a> for more information on plugins.</p>
-
-<p>A bunch of bug fixes for the <code>create</code> command. It now actually works, instead
-of creating an unusable <code>site.yml</code> file.</p>
-
-<p>The default build directory is now <code>.statocles/build</code> instead of <code>.statocles-build</code>.
-It is anticipated we might use the <code>.statocles</code> directory for some additional
-site metadata.</p>
-
-<p>With <a href="http://mojolicio.us">Mojolicious</a> 6.0 release, there were a few breaking
-changes that we needed to fix in Statocles. We now require 6.0.</p>
-
-<p>Full changelog below:</p>
-
-                <p><a href="http://preaction.github.io/Statocles/blog/2015/03/02/release-v0.040#section-2">Continue reading...</a></p>
-            <p>Tags:
-                <a href="/blog/tag/release">release</a>
-            </p>
-        ]]></content>
-        <updated>2015-03-02T00:00:00Z</updated>
         <category term="release" />
     </entry>
 </feed>

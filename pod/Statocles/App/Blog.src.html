@@ -286,6 +286,30 @@ sub post_pages {
     return @pages;
 }
 
+=method post_files()
+
+Get all the post collateral files.
+
+=cut
+
+sub post_files {
+    my ( $self ) = @_;
+    my @pages;
+
+    my $iter = $self-&gt;store-&gt;find_files;
+    while ( my $path = $iter-&gt;() ) {
+        next unless $path =~ m{^/(\d{4})/(\d{2})/(\d{2})/[^/]+/};
+        next if $path =~ /[.]markdown$/;
+
+        push @pages, Statocles::Page::File-&gt;new(
+            path =&gt; $path,
+            fh =&gt; $self-&gt;store-&gt;open_file( $path ),
+        );
+    }
+
+    return @pages;
+}
+
 # Return the post docs sorted by date, pruning any docs that are after
 # the current date
 sub _sorted_docs {
@@ -479,6 +503,7 @@ sub pages {
     my @post_pages = $self-&gt;post_pages;
     return (
         ( map { $self-&gt;$_( @post_pages ) } qw( index tag_pages ) ),
+        $self-&gt;post_files,
         @post_pages,
     );
 }
@@ -517,23 +542,36 @@ sub _tag_url {
     return $tag;
 }
 
-=method recent_posts( $count )
+=method recent_posts( $count, %filter )
 
 Get the last $count recent posts for this blog. Useful for templates and site
 index pages.
 
+%filter is an optional set of filters to apply to only show recent posts
+matching the given criteria. The following filters are available:
+
+    tags        -&gt; (string) Only show posts with the given tag
+
 =cut
 
 sub recent_posts {
-    my ( $self, $count ) = @_;
+    my ( $self, $count, %filter ) = @_;
 
     my $today = Time::Piece-&gt;new-&gt;ymd;
     my @pages;
     my @docs = $self-&gt;_sorted_docs;
-    for my $doc ( @docs[0..$count-1] ) {
+    DOC: for my $doc ( @docs ) {
+        QUERY: for my $attr ( keys %filter ) {
+            my $value = $filter{ $attr };
+            if ( $attr eq &#39;tags&#39; ) {
+                next DOC unless grep { $_ eq $value } @{ $doc-&gt;tags };
+            }
+        }
+
         my $page = $self-&gt;_make_post_page( $doc );
         $page-&gt;path( join &quot;/&quot;, $self-&gt;url_root, $page-&gt;path );
         push @pages, $page;
+        last if @pages &gt;= $count;
     }
 
     return @pages;
