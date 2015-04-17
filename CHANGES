@@ -1,6 +1,17 @@
 Changelog for Statocles
 
-0.044 2015-04-06T05:49:07
+0.045 2015-04-17T04:19:15
+ - allow blog post collateral in post directory
+ - fix link check plugin not finding url-encoded links
+ - allow recent posts filtering by tag
+ - add -p <port> option to specify port in daemon
+ - fix create command example on index page
+ - add latest release version to the index page
+ - use the default Statocles build dir
+ - update site theme from Statocles default theme
+ - add release v0.044 announcement
+
+0.044 2015-04-06T05:49:07Z
  - fix tadegenban showing in contributors list twice
  - add recent posts method to the blog
  - add test with path field inside document
