@@ -680,6 +680,14 @@ my @page_tests = (
 
     # Does not show /blog/9999/12/31/forever-is-a-long-time/index.html
     # Does not show /blog/draft/a-draft-post.html
+
+    # Collateral files
+    '/blog/2014/04/30/plug/image.jpg' => sub {
+        my ( $content ) = @_;
+
+        is $content, $SHARE_DIR->child(qw( app blog 2014 04 30 plug image.jpg ))->slurp;
+    },
+
 );
 
 

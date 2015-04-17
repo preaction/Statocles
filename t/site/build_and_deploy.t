@@ -9,12 +9,17 @@ sub test_page_content {
     my ( $site, $page, $dir ) = @_;
     my $elem;
     my $path = $dir->child( $page->path );
-    my $got_dom = Mojo::DOM->new( $path->slurp );
 
-    if ( ok $elem = $got_dom->at('title'), 'has title' ) {
-        like $elem->text, qr{@{[$site->title]}}, 'page contains site title ' . $site->title;
+    if ( $path =~ /[.]html$/ ) {
+        my $got_dom = Mojo::DOM->new( $path->slurp );
+
+        if ( ok $elem = $got_dom->at('title'), 'has title' ) {
+            like $elem->text, qr{@{[$site->title]}}, 'page contains site title ' . $site->title;
+        }
     }
-
+    else {
+        ok $path->exists, 'path exists at least';
+    }
 }
 
 sub test_base_url {

@@ -200,6 +200,30 @@ sub post_pages {
     return @pages;
 }
 
+=method post_files()
+
+Get all the post collateral files.
+
+=cut
+
+sub post_files {
+    my ( $self ) = @_;
+    my @pages;
+
+    my $iter = $self->store->find_files;
+    while ( my $path = $iter->() ) {
+        next unless $path =~ m{^/(\d{4})/(\d{2})/(\d{2})/[^/]+/};
+        next if $path =~ /[.]markdown$/;
+
+        push @pages, Statocles::Page::File->new(
+            path => $path,
+            fh => $self->store->open_file( $path ),
+        );
+    }
+
+    return @pages;
+}
+
 # Return the post docs sorted by date, pruning any docs that are after
 # the current date
 sub _sorted_docs {
@@ -393,6 +417,7 @@ sub pages {
     my @post_pages = $self->post_pages;
     return (
         ( map { $self->$_( @post_pages ) } qw( index tag_pages ) ),
+        $self->post_files,
         @post_pages,
     );
 }
