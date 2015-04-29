@@ -437,9 +437,14 @@ sub bundle_theme {
 
             my $asset = $self->static->file( $path );
             if ( !$asset ) {
-                # Check for index.html
-                $path = Mojo::Path->new( $c->stash->{path} . "/index.html" );
-                $asset = $self->static->file( $path );
+                if ( $path =~ m{/$} ) {
+                    # Check for index.html
+                    $path = Mojo::Path->new( $c->stash->{path} . "/index.html" );
+                    $asset = $self->static->file( $path );
+                }
+                elsif ( $self->site->build_store->path->child( $path )->is_dir ) {
+                    return $c->redirect_to( "/$path/" );
+                }
             }
 
             if ( !$asset ) {

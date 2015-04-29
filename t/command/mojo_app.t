@@ -37,6 +37,24 @@ subtest 'root site' => sub {
         ->content_type_is( 'text/html;charset=UTF-8' )
         ;
 
+    # Check blog URL
+    $t->get_ok( "/blog/2014/04/23/slug/index.html" )
+        ->status_is( 200 )
+        ->content_is( $tmp->child( build_site => qw( blog 2014 04 23 slug index.html ) )->slurp_utf8 )
+        ->content_type_is( 'text/html;charset=UTF-8' )
+        ;
+
+    # Check directory redirect
+    $t->get_ok( "/blog/2014/04/23/slug" )
+        ->status_is( 302 )
+        ->header_is( Location => '/blog/2014/04/23/slug/' )
+        ;
+    $t->get_ok( "/blog/2014/04/23/slug/" )
+        ->status_is( 200 )
+        ->content_is( $tmp->child( build_site => qw( blog 2014 04 23 slug index.html ) )->slurp_utf8 )
+        ->content_type_is( 'text/html;charset=UTF-8' )
+        ;
+
     # Check that malicious URL gets plonked
     $t->get_ok( '/../../../../../etc/passwd' )
         ->status_is( 400 )
@@ -166,6 +184,24 @@ subtest 'nonroot site' => sub {
     $t->get_ok( "/nonroot/index.html" )
         ->status_is( 200 )
         ->content_is( $tmp->child( build_site => 'index.html' )->slurp_utf8 )
+        ->content_type_is( 'text/html;charset=UTF-8' )
+        ;
+
+    # Check blog URL
+    $t->get_ok( "/nonroot/blog/2014/04/23/slug/index.html" )
+        ->status_is( 200 )
+        ->content_is( $tmp->child( build_site => qw( blog 2014 04 23 slug index.html ) )->slurp_utf8 )
+        ->content_type_is( 'text/html;charset=UTF-8' )
+        ;
+
+    # Check directory redirect
+    $t->get_ok( "/nonroot/blog/2014/04/23/slug" )
+        ->status_is( 302 )
+        ->header_is( Location => '/nonroot/blog/2014/04/23/slug/' )
+        ;
+    $t->get_ok( "/nonroot/blog/2014/04/23/slug/" )
+        ->status_is( 200 )
+        ->content_is( $tmp->child( build_site => qw( blog 2014 04 23 slug index.html ) )->slurp_utf8 )
         ->content_type_is( 'text/html;charset=UTF-8' )
         ;
 
