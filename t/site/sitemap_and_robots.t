@@ -23,34 +23,35 @@ my $to_href = sub {
 };
 
 my %page_mod = (
-    '/blog/2014/04/23/slug' => '2014-04-30',
-    '/blog/2014/04/30/plug' => '2014-04-30',
+    '/blog/2014/04/23/slug/' => '2014-04-30',
+    '/blog/2014/04/30/plug/' => '2014-04-30',
     '/blog/2014/05/22/(regex)[name].file.html' => '2014-05-22',
     '/blog/2014/06/02/more_tags.html' => '2014-06-02',
-    '' => '2014-06-02',
-    '/blog/page/2' => '2014-06-02',
-    '/blog/tag/more' => '2014-06-02',
-    '/blog/tag/better' => '2014-06-02',
-    '/blog/tag/better/page/2' => '2014-06-02',
-    '/blog/tag/error-message' => '2014-05-22',
-    '/blog/tag/even-more-tags' => '2014-06-02',
+    '/' => '2014-06-02',
+    '/blog/page/2/' => '2014-06-02',
+    '/blog/tag/more/' => '2014-06-02',
+    '/blog/tag/better/' => '2014-06-02',
+    '/blog/tag/better/page/2/' => '2014-06-02',
+    '/blog/tag/error-message/' => '2014-05-22',
+    '/blog/tag/even-more-tags/' => '2014-06-02',
 );
 
 my @posts = qw(
-    /blog/2014/04/23/slug
-    /blog/2014/04/30/plug
+    /blog/2014/04/23/slug/
+    /blog/2014/04/30/plug/
     /blog/2014/05/22/(regex)[name].file.html
     /blog/2014/06/02/more_tags.html
 );
 
-my @lists = ( '', qw(
-    /blog/page/2
-    /blog/tag/more
-    /blog/tag/better
-    /blog/tag/better/page/2
-    /blog/tag/error-message
-    /blog/tag/even-more-tags
-) );
+my @lists = qw(
+    /
+    /blog/page/2/
+    /blog/tag/more/
+    /blog/tag/better/
+    /blog/tag/better/page/2/
+    /blog/tag/error-message/
+    /blog/tag/even-more-tags/
+);
 
 my @expect = (
     ( # List pages

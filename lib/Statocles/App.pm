@@ -73,7 +73,7 @@ Get a URL to a page in this application. Prepends the L</url_root> if necessary.
 
 sub url {
     my ( $self, $url ) = @_;
-    $url =~ s{/index[.]html$}{};
+    $url =~ s{/index[.]html$}{/};
     return join "/", $self->url_root, $url;
 }
 

@@ -109,7 +109,7 @@ sub paginate {
         my $next = $i != $#sets ? sprintf( $path_format, $i + 2 ) : '';
 
         # Remove index.html from link URLs
-        s{/index[.]html$}{} for ( $prev, $next );
+        s{/index[.]html$}{/} for ( $prev, $next );
 
         push @retval, $class->new(
             path => $path,

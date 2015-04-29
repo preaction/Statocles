@@ -426,13 +426,13 @@ sub url {
                 : $self->base_url;
 
     # Remove index.html from the end of the path, since it's redundant
-    $path =~ s{/index[.]html$}{};
+    $path =~ s{/index[.]html$}{/};
 
     # Remove the / from both sides of the join so we don't double up
     $base =~ s{/$}{};
     $path =~ s{^/}{};
 
-    return join "/", $base, ( $path || !$base ? ( $path ) : () );
+    return join "/", $base, $path;
 }
 
 1;

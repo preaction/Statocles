@@ -12,7 +12,7 @@ subtest 'url method' => sub {
            'http://example.com/blog/2014/01/01/a-page.html';
         subtest 'index.html is removed' => sub {
             is $site->url( '/index.html' ),
-               'http://example.com';
+               'http://example.com/';
         };
     };
 
@@ -25,7 +25,7 @@ subtest 'url method' => sub {
            'http://example.com/folder/blog/2014/01/01/a-page.html';
         subtest 'index.html is removed' => sub {
             is $site->url( '/index.html' ),
-               'http://example.com/folder';
+               'http://example.com/folder/';
         };
     };
 
@@ -47,7 +47,7 @@ subtest 'url method' => sub {
             $site->_write_deploy( $site->_deploy );
             is $site->url( '/blog/2014/01/01/a-page.html' ), 'http://example.com/blog/2014/01/01/a-page.html';
             subtest 'index.html is removed' => sub {
-                is $site->url( '/index.html' ), 'http://example.com';
+                is $site->url( '/index.html' ), 'http://example.com/';
             };
         };
     };

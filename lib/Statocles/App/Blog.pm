@@ -258,7 +258,7 @@ sub _make_post_page {
     for my $tag ( @{ $doc->tags } ) {
         push @tags, $self->link(
             text => $tag,
-            href => join( "/", 'tag', $self->_tag_url( $tag ) ),
+            href => join( "/", 'tag', $self->_tag_url( $tag ), '' ),
         );
     }
 
@@ -435,7 +435,7 @@ tag links. The common attributes are:
 sub tags {
     my ( $self ) = @_;
     my %tagged_docs = $self->_tag_docs( @{ $self->_post_pages } );
-    return map {; $self->link( text => $_, href => join( "/", 'tag', $self->_tag_url( $_ ) ) ) }
+    return map {; $self->link( text => $_, href => join( "/", 'tag', $self->_tag_url( $_ ), '' ) ) }
         sort keys %tagged_docs
 }
 
@@ -504,7 +504,7 @@ Return the absolute URL to this page, removing the "/index.html" if necessary.
 sub page_url {
     my ( $self, $page ) = @_;
     my $url = "".$page->path;
-    $url =~ s{/index[.]html$}{};
+    $url =~ s{/index[.]html$}{/};
     return $url;
 }
 
