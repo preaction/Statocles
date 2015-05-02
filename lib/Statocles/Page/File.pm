@@ -4,16 +4,27 @@ package Statocles::Page::File;
 use Statocles::Base 'Class';
 with 'Statocles::Page';
 
+=attr file_path
+
+The path to the file.
+
+=cut
+
+has file_path => (
+    is => 'ro',
+    isa => Path,
+    coerce => Path->coercion,
+);
+
 =attr fh
 
-The file handle containing the contents of the page. Required.
+The file handle containing the contents of the page.
 
 =cut
 
 has fh => (
     is => 'ro',
     isa => FileHandle,
-    required => 1,
 );
 
 =method vars
@@ -34,7 +45,7 @@ Return
 
 sub render {
     my ( $self ) = @_;
-    return $self->fh;
+    return $self->file_path ? $self->file_path->openr_utf8 : $self->fh;
 }
 
 1;
@@ -42,8 +53,14 @@ __END__
 
 =head1 SYNOPSIS
 
-    open my $fh, '<', '/path/to/file.txt';
+    # File path
+    my $page = Statocles::Page::File->new(
+        path => '/path/to/page.txt',
+        file_path => '/path/to/file.txt',
+    );
 
+    # Filehandle
+    open my $fh, '<', '/path/to/file.txt';
     my $page = Statocles::Page::File->new(
         path => '/path/to/page.txt',
         fh => $fh,
