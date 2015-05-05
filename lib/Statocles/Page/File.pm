@@ -45,7 +45,7 @@ Return
 
 sub render {
     my ( $self ) = @_;
-    return $self->file_path ? $self->file_path->openr_utf8 : $self->fh;
+    return $self->file_path ? $self->file_path->openr_raw : $self->fh;
 }
 
 1;
