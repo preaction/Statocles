@@ -40,7 +40,7 @@ sub pages {
 
         push @pages, Statocles::Page::File->new(
             path => $path,
-            fh => $self->store->open_file( $path ),
+            file_path => $self->store->path->child( $path ),
         );
     }
 
