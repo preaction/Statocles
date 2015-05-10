@@ -117,6 +117,7 @@ img.u-pull-left, img.u-pull-right {
     overflow: hidden;
     border-bottom: 1px solid #bbb;
     color: #777;
+    background-color: white;
     margin-bottom: 1em;
 }
 
