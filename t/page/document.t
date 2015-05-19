@@ -79,12 +79,17 @@ subtest 'template string' => sub {
         template => join( ' ',
             ( map { "<\%= \$self->$_ \%>" } qw( date path ) ),
             ( map { "<\%= \$doc->$_ \%>" } qw( title author ) ),
+            ( map { "<\%= \$$_ \%>" } qw( extra_data ) ),
             '<%= $content %>',
         ),
+        data => {
+            extra_data => 'This is extra data',
+        },
     );
 
     my $output = $page->render;
     my $expect = join " ", $page->date, $page->path, $doc->title, $doc->author,
+        $page->data->{extra_data},
         $md->markdown( $doc->content ) . "\n\n";
     eq_or_diff $output, $expect;
 };

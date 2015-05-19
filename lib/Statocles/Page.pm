@@ -54,6 +54,18 @@ has date => (
     default => sub { Time::Piece->new },
 );
 
+=attr data
+
+A hash of additional template variables for this page.
+
+=cut
+
+has data => (
+    is => 'ro',
+    isa => HashRef,
+    default => sub { {} },
+);
+
 =attr links
 
 A hash of arrays of links to pages related to this page. Possible keys:
@@ -189,6 +201,7 @@ with the L<layout|Statocles::Page/layout>.
 sub render {
     my ( $self, %args ) = @_;
     my %vars = (
+        %{ $self->data },
         %args,
         self => $self,
         app => $self->app,
