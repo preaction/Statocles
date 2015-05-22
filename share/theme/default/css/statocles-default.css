@@ -84,6 +84,11 @@ footer .tagline {
  * Classes
  ************************************************/
 
+ol.bare, ul.bare {
+    list-style-type: none;
+    margin-left: 0;
+}
+
 ol.list-inline, ul.list-inline {
     margin: 0;
 }
