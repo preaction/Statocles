@@ -107,6 +107,38 @@ has date => (
     predicate => 'has_date',
 );
 
+=attr template
+
+A template override for this document.
+
+=cut
+
+has template => (
+    is => 'rw',
+    isa => Maybe[ArrayRef[Str]],
+    coerce => sub {
+        return $_[0] if ref $_[0];
+        return [ grep { $_ ne '' } split m{/}, $_[0] ];
+    },
+    predicate => 'has_template',
+);
+
+=attr layout
+
+A layout override for this document.
+
+=cut
+
+has layout => (
+    is => 'rw',
+    isa => Maybe[ArrayRef[Str]],
+    coerce => sub {
+        return $_[0] if ref $_[0];
+        return [ grep { $_ ne '' } split m{/}, $_[0] ];
+    },
+    predicate => 'has_layout',
+);
+
 1;
 __END__
 

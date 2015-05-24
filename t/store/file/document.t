@@ -87,6 +87,24 @@ my @exp_docs = (
         content => "This document has multiple tags separated by commas\n",
     ),
 
+
+    Statocles::Document->new(
+        path => '/template/basic.markdown',
+        title => 'Template document',
+        content => "This document has a template\n",
+        template => [qw( document basic.html.ep )],
+        layout => [qw( site basic.html.ep )],
+    ),
+
+    Statocles::Document->new(
+        path => '/template/leading-slash.markdown',
+        title => 'Template (Slash) document',
+        content => "This document has a template with a leading slash\n",
+        template => [qw( document slash.html.ep )],
+        layout => [qw( site slash.html.ep )],
+    ),
+
+
 );
 
 my @ignored_docs = (
