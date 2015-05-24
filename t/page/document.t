@@ -69,47 +69,50 @@ subtest 'page date overridden by published date' => sub {
     is $page->date->datetime, $tp->datetime;
 };
 
-subtest 'template string' => sub {
-    my $tp = Time::Piece->new;
+subtest 'template coercion' => sub {
 
-    my $page = Statocles::Page::Document->new(
-        document => $doc,
-        path => '/path/to/page.html',
-        date => $tp,
-        template => join( ' ',
-            ( map { "<\%= \$self->$_ \%>" } qw( date path ) ),
-            ( map { "<\%= \$doc->$_ \%>" } qw( title author ) ),
-            ( map { "<\%= \$$_ \%>" } qw( extra_data ) ),
-            '<%= $content %>',
-        ),
-        data => {
-            extra_data => 'This is extra data',
-        },
-    );
+    subtest 'template' => sub {
+        my $tp = Time::Piece->new;
 
-    my $output = $page->render;
-    my $expect = join " ", $page->date, $page->path, $doc->title, $doc->author,
-        $page->data->{extra_data},
-        $md->markdown( $doc->content ) . "\n\n";
-    eq_or_diff $output, $expect;
-};
+        my $page = Statocles::Page::Document->new(
+            document => $doc,
+            path => '/path/to/page.html',
+            date => $tp,
+            template => join( ' ',
+                ( map { "<\%= \$self->$_ \%>" } qw( date path ) ),
+                ( map { "<\%= \$doc->$_ \%>" } qw( title author ) ),
+                ( map { "<\%= \$$_ \%>" } qw( extra_data ) ),
+                '<%= $content %>',
+            ),
+            data => {
+                extra_data => 'This is extra data',
+            },
+        );
 
-subtest 'layout' => sub {
-    my $page = Statocles::Page::Document->new(
-        document => $doc,
-        path => '/path/to/page.html',
-        template => join( ' ',
-            '<%= $self->path %>',
-            ( map { "<\%= \$doc->$_ \%>" } qw( title author ) ),
-            '<%= $content %>',
-        ),
-        layout => 'HEAD <%= $content %> FOOT',
-    );
+        my $output = $page->render;
+        my $expect = join " ", $page->date, $page->path, $doc->title, $doc->author,
+            $page->data->{extra_data},
+            $md->markdown( $doc->content ) . "\n\n";
+        eq_or_diff $output, $expect;
+    };
 
-    my $output = $page->render;
-    my $expect = join " ", 'HEAD', $page->path, $doc->title, $doc->author,
-        $md->markdown( $doc->content ) . "\n", 'FOOT' . "\n";
-    eq_or_diff $output, $expect;
+    subtest 'layout' => sub {
+        my $page = Statocles::Page::Document->new(
+            document => $doc,
+            path => '/path/to/page.html',
+            template => join( ' ',
+                '<%= $self->path %>',
+                ( map { "<\%= \$doc->$_ \%>" } qw( title author ) ),
+                '<%= $content %>',
+            ),
+            layout => 'HEAD <%= $content %> FOOT',
+        );
+
+        my $output = $page->render;
+        my $expect = join " ", 'HEAD', $page->path, $doc->title, $doc->author,
+            $md->markdown( $doc->content ) . "\n", 'FOOT' . "\n";
+        eq_or_diff $output, $expect;
+    };
 };
 
 subtest 'extra args' => sub {
