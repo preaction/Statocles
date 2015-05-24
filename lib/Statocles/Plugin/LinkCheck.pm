@@ -46,6 +46,7 @@ sub check_pages {
                     $url =~ s{#.*$}{};
                     next unless $url;
                     next if $url =~ m{^(?:https?|mailto|javascript):/};
+                    next if $url =~ m{^//};
                     if ( $url !~ m{^/} ) {
                         $url = $page->path->parent->child( $url );
                     }
