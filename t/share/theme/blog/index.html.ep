@@ -1,3 +1,7 @@
+% if ( my $tag_text = $self->data->{ tag_text } ) {
+<p><%= $tag_text %></p>
+% }
+
 % for my $page ( @$pages ) {
     <article>
     <h1><a href="<%= $app->page_url( $page ) %>"><%= $page->title %></a></h1>

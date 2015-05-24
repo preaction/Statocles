@@ -19,6 +19,9 @@ my $app = Statocles::App::Blog->new(
     data => {
         info => 'This is the app info',
     },
+    tag_text => {
+        'error message' => 'These are error messages',
+    },
 );
 
 my @page_tests = (
@@ -237,6 +240,8 @@ my @page_tests = (
 
     '/blog/tag/error-message/index.html' => sub {
         my ( $html, $dom ) = @_;
+
+        like $html, qr{These are error messages}, 'has tag description';
 
         cmp_deeply [ $dom->find( 'h1 a' )->map( 'text' )->each ],
             [ 'Regex violating Post' ],

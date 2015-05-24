@@ -23,6 +23,18 @@ has store => (
     required => 1,
 );
 
+=attr tag_text
+
+A hash of tag and descriptions to introduce tags. Having a description is optional.
+
+=cut
+
+has tag_text => (
+    is => 'ro',
+    isa => HashRef,
+    default => sub { {} },
+);
+
 =attr page_size
 
 The number of posts to put in a page (the main page and the tag pages). Defaults
@@ -372,6 +384,9 @@ sub tag_pages {
             app => $self,
             template => $self->site->theme->template( blog => 'index.html' ),
             layout => $self->site->theme->template( site => 'layout.html' ),
+            data => {
+                tag_text => $self->tag_text->{ $tag },
+            },
         );
 
         my $index = $tag_pages[0];
