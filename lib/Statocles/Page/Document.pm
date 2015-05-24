@@ -131,6 +131,38 @@ sub tags {
     return @{ $self->_tags };
 }
 
+=method template()
+
+The L<template|Statocles::Template> for this page. If the document has a template,
+it will be used. Otherwise, the L<template attribute|Statocles::Page/template> will
+be used.
+
+=cut
+
+around template => sub {
+    my ( $orig, $self, @args ) = @_;
+    if ( $self->document->has_template ) {
+        return $self->site->theme->template( @{ $self->document->template } );
+    }
+    return $self->$orig( @args );
+};
+
+=method layout()
+
+The L<layout template|Statocles::Template> for this page. If the document has a layout,
+it will be used. Otherwise, the L<layout attribute|Statocles::Page/layout> will
+be used.
+
+=cut
+
+around layout => sub {
+    my ( $orig, $self, @args ) = @_;
+    if ( $self->document->has_layout ) {
+        return $self->site->theme->template( @{ $self->document->layout } );
+    }
+    return $self->$orig( @args );
+};
+
 1;
 __END__
 

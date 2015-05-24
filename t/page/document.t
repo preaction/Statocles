@@ -6,7 +6,10 @@ use Statocles::Document;
 use Statocles::Page::Document;
 use Text::Markdown;
 use Statocles::Site;
-my $site = Statocles::Site->new( deploy => tempdir );
+my $site = Statocles::Site->new(
+    deploy => tempdir,
+    theme => $SHARE_DIR->child(qw( theme )),
+);
 
 my $doc = Statocles::Document->new(
     path => '/path/to/document.markdown',
@@ -67,6 +70,28 @@ subtest 'page date overridden by published date' => sub {
 
     isa_ok $page->date, 'Time::Piece';
     is $page->date->datetime, $tp->datetime;
+};
+
+subtest 'document template/layout override' => sub {
+    my $doc = Statocles::Document->new(
+        path => '/path/to/doc.markdown',
+        title => 'Page Title',
+        content => 'Page content',
+        template => '/document/recipe.html',
+        layout => '/layout/logo.html',
+    );
+
+    my $page = Statocles::Page::Document->new(
+        path => '/path/to/doc.html',
+        site => $site,
+        document => $doc,
+        template => '<%= $content %>', # will be overridden
+        layout => '<%= $content %>', # will be overridden
+    );
+
+    my $output = $page->render;
+    my $expect = "Logo layout\nRecipe template\nPage Title\n<p>Page content</p>\n\n\n";
+    eq_or_diff $output, $expect;
 };
 
 subtest 'template coercion' => sub {

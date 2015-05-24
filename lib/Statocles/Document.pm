@@ -109,7 +109,9 @@ has date => (
 
 =attr template
 
-A template override for this document.
+A template override for this document. If set, the L<document
+page|Statocles::Page::Document> will use this instead of the template provided
+by the application.
 
 =cut
 
@@ -125,7 +127,9 @@ has template => (
 
 =attr layout
 
-A layout override for this document.
+A layout template override for this document. If set, the L<document
+page|Statocles::Page::Document> will use this instead of the layout provided
+by the application.
 
 =cut
 
