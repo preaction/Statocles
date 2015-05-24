@@ -224,13 +224,31 @@ sub post_files {
 
     my $iter = $self->store->find_files;
     while ( my $path = $iter->() ) {
+        # Files must be in folders
         next unless $path =~ m{^/(\d{4})/(\d{2})/(\d{2})/[^/]+/};
-        next if $path =~ /[.]markdown$/;
 
-        push @pages, Statocles::Page::File->new(
-            path => $path,
-            file_path => $self->store->path->child( $path ),
-        );
+        # index.markdown is the post itself
+        next if $path =~ m{/index[.]markdown$};
+
+        if ( $path =~ /[.]markdown/ ) {
+            my $page_path = $path;
+            $page_path =~ s{[.]\w+$}{.html};
+
+            my %args = (
+                path => $page_path,
+                app => $self,
+                layout => $self->site->theme->template( site => 'layout.html' ),
+                document => $self->store->read_document( $path ),
+            );
+
+            push @pages, Statocles::Page::Document->new( %args );
+        }
+        else {
+            push @pages, Statocles::Page::File->new(
+                path => $path,
+                file_path => $self->store->path->child( $path ),
+            );
+        }
     }
 
     return @pages;

@@ -693,6 +693,12 @@ my @page_tests = (
         is $content, $SHARE_DIR->child(qw( app blog 2014 04 30 plug image.jpg ))->slurp;
     },
 
+    # Extra pages
+    '/blog/2014/04/30/plug/recipe.html' => sub {
+        my ( $html, $dom ) = @_;
+
+        is $dom->at( 'h2' )->text, "Recipe page";
+    },
 );
 
 
