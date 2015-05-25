@@ -4,6 +4,10 @@
     <div class="nine columns">
         <main>
 
+            % if ( my $tag_text = $self->data->{ tag_text } ) {
+            <p><%= $tag_text %></p>
+            % }
+
             % for my $page ( @$pages ) {
             <article>
                 <header>

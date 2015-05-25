@@ -84,14 +84,34 @@
 
         </header>
         <div class="main container">
-            <h1 id="NAME">NAME</h1>
+            <div class="crumbtrail">
+<ul>
+    <li>
+        <a href="/Statocles/pod/index.html">Statocles</a>
+    </li>
+    <li>
+        <a href="/Statocles/pod/Statocles/Page.html">Page</a>
+    </li>
+    <li>
+        <a href="/Statocles/pod/Statocles/Page/File.html">File</a>
+    </li>
+</ul>
+(<a href="/Statocles/pod/Statocles/Page/File.src.html">source</a>)
+</div>
+<h1 id="NAME">NAME</h1>
 
 <p>Statocles::Page::File - A page wrapping a file (handle)</p>
 
 <h1 id="SYNOPSIS">SYNOPSIS</h1>
 
-<pre><code>    open my $fh, &#39;&lt;&#39;, &#39;/path/to/file.txt&#39;;
+<pre><code>    # File path
+    my $page = Statocles::Page::File-&gt;new(
+        path =&gt; &#39;/path/to/page.txt&#39;,
+        file_path =&gt; &#39;/path/to/file.txt&#39;,
+    );
 
+    # Filehandle
+    open my $fh, &#39;&lt;&#39;, &#39;/path/to/file.txt&#39;;
     my $page = Statocles::Page::File-&gt;new(
         path =&gt; &#39;/path/to/page.txt&#39;,
         fh =&gt; $fh,
@@ -103,9 +123,13 @@
 
 <h1 id="ATTRIBUTES">ATTRIBUTES</h1>
 
+<h2 id="file_path">file_path</h2>
+
+<p>The path to the file.</p>
+
 <h2 id="fh">fh</h2>
 
-<p>The file handle containing the contents of the page. Required.</p>
+<p>The file handle containing the contents of the page.</p>
 
 <h1 id="METHODS">METHODS</h1>
 

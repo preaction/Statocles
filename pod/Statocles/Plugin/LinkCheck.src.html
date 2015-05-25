@@ -84,7 +84,8 @@
 
         </header>
         <div class="main container">
-            <pre>package Statocles::Plugin::LinkCheck;
+            <a href="/Statocles/pod/Statocles/Plugin/LinkCheck.html">Back to documentation</a>
+<pre>package Statocles::Plugin::LinkCheck;
 # ABSTRACT: Check links and images for validity during build
 
 use Statocles::Base &#39;Class&#39;;
@@ -132,6 +133,7 @@ sub check_pages {
                     $url =~ s{#.*$}{};
                     next unless $url;
                     next if $url =~ m{^(?:https?|mailto|javascript):/};
+                    next if $url =~ m{^//};
                     if ( $url !~ m{^/} ) {
                         $url = $page-&gt;path-&gt;parent-&gt;child( $url );
                     }

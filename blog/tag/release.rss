@@ -2,14 +2,55 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Statocles</title>
-        <link>http://preaction.github.io/Statocles/blog/tag/release</link>
+        <link>http://preaction.github.io/Statocles/blog/tag/release/</link>
         <atom:link href="http://preaction.github.io/Statocles/blog/tag/release.rss" rel="self" type="application/rss+xml" />
         <description>Blog feed of Statocles</description>
-        <generator>Statocles 0.044</generator>
+        <generator>Statocles 0.046</generator>
+        <item>
+            <title>Release v0.046</title>
+            <link>http://preaction.github.io/Statocles/blog/2015/05/24/release-v0-046/</link>
+            <guid>http://preaction.github.io/Statocles/blog/2015/05/24/release-v0-046/</guid>
+            <description><![CDATA[
+                <p>A few new features and a bunch of bugfixes in this release.</p>
+
+<p>Page objects now have a generic "data" attribute. This allows adding miscellaneous
+extra information to the Page, which is then available to the template.</p>
+
+<p>Using this, the <a href="/pod/Statocles/App/Perldoc.html">Perldoc app</a> now has a crumbtrail
+and a link to the module source, and the <a href="/pod/Statocles/App/Blog.html">blog app</a> can
+now have introductory text for the tags that show up on the tag page.</p>
+
+<p>There were some changes to the default theme to make extending it a bit easier.</p>
+
+<ul>
+<li>The navbar has a default background color, so putting a background color on
+body is less surprising.</li>
+<li>The grid columns are centered in their margin, so adding a background color
+to the columns looks better.</li>
+</ul>
+
+<p>Finally, a <a href="/pod/Statocles/Document.html">document</a> is now allowed to override its
+template and layout. The <a href="/pod/Statocles/Page/Document.html">document page</a> uses
+the document template to override the template provided by the app.</p>
+
+<p>Because of this, we can now allow extra pages in blog posts. Just put the extra page
+inside the blog post's directory.</p>
+
+<p>Full changelog below...</p>
+
+                    <p><a href="http://preaction.github.io/Statocles/blog/2015/05/24/release-v0-046/#section-2">Continue reading...</a></p>
+                <p>Tags:
+                    <a href="/blog/tag/release/">release</a>
+                </p>
+            ]]></description>
+            <pubDate>
+                Sun, 24 May 2015 00:00:00 +0000
+            </pubDate>
+        </item>
         <item>
             <title>Release v0.045</title>
-            <link>http://preaction.github.io/Statocles/blog/2015/04/16/release-v0-045</link>
-            <guid>http://preaction.github.io/Statocles/blog/2015/04/16/release-v0-045</guid>
+            <link>http://preaction.github.io/Statocles/blog/2015/04/16/release-v0-045/</link>
+            <guid>http://preaction.github.io/Statocles/blog/2015/04/16/release-v0-045/</guid>
             <description><![CDATA[
                 <p>A couple small changes in this release:</p>
 
@@ -29,9 +70,9 @@ you need to run multiple instances.</p>
 
 <p>Full changelog below:</p>
 
-                    <p><a href="http://preaction.github.io/Statocles/blog/2015/04/16/release-v0-045#section-2">Continue reading...</a></p>
+                    <p><a href="http://preaction.github.io/Statocles/blog/2015/04/16/release-v0-045/#section-2">Continue reading...</a></p>
                 <p>Tags:
-                    <a href="/blog/tag/release">release</a>
+                    <a href="/blog/tag/release/">release</a>
                 </p>
             ]]></description>
             <pubDate>
@@ -40,8 +81,8 @@ you need to run multiple instances.</p>
         </item>
         <item>
             <title>Release v0.044</title>
-            <link>http://preaction.github.io/Statocles/blog/2015/04/06/release-v0.044</link>
-            <guid>http://preaction.github.io/Statocles/blog/2015/04/06/release-v0.044</guid>
+            <link>http://preaction.github.io/Statocles/blog/2015/04/06/release-v0.044/</link>
+            <guid>http://preaction.github.io/Statocles/blog/2015/04/06/release-v0.044/</guid>
             <description><![CDATA[
                 <p>A few small features, and some small breaking changes in this release.</p>
 
@@ -73,9 +114,9 @@ posts in a blog.</p>
 
 <p>Full changelog is below.</p>
 
-                    <p><a href="http://preaction.github.io/Statocles/blog/2015/04/06/release-v0.044#section-2">Continue reading...</a></p>
+                    <p><a href="http://preaction.github.io/Statocles/blog/2015/04/06/release-v0.044/#section-2">Continue reading...</a></p>
                 <p>Tags:
-                    <a href="/blog/tag/release">release</a>
+                    <a href="/blog/tag/release/">release</a>
                 </p>
             ]]></description>
             <pubDate>
@@ -84,8 +125,8 @@ posts in a blog.</p>
         </item>
         <item>
             <title>Release v0.043</title>
-            <link>http://preaction.github.io/Statocles/blog/2015/03/24/release-v0.043</link>
-            <guid>http://preaction.github.io/Statocles/blog/2015/03/24/release-v0.043</guid>
+            <link>http://preaction.github.io/Statocles/blog/2015/03/24/release-v0.043/</link>
+            <guid>http://preaction.github.io/Statocles/blog/2015/03/24/release-v0.043/</guid>
             <description><![CDATA[
                 <p>A couple interesting changes this week!</p>
 
@@ -110,9 +151,9 @@ Moo 2.</p>
 
 <p>Full changelog below:</p>
 
-                    <p><a href="http://preaction.github.io/Statocles/blog/2015/03/24/release-v0.043#section-2">Continue reading...</a></p>
+                    <p><a href="http://preaction.github.io/Statocles/blog/2015/03/24/release-v0.043/#section-2">Continue reading...</a></p>
                 <p>Tags:
-                    <a href="/blog/tag/release">release</a>
+                    <a href="/blog/tag/release/">release</a>
                 </p>
             ]]></description>
             <pubDate>
@@ -121,8 +162,8 @@ Moo 2.</p>
         </item>
         <item>
             <title>Release v0.042</title>
-            <link>http://preaction.github.io/Statocles/blog/2015/03/16/release-v0.042</link>
-            <guid>http://preaction.github.io/Statocles/blog/2015/03/16/release-v0.042</guid>
+            <link>http://preaction.github.io/Statocles/blog/2015/03/16/release-v0.042/</link>
+            <guid>http://preaction.github.io/Statocles/blog/2015/03/16/release-v0.042/</guid>
             <description><![CDATA[
                 <p>A slow week, but some needed features:</p>
 
@@ -141,44 +182,13 @@ object that exposes a <code>markdown</code> method.</p>
 
 <p>Full changelog below:</p>
 
-                    <p><a href="http://preaction.github.io/Statocles/blog/2015/03/16/release-v0.042#section-2">Continue reading...</a></p>
+                    <p><a href="http://preaction.github.io/Statocles/blog/2015/03/16/release-v0.042/#section-2">Continue reading...</a></p>
                 <p>Tags:
-                    <a href="/blog/tag/release">release</a>
+                    <a href="/blog/tag/release/">release</a>
                 </p>
             ]]></description>
             <pubDate>
                 Mon, 16 Mar 2015 00:00:00 +0000
-            </pubDate>
-        </item>
-        <item>
-            <title>Release v0.041</title>
-            <link>http://preaction.github.io/Statocles/blog/2015/03/08/release-v0.041</link>
-            <guid>http://preaction.github.io/Statocles/blog/2015/03/08/release-v0.041</guid>
-            <description><![CDATA[
-                <p>A slight breaking change in this release: The "last modified" date is no longer being
-used in the blog. Instead, the date shown is only the slug date, which makes the date
-more accurate when pre-dating posts.</p>
-
-<p>The <code>last_modified</code> attribute is now simply called <code>date</code>, which makes it a bit more
-general-purpose. This means that you'll need to re-bundle your templates.</p>
-
-<p>A change to <a href="http://metacpan.org/pod/Beam::Wire">Beam::Wire</a> means a change to Statocles
-config files: <code>$method</code> in the event handlers is now <code>$sub</code>, so if you have configured
-the LinkCheck plugin, you'll get a deprecation warning from Beam::Wire.</p>
-
-<p>The site creator now allows you to set the <code>base_url</code>, since that's required for
-Statocles to work properly. It also, if given a site as an argument, creates the
-site's directory.</p>
-
-<p>Full changelog below:</p>
-
-                    <p><a href="http://preaction.github.io/Statocles/blog/2015/03/08/release-v0.041#section-2">Continue reading...</a></p>
-                <p>Tags:
-                    <a href="/blog/tag/release">release</a>
-                </p>
-            ]]></description>
-            <pubDate>
-                Sun, 08 Mar 2015 00:00:00 +0000
             </pubDate>
         </item>
     </channel>

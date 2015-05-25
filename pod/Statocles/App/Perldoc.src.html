@@ -84,7 +84,8 @@
 
         </header>
         <div class="main container">
-            <pre>package Statocles::App::Perldoc;
+            <a href="/Statocles/pod/Statocles/App/Perldoc.html">Back to documentation</a>
+<pre>package Statocles::App::Perldoc;
 # ABSTRACT: Render documentation for Perl modules
 
 use Statocles::Base &#39;Class&#39;;
@@ -234,43 +235,72 @@ sub pages {
             }
         }
 
+        my $source_path = &quot;$module.src.html&quot;;
+        $source_path =~ s{::}{/}g;
+
+        my ( @parts ) = split m{::}, $module;
+        my @crumbtrail;
+        for my $i ( 0..$#parts ) {
+            my $trail_module = join &quot;::&quot;, @parts[0..$i];
+            if ( $modules{ $trail_module } ) {
+                push @crumbtrail, {
+                    text =&gt; $parts[ $i ],
+                    href =&gt; $self-&gt;url( $self-&gt;_module_href( $trail_module ) ),
+                };
+            }
+            else {
+                push @crumbtrail, {
+                    text =&gt; $parts[ $i ],
+                };
+            }
+        }
+
+        my %page_args = (
+            layout =&gt; $self-&gt;site-&gt;theme-&gt;template( site =&gt; &#39;layout.html&#39; ),
+            template =&gt; $self-&gt;site-&gt;theme-&gt;template( perldoc =&gt; &#39;pod.html&#39; ),
+            content =&gt; &quot;$dom&quot;,
+            app =&gt; $self,
+            path =&gt; $self-&gt;_module_href( $module ),
+            data =&gt; {
+                source_path =&gt; $self-&gt;url( $source_path ),
+                crumbtrail =&gt; \@crumbtrail,
+            },
+        );
+
         if ( $module eq $self-&gt;index_module ) {
-            unshift @pages, Statocles::Page::Plain-&gt;new(
-                path =&gt; join( &#39;/&#39;, &#39;index.html&#39; ),
-                layout =&gt; $self-&gt;site-&gt;theme-&gt;template( site =&gt; &#39;layout.html&#39; ),
-                template =&gt; $self-&gt;site-&gt;theme-&gt;template( perldoc =&gt; &#39;pod.html&#39; ),
-                content =&gt; &quot;$dom&quot;,
-                app =&gt; $self,
-            );
+            unshift @pages, Statocles::Page::Plain-&gt;new( %page_args );
         }
         else {
-            my $page_url = &quot;$module.html&quot;;
-            $page_url =~ s{::}{/}g;
-
-            push @pages, Statocles::Page::Plain-&gt;new(
-                path =&gt; join( &#39;/&#39;, $page_url ),
-                layout =&gt; $self-&gt;site-&gt;theme-&gt;template( site =&gt; &#39;layout.html&#39; ),
-                template =&gt; $self-&gt;site-&gt;theme-&gt;template( perldoc =&gt; &#39;pod.html&#39; ),
-                content =&gt; &quot;$dom&quot;,
-                app =&gt; $self,
-            );
-
+            push @pages, Statocles::Page::Plain-&gt;new( %page_args );
         }
 
         # Add the source as a text file
-        my $source_url = &quot;$module.src.html&quot;;
-        $source_url =~ s{::}{/}g;
         push @pages, Statocles::Page::Plain-&gt;new(
-            path =&gt; $source_url,
+            path =&gt; $source_path,
             layout =&gt; $self-&gt;site-&gt;theme-&gt;template( site =&gt; &#39;layout.html&#39; ),
             template =&gt; $self-&gt;site-&gt;theme-&gt;template( perldoc =&gt; &#39;source.html&#39; ),
             content =&gt; Path::Tiny-&gt;new( $path )-&gt;slurp,
             app =&gt; $self,
+            data =&gt; {
+                doc_path =&gt; $self-&gt;url( $page_args{path} ),
+                crumbtrail =&gt; \@crumbtrail,
+            },
         );
 
     }
 
     return @pages;
+}
+
+sub _module_href {
+    my ( $self, $module ) = @_;
+    if ( $module eq $self-&gt;index_module ) {
+        return join &#39;/&#39;, &#39;index.html&#39;;
+    }
+
+    my $page_url = &quot;$module.html&quot;;
+    $page_url =~ s{::}{/}g;
+    return $page_url;
 }
 
 =method _weave_module( $path )

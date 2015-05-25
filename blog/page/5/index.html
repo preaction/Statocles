@@ -5,6 +5,8 @@
         <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
         <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
         <title>Statocles</title>
+        <link href="/Statocles/blog/index.atom" rel="alternate" type="application/atom+xml">
+        <link href="/Statocles/blog/index.rss" rel="alternate" type="application/rss+xml">
         <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
 <style>
     h1, h2, h3, h4, h5, h6 {
@@ -84,75 +86,98 @@
 
         </header>
         <div class="main container">
-            <div class="crumbtrail">
+            
+<div class="row">
+
+    <div class="nine columns">
+        <main>
+
+
+            <article>
+                <header>
+                    <h1><a href="/Statocles/blog/2014/12/07/statocles-initial-public-(alpha)-release.html">Statocles Initial Public (alpha) Release</a></h1>
+
+                    <p class="tags">Tags:
+                        <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
+                    </p>
+
+                    <aside>
+                        <p><time datetime="2014-12-07">
+                            Posted on 2014-12-07
+                        </time>
+                            by preaction
+                        </p>
+                    </aside>
+
+                </header>
+
+                <p>Though Statocles has been on CPAN for months, this is the first time I&#39;m announcing its
+availability to the world!</p>
+
+<p>Statocles is a CMS for building static HTML websites. The goals of this app are to make
+it easy to edit content via any text editor [1].</p>
+
+<p>This initial release includes:</p>
+
 <ul>
-    <li>
-        <a href="/Statocles/pod/index.html">Statocles</a>
-    </li>
-    <li>
-        <a href="/Statocles/pod/Statocles/Document.html">Document</a>
-    </li>
+<li>A blog app</li>
+<li>Plain pages, for things like About Us and Contact Us</li>
+<li>A POD renderer for documentation of Perl projects</li>
 </ul>
-(<a href="/Statocles/pod/Statocles/Document.src.html">source</a>)
+
+<p>This site is generated with Statocles, and so is <a href="http://preaction.github.io">my blog</a>.</p>
+
+<h2>Getting Started</h2>
+
+<p><a href="http://metacpan.org/pod/Statocles">Get Statocles from CPAN</a> and <a href="/Statocles/pod/Statocles/Help/Setup.html">follow the Statocles
+Setup guide</a>. If you have any issues, report them on
+<a href="https://github.com/preaction/Statocles">the Statocles Githup Repo</a>. If you have questions,
+<a href="https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">join us on IRC on irc.perl.org #statocles</a>!</p>
+
+<p>[1]: A future project will make Statocles content editable with a web interface</p>
+
+
+
+            </article>
+        </main>
+
+        <ul class="pager">
+            <li class="prev">
+                <a class="button disabled" href="" rel="next">
+                    ← Older
+                </a>
+            </li>
+            <li class="next">
+                <a class="button button-primary" href="page/4" rel="prev">
+                    Newer →
+                </a>
+            </li>
+        </ul>
+
+    </div>
+
+    <div class="three columns sidebar">
+        
+        <h1>Tags</h1>
+        <ul class="list-inline">
+            <li><a href="/Statocles/blog/tag/release/">release</a></li>
+        </ul>
+        <h1>Feeds</h1>
+        <ul class="list-inline">
+            <li>
+                <a href="/Statocles/blog/index.atom" rel="alternate" type="application/atom+xml">
+                    Atom
+                </a>
+            </li>
+            <li>
+                <a href="/Statocles/blog/index.rss" rel="alternate" type="application/rss+xml">
+                    RSS
+                </a>
+            </li>
+        </ul>
+    </div>
+
 </div>
-<h1 id="NAME">NAME</h1>
-
-<p>Statocles::Document - Base class for all Statocles documents</p>
-
-<h1 id="DESCRIPTION">DESCRIPTION</h1>
-
-<p>A Statocles::Document is the base unit of content in Statocles. <a href="/Statocles/pod/Statocles/App.html">Applications</a> take documents to build <a href="/Statocles/pod/Statocles/Page.html">pages</a>.</p>
-
-<p>This is the Model class in the Model-View-Controller pattern.</p>
-
-<h1 id="ATTRIBUTES">ATTRIBUTES</h1>
-
-<h2 id="path">path</h2>
-
-<p>The path to this document.</p>
-
-<h2 id="title">title</h2>
-
-<p>The title from this document.</p>
-
-<h2 id="author">author</h2>
-
-<p>The author of this document.</p>
-
-<h2 id="content">content</h2>
-
-<p>The raw content of this document, in markdown.</p>
-
-<h2 id="tags">tags</h2>
-
-<p>The tags for this document. Tags are used to categorize documents.</p>
-
-<p>Tags may be specified as an array or as a comma-seperated string of tags.</p>
-
-<h2 id="links">links</h2>
-
-<p>Related links for this document. Links are used to build relationships to other web addresses. Link categories are named based on their relationship.</p>
-
-<pre><code>    alternate - The same document posted to another web site</code></pre>
-
-<p>Each category contains an arrayref of hashrefs of <a href="/Statocles/pod/Statocles/Link.html">link objects</a>. See the <a href="/Statocles/pod/Statocles/Link.html">Statocles::Link</a> documentation for a full list of supported attributes. The most common attributes are:</p>
-
-<pre><code>    text - The text of the link
-    href - The URL for the link</code></pre>
-
-<h2 id="date">date</h2>
-
-<p>The date/time this document is for. For pages, this is the last modified date. For blog posts, this is the post&#39;s date.</p>
-
-<h2 id="template">template</h2>
-
-<p>A template override for this document. If set, the <a href="/Statocles/pod/Statocles/Page/Document.html">document page</a> will use this instead of the template provided by the application.</p>
-
-<h2 id="layout">layout</h2>
-
-<p>A layout template override for this document. If set, the <a href="/Statocles/pod/Statocles/Page/Document.html">document page</a> will use this instead of the layout provided by the application.</p>
-
-
 
         </div>
         <footer>

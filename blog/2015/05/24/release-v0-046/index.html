@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <title>Statocles</title>
+        <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
+<style>
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Forum', sans-serif;
+        font-weight: bold;
+    }
+
+    #index-banner {
+        font-family: 'Forum', sans-serif;
+        height: 300px;
+        position: relative;
+        margin-bottom: 1em;
+        border-bottom: 1px solid #777
+    }
+    #index-banner:before, #index-banner:after {
+        width: 60px;
+        height: 300px;
+        content: url(/Statocles/theme/images/column.png);
+    }
+    #index-banner:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #index-banner:after {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    #index-banner h1 {
+        padding-top: 1em;
+        text-transform: uppercase;
+        font-size: 72px;
+        text-align: center;
+    }
+    #index-banner h1 small {
+        display: block;
+        font-size: 24px;
+    }
+
+    #index-banner .latest-release {
+        text-align: center;
+    }
+
+</style>
+
+    </head>
+    <body>
+        <header>
+            <nav class="navbar">
+                <div class="container">
+                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <ul>
+                        <li>
+                            <a href="/Statocles/blog">Blog</a>
+                        </li>
+                        <li>
+                            <a href="/Statocles/pod">Docs</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles">Code</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles/issues">Bugs</a>
+                        </li>
+                        <li>
+                            <a href="http://metacpan.org/pod/Statocles">CPAN</a>
+                        </li>
+                        <li>
+                            <a href="https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">IRC</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <a href="https://github.com/preaction/Statocles"><img alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; z-index: 1000; border: 0;"></a>
+
+        </header>
+        <div class="main container">
+            <div class="row">
+
+    <div class="nine columns">
+        <main>
+            <header>
+                <h1>Release v0.046</h1>
+                <p class="tags">Tags:
+                    <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
+                </p>
+                <aside>
+                    <p><time datetime="2015-05-24">
+                        Posted on 2015-05-24
+                    </time>
+                    </p>
+                </aside>
+            </header>
+            <section id="section-1">
+                <p>A few new features and a bunch of bugfixes in this release.</p>
+
+<p>Page objects now have a generic &quot;data&quot; attribute. This allows adding miscellaneous
+extra information to the Page, which is then available to the template.</p>
+
+<p>Using this, the <a href="/Statocles/pod/Statocles/App/Perldoc.html">Perldoc app</a> now has a crumbtrail
+and a link to the module source, and the <a href="/Statocles/pod/Statocles/App/Blog.html">blog app</a> can
+now have introductory text for the tags that show up on the tag page.</p>
+
+<p>There were some changes to the default theme to make extending it a bit easier.</p>
+
+<ul>
+<li>The navbar has a default background color, so putting a background color on
+body is less surprising.</li>
+<li>The grid columns are centered in their margin, so adding a background color
+to the columns looks better.</li>
+</ul>
+
+<p>Finally, a <a href="/Statocles/pod/Statocles/Document.html">document</a> is now allowed to override its
+template and layout. The <a href="/Statocles/pod/Statocles/Page/Document.html">document page</a> uses
+the document template to override the template provided by the app.</p>
+
+<p>Because of this, we can now allow extra pages in blog posts. Just put the extra page
+inside the blog post&#39;s directory.</p>
+
+<p>Full changelog below...</p>
+
+            </section>
+            <section id="section-2">
+                <ul>
+<li><a href="https://github.com/preaction/Statocles/commit/53390e46cf1f78c80397c5537dd4ddacddee8cb7">add module crumbtrail to perldoc app</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/74fffb6e45f8e822eb45922c1b03e471a1bc3a90">add link to module source in perldoc app</a> (<a href="https://github.com/preaction/Statocles/issues/282">#282</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/cd8c18d92ed4dc231cd2e28e6b3f3de5552e7119">fix link check showing schema-less urls as broken</a> (<a href="https://github.com/preaction/Statocles/issues/310">#310</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/0ca82131dfc9a76da5894b6ea24a560fdbc97e18">allow additional markdown pages in blog posts</a> (<a href="https://github.com/preaction/Statocles/issues/308">#308</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/303c0a796193848dbb7bf8019ed770b9ac1eb4a4">use document templates to override page templates</a> (<a href="https://github.com/preaction/Statocles/issues/40">#40</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/2b2fbf129f3124b6644d57dd93e82c33313a9ef4">add template and layout fields to documents</a> (<a href="https://github.com/preaction/Statocles/issues/40">#40</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/e23be13f39bf9d2d50d537a78075d80bb3c43050">add tag_text property to blog app</a> (<a href="https://github.com/preaction/Statocles/issues/258">#258</a>, <a href="https://github.com/preaction/Statocles/issues/257">#257</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/7aee8f70ca3efb08fc5b187ba0f0500de7813c0c">remove ModuleBuild to prevent toolchain confusion</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/fe9bd8c38af55bbf2fcdfa0c99475a52c5adbcc8">add .bare class to remove bullets from lists</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/c5683b560ee5b2d83fb62ced8d036cb01f16efaf">add data attribute to pages</a> (<a href="https://github.com/preaction/Statocles/issues/271">#271</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/0e038a19710c0f42377dfc4929209ae16b6bc822">add a default background color to navbar</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/8fa054383f1db767c4a80fa2700b1d436e81e687">adjust grid spacing to center columns</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/bf91cb67b693650313d5cc4d06ff4c6e769af7eb">use file_path attribute when copying files in apps</a> (<a href="https://github.com/preaction/Statocles/issues/226">#226</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/a7856d676ee33ea7b2c6f3c2181bbaa3249b0895">use raw bytes when opening file pages</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/01a37f01d2d314488f47ae24fb0217a8c1c0a67a">allow using file path when copying files</a> (<a href="https://github.com/preaction/Statocles/issues/226">#226</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/096e8f94994020c8a9f8aeb385bb996bb19f328f">ensure all directory URLs end with a /</a> (<a href="https://github.com/preaction/Statocles/issues/299">#299</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/85809ee620f86cc4591383d25885164d59404428">redirect to directory/ in daemon</a> (<a href="https://github.com/preaction/Statocles/issues/300">#300</a>)</li>
+</ul>
+
+            </section>
+        </main>
+    </div>
+
+    <div class="three columns sidebar">
+        
+        <nav id="tags">
+            <h1>Tags</h1>
+            <ul class="list-inline">
+                <li><a href="/Statocles/blog/tag/release/">release</a></li>
+            </ul>
+        </nav>
+    </div>
+
+</div>
+
+        </div>
+        <footer>
+            <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61295159-3', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+            <div class="container tagline">
+                <a href="http://preaction.github.io/Statocles">Made with Statocles</a><br>
+                <a href="http://www.perl.org">Powered by Perl</a>
+            </div>
+        </footer>
+    </body>
+</html>

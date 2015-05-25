@@ -84,7 +84,8 @@
 
         </header>
         <div class="main container">
-            <pre>package Statocles::Page::List;
+            <a href="/Statocles/pod/Statocles/Page/List.html">Back to documentation</a>
+<pre>package Statocles::Page::List;
 # ABSTRACT: A page presenting a list of other pages
 
 use Statocles::Base &#39;Class&#39;;
@@ -195,7 +196,7 @@ sub paginate {
         my $next = $i != $#sets ? sprintf( $path_format, $i + 2 ) : &#39;&#39;;
 
         # Remove index.html from link URLs
-        s{/index[.]html$}{} for ( $prev, $next );
+        s{/index[.]html$}{/} for ( $prev, $next );
 
         push @retval, $class-&gt;new(
             path =&gt; $path,

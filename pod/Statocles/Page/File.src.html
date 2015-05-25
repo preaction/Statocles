@@ -84,22 +84,34 @@
 
         </header>
         <div class="main container">
-            <pre>package Statocles::Page::File;
+            <a href="/Statocles/pod/Statocles/Page/File.html">Back to documentation</a>
+<pre>package Statocles::Page::File;
 # ABSTRACT: A page wrapping a file (handle)
 
 use Statocles::Base &#39;Class&#39;;
 with &#39;Statocles::Page&#39;;
 
+=attr file_path
+
+The path to the file.
+
+=cut
+
+has file_path =&gt; (
+    is =&gt; &#39;ro&#39;,
+    isa =&gt; Path,
+    coerce =&gt; Path-&gt;coercion,
+);
+
 =attr fh
 
-The file handle containing the contents of the page. Required.
+The file handle containing the contents of the page.
 
 =cut
 
 has fh =&gt; (
     is =&gt; &#39;ro&#39;,
     isa =&gt; FileHandle,
-    required =&gt; 1,
 );
 
 =method vars
@@ -120,7 +132,7 @@ Return
 
 sub render {
     my ( $self ) = @_;
-    return $self-&gt;fh;
+    return $self-&gt;file_path ? $self-&gt;file_path-&gt;openr_raw : $self-&gt;fh;
 }
 
 1;
@@ -128,8 +140,14 @@ __END__
 
 =head1 SYNOPSIS
 
-    open my $fh, &#39;&lt;&#39;, &#39;/path/to/file.txt&#39;;
+    # File path
+    my $page = Statocles::Page::File-&gt;new(
+        path =&gt; &#39;/path/to/page.txt&#39;,
+        file_path =&gt; &#39;/path/to/file.txt&#39;,
+    );
 
+    # Filehandle
+    open my $fh, &#39;&lt;&#39;, &#39;/path/to/file.txt&#39;;
     my $page = Statocles::Page::File-&gt;new(
         path =&gt; &#39;/path/to/page.txt&#39;,
         fh =&gt; $fh,

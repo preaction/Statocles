@@ -84,7 +84,8 @@
 
         </header>
         <div class="main container">
-            <pre>package Statocles::Page::Document;
+            <a href="/Statocles/pod/Statocles/Page/Document.html">Back to documentation</a>
+<pre>package Statocles::Page::Document;
 # ABSTRACT: Render documents into HTML
 
 use Statocles::Base &#39;Class&#39;;
@@ -216,6 +217,38 @@ sub tags {
     my ( $self ) = @_;
     return @{ $self-&gt;_tags };
 }
+
+=method template()
+
+The L&lt;template|Statocles::Template&gt; for this page. If the document has a template,
+it will be used. Otherwise, the L&lt;template attribute|Statocles::Page/template&gt; will
+be used.
+
+=cut
+
+around template =&gt; sub {
+    my ( $orig, $self, @args ) = @_;
+    if ( $self-&gt;document-&gt;has_template ) {
+        return $self-&gt;site-&gt;theme-&gt;template( @{ $self-&gt;document-&gt;template } );
+    }
+    return $self-&gt;$orig( @args );
+};
+
+=method layout()
+
+The L&lt;layout template|Statocles::Template&gt; for this page. If the document has a layout,
+it will be used. Otherwise, the L&lt;layout attribute|Statocles::Page/layout&gt; will
+be used.
+
+=cut
+
+around layout =&gt; sub {
+    my ( $orig, $self, @args ) = @_;
+    if ( $self-&gt;document-&gt;has_layout ) {
+        return $self-&gt;site-&gt;theme-&gt;template( @{ $self-&gt;document-&gt;layout } );
+    }
+    return $self-&gt;$orig( @args );
+};
 
 1;
 __END__

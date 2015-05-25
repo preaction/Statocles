@@ -84,7 +84,8 @@
 
         </header>
         <div class="main container">
-            <pre>package Statocles::Command;
+            <a href="/Statocles/pod/Statocles/Command.html">Back to documentation</a>
+<pre>package Statocles::Command;
 # ABSTRACT: The statocles command-line interface
 
 use Statocles::Base &#39;Class&#39;;
@@ -523,9 +524,14 @@ sub bundle_theme {
 
             my $asset = $self-&gt;static-&gt;file( $path );
             if ( !$asset ) {
-                # Check for index.html
-                $path = Mojo::Path-&gt;new( $c-&gt;stash-&gt;{path} . &quot;/index.html&quot; );
-                $asset = $self-&gt;static-&gt;file( $path );
+                if ( $path =~ m{/$} ) {
+                    # Check for index.html
+                    $path = Mojo::Path-&gt;new( $c-&gt;stash-&gt;{path} . &quot;/index.html&quot; );
+                    $asset = $self-&gt;static-&gt;file( $path );
+                }
+                elsif ( $self-&gt;site-&gt;build_store-&gt;path-&gt;child( $path )-&gt;is_dir ) {
+                    return $c-&gt;redirect_to( &quot;/$path/&quot; );
+                }
             }
 
             if ( !$asset ) {

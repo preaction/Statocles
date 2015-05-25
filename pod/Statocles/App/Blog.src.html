@@ -84,7 +84,8 @@
 
         </header>
         <div class="main container">
-            <pre>package Statocles::App::Blog;
+            <a href="/Statocles/pod/Statocles/App/Blog.html">Back to documentation</a>
+<pre>package Statocles::App::Blog;
 # ABSTRACT: A blog application
 
 use Statocles::Base &#39;Class&#39;;
@@ -107,6 +108,18 @@ has store =&gt; (
     isa =&gt; Store,
     coerce =&gt; Store-&gt;coercion,
     required =&gt; 1,
+);
+
+=attr tag_text
+
+A hash of tag and descriptions to introduce tags. Having a description is optional.
+
+=cut
+
+has tag_text =&gt; (
+    is =&gt; &#39;ro&#39;,
+    isa =&gt; HashRef,
+    default =&gt; sub { {} },
 );
 
 =attr page_size
@@ -298,13 +311,31 @@ sub post_files {
 
     my $iter = $self-&gt;store-&gt;find_files;
     while ( my $path = $iter-&gt;() ) {
+        # Files must be in folders
         next unless $path =~ m{^/(\d{4})/(\d{2})/(\d{2})/[^/]+/};
-        next if $path =~ /[.]markdown$/;
 
-        push @pages, Statocles::Page::File-&gt;new(
-            path =&gt; $path,
-            fh =&gt; $self-&gt;store-&gt;open_file( $path ),
-        );
+        # index.markdown is the post itself
+        next if $path =~ m{/index[.]markdown$};
+
+        if ( $path =~ /[.]markdown/ ) {
+            my $page_path = $path;
+            $page_path =~ s{[.]\w+$}{.html};
+
+            my %args = (
+                path =&gt; $page_path,
+                app =&gt; $self,
+                layout =&gt; $self-&gt;site-&gt;theme-&gt;template( site =&gt; &#39;layout.html&#39; ),
+                document =&gt; $self-&gt;store-&gt;read_document( $path ),
+            );
+
+            push @pages, Statocles::Page::Document-&gt;new( %args );
+        }
+        else {
+            push @pages, Statocles::Page::File-&gt;new(
+                path =&gt; $path,
+                file_path =&gt; $self-&gt;store-&gt;path-&gt;child( $path ),
+            );
+        }
     }
 
     return @pages;
@@ -344,7 +375,7 @@ sub _make_post_page {
     for my $tag ( @{ $doc-&gt;tags } ) {
         push @tags, $self-&gt;link(
             text =&gt; $tag,
-            href =&gt; join( &quot;/&quot;, &#39;tag&#39;, $self-&gt;_tag_url( $tag ) ),
+            href =&gt; join( &quot;/&quot;, &#39;tag&#39;, $self-&gt;_tag_url( $tag ), &#39;&#39; ),
         );
     }
 
@@ -458,6 +489,9 @@ sub tag_pages {
             app =&gt; $self,
             template =&gt; $self-&gt;site-&gt;theme-&gt;template( blog =&gt; &#39;index.html&#39; ),
             layout =&gt; $self-&gt;site-&gt;theme-&gt;template( site =&gt; &#39;layout.html&#39; ),
+            data =&gt; {
+                tag_text =&gt; $self-&gt;tag_text-&gt;{ $tag },
+            },
         );
 
         my $index = $tag_pages[0];
@@ -521,7 +555,7 @@ tag links. The common attributes are:
 sub tags {
     my ( $self ) = @_;
     my %tagged_docs = $self-&gt;_tag_docs( @{ $self-&gt;_post_pages } );
-    return map {; $self-&gt;link( text =&gt; $_, href =&gt; join( &quot;/&quot;, &#39;tag&#39;, $self-&gt;_tag_url( $_ ) ) ) }
+    return map {; $self-&gt;link( text =&gt; $_, href =&gt; join( &quot;/&quot;, &#39;tag&#39;, $self-&gt;_tag_url( $_ ), &#39;&#39; ) ) }
         sort keys %tagged_docs
 }
 
@@ -590,7 +624,7 @@ Return the absolute URL to this page, removing the &quot;/index.html&quot; if ne
 sub page_url {
     my ( $self, $page ) = @_;
     my $url = &quot;&quot;.$page-&gt;path;
-    $url =~ s{/index[.]html$}{};
+    $url =~ s{/index[.]html$}{/};
     return $url;
 }
 
