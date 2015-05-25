@@ -1,1 +1,2 @@
 <%= $content %>
+<p><a href="<%= $self->data->{ source_path } %>">source</a></p>

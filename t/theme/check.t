@@ -97,10 +97,24 @@ my %app_vars = (
     perldoc => {
         'pod.html.ep' => {
             %common_vars,
+            self => Statocles::Page::Plain->new(
+                path => '/path',
+                content => 'Fake content',
+                data => {
+                    source_path => '/source.html',
+                },
+            ),
             content => 'Fake content',
         },
         'source.html.ep' => {
             %common_vars,
+            self => Statocles::Page::Plain->new(
+                path => '/path',
+                content => 'Fake content',
+                data => {
+                    doc_path => '/source.html',
+                },
+            ),
             content => 'Fake content',
         },
     },

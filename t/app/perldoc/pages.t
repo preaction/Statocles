@@ -27,6 +27,7 @@ my @page_tests = (
 
         ok $dom->at( 'a[href="/pod/My/Internal.html"]' ), 'internal link exists';
         ok $dom->at( 'a[href="https://metacpan.org/pod/External"]' ), 'external link exists';
+        ok $dom->at( 'a[href="/pod/My.src.html"]' ), 'source link exists';
 
         if ( ok $node = $dom->at( 'footer #app-info' ) ) {
             is $node->text, 'This is the app info', 'app-info is correct';
@@ -51,6 +52,7 @@ my @page_tests = (
         }
 
         ok $dom->at( 'a[href="/pod/index.html"]' ), 'internal link to index page';
+        ok $dom->at( 'a[href="/pod/My/Internal.src.html"]' ), 'source link exists';
 
         if ( ok $node = $dom->at( 'footer #app-info' ) ) {
             is $node->text, 'This is the app info', 'app-info is correct';
@@ -75,6 +77,7 @@ my @page_tests = (
         }
 
         ok $dom->at( 'a[href="/pod/command.html"]' ), 'internal link to same page';
+        ok $dom->at( 'a[href="/pod/command.src.html"]' ), 'source link exists';
 
         if ( ok $node = $dom->at( 'footer #app-info' ) ) {
             is $node->text, 'This is the app info', 'app-info is correct';
@@ -99,6 +102,7 @@ my @page_tests = (
         }
 
         ok $dom->at( 'a[href="/pod/shellcmd.html"]' ), 'internal link to same page';
+        ok $dom->at( 'a[href="/pod/shellcmd.src.html"]' ), 'source link exists';
 
         if ( ok $node = $dom->at( 'footer #app-info' ) ) {
             is $node->text, 'This is the app info', 'app-info is correct';

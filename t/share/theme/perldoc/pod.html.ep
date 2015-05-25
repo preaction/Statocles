@@ -1,2 +1,3 @@
 POD
+<a href="<%= $self->data->{ source_path } %>">source</a>
 <%= $content %>

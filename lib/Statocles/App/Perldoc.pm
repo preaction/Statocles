@@ -148,38 +148,41 @@ sub pages {
             }
         }
 
+        my $source_path = "$module.src.html";
+        $source_path =~ s{::}{/}g;
+
+        my %page_args = (
+            layout => $self->site->theme->template( site => 'layout.html' ),
+            template => $self->site->theme->template( perldoc => 'pod.html' ),
+            content => "$dom",
+            app => $self,
+            data => {
+                source_path => $self->url( $source_path ),
+            },
+        );
+
         if ( $module eq $self->index_module ) {
-            unshift @pages, Statocles::Page::Plain->new(
-                path => join( '/', 'index.html' ),
-                layout => $self->site->theme->template( site => 'layout.html' ),
-                template => $self->site->theme->template( perldoc => 'pod.html' ),
-                content => "$dom",
-                app => $self,
-            );
+            $page_args{path} = join( '/', 'index.html' );
+            unshift @pages, Statocles::Page::Plain->new( %page_args );
         }
         else {
             my $page_url = "$module.html";
             $page_url =~ s{::}{/}g;
+            $page_args{path} = $page_url;
 
-            push @pages, Statocles::Page::Plain->new(
-                path => join( '/', $page_url ),
-                layout => $self->site->theme->template( site => 'layout.html' ),
-                template => $self->site->theme->template( perldoc => 'pod.html' ),
-                content => "$dom",
-                app => $self,
-            );
-
+            push @pages, Statocles::Page::Plain->new( %page_args );
         }
 
         # Add the source as a text file
-        my $source_url = "$module.src.html";
-        $source_url =~ s{::}{/}g;
         push @pages, Statocles::Page::Plain->new(
-            path => $source_url,
+            path => $source_path,
             layout => $self->site->theme->template( site => 'layout.html' ),
             template => $self->site->theme->template( perldoc => 'source.html' ),
             content => Path::Tiny->new( $path )->slurp,
             app => $self,
+            data => {
+                doc_path => $self->url( $page_args{path} ),
+            },
         );
 
     }
