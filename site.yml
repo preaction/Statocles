@@ -21,6 +21,8 @@ site:
                   href: /blog
                 - title: Docs
                   href: /pod
+                - title: Gallery
+                  href: /gallery
                 - title: Code
                   href: 'http://github.com/preaction/Statocles'
                 - title: Bugs
