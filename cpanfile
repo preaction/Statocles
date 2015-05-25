@@ -22,13 +22,10 @@ recommends "PPI" => "0";
 recommends "Pod::Elemental" => "0";
 recommends "Pod::Weaver" => "0";
 
-on 'build' => sub {
-  requires "Module::Build" => "0.3601";
-};
-
 on 'test' => sub {
   requires "Capture::Tiny" => "0";
   requires "Dir::Self" => "0";
+  requires "ExtUtils::MakeMaker" => "0";
   requires "File::Spec" => "0";
   requires "IO::Handle" => "0";
   requires "IPC::Open3" => "0";
@@ -40,12 +37,10 @@ on 'test' => sub {
 };
 
 on 'test' => sub {
-  recommends "CPAN::Meta" => "0";
-  recommends "CPAN::Meta::Requirements" => "2.120900";
+  recommends "CPAN::Meta" => "2.120900";
 };
 
 on 'configure' => sub {
   requires "ExtUtils::MakeMaker" => "0";
   requires "File::ShareDir::Install" => "0.06";
-  requires "Module::Build" => "0.3601";
 };

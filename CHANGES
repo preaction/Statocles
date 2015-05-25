@@ -1,6 +1,28 @@
 Changelog for Statocles
 
-0.045 2015-04-17T04:19:15
+0.046 2015-05-25T01:46:58
+ - update statocles site theme from default theme
+ - add module crumbtrail to perldoc app
+ - add link to module source in perldoc app
+ - fix link check showing schema-less urls as broken
+ - allow additional markdown pages in blog posts
+ - use document templates to override page templates
+ - move page template coercion tests
+ - add template and layout fields to documents
+ - add tag_text property to blog app
+ - remove ModuleBuild to prevent toolchain confusion
+ - add .bare class to remove bullets from lists
+ - add data attribute to pages
+ - add a default background color to navbar
+ - adjust grid spacing to center columns
+ - use file_path attribute when copying files in apps
+ - use raw bytes when opening file pages
+ - allow using file path when copying files
+ - ensure all directory URLs end with a /
+ - redirect to directory/ in daemon
+ - add release v0.045 announcement
+
+0.045 2015-04-17T04:19:15Z
  - allow blog post collateral in post directory
  - fix link check plugin not finding url-encoded links
  - allow recent posts filtering by tag
