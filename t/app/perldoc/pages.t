@@ -29,6 +29,11 @@ my @page_tests = (
         ok $dom->at( 'a[href="https://metacpan.org/pod/External"]' ), 'external link exists';
         ok $dom->at( 'a[href="/pod/My.src.html"]' ), 'source link exists';
 
+        my @crumbtrail = $dom->find( '.crumbtrail li' )->each;
+        is scalar @crumbtrail, 1;
+        is $crumbtrail[0]->at( 'a' )->text, 'My';
+        is $crumbtrail[0]->at( 'a' )->attr( 'href' ), '/pod/index.html';
+
         if ( ok $node = $dom->at( 'footer #app-info' ) ) {
             is $node->text, 'This is the app info', 'app-info is correct';
         }
@@ -53,6 +58,13 @@ my @page_tests = (
 
         ok $dom->at( 'a[href="/pod/index.html"]' ), 'internal link to index page';
         ok $dom->at( 'a[href="/pod/My/Internal.src.html"]' ), 'source link exists';
+
+        my @crumbtrail = $dom->find( '.crumbtrail li' )->each;
+        is scalar @crumbtrail, 2;
+        is $crumbtrail[0]->at( 'a' )->text, 'My';
+        is $crumbtrail[0]->at( 'a' )->attr( 'href' ), '/pod/index.html';
+        is $crumbtrail[1]->at( 'a' )->text, 'Internal';
+        is $crumbtrail[1]->at( 'a' )->attr( 'href' ), '/pod/My/Internal.html';
 
         if ( ok $node = $dom->at( 'footer #app-info' ) ) {
             is $node->text, 'This is the app info', 'app-info is correct';
@@ -79,6 +91,11 @@ my @page_tests = (
         ok $dom->at( 'a[href="/pod/command.html"]' ), 'internal link to same page';
         ok $dom->at( 'a[href="/pod/command.src.html"]' ), 'source link exists';
 
+        my @crumbtrail = $dom->find( '.crumbtrail li' )->each;
+        is scalar @crumbtrail, 1;
+        is $crumbtrail[0]->at( 'a' )->text, 'command';
+        is $crumbtrail[0]->at( 'a' )->attr( 'href' ), '/pod/command.html';
+
         if ( ok $node = $dom->at( 'footer #app-info' ) ) {
             is $node->text, 'This is the app info', 'app-info is correct';
         }
@@ -103,6 +120,11 @@ my @page_tests = (
 
         ok $dom->at( 'a[href="/pod/shellcmd.html"]' ), 'internal link to same page';
         ok $dom->at( 'a[href="/pod/shellcmd.src.html"]' ), 'source link exists';
+
+        my @crumbtrail = $dom->find( '.crumbtrail li' )->each;
+        is scalar @crumbtrail, 1;
+        is $crumbtrail[0]->at( 'a' )->text, 'shellcmd';
+        is $crumbtrail[0]->at( 'a' )->attr( 'href' ), '/pod/shellcmd.html';
 
         if ( ok $node = $dom->at( 'footer #app-info' ) ) {
             is $node->text, 'This is the app info', 'app-info is correct';

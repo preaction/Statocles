@@ -151,25 +151,39 @@ sub pages {
         my $source_path = "$module.src.html";
         $source_path =~ s{::}{/}g;
 
+        my ( @parts ) = split m{::}, $module;
+        my @crumbtrail;
+        for my $i ( 0..$#parts ) {
+            my $trail_module = join "::", @parts[0..$i];
+            if ( $modules{ $trail_module } ) {
+                push @crumbtrail, {
+                    text => $parts[ $i ],
+                    href => $self->url( $self->_module_href( $trail_module ) ),
+                };
+            }
+            else {
+                push @crumbtrail, {
+                    text => $parts[ $i ],
+                };
+            }
+        }
+
         my %page_args = (
             layout => $self->site->theme->template( site => 'layout.html' ),
             template => $self->site->theme->template( perldoc => 'pod.html' ),
             content => "$dom",
             app => $self,
+            path => $self->_module_href( $module ),
             data => {
                 source_path => $self->url( $source_path ),
+                crumbtrail => \@crumbtrail,
             },
         );
 
         if ( $module eq $self->index_module ) {
-            $page_args{path} = join( '/', 'index.html' );
             unshift @pages, Statocles::Page::Plain->new( %page_args );
         }
         else {
-            my $page_url = "$module.html";
-            $page_url =~ s{::}{/}g;
-            $page_args{path} = $page_url;
-
             push @pages, Statocles::Page::Plain->new( %page_args );
         }
 
@@ -182,12 +196,24 @@ sub pages {
             app => $self,
             data => {
                 doc_path => $self->url( $page_args{path} ),
+                crumbtrail => \@crumbtrail,
             },
         );
 
     }
 
     return @pages;
+}
+
+sub _module_href {
+    my ( $self, $module ) = @_;
+    if ( $module eq $self->index_module ) {
+        return join '/', 'index.html';
+    }
+
+    my $page_url = "$module.html";
+    $page_url =~ s{::}{/}g;
+    return $page_url;
 }
 
 =method _weave_module( $path )

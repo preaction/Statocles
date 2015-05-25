@@ -188,6 +188,27 @@ ul.pager {
     float: right;
 }
 
+/** Crumbtrail widget */
+
+.crumbtrail ul {
+    display: inline-block;
+    list-style: none;
+    margin: 0;
+}
+
+.crumbtrail li {
+    display: inline-block;
+}
+
+.crumbtrail li::before {
+    content: '::';
+    display: inline-block;
+}
+
+.crumbtrail li:first-child::before {
+    content: '';
+}
+
 /************************************************
  * Applications
  */
