@@ -232,12 +232,14 @@ subtest 'page includes' => sub {
     my $doc = Statocles::Document->new(
         path => '/path/to/document.markdown',
         title => 'Page Title',
+        data => 'Hello, Darling',
         content => <<'MARKDOWN',
 # Subtitle
 
 This is a paragraph of markdown.
 
 %= include "include/test.markdown.ep", title => $self->title
+%= $self->data
 MARKDOWN
     );
 
@@ -252,6 +254,8 @@ MARKDOWN
 <p>This is a paragraph of markdown.</p>
 
 <h1>Page Title</h1>
+
+<p>Hello, Darling</p>
 
 
 ENDHTML

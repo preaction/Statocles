@@ -90,7 +90,7 @@ sub content {
     my ( $self, %vars ) = @_;
     my $content = $self->document->content;
     my $tmpl = $self->site->theme->build_template( $self->path, $content );
-    my $rendered = $tmpl->render( %vars, $self->vars );
+    my $rendered = $tmpl->render( %vars, $self->vars, self => $self->document );
     return $self->markdown->markdown( $rendered );
 }
 

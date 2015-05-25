@@ -143,6 +143,17 @@ has layout => (
     predicate => 'has_layout',
 );
 
+=attr data
+
+Any kind of miscellaneous data. This is available immediately in the document
+content.
+
+=cut
+
+has data => (
+    is => 'rw',
+);
+
 1;
 __END__
 
