@@ -1,1 +1,16 @@
+<div class="crumbtrail">
+<ul>
+% for my $trail ( @{ $self->data->{ crumbtrail } } ) {
+    <li>
+        % if ( $trail->{href} ) {
+        <a href="<%= $trail->{href} %>"><%= $trail->{text} %></a>
+        % }
+        % else {
+        <%= $trail->{text} %>
+        % }
+    </li>
+% }
+</ul>
+(<a href="<%= $self->data->{ source_path } %>">source</a>)
+</div>
 <%= $content %>

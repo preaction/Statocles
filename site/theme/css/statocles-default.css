@@ -84,6 +84,11 @@ footer .tagline {
  * Classes
  ************************************************/
 
+ol.bare, ul.bare {
+    list-style-type: none;
+    margin-left: 0;
+}
+
 ol.list-inline, ul.list-inline {
     margin: 0;
 }
@@ -99,6 +104,16 @@ img.u-pull-left, img.u-pull-right {
 }
 
 /************************************************
+ * Grid
+ ************************************************/
+
+.column, .columns {
+    margin-left: 2%;
+    padding-left: 1%;
+    padding-right: 1%;
+}
+
+/************************************************
  * Widgets
  ************************************************/
 
@@ -107,6 +122,7 @@ img.u-pull-left, img.u-pull-right {
     overflow: hidden;
     border-bottom: 1px solid #bbb;
     color: #777;
+    background-color: white;
     margin-bottom: 1em;
 }
 
@@ -170,6 +186,27 @@ ul.pager {
 
 .pager .next {
     float: right;
+}
+
+/** Crumbtrail widget */
+
+.crumbtrail ul {
+    display: inline-block;
+    list-style: none;
+    margin: 0;
+}
+
+.crumbtrail li {
+    display: inline-block;
+}
+
+.crumbtrail li::before {
+    content: '::';
+    display: inline-block;
+}
+
+.crumbtrail li:first-child::before {
+    content: '';
 }
 
 /************************************************
