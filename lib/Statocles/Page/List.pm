@@ -29,7 +29,7 @@ The path to the previous page in the pagination series.
 =cut
 
 has [qw( next prev )] => (
-    is => 'ro',
+    is => 'rw',
     isa => Path,
     coerce => Path->coercion,
 );

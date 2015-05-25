@@ -342,8 +342,8 @@ sub index {
 
     my @pages = Statocles::Page::List->paginate(
         after => $self->page_size,
-        path => 'page/%i/index.html',
-        index => 'index.html',
+        path => '/page/%i/index.html',
+        index => '/index.html',
         # Sorting by path just happens to also sort by date
         pages => [ sort { $b->path cmp $a->path } @index_post_pages ],
         app => $self,
@@ -395,8 +395,8 @@ sub tag_pages {
     for my $tag ( keys %tagged_docs ) {
         my @tag_pages = Statocles::Page::List->paginate(
             after => $self->page_size,
-            path => join( "/", 'tag', $self->_tag_url( $tag ), 'page/%i/index.html' ),
-            index => join( "/", 'tag', $self->_tag_url( $tag ), 'index.html' ),
+            path => join( "/", '', 'tag', $self->_tag_url( $tag ), 'page/%i/index.html' ),
+            index => join( "/", '', 'tag', $self->_tag_url( $tag ), 'index.html' ),
             # Sorting by path just happens to also sort by date
             pages => [ sort { $b->path cmp $a->path } @{ $tagged_docs{ $tag } } ],
             app => $self,

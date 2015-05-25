@@ -61,6 +61,14 @@ my @page_tests = (
         if ( ok my $node = $dom->at( 'footer #app-info' ) ) {
             is $node->text, $app->data->{info}, 'app-info is correct';
         }
+
+        my $prev = $dom->at( '.pager .prev' );
+        is $prev->at( 'a' )->attr( 'class' ), 'button button-primary';
+        is $prev->at( 'a' )->attr( 'href' ), '/blog/page/2';
+
+        my $next = $dom->at( '.pager .next' );
+        is $next->at( 'a' )->attr( 'class' ), 'button disabled';
+        is $next->at( 'a' )->attr( 'href' ), '';
     },
 
     '/blog/page/2/index.html' => sub {
@@ -97,6 +105,14 @@ my @page_tests = (
         if ( ok my $node = $dom->at( 'footer #app-info' ) ) {
             is $node->text, $app->data->{info}, 'app-info is correct';
         }
+
+        my $prev = $dom->at( '.pager .prev' );
+        is $prev->at( 'a' )->attr( 'class' ), 'button disabled';
+        is $prev->at( 'a' )->attr( 'href' ), '';
+
+        my $next = $dom->at( '.pager .next' );
+        is $next->at( 'a' )->attr( 'class' ), 'button button-primary';
+        is $next->at( 'a' )->attr( 'href' ), '/blog';
     },
 
     # Index feeds
@@ -200,6 +216,14 @@ my @page_tests = (
         if ( ok my $node = $dom->at( 'footer #app-info' ) ) {
             is $node->text, $app->data->{info}, 'app-info is correct';
         }
+
+        my $prev = $dom->at( '.pager .prev' );
+        is $prev->at( 'a' )->attr( 'class' ), 'button button-primary';
+        is $prev->at( 'a' )->attr( 'href' ), '/blog/tag/better/page/2';
+
+        my $next = $dom->at( '.pager .next' );
+        is $next->at( 'a' )->attr( 'class' ), 'button disabled';
+        is $next->at( 'a' )->attr( 'href' ), '';
     },
 
     '/blog/tag/better/page/2/index.html' => sub {
@@ -236,6 +260,14 @@ my @page_tests = (
         if ( ok my $node = $dom->at( 'footer #app-info' ) ) {
             is $node->text, $app->data->{info}, 'app-info is correct';
         }
+
+        my $prev = $dom->at( '.pager .prev' );
+        is $prev->at( 'a' )->attr( 'class' ), 'button disabled';
+        is $prev->at( 'a' )->attr( 'href' ), '';
+
+        my $next = $dom->at( '.pager .next' );
+        is $next->at( 'a' )->attr( 'class' ), 'button button-primary';
+        is $next->at( 'a' )->attr( 'href' ), '/blog/tag/better';
     },
 
     '/blog/tag/error-message/index.html' => sub {
@@ -274,6 +306,14 @@ my @page_tests = (
         if ( ok my $node = $dom->at( 'footer #app-info' ) ) {
             is $node->text, $app->data->{info}, 'app-info is correct';
         }
+
+        my $prev = $dom->at( '.pager .prev' );
+        is $prev->at( 'a' )->attr( 'class' ), 'button disabled';
+        is $prev->at( 'a' )->attr( 'href' ), '';
+
+        my $next = $dom->at( '.pager .next' );
+        is $next->at( 'a' )->attr( 'class' ), 'button disabled';
+        is $next->at( 'a' )->attr( 'href' ), '';
     },
 
     '/blog/tag/more/index.html' => sub {
@@ -308,6 +348,14 @@ my @page_tests = (
         if ( ok my $node = $dom->at( 'footer #app-info' ) ) {
             is $node->text, $app->data->{info}, 'app-info is correct';
         }
+
+        my $prev = $dom->at( '.pager .prev' );
+        is $prev->at( 'a' )->attr( 'class' ), 'button disabled';
+        is $prev->at( 'a' )->attr( 'href' ), '';
+
+        my $next = $dom->at( '.pager .next' );
+        is $next->at( 'a' )->attr( 'class' ), 'button disabled';
+        is $next->at( 'a' )->attr( 'href' ), '';
     },
 
     '/blog/tag/even-more-tags/index.html' => sub {
@@ -342,6 +390,14 @@ my @page_tests = (
         if ( ok my $node = $dom->at( 'footer #app-info' ) ) {
             is $node->text, $app->data->{info}, 'app-info is correct';
         }
+
+        my $prev = $dom->at( '.pager .prev' );
+        is $prev->at( 'a' )->attr( 'class' ), 'button disabled';
+        is $prev->at( 'a' )->attr( 'href' ), '';
+
+        my $next = $dom->at( '.pager .next' );
+        is $next->at( 'a' )->attr( 'class' ), 'button disabled';
+        is $next->at( 'a' )->attr( 'href' ), '';
     },
 
     # Tag feeds

@@ -57,8 +57,17 @@ around pages => sub {
     # Add the url_root
     my $url_root = $self->url_root;
     for my $page ( @pages ) {
-        next if $page->path =~ /^$url_root/;
-        $page->path( join "/", $url_root, $page->path );
+        my @url_attrs = qw( path );
+
+        if ( $page->isa( 'Statocles::Page::List' ) ) {
+            push @url_attrs, qw( next prev );
+        }
+
+        for my $attr ( @url_attrs ) {
+            if ( $page->$attr && $page->$attr !~ /^$url_root/ ) {
+                $page->$attr( join "/", $url_root, $page->$attr );
+            }
+        }
     }
 
     return @pages;
