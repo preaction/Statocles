@@ -1,6 +1,7 @@
 
 use Statocles::Base 'Test';
 use Statocles::App::Static;
+use Mojo::DOM;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
 
 my ( $site, $build_dir, $deploy_dir ) = build_test_site_apps(
@@ -13,21 +14,28 @@ my $page = ( $blog->pages )[0];
 
 subtest 'build' => sub {
     $site->build;
-    # XXX: Test the content
+
     ok $build_dir->child( 'index.html' )->exists,
         'site index renames app page';
     ok !$deploy_dir->child( 'index.html' )->exists, 'not deployed yet';
     ok !$build_dir->child( 'blog', 'index.html' )->exists,
         'site index renames app page';
+
+    my $dom = Mojo::DOM->new( $build_dir->child( '/blog/page/2/index.html' )->slurp_utf8 );
+    ok !$dom->at( '[href=/blog]' ), 'no link to /blog';
+    ok !$dom->at( '[href=/blog/index.html]' ), 'no link to /blog/index.html';
 };
 
 subtest 'deploy' => sub {
     $site->deploy;
-    # XXX: Test the content
     ok $deploy_dir->child( 'index.html' )->exists,
         'site index renames app page';
     ok !$deploy_dir->child( 'blog', 'index.html' )->exists,
         'site index renames app page';
+
+    my $dom = Mojo::DOM->new( $deploy_dir->child( '/blog/page/2/index.html' )->slurp_utf8 );
+    ok !$dom->at( '[href=/blog]' ), 'no link to /blog';
+    ok !$dom->at( '[href=/blog/index.html]' ), 'no link to /blog/index.html';
 };
 
 subtest 'error messages' => sub {

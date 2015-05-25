@@ -342,21 +342,30 @@ sub build {
     my $base_path = Mojo::URL->new( $base_url )->path;
     $base_path =~ s{/$}{};
 
+    my $index_root = $self->index ? $apps->{ $self->index }->url_root : '';
     for my $page ( @pages ) {
         my $content = $page->render( %args );
 
         if ( !ref $content ) {
-            if ( $base_path =~ /\S/ ) {
-                my $dom = Mojo::DOM->new( $content );
-                for my $attr ( qw( src href ) ) {
-                    for my $el ( $dom->find( "[$attr]" )->each ) {
-                        my $url = $el->attr( $attr );
-                        next unless $url =~ m{^/};
-                        $el->attr( $attr, join "", $base_path, $url );
+            my $dom = Mojo::DOM->new( $content );
+            for my $attr ( qw( src href ) ) {
+                for my $el ( $dom->find( "[$attr]" )->each ) {
+                    my $url = $el->attr( $attr );
+                    next unless $url =~ m{^/};
+
+                    # Rewrite links to the index app's index page
+                    if ( $index_root && $url =~ m{^$index_root(?:/index[.]html)?$} ) {
+                        $url = '/';
                     }
+
+                    if ( $base_path =~ /\S/ ) {
+                        $url = join "", $base_path, $url;
+                    }
+
+                    $el->attr( $attr, $url );
                 }
-                $content = $dom->to_string;
             }
+            $content = $dom->to_string;
         }
 
         $store->write_file( $page->path, $content );
