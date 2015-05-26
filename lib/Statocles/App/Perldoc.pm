@@ -4,7 +4,6 @@ package Statocles::App::Perldoc;
 use Statocles::Base 'Class';
 use Statocles::Page::Plain;
 use Scalar::Util qw( blessed );
-use List::MoreUtils qw( any );
 use Pod::Simple::Search;
 use Pod::Simple::XHTML;
 with 'Statocles::App';
@@ -268,7 +267,7 @@ sub _weave_module {
     my $finder = sub {
         my $node = $_[ 1 ];
         return 0
-            unless any { $node->isa( $_ ) }
+            unless grep { $node->isa( $_ ) }
         qw( PPI::Token::Quote PPI::Token::QuoteLike PPI::Token::HereDoc );
         return 1 if $node->content =~ /^=[a-z]/m;
         return 0;

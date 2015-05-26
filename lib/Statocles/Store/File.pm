@@ -6,7 +6,6 @@ with 'Statocles::Store';
 use Scalar::Util qw( weaken blessed );
 use Statocles::Document;
 use YAML;
-use List::MoreUtils qw( firstidx );
 use File::Spec::Functions qw( splitdir );
 
 my $DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S';
@@ -145,10 +144,10 @@ sub parse_frontmatter {
         shift @lines;
 
         # The next --- is the end of the YAML frontmatter
-        my $i = firstidx { /^---/ } @lines;
+        my ( $i ) = grep { $lines[ $_ ] =~ /^---/ } 0..$#lines;
 
         # If we did not find the marker between YAML and Markdown
-        if ( $i < 0 ) {
+        if ( !defined $i ) {
             die "Could not find end of front matter (---) in '$from'\n";
         }
 

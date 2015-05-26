@@ -4,7 +4,6 @@ package Statocles::Page::List;
 use Statocles::Base 'Class';
 with 'Statocles::Page';
 use List::Util qw( max );
-use List::MoreUtils qw( part );
 use Statocles::Template;
 
 =attr pages
@@ -101,7 +100,11 @@ sub paginate {
     my $path_format = delete $args{path};
     my $index = delete $args{index};
 
-    my @sets = part { int( $_ / $after ) } 0..$#{$pages};
+    my @sets;
+    for my $i ( 0..$#{$pages} ) {
+        push @{ $sets[ int( $i / $after ) ] }, $pages->[ $i ];
+    }
+
     my @retval;
     for my $i ( 0..$#sets ) {
         my $path = $index && $i == 0 ? $index : sprintf( $path_format, $i + 1 );
@@ -113,7 +116,7 @@ sub paginate {
 
         push @retval, $class->new(
             path => $path,
-            pages => [ @{$pages}[ @{ $sets[$i] } ] ],
+            pages => $sets[$i],
             ( $next ? ( next => $next ) : () ),
             ( $i > 0 ? ( prev => $prev ) : () ),
             date => $pages->[0]->date,
