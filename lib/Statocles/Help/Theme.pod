@@ -96,9 +96,15 @@ When an application assembles a L<page object|Statocles::Page>, it sets values
 inside. The page then gives those values to the template. The common values in
 every template are:
 
-    $self   - The current L<Statocles::Page|Statocles::Page> object
-    $site   - The current L<Statocles::Site|Statocles::Site> object
-    $app    - The current L<Statocles::App|Statocles::App> object
+=over 4
+
+=item C<$self> - The current L<Statocles::Page|Statocles::Page> object
+
+=item C<$site> - The current L<Statocles::Site|Statocles::Site> object
+
+=item C<$app> - The current L<Statocles::App|Statocles::App> object
+
+=back
 
 These objects hold all the data we need to render the page.
 
