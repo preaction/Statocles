@@ -5,7 +5,7 @@ use Statocles::Base;
 use Test::More;
 use Test::Exception;
 use Test::Deep;
-use File::Copy::Recursive qw( dircopy );
+use Statocles::Util qw( dircopy );
 
 use base qw( Exporter );
 our @EXPORT_OK = qw(
@@ -251,8 +251,8 @@ sub build_temp_site {
     my ( $share_dir ) = @_;
 
     my $tmp = Path::Tiny->tempdir;
-    dircopy $share_dir->child( qw( app blog ) )->stringify, $tmp->child( 'blog' )->stringify;
-    dircopy $share_dir->child( 'theme' )->stringify, $tmp->child( 'theme' )->stringify;
+    dircopy $share_dir->child( qw( app blog ) ), $tmp->child( 'blog' );
+    dircopy $share_dir->child( 'theme' ), $tmp->child( 'theme' );
     $tmp->child( 'build_site' )->mkpath;
     $tmp->child( 'deploy_site' )->mkpath;
     $tmp->child( 'build_foo' )->mkpath;

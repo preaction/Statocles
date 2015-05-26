@@ -1,7 +1,7 @@
 
 use Statocles::Base 'Test';
 use Statocles::Store::File;
-use File::Copy::Recursive qw( dircopy );
+use Statocles::Util qw( dircopy );
 use Capture::Tiny qw( capture );
 my $SHARE_DIR = path( __DIR__, '..', '..', 'share' );
 build_test_site( theme => $SHARE_DIR->child( 'theme' ) );
@@ -156,7 +156,7 @@ subtest 'read with relative directory' => sub {
 subtest 'path that has regex-special characters inside' => sub {
     my $tmpdir = tempdir;
     my $baddir = $tmpdir->child( '[regex](name).dir' );
-    dircopy $SHARE_DIR->child( qw( store docs ) )->stringify, "$baddir";
+    dircopy $SHARE_DIR->child( qw( store docs ) ), $baddir;
     my $ignored_store = Statocles::Store::File->new(
         path => $baddir->child( qw( ignore ) ),
     );

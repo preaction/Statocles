@@ -9,7 +9,7 @@ BEGIN {
 };
 
 use Statocles::App::Blog;
-use File::Copy::Recursive qw( dircopy );
+use Statocles::Util qw( dircopy );
 
 my $SHARE_DIR = path( __DIR__ )->parent->child( 'share' );
 
@@ -142,8 +142,7 @@ subtest 'deploy with submodules and ignored files' => sub {
     # they would cause an error if added to the repository
     my $build_dir = $tmpdir->child( 'build' );
     $build_dir->mkpath;
-    dircopy( $SHARE_DIR->child( qw( deploy ) )->stringify, $build_dir->stringify )
-        or die "Could not copy directory: $!";
+    dircopy( $SHARE_DIR->child( qw( deploy ) ), $build_dir );
     $build_store = Statocles::Store::File->new( path => $build_dir );
     $build_dir->child( 'test.swp' )->spew( 'ERROR!' );
     $build_dir->child( '.DS_Store' )->spew( 'ERROR!' );
@@ -256,8 +255,7 @@ sub make_deploy {
     _git_run( $workgit, remote => add => $args{remote} => "$remotedir" );
 
     # Copy the store into the repository, so we have something to commit
-    dircopy( $SHARE_DIR->child( qw( app blog ) )->stringify, $remotedir->child( 'blog' )->stringify )
-        or die "Could not copy directory: $!";
+    dircopy( $SHARE_DIR->child( qw( app blog ) ), $remotedir->child( 'blog' ) );
     _git_run( $remotegit, add => 'blog' );
 
     # Also add a file not in the store, to test that we create an orphan branch

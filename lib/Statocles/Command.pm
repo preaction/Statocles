@@ -6,7 +6,6 @@ use Scalar::Util qw( blessed );
 use Getopt::Long qw( GetOptionsFromArray :config pass_through bundling no_auto_abbrev );
 use Pod::Usage::Return qw( pod2usage );
 use File::Share qw( dist_dir );
-use File::Copy::Recursive qw( dircopy );
 use Beam::Wire;
 
 my @VERBOSE = ( "warn", "info", "debug", "trace" );
