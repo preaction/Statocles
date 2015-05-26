@@ -59,7 +59,7 @@ site:
                     modules:
                         - 'Statocles'
                         - 'Statocles::'
-                    index_module: Statocles
+                    index_module: 'Statocles::Help'
                     weave: 1
 
             blog:
