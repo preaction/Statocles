@@ -106,7 +106,33 @@ every template are:
 
 =back
 
-These objects hold all the data we need to render the page.
+These objects hold all the data we need to render the page. Since you are writing Perl,
+you can use any of the methods from those objects. Some useful methods to note are:
+
+=over 4
+
+=item C<data()>
+
+All of the objects above, Page, Site, and App, have a C<data()> method that
+allows for arbitrary key/values. Site and App data are configured in the Site's
+config file, so these can be used as hooks for template authors to add
+additional features, such as social media links or metrics tools. Page objects
+data come from the App, and add information that may not fit anywhere else.
+
+=item L<C<$self-E<gt>sections>|Statocles::Page::Document/sections>
+
+The C<sections> method works on L<document pages|Statocles::Page::Document> and gives
+you all of the content split into sections on the section marker (C<--->).
+
+    # Get only the first section
+    my ( $first_section ) = $self->sections;
+
+    # Loop over the sections
+    % for my $section ( $self->sections ) {
+        <%= $section %>
+    % }
+
+=back
 
 =head2 Helpers
 
