@@ -107,6 +107,27 @@ Most of the content in a Statocles site consists of
 L<documents|Statocles::Document>.  This section explains some of the options
 available when writing documents.
 
+=head2 Content Sections
+
+After the frontmatter, you can use C<---> to divide the document into sections.
+This may have meaning for an app. For example, L<the blog
+app|Statocles::App::Blog> shows only the first content section on the index
+page, tag pages, and feeds, hiding the rest of the post behind a "Continue
+reading" link.
+
+    ---
+    title: My Long Post
+    ---
+
+    # A Long Post
+
+    This is a long post. Since I don't want you to have to skip past all the content,
+    I will instead put a "Read more" link below.
+
+    ---
+
+    Turns out this isn't that long of a post. Made you click!
+
 =head2 Custom Template and Layout
 
 Every document can have its own custom template and layout. This allows you to
