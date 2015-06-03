@@ -53,7 +53,7 @@ our %IMPORT_BUNDLES = (
         'Statocles::Event',
         sub {
             my ( $bundles, $args ) = @_;
-            Moo::Role->apply_role_to_package( $args->{package}, 'Beam::Emitter' );
+            Moo::Role->apply_roles_to_package( $args->{package}, 'Beam::Emitter' );
             return;
         },
     ],
