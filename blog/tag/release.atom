@@ -2,10 +2,39 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://preaction.github.io/Statocles/blog/tag/release/</id>
     <title>Statocles</title>
-    <updated>2015-05-24T21:07:37Z</updated>
+    <updated>2015-06-04T00:00:37Z</updated>
     <link href="http://preaction.github.io/Statocles/blog/tag/release.atom" rel="self" />
     <link href="http://preaction.github.io/Statocles/blog/tag/release/" rel="alternate" />
-    <generator version="0.046">Statocles</generator>
+    <generator version="0.047">Statocles</generator>
+    <entry>
+        <id>http://preaction.github.io/Statocles/blog/2015/06/03/release-v0-047/</id>
+        <title>Release v0.047</title>
+        <link href="http://preaction.github.io/Statocles/blog/2015/06/03/release-v0-047/" rel="alternate" />
+        <content type="html"><![CDATA[
+            <p>A bunch of bugfixes in this release, including one that could have prevented
+users from upgrading from previous versions due to a test failure.</p>
+
+<p>Most importantly, pagination in the blog is working again.</p>
+
+<p>Some additions to the <a href="/pod/Statocles/Help/Content.html">Content help guide</a>
+about a the new features over the last few releases, and one new feature adding
+a <code>data</code> attribute to <a href="/pod/Statocles/Document.html">Statocles::Document</a>,
+which allows for fun things when generating content.</p>
+
+<p>Finally, some of our dependencies have been removed, since their functionality
+overlapped with other dependencies (or turned out to be very easy to implement
+ourselves).</p>
+
+<p>Full changelog below</p>
+
+                <p><a href="http://preaction.github.io/Statocles/blog/2015/06/03/release-v0-047/#section-2">Continue reading...</a></p>
+            <p>Tags:
+                <a href="/blog/tag/release/">release</a>
+            </p>
+        ]]></content>
+        <updated>2015-06-03T00:00:00Z</updated>
+        <category term="release" />
+    </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2015/05/24/release-v0-046/</id>
         <title>Release v0.046</title>
@@ -154,36 +183,6 @@ Moo 2.</p>
             </p>
         ]]></content>
         <updated>2015-03-24T00:00:00Z</updated>
-        <category term="release" />
-    </entry>
-    <entry>
-        <id>http://preaction.github.io/Statocles/blog/2015/03/16/release-v0.042/</id>
-        <title>Release v0.042</title>
-        <link href="http://preaction.github.io/Statocles/blog/2015/03/16/release-v0.042/" rel="alternate" />
-        <content type="html"><![CDATA[
-            <p>A slow week, but some needed features:</p>
-
-<p>The LinkCheck plugin now supports an <code>ignore</code> attribute, in case there are
-links that aren't managed by Statocles (like having Github project links in a
-Github user/organization site).</p>
-
-<p>A new <code>before_build_write</code> event was added to the Site object, so that plugins
-can edit pages after the App creates them, and even add pages to the site.</p>
-
-<p>The Site object now has full control over the Markdown object that turns
-Markdown into HTML, which lets you use the other attributes of
-<a href="http://metacpan.org/pod/Text::Markdown">Text::Markdown</a>, or even use
-<a href="http://metacpan.org/pod/Text::MultiMarkdown">Text::MultiMarkdown</a> or any
-object that exposes a <code>markdown</code> method.</p>
-
-<p>Full changelog below:</p>
-
-                <p><a href="http://preaction.github.io/Statocles/blog/2015/03/16/release-v0.042/#section-2">Continue reading...</a></p>
-            <p>Tags:
-                <a href="/blog/tag/release/">release</a>
-            </p>
-        ]]></content>
-        <updated>2015-03-16T00:00:00Z</updated>
         <category term="release" />
     </entry>
 </feed>

@@ -66,6 +66,9 @@
                             <a href="/Statocles/pod">Docs</a>
                         </li>
                         <li>
+                            <a href="/Statocles/gallery">Gallery</a>
+                        </li>
+                        <li>
                             <a href="http://github.com/preaction/Statocles">Code</a>
                         </li>
                         <li>
@@ -228,6 +231,17 @@ has layout =&gt; (
         return [ grep { $_ ne &#39;&#39; } split m{/}, $_[0] ];
     },
     predicate =&gt; &#39;has_layout&#39;,
+);
+
+=attr data
+
+Any kind of miscellaneous data. This is available immediately in the document
+content.
+
+=cut
+
+has data =&gt; (
+    is =&gt; &#39;rw&#39;,
 );
 
 1;

@@ -66,6 +66,9 @@
                             <a href="/Statocles/pod">Docs</a>
                         </li>
                         <li>
+                            <a href="/Statocles/gallery">Gallery</a>
+                        </li>
+                        <li>
                             <a href="http://github.com/preaction/Statocles">Code</a>
                         </li>
                         <li>
@@ -140,7 +143,7 @@ our %IMPORT_BUNDLES = (
         &#39;Statocles::Event&#39;,
         sub {
             my ( $bundles, $args ) = @_;
-            Moo::Role-&gt;apply_role_to_package( $args-&gt;{package}, &#39;Beam::Emitter&#39; );
+            Moo::Role-&gt;apply_roles_to_package( $args-&gt;{package}, &#39;Beam::Emitter&#39; );
             return;
         },
     ],

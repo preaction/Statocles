@@ -66,6 +66,9 @@
                             <a href="/Statocles/pod">Docs</a>
                         </li>
                         <li>
+                            <a href="/Statocles/gallery">Gallery</a>
+                        </li>
+                        <li>
                             <a href="http://github.com/preaction/Statocles">Code</a>
                         </li>
                         <li>
@@ -92,7 +95,7 @@ use Statocles::Base;
 use Test::More;
 use Test::Exception;
 use Test::Deep;
-use File::Copy::Recursive qw( dircopy );
+use Statocles::Util qw( dircopy );
 
 use base qw( Exporter );
 our @EXPORT_OK = qw(
@@ -338,8 +341,8 @@ sub build_temp_site {
     my ( $share_dir ) = @_;
 
     my $tmp = Path::Tiny-&gt;tempdir;
-    dircopy $share_dir-&gt;child( qw( app blog ) )-&gt;stringify, $tmp-&gt;child( &#39;blog&#39; )-&gt;stringify;
-    dircopy $share_dir-&gt;child( &#39;theme&#39; )-&gt;stringify, $tmp-&gt;child( &#39;theme&#39; )-&gt;stringify;
+    dircopy $share_dir-&gt;child( qw( app blog ) ), $tmp-&gt;child( &#39;blog&#39; );
+    dircopy $share_dir-&gt;child( &#39;theme&#39; ), $tmp-&gt;child( &#39;theme&#39; );
     $tmp-&gt;child( &#39;build_site&#39; )-&gt;mkpath;
     $tmp-&gt;child( &#39;deploy_site&#39; )-&gt;mkpath;
     $tmp-&gt;child( &#39;build_foo&#39; )-&gt;mkpath;

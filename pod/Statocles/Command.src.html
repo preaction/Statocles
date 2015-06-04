@@ -66,6 +66,9 @@
                             <a href="/Statocles/pod">Docs</a>
                         </li>
                         <li>
+                            <a href="/Statocles/gallery">Gallery</a>
+                        </li>
+                        <li>
                             <a href="http://github.com/preaction/Statocles">Code</a>
                         </li>
                         <li>
@@ -93,7 +96,6 @@ use Scalar::Util qw( blessed );
 use Getopt::Long qw( GetOptionsFromArray :config pass_through bundling no_auto_abbrev );
 use Pod::Usage::Return qw( pod2usage );
 use File::Share qw( dist_dir );
-use File::Copy::Recursive qw( dircopy );
 use Beam::Wire;
 
 my @VERBOSE = ( &quot;warn&quot;, &quot;info&quot;, &quot;debug&quot;, &quot;trace&quot; );

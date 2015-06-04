@@ -66,6 +66,9 @@
                             <a href="/Statocles/pod">Docs</a>
                         </li>
                         <li>
+                            <a href="/Statocles/gallery">Gallery</a>
+                        </li>
+                        <li>
                             <a href="http://github.com/preaction/Statocles">Code</a>
                         </li>
                         <li>
@@ -429,8 +432,8 @@ sub index {
 
     my @pages = Statocles::Page::List-&gt;paginate(
         after =&gt; $self-&gt;page_size,
-        path =&gt; &#39;page/%i/index.html&#39;,
-        index =&gt; &#39;index.html&#39;,
+        path =&gt; &#39;/page/%i/index.html&#39;,
+        index =&gt; &#39;/index.html&#39;,
         # Sorting by path just happens to also sort by date
         pages =&gt; [ sort { $b-&gt;path cmp $a-&gt;path } @index_post_pages ],
         app =&gt; $self,
@@ -482,8 +485,8 @@ sub tag_pages {
     for my $tag ( keys %tagged_docs ) {
         my @tag_pages = Statocles::Page::List-&gt;paginate(
             after =&gt; $self-&gt;page_size,
-            path =&gt; join( &quot;/&quot;, &#39;tag&#39;, $self-&gt;_tag_url( $tag ), &#39;page/%i/index.html&#39; ),
-            index =&gt; join( &quot;/&quot;, &#39;tag&#39;, $self-&gt;_tag_url( $tag ), &#39;index.html&#39; ),
+            path =&gt; join( &quot;/&quot;, &#39;&#39;, &#39;tag&#39;, $self-&gt;_tag_url( $tag ), &#39;page/%i/index.html&#39; ),
+            index =&gt; join( &quot;/&quot;, &#39;&#39;, &#39;tag&#39;, $self-&gt;_tag_url( $tag ), &#39;index.html&#39; ),
             # Sorting by path just happens to also sort by date
             pages =&gt; [ sort { $b-&gt;path cmp $a-&gt;path } @{ $tagged_docs{ $tag } } ],
             app =&gt; $self,

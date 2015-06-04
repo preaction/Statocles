@@ -66,6 +66,9 @@
                             <a href="/Statocles/pod">Docs</a>
                         </li>
                         <li>
+                            <a href="/Statocles/gallery">Gallery</a>
+                        </li>
+                        <li>
                             <a href="http://github.com/preaction/Statocles">Code</a>
                         </li>
                         <li>
@@ -87,10 +90,10 @@
             <div class="crumbtrail">
 <ul>
     <li>
-        <a href="/Statocles/pod/index.html">Statocles</a>
+        <a href="/Statocles/pod/Statocles.html">Statocles</a>
     </li>
     <li>
-        <a href="/Statocles/pod/Statocles/Help.html">Help</a>
+        <a href="/Statocles/pod/index.html">Help</a>
     </li>
     <li>
         <a href="/Statocles/pod/Statocles/Help/Theme.html">Theme</a>
@@ -187,11 +190,47 @@
 
 <p>When an application assembles a <a href="/Statocles/pod/Statocles/Page.html">page object</a>, it sets values inside. The page then gives those values to the template. The common values in every template are:</p>
 
-<pre><code>    $self   - The current L&lt;Statocles::Page|Statocles::Page&gt; object
-    $site   - The current L&lt;Statocles::Site|Statocles::Site&gt; object
-    $app    - The current L&lt;Statocles::App|Statocles::App&gt; object</code></pre>
+<dl>
 
-<p>These objects hold all the data we need to render the page.</p>
+<dt><code>$self</code> - The current <a href="/Statocles/pod/Statocles/Page.html">Statocles::Page</a> object</dt>
+<dd>
+
+</dd>
+<dt><code>$site</code> - The current <a href="/Statocles/pod/Statocles/Site.html">Statocles::Site</a> object</dt>
+<dd>
+
+</dd>
+<dt><code>$app</code> - The current <a href="/Statocles/pod/Statocles/App.html">Statocles::App</a> object</dt>
+<dd>
+
+</dd>
+</dl>
+
+<p>These objects hold all the data we need to render the page. Since you are writing Perl, you can use any of the methods from those objects. Some useful methods to note are:</p>
+
+<dl>
+
+<dt><code>data()</code></dt>
+<dd>
+
+<p>All of the objects above, Page, Site, and App, have a <code>data()</code> method that allows for arbitrary key/values. Site and App data are configured in the Site&#39;s config file, so these can be used as hooks for template authors to add additional features, such as social media links or metrics tools. Page objects data come from the App, and add information that may not fit anywhere else.</p>
+
+</dd>
+<dt><a href="/Statocles/pod/Statocles/Page/Document#sections.html"><code>$self-&gt;sections</code></a></dt>
+<dd>
+
+<p>The <code>sections</code> method works on <a href="/Statocles/pod/Statocles/Page/Document.html">document pages</a> and gives you all of the content split into sections on the section marker (<code>---</code>).</p>
+
+<pre><code>    # Get only the first section
+    my ( $first_section ) = $self-&gt;sections;
+
+    # Loop over the sections
+    % for my $section ( $self-&gt;sections ) {
+        &lt;%= $section %&gt;
+    % }</code></pre>
+
+</dd>
+</dl>
 
 <h2 id="Helpers">Helpers</h2>
 

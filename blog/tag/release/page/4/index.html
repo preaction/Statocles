@@ -68,6 +68,9 @@
                             <a href="/Statocles/pod">Docs</a>
                         </li>
                         <li>
+                            <a href="/Statocles/gallery">Gallery</a>
+                        </li>
+                        <li>
                             <a href="http://github.com/preaction/Statocles">Code</a>
                         </li>
                         <li>
@@ -93,6 +96,41 @@
         <main>
 
 
+            <article>
+                <header>
+                    <h1><a href="/Statocles/blog/2015/01/04/release-v0.032.html">Release v0.032</a></h1>
+
+                    <p class="tags">Tags:
+                        <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
+                    </p>
+
+                    <aside>
+                        <p><time datetime="2015-01-04">
+                            Posted on 2015-01-04
+                        </time>
+                            by preaction
+                        </p>
+                    </aside>
+
+                </header>
+
+                <p>Another major breaking change in this version: Theme is now an attribute of a site,
+not an app. The per-app theme was too much flexibility, and made it very difficult
+to add theme collateral like scripts, stylesheets, and images.</p>
+
+<p>The robots.txt is now a template, which allows you to overwrite it with new contents.
+The Mac::FSEvents module, which we use to watch the filesystem on OSX, is now a
+prereq for OSX users.</p>
+
+<p>Finally, some tests were updated with more diagnostics information, to track down
+some locale problems.</p>
+
+<p>Full changelog below:</p>
+
+
+                    <p><a href="/Statocles/blog/2015/01/04/release-v0.032.html#section-2">Continue reading Release v0.032...</a></p>
+
+            </article>
             <article>
                 <header>
                     <h1><a href="/Statocles/blog/2014/12/25/release-v0.031.html">Release v0.031</a></h1>
@@ -241,43 +279,16 @@ Still plenty of cleanup to go.</p>
                     <p><a href="/Statocles/blog/2014/12/14/release-v0.028.html#section-2">Continue reading Release v0.028...</a></p>
 
             </article>
-            <article>
-                <header>
-                    <h1><a href="/Statocles/blog/2014/12/08/release-v0.027.html">Release v0.027</a></h1>
-
-                    <p class="tags">Tags:
-                        <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
-                    </p>
-
-                    <aside>
-                        <p><time datetime="2014-12-08">
-                            Posted on 2014-12-08
-                        </time>
-                            by preaction
-                        </p>
-                    </aside>
-
-                </header>
-
-                <p>This release fixes some issues that would prevent Statocles from installing. I may have
-finally fixed <a href="https://github.com/preaction/Statocles/issues/110">the Win32 test failure that has been plaguing me!</a></p>
-
-<p>Full changelog:</p>
-
-
-                    <p><a href="/Statocles/blog/2014/12/08/release-v0.027.html#section-2">Continue reading Release v0.027...</a></p>
-
-            </article>
         </main>
 
         <ul class="pager">
             <li class="prev">
-                <a class="button button-primary" href="tag/release/page/5" rel="next">
+                <a class="button button-primary" href="/Statocles/blog/tag/release/page/5" rel="next">
                     ← Older
                 </a>
             </li>
             <li class="next">
-                <a class="button button-primary" href="tag/release/page/3" rel="prev">
+                <a class="button button-primary" href="/Statocles/blog/tag/release/page/3" rel="prev">
                     Newer →
                 </a>
             </li>

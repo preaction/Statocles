@@ -66,6 +66,9 @@
                             <a href="/Statocles/pod">Docs</a>
                         </li>
                         <li>
+                            <a href="/Statocles/gallery">Gallery</a>
+                        </li>
+                        <li>
                             <a href="http://github.com/preaction/Statocles">Code</a>
                         </li>
                         <li>
@@ -144,8 +147,17 @@ around pages =&gt; sub {
     # Add the url_root
     my $url_root = $self-&gt;url_root;
     for my $page ( @pages ) {
-        next if $page-&gt;path =~ /^$url_root/;
-        $page-&gt;path( join &quot;/&quot;, $url_root, $page-&gt;path );
+        my @url_attrs = qw( path );
+
+        if ( $page-&gt;isa( &#39;Statocles::Page::List&#39; ) ) {
+            push @url_attrs, qw( next prev );
+        }
+
+        for my $attr ( @url_attrs ) {
+            if ( $page-&gt;$attr &amp;&amp; $page-&gt;$attr !~ /^$url_root/ ) {
+                $page-&gt;$attr( join &quot;/&quot;, $url_root, $page-&gt;$attr );
+            }
+        }
     }
 
     return @pages;

@@ -66,6 +66,9 @@
                             <a href="/Statocles/pod">Docs</a>
                         </li>
                         <li>
+                            <a href="/Statocles/gallery">Gallery</a>
+                        </li>
+                        <li>
                             <a href="http://github.com/preaction/Statocles">Code</a>
                         </li>
                         <li>
@@ -87,10 +90,10 @@
             <div class="crumbtrail">
 <ul>
     <li>
-        <a href="/Statocles/pod/index.html">Statocles</a>
+        <a href="/Statocles/pod/Statocles.html">Statocles</a>
     </li>
     <li>
-        <a href="/Statocles/pod/Statocles/Help.html">Help</a>
+        <a href="/Statocles/pod/index.html">Help</a>
     </li>
     <li>
         <a href="/Statocles/pod/Statocles/Help/Content.html">Content</a>
@@ -106,16 +109,56 @@
 
 <p>This guide describes how to use <a href="https://metacpan.org/pod/statocles">the statocles command</a> to manage site content, build, test, and deploy the site.</p>
 
+<h1 id="BASIC-CONTENT">BASIC CONTENT</h1>
+
 <h2 id="Create-A-Blog-Post">Create A Blog Post</h2>
 
 <p>Remember when we gave our blog app a name? Now we can use that name to access the blog&#39;s command-line commands. To create a new blog post, we can use the <code>post</code> command:</p>
 
-<pre><code>    $ statocles blog post My First Post
-    New post at: blog/2014/06/04/my-first-post.markdown</code></pre>
+<pre><code>    $ statocles blog post Snickerdoodles
+    New post at: blog/2014/06/04/snickerdoodles</code></pre>
 
 <p>Everything after <code>post</code> will be used as the title of the post.</p>
 
 <p>If you have the <code>EDITOR</code> environment variable set, your editor will automatically open on the newly-created document.</p>
+
+<h2 id="Frontmatter">Frontmatter</h2>
+
+<p>Statocles documents start out with a block of YAML, called the frontmatter. This header holds metadata about the document, such as the title, author, date, tags, and other information.</p>
+
+<pre><code>    ---
+    title: Snickerdoodles
+    author: preaction
+    tags: cookies, cinnamon
+    ---</code></pre>
+
+<h2 id="Markdown">Markdown</h2>
+
+<p>Below the frontmatter, after the second <code>---</code>, everything is <a href="http://daringfireball.net/projects/markdown/syntax">Markdown</a>, a simple, text-based language that will be generated into HTML.</p>
+
+<pre><code>    # Snickerdoodles
+
+    Snickerdoodles are a simple, chewy, cinnamon cookie.
+
+    ## Ingredients
+
+    * 1/2 c butter
+    * 1 c sugar</code></pre>
+
+<p>This will be parsed into</p>
+
+<pre><code>    &lt;h1&gt;Snickerdoodles&lt;/h1&gt;
+
+    &lt;p&gt;Snickerdoodles are a simple, chewy, cinnamon cookie.&lt;/p&gt;
+
+    &lt;h2&gt;Ingredients&lt;/h2&gt;
+
+    &lt;ul&gt;
+        &lt;li&gt;1/2 c butter&lt;/li&gt;
+        &lt;li&gt;1 c sugar&lt;/li&gt;
+    &lt;/ul&gt;</code></pre>
+
+<p>See <a href="http://daringfireball.net/projects/markdown/syntax">the Markdown website</a> for full documentation on Markdown syntax.</p>
 
 <h2 id="Build-The-Site">Build The Site</h2>
 
@@ -144,6 +187,94 @@
 <pre><code>    $ statocles deploy</code></pre>
 
 <p>Running the <code>deploy</code> command will, in the case of the Git deploy, commit the updated pages to the Git repository. <code>deploy</code> will try to do a <code>git push</code> automatically, so your changes are now live on Github Pages!</p>
+
+<h1 id="ADVANCED-FEATURES">ADVANCED FEATURES</h1>
+
+<p>Most of the content in a Statocles site consists of <a href="/Statocles/pod/Statocles/Document.html">documents</a>. This section explains some of the options available when writing documents.</p>
+
+<h2 id="Content-Sections">Content Sections</h2>
+
+<p>After the frontmatter, you can use <code>---</code> to divide the document into sections. This may have meaning for an app. For example, <a href="/Statocles/pod/Statocles/App/Blog.html">the blog app</a> shows only the first content section on the index page, tag pages, and feeds, hiding the rest of the post behind a &quot;Continue reading&quot; link.</p>
+
+<pre><code>    ---
+    title: My Long Post
+    ---
+
+    # A Long Post
+
+    This is a long post. Since I don&#39;t want you to have to skip past all the content,
+    I will instead put a &quot;Read more&quot; link below.
+
+    ---
+
+    Turns out this isn&#39;t that long of a post. Made you click!</code></pre>
+
+<h2 id="Custom-Template-and-Layout">Custom Template and Layout</h2>
+
+<p>Every document can have its own custom template and layout. This allows you to have multiple kinds of posts in a blog, or additional customization for particular pages.</p>
+
+<p>You can specify a custom template or layout by using the <code>template</code> or <code>layout</code> key in the frontmatter:</p>
+
+<pre><code>    ---
+    title: Chocolate-Chip Cookies
+    template: document/recipe.html
+    ---
+
+    # Chocolate-Chip Cookies
+
+    This is really the best cookie ever!</code></pre>
+
+<p>When the page is created, the <code>document/recipe.html.ep</code> template will be read from the <a href="/Statocles/pod/Statocles/Help/Theme.html">theme directory</a>.</p>
+
+<h2 id="Generated-Content">Generated Content</h2>
+
+<p>All documents are also run through <a href="/Statocles/pod/Statocles/Help/Theme#Writing-a-Template.html">the template processor</a>, so we have access to <a href="https://metacpan.org/pod/Statocle::Help::Theme#Helpers">template helpers</a>, but we can also generate our content from the document&#39;s frontmatter data.</p>
+
+<pre><code>    ---
+    title: Cheddar Cheese Sauce
+    data:
+        ingredients:
+            - 1 tbsp flour
+            - 1 tbsp butter
+            - 1 c milk
+            - 2 c cheddar cheese
+    ---
+
+    % for my $ingredient ( @{ $self-&gt;data-&gt;{ingredients} } ) {
+    * &lt;%= $ingredient %&gt;&lt;/li&gt;
+    % }</code></pre>
+
+<p>Since this template is generated before the Markdown is parsed, you can generate HTML or Markdown from your template.</p>
+
+<p>When the content is being generated, you have access to the following variables:</p>
+
+<dl>
+
+<dt><code>$self</code> - The current <a href="/Statocles/pod/Statocles/Document.html">document object</a></dt>
+<dd>
+
+</dd>
+<dt><code>$site</code> - The current <a href="/Statocles/pod/Statocles/Site.html">site object</a></dt>
+<dd>
+
+</dd>
+<dt><code>$app</code> - The current <a href="/Statocles/pod/Statocles/App.html">app object</a></dt>
+<dd>
+
+</dd>
+</dl>
+
+<h1 id="SEE-ALSO">SEE ALSO</h1>
+
+<dl>
+
+<dt><a href="/Statocles/pod/Statocles/Document.html">Statocles::Document</a></dt>
+<dd>
+
+<p>These objects are created from document files.</p>
+
+</dd>
+</dl>
 
 
 

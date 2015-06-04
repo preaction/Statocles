@@ -68,6 +68,9 @@
                             <a href="/Statocles/pod">Docs</a>
                         </li>
                         <li>
+                            <a href="/Statocles/gallery">Gallery</a>
+                        </li>
+                        <li>
                             <a href="http://github.com/preaction/Statocles">Code</a>
                         </li>
                         <li>
@@ -93,6 +96,44 @@
         <main>
 
 
+            <article>
+                <header>
+                    <h1><a href="/Statocles/blog/2015/03/16/release-v0.042/">Release v0.042</a></h1>
+
+                    <p class="tags">Tags:
+                        <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
+                    </p>
+
+                    <aside>
+                        <p><time datetime="2015-03-16">
+                            Posted on 2015-03-16
+                        </time>
+                        </p>
+                    </aside>
+
+                </header>
+
+                <p>A slow week, but some needed features:</p>
+
+<p>The LinkCheck plugin now supports an <code>ignore</code> attribute, in case there are
+links that aren&#39;t managed by Statocles (like having Github project links in a
+Github user/organization site).</p>
+
+<p>A new <code>before_build_write</code> event was added to the Site object, so that plugins
+can edit pages after the App creates them, and even add pages to the site.</p>
+
+<p>The Site object now has full control over the Markdown object that turns
+Markdown into HTML, which lets you use the other attributes of
+<a href="http://metacpan.org/pod/Text::Markdown">Text::Markdown</a>, or even use
+<a href="http://metacpan.org/pod/Text::MultiMarkdown">Text::MultiMarkdown</a> or any
+object that exposes a <code>markdown</code> method.</p>
+
+<p>Full changelog below:</p>
+
+
+                    <p><a href="/Statocles/blog/2015/03/16/release-v0.042/#section-2">Continue reading Release v0.042...</a></p>
+
+            </article>
             <article>
                 <header>
                     <h1><a href="/Statocles/blog/2015/03/08/release-v0.041/">Release v0.041</a></h1>
@@ -235,43 +276,16 @@ slightly older versions of git.</p>
                     <p><a href="/Statocles/blog/2015/02/14/release-v0.038.html#section-2">Continue reading Release v0.038...</a></p>
 
             </article>
-            <article>
-                <header>
-                    <h1><a href="/Statocles/blog/2015/02/12/release-v0.037.html">Release v0.037</a></h1>
-
-                    <p class="tags">Tags:
-                        <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
-                    </p>
-
-                    <aside>
-                        <p><time datetime="2015-02-12">
-                            Posted on 2015-02-12
-                        </time>
-                        </p>
-                    </aside>
-
-                </header>
-
-                <p>A short release to potentially fix some possible installation problems, reported
-by CPAN Testers.</p>
-
-<ul>
-<li><a href="https://github.com/preaction/Statocles/commit/08924fd7172ae45ee15bae3f740764b840011dee">possibly fix cpantesters reports about submodule</a> (<a href="https://github.com/preaction/Statocles/issues/245">#245</a>)</li>
-</ul>
-
-
-
-            </article>
         </main>
 
         <ul class="pager">
             <li class="prev">
-                <a class="button button-primary" href="page/3" rel="next">
+                <a class="button button-primary" href="/Statocles/blog/page/3" rel="next">
                     ← Older
                 </a>
             </li>
             <li class="next">
-                <a class="button button-primary" href="index.html" rel="prev">
+                <a class="button button-primary" href="/Statocles/blog" rel="prev">
                     Newer →
                 </a>
             </li>

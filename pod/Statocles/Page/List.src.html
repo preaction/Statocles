@@ -66,6 +66,9 @@
                             <a href="/Statocles/pod">Docs</a>
                         </li>
                         <li>
+                            <a href="/Statocles/gallery">Gallery</a>
+                        </li>
+                        <li>
                             <a href="http://github.com/preaction/Statocles">Code</a>
                         </li>
                         <li>
@@ -91,7 +94,6 @@
 use Statocles::Base &#39;Class&#39;;
 with &#39;Statocles::Page&#39;;
 use List::Util qw( max );
-use List::MoreUtils qw( part );
 use Statocles::Template;
 
 =attr pages
@@ -116,7 +118,7 @@ The path to the previous page in the pagination series.
 =cut
 
 has [qw( next prev )] =&gt; (
-    is =&gt; &#39;ro&#39;,
+    is =&gt; &#39;rw&#39;,
     isa =&gt; Path,
     coerce =&gt; Path-&gt;coercion,
 );
@@ -188,7 +190,11 @@ sub paginate {
     my $path_format = delete $args{path};
     my $index = delete $args{index};
 
-    my @sets = part { int( $_ / $after ) } 0..$#{$pages};
+    my @sets;
+    for my $i ( 0..$#{$pages} ) {
+        push @{ $sets[ int( $i / $after ) ] }, $pages-&gt;[ $i ];
+    }
+
     my @retval;
     for my $i ( 0..$#sets ) {
         my $path = $index &amp;&amp; $i == 0 ? $index : sprintf( $path_format, $i + 1 );
@@ -200,7 +206,7 @@ sub paginate {
 
         push @retval, $class-&gt;new(
             path =&gt; $path,
-            pages =&gt; [ @{$pages}[ @{ $sets[$i] } ] ],
+            pages =&gt; $sets[$i],
             ( $next ? ( next =&gt; $next ) : () ),
             ( $i &gt; 0 ? ( prev =&gt; $prev ) : () ),
             date =&gt; $pages-&gt;[0]-&gt;date,

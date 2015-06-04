@@ -66,6 +66,9 @@
                             <a href="/Statocles/pod">Docs</a>
                         </li>
                         <li>
+                            <a href="/Statocles/gallery">Gallery</a>
+                        </li>
+                        <li>
                             <a href="http://github.com/preaction/Statocles">Code</a>
                         </li>
                         <li>
@@ -183,11 +186,43 @@ When an application assembles a L&lt;page object|Statocles::Page&gt;, it sets va
 inside. The page then gives those values to the template. The common values in
 every template are:
 
-    $self   - The current L&lt;Statocles::Page|Statocles::Page&gt; object
-    $site   - The current L&lt;Statocles::Site|Statocles::Site&gt; object
-    $app    - The current L&lt;Statocles::App|Statocles::App&gt; object
+=over 4
 
-These objects hold all the data we need to render the page.
+=item C&lt;$self&gt; - The current L&lt;Statocles::Page|Statocles::Page&gt; object
+
+=item C&lt;$site&gt; - The current L&lt;Statocles::Site|Statocles::Site&gt; object
+
+=item C&lt;$app&gt; - The current L&lt;Statocles::App|Statocles::App&gt; object
+
+=back
+
+These objects hold all the data we need to render the page. Since you are writing Perl,
+you can use any of the methods from those objects. Some useful methods to note are:
+
+=over 4
+
+=item C&lt;data()&gt;
+
+All of the objects above, Page, Site, and App, have a C&lt;data()&gt; method that
+allows for arbitrary key/values. Site and App data are configured in the Site&#39;s
+config file, so these can be used as hooks for template authors to add
+additional features, such as social media links or metrics tools. Page objects
+data come from the App, and add information that may not fit anywhere else.
+
+=item L&lt;C&lt;$self-E&lt;gt&gt;sections&gt;|Statocles::Page::Document/sections&gt;
+
+The C&lt;sections&gt; method works on L&lt;document pages|Statocles::Page::Document&gt; and gives
+you all of the content split into sections on the section marker (C&lt;---&gt;).
+
+    # Get only the first section
+    my ( $first_section ) = $self-&gt;sections;
+
+    # Loop over the sections
+    % for my $section ( $self-&gt;sections ) {
+        &lt;%= $section %&gt;
+    % }
+
+=back
 
 =head2 Helpers
 

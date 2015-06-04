@@ -66,6 +66,9 @@
                             <a href="/Statocles/pod">Docs</a>
                         </li>
                         <li>
+                            <a href="/Statocles/gallery">Gallery</a>
+                        </li>
+                        <li>
                             <a href="http://github.com/preaction/Statocles">Code</a>
                         </li>
                         <li>
@@ -91,7 +94,6 @@
 use Statocles::Base &#39;Class&#39;;
 use Statocles::Page::Plain;
 use Scalar::Util qw( blessed );
-use List::MoreUtils qw( any );
 use Pod::Simple::Search;
 use Pod::Simple::XHTML;
 with &#39;Statocles::App&#39;;
@@ -355,7 +357,7 @@ sub _weave_module {
     my $finder = sub {
         my $node = $_[ 1 ];
         return 0
-            unless any { $node-&gt;isa( $_ ) }
+            unless grep { $node-&gt;isa( $_ ) }
         qw( PPI::Token::Quote PPI::Token::QuoteLike PPI::Token::HereDoc );
         return 1 if $node-&gt;content =~ /^=[a-z]/m;
         return 0;

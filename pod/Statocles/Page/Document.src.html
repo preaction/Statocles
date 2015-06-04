@@ -66,6 +66,9 @@
                             <a href="/Statocles/pod">Docs</a>
                         </li>
                         <li>
+                            <a href="/Statocles/gallery">Gallery</a>
+                        </li>
+                        <li>
                             <a href="http://github.com/preaction/Statocles">Code</a>
                         </li>
                         <li>
@@ -177,7 +180,7 @@ sub content {
     my ( $self, %vars ) = @_;
     my $content = $self-&gt;document-&gt;content;
     my $tmpl = $self-&gt;site-&gt;theme-&gt;build_template( $self-&gt;path, $content );
-    my $rendered = $tmpl-&gt;render( %vars, $self-&gt;vars );
+    my $rendered = $tmpl-&gt;render( %vars, $self-&gt;vars, self =&gt; $self-&gt;document );
     return $self-&gt;markdown-&gt;markdown( $rendered );
 }
 

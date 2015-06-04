@@ -66,6 +66,9 @@
                             <a href="/Statocles/pod">Docs</a>
                         </li>
                         <li>
+                            <a href="/Statocles/gallery">Gallery</a>
+                        </li>
+                        <li>
                             <a href="http://github.com/preaction/Statocles">Code</a>
                         </li>
                         <li>
@@ -93,19 +96,64 @@
 This guide describes how to use L&lt;the statocles command|statocles&gt; to manage
 site content, build, test, and deploy the site.
 
+=head1 BASIC CONTENT
+
 =head2 Create A Blog Post
 
 Remember when we gave our blog app a name? Now we can use that name to access
 the blog&#39;s command-line commands. To create a new blog post, we can use the
 C&lt;post&gt; command:
 
-    $ statocles blog post My First Post
-    New post at: blog/2014/06/04/my-first-post.markdown
+    $ statocles blog post Snickerdoodles
+    New post at: blog/2014/06/04/snickerdoodles
 
 Everything after C&lt;post&gt; will be used as the title of the post.
 
 If you have the C&lt;EDITOR&gt; environment variable set, your editor will
 automatically open on the newly-created document.
+
+=head2 Frontmatter
+
+Statocles documents start out with a block of YAML, called the frontmatter.
+This header holds metadata about the document, such as the title, author, date,
+tags, and other information.
+
+    ---
+    title: Snickerdoodles
+    author: preaction
+    tags: cookies, cinnamon
+    ---
+
+=head2 Markdown
+
+Below the frontmatter, after the second C&lt;---&gt;, everything is
+L&lt;Markdown|http://daringfireball.net/projects/markdown/syntax&gt;, a simple, text-based
+language that will be generated into HTML.
+
+    # Snickerdoodles
+
+    Snickerdoodles are a simple, chewy, cinnamon cookie.
+
+    ## Ingredients
+
+    * 1/2 c butter
+    * 1 c sugar
+
+This will be parsed into
+
+    &lt;h1&gt;Snickerdoodles&lt;/h1&gt;
+
+    &lt;p&gt;Snickerdoodles are a simple, chewy, cinnamon cookie.&lt;/p&gt;
+
+    &lt;h2&gt;Ingredients&lt;/h2&gt;
+
+    &lt;ul&gt;
+        &lt;li&gt;1/2 c butter&lt;/li&gt;
+        &lt;li&gt;1 c sugar&lt;/li&gt;
+    &lt;/ul&gt;
+
+See L&lt;the Markdown website|http://daringfireball.net/projects/markdown/syntax&gt; for
+full documentation on Markdown syntax.
 
 =head2 Build The Site
 
@@ -142,6 +190,100 @@ of having a website in a git repository is change tracking.
 Running the C&lt;deploy&gt; command will, in the case of the Git deploy, commit the
 updated pages to the Git repository. C&lt;deploy&gt; will try to do a C&lt;git push&gt;
 automatically, so your changes are now live on Github Pages!
+
+=head1 ADVANCED FEATURES
+
+Most of the content in a Statocles site consists of
+L&lt;documents|Statocles::Document&gt;.  This section explains some of the options
+available when writing documents.
+
+=head2 Content Sections
+
+After the frontmatter, you can use C&lt;---&gt; to divide the document into sections.
+This may have meaning for an app. For example, L&lt;the blog
+app|Statocles::App::Blog&gt; shows only the first content section on the index
+page, tag pages, and feeds, hiding the rest of the post behind a &quot;Continue
+reading&quot; link.
+
+    ---
+    title: My Long Post
+    ---
+
+    # A Long Post
+
+    This is a long post. Since I don&#39;t want you to have to skip past all the content,
+    I will instead put a &quot;Read more&quot; link below.
+
+    ---
+
+    Turns out this isn&#39;t that long of a post. Made you click!
+
+=head2 Custom Template and Layout
+
+Every document can have its own custom template and layout. This allows you to
+have multiple kinds of posts in a blog, or additional customization for
+particular pages.
+
+You can specify a custom template or layout by using the C&lt;template&gt; or C&lt;layout&gt; key
+in the frontmatter:
+
+    ---
+    title: Chocolate-Chip Cookies
+    template: document/recipe.html
+    ---
+
+    # Chocolate-Chip Cookies
+
+    This is really the best cookie ever!
+
+When the page is created, the C&lt;document/recipe.html.ep&gt; template will be read from
+the L&lt;theme directory|Statocles::Help::Theme&gt;.
+
+=head2 Generated Content
+
+All documents are also run through L&lt;the template
+processor|Statocles::Help::Theme/Writing-a-Template&gt;, so we have access to
+L&lt;template helpers|Statocle::Help::Theme/Helpers&gt;, but we can also generate our
+content from the document&#39;s frontmatter data.
+
+    ---
+    title: Cheddar Cheese Sauce
+    data:
+        ingredients:
+            - 1 tbsp flour
+            - 1 tbsp butter
+            - 1 c milk
+            - 2 c cheddar cheese
+    ---
+
+    % for my $ingredient ( @{ $self-&gt;data-&gt;{ingredients} } ) {
+    * &lt;%= $ingredient %&gt;&lt;/li&gt;
+    % }
+
+Since this template is generated before the Markdown is parsed, you can
+generate HTML or Markdown from your template.
+
+When the content is being generated, you have access to the following variables:
+
+=over 4
+
+=item C&lt;$self&gt; - The current L&lt;document object|Statocles::Document&gt;
+
+=item C&lt;$site&gt; - The current L&lt;site object|Statocles::Site&gt;
+
+=item C&lt;$app&gt; - The current L&lt;app object|Statocles::App&gt;
+
+=back
+
+=head1 SEE ALSO
+
+=over 4
+
+=item L&lt;Statocles::Document&gt;
+
+These objects are created from document files.
+
+=back
 
 </pre>
 
