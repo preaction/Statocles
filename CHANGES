@@ -1,6 +1,24 @@
 Changelog for Statocles
 
-0.046 2015-05-25T01:46:58
+0.047 2015-06-04T03:27:41
+ - add blank link to allow for $VERSION
+ - add another of my many e-mails to mailmap
+ - move to documented Role::Tiny API
+ - upgrade Import::Base to fix test failures
+ - add some interesting methods to the Theme guide
+ - add content sections to content guide
+ - fix links to template objects in Theme guide
+ - add more documentation about writing content
+ - move site doc link directly to the guides
+ - remove dependency on List::MoreUtils
+ - remove dependency on File::Copy::Recursive
+ - fix links to the index app should be the site root
+ - fix pagination in the blog
+ - add example site gallery
+ - add data attribute to documents
+ - add release v0.046 announcement
+
+0.046 2015-05-25T01:46:58Z
  - update statocles site theme from default theme
  - add module crumbtrail to perldoc app
  - add link to module source in perldoc app
