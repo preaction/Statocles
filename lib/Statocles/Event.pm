@@ -10,6 +10,7 @@ An event with L<page objects|Statocles::Page>.
 =cut
 
 package Statocles::Event::Pages;
+
 use Statocles::Base 'Class';
 extends 'Beam::Event';
 
