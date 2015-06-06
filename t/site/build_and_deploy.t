@@ -28,11 +28,11 @@ sub test_base_url {
     my $path = $dir->child( $page->path );
     my $got_dom = Mojo::DOM->new( $path->slurp );
 
-    if ( ok $elem = $got_dom->at( 'head > link' ), 'has stylesheet' ) {
-        my $site_path = Mojo::URL->new( $base_url )->path;
-        $site_path =~ s{/$}{};
-        is $elem->attr( 'href' ), $site_path . '/theme/css/normalize.css';
-    }
+    my $site_path = Mojo::URL->new( $base_url )->path;
+    $site_path =~ s{/$}{};
+    my @links = $got_dom->find( 'head > link' )->each;
+    is $links[0]->attr( 'href' ), $site_path . '/theme/css/normalize.css';
+    is $links[1]->attr( 'href' ), '//cdn.example.com/css/cdn.css';
 }
 
 subtest 'build' => sub {

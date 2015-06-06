@@ -2,6 +2,7 @@
 <html>
     <head>
         <link rel="stylesheet" href="/theme/css/normalize.css" />
+        <link rel="stylesheet" href="//cdn.example.com/css/cdn.css" />
         <title><%= $site->title %></title>
     </head>
     <body>
