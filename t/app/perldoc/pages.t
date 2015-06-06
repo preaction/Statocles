@@ -26,8 +26,11 @@ my @page_tests = (
         }
 
         ok $dom->at( 'a[href="/pod/My/Internal.html"]' ), 'internal link exists';
+        ok !$dom->at( 'a[href="/pod/My/Internal.html"]' )->attr( 'rel' ), 'internal link has no rel';
         ok $dom->at( 'a[href="https://metacpan.org/pod/External"]' ), 'external link exists';
+        is $dom->at( 'a[href="https://metacpan.org/pod/External"]' )->attr( 'rel' ), 'external', 'external link has rel=external';
         ok $dom->at( 'a[href="/pod/My.src.html"]' ), 'source link exists';
+        ok !$dom->at( 'a[href="/pod/My.src.html"]' )->attr( 'rel' ), 'source link has no rel';
 
         my @crumbtrail = $dom->find( '.crumbtrail li' )->each;
         is scalar @crumbtrail, 1;

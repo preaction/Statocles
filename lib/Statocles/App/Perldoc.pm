@@ -128,23 +128,29 @@ sub pages {
         $parser->parse_string_document( $pod );
         #; say $parser_output;
 
-        # Rewrite links for modules that we will be serving locally
         my $dom = Mojo::DOM->new( $parser_output );
         for my $node ( $dom->find( 'a[href]' )->each ) {
             my $href = $node->attr( 'href' );
-            $href =~ s/$pod_base//;
 
-            if ( grep { $href =~ /^$_/ } @{ $self->modules } ) {
+            # Rewrite links for modules that we will be serving locally
+            if ( grep { $href =~ /^$pod_base$_/ } @{ $self->modules } ) {
                 my $new_href;
                 if ( $href eq $self->index_module ) {
                     $new_href = 'index.html';
                 }
                 else {
-                    $new_href = join '/', split /::/, $href;
+                    $new_href = $href;
+                    $new_href =~ s/$pod_base//;
+                    $new_href = join '/', split /::/, $new_href;
                     $new_href .= '.html';
                 }
                 $node->attr( href => $self->url( $new_href ) );
             }
+            # Add rel="external" for remaining external links
+            elsif ( $href =~ m{(?:[^:]+:)?//} ) {
+                $node->attr( rel => 'external' );
+            }
+
         }
 
         my $source_path = "$module.src.html";
