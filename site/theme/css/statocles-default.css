@@ -80,6 +80,14 @@ footer .tagline {
     text-align: right;
 }
 
+a[rel=external]::before {
+    content: '\f08e';
+    font-family: "FontAwesome";
+    display: inline-block;
+    font-size: smaller;
+    vertical-align: top;
+}
+
 /************************************************
  * Classes
  ************************************************/
