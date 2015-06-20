@@ -82,8 +82,14 @@ Get a URL to a page in this application. Prepends the L</url_root> if necessary.
 
 sub url {
     my ( $self, $url ) = @_;
+    my $base = $self->url_root;
     $url =~ s{/index[.]html$}{/};
-    return join "/", $self->url_root, $url;
+
+    # Remove the / from both sides of the join so we don't double up
+    $base =~ s{/$}{};
+    $url =~ s{^/}{};
+
+    return join "/", $base, $url;
 }
 
 =method link( %args )
