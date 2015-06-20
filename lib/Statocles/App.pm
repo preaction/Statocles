@@ -105,11 +105,29 @@ sub link {
 1;
 __END__
 
+=head1 SYNOPSIS
+
+    package MyApp;
+    use Statocles::Base 'Class';
+    with 'Statocles::App';
+
+    sub pages {
+        return Statocles::Page::Content->new(
+            path => '/index.html',
+            content => 'Hello, World',
+        );
+    }
+
 =head1 DESCRIPTION
 
-A Statocles App turns L<documents|Statocles::Documents> into a set of
-L<pages|Statocles::Pages> that can then be written to the filesystem (or served
-directly, if desired).
+A Statocles App creates a set of L<pages|Statocles::Pages> that can then be
+written to the filesystem (or served directly, if desired).
+
+Pages can be created from L<documents|Statocles::Documents> stored in a
+L<store|Statocles::Store> (see L<Statocles::Page::Document>), files stored in a
+store (see L<Statocles::Page::File>), lists of content (see
+L<Statocles::Page::List>), or anything at all (see
+L<Statocles::Page::Content>).
 
 =head1 INCLUDED APPS
 
@@ -124,6 +142,16 @@ These applications are included with the core Statocles distribution.
 =item L<Statocles::App::Static>
 
 =item L<Statocles::App::Perldoc>
+
+=back
+
+=head1 SEE ALSO
+
+=over 4
+
+=item L<Statocles::Store>
+
+=item L<Statocle::Page>
 
 =back
 
