@@ -13,6 +13,20 @@ subtest 'constructor' => sub {
         'Statocles::Link',
         required => \%required,
     );
+
+    subtest 'coerce' => sub {
+
+        subtest 'Path object' => sub {
+            my $link;
+            lives_ok {
+                $link = Statocles::Link->new(
+                    href => Path::Tiny->new( 'test', 'index.html' ),
+                    text => 'Text',
+                );
+            } or return;
+            is $link->href, '/test/index.html';
+        };
+    };
 };
 
 subtest 'new_from_element' => sub {

@@ -2,6 +2,7 @@ package Statocles::Link;
 # ABSTRACT: A link object to build <a> and <link> tags
 
 use Statocles::Base 'Class';
+use Scalar::Util qw( blessed );
 
 =attr href
 
@@ -13,6 +14,13 @@ has href => (
     is => 'rw',
     isa => Str,
     required => 1,
+    coerce => sub {
+        my ( $href ) = @_;
+        if ( blessed $href && $href->isa( 'Path::Tiny' ) ) {
+            return $href->absolute( '/' )->stringify;
+        }
+        return $href;
+    },
 );
 
 =attr text
