@@ -259,13 +259,15 @@ sub render {
 =method links( KEY )
 
 Get the links set for the given key. See L<the links attribute|/links> for some
-commonly-used keys. Returns a list of L<link objects|Statocles::Link>.
+commonly-used keys. Returns a list of L<link objects|Statocles::Link>. In
+scalar context, returns the first link in the list.
 
 =cut
 
 sub links {
     my ( $self, $name ) = @_;
-    return $self->_links->{ $name } ? @{ $self->_links->{ $name } } : ();
+    my @links = $self->_links->{ $name } ? @{ $self->_links->{ $name } } : ();
+    return wantarray ? @links : $links[0];
 }
 
 1;
