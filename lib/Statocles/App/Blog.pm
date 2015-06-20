@@ -6,7 +6,6 @@ use Getopt::Long qw( GetOptionsFromArray );
 use Statocles::Store::File;
 use Statocles::Page::Document;
 use Statocles::Page::List;
-use Statocles::Page::Feed;
 
 with 'Statocles::App';
 
@@ -306,19 +305,17 @@ sub _make_post_page {
 =method index()
 
 Get the index page (a L<list page|Statocles::Page::List>) for this application.
-This includes all the relevant L<feed pages|Statocles::Page::Feed>.
+This includes all the relevant feed pages.
 
 =cut
 
 my %FEEDS = (
     rss => {
         text => 'RSS',
-        type => 'application/rss+xml',
         template => 'index.rss',
     },
     atom => {
         text => 'Atom',
-        type => 'application/atom+xml',
         template => 'index.atom',
     },
 );
@@ -357,13 +354,22 @@ sub index {
     my @feed_pages;
     my @feed_links;
     for my $feed ( sort keys %FEEDS ) {
-        my $page = Statocles::Page::Feed->new(
+        my $page = Statocles::Page::List->new(
             app => $self,
-            type => $FEEDS{ $feed }{ type },
-            page => $index,
+            pages => $index->pages,
             path => 'index.' . $feed,
             template => $self->site->theme->template( blog => $FEEDS{$feed}{template} ),
+            links => {
+                alternate => [
+                    $self->link(
+                        href => $index->path,
+                        title => 'index',
+                        type => $index->type,
+                    ),
+                ],
+            },
         );
+
         push @feed_pages, $page;
         push @feed_links, $self->link(
             text => $FEEDS{ $feed }{ text },
@@ -413,13 +419,22 @@ sub tag_pages {
         for my $feed ( sort keys %FEEDS ) {
             my $tag_file = $self->_tag_url( $tag ) . '.' . $feed;
 
-            my $page = Statocles::Page::Feed->new(
-                type => $FEEDS{ $feed }{ type },
+            my $page = Statocles::Page::List->new(
                 app => $self,
-                page => $index,
+                pages => $index->pages,
                 path => join( "/", 'tag', $tag_file ),
                 template => $self->site->theme->template( blog => $FEEDS{$feed}{template} ),
+                links => {
+                    alternate => [
+                        $self->link(
+                            href => $index->path,
+                            title => $tag,
+                            type => $index->type,
+                        ),
+                    ],
+                },
             );
+
             push @feed_pages, $page;
             push @feed_links, $self->link(
                 text => $FEEDS{ $feed }{ text },

@@ -6,10 +6,10 @@ $Statocles::VERSION = '0.000001';
 use Statocles::Document;
 use Statocles::Page::List;
 use Statocles::Page::Document;
-use Statocles::Page::Feed;
 use Statocles::App::Blog;
 use Statocles::Site;
 use Statocles::Theme;
+use Statocles::Link;
 
 my $THEME_DIR = path( __DIR__, '..', '..', 'share', 'theme' );
 
@@ -59,10 +59,18 @@ $page{ list } = Statocles::Page::List->new(
     prev => 'page-1.html',
 );
 
-$page{ feed } = Statocles::Page::Feed->new(
+$page{ feed } = Statocles::Page::List->new(
     app => $blog,
     path => 'feed.rss',
-    page => $page{ list },
+    pages => $page{ list }->pages,
+    links => {
+        alternate => [
+            Statocles::Link->new(
+                href => $page{list}->path,
+                title => 'index',
+            ),
+        ],
+    },
 );
 
 my %common_vars = (

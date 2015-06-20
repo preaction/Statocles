@@ -208,9 +208,7 @@ sub test_pages {
     for my $page ( @pages ) {
         ok $page->DOES( 'Statocles::Page' ), 'must be a Statocles::Page';
 
-        if ( !$page->isa( 'Statocles::Page::Feed' ) ) {
-            isa_ok $page->date, 'Time::Piece', 'must set a date';
-        }
+        isa_ok $page->date, 'Time::Piece', 'must set a date';
 
         if ( !$page_tests{ $page->path } ) {
             fail "No tests found for page: " . $page->path;
