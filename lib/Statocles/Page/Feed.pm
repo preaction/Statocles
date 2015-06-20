@@ -15,20 +15,6 @@ has page => (
     isa => InstanceOf['Statocles::Page::List'],
 );
 
-=attr type
-
-The MIME type of this feed.
-
-    application/rss+xml     - RSS feed
-    application/atom+xml    - Atom feed
-
-=cut
-
-has type => (
-    is => 'ro',
-    isa => Str,
-);
-
 =method vars
 
 Get the template variables for this page.

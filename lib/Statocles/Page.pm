@@ -41,6 +41,43 @@ has path => (
     required => 1,
 );
 
+=attr type
+
+The MIME type of this page. By default, will use the L<path's|/path> file extention
+to detect a likely type.
+
+=cut
+
+our %TYPES = (
+    # text
+    html => 'text/html',
+    markdown => 'text/markdown',
+    css => 'text/css',
+
+    # image
+    jpg => 'image/jpeg',
+    jpeg => 'image/jpeg',
+    png => 'image/png',
+    gif => 'image/gif',
+
+    # application
+    rss => 'application/rss+xml',
+    atom => 'application/atom+xml',
+    js => 'application/javascript',
+    json => 'application/json',
+);
+
+has type => (
+    is => 'ro',
+    isa => Str,
+    lazy => 1,
+    default => sub {
+        my ( $self ) = @_;
+        my ( $ext ) = $self->path =~ /[.]([^.]+)$/;
+        return $TYPES{ $ext };
+    },
+);
+
 =attr date
 
 The date of this page. Used for last updated date and blog post dates.
