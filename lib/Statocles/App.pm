@@ -110,3 +110,20 @@ __END__
 A Statocles App turns L<documents|Statocles::Documents> into a set of
 L<pages|Statocles::Pages> that can then be written to the filesystem (or served
 directly, if desired).
+
+=head1 INCLUDED APPS
+
+These applications are included with the core Statocles distribution.
+
+=over 4
+
+=item L<Statocles::App::Blog>
+
+=item L<Statocles::App::Plain>
+
+=item L<Statocles::App::Static>
+
+=item L<Statocles::App::Perldoc>
+
+=back
+
