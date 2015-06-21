@@ -270,6 +270,30 @@ sub links {
     return wantarray ? @links : $links[0];
 }
 
+=method basename()
+
+Get the base file name of this page. Everything after the last C</>.
+
+=cut
+
+sub basename {
+    my ( $self ) = @_;
+    return $self->path->basename;
+}
+
+=method dirname()
+
+Get the full directory to this page. Anything that isn't part of L</basename>.
+
+There will not be a trailing slash unless it is the root directory.
+
+=cut
+
+sub dirname {
+    my ( $self ) = @_;
+    return $self->path->parent->stringify;
+}
+
 1;
 __END__
 
