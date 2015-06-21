@@ -19,7 +19,7 @@ subtest 'recent_posts' => sub {
     cmp_deeply [ @pages ], [
         methods(
             path => Path::Tiny->new(
-                qw{ blog 2014 06 02 more_tags.html }
+                qw{ blog 2014 06 02 more_tags index.html }
             )->absolute( '/' ),
         ),
         methods(
@@ -37,7 +37,7 @@ subtest 'posts with given tag' => sub {
         cmp_deeply \@pages, [
             methods(
                 path => Path::Tiny->new(
-                    qw{ blog 2014 06 02 more_tags.html }
+                    qw{ blog 2014 06 02 more_tags index.html }
                 )->absolute( '/' ),
             ),
         ] or diag explain [ map { $_->path } @pages ];

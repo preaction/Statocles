@@ -21,7 +21,7 @@ subtest 'build events' => sub {
                 superbagof(
                     methods( path => re( qr{^\Q/blog/2014/04/23/slug/index.html} ) ),
                     methods( path => re( qr{^\Q/blog/2014/04/30/plug/index.html} ) ),
-                    methods( path => re( qr{^\Q/blog/2014/06/02/more_tags.html} ) ),
+                    methods( path => re( qr{^\Q/blog/2014/06/02/more_tags/index.html} ) ),
                 ),
                 'page paths are correct';
 

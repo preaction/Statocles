@@ -19,3 +19,6 @@ links:
 
 [Full URLs are not broken](http://example.com)
 [Full URLs without schema are not broken](//example.com)
+
+![](image.jpg)
+[Fixed relative URL](docs.html)

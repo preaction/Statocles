@@ -10,14 +10,14 @@ subtest 'check links' => sub {
 
     $site->build;
 
-    my $page = '/blog/2014/06/02/more_tags.html';
+    my $page = '/blog/2014/06/02/more_tags/index.html';
 
     cmp_deeply $site->log->history,
         bag(
             [ ignore(), 'warn', re(qr{\QURL broken on $page: '/does_not_exist.jpg' not found}) ],
             [ ignore(), 'warn', re(qr{\QURL broken on $page: '/does_not_exist' not found}) ],
             [ ignore(), 'warn', re(qr{\QURL broken on $page: '/images/with spaces.png' not found}) ],
-            [ ignore(), 'warn', re(qr{\QURL broken on $page: '/blog/2014/06/02/does_not_exist' not found}) ],
+            [ ignore(), 'warn', re(qr{\QURL broken on $page: '/blog/2014/06/02/more_tags/does_not_exist' not found}) ],
         ),
         'broken links found'
             or diag explain $site->log->history;
@@ -37,12 +37,12 @@ subtest 'ignore patterns' => sub {
 
         $site->build;
 
-        my $page = '/blog/2014/06/02/more_tags.html';
+        my $page = '/blog/2014/06/02/more_tags/index.html';
 
         cmp_deeply $site->log->history,
             bag(
                 [ ignore(), 'warn', re(qr{\QURL broken on $page: '/images/with spaces.png' not found}) ],
-                [ ignore(), 'warn', re(qr{\QURL broken on $page: '/blog/2014/06/02/does_not_exist' not found}) ],
+                [ ignore(), 'warn', re(qr{\QURL broken on $page: '/blog/2014/06/02/more_tags/does_not_exist' not found}) ],
             ),
             'broken links found'
                 or diag explain $site->log->history;
@@ -60,7 +60,7 @@ subtest 'ignore patterns' => sub {
 
         $site->build;
 
-        my $page = '/blog/2014/06/02/more_tags.html';
+        my $page = '/blog/2014/06/02/more_tags/index.html';
 
         cmp_deeply $site->log->history, [],
             'all broken links ignored'

@@ -7,3 +7,5 @@ tags: better
 [Better body content](/) Link to root is not broken
 
 ![image in local directory](image.jpg)
+
+[link in local directory](recipe.html)

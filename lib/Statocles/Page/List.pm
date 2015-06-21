@@ -5,6 +5,7 @@ use Statocles::Base 'Class';
 with 'Statocles::Page';
 use List::Util qw( max );
 use Statocles::Template;
+use Statocles::Page::ListItem;
 
 =attr pages
 
@@ -12,10 +13,32 @@ The pages that should be shown in this list.
 
 =cut
 
-has pages => (
+has _pages => (
     is => 'ro',
     isa => ArrayRef[ConsumerOf['Statocles::Page']],
+    init_arg => 'pages',
 );
+
+sub pages {
+    my ( $self ) = @_;
+
+    my %rewrite;
+    if ( $self->type eq 'application/rss+xml' || $self->type eq 'application/atom+xml' ) {
+        %rewrite = ( rewrite_mode => 'full' );
+    }
+
+    my @pages;
+    for my $page ( @{ $self->_pages } ) {
+        # Always re-wrap the page, even if it's already wrapped,
+        # to change the rewrite_mode
+        push @pages, Statocles::Page::ListItem->new(
+            %rewrite,
+            page => $page->isa( 'Statocles::Page::ListItem' ) ? $page->page : $page,
+        );
+    }
+
+    return \@pages;
+}
 
 =attr next
 

@@ -35,12 +35,20 @@ my @page_tests = (
             'first page has 2 latest post titles';
 
         cmp_deeply [ $dom->find( 'h1 a' )->map( attr => 'href' )->each ],
-            [ '/blog/2014/06/02/more_tags.html', '/blog/2014/05/22/(regex)[name].file.html' ],
+            [ '/blog/2014/06/02/more_tags/', '/blog/2014/05/22/(regex)[name].file.html' ],
             'first page has 2 latest post paths';
 
         cmp_deeply [ $dom->find( '.author' )->map( 'text' )->each ],
             [ 'preaction' ],
             'author is correct';
+
+        cmp_deeply [ $dom->find( 'img' )->map( attr => 'src' )->each ],
+            superbagof( '/blog/2014/06/02/more_tags/image.jpg' ),
+            'relative image is fixed on list page';
+
+        cmp_deeply [ $dom->find( 'a' )->map( attr => 'href' )->each ],
+            superbagof( '/blog/2014/06/02/more_tags/docs.html' ),
+            'relative link is fixed on list page';
 
         cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
             bag( qw(
@@ -131,7 +139,7 @@ my @page_tests = (
 
         cmp_deeply [ $dom->find( 'entry id' )->map( 'text' )->each ],
             [
-                'http://example.com/blog/2014/06/02/more_tags.html',
+                'http://example.com/blog/2014/06/02/more_tags/',
                 'http://example.com/blog/2014/05/22/(regex)[name].file.html',
             ],
             'atom feed has 2 latest post paths';
@@ -151,6 +159,15 @@ my @page_tests = (
         cmp_deeply [ $dom->find( 'entry category' )->map( attr => 'term' )->each ],
             [ 'more', 'better', 'even more tags', 'better', 'error message' ],
             'categories are correct';
+
+        my $content_dom = Mojo::DOM->new( $dom->at( 'entry:first-of-type content' )->text );
+        cmp_deeply [ $content_dom->find( 'img' )->map( attr => 'src' )->each ],
+            superbagof( 'http://example.com/blog/2014/06/02/more_tags/image.jpg' ),
+            'relative image is fixed on feed page';
+
+        cmp_deeply [ $content_dom->find( 'a' )->map( attr => 'href' )->each ],
+            superbagof( 'http://example.com/blog/2014/06/02/more_tags/docs.html' ),
+            'relative link is fixed on feed page';
     },
 
     '/blog/index.rss' => sub {
@@ -167,7 +184,7 @@ my @page_tests = (
 
         cmp_deeply [ $dom->find( 'item link' )->map( 'text' )->each ],
             [
-                'http://example.com/blog/2014/06/02/more_tags.html',
+                'http://example.com/blog/2014/06/02/more_tags/',
                 'http://example.com/blog/2014/05/22/(regex)[name].file.html',
             ],
             'rss feed has 2 latest post paths';
@@ -190,7 +207,7 @@ my @page_tests = (
             'first "better" page has 2 latest post titles';
 
         cmp_deeply [ $dom->find( 'h1 a' )->map( attr => 'href' )->each ],
-            [ '/blog/2014/06/02/more_tags.html', '/blog/2014/05/22/(regex)[name].file.html' ],
+            [ '/blog/2014/06/02/more_tags/', '/blog/2014/05/22/(regex)[name].file.html' ],
             'first "better" page has 2 latest post paths';
 
         cmp_deeply [ $dom->find( '.author' )->map( 'text' )->each ],
@@ -236,6 +253,14 @@ my @page_tests = (
         cmp_deeply [ $dom->find( 'h1 a' )->map( attr => 'href' )->each ],
             [ '/blog/2014/04/30/plug/' ],
             'second "better" page has earlier post url';
+
+        cmp_deeply [ $dom->find( 'img' )->map( attr => 'src' )->each ],
+            superbagof( '/blog/2014/04/30/plug/image.jpg' ),
+            'relative image is fixed on list page';
+
+        cmp_deeply [ $dom->find( 'a' )->map( attr => 'href' )->each ],
+            superbagof( '/blog/2014/04/30/plug/recipe.html' ),
+            'relative link is fixed on list page';
 
         cmp_deeply [ $dom->find( '.author' )->map( 'text' )->each ],
             [ 'preaction' ],
@@ -324,7 +349,7 @@ my @page_tests = (
             '"more" page has 1 post title';
 
         cmp_deeply [ $dom->find( 'h1 a' )->map( attr => 'href' )->each ],
-            [ '/blog/2014/06/02/more_tags.html', ],
+            [ '/blog/2014/06/02/more_tags/', ],
             '"more" page has 1 post url';
 
         ok !$dom->at( '.author' ), 'no author for this post';
@@ -366,7 +391,7 @@ my @page_tests = (
             '"even more tags" page has 1 post title';
 
         cmp_deeply [ $dom->find( 'h1 a' )->map( attr => 'href' )->each ],
-            [ '/blog/2014/06/02/more_tags.html', ],
+            [ '/blog/2014/06/02/more_tags/', ],
             '"even more tags" page has 1 post url';
 
         ok !$dom->at( '.author' ), 'no author for this post';
@@ -418,7 +443,7 @@ my @page_tests = (
 
         cmp_deeply [ $dom->find( 'entry id' )->map( 'text' )->each ],
             [
-                'http://example.com/blog/2014/06/02/more_tags.html',
+                'http://example.com/blog/2014/06/02/more_tags/',
                 'http://example.com/blog/2014/05/22/(regex)[name].file.html',
             ],
             'atom feed has 2 latest post paths';
@@ -450,7 +475,7 @@ my @page_tests = (
 
         cmp_deeply [ $dom->find( 'item link' )->map( 'text' )->each ],
             [
-                'http://example.com/blog/2014/06/02/more_tags.html',
+                'http://example.com/blog/2014/06/02/more_tags/',
                 'http://example.com/blog/2014/05/22/(regex)[name].file.html',
             ],
             'rss feed has 2 latest post paths';
@@ -546,7 +571,7 @@ my @page_tests = (
 
         cmp_deeply [ $dom->find( 'entry id' )->map( 'text' )->each ],
             [
-                'http://example.com/blog/2014/06/02/more_tags.html',
+                'http://example.com/blog/2014/06/02/more_tags/',
             ],
             'atom feed has correct post paths';
 
@@ -575,7 +600,7 @@ my @page_tests = (
 
         cmp_deeply [ $dom->find( 'item link' )->map( 'text' )->each ],
             [
-                'http://example.com/blog/2014/06/02/more_tags.html',
+                'http://example.com/blog/2014/06/02/more_tags/',
             ],
             'rss feed has correct post paths';
 
@@ -607,7 +632,7 @@ my @page_tests = (
 
         cmp_deeply [ $dom->find( 'entry id' )->map( 'text' )->each ],
             [
-                'http://example.com/blog/2014/06/02/more_tags.html',
+                'http://example.com/blog/2014/06/02/more_tags/',
             ],
             'atom feed has correct post paths';
 
@@ -637,7 +662,7 @@ my @page_tests = (
 
         cmp_deeply [ $dom->find( 'item link' )->map( 'text' )->each ],
             [
-                'http://example.com/blog/2014/06/02/more_tags.html',
+                'http://example.com/blog/2014/06/02/more_tags/',
             ],
             'rss feed has right post links';
 
@@ -712,7 +737,7 @@ my @page_tests = (
         }
     },
 
-    '/blog/2014/06/02/more_tags.html' => sub {
+    '/blog/2014/06/02/more_tags/index.html' => sub {
         my ( $html, $dom ) = @_;
 
         is $dom->at( 'header h1' )->text, 'More Tags';
@@ -749,11 +774,23 @@ my @page_tests = (
         is $content, $SHARE_DIR->child(qw( app blog 2014 04 30 plug image.jpg ))->slurp;
     },
 
+    '/blog/2014/06/02/more_tags/image.jpg' => sub {
+        my ( $content ) = @_;
+
+        is $content, $SHARE_DIR->child(qw( app blog 2014 06 02 more_tags image.jpg ))->slurp;
+    },
+
     # Extra pages
     '/blog/2014/04/30/plug/recipe.html' => sub {
         my ( $html, $dom ) = @_;
 
         is $dom->at( 'h2' )->text, "Recipe page";
+    },
+
+    '/blog/2014/06/02/more_tags/docs.html' => sub {
+        my ( $html, $dom ) = @_;
+
+        is $dom->at( 'p' )->text, "This is some documentation. It isn't very good.";
     },
 );
 
