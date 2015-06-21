@@ -43,7 +43,7 @@ my @page_tests = (
             'author is correct';
 
         cmp_deeply [ $dom->find( 'img' )->map( attr => 'src' )->each ],
-            superbagof( '/blog/2014/06/02/more_tags/image.jpg' ),
+            superbagof( '/blog/2014/06/02/more_tags/image.markdown.jpg' ),
             'relative image is fixed on list page';
 
         cmp_deeply [ $dom->find( 'a' )->map( attr => 'href' )->each ],
@@ -162,7 +162,7 @@ my @page_tests = (
 
         my $content_dom = Mojo::DOM->new( $dom->at( 'entry:first-of-type content' )->text );
         cmp_deeply [ $content_dom->find( 'img' )->map( attr => 'src' )->each ],
-            superbagof( 'http://example.com/blog/2014/06/02/more_tags/image.jpg' ),
+            superbagof( 'http://example.com/blog/2014/06/02/more_tags/image.markdown.jpg' ),
             'relative image is fixed on feed page';
 
         cmp_deeply [ $content_dom->find( 'a' )->map( attr => 'href' )->each ],
@@ -774,10 +774,11 @@ my @page_tests = (
         is $content, $SHARE_DIR->child(qw( app blog 2014 04 30 plug image.jpg ))->slurp;
     },
 
-    '/blog/2014/06/02/more_tags/image.jpg' => sub {
+    # Test that only markdown files get markdowned
+    '/blog/2014/06/02/more_tags/image.markdown.jpg' => sub {
         my ( $content ) = @_;
 
-        is $content, $SHARE_DIR->child(qw( app blog 2014 06 02 more_tags image.jpg ))->slurp;
+        is $content, $SHARE_DIR->child(qw( app blog 2014 06 02 more_tags image.markdown.jpg ))->slurp;
     },
 
     # Extra pages

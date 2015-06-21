@@ -229,7 +229,7 @@ sub post_files {
         # index.markdown is the post itself
         next if $path =~ m{/index[.]markdown$};
 
-        if ( $path =~ /[.]markdown/ ) {
+        if ( $path =~ /[.]markdown$/ ) {
             my $page_path = $path;
             $page_path =~ s{[.]\w+$}{.html};
 
