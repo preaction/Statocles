@@ -10,6 +10,7 @@ my $site = Statocles::Site->new(
     deploy => tempdir,
     theme => $SHARE_DIR->child(qw( theme )),
 );
+my $md = Text::Markdown->new;
 
 my $doc = Statocles::Document->new(
     path => '/path/to/document.markdown',
@@ -26,13 +27,49 @@ This is a paragraph of markdown.
 
 This is another paragraph of markdown.
 
+<%= "hello" %>
+
 ---
 
 This is a second section of content
 
 MARKDOWN
 );
-my $md = Text::Markdown->new;
+
+my $expect_content = $md->markdown( <<'MARKDOWN' );
+# Subtitle
+
+This is a paragraph of markdown.
+
+## Subtitle 2
+
+This is another paragraph of markdown.
+
+hello
+
+---
+
+This is a second section of content
+MARKDOWN
+
+my @expect_sections = (
+    $md->markdown( <<'MARKDOWN' ),
+# Subtitle
+
+This is a paragraph of markdown.
+
+## Subtitle 2
+
+This is another paragraph of markdown.
+
+hello
+MARKDOWN
+
+    $md->markdown( <<'MARKDOWN' ),
+This is a second section of content
+MARKDOWN
+
+);
 
 subtest 'constructor' => sub {
 
@@ -117,7 +154,7 @@ subtest 'template coercion' => sub {
         my $output = $page->render;
         my $expect = join " ", $page->date, $page->path, $doc->title, $doc->author,
             $page->data->{extra_data},
-            $md->markdown( $doc->content ) . "\n\n";
+            $expect_content . "\n\n";
         eq_or_diff $output, $expect;
     };
 
@@ -135,7 +172,7 @@ subtest 'template coercion' => sub {
 
         my $output = $page->render;
         my $expect = join " ", 'HEAD', $page->path, $doc->title, $doc->author,
-            $md->markdown( $doc->content ) . "\n", 'FOOT' . "\n";
+            $expect_content . "\n", 'FOOT' . "\n";
         eq_or_diff $output, $expect;
     };
 };
@@ -155,7 +192,7 @@ subtest 'extra args' => sub {
 
     my $output = $page->render( site => 'hello', title => 'DOES NOT OVERRIDE', );
     my $expect = join " ", 'hello', 'HEAD', 'hello', $page->path, $doc->title,
-        $doc->author, $md->markdown( $doc->content ) . "\n", 'FOOT' . "\n";
+        $doc->author, $expect_content . "\n", 'FOOT' . "\n";
     eq_or_diff $output, $expect;
 };
 
@@ -174,7 +211,7 @@ ENDTEMPLATE
 
     my $output = $page->render;
     my @sections = split /\n---\n/, $doc->content;
-    my $expect = join "\n", $md->markdown( $sections[0] ), "MORE...", "", "";
+    my $expect = join "\n", $expect_sections[0], "MORE...", "", "";
     eq_or_diff $output, $expect;
 };
 

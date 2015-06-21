@@ -79,6 +79,13 @@ has '+_links' => (
     default => sub { $_[0]->document->links },
 );
 
+sub _render_content_template {
+    my ( $self, $content, $vars ) = @_;
+    my $tmpl = $self->site->theme->build_template( $self->path, $content );
+    my $rendered = $tmpl->render( %$vars, $self->vars, self => $self->document );
+    return $rendered;
+}
+
 =method content( vars )
 
 Generate the document HTML by processing template directives and converting
@@ -89,8 +96,7 @@ Markdown. C<vars> is a set of name-value pairs to give to the template.
 sub content {
     my ( $self, %vars ) = @_;
     my $content = $self->document->content;
-    my $tmpl = $self->site->theme->build_template( $self->path, $content );
-    my $rendered = $tmpl->render( %vars, $self->vars, self => $self->document );
+    my $rendered = $self->_render_content_template( $content, \%vars );
     return $self->markdown->markdown( $rendered );
 }
 
@@ -117,7 +123,10 @@ sections.
 sub sections {
     my ( $self ) = @_;
     my @sections = split /\n---\n/, $self->document->content;
-    return map { $self->markdown->markdown( $_ ) } @sections;
+    return
+        map { $self->markdown->markdown( $_ ) }
+        map { $self->_render_content_template( $_, {} ) }
+        @sections;
 }
 
 =method tags()
