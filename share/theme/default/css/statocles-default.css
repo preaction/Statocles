@@ -182,6 +182,9 @@ img.u-pull-left, img.u-pull-right {
     font-size: 1em;
 }
 
+.sidebar {
+    font-size: 0.8em;
+}
 
 /** Pager widget */
 ul.pager {
@@ -194,6 +197,21 @@ ul.pager {
 
 .pager .next {
     float: right;
+}
+
+/** Footer */
+footer {
+    margin-top: 1em;
+    padding-bottom: 0.5em;
+    background-color: #eee;
+    font-size: 0.7em;
+    border: 1px solid #bbb;
+    border-bottom: none;
+}
+
+footer li {
+    margin: 0;
+    padding: 0;
 }
 
 /** Crumbtrail widget */
