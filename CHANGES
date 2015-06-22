@@ -1,6 +1,27 @@
 Changelog for Statocles
 
-0.047 2015-06-04T03:27:41
+0.048 2015-06-22T07:10:26
+ - fix vim swap files being parsed as markdown
+ - add ListItem page to wrap pages in a list page
+ - add basename and dirname to Page objects
+ - fix templated content not rendered in blog list
+ - remove Statocles::Page::Feed
+ - allow Path::Tiny objects in link href attrs
+ - fix double / when building App urls
+ - remove duplicate test
+ - make it easier to deal with one page link
+ - add type to base Page role
+ - add more basic docs to the app role
+ - link to built-in app docs in app role documentation
+ - remove unused import
+ - upgrade perl in travis config
+ - update site theme from default theme
+ - add fontawesome and icons for rel=external links
+ - fix schema-less URLs being rewritten by build
+ - add rel="external" to external perldoc links
+ - add release v0.047 announcement
+
+0.047 2015-06-04T03:27:41Z
  - add blank link to allow for $VERSION
  - add another of my many e-mails to mailmap
  - move to documented Role::Tiny API
