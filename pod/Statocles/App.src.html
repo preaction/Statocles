@@ -4,6 +4,7 @@
         <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
         <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
         <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <title>Statocles</title>
         <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
 <style>
@@ -57,7 +58,7 @@
         <header>
             <nav class="navbar">
                 <div class="container">
-                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <a class="brand" href="/">Statocles</a>
                     <ul>
                         <li>
                             <a href="/Statocles/blog">Blog</a>
@@ -172,8 +173,14 @@ Get a URL to a page in this application. Prepends the L&lt;/url_root&gt; if nece
 
 sub url {
     my ( $self, $url ) = @_;
+    my $base = $self-&gt;url_root;
     $url =~ s{/index[.]html$}{/};
-    return join &quot;/&quot;, $self-&gt;url_root, $url;
+
+    # Remove the / from both sides of the join so we don&#39;t double up
+    $base =~ s{/$}{};
+    $url =~ s{^/}{};
+
+    return join &quot;/&quot;, $base, $url;
 }
 
 =method link( %args )
@@ -195,11 +202,56 @@ sub link {
 1;
 __END__
 
+=head1 SYNOPSIS
+
+    package MyApp;
+    use Statocles::Base &#39;Class&#39;;
+    with &#39;Statocles::App&#39;;
+
+    sub pages {
+        return Statocles::Page::Content-&gt;new(
+            path =&gt; &#39;/index.html&#39;,
+            content =&gt; &#39;Hello, World&#39;,
+        );
+    }
+
 =head1 DESCRIPTION
 
-A Statocles App turns L&lt;documents|Statocles::Documents&gt; into a set of
-L&lt;pages|Statocles::Pages&gt; that can then be written to the filesystem (or served
-directly, if desired).
+A Statocles App creates a set of L&lt;pages|Statocles::Pages&gt; that can then be
+written to the filesystem (or served directly, if desired).
+
+Pages can be created from L&lt;documents|Statocles::Documents&gt; stored in a
+L&lt;store|Statocles::Store&gt; (see L&lt;Statocles::Page::Document&gt;), files stored in a
+store (see L&lt;Statocles::Page::File&gt;), lists of content (see
+L&lt;Statocles::Page::List&gt;), or anything at all (see
+L&lt;Statocles::Page::Content&gt;).
+
+=head1 INCLUDED APPS
+
+These applications are included with the core Statocles distribution.
+
+=over 4
+
+=item L&lt;Statocles::App::Blog&gt;
+
+=item L&lt;Statocles::App::Plain&gt;
+
+=item L&lt;Statocles::App::Static&gt;
+
+=item L&lt;Statocles::App::Perldoc&gt;
+
+=back
+
+=head1 SEE ALSO
+
+=over 4
+
+=item L&lt;Statocles::Store&gt;
+
+=item L&lt;Statocle::Page&gt;
+
+=back
+
 </pre>
 
         </div>

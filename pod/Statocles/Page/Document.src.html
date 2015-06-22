@@ -4,6 +4,7 @@
         <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
         <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
         <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <title>Statocles</title>
         <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
 <style>
@@ -57,7 +58,7 @@
         <header>
             <nav class="navbar">
                 <div class="container">
-                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <a class="brand" href="/">Statocles</a>
                     <ul>
                         <li>
                             <a href="/Statocles/blog">Blog</a>
@@ -169,6 +170,13 @@ has &#39;+_links&#39; =&gt; (
     default =&gt; sub { $_[0]-&gt;document-&gt;links },
 );
 
+sub _render_content_template {
+    my ( $self, $content, $vars ) = @_;
+    my $tmpl = $self-&gt;site-&gt;theme-&gt;build_template( $self-&gt;path, $content );
+    my $rendered = $tmpl-&gt;render( %$vars, $self-&gt;vars, self =&gt; $self-&gt;document );
+    return $rendered;
+}
+
 =method content( vars )
 
 Generate the document HTML by processing template directives and converting
@@ -179,8 +187,7 @@ Markdown. C&lt;vars&gt; is a set of name-value pairs to give to the template.
 sub content {
     my ( $self, %vars ) = @_;
     my $content = $self-&gt;document-&gt;content;
-    my $tmpl = $self-&gt;site-&gt;theme-&gt;build_template( $self-&gt;path, $content );
-    my $rendered = $tmpl-&gt;render( %vars, $self-&gt;vars, self =&gt; $self-&gt;document );
+    my $rendered = $self-&gt;_render_content_template( $content, \%vars );
     return $self-&gt;markdown-&gt;markdown( $rendered );
 }
 
@@ -207,7 +214,10 @@ sections.
 sub sections {
     my ( $self ) = @_;
     my @sections = split /\n---\n/, $self-&gt;document-&gt;content;
-    return map { $self-&gt;markdown-&gt;markdown( $_ ) } @sections;
+    return
+        map { $self-&gt;markdown-&gt;markdown( $_ ) }
+        map { $self-&gt;_render_content_template( $_, {} ) }
+        @sections;
 }
 
 =method tags()

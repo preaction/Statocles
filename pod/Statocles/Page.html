@@ -4,6 +4,7 @@
         <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
         <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
         <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <title>Statocles</title>
         <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
 <style>
@@ -57,7 +58,7 @@
         <header>
             <nav class="navbar">
                 <div class="container">
-                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <a class="brand" href="/">Statocles</a>
                     <ul>
                         <li>
                             <a href="/Statocles/blog">Blog</a>
@@ -120,6 +121,10 @@
 
 <p>The absolute URL path to save this page to.</p>
 
+<h2 id="type">type</h2>
+
+<p>The MIME type of this page. By default, will use the <a href="#path">path&#39;s</a> file extention to detect a likely type.</p>
+
 <h2 id="date">date</h2>
 
 <p>The date of this page. Used for last updated date and blog post dates.</p>
@@ -157,7 +162,7 @@
 
 <h2 id="search_change_frequency">search_change_frequency</h2>
 
-<p>How frequently a search engine should check this page for changes. This is used in the <a href="http://www.sitemaps.org">sitemap.xml</a> to give hints to search engines.</p>
+<p>How frequently a search engine should check this page for changes. This is used in the <a href="http://www.sitemaps.org" rel="external">sitemap.xml</a> to give hints to search engines.</p>
 
 <p>Should be one of:</p>
 
@@ -175,11 +180,11 @@
 
 <h2 id="search_priority">search_priority</h2>
 
-<p>How high should this page rank in search results compared to similar pages on this site? This is used in the <a href="http://www.sitemaps.org">sitemap.xml</a> to rank individual, full pages more highly than aggregate, list pages.</p>
+<p>How high should this page rank in search results compared to similar pages on this site? This is used in the <a href="http://www.sitemaps.org" rel="external">sitemap.xml</a> to rank individual, full pages more highly than aggregate, list pages.</p>
 
 <p>Value should be between <code>0.0</code> and <code>1.0</code>. The default is <code>0.5</code>.</p>
 
-<p>This is only used to decide which pages are more important for the search engine to crawl, and which pages within your site should be given to users. It does not improve your rankings compared to other sites. See <a href="http://sitemaps.org">the sitemap protocol</a> for details.</p>
+<p>This is only used to decide which pages are more important for the search engine to crawl, and which pages within your site should be given to users. It does not improve your rankings compared to other sites. See <a href="http://sitemaps.org" rel="external">the sitemap protocol</a> for details.</p>
 
 <h1 id="METHODS">METHODS</h1>
 
@@ -193,7 +198,17 @@
 
 <h2 id="links-KEY">links( KEY )</h2>
 
-<p>Get the links set for the given key. See <a href="#links">the links attribute</a> for some commonly-used keys. Returns a list of <a href="/Statocles/pod/Statocles/Link.html">link objects</a>.</p>
+<p>Get the links set for the given key. See <a href="#links">the links attribute</a> for some commonly-used keys. Returns a list of <a href="/Statocles/pod/Statocles/Link.html">link objects</a>. In scalar context, returns the first link in the list.</p>
+
+<h2 id="basename">basename()</h2>
+
+<p>Get the base file name of this page. Everything after the last <code>/</code>.</p>
+
+<h2 id="dirname">dirname()</h2>
+
+<p>Get the full directory to this page. Anything that isn&#39;t part of <a href="#basename">&quot;basename&quot;</a>.</p>
+
+<p>There will not be a trailing slash unless it is the root directory.</p>
 
 <h1 id="SEE-ALSO">SEE ALSO</h1>
 

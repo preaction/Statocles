@@ -93,43 +93,57 @@
     <div class="nine columns">
         <main>
             <header>
-                <h1>Release v0.045</h1>
+                <h1>Release v0.048</h1>
                 <p class="tags">Tags:
                     <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
                 </p>
                 <aside>
-                    <p><time datetime="2015-04-16">
-                        Posted on 2015-04-16
+                    <p><time datetime="2015-06-22">
+                        Posted on 2015-06-22
                     </time>
                     </p>
                 </aside>
             </header>
             <section id="section-1">
-                <p>A couple small changes in this release:</p>
+                <p>Here starts the road to v1.0! Some breaking changes in this release:</p>
 
-<p>Blog posts are now allowed to have images inside the post directory. This makes
-it a lot easier to add images to blogs. You don&#39;t need to configure a global
-<code>/images</code> directory. You can put your image in <code>/blog/YYYY/MM/DD/post-title</code>.
-Even better, you get to refer to it in your post as <code>![](image.jpg)</code>.</p>
+<p>Statocles::Page::Feed is now removed. The functionality has been added to all
+pages, and all the feed templates have been updated accordingly. This means you
+must update your themes to grab the new feed templates.</p>
 
-<p>The <a href="/Statocles/pod/Statocles/Plugin/LinkCheck.html">link check plugin</a> now correctly finds
-links the URL encoded characters.</p>
+<p>To fix a long-standing bug with blog content not showing up correctly on the
+list pages (index, tag lists), the
+<a href="/Statocles/pod/Statocles/Page/ListItem.html">Statocles::Page::ListItem</a> class was added.
+This class proxies another page and rewrites its content to survive intact
+inside a list page.</p>
 
-<p>The recent posts helper now allows filtering by tag, if, for example, you want to
-display only the last <code>release</code> blog and not any other blog post.</p>
+<p>Some minor things:</p>
 
-<p><code>statocles daemon</code> now allows setting <code>-p &lt;port&gt;</code>, in case port 3000 is in-use, or
-you need to run multiple instances.</p>
+<p>External perldoc links are now explicitly labelled as such with a
+<a href="http://fontawesome.io">FontAwesome</a> icon.</p>
 
-<p>Full changelog below:</p>
+<p>Some doc updates to start documenting the <a href="/Statocles/pod/Statocles/App.html">App API</a>.</p>
+
+<p>Full changelog below...</p>
 
             </section>
             <section id="section-2">
                 <ul>
-<li><a href="https://github.com/preaction/Statocles/commit/c2be5c6ac4b4b2bd0585398ac098b39e194f6f12">allow blog post collateral in post directory</a> (<a href="https://github.com/preaction/Statocles/issues/228">#228</a>)</li>
-<li><a href="https://github.com/preaction/Statocles/commit/bd6f74c457cd75077713716b0073d9bff264e49d">fix link check plugin not finding url-encoded links</a> (<a href="https://github.com/preaction/Statocles/issues/294">#294</a>)</li>
-<li><a href="https://github.com/preaction/Statocles/commit/9f37c4ef0fbc9e0495c87197f0d749d4f9b30af3">allow recent posts filtering by tag</a> (<a href="https://github.com/preaction/Statocles/issues/292">#292</a>)</li>
-<li><a href="https://github.com/preaction/Statocles/commit/7501643b2f80eb8d70b3a58ccc800cf9ff550df6">add -p <port> option to specify port in daemon (<a href="https://github.com/preaction/Statocles/issues/219">#219</a>)</port></a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/d87a00868efb382b1400f04edf6adc8c7dd019c7">fix vim swap files being parsed as markdown</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/eaa26fabcbe82845ca9246d51b92c5dc21772b60">add ListItem page to wrap pages in a list page</a> (<a href="https://github.com/preaction/Statocles/issues/298">#298</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/97c17e53049acdd095a4654111b09b0c875891d5">add basename and dirname to Page objects</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/4916a9cae26f488e81ac16a81576b7c5b3f4e703">fix templated content not rendered in blog list</a> (<a href="https://github.com/preaction/Statocles/issues/320">#320</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/014ec402ce8c2698e9aa81f846f5f75a96ae8275">remove Statocles::Page::Feed</a> (<a href="https://github.com/preaction/Statocles/issues/329">#329</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/eb1750d2d795d4ec4aa11de294860bac1fa9deb9">allow Path::Tiny objects in link href attrs</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/b656a42d764c3ae57f25a248c3a941f5d7ca95c5">fix double / when building App urls</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/285ca9fd02dd242a26e3a5ed0c8d37277c7b33c5">make it easier to deal with one page link</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/f2512e2465c8702a68765463c144fb2b9c82bb39">add type to base Page role</a> (<a href="https://github.com/preaction/Statocles/issues/329">#329</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/9e162173d173beb2daa9e5973f7b80da0cb79ee9">add more basic docs to the app role</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/7d9c9df4ef067694aff4fd239e54c0da19264e23">link to built-in app docs in app role documentation</a> (<a href="https://github.com/preaction/Statocles/issues/323">#323</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/c2acd231cba1d07a56dd7be42ae4ed39e4991f62">remove unused import</a> (<a href="https://github.com/preaction/Statocles/issues/328">#328</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/26d925ca40aa28e356a29cd3cc57d06e6a1d0e6d">add fontawesome and icons for rel=external links</a> (<a href="https://github.com/preaction/Statocles/issues/136">#136</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/6f77015793a0bbb87b3f99fbb235a4f026039809">fix schema-less URLs being rewritten by build</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/769bc234a6b3dde1bf2e6abd1bbcd8ced6beddef">add rel=&quot;external&quot; to external perldoc links</a> (<a href="https://github.com/preaction/Statocles/issues/136">#136</a>)</li>
 </ul>
 
             </section>

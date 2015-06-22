@@ -4,6 +4,7 @@
         <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
         <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
         <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <title>Statocles</title>
         <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
 <style>
@@ -57,7 +58,7 @@
         <header>
             <nav class="navbar">
                 <div class="container">
-                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <a class="brand" href="/">Statocles</a>
                     <ul>
                         <li>
                             <a href="/Statocles/blog">Blog</a>
@@ -218,23 +219,29 @@ sub pages {
         $parser-&gt;parse_string_document( $pod );
         #; say $parser_output;
 
-        # Rewrite links for modules that we will be serving locally
         my $dom = Mojo::DOM-&gt;new( $parser_output );
         for my $node ( $dom-&gt;find( &#39;a[href]&#39; )-&gt;each ) {
             my $href = $node-&gt;attr( &#39;href&#39; );
-            $href =~ s/$pod_base//;
 
-            if ( grep { $href =~ /^$_/ } @{ $self-&gt;modules } ) {
+            # Rewrite links for modules that we will be serving locally
+            if ( grep { $href =~ /^$pod_base$_/ } @{ $self-&gt;modules } ) {
                 my $new_href;
                 if ( $href eq $self-&gt;index_module ) {
                     $new_href = &#39;index.html&#39;;
                 }
                 else {
-                    $new_href = join &#39;/&#39;, split /::/, $href;
+                    $new_href = $href;
+                    $new_href =~ s/$pod_base//;
+                    $new_href = join &#39;/&#39;, split /::/, $new_href;
                     $new_href .= &#39;.html&#39;;
                 }
                 $node-&gt;attr( href =&gt; $self-&gt;url( $new_href ) );
             }
+            # Add rel=&quot;external&quot; for remaining external links
+            elsif ( $href =~ m{(?:[^:]+:)?//} ) {
+                $node-&gt;attr( rel =&gt; &#39;external&#39; );
+            }
+
         }
 
         my $source_path = &quot;$module.src.html&quot;;

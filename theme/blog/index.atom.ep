@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id><%= $site->url( $self->page->path ) %></id>
+    <id><%= $site->url( $self->links( 'alternate' )->href ) %></id>
     <title><%= $site->title %></title>
     <updated><%= Time::Piece->new->strftime('%Y-%m-%dT%H:%M:%SZ') %></updated>
     <link rel="self" href="<%= $site->url( $self->path ) %>"/>
-    <link rel="alternate" href="<%= $site->url( $self->page->path ) %>"/>
+    <link rel="alternate" href="<%= $site->url( $self->links( 'alternate' )->href ) %>"/>
     <generator version="<%= $Statocles::VERSION %>">Statocles</generator>
     % for my $p ( @$pages ) {
     <entry>

@@ -4,6 +4,7 @@
         <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
         <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
         <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <title>Statocles</title>
         <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
 <style>
@@ -57,7 +58,7 @@
         <header>
             <nav class="navbar">
                 <div class="container">
-                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <a class="brand" href="/">Statocles</a>
                     <ul>
                         <li>
                             <a href="/Statocles/blog">Blog</a>
@@ -96,7 +97,6 @@ use Getopt::Long qw( GetOptionsFromArray );
 use Statocles::Store::File;
 use Statocles::Page::Document;
 use Statocles::Page::List;
-use Statocles::Page::Feed;
 
 with &#39;Statocles::App&#39;;
 
@@ -320,7 +320,7 @@ sub post_files {
         # index.markdown is the post itself
         next if $path =~ m{/index[.]markdown$};
 
-        if ( $path =~ /[.]markdown/ ) {
+        if ( $path =~ /[.]markdown$/ ) {
             my $page_path = $path;
             $page_path =~ s{[.]\w+$}{.html};
 
@@ -396,19 +396,17 @@ sub _make_post_page {
 =method index()
 
 Get the index page (a L&lt;list page|Statocles::Page::List&gt;) for this application.
-This includes all the relevant L&lt;feed pages|Statocles::Page::Feed&gt;.
+This includes all the relevant feed pages.
 
 =cut
 
 my %FEEDS = (
     rss =&gt; {
         text =&gt; &#39;RSS&#39;,
-        type =&gt; &#39;application/rss+xml&#39;,
         template =&gt; &#39;index.rss&#39;,
     },
     atom =&gt; {
         text =&gt; &#39;Atom&#39;,
-        type =&gt; &#39;application/atom+xml&#39;,
         template =&gt; &#39;index.atom&#39;,
     },
 );
@@ -447,13 +445,22 @@ sub index {
     my @feed_pages;
     my @feed_links;
     for my $feed ( sort keys %FEEDS ) {
-        my $page = Statocles::Page::Feed-&gt;new(
+        my $page = Statocles::Page::List-&gt;new(
             app =&gt; $self,
-            type =&gt; $FEEDS{ $feed }{ type },
-            page =&gt; $index,
+            pages =&gt; $index-&gt;pages,
             path =&gt; &#39;index.&#39; . $feed,
             template =&gt; $self-&gt;site-&gt;theme-&gt;template( blog =&gt; $FEEDS{$feed}{template} ),
+            links =&gt; {
+                alternate =&gt; [
+                    $self-&gt;link(
+                        href =&gt; $index-&gt;path,
+                        title =&gt; &#39;index&#39;,
+                        type =&gt; $index-&gt;type,
+                    ),
+                ],
+            },
         );
+
         push @feed_pages, $page;
         push @feed_links, $self-&gt;link(
             text =&gt; $FEEDS{ $feed }{ text },
@@ -503,13 +510,22 @@ sub tag_pages {
         for my $feed ( sort keys %FEEDS ) {
             my $tag_file = $self-&gt;_tag_url( $tag ) . &#39;.&#39; . $feed;
 
-            my $page = Statocles::Page::Feed-&gt;new(
-                type =&gt; $FEEDS{ $feed }{ type },
+            my $page = Statocles::Page::List-&gt;new(
                 app =&gt; $self,
-                page =&gt; $index,
+                pages =&gt; $index-&gt;pages,
                 path =&gt; join( &quot;/&quot;, &#39;tag&#39;, $tag_file ),
                 template =&gt; $self-&gt;site-&gt;theme-&gt;template( blog =&gt; $FEEDS{$feed}{template} ),
+                links =&gt; {
+                    alternate =&gt; [
+                        $self-&gt;link(
+                            href =&gt; $index-&gt;path,
+                            title =&gt; $tag,
+                            type =&gt; $index-&gt;type,
+                        ),
+                    ],
+                },
             );
+
             push @feed_pages, $page;
             push @feed_links, $self-&gt;link(
                 text =&gt; $FEEDS{ $feed }{ text },

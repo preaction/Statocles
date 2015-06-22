@@ -4,6 +4,7 @@
         <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
         <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
         <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <title>Statocles</title>
         <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
 <style>
@@ -57,7 +58,7 @@
         <header>
             <nav class="navbar">
                 <div class="container">
-                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <a class="brand" href="/">Statocles</a>
                     <ul>
                         <li>
                             <a href="/Statocles/blog">Blog</a>
@@ -129,6 +130,43 @@ has path =&gt; (
     isa =&gt; Path,
     coerce =&gt; Path-&gt;coercion,
     required =&gt; 1,
+);
+
+=attr type
+
+The MIME type of this page. By default, will use the L&lt;path&#39;s|/path&gt; file extention
+to detect a likely type.
+
+=cut
+
+our %TYPES = (
+    # text
+    html =&gt; &#39;text/html&#39;,
+    markdown =&gt; &#39;text/markdown&#39;,
+    css =&gt; &#39;text/css&#39;,
+
+    # image
+    jpg =&gt; &#39;image/jpeg&#39;,
+    jpeg =&gt; &#39;image/jpeg&#39;,
+    png =&gt; &#39;image/png&#39;,
+    gif =&gt; &#39;image/gif&#39;,
+
+    # application
+    rss =&gt; &#39;application/rss+xml&#39;,
+    atom =&gt; &#39;application/atom+xml&#39;,
+    js =&gt; &#39;application/javascript&#39;,
+    json =&gt; &#39;application/json&#39;,
+);
+
+has type =&gt; (
+    is =&gt; &#39;ro&#39;,
+    isa =&gt; Str,
+    lazy =&gt; 1,
+    default =&gt; sub {
+        my ( $self ) = @_;
+        my ( $ext ) = $self-&gt;path =~ /[.]([^.]+)$/;
+        return $TYPES{ $ext };
+    },
 );
 
 =attr date
@@ -312,13 +350,39 @@ sub render {
 =method links( KEY )
 
 Get the links set for the given key. See L&lt;the links attribute|/links&gt; for some
-commonly-used keys. Returns a list of L&lt;link objects|Statocles::Link&gt;.
+commonly-used keys. Returns a list of L&lt;link objects|Statocles::Link&gt;. In
+scalar context, returns the first link in the list.
 
 =cut
 
 sub links {
     my ( $self, $name ) = @_;
-    return $self-&gt;_links-&gt;{ $name } ? @{ $self-&gt;_links-&gt;{ $name } } : ();
+    my @links = $self-&gt;_links-&gt;{ $name } ? @{ $self-&gt;_links-&gt;{ $name } } : ();
+    return wantarray ? @links : $links[0];
+}
+
+=method basename()
+
+Get the base file name of this page. Everything after the last C&lt;/&gt;.
+
+=cut
+
+sub basename {
+    my ( $self ) = @_;
+    return $self-&gt;path-&gt;basename;
+}
+
+=method dirname()
+
+Get the full directory to this page. Anything that isn&#39;t part of L&lt;/basename&gt;.
+
+There will not be a trailing slash unless it is the root directory.
+
+=cut
+
+sub dirname {
+    my ( $self ) = @_;
+    return $self-&gt;path-&gt;parent-&gt;stringify;
 }
 
 1;

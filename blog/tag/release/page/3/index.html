@@ -4,6 +4,7 @@
         <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
         <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
         <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <title>Statocles</title>
         <link href="/Statocles/blog/tag/release.atom" rel="alternate" type="application/atom+xml">
         <link href="/Statocles/blog/tag/release.rss" rel="alternate" type="application/rss+xml">
@@ -59,7 +60,7 @@
         <header>
             <nav class="navbar">
                 <div class="container">
-                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <a class="brand" href="/">Statocles</a>
                     <ul>
                         <li>
                             <a href="/Statocles/blog">Blog</a>
@@ -98,6 +99,37 @@
 
             <article>
                 <header>
+                    <h1><a href="/Statocles/blog/2015/02/14/release-v0.038.html">Release v0.038</a></h1>
+
+                    <p class="tags">Tags:
+                        <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
+                    </p>
+
+                    <aside>
+                        <p><time datetime="2015-02-14">
+                            Posted on 2015-02-14
+                        </time>
+                        </p>
+                    </aside>
+
+                </header>
+
+                <p>With a new way to quickly build old git versions, this release fixes compatibility
+with Git 1.7.</p>
+
+<p>Unfortunately, we had to increase our minimum supported version of Git to
+1.7.2, in order to get <code>git status --porcelain</code> and orphan branches. Neither of
+these are that big of a deal-breaker, so in theory we could support some
+slightly older versions of git.</p>
+
+<p>Full changelog below:</p>
+
+
+                    <p><a href="/Statocles/blog/2015/02/14/release-v0.038.html#section-2">Continue reading Release v0.038...</a></p>
+
+            </article>
+            <article>
+                <header>
                     <h1><a href="/Statocles/blog/2015/02/12/release-v0.037.html">Release v0.037</a></h1>
 
                     <p class="tags">Tags:
@@ -117,7 +149,7 @@
 by CPAN Testers.</p>
 
 <ul>
-<li><a href="https://github.com/preaction/Statocles/commit/08924fd7172ae45ee15bae3f740764b840011dee">possibly fix cpantesters reports about submodule</a> (<a href="https://github.com/preaction/Statocles/issues/245">#245</a>)</li>
+<li><a href="/Statocles/blog/2015/02/12/https://github.com/preaction/Statocles/commit/08924fd7172ae45ee15bae3f740764b840011dee">possibly fix cpantesters reports about submodule</a> (<a href="/Statocles/blog/2015/02/12/https://github.com/preaction/Statocles/issues/245">#245</a>)</li>
 </ul>
 
 
@@ -179,7 +211,7 @@ theme is to start from one of the existing themes.</p>
 
                 </header>
 
-                <p>Almost ready for the beta announcement now! Only <a href="https://github.com/preaction/Statocles/milestones/beta">a few issues remain before we
+                <p>Almost ready for the beta announcement now! Only <a href="/Statocles/blog/2015/02/08/https://github.com/preaction/Statocles/milestones/beta">a few issues remain before we
 can announce beta</a>.</p>
 
 <p>Content is now always processed through the template parser. This lets us have
@@ -228,7 +260,7 @@ default theme to the <code>mytheme</code> directory.</p>
 
                 </header>
 
-                <p>Lots of breaking changes in this release, in our ramp-up to the <a href="https://github.com/preaction/Statocles/milestones/beta">beta
+                <p>Lots of breaking changes in this release, in our ramp-up to the <a href="/Statocles/blog/2015/01/25/https://github.com/preaction/Statocles/milestones/beta">beta
 announcement</a>.</p>
 
 <p>The biggest change in this release is the new <a href="/Statocles/pod/Statocles/Deploy.html">Deploy object</a>.
@@ -238,7 +270,7 @@ possibilities include rsync or FTP, or any command at all.</p>
 <p><em>NOTE:</em> This change breaks your site.yml file, so please read <a href="/Statocles/pod/Statocles/Help/Config.html">the config help
 file</a> to fix it.</p>
 
-<p>Some major theme changes were also added, and a new default theme (using <a href="http://getskeleton.com">the
+<p>Some major theme changes were also added, and a new default theme (using <a href="/Statocles/blog/2015/01/25/http://getskeleton.com">the
 Skeleton CSS library</a>) was added, removing the need for
 Bootstrap (too big) from a CDN.</p>
 
@@ -257,34 +289,6 @@ themes to make good use of this feature!</p>
 
 
                     <p><a href="/Statocles/blog/2015/01/25/release-v0.034.html#section-2">Continue reading Release v0.034...</a></p>
-
-            </article>
-            <article>
-                <header>
-                    <h1><a href="/Statocles/blog/2015/01/11/release-v0.033.html">Release v0.033</a></h1>
-
-                    <p class="tags">Tags:
-                        <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
-                    </p>
-
-                    <aside>
-                        <p><time datetime="2015-01-11">
-                            Posted on 2015-01-11
-                        </time>
-                            by preaction
-                        </p>
-                    </aside>
-
-                </header>
-
-                <p>Just some minor bugfixes in this release: The <code>--date</code> option when making a new blog
-post finally works, and when writing a new post while the daemon is running, the site
-will be updated as expected.</p>
-
-<p>Full changelog below.</p>
-
-
-                    <p><a href="/Statocles/blog/2015/01/11/release-v0.033.html#section-2">Continue reading Release v0.033...</a></p>
 
             </article>
         </main>

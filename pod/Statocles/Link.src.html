@@ -4,6 +4,7 @@
         <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
         <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
         <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <title>Statocles</title>
         <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
 <style>
@@ -57,7 +58,7 @@
         <header>
             <nav class="navbar">
                 <div class="container">
-                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <a class="brand" href="/">Statocles</a>
                     <ul>
                         <li>
                             <a href="/Statocles/blog">Blog</a>
@@ -92,6 +93,7 @@
 # ABSTRACT: A link object to build &lt;a&gt; and &lt;link&gt; tags
 
 use Statocles::Base &#39;Class&#39;;
+use Scalar::Util qw( blessed );
 
 =attr href
 
@@ -103,6 +105,13 @@ has href =&gt; (
     is =&gt; &#39;rw&#39;,
     isa =&gt; Str,
     required =&gt; 1,
+    coerce =&gt; sub {
+        my ( $href ) = @_;
+        if ( blessed $href &amp;&amp; $href-&gt;isa( &#39;Path::Tiny&#39; ) ) {
+            return $href-&gt;absolute( &#39;/&#39; )-&gt;stringify;
+        }
+        return $href;
+    },
 );
 
 =attr text

@@ -88,37 +88,61 @@
 
         </header>
         <div class="main container">
-            <a href="/Statocles/pod/Statocles/Help/Setup.html">Back to documentation</a>
-<pre># PODNAME: Statocles::Help::Setup
-# ABSTRACT: How to set up a Statocles site
+            <div class="crumbtrail">
+<ul>
+    <li>
+        <a href="/Statocles/pod/Statocles.html">Statocles</a>
+    </li>
+    <li>
+        <a href="/Statocles/pod/Statocles/Page.html">Page</a>
+    </li>
+    <li>
+        <a href="/Statocles/pod/Statocles/Page/ListItem.html">ListItem</a>
+    </li>
+</ul>
+(<a href="/Statocles/pod/Statocles/Page/ListItem.src.html">source</a>)
+</div>
+<h1 id="NAME">NAME</h1>
 
-=head1 DESCRIPTION
+<p>Statocles::Page::ListItem - An item in a List page</p>
 
-This document describes how to get started using Statocles.
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
 
-=head1 CREATE COMMAND
+<p>This page wraps another page for use inside of a <a href="/Statocles/pod/Statocles/Page/List.html">list page</a>. This page will rewrite content to ensure that relative links in the page work correctly when moved into the list page.</p>
 
-To use the site create command, run C&lt;statocles create www.example.com&gt;.
+<h1 id="ATTRIBUTES">ATTRIBUTES</h1>
 
-=head1 CONFIGURATION
+<h2 id="page">page</h2>
 
-To configure a Statocles site, see L&lt;the Statocles config guide,
-Statocle::Help::Config|Statocles::Help::Config&gt;.
+<p>The <a href="/Statocles/pod/Statocles/Page.html">page object</a> for this item in the list.</p>
 
-=head1 CONTENT
+<h2 id="rewrite_mode">rewrite_mode</h2>
 
-To begin working with the content on a Statocles site, see L&lt;the Statocles
-content guide, Statocle::Help::Content|Statocles::Help::Content&gt;.
+<p>One of &quot;absolute&quot; or &quot;full&quot;. Defaults to &quot;absolute&quot;.</p>
 
-=head1 SEE ALSO
+<p>If &quot;absolute&quot;, will rewrite the content using the absolute path of the page.</p>
 
-=over 4
+<p>If &quot;full&quot;, will use the full URL (the site base_url and the page URL) when rewriting the content.</p>
 
-=item L&lt;Statocles::Help - The main Statocles help guide|Statocles::Help&gt;
+<h1 id="METHODS">METHODS</h1>
 
-=back
+<h2 id="DOES-class">DOES( $class )</h2>
 
-</pre>
+<p>This page proxies everything necessary to be a page object, without consuming the <a href="/Statocles/pod/Statocles/Page.html">page role</a>.</p>
+
+<h2 id="AUTOLOAD">AUTOLOAD</h2>
+
+<p>Methods are proxyed to the <a href="#page">page object</a> so that this object appears mostly as the page inside of it.</p>
+
+<h2 id="content">content()</h2>
+
+<p>Get the content for this page. Rewrite any links, images, or other according to the <a href="#rewrite_mode">rewrite_mode attributes</a>.</p>
+
+<h2 id="sections">sections()</h2>
+
+<p>Get a list of content divided into sections. The Markdown &quot;---&quot; marker divides sections. Rewrite any links, images, or other according to the <a href="#rewrite_mode">rewrite_mode attributes</a>.</p>
+
+
 
         </div>
         <footer>

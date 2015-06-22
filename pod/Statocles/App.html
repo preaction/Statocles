@@ -4,6 +4,7 @@
         <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
         <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
         <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <title>Statocles</title>
         <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
 <style>
@@ -57,7 +58,7 @@
         <header>
             <nav class="navbar">
                 <div class="container">
-                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <a class="brand" href="/">Statocles</a>
                     <ul>
                         <li>
                             <a href="/Statocles/blog">Blog</a>
@@ -102,9 +103,24 @@
 
 <p>Statocles::App - Base role for Statocles applications</p>
 
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>    package MyApp;
+    use Statocles::Base &#39;Class&#39;;
+    with &#39;Statocles::App&#39;;
+
+    sub pages {
+        return Statocles::Page::Content-&gt;new(
+            path =&gt; &#39;/index.html&#39;,
+            content =&gt; &#39;Hello, World&#39;,
+        );
+    }</code></pre>
+
 <h1 id="DESCRIPTION">DESCRIPTION</h1>
 
-<p>A Statocles App turns <a href="/Statocles/pod/Statocles/Documents.html">documents</a> into a set of <a href="/Statocles/pod/Statocles/Pages.html">pages</a> that can then be written to the filesystem (or served directly, if desired).</p>
+<p>A Statocles App creates a set of <a href="/Statocles/pod/Statocles/Pages.html">pages</a> that can then be written to the filesystem (or served directly, if desired).</p>
+
+<p>Pages can be created from <a href="/Statocles/pod/Statocles/Documents.html">documents</a> stored in a <a href="/Statocles/pod/Statocles/Store.html">store</a> (see <a href="/Statocles/pod/Statocles/Page/Document.html">Statocles::Page::Document</a>), files stored in a store (see <a href="/Statocles/pod/Statocles/Page/File.html">Statocles::Page::File</a>), lists of content (see <a href="/Statocles/pod/Statocles/Page/List.html">Statocles::Page::List</a>), or anything at all (see <a href="/Statocles/pod/Statocles/Page/Content.html">Statocles::Page::Content</a>).</p>
 
 <h1 id="ATTRIBUTES">ATTRIBUTES</h1>
 
@@ -133,6 +149,44 @@
 <h2 id="link-args">link( %args )</h2>
 
 <p>Create a link to a page in this application. <code>%args</code> are attributes to be given to <a href="/Statocles/pod/Statocles/Link.html">Statocles::Link</a> constructor.</p>
+
+<h1 id="INCLUDED-APPS">INCLUDED APPS</h1>
+
+<p>These applications are included with the core Statocles distribution.</p>
+
+<dl>
+
+<dt><a href="/Statocles/pod/Statocles/App/Blog.html">Statocles::App::Blog</a></dt>
+<dd>
+
+</dd>
+<dt><a href="/Statocles/pod/Statocles/App/Plain.html">Statocles::App::Plain</a></dt>
+<dd>
+
+</dd>
+<dt><a href="/Statocles/pod/Statocles/App/Static.html">Statocles::App::Static</a></dt>
+<dd>
+
+</dd>
+<dt><a href="/Statocles/pod/Statocles/App/Perldoc.html">Statocles::App::Perldoc</a></dt>
+<dd>
+
+</dd>
+</dl>
+
+<h1 id="SEE-ALSO">SEE ALSO</h1>
+
+<dl>
+
+<dt><a href="/Statocles/pod/Statocles/Store.html">Statocles::Store</a></dt>
+<dd>
+
+</dd>
+<dt><a href="https://metacpan.org/pod/Statocle::Page" rel="external">Statocle::Page</a></dt>
+<dd>
+
+</dd>
+</dl>
 
 
 

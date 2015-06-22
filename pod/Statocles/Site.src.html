@@ -4,6 +4,7 @@
         <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
         <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
         <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <title>Statocles</title>
         <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
 <style>
@@ -57,7 +58,7 @@
         <header>
             <nav class="navbar">
                 <div class="container">
-                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <a class="brand" href="/">Statocles</a>
                     <ul>
                         <li>
                             <a href="/Statocles/blog">Blog</a>
@@ -441,7 +442,7 @@ sub build {
             for my $attr ( qw( src href ) ) {
                 for my $el ( $dom-&gt;find( &quot;[$attr]&quot; )-&gt;each ) {
                     my $url = $el-&gt;attr( $attr );
-                    next unless $url =~ m{^/};
+                    next unless $url =~ m{^/[^/]};
 
                     # Rewrite links to the index app&#39;s index page
                     if ( $index_root &amp;&amp; $url =~ m{^$index_root(?:/index[.]html)?$} ) {

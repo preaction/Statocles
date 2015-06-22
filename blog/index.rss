@@ -5,7 +5,42 @@
         <link>http://preaction.github.io/Statocles/blog/</link>
         <atom:link href="http://preaction.github.io/Statocles/blog/index.rss" rel="self" type="application/rss+xml" />
         <description>Blog feed of Statocles</description>
-        <generator>Statocles 0.047</generator>
+        <generator>Statocles 0.048</generator>
+        <item>
+            <title>Release v0.048</title>
+            <link>http://preaction.github.io/Statocles/blog/2015/06/22/release-v0-048/</link>
+            <guid>http://preaction.github.io/Statocles/blog/2015/06/22/release-v0-048/</guid>
+            <description><![CDATA[
+                <p>Here starts the road to v1.0! Some breaking changes in this release:</p>
+
+<p>Statocles::Page::Feed is now removed. The functionality has been added to all
+pages, and all the feed templates have been updated accordingly. This means you
+must update your themes to grab the new feed templates.</p>
+
+<p>To fix a long-standing bug with blog content not showing up correctly on the
+list pages (index, tag lists), the
+<a href="http://preaction.github.io/Statocles/pod/Statocles/Page/ListItem.html">Statocles::Page::ListItem</a> class was added.
+This class proxies another page and rewrites its content to survive intact
+inside a list page.</p>
+
+<p>Some minor things:</p>
+
+<p>External perldoc links are now explicitly labelled as such with a
+<a href="http://preaction.github.io/Statocles/blog/2015/06/22/release-v0-048/http://fontawesome.io">FontAwesome</a> icon.</p>
+
+<p>Some doc updates to start documenting the <a href="http://preaction.github.io/Statocles/pod/Statocles/App.html">App API</a>.</p>
+
+<p>Full changelog below...</p>
+
+                    <p><a href="http://preaction.github.io/Statocles/blog/2015/06/22/release-v0-048/#section-2">Continue reading...</a></p>
+                <p>Tags:
+                    <a href="/blog/tag/release/">release</a>
+                </p>
+            ]]></description>
+            <pubDate>
+                Mon, 22 Jun 2015 00:00:00 +0000
+            </pubDate>
+        </item>
         <item>
             <title>Release v0.047</title>
             <link>http://preaction.github.io/Statocles/blog/2015/06/03/release-v0-047/</link>
@@ -16,9 +51,9 @@ users from upgrading from previous versions due to a test failure.</p>
 
 <p>Most importantly, pagination in the blog is working again.</p>
 
-<p>Some additions to the <a href="/pod/Statocles/Help/Content.html">Content help guide</a>
+<p>Some additions to the <a href="http://preaction.github.io/Statocles/pod/Statocles/Help/Content.html">Content help guide</a>
 about a the new features over the last few releases, and one new feature adding
-a <code>data</code> attribute to <a href="/pod/Statocles/Document.html">Statocles::Document</a>,
+a <code>data</code> attribute to <a href="http://preaction.github.io/Statocles/pod/Statocles/Document.html">Statocles::Document</a>,
 which allows for fun things when generating content.</p>
 
 <p>Finally, some of our dependencies have been removed, since their functionality
@@ -43,11 +78,11 @@ ourselves).</p>
             <description><![CDATA[
                 <p>A few new features and a bunch of bugfixes in this release.</p>
 
-<p>Page objects now have a generic "data" attribute. This allows adding miscellaneous
+<p>Page objects now have a generic &quot;data&quot; attribute. This allows adding miscellaneous
 extra information to the Page, which is then available to the template.</p>
 
-<p>Using this, the <a href="/pod/Statocles/App/Perldoc.html">Perldoc app</a> now has a crumbtrail
-and a link to the module source, and the <a href="/pod/Statocles/App/Blog.html">blog app</a> can
+<p>Using this, the <a href="http://preaction.github.io/Statocles/pod/Statocles/App/Perldoc.html">Perldoc app</a> now has a crumbtrail
+and a link to the module source, and the <a href="http://preaction.github.io/Statocles/pod/Statocles/App/Blog.html">blog app</a> can
 now have introductory text for the tags that show up on the tag page.</p>
 
 <p>There were some changes to the default theme to make extending it a bit easier.</p>
@@ -59,12 +94,12 @@ body is less surprising.</li>
 to the columns looks better.</li>
 </ul>
 
-<p>Finally, a <a href="/pod/Statocles/Document.html">document</a> is now allowed to override its
-template and layout. The <a href="/pod/Statocles/Page/Document.html">document page</a> uses
+<p>Finally, a <a href="http://preaction.github.io/Statocles/pod/Statocles/Document.html">document</a> is now allowed to override its
+template and layout. The <a href="http://preaction.github.io/Statocles/pod/Statocles/Page/Document.html">document page</a> uses
 the document template to override the template provided by the app.</p>
 
 <p>Because of this, we can now allow extra pages in blog posts. Just put the extra page
-inside the blog post's directory.</p>
+inside the blog post&#39;s directory.</p>
 
 <p>Full changelog below...</p>
 
@@ -85,11 +120,11 @@ inside the blog post's directory.</p>
                 <p>A couple small changes in this release:</p>
 
 <p>Blog posts are now allowed to have images inside the post directory. This makes
-it a lot easier to add images to blogs. You don't need to configure a global
+it a lot easier to add images to blogs. You don&#39;t need to configure a global
 <code>/images</code> directory. You can put your image in <code>/blog/YYYY/MM/DD/post-title</code>.
 Even better, you get to refer to it in your post as <code>![](image.jpg)</code>.</p>
 
-<p>The <a href="/pod/Statocles/Plugin/LinkCheck.html">link check plugin</a> now correctly finds
+<p>The <a href="http://preaction.github.io/Statocles/pod/Statocles/Plugin/LinkCheck.html">link check plugin</a> now correctly finds
 links the URL encoded characters.</p>
 
 <p>The recent posts helper now allows filtering by tag, if, for example, you want to
@@ -117,8 +152,8 @@ you need to run multiple instances.</p>
                 <p>A few small features, and some small breaking changes in this release.</p>
 
 <p>The <code>read_document</code> and <code>write_document</code> method of
-<a href="/pod/Statocles/Store/File.html">Statocles::Store::File</a> now use
-<a href="/pod/Statocles/Document.html">Statocles::Document</a> instead of plain hashrefs.
+<a href="http://preaction.github.io/Statocles/pod/Statocles/Store/File.html">Statocles::Store::File</a> now use
+<a href="http://preaction.github.io/Statocles/pod/Statocles/Document.html">Statocles::Document</a> instead of plain hashrefs.
 It was weird to have one method (<code>read_documents</code> with an <code>s</code>) get document
 objects, and everything else use hashes. The important
 serialization/deserialization routines are in Statocles::Document, so it is
@@ -133,12 +168,12 @@ every replacement to a single dash (<code>-</code>), instead of having multiple 
 This only affects new posts, not existing posts, so if you want to fix your
 current posts, you must fix them manually.</p>
 
-<p>An upgrade to <a href="http://metacpan.org/pod/Beam::Wire">Beam::Wire</a> now allows you
+<p>An upgrade to <a href="http://preaction.github.io/Statocles/blog/2015/04/06/release-v0.044/http://metacpan.org/pod/Beam::Wire">Beam::Wire</a> now allows you
 to compose roles in the Statocles configuration file, so additional behavior
-can be added to existing applications. See <a href="/pod/Statocles/Help/Develop.html">the Develop
+can be added to existing applications. See <a href="http://preaction.github.io/Statocles/pod/Statocles/Help/Develop.html">the Develop
 Guide</a> for more information.</p>
 
-<p>Finally, <a href="/pod/Statocles/App/Blog.html">the Blog app</a> now has a <code>recent_posts()</code>
+<p>Finally, <a href="http://preaction.github.io/Statocles/pod/Statocles/App/Blog.html">the Blog app</a> now has a <code>recent_posts()</code>
 method that can be used in templates and markdown to display the most recent
 posts in a blog.</p>
 
@@ -151,43 +186,6 @@ posts in a blog.</p>
             ]]></description>
             <pubDate>
                 Mon, 06 Apr 2015 00:00:00 +0000
-            </pubDate>
-        </item>
-        <item>
-            <title>Release v0.043</title>
-            <link>http://preaction.github.io/Statocles/blog/2015/03/24/release-v0.043/</link>
-            <guid>http://preaction.github.io/Statocles/blog/2015/03/24/release-v0.043/</guid>
-            <description><![CDATA[
-                <p>A couple interesting changes this week!</p>
-
-<p>There was a case where two apps could produce pages with the same path. Now, this
-produces a warning, and there's an attempt to do the right thing by making pages
-generated by apps more important than files simply being copied.</p>
-
-<p>The <code>url_root</code> attribute was moved to the Statocles::App class, so that all
-apps have it. This will prevent an app forgetting to add it.  In order to make
-this work, some new methods were added to the Statocles::App class to build
-URLs and links with the right URL root.</p>
-
-<p>It's now a lot easier to use a default Theme and still get some minor
-customizations by specifying one or more include directories. See <a href="/pod/Statocles/Help/Theme.html">the
-Statocles Theme guide</a> for more information.</p>
-
-<p>A single Git repository can now have any number of site deploys inside. Just make
-sure the path is somewhere in the Git repository's working tree.</p>
-
-<p>With Moo 2 coming out, Moo::Lax is not needed, so we've changed our dependency to
-Moo 2.</p>
-
-<p>Full changelog below:</p>
-
-                    <p><a href="http://preaction.github.io/Statocles/blog/2015/03/24/release-v0.043/#section-2">Continue reading...</a></p>
-                <p>Tags:
-                    <a href="/blog/tag/release/">release</a>
-                </p>
-            ]]></description>
-            <pubDate>
-                Tue, 24 Mar 2015 00:00:00 +0000
             </pubDate>
         </item>
     </channel>

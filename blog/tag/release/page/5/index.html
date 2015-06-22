@@ -4,6 +4,7 @@
         <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
         <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
         <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <title>Statocles</title>
         <link href="/Statocles/blog/tag/release.atom" rel="alternate" type="application/atom+xml">
         <link href="/Statocles/blog/tag/release.rss" rel="alternate" type="application/rss+xml">
@@ -59,7 +60,7 @@
         <header>
             <nav class="navbar">
                 <div class="container">
-                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <a class="brand" href="/">Statocles</a>
                     <ul>
                         <li>
                             <a href="/Statocles/blog">Blog</a>
@@ -98,6 +99,43 @@
 
             <article>
                 <header>
+                    <h1><a href="/Statocles/blog/2014/12/14/release-v0.028.html">Release v0.028</a></h1>
+
+                    <p class="tags">Tags:
+                        <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
+                    </p>
+
+                    <aside>
+                        <p><time datetime="2014-12-14">
+                            Posted on 2014-12-14
+                        </time>
+                            by preaction
+                        </p>
+                    </aside>
+
+                </header>
+
+                <p>This release adds automatic rebuilding of the site when changes are made (OSX
+only, so far). We&#39;re now using Mojo::Log for logging (instead of a hacked up
+<code>diag()</code> sub).</p>
+
+<p>A breaking change to applications: The <code>index()</code> method is no longer used by
+the site to determine what is the front page of the app, appropriate to
+transform into the front page of the site. Now, the first item returned by
+<code>pages()</code> must be the index page. This reduces the number of methods
+applications need, and made it easier to implement the automatic rebuilding.</p>
+
+<p>Finally, some much-needed cleanup as part of the automatic rebuilding feature.
+Still plenty of cleanup to go.</p>
+
+<p>Full changelog:</p>
+
+
+                    <p><a href="/Statocles/blog/2014/12/14/release-v0.028.html#section-2">Continue reading Release v0.028...</a></p>
+
+            </article>
+            <article>
+                <header>
                     <h1><a href="/Statocles/blog/2014/12/08/release-v0.027.html">Release v0.027</a></h1>
 
                     <p class="tags">Tags:
@@ -115,7 +153,7 @@
                 </header>
 
                 <p>This release fixes some issues that would prevent Statocles from installing. I may have
-finally fixed <a href="https://github.com/preaction/Statocles/issues/110">the Win32 test failure that has been plaguing me!</a></p>
+finally fixed <a href="/Statocles/blog/2014/12/08/https://github.com/preaction/Statocles/issues/110">the Win32 test failure that has been plaguing me!</a></p>
 
 <p>Full changelog:</p>
 
@@ -155,14 +193,14 @@ it easy to edit content via any text editor [1].</p>
 <li>A POD renderer for documentation of Perl projects</li>
 </ul>
 
-<p>This site is generated with Statocles, and so is <a href="http://preaction.github.io">my blog</a>.</p>
+<p>This site is generated with Statocles, and so is <a href="/Statocles/blog/2014/12/07/http://preaction.github.io">my blog</a>.</p>
 
 <h2>Getting Started</h2>
 
-<p><a href="http://metacpan.org/pod/Statocles">Get Statocles from CPAN</a> and <a href="/Statocles/pod/Statocles/Help/Setup.html">follow the Statocles
+<p><a href="/Statocles/blog/2014/12/07/http://metacpan.org/pod/Statocles">Get Statocles from CPAN</a> and <a href="/Statocles/pod/Statocles/Help/Setup.html">follow the Statocles
 Setup guide</a>. If you have any issues, report them on
-<a href="https://github.com/preaction/Statocles">the Statocles Githup Repo</a>. If you have questions,
-<a href="https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">join us on IRC on irc.perl.org #statocles</a>!</p>
+<a href="/Statocles/blog/2014/12/07/https://github.com/preaction/Statocles">the Statocles Githup Repo</a>. If you have questions,
+<a href="/Statocles/blog/2014/12/07/https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">join us on IRC on irc.perl.org #statocles</a>!</p>
 
 <p>[1]: A future project will make Statocles content editable with a web interface</p>
 

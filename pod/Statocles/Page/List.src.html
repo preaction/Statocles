@@ -4,6 +4,7 @@
         <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
         <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
         <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <title>Statocles</title>
         <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
 <style>
@@ -57,7 +58,7 @@
         <header>
             <nav class="navbar">
                 <div class="container">
-                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <a class="brand" href="/">Statocles</a>
                     <ul>
                         <li>
                             <a href="/Statocles/blog">Blog</a>
@@ -95,6 +96,7 @@ use Statocles::Base &#39;Class&#39;;
 with &#39;Statocles::Page&#39;;
 use List::Util qw( max );
 use Statocles::Template;
+use Statocles::Page::ListItem;
 
 =attr pages
 
@@ -102,10 +104,32 @@ The pages that should be shown in this list.
 
 =cut
 
-has pages =&gt; (
+has _pages =&gt; (
     is =&gt; &#39;ro&#39;,
     isa =&gt; ArrayRef[ConsumerOf[&#39;Statocles::Page&#39;]],
+    init_arg =&gt; &#39;pages&#39;,
 );
+
+sub pages {
+    my ( $self ) = @_;
+
+    my %rewrite;
+    if ( $self-&gt;type eq &#39;application/rss+xml&#39; || $self-&gt;type eq &#39;application/atom+xml&#39; ) {
+        %rewrite = ( rewrite_mode =&gt; &#39;full&#39; );
+    }
+
+    my @pages;
+    for my $page ( @{ $self-&gt;_pages } ) {
+        # Always re-wrap the page, even if it&#39;s already wrapped,
+        # to change the rewrite_mode
+        push @pages, Statocles::Page::ListItem-&gt;new(
+            %rewrite,
+            page =&gt; $page-&gt;isa( &#39;Statocles::Page::ListItem&#39; ) ? $page-&gt;page : $page,
+        );
+    }
+
+    return \@pages;
+}
 
 =attr next
 
