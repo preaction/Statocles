@@ -130,7 +130,7 @@ sub pages {
             layout =&gt; $self-&gt;site-&gt;theme-&gt;template( site =&gt; &#39;layout.html&#39; ),
         );
 
-        if ( $url eq &#39;index.html&#39; ) {
+        if ( $url =~ m{^/?index[.]html$} ) {
             unshift @pages, $page;
         }
         else {

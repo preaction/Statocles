@@ -391,7 +391,18 @@ sub build {
         }
 
         for my $page ( @app_pages ) {
-            $seen_paths{ $page-&gt;path }{ $app_name } = $page;
+            my $path = $page-&gt;path;
+
+            if ( $seen_paths{ $path }{ $app_name } ) {
+                $self-&gt;log-&gt;warn(
+                    sprintf &#39;Duplicate page with path &quot;%s&quot; from app &quot;%s&quot;&#39;,
+                        $path,
+                        $app_name,
+                );
+                next;
+            }
+
+            $seen_paths{ $path }{ $app_name } = $page;
         }
     }
 

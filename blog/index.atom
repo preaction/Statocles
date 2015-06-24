@@ -2,10 +2,35 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://preaction.github.io/Statocles/blog/</id>
     <title>Statocles</title>
-    <updated>2015-06-22T02:26:37Z</updated>
+    <updated>2015-06-23T21:47:14Z</updated>
     <link href="http://preaction.github.io/Statocles/blog/index.atom" rel="self" />
     <link href="http://preaction.github.io/Statocles/blog/" rel="alternate" />
     <generator version="0.048">Statocles</generator>
+    <entry>
+        <id>http://preaction.github.io/Statocles/blog/2015/06/23/release-v0-049/</id>
+        <title>Release v0.049</title>
+        <link href="http://preaction.github.io/Statocles/blog/2015/06/23/release-v0-049/" rel="alternate" />
+        <content type="html"><![CDATA[
+            <p>A quick couple of bugfixes to solve an ongoing problem at $work. It turns out that
+using <a href="http://preaction.github.io/Statocles/pod/Statocles/App/Plain.html">the plain app</a> as the index app was contingent
+on the filesystem&#39;s ordering or some other unpredictable thing. Now, this is fixed,
+so the plain app can be safely used as the index.</p>
+
+<p>This will be fixed/changed completely to <a href="http://preaction.github.io/Statocles/blog/2015/06/23/release-v0-049/https://github.com/preaction/Statocles/issues/326">allow any page to be the index in a future
+version</a>.</p>
+
+<p>Additionally, some footer styles were added to the default theme.</p>
+
+<p>Full changelog below...</p>
+
+                <p><a href="http://preaction.github.io/Statocles/blog/2015/06/23/release-v0-049/#section-2">Continue reading...</a></p>
+            <p>Tags:
+                <a href="/blog/tag/release/">release</a>
+            </p>
+        ]]></content>
+        <updated>2015-06-23T00:00:00Z</updated>
+        <category term="release" />
+    </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2015/06/22/release-v0-048/</id>
         <title>Release v0.048</title>
@@ -138,49 +163,6 @@ you need to run multiple instances.</p>
             </p>
         ]]></content>
         <updated>2015-04-16T00:00:00Z</updated>
-        <category term="release" />
-    </entry>
-    <entry>
-        <id>http://preaction.github.io/Statocles/blog/2015/04/06/release-v0.044/</id>
-        <title>Release v0.044</title>
-        <link href="http://preaction.github.io/Statocles/blog/2015/04/06/release-v0.044/" rel="alternate" />
-        <content type="html"><![CDATA[
-            <p>A few small features, and some small breaking changes in this release.</p>
-
-<p>The <code>read_document</code> and <code>write_document</code> method of
-<a href="http://preaction.github.io/Statocles/pod/Statocles/Store/File.html">Statocles::Store::File</a> now use
-<a href="http://preaction.github.io/Statocles/pod/Statocles/Document.html">Statocles::Document</a> instead of plain hashrefs.
-It was weird to have one method (<code>read_documents</code> with an <code>s</code>) get document
-objects, and everything else use hashes. The important
-serialization/deserialization routines are in Statocles::Document, so it is
-likely that more changes will happen around these APIs in the future.</p>
-
-<p>Because of the above change, Stores now have a way to read a document from a string.
-So, when a blog post is read from <code>&lt;STDIN&gt;</code>, it can contain tags, links, and other
-fields, instead of just content.</p>
-
-<p>Some fixes to blog slugs to remove any non-word characters, and also reduce
-every replacement to a single dash (<code>-</code>), instead of having multiple dashes.
-This only affects new posts, not existing posts, so if you want to fix your
-current posts, you must fix them manually.</p>
-
-<p>An upgrade to <a href="http://preaction.github.io/Statocles/blog/2015/04/06/release-v0.044/http://metacpan.org/pod/Beam::Wire">Beam::Wire</a> now allows you
-to compose roles in the Statocles configuration file, so additional behavior
-can be added to existing applications. See <a href="http://preaction.github.io/Statocles/pod/Statocles/Help/Develop.html">the Develop
-Guide</a> for more information.</p>
-
-<p>Finally, <a href="http://preaction.github.io/Statocles/pod/Statocles/App/Blog.html">the Blog app</a> now has a <code>recent_posts()</code>
-method that can be used in templates and markdown to display the most recent
-posts in a blog.</p>
-
-<p>Full changelog is below.</p>
-
-                <p><a href="http://preaction.github.io/Statocles/blog/2015/04/06/release-v0.044/#section-2">Continue reading...</a></p>
-            <p>Tags:
-                <a href="/blog/tag/release/">release</a>
-            </p>
-        ]]></content>
-        <updated>2015-04-06T00:00:00Z</updated>
         <category term="release" />
     </entry>
 </feed>
