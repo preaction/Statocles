@@ -74,12 +74,6 @@ main img {
     max-width: 100%;
 }
 
-footer .tagline {
-    font-size: smaller;
-    line-height: 1.3;
-    text-align: right;
-}
-
 a[rel=external]::before {
     content: '\f08e';
     font-family: "FontAwesome";
@@ -203,15 +197,13 @@ ul.pager {
 footer {
     margin-top: 1em;
     padding-bottom: 0.5em;
-    background-color: #eee;
     font-size: 0.7em;
-    border: 1px solid #bbb;
-    border-bottom: none;
 }
 
-footer li {
-    margin: 0;
-    padding: 0;
+footer .tagline {
+    font-size: smaller;
+    line-height: 1.3;
+    text-align: right;
 }
 
 /** Crumbtrail widget */
