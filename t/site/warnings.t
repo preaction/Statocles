@@ -6,6 +6,7 @@ use Statocles::Page::Plain;
 use Statocles::App::Static;
 use Statocles::App::Plain;
 use Mojo::DOM;
+use Test::Lib;
 use TestApp;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
 

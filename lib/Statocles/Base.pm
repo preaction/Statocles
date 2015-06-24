@@ -28,7 +28,7 @@ my @class_modules = (
 
 our %IMPORT_BUNDLES = (
     Test => [
-        qw( Test::More Test::Deep Test::Differences Test::Exception Test::Lib ),
+        qw( Test::More Test::Deep Test::Differences Test::Exception ),
         'Dir::Self' => [qw( __DIR__ )],
         'Path::Tiny' => [qw( path tempdir cwd )],
         'Statocles::Test' => [qw(
