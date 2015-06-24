@@ -1,6 +1,13 @@
 Changelog for Statocles
 
-0.048 2015-06-22T07:10:26
+0.049 2015-06-24T02:38:18
+ - add warning if app creates duplicate pages
+ - fix plain app using wrong index page
+ - update site theme from statocles default
+ - add footer styles to default theme
+ - add release v0.048 announcement
+
+0.048 2015-06-22T07:10:26Z
  - fix vim swap files being parsed as markdown
  - add ListItem page to wrap pages in a list page
  - add basename and dirname to Page objects

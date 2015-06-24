@@ -56,9 +56,10 @@ my %WriteMakefileArgs = (
     "Test::Deep" => 0,
     "Test::Differences" => 0,
     "Test::Exception" => 0,
+    "Test::Lib" => 0,
     "Test::More" => "1.001005"
   },
-  "VERSION" => "0.048",
+  "VERSION" => "0.049",
   "test" => {
     "TESTS" => "t/*.t t/app/*.t t/app/blog/*.t t/app/perldoc/*.t t/app/plain/*.t t/app/static/*.t t/bin/*.t t/command/*.t t/deploy/*.t t/page/*.t t/plugin/*.t t/site/*.t t/store/file/*.t t/template/*.t t/theme/*.t"
   }
@@ -87,6 +88,7 @@ my %FallbackPrereqs = (
   "Test::Deep" => 0,
   "Test::Differences" => 0,
   "Test::Exception" => 0,
+  "Test::Lib" => 0,
   "Test::More" => "1.001005",
   "Text::Markdown" => 0,
   "Time::Piece" => 0,

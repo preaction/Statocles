@@ -31,6 +31,7 @@ on 'test' => sub {
   requires "Test::Deep" => "0";
   requires "Test::Differences" => "0";
   requires "Test::Exception" => "0";
+  requires "Test::Lib" => "0";
   requires "Test::More" => "1.001005";
 };
 
