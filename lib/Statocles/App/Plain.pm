@@ -39,7 +39,7 @@ sub pages {
             layout => $self->site->theme->template( site => 'layout.html' ),
         );
 
-        if ( $url eq 'index.html' ) {
+        if ( $url =~ m{^/?index[.]html$} ) {
             unshift @pages, $page;
         }
         else {

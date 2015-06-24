@@ -38,6 +38,11 @@ test_pages(
 
     },
 
+    '/aaa.html' => sub {
+        my ( $html, $dom ) = @_;
+        like $dom->at( 'p' )->text, qr{^\QThis page's purpose is to come first in the list};
+    },
+
     '/foo/index.html' => sub {
         my ( $html, $dom ) = @_;
         # XXX: Find the layout and template
