@@ -598,6 +598,18 @@ C<deploy> in a nightly cron job.
 
 =back
 
+=head1 COMMANDS
+
+=head2 post
+
+    post [--date <date>] <title>
+
+Create a new blog post, optionally setting an initial C<title>. The post will be
+created in a directory according to the current date.
+
+Initial post content can be read from C<STDIN>. This lets you write other programs
+to generate content for blog posts (for example, to help automate release blog posts).
+
 =head1 THEME
 
 =over
