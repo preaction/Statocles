@@ -33,6 +33,11 @@ sub test_base_url {
     my @links = $got_dom->find( 'head > link' )->each;
     is $links[0]->attr( 'href' ), $site_path . '/theme/css/normalize.css';
     is $links[1]->attr( 'href' ), '//cdn.example.com/css/cdn.css';
+
+    if ( ok $elem = $got_dom->at( '.brand' ), 'has brand' ) {
+        is $elem->attr( 'href' ), $site_path . '/',
+            'single "/" is replaced with base_url ' . $site_path;
+    }
 }
 
 subtest 'build' => sub {

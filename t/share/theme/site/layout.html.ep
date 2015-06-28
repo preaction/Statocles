@@ -6,6 +6,7 @@
         <title><%= $site->title %></title>
     </head>
     <body>
+        <a class="brand" href="/">Home</a>
         <nav>
             % for my $link ( $site->nav( 'main' ) ) {
                 <a href="<%= $link->href %>" title="<%= $link->title %>"><%= $link->text %></a>

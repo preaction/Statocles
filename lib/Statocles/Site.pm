@@ -362,7 +362,7 @@ sub build {
             for my $attr ( qw( src href ) ) {
                 for my $el ( $dom->find( "[$attr]" )->each ) {
                     my $url = $el->attr( $attr );
-                    next unless $url =~ m{^/[^/]};
+                    next unless $url =~ m{^/(?:[^/]|$)};
 
                     # Rewrite links to the index app's index page
                     if ( $index_root && $url =~ m{^$index_root(?:/index[.]html)?$} ) {
