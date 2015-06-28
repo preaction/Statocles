@@ -8,11 +8,13 @@ site content, build, test, and deploy the site.
 
 =head1 BASIC CONTENT
 
-=head2 Create A Blog Post
+=head2 Run an App Command
 
-Remember when we gave our blog app a name? Now we can use that name to access
-the blog's command-line commands. To create a new blog post, we can use the
-C<post> command:
+Every application in a Statocles site has a name. The name is the key in the
+L<site object's|Statocles::Site> C<apps> attribute in the L<site.yml config
+file|Statocles::Help::Config>. We can use that name to access the app's
+command-line commands. To create a new blog post using L<the blog
+app|Statocles::App::Blog>, we can use the C<post> command:
 
     $ statocles blog post Snickerdoodles
     New post at: blog/2014/06/04/snickerdoodles
@@ -21,6 +23,9 @@ Everything after C<post> will be used as the title of the post.
 
 If you have the C<EDITOR> environment variable set, your editor will
 automatically open on the newly-created document.
+
+Not all applications have or need commands. See L<the application
+documentation|Statocles::App/"SEE ALSO"> for more information.
 
 =head2 Frontmatter
 
@@ -62,8 +67,10 @@ This will be parsed into
         <li>1 c sugar</li>
     </ul>
 
-See L<the Markdown website|http://daringfireball.net/projects/markdown/syntax> for
-full documentation on Markdown syntax.
+Markdown has some simple formatting for basic things. For more advanced needs,
+you can embed raw HTML directly.  See L<the Markdown
+website|http://daringfireball.net/projects/markdown/syntax> for full
+documentation on Markdown syntax.
 
 =head2 Build The Site
 
