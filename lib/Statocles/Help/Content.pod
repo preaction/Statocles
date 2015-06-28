@@ -13,8 +13,15 @@ site content, build, test, and deploy the site.
 Every application in a Statocles site has a name. The name is the key in the
 L<site object's|Statocles::Site> C<apps> attribute in the L<site.yml config
 file|Statocles::Help::Config>. We can use that name to access the app's
-command-line commands. To create a new blog post using L<the blog
-app|Statocles::App::Blog>, we can use the C<post> command:
+command-line commands.
+
+Not all applications have or need commands. See L<the application
+documentation|Statocles::App/"SEE ALSO"> for more information.
+
+=head3 Create a Blog Post
+
+To create a new blog post using L<the blog app|Statocles::App::Blog>, we can
+use the C<post> command:
 
     $ statocles blog post Snickerdoodles
     New post at: blog/2014/06/04/snickerdoodles
@@ -24,8 +31,13 @@ Everything after C<post> will be used as the title of the post.
 If you have the C<EDITOR> environment variable set, your editor will
 automatically open on the newly-created document.
 
-Not all applications have or need commands. See L<the application
-documentation|Statocles::App/"SEE ALSO"> for more information.
+=head3 Create a Plain Page
+
+To creat a plain page using L<the plain app|Statocles::App::Plain>, we just have
+to create a new file:
+
+    $ mkdir page/about
+    $ vim page/about/index.markdown
 
 =head2 Frontmatter
 
