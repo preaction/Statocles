@@ -58,7 +58,7 @@
         <header>
             <nav class="navbar">
                 <div class="container">
-                    <a class="brand" href="/">Statocles</a>
+                    <a class="brand" href="/Statocles/">Statocles</a>
                     <ul>
                         <li>
                             <a href="/Statocles/blog">Blog</a>
@@ -112,9 +112,15 @@
 
 <h1 id="BASIC-CONTENT">BASIC CONTENT</h1>
 
-<h2 id="Create-A-Blog-Post">Create A Blog Post</h2>
+<h2 id="Run-an-App-Command">Run an App Command</h2>
 
-<p>Remember when we gave our blog app a name? Now we can use that name to access the blog&#39;s command-line commands. To create a new blog post, we can use the <code>post</code> command:</p>
+<p>Every application in a Statocles site has a name. The name is the key in the <a href="/Statocles/pod/Statocles/Site.html">site object&#39;s</a> <code>apps</code> attribute in the <a href="/Statocles/pod/Statocles/Help/Config.html">site.yml config file</a>. We can use that name to access the app&#39;s command-line commands.</p>
+
+<p>Not all applications have or need commands. See <a href="/Statocles/pod/Statocles/App#SEE-ALSO.html">the application documentation</a> for more information.</p>
+
+<h3 id="Create-a-Blog-Post">Create a Blog Post</h3>
+
+<p>To create a new blog post using <a href="/Statocles/pod/Statocles/App/Blog.html">the blog app</a>, we can use the <code>post</code> command:</p>
 
 <pre><code>    $ statocles blog post Snickerdoodles
     New post at: blog/2014/06/04/snickerdoodles</code></pre>
@@ -122,6 +128,13 @@
 <p>Everything after <code>post</code> will be used as the title of the post.</p>
 
 <p>If you have the <code>EDITOR</code> environment variable set, your editor will automatically open on the newly-created document.</p>
+
+<h3 id="Create-a-Plain-Page">Create a Plain Page</h3>
+
+<p>To creat a plain page using <a href="/Statocles/pod/Statocles/App/Plain.html">the plain app</a>, we just have to create a new file:</p>
+
+<pre><code>    $ mkdir page/about
+    $ vim page/about/index.markdown</code></pre>
 
 <h2 id="Frontmatter">Frontmatter</h2>
 
@@ -159,7 +172,7 @@
         &lt;li&gt;1 c sugar&lt;/li&gt;
     &lt;/ul&gt;</code></pre>
 
-<p>See <a href="http://daringfireball.net/projects/markdown/syntax" rel="external">the Markdown website</a> for full documentation on Markdown syntax.</p>
+<p>Markdown has some simple formatting for basic things. For more advanced needs, you can embed raw HTML directly. See <a href="http://daringfireball.net/projects/markdown/syntax" rel="external">the Markdown website</a> for full documentation on Markdown syntax.</p>
 
 <h2 id="Build-The-Site">Build The Site</h2>
 

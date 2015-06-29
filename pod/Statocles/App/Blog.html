@@ -58,7 +58,7 @@
         <header>
             <nav class="navbar">
                 <div class="container">
-                    <a class="brand" href="/">Statocles</a>
+                    <a class="brand" href="/Statocles/">Statocles</a>
                     <ul>
                         <li>
                             <a href="/Statocles/blog">Blog</a>
@@ -207,6 +207,16 @@
 <h2 id="page_url-page">page_url( page )</h2>
 
 <p>Return the absolute URL to this page, removing the &quot;/index.html&quot; if necessary.</p>
+
+<h1 id="COMMANDS">COMMANDS</h1>
+
+<h2 id="post">post</h2>
+
+<pre><code>    post [--date &lt;date&gt;] &lt;title&gt;</code></pre>
+
+<p>Create a new blog post, optionally setting an initial <code>title</code>. The post will be created in a directory according to the current date.</p>
+
+<p>Initial post content can be read from <code>STDIN</code>. This lets you write other programs to generate content for blog posts (for example, to help automate release blog posts).</p>
 
 <h1 id="THEME">THEME</h1>
 

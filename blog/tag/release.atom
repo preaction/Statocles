@@ -2,10 +2,32 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://preaction.github.io/Statocles/blog/tag/release/</id>
     <title>Statocles</title>
-    <updated>2015-06-23T21:47:16Z</updated>
+    <updated>2015-06-28T22:16:33Z</updated>
     <link href="http://preaction.github.io/Statocles/blog/tag/release.atom" rel="self" />
     <link href="http://preaction.github.io/Statocles/blog/tag/release/" rel="alternate" />
-    <generator version="0.048">Statocles</generator>
+    <generator version="0.050">Statocles</generator>
+    <entry>
+        <id>http://preaction.github.io/Statocles/blog/2015/06/28/release-v0-050/</id>
+        <title>Release v0.050</title>
+        <link href="http://preaction.github.io/Statocles/blog/2015/06/28/release-v0-050/" rel="alternate" />
+        <content type="html"><![CDATA[
+            <p>Some minor doc fixes, and a fix to ensure that all links are properly rewritten
+to include the site base URL.</p>
+
+<p>Also, a reverse from the last release that added an annoying background color
+to the footer of the default theme (and, by extention, any theme extended from
+the default theme).</p>
+
+<p>Full changelog below...</p>
+
+                <p><a href="http://preaction.github.io/Statocles/blog/2015/06/28/release-v0-050/#section-2">Continue reading...</a></p>
+            <p>Tags:
+                <a href="/blog/tag/release/">release</a>
+            </p>
+        ]]></content>
+        <updated>2015-06-28T00:00:00Z</updated>
+        <category term="release" />
+    </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2015/06/23/release-v0-049/</id>
         <title>Release v0.049</title>
@@ -132,37 +154,6 @@ inside the blog post&#39;s directory.</p>
             </p>
         ]]></content>
         <updated>2015-05-24T00:00:00Z</updated>
-        <category term="release" />
-    </entry>
-    <entry>
-        <id>http://preaction.github.io/Statocles/blog/2015/04/16/release-v0-045/</id>
-        <title>Release v0.045</title>
-        <link href="http://preaction.github.io/Statocles/blog/2015/04/16/release-v0-045/" rel="alternate" />
-        <content type="html"><![CDATA[
-            <p>A couple small changes in this release:</p>
-
-<p>Blog posts are now allowed to have images inside the post directory. This makes
-it a lot easier to add images to blogs. You don&#39;t need to configure a global
-<code>/images</code> directory. You can put your image in <code>/blog/YYYY/MM/DD/post-title</code>.
-Even better, you get to refer to it in your post as <code>![](image.jpg)</code>.</p>
-
-<p>The <a href="http://preaction.github.io/Statocles/pod/Statocles/Plugin/LinkCheck.html">link check plugin</a> now correctly finds
-links the URL encoded characters.</p>
-
-<p>The recent posts helper now allows filtering by tag, if, for example, you want to
-display only the last <code>release</code> blog and not any other blog post.</p>
-
-<p><code>statocles daemon</code> now allows setting <code>-p &lt;port&gt;</code>, in case port 3000 is in-use, or
-you need to run multiple instances.</p>
-
-<p>Full changelog below:</p>
-
-                <p><a href="http://preaction.github.io/Statocles/blog/2015/04/16/release-v0-045/#section-2">Continue reading...</a></p>
-            <p>Tags:
-                <a href="/blog/tag/release/">release</a>
-            </p>
-        ]]></content>
-        <updated>2015-04-16T00:00:00Z</updated>
         <category term="release" />
     </entry>
 </feed>

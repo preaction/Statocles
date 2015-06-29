@@ -58,7 +58,7 @@
         <header>
             <nav class="navbar">
                 <div class="container">
-                    <a class="brand" href="/">Statocles</a>
+                    <a class="brand" href="/Statocles/">Statocles</a>
                     <ul>
                         <li>
                             <a href="/Statocles/blog">Blog</a>
@@ -99,11 +99,20 @@ site content, build, test, and deploy the site.
 
 =head1 BASIC CONTENT
 
-=head2 Create A Blog Post
+=head2 Run an App Command
 
-Remember when we gave our blog app a name? Now we can use that name to access
-the blog&#39;s command-line commands. To create a new blog post, we can use the
-C&lt;post&gt; command:
+Every application in a Statocles site has a name. The name is the key in the
+L&lt;site object&#39;s|Statocles::Site&gt; C&lt;apps&gt; attribute in the L&lt;site.yml config
+file|Statocles::Help::Config&gt;. We can use that name to access the app&#39;s
+command-line commands.
+
+Not all applications have or need commands. See L&lt;the application
+documentation|Statocles::App/&quot;SEE ALSO&quot;&gt; for more information.
+
+=head3 Create a Blog Post
+
+To create a new blog post using L&lt;the blog app|Statocles::App::Blog&gt;, we can
+use the C&lt;post&gt; command:
 
     $ statocles blog post Snickerdoodles
     New post at: blog/2014/06/04/snickerdoodles
@@ -112,6 +121,14 @@ Everything after C&lt;post&gt; will be used as the title of the post.
 
 If you have the C&lt;EDITOR&gt; environment variable set, your editor will
 automatically open on the newly-created document.
+
+=head3 Create a Plain Page
+
+To creat a plain page using L&lt;the plain app|Statocles::App::Plain&gt;, we just have
+to create a new file:
+
+    $ mkdir page/about
+    $ vim page/about/index.markdown
 
 =head2 Frontmatter
 
@@ -153,8 +170,10 @@ This will be parsed into
         &lt;li&gt;1 c sugar&lt;/li&gt;
     &lt;/ul&gt;
 
-See L&lt;the Markdown website|http://daringfireball.net/projects/markdown/syntax&gt; for
-full documentation on Markdown syntax.
+Markdown has some simple formatting for basic things. For more advanced needs,
+you can embed raw HTML directly.  See L&lt;the Markdown
+website|http://daringfireball.net/projects/markdown/syntax&gt; for full
+documentation on Markdown syntax.
 
 =head2 Build The Site
 

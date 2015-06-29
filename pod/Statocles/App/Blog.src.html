@@ -58,7 +58,7 @@
         <header>
             <nav class="navbar">
                 <div class="container">
-                    <a class="brand" href="/">Statocles</a>
+                    <a class="brand" href="/Statocles/">Statocles</a>
                     <ul>
                         <li>
                             <a href="/Statocles/blog">Blog</a>
@@ -688,6 +688,18 @@ In order to ensure that post-dated blogs get added, you may want to run
 C&lt;deploy&gt; in a nightly cron job.
 
 =back
+
+=head1 COMMANDS
+
+=head2 post
+
+    post [--date &lt;date&gt;] &lt;title&gt;
+
+Create a new blog post, optionally setting an initial C&lt;title&gt;. The post will be
+created in a directory according to the current date.
+
+Initial post content can be read from C&lt;STDIN&gt;. This lets you write other programs
+to generate content for blog posts (for example, to help automate release blog posts).
 
 =head1 THEME
 

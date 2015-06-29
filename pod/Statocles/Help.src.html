@@ -58,7 +58,7 @@
         <header>
             <nav class="navbar">
                 <div class="container">
-                    <a class="brand" href="/">Statocles</a>
+                    <a class="brand" href="/Statocles/">Statocles</a>
                     <ul>
                         <li>
                             <a href="/Statocles/blog">Blog</a>
@@ -117,6 +117,168 @@ L&lt;Statocles::Help::Deploy&gt;.
 
 To develop custom Statocles applications, custom ways to deploy, custom template
 languages, or other extensions, see L&lt;Statocles::Help::Develop&gt;.
+
+=head1 MODULES
+
+=over 4
+
+=item *
+
+L&lt;Statocles&gt;
+
+=over 4
+
+=item *
+
+L&lt;Statocles::App&gt; - Base app role
+
+=over 4
+
+=item *
+
+L&lt;Statocles::App::Blog&gt; - Blog application
+
+=item *
+
+L&lt;Statocles::App::Perldoc&gt; - POD application
+
+=item *
+
+L&lt;Statocles::App::Plain&gt; - Plain Markdown pages
+
+=item *
+
+L&lt;Statocles::App::Static&gt; - Static files
+
+=back
+
+=item *
+
+L&lt;Statocles::Base&gt; - Base module bundles
+
+=item *
+
+L&lt;Statocles::Command&gt; - Command module
+
+=item *
+
+L&lt;Statocles::Deploy&gt; - Base deploy role
+
+=over 4
+
+=item *
+
+L&lt;Statocles::Deploy::File&gt; - Deploy to a local directory
+
+=item *
+
+L&lt;Statocles::Deploy::Git&gt; - Deploy to a git repository
+
+=back
+
+=item *
+
+L&lt;Statocles::Document&gt; - Default document class
+
+=item *
+
+L&lt;Statocles::Event&gt; - Event classes
+
+=item *
+
+L&lt;Statocles::Help&gt; - This document
+
+=over 4
+
+=item *
+
+L&lt;Statocles::Help::Config&gt; - Configure the site.yml file
+
+=item *
+
+L&lt;Statocles::Help::Content&gt; - Writing content documents
+
+=item *
+
+L&lt;Statocles::Help::Deploy&gt; - Deploying the site
+
+=item *
+
+L&lt;Statocles::Help::Develop&gt; - Developing apps and plugins
+
+=item *
+
+L&lt;Statocles::Help::Theme&gt; - Develop themes and templates
+
+=back
+
+=item *
+
+L&lt;Statocles::Link&gt; - A link to another place
+
+=item *
+
+L&lt;Statocles::Page&gt; - Base page role
+
+=over 4
+
+=item *
+
+L&lt;Statocles::Page::Document&gt; - Display a single document
+
+=item *
+
+L&lt;Statocles::Page::File&gt; - Display a static file
+
+=item *
+
+L&lt;Statocles::Page::List&gt; - Display a list of other pages
+
+=item *
+
+L&lt;Statocles::Page::ListItem&gt; - A single item in a list page
+
+=item *
+
+L&lt;Statocles::Page::Plain&gt; - Page with pre-generated HTML
+
+=back
+
+=item *
+
+L&lt;Statocles::Plugin::LinkCheck&gt; - Check for broken links in the site
+
+=item *
+
+L&lt;Statocles::Site&gt; - Main site class
+
+=item *
+
+L&lt;Statocles::Store::File&gt; - Storage for documents and files
+
+=item *
+
+L&lt;Statocles::Template&gt; - Default template class
+
+=item *
+
+L&lt;Statocles::Test&gt; - Helpful test routines
+
+=item *
+
+L&lt;Statocles::Theme&gt; - Default theme class
+
+=item *
+
+L&lt;Statocles::Types&gt; - Types library
+
+=item *
+
+L&lt;Statocles::Util&gt; - Utility functions
+
+=back
+
+=back
 
 =head1 SUPPORT
 
