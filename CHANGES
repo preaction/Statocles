@@ -1,6 +1,16 @@
 Changelog for Statocles
 
-0.049 2015-06-24T02:38:18
+0.050 2015-06-29T03:11:25
+ - add command docs to Blog app
+ - show how to create plain page in content guide
+ - clarify some parts of the content guide
+ - fix "/" not being rewritten with base URL
+ - add module list to Statocles::Help
+ - move test::lib to test to fix xt/ tests
+ - remove background and border from default footer
+ - add release v0.049 announcement
+
+0.049 2015-06-24T02:38:18Z
  - add warning if app creates duplicate pages
  - fix plain app using wrong index page
  - update site theme from statocles default
