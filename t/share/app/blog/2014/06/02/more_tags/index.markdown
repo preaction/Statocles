@@ -22,3 +22,5 @@ links:
 
 ![](image.markdown.jpg)
 [Fixed relative URL](docs.html)
+
+[Test a mailto: link](mailto:user@example.com)
