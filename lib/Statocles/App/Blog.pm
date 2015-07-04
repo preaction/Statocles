@@ -221,13 +221,19 @@ sub post_files {
     my ( $self ) = @_;
     my @pages;
 
+    my @paths;
     my $iter = $self->store->find_files;
     while ( my $path = $iter->() ) {
+        push @paths, $path;
+    }
+
+    for my $path ( @paths ) {
         # Files must be in folders
         next unless $path =~ m{^/(\d{4})/(\d{2})/(\d{2})/[^/]+/};
 
         # index.markdown is the post itself
         next if $path =~ m{/index[.]markdown$};
+        next if $path =~ m{/index[.]html$};
 
         if ( $path =~ /[.]markdown$/ ) {
             my $page_path = $path;
@@ -243,6 +249,13 @@ sub post_files {
             push @pages, Statocles::Page::Document->new( %args );
         }
         else {
+            # If there's a markdown file, don't keep the html file
+            if ( $path =~ /[.]html$/ ) {
+                my $doc_path = "$path";
+                $doc_path =~ s/[.]html$/.markdown/;
+                next if grep { $_ eq $doc_path } @paths;
+            }
+
             push @pages, Statocles::Page::File->new(
                 path => $path,
                 file_path => $self->store->path->child( $path ),
