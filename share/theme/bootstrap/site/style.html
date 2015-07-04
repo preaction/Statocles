@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="../css/normalize.css" />
+        <link rel="stylesheet" href="../css/skeleton.css" />
+        <link rel="stylesheet" href="../css/statocles-default.css" />
+        <style type="text/css">
+            .section-head { border-bottom: 2px solid #222 }
+            .section-sub { border-bottom: 1px solid #222 }
+            .example { background-color: white; font-size: 80%; }
+        </style>
+        <title>Style Demo</title>
+    </head>
+    <body>
+
+        <header>
+            <nav class="navbar">
+                <div class="container">
+                    <a class="brand" href="/">Brand</a>
+                    <ul>
+                        <li><a href="#text">Text</a></li>
+                        <li><a href="#widgets">Widgets</a></li>
+                        <li><a href="#blog">Blog</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <main class="container">
+
+            <h1>Style Demo</h1>
+
+            <h2 id="text" class="section-head">Text</h2>
+
+            <p>These are plain styles for plain HTML. No formatting classes
+            involved in this section!</p>
+
+            <section>
+                <div class="row">
+                    <div class="one-half column">
+                        <h3 class="section-sub">Headings</h3>
+
+                        <h1>Heading 1</h1>
+                        <pre><code class="example"># Heading 1
+&lt;h1&gt;Heading 1&lt;/h1&gt;</code></pre>
+
+                        <h2>Heading 2</h2>
+                        <pre><code class="example">## Heading 2
+&lt;h2&gt;Heading 2&lt;/h2&gt;</code></pre>
+
+                        <h3>Heading 3</h3>
+                        <pre><code class="example">### Heading 3
+&lt;h3&gt;Heading 3&lt;/h3&gt;</code></pre>
+
+                        <h4>Heading 4</h4>
+                        <pre><code class="example">#### Heading 4
+&lt;h4&gt;Heading 4&lt;/h4&gt;</code></pre>
+
+                        <h5>Heading 5</h5>
+                        <pre><code class="example">##### Heading 5
+&lt;h5&gt;Heading 5&lt;/h5&gt;</code></pre>
+
+                    </div>
+
+                    <div class="one-half column">
+                        <h3 class="section-sub">Formatting</h3>
+
+                        <p><a href="#">Links</a></p>
+                        <pre><code class="example">[Link text](http://example.com)
+&lt;a href="http://example.com"&gt;Link text&lt;/a&gt;</code></pre>
+
+                        <p><em>Emphasis</em></p>
+                        <pre><code class="example">_Emphasis_
+&lt;em&gt;Emphasis&lt;/em&gt;</code></pre>
+
+                        <p><strong>Strong Emphasis</strong></p>
+                        <pre><code class="example">*Strong Emphasis*
+&lt;strong&gt;Strong Emphasis&lt;/strong&gt;</code></pre>
+
+                        <p><code>Inline code</code></p>
+                        <pre><code class="example">`Inline code`
+&lt;code&gt;Inline code&lt;/code&gt;</code></pre>
+
+                        <p><kbd>Keyboard input</kbd></p>
+                        <pre><code class="example">&lt;kbd&gt;...&lt;/kbd&gt;</code></pre>
+
+                        <p><samp>Sample output</samp></p>
+                        <pre><code class="example">&lt;samp&gt;...&lt;/samp&gt;</code></pre>
+
+                    </div>
+
+                </div>
+
+                <h3 class="section-sub">Text Blocks</h3>
+
+                <h4>Paragraphs</h4>
+
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Vestibulum vestibulum nunc at velit sagittis, id pulvinar augue
+                volutpat. In lobortis semper scelerisque. Praesent pharetra
+                augue vitae hendrerit aliquet. Aliquam vel ex felis. Nam
+                gravida accumsan odio eu semper. Sed id leo tellus. Suspendisse
+                pretium ligula et cursus hendrerit. Ut commodo metus a
+                efficitur tempus.  Fusce vel enim eget velit fringilla
+                congue.</p>
+
+                <pre><code class="example">Lorem ipsum dolor sit amet...
+
+&lt;p&gt;Lorem ipsum dolor sit amet...&lt;/p&gt;</code></pre>
+
+                <h4>Code</h4>
+
+                <pre><code>use strict;
+use warnings;
+use feature qw( say );
+
+package Hash::Object;
+
+sub new {
+    my ( $class, %self ) = @_;
+    return bless { %self }, $class;
+}
+</code></pre>
+
+<pre><code>use strict; use warnings; use feature qw( say ); package Hash::Object; sub new { my ( $class, %self ) = @_; return bless { %self }, $class; }</code></pre>
+
+                <pre><code class="example">    # 4-space indent
+    use strict;
+    use warnings;
+
+&lt;pre&gt;&lt;code&gt;use strict;
+use warnings;&lt;/code&gt;&lt;/pre&gt;</code></pre>
+
+                <h4>Blockquote</h4>
+
+                <blockquote>Lorem ipsum dolor sit amet, consectetur adipiscing
+                elit. Vestibulum vestibulum nunc at velit sagittis, id
+                pulvinar augue volutpat. In lobortis semper scelerisque.
+                Praesent pharetra augue vitae hendrerit aliquet. Aliquam
+                vel ex felis. Nam gravida accumsan odio eu semper. Sed id
+                leo tellus. Suspendisse pretium ligula et cursus hendrerit. Ut
+                commodo metus a efficitur tempus.  Fusce vel enim eget velit
+                fringilla congue. <cite>Some Author</cite></blockquote>
+
+                <pre><code class="example">&gt; Lorem ipsum dolor sit amet...
+
+&lt;blockquote&gt;
+Lorem ipsum dolor sit amet...
+&lt;cite&gt;Citation&lt;/cite&gt;
+&lt;/blockquote&gt;</code></pre>
+
+                <h3 class="section-sub">Lists</h3>
+
+                <div class="row">
+                    <div class="one-half column">
+                        <h4>Ordered</h4>
+
+                        <ol>
+                            <li>Lorem ipsum dolor sit amet</li>
+                            <li>Vivamus quis hendrerit quam</li>
+                            <li>Aenean sed velit lobortis, interdum</li>
+                            <li>Vivamus nunc purus, malesuada at lacinia</li>
+                            <li>Aenean nec arcu quis</li>
+                        </ol>
+
+                        <pre><code class="example">1. Lorem ipsum dolor sit amet
+2. Vivamus quis hendrerit quam
+3. Aenean sed velit lobortis, interdum
+
+&lt;ol&gt;
+    &lt;li&gt;Lorem ipsum dolor sit amet&lt;/li&gt;
+    &lt;li&gt;Vivamus quis hendrerit quam&lt;/li&gt;
+    &lt;li&gt;Aenean sed velit lobortis, interdum&lt;/li&gt;
+&lt;/ol&gt;</code></pre>
+
+                    </div>
+
+                    <div class="one-half column">
+                        <h4>Unordered</h4>
+
+                        <ul>
+                            <li>Maecenas consequat, quam id rhoncus</li>
+                            <li>Massa finibus justo, a interdum</li>
+                            <li>Nullam consequat lacus mattis</li>
+                            <li>Proin viverra tincidunt mauris ac interdum</li>
+                            <li>Interdum ante in, ullamcorper tortor</li>
+                        </ul>
+
+                        <pre><code class="example">* Lorem ipsum dolor sit amet
+* Vivamus quis hendrerit quam
+* Aenean sed velit lobortis, interdum
+
+&lt;ul&gt;
+    &lt;li&gt;Lorem ipsum dolor sit amet&lt;/li&gt;
+    &lt;li&gt;Vivamus quis hendrerit quam&lt;/li&gt;
+    &lt;li&gt;Aenean sed velit lobortis, interdum&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+
+                    </div>
+                </div>
+            </section>
+
+            <h2 id="classes" class="section-head">Classes</h2>
+
+            <section>
+                <h3 class="section-sub">Lists</h3>
+
+                <h4>Inline lists</h4>
+
+                <div class="row">
+                    <div class="one-half column">
+                        <ul class="list-inline">
+                            <li>Lorem</li>
+                            <li>Ipsum</li>
+                            <li>Dolor</li>
+                        </ul>
+
+                        <pre><code class="example">&lt;ul class="list-inline"&gt;
+    &lt;li&gt;Lorem&lt;/li&gt;
+    &lt;li&gt;Ipsum&lt;/li&gt;
+    &lt;li&gt;Dolor&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+                    </div>
+                    <div class="one-half column">
+                        <ol class="list-inline">
+                            <li>Lorem</li>
+                            <li>Ipsum</li>
+                            <li>Dolor</li>
+                        </ol>
+
+                        <pre><code class="example">&lt;ol class="list-inline"&gt;
+    &lt;li&gt;Lorem&lt;/li&gt;
+    &lt;li&gt;Ipsum&lt;/li&gt;
+    &lt;li&gt;Dolor&lt;/li&gt;
+&lt;/ol&gt;</code></pre>
+                    </div>
+                </div>
+
+            </section>
+
+            <section>
+                <h3 class="section-sub">Images</h3>
+
+                <div class="row">
+
+                    <div class="one-half column">
+                        <p><img src="http://placehold.it/150x150"
+                        class="u-pull-left"> Lorem ipsum dolor sit amet,
+                        consectetur adipiscing elit.  Vestibulum vestibulum
+                        nunc at velit sagittis, id pulvinar augue volutpat. In
+                        lobortis semper scelerisque. Praesent pharetra augue
+                        vitae hendrerit aliquet.</p>
+                        <div class="u-cf"></div>
+                        <pre><code class="example">&lt;img src="#" class="u-pull-left"&gt;</code></pre>
+                    </div>
+
+                    <div class="one-half column">
+                        <p><img src="http://placehold.it/150x150"
+                        class="u-pull-right"> Lorem ipsum dolor sit amet,
+                        consectetur adipiscing elit.  Vestibulum vestibulum
+                        nunc at velit sagittis, id pulvinar augue volutpat. In
+                        lobortis semper scelerisque. Praesent pharetra augue
+                        vitae hendrerit aliquet.</p>
+                        <div class="u-cf"></div>
+                        <pre><code class="example">&lt;img src="#" class="u-pull-right"&gt;</code></pre>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <h2 id="widgets" class="section-head">Widgets</h2>
+
+            <section>
+                <h3 class="section-sub">Pager</h3>
+
+                <div class="row">
+                    <div class="one-half column">
+                        <h4>Enabled</h4>
+
+                        <ul class="pager">
+                            <li class="prev">
+                                <a class="button button-primary" rel="next" href="#">
+                                    &larr; Older
+                                </a>
+                            </li>
+                            <li class="next">
+                                <a class="button button-primary" rel="prev" href="#">
+                                    Newer &rarr;
+                                </a>
+                            </li>
+                        </ul>
+
+                        <div class="u-cf"></div>
+
+                        <pre><code class="example">&lt;ul class="pager"&gt;
+  &lt;li class="prev"&gt;
+    &lt;a class="button button-primary" rel="next" href="#"&gt;
+      &amp;larr; Older
+    &lt;/a&gt;
+  &lt;/li&gt;
+  &lt;li class="next"&gt;
+    &lt;a class="button button-primary" rel="prev" href="#"&gt;
+      Newer &amp;rarr;
+    &lt;/a&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+
+                    </div>
+
+                    <div class="one-half column">
+                        <h4>Disabled</h4>
+
+                        <ul class="pager">
+                            <li class="prev">
+                                <a class="button disabled" rel="next" href="#">
+                                    &larr; Older
+                                </a>
+                            </li>
+                            <li class="next">
+                                <a class="button disabled" rel="prev">
+                                    Newer &rarr;
+                                </a>
+                            </li>
+                        </ul>
+
+                        <div class="u-cf"></div>
+
+                        <pre><code class="example">&lt;ul class="pager"&gt;
+  &lt;li class="prev"&gt;
+    &lt;a class="button disabled" rel="next" href="#"&gt;
+      &amp;larr; Older
+    &lt;/a&gt;
+  &lt;/li&gt;
+  &lt;li class="next"&gt;
+    &lt;a class="button disabled" rel="prev"&gt;
+      Newer &amp;rarr;
+    &lt;/a&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+
+                    </div>
+
+                </div>
+
+                <h3 class="section-sub">Sidebar</h3>
+
+                <p>Recommended width is <code class="example">class="three
+                columns"</code>.</p>
+
+                <pre><code class="example">&lt;div class="three columns sidebar"&gt;...&lt;/div&gt;</code></pre>
+
+                <div class="row">
+                    <div class="three columns sidebar">
+                        <h1>Heading 1</h1>
+                        <p>Lorem ipsum dolor sit amet, consectetur
+                        adipiscing elit. Vivamus quis hendrerit quam, ac
+                        tristique nisl. <code>Aenean sed velit lobortis, interdum
+                        ante in, ullamcorper tortor.</code></p>
+                        <ul>
+                            <li>Maecenas consequat, quam id rhoncus</li>
+                            <li>Massa finibus justo, a interdum</li>
+                            <li>Proin viverra tincidunt mauris ac interdum</li>
+                            <li>Interdum ante in, ullamcorper tortor</li>
+                        </ul>
+                    </div>
+
+                    <div class="three columns sidebar">
+                        <h2>Heading 2</h2>
+                        <p>Vivamus nunc purus, malesuada at lacinia a,
+                        pellentesque nec enim. <em>Vestibulum</em> et est euismod,
+                        ultrices lectus non, aliquam magna. Proin viverra
+                        tincidunt mauris ac interdum. Aenean nec arcu quis
+                        turpis accumsan dignissim et ut risus.</p>
+                    </div>
+
+                    <div class="three columns sidebar">
+                        <h3>Heading 3</h3>
+                        <img src="http://placehold.it/200x200">
+                        <ol>
+                            <li>Lorem ipsum dolor sit amet</li>
+                            <li>Vivamus quis hendrerit quam</li>
+                            <li>Aenean sed velit lobortis, interdum</li>
+                            <li>Vivamus nunc purus, malesuada at lacinia</li>
+                            <li>Aenean nec arcu quis</li>
+                        </ol>
+                    </div>
+
+                    <div class="three columns sidebar">
+                        <h4>Heading 4</h4>
+                        <p>Maecenas consequat, quam id rhoncus convallis,
+                        erat massa finibus justo, a interdum justo est eget
+                        tellus. Ut mattis <strong>dolor dolor</strong>. Maecenas vitae
+                        congue diam. <kbd>Nullam consequat lacus mattis,
+                        faucibus arcu ut, auctor ex.</kbd></p>
+
+                        <h5>Heading 5</h5>
+
+                    </div>
+                </div>
+
+                <h3 class="section-sub">Crumbtrail</h3>
+                <div class="crumbtrail">
+                    <ul>
+                        <li>
+                            <a href="http://example.com">Foo</a>
+                        </li>
+                        <li>
+                            Bar
+                        </li>
+                        <li>
+                            <a href="http://example.com">Baz</a>
+                        </li>
+                    </ul>
+                    (<a href="http://example.com">extras</a>)
+                </div>
+
+            </section>
+
+            <h2 id="blog" class="section-head">Blog</h2>
+
+            <section>
+
+                <div class="row">
+                    <div class="nine columns">
+                        <article>
+
+                            <header>
+                                <h1><a href="#">A Blog Post</a></h1>
+
+                                <p class="tags">Tags:
+                                    <a href="#" rel="tag">massa</a>
+                                    <a href="#" rel="tag">efficitur</a>
+                                    <a href="#" rel="tag">semper</a>
+                                </p>
+
+                                <aside>
+                                    <p><time datetime="2014-01-01T00:00:00Z">
+                                        Posted on 2014-01-01
+                                    </time>
+                                    by preaction</p>
+                                </aside>
+
+                                <p>Originally posted as:
+                                    <a href="#">
+                                        <em>Another Blog Post</em> on medium.com.
+                                    </a>
+                                </p>
+
+                            </header>
+
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                            Vestibulum vestibulum nunc at velit sagittis, id pulvinar
+                            augue volutpat. In lobortis semper scelerisque. Praesent
+                            pharetra augue vitae hendrerit aliquet. Aliquam vel ex
+                            felis. Nam gravida accumsan odio eu semper. Sed id leo
+                            tellus. Suspendisse pretium ligula et cursus hendrerit. Ut
+                            commodo metus a efficitur tempus. Fusce vel enim eget velit
+                            fringilla congue.</p>
+
+                            <p>Nullam massa neque, viverra id efficitur in, bibendum
+                            eget odio. Suspendisse potenti. Nunc suscipit, erat eu
+                            pulvinar scelerisque, orci leo tempor ante, eget rutrum
+                            massa purus vitae velit. Curabitur nec ex vitae ipsum
+                            blandit aliquet ut eu sem. Cras vel orci lorem. In dictum
+                            iaculis massa, tempor faucibus mi tempus sit amet. Donec
+                            porttitor diam et nulla facilisis mattis.</p>
+
+                            <p><a href="#">Continue reading A Blog Post...</a></p>
+
+                        </article>
+
+                        <ul class="pager">
+                            <li class="prev">
+                                <a class="button button-primary" rel="next" href="#">&larr; Older</a>
+                            </li>
+                            <li class="next">
+                                <a class="button disabled" rel="next">Newer &rarr;</a>
+                            </li>
+                        </ul>
+
+                    </div>
+
+                    <div class="three columns sidebar">
+                        <h3>Tags</h3>
+                        <ul class="list-inline">
+                            <li><a href="#">bibendum</a></li>
+                            <li><a href="#">orci</a></li>
+                            <li><a href="#">lorem</a></li>
+                            <li><a href="#">vitae</a></li>
+                            <li><a href="#">efficitur</a></li>
+                            <li><a href="#">massa</a></li>
+                            <li><a href="#">semper</a></li>
+                        </ul>
+
+                        <h3>Feeds</h3>
+                        <ul class="list-inline">
+                            <li>
+                                <a href="#" rel="alternate" type="">
+                                    Atom
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" rel="alternate" type="">
+                                    RSS
+                                </a>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+
+            </section>
+
+        </main>
+
+        <footer>
+            <div class="container tagline">
+                <a href="http://preaction.github.io/Statocles">Made with Statocles</a><br/>
+                <a href="http://www.perl.org">Powered by Perl</a>
+            </div>
+        </footer>
+
+    </body>
+</html>

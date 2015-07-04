@@ -1,0 +1,55 @@
+<div class="row">
+
+    <div class="col-md-9">
+        <main>
+            <header>
+                <h1><%= $self->title %></h1>
+                <p class="tags">Tags:
+                % for my $tag ( $self->tags ) {
+                    <a href="<%= $tag->href %>" rel="tag"><%= $tag->text %></a>
+                % }
+                </p>
+
+                <aside>
+                    <p><time datetime="<%= $self->date->strftime('%Y-%m-%d') %>">
+                        Posted on <%= $self->date->strftime('%Y-%m-%d') %>
+                    </time>
+                    % if ( $self->author ) {
+                        by <%= $self->author %>
+                    % }
+                    </p>
+                </aside>
+
+                % if ( $self->links( 'crosspost' ) ) {
+                <p>Originally posted as:
+                    % for my $link ( $self->links( 'crosspost' ) ) {
+                        <a href="<%= $link->href %>">
+                            <em><%= $self->title %></em> on <%= $link->title %>.
+                        </a>
+                    % }
+                </p>
+                % }
+
+            </header>
+            % my @sections = $self->sections;
+            % for my $i ( 0..$#sections ) {
+            <section id="section-<%= $i+1 %>">
+                <%= $sections[$i] %>
+            </section>
+            % }
+        </main>
+    </div>
+
+    <div class="col-md-3">
+        %= include 'site/sidebar_before.html.ep'
+        <nav id="tags">
+            <h1>Tags</h1>
+            <ul class="list-inline">
+            % for my $tag ( $app->tags ) {
+                <li><a href="<%= $tag->href %>"><%= $tag->text %></a></li>
+            % }
+            </ul>
+        </nav>
+    </div>
+
+</div>

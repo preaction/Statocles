@@ -1,0 +1,97 @@
+
+<div class="row">
+
+    <div class="col-md-9">
+        <main>
+
+            % if ( my $tag_text = $self->data->{ tag_text } ) {
+            <p><%= $tag_text %></p>
+            % }
+
+            % for my $page ( @$pages ) {
+            <article>
+                <header>
+                    <h1><a href="<%= $app->page_url( $page ) %>"><%= $page->title %></a></h1>
+
+                    <p class="tags">Tags:
+                    % for my $tag ( $page->tags ) {
+                        <a href="<%= $tag->href %>" rel="tag"><%= $tag->text %></a>
+                    % }
+                    </p>
+
+                    <aside>
+                        <p><time datetime="<%= $page->date->strftime('%Y-%m-%d') %>">
+                            Posted on <%= $page->date->strftime('%Y-%m-%d') %>
+                        </time>
+                        % if ( $page->author ) {
+                            by <%= $page->author %>
+                        % }
+                        </p>
+                    </aside>
+
+                    % if ( $page->links( 'crosspost' ) ) {
+                    <p>Originally posted as:
+                        % for my $link ( $page->links( 'crosspost' ) ) {
+                            <a href="<%= $link->href %>">
+                                <em><%= $page->title %></em> on <%= $link->title %>.
+                            </a>
+                        % }
+                    </p>
+                    % }
+                </header>
+
+                % my @sections = $page->sections;
+                <%= $sections[0] %>
+
+                % if ( @sections > 1 ) {
+                    <p><a href="<%= $page->path %>#section-2">Continue reading <%= $page->title %>...</a></p>
+                % }
+
+            </article>
+            % }
+        </main>
+
+        <ul class="pager">
+            <li class="previous <%= !$self->next ? 'disabled' : '' %>">
+                % if ( $self->next ) {
+                <a rel="next" href="<%= $self->next %>">&larr; Older</a>
+                % }
+                % else {
+                <span>&larr; Older</span>
+                % }
+            </li>
+            <li class="next <%= !$self->prev ? 'disabled' : '' %>">
+                % if ( $self->prev ) {
+                <a rel="prev" href="<%= $self->prev %>">Newer &rarr;</a>
+                % }
+                % else {
+                <span>Newer &rarr;</span>
+                % }
+            </li>
+        </ul>
+
+    </div>
+
+    <div class="sidebar col-md-3">
+        %= include 'site/sidebar_before.html.ep'
+        <h1>Tags</h1>
+        <ul class="list-inline">
+        % for my $tag ( $app->tags ) {
+            <li><a href="<%= $tag->href %>"><%= $tag->text %></a></li>
+        % }
+        </ul>
+        % if ( my @links = $self->links( 'feed' ) ) {
+        <h1>Feeds</h1>
+        <ul class="list-inline">
+            % for my $link ( @links ) {
+            <li>
+                <a href="<%= $link->href %>" rel="alternate" type="<%= $link->type %>">
+                    <%= $link->text %>
+                </a>
+            </li>
+            % }
+        </ul>
+        % }
+    </div>
+
+</div>

@@ -1,0 +1,52 @@
+
+header aside {
+    margin-top: 0;
+    font-size: 12pt;
+}
+.sidebar h1 {
+    font-size: 14pt;
+}
+
+/** Add a line when using the "Continue reading..." link */
+section:target {
+    padding-top: 0.5em;
+    border-top: 2px dashed #045578;
+}
+
+/** Don't allow <pre> to push too much */
+pre {
+    max-width: 100%;
+    overflow-x: scroll;
+}
+
+/** <code> is used for input and output, so let it wrap */
+code {
+    white-space: normal;
+}
+
+.tags {
+    float: right;
+}
+
+/**
+ * Don't allow main content images to push things around
+ */
+main img {
+    max-width: 100%;
+}
+
+a[rel=external]::after {
+    content: '\f08e';
+    padding-left: 0.2em;
+    font-family: "FontAwesome";
+    display: inline-block;
+    font-size: smaller;
+    vertical-align: top;
+}
+
+footer .tagline {
+    font-size: smaller;
+    line-height: 1.3;
+    text-align: right;
+}
+

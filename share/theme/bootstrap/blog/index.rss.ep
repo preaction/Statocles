@@ -1,0 +1,50 @@
+%# RSS requires date/time in the 'C' locale as per RFC822. strftime() is one of
+%# the few things that actually cares about locale.
+% use POSIX qw( locale_h );
+% my $current_locale = setlocale( LC_TIME );
+% setlocale( LC_TIME, 'C' );
+<?xml version="1.0"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title><%= $site->title %></title>
+        <link><%= $site->url( $self->links( 'alternate' )->href ) %></link>
+        <atom:link href="<%= $site->url( $self->path ) %>" rel="self" type="application/rss+xml" />
+        <description>Blog feed of <%= $site->title %></description>
+        <generator>Statocles <%= $Statocles::VERSION %></generator>
+        % for my $p ( @$pages ) {
+        <item>
+            <title><%= $p->title %></title>
+            <link><%= $site->url( $p->path ) %></link>
+            <guid><%= $site->url( $p->path ) %></guid>
+            <description><![CDATA[
+                % my @sections = $p->sections;
+                <%= $sections[0] %>
+                % if ( $p->links( 'crosspost' ) ) {
+                    <ul>
+                    % for my $link ( $p->links( 'crosspost' ) ) {
+                        <li><a href="<%= $link->href %>">
+                            Continue reading <em><%= $p->title %></em> on <%= $link->title %>...
+                        </a></li>
+                    % }
+                        <li><a href="<%= $site->url( $p->path ) %>#section-2">
+                            Continue reading on <%= $site->title %>
+                        </a></li>
+                    </ul>
+                % }
+                % else {
+                    <p><a href="<%= $site->url( $p->path ) %>#section-2">Continue reading...</a></p>
+                % }
+                <p>Tags:
+                % for my $tag ( $p->tags ) {
+                    <a href="<%= $tag->href %>"><%= $tag->text %></a>
+                % }
+                </p>
+            ]]></description>
+            <pubDate>
+                <%= $p->date->strftime('%a, %d %b %Y %H:%M:%S ') . sprintf q{%+05d}, $p->date->tzoffset / 36 %>
+            </pubDate>
+        </item>
+        % }
+    </channel>
+</rss>
+% setlocale( LC_TIME, $current_locale );

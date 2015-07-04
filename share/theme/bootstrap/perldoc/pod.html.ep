@@ -1,0 +1,17 @@
+<ol class="breadcrumb">
+% for my $i ( 0..$#{ $self->data->{ crumbtrail } } ) {
+    % my $trail = $self->data->{ crumbtrail }[ $i ];
+    <li <%= !$trail->{href} ? 'class="active"' : '' %>>
+        % if ( $trail->{href} ) {
+            <a href="<%= $trail->{href} %>"><%= $trail->{text} %></a>
+            % }
+            % else {
+            <%= $trail->{text} %>
+        % }
+        % if ( $i == $#{ $self->data->{ crumbtrail } } ) {
+            (<a href="<%= $self->data->{ source_path } %>">source</a>)
+        % }
+    </li>
+% }
+</ol>
+<%= $content %>

@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id><%= $site->url( $self->links( 'alternate' )->href ) %></id>
+    <title><%= $site->title %></title>
+    <updated><%= Time::Piece->new->strftime('%Y-%m-%dT%H:%M:%SZ') %></updated>
+    <link rel="self" href="<%= $site->url( $self->path ) %>"/>
+    <link rel="alternate" href="<%= $site->url( $self->links( 'alternate' )->href ) %>"/>
+    <generator version="<%= $Statocles::VERSION %>">Statocles</generator>
+    % for my $p ( @$pages ) {
+    <entry>
+        <id><%= $site->url( $p->path ) %></id>
+        <title><%= $p->title %></title>
+        % if ( $p->author ) {
+        <author><name><%= $p->author %></name></author>
+        % }
+        <link rel="alternate" href="<%= $site->url( $p->path ) %>" />
+        <content type="html"><![CDATA[
+            % my @sections = $p->sections;
+            <%= $sections[0] %>
+            % if ( $p->links( 'crosspost' ) ) {
+                <ul>
+                % for my $link ( $p->links( 'crosspost' ) ) {
+                    <li><a href="<%= $link->href %>">
+                        Continue reading <em><%= $p->title %></em> on <%= $link->title %>...
+                    </a></li>
+                % }
+                    <li><a href="<%= $site->url( $p->path ) %>#section-2">
+                        Continue reading on <%= $site->title %>
+                    </a></li>
+                </ul>
+            % }
+            % else {
+                <p><a href="<%= $site->url( $p->path ) %>#section-2">Continue reading...</a></p>
+            % }
+            <p>Tags:
+            % for my $tag ( $p->tags ) {
+                <a href="<%= $tag->href %>"><%= $tag->text %></a>
+            % }
+            </p>
+        ]]></content>
+        <updated><%= $p->date->strftime('%Y-%m-%dT%H:%M:%SZ') %></updated>
+        % for my $t ( $p->tags ) {
+        <category term="<%= $t->text %>" />
+        % }
+    </entry>
+    % }
+</feed>

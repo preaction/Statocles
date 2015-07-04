@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="/theme/css/statocles-bootstrap.css" />
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <title><%= $site->title %></title>
+        % for my $link ( $self->links( 'feed' ) ) {
+        <link rel="alternate" href="<%= $link->href %>" type="<%= $link->type %>" />
+        % }
+        %= include 'site/head_after.html.ep'
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-default navbar-static-top" role="navigation">
+                <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#top-navbar-collapse-1">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="/"><%= $site->title %></a>
+                    </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="top-navbar-collapse-1">
+                        % if ( $site->nav( 'main' ) ) {
+                        <ul class="nav navbar-nav">
+                            % for my $nav ( $site->nav( 'main' ) ) {
+                            <li><a href="<%= $nav->href %>"><%= $nav->text %></a></li>
+                            % }
+                        </ul>
+                        % }
+                        %= include 'site/navbar_extra.html.ep'
+                    </div>
+                </div>
+            </nav>
+            %= include 'site/header_after.html.ep'
+        </header>
+        <div class="main container">
+            <%= $content %>
+        </div>
+        <footer>
+            %= include 'site/footer.html.ep'
+            <div class="container tagline">
+                <a href="http://preaction.github.io/Statocles">Made with Statocles</a><br/>
+                <a href="http://www.perl.org">Powered by Perl</a>
+            </div>
+        </footer>
+    </body>
+</html>
