@@ -25,6 +25,7 @@
                         % }
                     </ul>
                     % }
+                    %= include 'site/navbar_extra.html.ep'
                 </div>
             </nav>
             %= include 'site/header_after.html.ep'
