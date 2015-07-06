@@ -18,31 +18,29 @@ my @page_tests = (
         }
 
         if ( ok $node = $dom->at( 'h1#NAME + p' ) ) {
-            is $node->text, 'My - A sample for my perldoc app';
+            is $node->text, 'My::Internal - An internal module to link to';
         }
 
         if ( ok $node = $dom->at( 'h1#SYNOPSIS + pre code' ) ) {
-            like $node->text, qr{my \$my = My->new};
+            like $node->text, qr{my \$int = My::Internal->new};
         }
 
-        ok $dom->at( 'a[href="/pod/My/Internal.html"]' ), 'internal link exists';
-        ok !$dom->at( 'a[href="/pod/My/Internal.html"]' )->attr( 'rel' ), 'internal link has no rel';
-        ok $dom->at( 'a[href="https://metacpan.org/pod/External"]' ), 'external link exists';
-        is $dom->at( 'a[href="https://metacpan.org/pod/External"]' )->attr( 'rel' ), 'external', 'external link has rel=external';
-        ok $dom->at( 'a[href="/pod/My.src.html"]' ), 'source link exists';
-        ok !$dom->at( 'a[href="/pod/My.src.html"]' )->attr( 'rel' ), 'source link has no rel';
+        ok $dom->at( 'a[href="/pod/My.html"]' ), 'internal link';
+        ok $dom->at( 'a[href="/pod/My/Internal.src.html"]' ), 'source link exists';
 
         my @crumbtrail = $dom->find( '.crumbtrail li' )->each;
-        is scalar @crumbtrail, 1;
+        is scalar @crumbtrail, 2;
         is $crumbtrail[0]->at( 'a' )->text, 'My';
-        is $crumbtrail[0]->at( 'a' )->attr( 'href' ), '/pod/index.html';
+        is $crumbtrail[0]->at( 'a' )->attr( 'href' ), '/pod/My.html';
+        is $crumbtrail[1]->at( 'a' )->text, 'Internal';
+        is $crumbtrail[1]->at( 'a' )->attr( 'href' ), '/pod/index.html';
 
         if ( ok $node = $dom->at( 'footer #app-info' ) ) {
             is $node->text, 'This is the app info', 'app-info is correct';
         }
     },
 
-    '/pod/My/Internal.html' => sub {
+    '/pod/My.html' => sub {
         my ( $html, $dom ) = @_;
         # XXX: Find the layout and template
         my $node;
@@ -52,22 +50,24 @@ my @page_tests = (
         }
 
         if ( ok $node = $dom->at( 'h1#NAME + p' ) ) {
-            is $node->text, 'My::Internal - An internal module to link to';
+            is $node->text, 'My - A sample for my perldoc app';
         }
 
         if ( ok $node = $dom->at( 'h1#SYNOPSIS + pre code' ) ) {
-            like $node->text, qr{my \$int = My::Internal->new};
+            like $node->text, qr{my \$my = My->new};
         }
 
         ok $dom->at( 'a[href="/pod/index.html"]' ), 'internal link to index page';
-        ok $dom->at( 'a[href="/pod/My/Internal.src.html"]' ), 'source link exists';
+        ok !$dom->at( 'a[href="/pod/index.html"]' )->attr( 'rel' ), 'internal link has no rel';
+        ok $dom->at( 'a[href="https://metacpan.org/pod/External"]' ), 'external link exists';
+        is $dom->at( 'a[href="https://metacpan.org/pod/External"]' )->attr( 'rel' ), 'external', 'external link has rel=external';
+        ok $dom->at( 'a[href="/pod/My.src.html"]' ), 'source link exists';
+        ok !$dom->at( 'a[href="/pod/My.src.html"]' )->attr( 'rel' ), 'source link has no rel';
 
         my @crumbtrail = $dom->find( '.crumbtrail li' )->each;
-        is scalar @crumbtrail, 2;
+        is scalar @crumbtrail, 1;
         is $crumbtrail[0]->at( 'a' )->text, 'My';
-        is $crumbtrail[0]->at( 'a' )->attr( 'href' ), '/pod/index.html';
-        is $crumbtrail[1]->at( 'a' )->text, 'Internal';
-        is $crumbtrail[1]->at( 'a' )->attr( 'href' ), '/pod/My/Internal.html';
+        is $crumbtrail[0]->at( 'a' )->attr( 'href' ), '/pod/My.html';
 
         if ( ok $node = $dom->at( 'footer #app-info' ) ) {
             is $node->text, 'This is the app info', 'app-info is correct';
@@ -144,7 +144,7 @@ subtest 'without Pod::Weaver' => sub {
             $SHARE_DIR->child( qw( app perldoc bin ) ),
         ],
         modules => [qw( My My:: command shellcmd )],
-        index_module => 'My',
+        index_module => 'My::Internal',
         site => $site,
         data => {
             info => 'This is the app info',
@@ -191,7 +191,7 @@ subtest 'with Pod::Weaver' => sub {
                     $SHARE_DIR->child( qw( app perldoc bin-weaver ) ),
                 ],
                 modules => [qw( My My:: command shellcmd )],
-                index_module => 'My',
+                index_module => 'My::Internal',
                 site => $site,
                 data => {
                     info => 'This is the app info',
@@ -211,7 +211,7 @@ subtest 'with Pod::Weaver' => sub {
             $SHARE_DIR->child( qw( app perldoc bin-weaver ) ),
         ],
         modules => [qw( My My:: command shellcmd )],
-        index_module => 'My',
+        index_module => 'My::Internal',
         site => $site,
         data => {
             info => 'This is the app info',
