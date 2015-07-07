@@ -118,7 +118,7 @@ sub deploy {
     my ( $self, $from_store, $message ) = @_;
 
     my @files;
-    my $iter = $from_store-&gt;find_files;
+    my $iter = $from_store-&gt;find_files( include_documents =&gt; 1 );
     while ( my $path = $iter-&gt;() ) {
         # Git versions before 1.7.4.1 require a relative path to &#39;git add&#39;
         push @files, $path-&gt;relative( &quot;/&quot; )-&gt;stringify;

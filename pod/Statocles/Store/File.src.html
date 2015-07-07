@@ -120,6 +120,26 @@ has path =&gt; (
     required =&gt; 1,
 );
 
+=attr document_extensions
+
+An array of file extensions that should be considered documents. Defaults to
+&quot;markdown&quot; and &quot;md&quot;.
+
+=cut
+
+has document_extensions =&gt; (
+    is =&gt; &#39;ro&#39;,
+    isa =&gt; ArrayRef[Str],
+    default =&gt; sub { [qw( markdown md )] },
+    coerce =&gt; sub {
+        my ( $ext ) = @_;
+        if ( !ref $ext ) {
+            return [ split /[, ]/, $ext ];
+        }
+        return $ext;
+    },
+);
+
 =attr documents
 
 All the L&lt;documents|Statocles::Document&gt; currently read by this store.
@@ -180,10 +200,9 @@ sub read_documents {
     while ( my $path = $iter-&gt;() ) {
         next unless $path-&gt;is_file;
         next unless $self-&gt;_is_owned_path( $path );
-        if ( $path =~ /[.]markdown$/ ) {
-            my $rel_path = rootdir-&gt;child( $path-&gt;relative( $root_path ) );
-            push @docs, $self-&gt;read_document( $rel_path );
-        }
+        next unless $self-&gt;is_document( $path );
+        my $rel_path = rootdir-&gt;child( $path-&gt;relative( $root_path ) );
+        push @docs, $self-&gt;read_document( $rel_path );
     }
     return \@docs;
 }
@@ -326,6 +345,18 @@ sub _freeze_document {
     return $doc;
 }
 
+=method is_document( $path )
+
+Returns true if the path looks like a document path (matches the L&lt;/document_extensions&gt;).
+
+=cut
+
+sub is_document {
+    my ( $self, $path ) = @_;
+    my $match = join &quot;|&quot;, @{ $self-&gt;document_extensions };
+    return $path =~ /[.](?:$match)$/;
+}
+
 =method read_file( $path )
 
 Read the file from the given C&lt;path&gt;.
@@ -352,20 +383,29 @@ sub has_file {
     return $self-&gt;path-&gt;child( $path )-&gt;is_file;
 }
 
-=method find_files()
+=method find_files( %opt )
 
 Returns an iterator that, when called, produces a single path suitable to be passed
 to L&lt;read_file&gt;.
 
+Available options are:
+
+    include_documents      - If true, will include files that look like documents.
+                             Defaults to false.
+
 =cut
 
 sub find_files {
-    my ( $self ) = @_;
+    my ( $self, %opt ) = @_;
     my $iter = $self-&gt;path-&gt;iterator({ recurse =&gt; 1 });
     return sub {
-        my $path = $iter-&gt;();
-        return unless $path; # iterator exhausted
-        $path = $iter-&gt;() while $path &amp;&amp; ( $path-&gt;is_dir || !$self-&gt;_is_owned_path( $path ) );
+        my $path;
+        while ( $path = $iter-&gt;() ) {
+            next if $path-&gt;is_dir;
+            next if !$self-&gt;_is_owned_path( $path );
+            next if !$opt{include_documents} &amp;&amp; $self-&gt;is_document( $path );
+            last;
+        }
         return unless $path; # iterator exhausted
         return $path-&gt;relative( $self-&gt;path )-&gt;absolute( &#39;/&#39; );
     };

@@ -119,7 +119,7 @@ sub pages {
     my ( $self ) = @_;
 
     my @pages;
-    my $iter = $self-&gt;store-&gt;find_files;
+    my $iter = $self-&gt;store-&gt;find_files( include_documents =&gt; 1 );
     FILE: while ( my $path = $iter-&gt;() ) {
         # Check for hidden files and folders
         next if $path-&gt;basename =~ /^[.]/;

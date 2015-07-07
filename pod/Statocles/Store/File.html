@@ -128,6 +128,10 @@
 
 <p>The path to the directory containing the <a href="/Statocles/pod/Statocles/Document.html">documents</a>.</p>
 
+<h2 id="document_extensions">document_extensions</h2>
+
+<p>An array of file extensions that should be considered documents. Defaults to &quot;markdown&quot; and &quot;md&quot;.</p>
+
 <h2 id="documents">documents</h2>
 
 <p>All the <a href="/Statocles/pod/Statocles/Document.html">documents</a> currently read by this store.</p>
@@ -156,6 +160,10 @@
 
 <p>The document is written in Frontmatter format.</p>
 
+<h2 id="is_document-path">is_document( $path )</h2>
+
+<p>Returns true if the path looks like a document path (matches the <a href="#document_extensions">&quot;document_extensions&quot;</a>).</p>
+
 <h2 id="read_file-path">read_file( $path )</h2>
 
 <p>Read the file from the given <code>path</code>.</p>
@@ -166,9 +174,14 @@
 
 <p>NOTE: This should not be used to check for directories, as not all stores have directories.</p>
 
-<h2 id="find_files">find_files()</h2>
+<h2 id="find_files-opt">find_files( %opt )</h2>
 
 <p>Returns an iterator that, when called, produces a single path suitable to be passed to <a href="https://metacpan.org/pod/read_file" rel="external">read_file</a>.</p>
+
+<p>Available options are:</p>
+
+<pre><code>    include_documents      - If true, will include files that look like documents.
+                             Defaults to false.</code></pre>
 
 <h2 id="open_file-path">open_file( $path )</h2>
 

@@ -211,6 +211,28 @@
 
 <p>Now when we run <code>statocles deploy</code>, our repository will be updated and so will our web root <code>/var/www/www.example.com</code>.</p>
 
+<h1 id="File">File</h1>
+
+<p>If you only need to copy the files to another directory to serve them, if you&#39;re writing the site on the web server, or you&#39;ve got a Jenkins server that can build the site, you can use the <a href="/Statocles/pod/Statocles/Deploy/File.html">File deploy</a>. This deploy simply copies the built website to another directory.</p>
+
+<pre><code>    # site.yml
+    file_deploy:
+        class: Statocles::Deploy::File
+        args:
+            path: /var/www/www.example.com
+
+    site:
+        class: Statocles::Site
+        args:
+            deploy: { $ref: file_deploy }</code></pre>
+
+<p>This is the default deploy. If you just give a path to the site object, the site will be copied to that path:</p>
+
+<pre><code>    site:
+        class: Statocles::Site
+        args:
+            deploy: /var/www/www.example.com</code></pre>
+
 <h1 id="Custom-Deploy-Module">Custom Deploy Module</h1>
 
 <p>If none of these work for you, you can build your own deploy module. See <a href="/Statocles/pod/Statocles/Deploy.html">Statocles::Deploy</a> for details.</p>

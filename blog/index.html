@@ -99,6 +99,39 @@
 
             <article>
                 <header>
+                    <h1><a href="/Statocles/blog/2015/07/06/release-v0-051/">Release v0.051</a></h1>
+
+                    <p class="tags">Tags:
+                        <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
+                    </p>
+
+                    <aside>
+                        <p><time datetime="2015-07-06">
+                            Posted on 2015-07-06
+                        </time>
+                        </p>
+                    </aside>
+
+                </header>
+
+                <p>The Bootstrap theme is back as an option! Use <code>::bootstrap</code> as your theme to get it!</p>
+
+<p>A breaking change: The <a href="/Statocles/pod/Statocles/Store/File.html#find_files">Store&#39;s find_files method</a>
+now skips paths that look like documents by default. If you need to old behavior,
+pass in <code>include_documents =&gt; 1</code> to the method.</p>
+
+<p>That change was made to support &quot;.md&quot; as a document file extension. Previously, only
+&quot;.markdown&quot; was supported. This is a work-in-progress, so if there are any bugs,
+<a href="/Statocles/blog/2015/07/06/release-v0-051/http://github.com/preaction/Statocles/issues">file a bug report</a>.</p>
+
+<p>Full changelog below...</p>
+
+
+                    <p><a href="/Statocles/blog/2015/07/06/release-v0-051/#section-2">Continue reading Release v0.051...</a></p>
+
+            </article>
+            <article>
+                <header>
                     <h1><a href="/Statocles/blog/2015/06/28/release-v0-050/">Release v0.050</a></h1>
 
                     <p class="tags">Tags:
@@ -237,54 +270,6 @@ ourselves).</p>
 
 
                     <p><a href="/Statocles/blog/2015/06/03/release-v0-047/#section-2">Continue reading Release v0.047...</a></p>
-
-            </article>
-            <article>
-                <header>
-                    <h1><a href="/Statocles/blog/2015/05/24/release-v0-046/">Release v0.046</a></h1>
-
-                    <p class="tags">Tags:
-                        <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
-                    </p>
-
-                    <aside>
-                        <p><time datetime="2015-05-24">
-                            Posted on 2015-05-24
-                        </time>
-                        </p>
-                    </aside>
-
-                </header>
-
-                <p>A few new features and a bunch of bugfixes in this release.</p>
-
-<p>Page objects now have a generic &quot;data&quot; attribute. This allows adding miscellaneous
-extra information to the Page, which is then available to the template.</p>
-
-<p>Using this, the <a href="/Statocles/pod/Statocles/App/Perldoc.html">Perldoc app</a> now has a crumbtrail
-and a link to the module source, and the <a href="/Statocles/pod/Statocles/App/Blog.html">blog app</a> can
-now have introductory text for the tags that show up on the tag page.</p>
-
-<p>There were some changes to the default theme to make extending it a bit easier.</p>
-
-<ul>
-<li>The navbar has a default background color, so putting a background color on
-body is less surprising.</li>
-<li>The grid columns are centered in their margin, so adding a background color
-to the columns looks better.</li>
-</ul>
-
-<p>Finally, a <a href="/Statocles/pod/Statocles/Document.html">document</a> is now allowed to override its
-template and layout. The <a href="/Statocles/pod/Statocles/Page/Document.html">document page</a> uses
-the document template to override the template provided by the app.</p>
-
-<p>Because of this, we can now allow extra pages in blog posts. Just put the extra page
-inside the blog post&#39;s directory.</p>
-
-<p>Full changelog below...</p>
-
-
-                    <p><a href="/Statocles/blog/2015/05/24/release-v0-046/#section-2">Continue reading Release v0.046...</a></p>
 
             </article>
         </main>

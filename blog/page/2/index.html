@@ -99,6 +99,54 @@
 
             <article>
                 <header>
+                    <h1><a href="/Statocles/blog/2015/05/24/release-v0-046/">Release v0.046</a></h1>
+
+                    <p class="tags">Tags:
+                        <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
+                    </p>
+
+                    <aside>
+                        <p><time datetime="2015-05-24">
+                            Posted on 2015-05-24
+                        </time>
+                        </p>
+                    </aside>
+
+                </header>
+
+                <p>A few new features and a bunch of bugfixes in this release.</p>
+
+<p>Page objects now have a generic &quot;data&quot; attribute. This allows adding miscellaneous
+extra information to the Page, which is then available to the template.</p>
+
+<p>Using this, the <a href="/Statocles/pod/Statocles/App/Perldoc.html">Perldoc app</a> now has a crumbtrail
+and a link to the module source, and the <a href="/Statocles/pod/Statocles/App/Blog.html">blog app</a> can
+now have introductory text for the tags that show up on the tag page.</p>
+
+<p>There were some changes to the default theme to make extending it a bit easier.</p>
+
+<ul>
+<li>The navbar has a default background color, so putting a background color on
+body is less surprising.</li>
+<li>The grid columns are centered in their margin, so adding a background color
+to the columns looks better.</li>
+</ul>
+
+<p>Finally, a <a href="/Statocles/pod/Statocles/Document.html">document</a> is now allowed to override its
+template and layout. The <a href="/Statocles/pod/Statocles/Page/Document.html">document page</a> uses
+the document template to override the template provided by the app.</p>
+
+<p>Because of this, we can now allow extra pages in blog posts. Just put the extra page
+inside the blog post&#39;s directory.</p>
+
+<p>Full changelog below...</p>
+
+
+                    <p><a href="/Statocles/blog/2015/05/24/release-v0-046/#section-2">Continue reading Release v0.046...</a></p>
+
+            </article>
+            <article>
+                <header>
                     <h1><a href="/Statocles/blog/2015/04/16/release-v0-045/">Release v0.045</a></h1>
 
                     <p class="tags">Tags:
@@ -267,44 +315,6 @@ object that exposes a <code>markdown</code> method.</p>
 
 
                     <p><a href="/Statocles/blog/2015/03/16/release-v0.042/#section-2">Continue reading Release v0.042...</a></p>
-
-            </article>
-            <article>
-                <header>
-                    <h1><a href="/Statocles/blog/2015/03/08/release-v0.041/">Release v0.041</a></h1>
-
-                    <p class="tags">Tags:
-                        <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
-                    </p>
-
-                    <aside>
-                        <p><time datetime="2015-03-08">
-                            Posted on 2015-03-08
-                        </time>
-                        </p>
-                    </aside>
-
-                </header>
-
-                <p>A slight breaking change in this release: The &quot;last modified&quot; date is no longer being
-used in the blog. Instead, the date shown is only the slug date, which makes the date
-more accurate when pre-dating posts.</p>
-
-<p>The <code>last_modified</code> attribute is now simply called <code>date</code>, which makes it a bit more
-general-purpose. This means that you&#39;ll need to re-bundle your templates.</p>
-
-<p>A change to <a href="/Statocles/blog/2015/03/08/release-v0.041/http://metacpan.org/pod/Beam::Wire">Beam::Wire</a> means a change to Statocles
-config files: <code>$method</code> in the event handlers is now <code>$sub</code>, so if you have configured
-the LinkCheck plugin, you&#39;ll get a deprecation warning from Beam::Wire.</p>
-
-<p>The site creator now allows you to set the <code>base_url</code>, since that&#39;s required for
-Statocles to work properly. It also, if given a site as an argument, creates the
-site&#39;s directory.</p>
-
-<p>Full changelog below:</p>
-
-
-                    <p><a href="/Statocles/blog/2015/03/08/release-v0.041/#section-2">Continue reading Release v0.041...</a></p>
 
             </article>
         </main>

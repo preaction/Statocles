@@ -220,6 +220,32 @@ And give it to our site:
 Now when we run C&lt;statocles deploy&gt;, our repository will be updated and so will
 our web root C&lt;/var/www/www.example.com&gt;.
 
+=head1 File
+
+If you only need to copy the files to another directory to serve them, if
+you&#39;re writing the site on the web server, or you&#39;ve got a Jenkins server that
+can build the site, you can use the L&lt;File deploy|Statocles::Deploy::File&gt;.
+This deploy simply copies the built website to another directory.
+
+    # site.yml
+    file_deploy:
+        class: Statocles::Deploy::File
+        args:
+            path: /var/www/www.example.com
+
+    site:
+        class: Statocles::Site
+        args:
+            deploy: { $ref: file_deploy }
+
+This is the default deploy. If you just give a path to the site object, the
+site will be copied to that path:
+
+    site:
+        class: Statocles::Site
+        args:
+            deploy: /var/www/www.example.com
+
 =begin comment
 
 # XXX: Make Statocles::Deploy::Command for this!

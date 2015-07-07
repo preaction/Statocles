@@ -88,75 +88,65 @@
 
         </header>
         <div class="main container">
-            <div id="index-banner">
-<h1>Statocles <small>Static, App-capable Websites</small></h1>
-<div class="latest-release">
-    <a href="/Statocles/blog/2015/07/06/release-v0-051/index.html">
-        Latest release: v0.051
-        (<date>2015-07-06</date>)
-    </a>
-</div>
-</div>
+            <div class="row">
 
-<p>Statocles is a minimal web content management system with a focus on easy editing
-with any plain text editor.</p>
+    <div class="nine columns">
+        <main>
+            <header>
+                <h1>Release v0.051</h1>
+                <p class="tags">Tags:
+                    <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
+                </p>
+                <aside>
+                    <p><time datetime="2015-07-06">
+                        Posted on 2015-07-06
+                    </time>
+                    </p>
+                </aside>
+            </header>
+            <section id="section-1">
+                <p>The Bootstrap theme is back as an option! Use <code>::bootstrap</code> as your theme to get it!</p>
 
-<div class="row" style="display: table">
-    <div class="one-half column" style="display: table-cell">
-        Markdown and YAML...
-        <pre style="margin-top: 0"><code style="white-space: pre-wrap">---
-title: Home
----
-# Welcome
+<p>A breaking change: The <a href="/Statocles/pod/Statocles/Store/File.html#find_files">Store&#39;s find_files method</a>
+now skips paths that look like documents by default. If you need to old behavior,
+pass in <code>include_documents =&gt; 1</code> to the method.</p>
 
-My name is *Housemoon* and this is [a website](http://example.com)
-</code></pre>
-    </div>
-    <div class="one-half column" style="display: table-cell">
-        Becomes HTML...
-        <div style="background: #F1F1F1; border: 1px solid #E1E1E1; border-radius: 4px; padding: 1rem 1.5rem; margin: 0 0.2rem;">
-            <h1>Welcome</h1>
-            <p>My name is <strong>Housemoon</strong> and this is <a href="#">a website</a></p>
-        </div>
-    </div>
-</div>
+<p>That change was made to support &quot;.md&quot; as a document file extension. Previously, only
+&quot;.markdown&quot; was supported. This is a work-in-progress, so if there are any bugs,
+<a href="http://github.com/preaction/Statocles/issues">file a bug report</a>.</p>
 
-<h2>Features</h2>
+<p>Full changelog below...</p>
 
-<ul>
-<li>A simple format combining YAML and Markdown for editing site content.</li>
-<li>A <a href="/Statocles/pod/Statocles/Command.html">command-line application</a> for building,
-deploying, and editing the site.</li>
-<li>A simple daemon to display a test site before it goes live.</li>
-<li>A <a href="/Statocles/pod/Statocles/App/Blog.html">blogging application</a> with
-<ul>
-<li>RSS and Atom syndication feeds.</li>
-<li>Tags to organize blog posts. Tags have their own custom feeds.</li>
-<li>Post-dated blog posts to appear automatically when the date is passed.</li>
-</ul></li>
-<li><a href="/Statocles/pod/Statocles/Help/Theme.html">Customizable themes</a> using a simple syntax
-of embedded Perl</li>
-<li>A clean default theme using <a href="http://getskeleton.com">the Skeleton CSS library</a></li>
-<li>SEO-friendly features such as <a href="http://www.sitemaps.org">sitemaps (sitemap.xml)</a>.</li>
+            </section>
+            <section id="section-2">
+                <ul>
+<li><a href="https://github.com/preaction/Statocles/commit/9a1691fc30d153f6b571b89b6df35e1762e96451">make find_files skip documents by default</a> (<a href="https://github.com/preaction/Statocles/issues/332">#332</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/14deef0bf1ebbcb74c4d0ced76f78ea40fb5c109">add method to check if a path is a document</a> (<a href="https://github.com/preaction/Statocles/issues/332">#332</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/e6314ba56aed6eda02286aa2943e4158f0b4035f">allow &quot;md&quot; and other extensions for markdown files</a> (<a href="https://github.com/preaction/Statocles/issues/332">#332</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/ad025e80713fa937a389bb1294152b33632a3fe7">fix test to detect bad body links in perldoc app</a> (<a href="https://github.com/preaction/Statocles/issues/342">#342</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/65f818c821a7a71d808c8ba6cb1969422e7e7b80">fix links to index module in perldoc app</a> (<a href="https://github.com/preaction/Statocles/issues/342">#342</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/0047778be7ded228d40881122c1eb57dd3f85ff5">do not add static HTML when markdown files exist</a> (<a href="https://github.com/preaction/Statocles/issues/339">#339</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/4905e41ab029eeacf714a3a1d77a7c3653869e4a">fix scheme detection in LinkCheck plugin</a> (<a href="https://github.com/preaction/Statocles/issues/340">#340</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/1983ea50127c3e0f238df26cda75182216748fd3">mention the File deploy in the guides</a> (<a href="https://github.com/preaction/Statocles/issues/341">#341</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/0e74aa5a9f980c1a21f472f45cd120c4833f19de">make default theme closer to bootstrap theme</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/9e259e6ebb448d13ffb300319b7af02530163e5f">add bootstrap theme back as an option</a> (<a href="https://github.com/preaction/Statocles/issues/314">#314</a>)</li>
 </ul>
 
-<h2>Installing</h2>
+            </section>
+        </main>
+    </div>
 
-<p>Install the latest version of Statocles:</p>
+    <div class="three columns sidebar">
+        
+        <nav id="tags">
+            <h1>Tags</h1>
+            <ul class="list-inline">
+                <li><a href="/Statocles/blog/tag/release/">release</a></li>
+            </ul>
+        </nav>
+    </div>
 
-<pre><code>curl -L https://cpanmin.us | perl - -M https://cpan.metacpan.org -n Statocles
-</code></pre>
-
-<h2>Getting Started</h2>
-
-<p>Create a site using the <code>create</code> command:</p>
-
-<pre><code>statocles create www.example.com
-</code></pre>
-
-<p>See <a href="/Statocles/pod/Statocles/Help/Setup.html">the Statocles Setup guide</a> for more
-information.</p>
-
+</div>
 
         </div>
         <footer>

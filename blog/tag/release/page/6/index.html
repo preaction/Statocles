@@ -6,6 +6,8 @@
         <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <title>Statocles</title>
+        <link href="/Statocles/blog/tag/release.atom" rel="alternate" type="application/atom+xml">
+        <link href="/Statocles/blog/tag/release.rss" rel="alternate" type="application/rss+xml">
         <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
 <style>
     h1, h2, h3, h4, h5, h6 {
@@ -88,75 +90,98 @@
 
         </header>
         <div class="main container">
-            <div id="index-banner">
-<h1>Statocles <small>Static, App-capable Websites</small></h1>
-<div class="latest-release">
-    <a href="/Statocles/blog/2015/07/06/release-v0-051/index.html">
-        Latest release: v0.051
-        (<date>2015-07-06</date>)
-    </a>
-</div>
-</div>
+            
+<div class="row">
 
-<p>Statocles is a minimal web content management system with a focus on easy editing
-with any plain text editor.</p>
+    <div class="nine columns">
+        <main>
 
-<div class="row" style="display: table">
-    <div class="one-half column" style="display: table-cell">
-        Markdown and YAML...
-        <pre style="margin-top: 0"><code style="white-space: pre-wrap">---
-title: Home
----
-# Welcome
 
-My name is *Housemoon* and this is [a website](http://example.com)
-</code></pre>
-    </div>
-    <div class="one-half column" style="display: table-cell">
-        Becomes HTML...
-        <div style="background: #F1F1F1; border: 1px solid #E1E1E1; border-radius: 4px; padding: 1rem 1.5rem; margin: 0 0.2rem;">
-            <h1>Welcome</h1>
-            <p>My name is <strong>Housemoon</strong> and this is <a href="#">a website</a></p>
-        </div>
-    </div>
-</div>
+            <article>
+                <header>
+                    <h1><a href="/Statocles/blog/2014/12/07/statocles-initial-public-(alpha)-release.html">Statocles Initial Public (alpha) Release</a></h1>
 
-<h2>Features</h2>
+                    <p class="tags">Tags:
+                        <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
+                    </p>
+
+                    <aside>
+                        <p><time datetime="2014-12-07">
+                            Posted on 2014-12-07
+                        </time>
+                            by preaction
+                        </p>
+                    </aside>
+
+                </header>
+
+                <p>Though Statocles has been on CPAN for months, this is the first time I&#39;m announcing its
+availability to the world!</p>
+
+<p>Statocles is a CMS for building static HTML websites. The goals of this app are to make
+it easy to edit content via any text editor [1].</p>
+
+<p>This initial release includes:</p>
 
 <ul>
-<li>A simple format combining YAML and Markdown for editing site content.</li>
-<li>A <a href="/Statocles/pod/Statocles/Command.html">command-line application</a> for building,
-deploying, and editing the site.</li>
-<li>A simple daemon to display a test site before it goes live.</li>
-<li>A <a href="/Statocles/pod/Statocles/App/Blog.html">blogging application</a> with
-<ul>
-<li>RSS and Atom syndication feeds.</li>
-<li>Tags to organize blog posts. Tags have their own custom feeds.</li>
-<li>Post-dated blog posts to appear automatically when the date is passed.</li>
-</ul></li>
-<li><a href="/Statocles/pod/Statocles/Help/Theme.html">Customizable themes</a> using a simple syntax
-of embedded Perl</li>
-<li>A clean default theme using <a href="http://getskeleton.com">the Skeleton CSS library</a></li>
-<li>SEO-friendly features such as <a href="http://www.sitemaps.org">sitemaps (sitemap.xml)</a>.</li>
+<li>A blog app</li>
+<li>Plain pages, for things like About Us and Contact Us</li>
+<li>A POD renderer for documentation of Perl projects</li>
 </ul>
 
-<h2>Installing</h2>
-
-<p>Install the latest version of Statocles:</p>
-
-<pre><code>curl -L https://cpanmin.us | perl - -M https://cpan.metacpan.org -n Statocles
-</code></pre>
+<p>This site is generated with Statocles, and so is <a href="/Statocles/blog/2014/12/07/http://preaction.github.io">my blog</a>.</p>
 
 <h2>Getting Started</h2>
 
-<p>Create a site using the <code>create</code> command:</p>
+<p><a href="/Statocles/blog/2014/12/07/http://metacpan.org/pod/Statocles">Get Statocles from CPAN</a> and <a href="/Statocles/pod/Statocles/Help/Setup.html">follow the Statocles
+Setup guide</a>. If you have any issues, report them on
+<a href="/Statocles/blog/2014/12/07/https://github.com/preaction/Statocles">the Statocles Githup Repo</a>. If you have questions,
+<a href="/Statocles/blog/2014/12/07/https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">join us on IRC on irc.perl.org #statocles</a>!</p>
 
-<pre><code>statocles create www.example.com
-</code></pre>
+<p>[1]: A future project will make Statocles content editable with a web interface</p>
 
-<p>See <a href="/Statocles/pod/Statocles/Help/Setup.html">the Statocles Setup guide</a> for more
-information.</p>
 
+
+            </article>
+        </main>
+
+        <ul class="pager">
+            <li class="prev">
+                <a class="button disabled" href="" rel="next">
+                    ← Older
+                </a>
+            </li>
+            <li class="next">
+                <a class="button button-primary" href="/Statocles/blog/tag/release/page/5" rel="prev">
+                    Newer →
+                </a>
+            </li>
+        </ul>
+
+    </div>
+
+    <div class="three columns sidebar">
+        
+        <h1>Tags</h1>
+        <ul class="list-inline">
+            <li><a href="/Statocles/blog/tag/release/">release</a></li>
+        </ul>
+        <h1>Feeds</h1>
+        <ul class="list-inline">
+            <li>
+                <a href="/Statocles/blog/tag/release.atom" rel="alternate" type="application/atom+xml">
+                    Atom
+                </a>
+            </li>
+            <li>
+                <a href="/Statocles/blog/tag/release.rss" rel="alternate" type="application/rss+xml">
+                    RSS
+                </a>
+            </li>
+        </ul>
+    </div>
+
+</div>
 
         </div>
         <footer>
