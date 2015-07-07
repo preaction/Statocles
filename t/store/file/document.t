@@ -314,4 +314,14 @@ subtest 'verbose' => sub {
 
 };
 
+subtest 'check if a path is a document' => sub {
+    my $store = Statocles::Store::File->new(
+        path => $SHARE_DIR->child( qw( store ) ),
+    );
+    ok $store->is_document( Path::Tiny->new(qw( docs ext short.md )) );
+    ok $store->is_document( join "/", qw( docs ext short.md ) );
+    ok !$store->is_document( Path::Tiny->new( qw( files image.png ) ) );
+    ok !$store->is_document( join "/", qw( files image.png ) );
+};
+
 done_testing;

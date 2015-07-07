@@ -106,14 +106,12 @@ sub read_documents {
     my $root_path = $self->path;
     my @docs;
     my $iter = $root_path->iterator( { recurse => 1, follow_symlinks => 1 } );
-    my $ext = join "|", @{ $self->document_extensions };
     while ( my $path = $iter->() ) {
         next unless $path->is_file;
         next unless $self->_is_owned_path( $path );
-        if ( $path =~ /[.](?:$ext)$/ ) {
-            my $rel_path = rootdir->child( $path->relative( $root_path ) );
-            push @docs, $self->read_document( $rel_path );
-        }
+        next unless $self->is_document( $path );
+        my $rel_path = rootdir->child( $path->relative( $root_path ) );
+        push @docs, $self->read_document( $rel_path );
     }
     return \@docs;
 }
@@ -254,6 +252,18 @@ sub _freeze_document {
         }
     }
     return $doc;
+}
+
+=method is_document( $path )
+
+Returns true if the path looks like a document path (matches the L</document_extensions>).
+
+=cut
+
+sub is_document {
+    my ( $self, $path ) = @_;
+    my $match = join "|", @{ $self->document_extensions };
+    return $path =~ /[.](?:$match)$/;
 }
 
 =method read_file( $path )
