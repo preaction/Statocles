@@ -1,6 +1,19 @@
 Changelog for Statocles
 
-0.050 2015-06-29T03:11:25
+0.051 2015-07-07T03:07:38
+ - make find_files skip documents by default
+ - add method to check if a path is a document
+ - allow "md" and other extensions for markdown files
+ - fix test to detect bad body links in perldoc app
+ - fix links to index module in perldoc app
+ - do not add static HTML when markdown files exist
+ - fix scheme detection in LinkCheck plugin
+ - mention the File deploy in the guides
+ - make default theme closer to bootstrap theme
+ - add bootstrap theme back as an option
+ - add release v0.050 announcement
+
+0.050 2015-06-29T03:11:25Z
  - add command docs to Blog app
  - show how to create plain page in content guide
  - clarify some parts of the content guide
