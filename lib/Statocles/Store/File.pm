@@ -29,6 +29,26 @@ has path => (
     required => 1,
 );
 
+=attr document_extensions
+
+An array of file extensions that should be considered documents. Defaults to
+"markdown" and "md".
+
+=cut
+
+has document_extensions => (
+    is => 'ro',
+    isa => ArrayRef[Str],
+    default => sub { [qw( markdown md )] },
+    coerce => sub {
+        my ( $ext ) = @_;
+        if ( !ref $ext ) {
+            return [ split /[, ]/, $ext ];
+        }
+        return $ext;
+    },
+);
+
 =attr documents
 
 All the L<documents|Statocles::Document> currently read by this store.
@@ -86,10 +106,11 @@ sub read_documents {
     my $root_path = $self->path;
     my @docs;
     my $iter = $root_path->iterator( { recurse => 1, follow_symlinks => 1 } );
+    my $ext = join "|", @{ $self->document_extensions };
     while ( my $path = $iter->() ) {
         next unless $path->is_file;
         next unless $self->_is_owned_path( $path );
-        if ( $path =~ /[.]markdown$/ ) {
+        if ( $path =~ /[.](?:$ext)$/ ) {
             my $rel_path = rootdir->child( $path->relative( $root_path ) );
             push @docs, $self->read_document( $rel_path );
         }

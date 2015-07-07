@@ -21,6 +21,12 @@ my @exp_docs = (
     ),
 
     Statocles::Document->new(
+        path => '/ext/short.md',
+        title => 'Short Extension',
+        content => "This is a short extension\n",
+    ),
+
+    Statocles::Document->new(
         path => '/no-frontmatter.markdown',
         content => "\n# This Document has no frontmatter!\n\nDocuments are not required to have frontmatter!\n",
     ),
