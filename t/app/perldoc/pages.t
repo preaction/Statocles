@@ -25,7 +25,8 @@ my @page_tests = (
             like $node->text, qr{my \$int = My::Internal->new};
         }
 
-        ok $dom->at( 'a[href="/pod/My.html"]' ), 'internal link';
+        # Use <p> to match in body, not crumbtrail
+        ok $dom->at( 'p a[href="/pod/My.html"]' ), 'internal link';
         ok $dom->at( 'a[href="/pod/My/Internal.src.html"]' ), 'source link exists';
 
         my @crumbtrail = $dom->find( '.crumbtrail li' )->each;
@@ -57,10 +58,11 @@ my @page_tests = (
             like $node->text, qr{my \$my = My->new};
         }
 
-        ok $dom->at( 'a[href="/pod/index.html"]' ), 'internal link to index page';
-        ok !$dom->at( 'a[href="/pod/index.html"]' )->attr( 'rel' ), 'internal link has no rel';
-        ok $dom->at( 'a[href="https://metacpan.org/pod/External"]' ), 'external link exists';
-        is $dom->at( 'a[href="https://metacpan.org/pod/External"]' )->attr( 'rel' ), 'external', 'external link has rel=external';
+        # Use <p> to match in body, not crumbtrail
+        ok $dom->at( 'p a[href="/pod/index.html"]' ), 'internal link to index page';
+        ok !$dom->at( 'p a[href="/pod/index.html"]' )->attr( 'rel' ), 'internal link has no rel';
+        ok $dom->at( 'p a[href="https://metacpan.org/pod/External"]' ), 'external link exists';
+        is $dom->at( 'p a[href="https://metacpan.org/pod/External"]' )->attr( 'rel' ), 'external', 'external link has rel=external';
         ok $dom->at( 'a[href="/pod/My.src.html"]' ), 'source link exists';
         ok !$dom->at( 'a[href="/pod/My.src.html"]' )->attr( 'rel' ), 'source link has no rel';
 
@@ -91,7 +93,8 @@ my @page_tests = (
             like $node->text, qr{command[.]pl -h};
         }
 
-        ok $dom->at( 'a[href="/pod/command.html"]' ), 'internal link to same page';
+        # Use <p> to match in body, not crumbtrail
+        ok $dom->at( 'p a[href="/pod/command.html"]' ), 'internal link to same page';
         ok $dom->at( 'a[href="/pod/command.src.html"]' ), 'source link exists';
 
         my @crumbtrail = $dom->find( '.crumbtrail li' )->each;
@@ -121,7 +124,8 @@ my @page_tests = (
             like $node->text, qr{shellcmd -h};
         }
 
-        ok $dom->at( 'a[href="/pod/shellcmd.html"]' ), 'internal link to same page';
+        # Use <p> to match in body, not crumbtrail
+        ok $dom->at( 'p a[href="/pod/shellcmd.html"]' ), 'internal link to same page';
         ok $dom->at( 'a[href="/pod/shellcmd.src.html"]' ), 'source link exists';
 
         my @crumbtrail = $dom->find( '.crumbtrail li' )->each;
