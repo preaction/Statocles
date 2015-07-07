@@ -222,7 +222,7 @@ sub post_files {
     my @pages;
 
     my @paths;
-    my $iter = $self->store->find_files;
+    my $iter = $self->store->find_files( include_documents => 1 );
     while ( my $path = $iter->() ) {
         push @paths, $path;
     }
@@ -235,7 +235,7 @@ sub post_files {
         next if $path =~ m{/index[.]markdown$};
         next if $path =~ m{/index[.]html$};
 
-        if ( $path =~ /[.]markdown$/ ) {
+        if ( $self->store->is_document( $path ) ) {
             my $page_path = $path;
             $page_path =~ s{[.]\w+$}{.html};
 

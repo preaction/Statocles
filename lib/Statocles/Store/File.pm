@@ -292,20 +292,29 @@ sub has_file {
     return $self->path->child( $path )->is_file;
 }
 
-=method find_files()
+=method find_files( %opt )
 
 Returns an iterator that, when called, produces a single path suitable to be passed
 to L<read_file>.
 
+Available options are:
+
+    include_documents      - If true, will include files that look like documents.
+                             Defaults to false.
+
 =cut
 
 sub find_files {
-    my ( $self ) = @_;
+    my ( $self, %opt ) = @_;
     my $iter = $self->path->iterator({ recurse => 1 });
     return sub {
-        my $path = $iter->();
-        return unless $path; # iterator exhausted
-        $path = $iter->() while $path && ( $path->is_dir || !$self->_is_owned_path( $path ) );
+        my $path;
+        while ( $path = $iter->() ) {
+            next if $path->is_dir;
+            next if !$self->_is_owned_path( $path );
+            next if !$opt{include_documents} && $self->is_document( $path );
+            last;
+        }
         return unless $path; # iterator exhausted
         return $path->relative( $self->path )->absolute( '/' );
     };

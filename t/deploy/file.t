@@ -31,12 +31,22 @@ subtest 'deploy' => sub {
     );
     $deploy->deploy( $build_store );
 
+    my %paths = (
+        'doc.markdown' => 1,
+        'foo/index.html' => 1,
+        'index.html' => 1,
+    );
+
     subtest 'files are correct' => sub {
-        my $file_iter = $build_store->find_files;
-        while ( my $file = $file_iter->() ) {
-            ok $tmpdir->child( $file->path )->exists,
-                'page ' . $file->path . ' is in deploy path';
+        my @found;
+        my $iter = $tmpdir->iterator({ recurse => 1 });
+        while ( my $file = $iter->() ) {
+            next if $file->is_dir;
+            my $rel_file = $file->relative( $tmpdir );
+            ok $paths{ $rel_file }, 'page ' . $rel_file . ' is in deploy path';
+            push @found, $rel_file;
         }
+        is scalar @found, scalar keys %paths, 'all pages are found';
     };
 };
 

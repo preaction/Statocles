@@ -32,6 +32,8 @@ subtest 'find files' => sub {
     my @expect_paths = (
         path( qw( text.txt ) )->absolute( '/' ),
         path( qw( image.png ) )->absolute( '/' ),
+    );
+    my @expect_docs = (
         path( qw( folder doc.markdown ) )->absolute( '/' ),
     );
 
@@ -43,6 +45,17 @@ subtest 'find files' => sub {
 
     cmp_deeply \@got_paths, bag( @expect_paths )
         or diag explain \@got_paths;
+
+    subtest 'include documents' => sub {
+        my $iter = $store->find_files( include_documents => 1 );
+        my @got_paths;
+        while ( my $path = $iter->() ) {
+            push @got_paths, $path;
+        }
+
+        cmp_deeply \@got_paths, bag( @expect_paths, @expect_docs )
+            or diag explain \@got_paths;
+    };
 
     subtest 'can pass paths to read_file' => sub {
         my ( $path ) = grep { $_->basename eq 'text.txt' } @got_paths;

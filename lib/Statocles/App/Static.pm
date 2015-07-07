@@ -28,7 +28,7 @@ sub pages {
     my ( $self ) = @_;
 
     my @pages;
-    my $iter = $self->store->find_files;
+    my $iter = $self->store->find_files( include_documents => 1 );
     FILE: while ( my $path = $iter->() ) {
         # Check for hidden files and folders
         next if $path->basename =~ /^[.]/;
