@@ -45,8 +45,7 @@ has url_root => (
 
 =method pages()
 
-Get the pages for this app. Must return a list of L<Statocles::Page> objects, with
-the index page (the page intended to be the entry page) first.
+Get the pages for this app. Must return a list of L<Statocles::Page> objects.
 
 =cut
 

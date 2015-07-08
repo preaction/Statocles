@@ -15,7 +15,7 @@ site:
             blog: { '$ref': 'blog_app' }
             page: { '$ref': 'page_app' }
             static: { '$ref': 'static_app' }
-        index: 'blog'
+        index: '/blog'
         deploy: { '$ref': 'deploy' }
 
 blog_app:

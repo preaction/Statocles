@@ -189,8 +189,7 @@ sub test_pages {
         %opt = %{ +shift };
     }
 
-    my ( $index_path, $index_test, %page_tests ) = @_;
-    $page_tests{ $index_path } = $index_test;
+    my %page_tests = @_;
 
     local $Test::Builder::Level = $Test::Builder::Level + 1;
 
@@ -200,10 +199,6 @@ sub test_pages {
     my @pages = $app->pages;
 
     is scalar @pages, scalar keys %page_tests, 'correct number of pages';
-
-    if ( !$opt{noindex} ) {
-        is $pages[0]->path, $index_path, 'index page must come first';
-    }
 
     for my $page ( @pages ) {
         ok $page->DOES( 'Statocles::Page' ), 'must be a Statocles::Page';
@@ -308,7 +303,7 @@ sub build_temp_site {
             class => 'Statocles::Site',
             args => {
                 title => 'Site Title',
-                index => 'blog',
+                index => '/blog',
                 build_store => { '$ref' => 'build' },
                 deploy => { '$ref' => 'deploy' },
                 theme => { '$ref' => 'theme' },
@@ -337,7 +332,7 @@ sub build_temp_site {
             class => 'Statocles::Site',
             args => {
                 title => 'Site Foo',
-                index => 'blog',
+                index => '/blog',
                 build_store => { '$ref' => 'build_foo' },
                 deploy => { '$ref' => 'deploy_foo' },
                 theme => '::default',

@@ -97,7 +97,7 @@ a collection of apps that build and deploy to the same place.
             deploy:
                 $ref: github_deploy
             title: My Site
-            index: blog
+            index: /blog
             nav:
                 main:
                     - title: Blog
@@ -108,9 +108,9 @@ that we can refer to them on the command-line (later).
 
 As part of the default template, we can provide a site C<title>.
 
-The C<index> attribute gives the name of the app to use as our index page.
-Since we only have one app, we can only give it the C<blog>. Whatever main page
-the blog app defines will be moved to the main site index C</>.
+The C<index> attribute gives the path to the page to use as our index page.
+Since the blog's C<url_root> is C</blog>, this will move the main blog page
+to the main site index C</>.
 
 Finally, we can define a C<nav> list, again giving a name: C<main>. The
 default template uses the C<main> nav across the top.
@@ -141,7 +141,7 @@ your own site.
             deploy:
                 $ref: github_deploy
             title: My Site
-            index: blog
+            index: /blog
             nav:
                 main:
                     - title: Blog
@@ -220,7 +220,7 @@ To enable the new apps, we just need to add them to the site's C<apps>.
             deploy:
                 $ref: github_deploy
             title: My Site
-            index: blog
+            index: /blog
             nav:
                 main:
                     - title: Blog
@@ -258,7 +258,7 @@ Now we should probably make a link in our main nav to the new about page:
             deploy:
                 $ref: github_deploy
             title: My Site
-            index: blog
+            index: /blog
             nav:
                 main:
                     - title: Blog
@@ -311,7 +311,7 @@ Along with the blog app and our other settings, here is our new, complete site.y
                 $ref: github_deploy
 
             title: My Site
-            index: blog
+            index: /blog
             nav:
                 main:
                     - title: Blog

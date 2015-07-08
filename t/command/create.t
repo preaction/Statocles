@@ -24,7 +24,7 @@ subtest 'create a site' => sub {
 
         my $expect_config = site_config();
         $expect_config->{site}{args}{nav}{main}[0]{href} = "/blog";
-        $expect_config->{site}{args}{index} = "page";
+        $expect_config->{site}{args}{index} = "/page";
         $expect_config->{site}{args}{base_url} = "http://example.com";
         $expect_config->{deploy}{class} = "Statocles::Deploy::File";
         $expect_config->{deploy}{args}{path} = ".";
@@ -94,7 +94,7 @@ subtest 'create a site' => sub {
         # Missing http:// gets added
         $expect_config->{site}{args}{base_url} = "http://example.com";
         $expect_config->{site}{args}{nav}{main}[0]{href} = "/blog";
-        $expect_config->{site}{args}{index} = "page";
+        $expect_config->{site}{args}{index} = "/page";
         $expect_config->{deploy}{class} = "Statocles::Deploy::File";
         $expect_config->{deploy}{args}{path} = ".";
 
@@ -129,7 +129,7 @@ subtest 'create a site' => sub {
         my $expect_config = site_config();
         $expect_config->{site}{args}{base_url} = "https://example.com";
         $expect_config->{site}{args}{nav}{main}[0]{href} = "/blog";
-        $expect_config->{site}{args}{index} = "page";
+        $expect_config->{site}{args}{index} = "/page";
         $expect_config->{deploy}{class} = "Statocles::Deploy::File";
         $expect_config->{deploy}{args}{path} = ".";
 
@@ -308,7 +308,7 @@ sub site_config {
                     page => { '$ref' => 'page_app' },
                     static => { '$ref' => 'static_app' },
                 },
-                index => 'blog',
+                index => '/blog',
                 deploy => { '$ref' => 'deploy' },
             },
             on => [

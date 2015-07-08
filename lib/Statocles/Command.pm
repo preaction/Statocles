@@ -253,11 +253,11 @@ sub create_site {
     my ( $site ) = YAML::Load( $create_dir->child( 'site.yml' )->slurp_utf8 );
 
     if ( $answer{flavor} == 1 ) {
-        $site->{site}{args}{index} = "blog";
+        $site->{site}{args}{index} = "/blog";
         $site->{site}{args}{nav}{main}[0]{href} = "/";
     }
     elsif ( $answer{flavor} == 2 ) {
-        $site->{site}{args}{index} = "page";
+        $site->{site}{args}{index} = "/page";
         $site->{site}{args}{nav}{main}[0]{href} = "/blog";
     }
 

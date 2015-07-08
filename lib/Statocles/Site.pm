@@ -65,8 +65,7 @@ has apps => (
 
 =attr index
 
-The application to use as the site index. The application's individual index()
-method will be called to get the index page.
+The page path to use for the site index.
 
 =cut
 
@@ -222,10 +221,6 @@ Register this site as the global site.
 sub BUILD {
     my ( $self ) = @_;
 
-    if ( $self->index && !$self->app( $self->index ) ) {
-        die sprintf 'ERROR: Index app "%s" does not exist', $self->index;
-    }
-
     $Statocles::SITE = $self;
     for my $app ( values %{ $self->apps } ) {
         $app->site( $self );
@@ -285,11 +280,22 @@ sub build {
     );
 
     # Collect all the pages for this site
+    # XXX: Should we allow sites without indexes?
+    my $index_path = $self->index;
+    if ( $index_path && $index_path !~ m{^/} ) {
+        $self->log->warn(
+            sprintf 'site "index" property should be absolute path to index page (got "%s")',
+            $self->index,
+        );
+    }
+
     for my $app_name ( keys %{ $apps } ) {
         my $app = $apps->{$app_name};
 
         my @app_pages = $app->pages;
-        if ( $self->index eq $app_name ) {
+
+        # DEPRECATED: Index as app name
+        if ( $app_name eq $index_path ) {
 
             die sprintf 'ERROR: Index app "%s" did not generate any pages' . "\n", $self->index
                 unless @app_pages;
@@ -302,6 +308,18 @@ sub build {
         for my $page ( @app_pages ) {
             my $path = $page->path;
 
+            if ( $path =~ m{^$index_path(?:/index[.]html)?$} ) {
+                # Rename the app's page so that we don't get two pages with identical
+                # content, which is bad for SEO
+                $self->log->debug(
+                    sprintf 'Found index page "%s" from app "%s"',
+                    $path,
+                    $app_name,
+                );
+                $path = '/index.html';
+                $page->path( '/index.html' );
+            }
+
             if ( $seen_paths{ $path }{ $app_name } ) {
                 $self->log->warn(
                     sprintf 'Duplicate page with path "%s" from app "%s"',
@@ -313,6 +331,11 @@ sub build {
 
             $seen_paths{ $path }{ $app_name } = $page;
         }
+    }
+
+    # XXX: Do we want to allow sites with no index page ever?
+    if ( $self->index && !exists $seen_paths{ '/index.html' } ) {
+        die sprintf qq{ERROR: Index path "%s" does not exist}, $self->index
     }
 
     for my $path ( keys %seen_paths ) {
@@ -353,7 +376,11 @@ sub build {
     my $base_path = Mojo::URL->new( $base_url )->path;
     $base_path =~ s{/$}{};
 
-    my $index_root = $self->index ? $apps->{ $self->index }->url_root : '';
+    # DEPRECATED: Index without leading / is an index app
+    my $index_root  = $self->index =~ m{^/} ? $self->index
+                    : $self->index ? $apps->{ $self->index }->url_root : '';
+    $index_root =~ s{/index[.]html$}{};
+
     for my $page ( @pages ) {
         my $content = $page->render( %args );
 
