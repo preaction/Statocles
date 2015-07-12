@@ -12,8 +12,8 @@ The path to deploy to.
 
 has path => (
     is => 'ro',
-    isa => Dir,
-    coerce => Dir->coercion,
+    isa => Path,
+    coerce => Path->coercion,
     default => sub { Path::Tiny->new( '.' ) },
 );
 
@@ -25,6 +25,10 @@ Deploy the site, copying from the given store.
 
 sub deploy {
     my ( $self, $from_store, $message ) = @_;
+
+    die sprintf 'Deploy directory "%s" does not exist (did you forget to make it?)',
+        $self->path
+            if !$self->path->is_dir;
 
     my @files;
     my $iter = $from_store->find_files( include_documents => 1 );

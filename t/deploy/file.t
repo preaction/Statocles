@@ -50,4 +50,11 @@ subtest 'deploy' => sub {
     };
 };
 
+subtest 'missing directory' => sub {
+    my $store;
+    lives_ok { $store = Statocles::Deploy::File->new( path => 'DOES_NOT_EXIST' ) };
+    throws_ok { $store->deploy( $build_store ) }
+        qr{\QDeploy directory "DOES_NOT_EXIST" does not exist (did you forget to make it?)};
+};
+
 done_testing;
