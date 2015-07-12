@@ -65,7 +65,8 @@ has apps => (
 
 =attr index
 
-The page path to use for the site index.
+The page path to use for the site index. Make sure to include the leading
+slash (but C</index.html> is optional).
 
 =cut
 
