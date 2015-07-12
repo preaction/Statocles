@@ -1,0 +1,62 @@
+# PODNAME: Statocles::Help::Policy
+# ABSTRACT: Development and deprecation policies
+
+=head1 DESCRIPTION
+
+This document describes development and deprecation policies.
+
+=head1 MAJOR VERSIONS
+
+Major versions are the only time when APIs can break. Major versions
+must be at least 6 months apart.
+
+=head1 DEPRECATION
+
+Features will be deprecated for an entire major version before they are
+removed.
+
+Deprecation will start in the current major version, but only in testing (when
+the C<HARNESS_ACTIVE> environment variable set by L<the Test::Harness
+module|Test::Harness> is true). All deprecations will be accompanied with the
+new feature when possible so users can switch immediately.
+
+When the next major version happens, the deprecation will warn always. When the
+major version after that happens, the deprecation will be fatal. Finally, after
+the next major version, the warning/exception will be removed (and so, things
+will probably fail in unexpected ways).
+
+So, for something deprecated in v1.28:
+
+=over 4
+
+=item *
+
+Warning only when testing from v1.28 to v2.00
+
+=item *
+
+Warning in normal operation from v2.00 to v3.00
+
+=item *
+
+Fatal exception from v3.00 to v4.00
+
+=item *
+
+Exception removed in v4.00
+
+=back
+
+All deprecations will be recorded in L<the upgrading guide|Statocles::Help::Upgrading>
+along with instructions on how to work through it.
+
+=head1 SEE ALSO
+
+=over 4
+
+=item *
+
+L<Statocles::Help::Upgrading> - Guide to fixing use of deprecated features
+
+=back
+

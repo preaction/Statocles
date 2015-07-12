@@ -1,0 +1,45 @@
+# PODNAME: Statocles::Help::Upgrading
+# ABSTRACT: A guide to pitfalls when upgrading Statocles
+
+=head1 DESCRIPTION
+
+This document describes deprecated features and other pitfalls to encounter
+when upgrading Statocles.
+
+=head1 DEPRECATIONS
+
+=head2 v0
+
+=over 4
+
+=item site "index" property should be absolute path to index page (got "%s")
+
+The L<site object|Statocles::Site> "index" property used to be the name of the
+application that should be used as the index. For this to work, applications
+need to say which of their pages should be the site index, which they did by
+putting that page first in the list of pages returned. This was magic, and
+prone to breakage. It also doesn't allow the site author to choose any page
+they want as the site index.
+
+To fix this, set the site's "index" property to the path to the page you want
+to be the index page, including the leading slash.
+
+See the L<docs for the index property of the Site object|Statocles::Site/index>
+for more information.
+
+Deprecated in v0.051. Fatal in v1.000. Exception removed in v2.000.
+
+Thanks to L<Kyle Sheely|https://github.com/kylesheely> for the idea.
+
+=back
+
+=head1 SEE ALSO
+
+=over 4
+
+=item *
+
+L<Statocles::Help::Policy> - Policy for deprecations
+
+=back
+
