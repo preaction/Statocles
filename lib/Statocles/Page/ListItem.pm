@@ -86,13 +86,13 @@ sub _rewrite_content {
             my $url = $el->attr( $attr );
 
             # relative URLs must be absolute
-            if ( $url !~ m{^(?:[a-zA-Z]:)?//?} ) {
+            if ( $url !~ m{^(?:(?:[a-zA-Z]+:)|//?)} ) {
                 $url = $self->page->dirname . '/' . $url;
             }
 
             # absolute URLs may be full
             if ( $self->rewrite_mode eq 'full' ) {
-                if ( $url !~ m{^(?:[a-zA-Z]:)?//} ) {
+                if ( $url !~ m{^(?:(?:[a-zA-Z]+:)|//)} ) {
                     $url = $self->page->site->url( $url );
                 }
             }

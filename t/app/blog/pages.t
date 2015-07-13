@@ -50,6 +50,25 @@ my @page_tests = (
             superbagof( '/blog/2014/06/02/more_tags/docs.html' ),
             'relative link is fixed on list page';
 
+        subtest 'links on more_tags page are rewritten correctly' => sub {
+            my %links = (
+                # TEXT => URL
+                "Body Content" => '/does_not_exist',
+                "relative" => '/blog/2014/06/02/more_tags/does_not_exist',
+                "Broken link with URL encoding" => '/images/with%20spaces.png',
+                "Working link with URL encoding" => '/blog/2014/05/22/%28regex%29%5Bname%5D.file.html',
+                "Full URLs are not broken" => 'http://example.com',
+                "Full URLs without schema are not broken" => '//example.com',
+                "Fixed relative URL" => '/blog/2014/06/02/more_tags/docs.html',
+                "Test a mailto: link" => 'mailto:user@example.com',
+            );
+            my @links = $dom->find( 'article .content a' )->each;
+            is scalar @links, scalar keys %links, 'all links found';
+            for my $link ( @links ) {
+                is $link->attr( 'href' ), $links{ $link->text }, 'link href is correct: ' . $link->text;
+            }
+        };
+
         cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
             bag( qw(
                 /blog/tag/better/
@@ -752,6 +771,23 @@ my @page_tests = (
                 /blog/tag/better/
                 /blog/tag/even-more-tags/
             ) );
+
+        my %links = (
+            # TEXT => URL
+            "Body Content" => '/does_not_exist',
+            "relative" => 'does_not_exist',
+            "Broken link with URL encoding" => '/images/with%20spaces.png',
+            "Working link with URL encoding" => '/blog/2014/05/22/%28regex%29%5Bname%5D.file.html',
+            "Full URLs are not broken" => 'http://example.com',
+            "Full URLs without schema are not broken" => '//example.com',
+            "Fixed relative URL" => 'docs.html',
+            "Test a mailto: link" => 'mailto:user@example.com',
+        );
+        my @links = $dom->find( 'section a' )->each;
+        is scalar @links, scalar keys %links, 'all links found';
+        for my $link ( @links ) {
+            is $link->attr( 'href' ), $links{ $link->text }, 'link href is correct';
+        }
 
         # alternate, blogs.perl.org, http://blogs.perl.org/preaction/404.html
         is $dom->at( '.alternate a' )->attr( 'href' ),

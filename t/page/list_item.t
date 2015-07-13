@@ -16,6 +16,10 @@ my $content = <<'MARKDOWN';
 
 [Absolute link](/absolute.html)
 
+[Full link](http://example.net)
+
+[Schemaless link](//example.net)
+
 ![](image.jpg)
 
 ---
@@ -46,6 +50,8 @@ subtest 'content rewrite' => sub {
             my $dom = Mojo::DOM->new( $page->content );
             ok $dom->at( 'a[href=/path/to/blog/post/relative.html]' ), 'relative link is fixed';
             ok $dom->at( 'a[href=/absolute.html]' ), 'absolute link is ignored';
+            ok $dom->at( 'a[href=http://example.net]' ), 'full link is ignored';
+            ok $dom->at( 'a[href=//example.net]' ), 'schemaless link is ignored';
             ok $dom->at( 'img[src=/path/to/blog/post/image.jpg]' ), 'relative image is fixed';
             ok $dom->at( 'img[src=/path/to/blog/post/image2.jpg]' ), 'relative image2 is fixed';
         };
@@ -54,6 +60,8 @@ subtest 'content rewrite' => sub {
             my $dom = Mojo::DOM->new( $page->sections(1) );
             ok $dom->at( 'a[href=/path/to/blog/post/relative.html]' ), 'relative link is fixed';
             ok $dom->at( 'a[href=/absolute.html]' ), 'absolute link is ignored';
+            ok $dom->at( 'a[href=http://example.net]' ), 'full link is ignored';
+            ok $dom->at( 'a[href=//example.net]' ), 'schemaless link is ignored';
             ok $dom->at( 'img[src=/path/to/blog/post/image.jpg]' ), 'relative image is fixed';
         };
     };
@@ -68,6 +76,8 @@ subtest 'content rewrite' => sub {
             my $dom = Mojo::DOM->new( $page->content );
             ok $dom->at( 'a[href=http://example.com/base/path/to/blog/post/relative.html]' ), 'relative link is fixed';
             ok $dom->at( 'a[href=http://example.com/base/absolute.html]' ), 'absolute link is fixed';
+            ok $dom->at( 'a[href=http://example.net]' ), 'full link is ignored';
+            ok $dom->at( 'a[href=//example.net]' ), 'schemaless link is ignored';
             ok $dom->at( 'img[src=http://example.com/base/path/to/blog/post/image.jpg]' ), 'relative image is fixed';
             ok $dom->at( 'img[src=http://example.com/base/path/to/blog/post/image2.jpg]' ), 'relative image2 is fixed';
         };
@@ -76,6 +86,8 @@ subtest 'content rewrite' => sub {
             my $dom = Mojo::DOM->new( $page->sections(1) );
             ok $dom->at( 'a[href=http://example.com/base/path/to/blog/post/relative.html]' ), 'relative link is fixed';
             ok $dom->at( 'a[href=http://example.com/base/absolute.html]' ), 'absolute link is fixed';
+            ok $dom->at( 'a[href=http://example.net]' ), 'full link is ignored';
+            ok $dom->at( 'a[href=//example.net]' ), 'schemaless link is ignored';
             ok $dom->at( 'img[src=http://example.com/base/path/to/blog/post/image.jpg]' ), 'relative image is fixed';
         };
     };
