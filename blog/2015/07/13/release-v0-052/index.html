@@ -88,75 +88,68 @@
 
         </header>
         <div class="main container">
-            <div id="index-banner">
-<h1>Statocles <small>Static, App-capable Websites</small></h1>
-<div class="latest-release">
-    <a href="/Statocles/blog/2015/07/13/release-v0-052/index.html">
-        Latest release: v0.052
-        (<date>2015-07-13</date>)
-    </a>
-</div>
-</div>
+            <div class="row">
 
-<p>Statocles is a minimal web content management system with a focus on easy editing
-with any plain text editor.</p>
+    <div class="nine columns">
+        <main>
+            <header>
+                <h1>Release v0.052</h1>
+                <p class="tags">Tags:
+                    <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
+                </p>
+                <aside>
+                    <p><time datetime="2015-07-13">
+                        Posted on 2015-07-13
+                    </time>
+                    </p>
+                </aside>
+            </header>
+            <section id="section-1">
+                <p>In the run up to v1.000, we&#39;ve added a <a href="/Statocles/pod/Statocles/Help/Policy.html">deprecation policy</a>.</p>
 
-<div class="row" style="display: table">
-    <div class="one-half column" style="display: table-cell">
-        Markdown and YAML...
-        <pre style="margin-top: 0"><code style="white-space: pre-wrap">---
-title: Home
----
-# Welcome
+<p>Our first deprecation: The site&#39;s &quot;index&quot; property should now be a full path to
+a page, and not the name of an app. This lets you choose any page at all to be
+the site index, and removes some of the magic around choosing an index page
+that caused quite a few bugs. See <a href="/Statocles/pod/Statocles/Help/Upgrading.html">the upgrading
+guide</a> for tips on how to fix the
+deprecation warnings.</p>
 
-My name is *Housemoon* and this is [a website](http://example.com)
-</code></pre>
-    </div>
-    <div class="one-half column" style="display: table-cell">
-        Becomes HTML...
-        <div style="background: #F1F1F1; border: 1px solid #E1E1E1; border-radius: 4px; padding: 1rem 1.5rem; margin: 0 0.2rem;">
-            <h1>Welcome</h1>
-            <p>My name is <strong>Housemoon</strong> and this is <a href="#">a website</a></p>
-        </div>
-    </div>
-</div>
-
-<h2>Features</h2>
+<p>A couple bugfixes this release as well:</p>
 
 <ul>
-<li>A simple format combining YAML and Markdown for editing site content.</li>
-<li>A <a href="/Statocles/pod/Statocles/Command.html">command-line application</a> for building,
-deploying, and editing the site.</li>
-<li>A simple daemon to display a test site before it goes live.</li>
-<li>A <a href="/Statocles/pod/Statocles/App/Blog.html">blogging application</a> with
-<ul>
-<li>RSS and Atom syndication feeds.</li>
-<li>Tags to organize blog posts. Tags have their own custom feeds.</li>
-<li>Post-dated blog posts to appear automatically when the date is passed.</li>
-</ul></li>
-<li><a href="/Statocles/pod/Statocles/Help/Theme.html">Customizable themes</a> using a simple syntax
-of embedded Perl</li>
-<li>A clean default theme using <a href="http://getskeleton.com">the Skeleton CSS library</a></li>
-<li>SEO-friendly features such as <a href="http://www.sitemaps.org">sitemaps (sitemap.xml)</a>.</li>
+<li>The Bootstrap theme now correctly loads jQuery before the Bootstrap javascript</li>
+<li>A site can be built and tested without being able to deploy (if your deploy system
+is different from your development system).</li>
 </ul>
 
-<h2>Installing</h2>
+<p>Full changelog below...</p>
 
-<p>Install the latest version of Statocles:</p>
+            </section>
+            <section id="section-2">
+                <ul>
+<li><a href="https://github.com/preaction/Statocles/commit/03e5f6f13e19ef8054a7dc0dd8c219f9a027644e">enhance the docs about the site index property</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/a4b8dc92dbdaf5a820c587d047f14c8e3e3c2923">add deprecation policy and upgrading guide</a> (<a href="https://github.com/preaction/Statocles/issues/346">#346</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/7f3a5fc2fdb8589b0ef5ff4aa9b3bb50b89b65fc">allow site to be built with no deploy dir</a> (<a href="https://github.com/preaction/Statocles/issues/348">#348</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/2482b25b4d9deef0c447325a6523dd7ae80ebd3e">add core prereq for Pod::Simple</a> (<a href="https://github.com/preaction/Statocles/issues/349">#349</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/268685c34771eb148b637c603329aca0b7a3369f">fix bootstrap theme missing jquery</a> (<a href="https://github.com/preaction/Statocles/issues/350">#350</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/cf0d3ebb59d3583e68840c5918d4e5f28f8d0813">use page path for site index, not apps</a> (<a href="https://github.com/preaction/Statocles/issues/326">#326</a>)</li>
+</ul>
 
-<pre><code>curl -L https://cpanmin.us | perl - -M https://cpan.metacpan.org -n Statocles
-</code></pre>
+            </section>
+        </main>
+    </div>
 
-<h2>Getting Started</h2>
+    <div class="three columns sidebar">
+        
+        <nav id="tags">
+            <h1>Tags</h1>
+            <ul class="list-inline">
+                <li><a href="/Statocles/blog/tag/release/">release</a></li>
+            </ul>
+        </nav>
+    </div>
 
-<p>Create a site using the <code>create</code> command:</p>
-
-<pre><code>statocles create www.example.com
-</code></pre>
-
-<p>See <a href="/Statocles/pod/Statocles/Help/Setup.html">the Statocles Setup guide</a> for more
-information.</p>
-
+</div>
 
         </div>
         <footer>

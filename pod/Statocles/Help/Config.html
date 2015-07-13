@@ -173,7 +173,7 @@
             deploy:
                 $ref: github_deploy
             title: My Site
-            index: blog
+            index: /blog
             nav:
                 main:
                     - title: Blog
@@ -183,7 +183,7 @@
 
 <p>As part of the default template, we can provide a site <code>title</code>.</p>
 
-<p>The <code>index</code> attribute gives the name of the app to use as our index page. Since we only have one app, we can only give it the <code>blog</code>. Whatever main page the blog app defines will be moved to the main site index <code>/</code>.</p>
+<p>The <code>index</code> attribute gives the path to the page to use as our index page. Since the blog&#39;s <code>url_root</code> is <code>/blog</code>, this will move the main blog page to the main site index <code>/</code>.</p>
 
 <p>Finally, we can define a <code>nav</code> list, again giving a name: <code>main</code>. The default template uses the <code>main</code> nav across the top.</p>
 
@@ -212,7 +212,7 @@
             deploy:
                 $ref: github_deploy
             title: My Site
-            index: blog
+            index: /blog
             nav:
                 main:
                     - title: Blog
@@ -274,7 +274,7 @@
             deploy:
                 $ref: github_deploy
             title: My Site
-            index: blog
+            index: /blog
             nav:
                 main:
                     - title: Blog
@@ -311,7 +311,7 @@
             deploy:
                 $ref: github_deploy
             title: My Site
-            index: blog
+            index: /blog
             nav:
                 main:
                     - title: Blog
@@ -364,7 +364,7 @@
                 $ref: github_deploy
 
             title: My Site
-            index: blog
+            index: /blog
             nav:
                 main:
                     - title: Blog

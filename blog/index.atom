@@ -2,10 +2,42 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://preaction.github.io/Statocles/blog/</id>
     <title>Statocles</title>
-    <updated>2015-07-06T22:16:29Z</updated>
+    <updated>2015-07-13T01:01:52Z</updated>
     <link href="http://preaction.github.io/Statocles/blog/index.atom" rel="self" />
     <link href="http://preaction.github.io/Statocles/blog/" rel="alternate" />
-    <generator version="0.050">Statocles</generator>
+    <generator version="0.051">Statocles</generator>
+    <entry>
+        <id>http://preaction.github.io/Statocles/blog/2015/07/13/release-v0-052/</id>
+        <title>Release v0.052</title>
+        <link href="http://preaction.github.io/Statocles/blog/2015/07/13/release-v0-052/" rel="alternate" />
+        <content type="html"><![CDATA[
+            <p>In the run up to v1.000, we&#39;ve added a <a href="http://preaction.github.io/Statocles/pod/Statocles/Help/Policy.html">deprecation policy</a>.</p>
+
+<p>Our first deprecation: The site&#39;s &quot;index&quot; property should now be a full path to
+a page, and not the name of an app. This lets you choose any page at all to be
+the site index, and removes some of the magic around choosing an index page
+that caused quite a few bugs. See <a href="http://preaction.github.io/Statocles/pod/Statocles/Help/Upgrading.html">the upgrading
+guide</a> for tips on how to fix the
+deprecation warnings.</p>
+
+<p>A couple bugfixes this release as well:</p>
+
+<ul>
+<li>The Bootstrap theme now correctly loads jQuery before the Bootstrap javascript</li>
+<li>A site can be built and tested without being able to deploy (if your deploy system
+is different from your development system).</li>
+</ul>
+
+<p>Full changelog below...</p>
+
+                <p><a href="http://preaction.github.io/Statocles/blog/2015/07/13/release-v0-052/#section-2">Continue reading...</a></p>
+            <p>Tags:
+                <a href="/blog/tag/release/">release</a>
+            </p>
+        ]]></content>
+        <updated>2015-07-13T00:00:00Z</updated>
+        <category term="release" />
+    </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2015/07/06/release-v0-051/</id>
         <title>Release v0.051</title>
@@ -110,35 +142,6 @@ inside a list page.</p>
             </p>
         ]]></content>
         <updated>2015-06-22T00:00:00Z</updated>
-        <category term="release" />
-    </entry>
-    <entry>
-        <id>http://preaction.github.io/Statocles/blog/2015/06/03/release-v0-047/</id>
-        <title>Release v0.047</title>
-        <link href="http://preaction.github.io/Statocles/blog/2015/06/03/release-v0-047/" rel="alternate" />
-        <content type="html"><![CDATA[
-            <p>A bunch of bugfixes in this release, including one that could have prevented
-users from upgrading from previous versions due to a test failure.</p>
-
-<p>Most importantly, pagination in the blog is working again.</p>
-
-<p>Some additions to the <a href="http://preaction.github.io/Statocles/pod/Statocles/Help/Content.html">Content help guide</a>
-about a the new features over the last few releases, and one new feature adding
-a <code>data</code> attribute to <a href="http://preaction.github.io/Statocles/pod/Statocles/Document.html">Statocles::Document</a>,
-which allows for fun things when generating content.</p>
-
-<p>Finally, some of our dependencies have been removed, since their functionality
-overlapped with other dependencies (or turned out to be very easy to implement
-ourselves).</p>
-
-<p>Full changelog below</p>
-
-                <p><a href="http://preaction.github.io/Statocles/blog/2015/06/03/release-v0-047/#section-2">Continue reading...</a></p>
-            <p>Tags:
-                <a href="/blog/tag/release/">release</a>
-            </p>
-        ]]></content>
-        <updated>2015-06-03T00:00:00Z</updated>
         <category term="release" />
     </entry>
 </feed>

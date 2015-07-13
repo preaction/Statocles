@@ -103,8 +103,8 @@ The path to deploy to.
 
 has path =&gt; (
     is =&gt; &#39;ro&#39;,
-    isa =&gt; Dir,
-    coerce =&gt; Dir-&gt;coercion,
+    isa =&gt; Path,
+    coerce =&gt; Path-&gt;coercion,
     default =&gt; sub { Path::Tiny-&gt;new( &#39;.&#39; ) },
 );
 
@@ -116,6 +116,10 @@ Deploy the site, copying from the given store.
 
 sub deploy {
     my ( $self, $from_store, $message ) = @_;
+
+    die sprintf &#39;Deploy directory &quot;%s&quot; does not exist (did you forget to make it?)&#39;,
+        $self-&gt;path
+            if !$self-&gt;path-&gt;is_dir;
 
     my @files;
     my $iter = $from_store-&gt;find_files( include_documents =&gt; 1 );

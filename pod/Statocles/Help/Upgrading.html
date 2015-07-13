@@ -88,74 +88,59 @@
 
         </header>
         <div class="main container">
-            <div id="index-banner">
-<h1>Statocles <small>Static, App-capable Websites</small></h1>
-<div class="latest-release">
-    <a href="/Statocles/blog/2015/07/13/release-v0-052/index.html">
-        Latest release: v0.052
-        (<date>2015-07-13</date>)
-    </a>
+            <div class="crumbtrail">
+<ul>
+    <li>
+        <a href="/Statocles/pod/Statocles.html">Statocles</a>
+    </li>
+    <li>
+        <a href="/Statocles/pod/index.html">Help</a>
+    </li>
+    <li>
+        <a href="/Statocles/pod/Statocles/Help/Upgrading.html">Upgrading</a>
+    </li>
+</ul>
+(<a href="/Statocles/pod/Statocles/Help/Upgrading.src.html">source</a>)
 </div>
-</div>
+<h1 id="NAME">NAME</h1>
 
-<p>Statocles is a minimal web content management system with a focus on easy editing
-with any plain text editor.</p>
+<p>Statocles::Help::Upgrading - A guide to pitfalls when upgrading Statocles</p>
 
-<div class="row" style="display: table">
-    <div class="one-half column" style="display: table-cell">
-        Markdown and YAML...
-        <pre style="margin-top: 0"><code style="white-space: pre-wrap">---
-title: Home
----
-# Welcome
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
 
-My name is *Housemoon* and this is [a website](http://example.com)
-</code></pre>
-    </div>
-    <div class="one-half column" style="display: table-cell">
-        Becomes HTML...
-        <div style="background: #F1F1F1; border: 1px solid #E1E1E1; border-radius: 4px; padding: 1rem 1.5rem; margin: 0 0.2rem;">
-            <h1>Welcome</h1>
-            <p>My name is <strong>Housemoon</strong> and this is <a href="#">a website</a></p>
-        </div>
-    </div>
-</div>
+<p>This document describes deprecated features and other pitfalls to encounter when upgrading Statocles.</p>
 
-<h2>Features</h2>
+<h1 id="DEPRECATIONS">DEPRECATIONS</h1>
+
+<h2 id="v0">v0</h2>
+
+<dl>
+
+<dt>site &quot;index&quot; property should be absolute path to index page (got &quot;%s&quot;)</dt>
+<dd>
+
+<p>The <a href="/Statocles/pod/Statocles/Site.html">site object</a> &quot;index&quot; property used to be the name of the application that should be used as the index. For this to work, applications need to say which of their pages should be the site index, which they did by putting that page first in the list of pages returned. This was magic, and prone to breakage. It also doesn&#39;t allow the site author to choose any page they want as the site index.</p>
+
+<p>To fix this, set the site&#39;s &quot;index&quot; property to the path to the page you want to be the index page, including the leading slash.</p>
+
+<p>See the <a href="/Statocles/pod/Statocles/Site#index.html">docs for the index property of the Site object</a> for more information.</p>
+
+<p>Deprecated in v0.051. Fatal in v1.000. Exception removed in v2.000.</p>
+
+<p>Thanks to <a href="https://github.com/kylesheely" rel="external">Kyle Sheely</a> for the idea.</p>
+
+</dd>
+</dl>
+
+<h1 id="SEE-ALSO">SEE ALSO</h1>
 
 <ul>
-<li>A simple format combining YAML and Markdown for editing site content.</li>
-<li>A <a href="/Statocles/pod/Statocles/Command.html">command-line application</a> for building,
-deploying, and editing the site.</li>
-<li>A simple daemon to display a test site before it goes live.</li>
-<li>A <a href="/Statocles/pod/Statocles/App/Blog.html">blogging application</a> with
-<ul>
-<li>RSS and Atom syndication feeds.</li>
-<li>Tags to organize blog posts. Tags have their own custom feeds.</li>
-<li>Post-dated blog posts to appear automatically when the date is passed.</li>
-</ul></li>
-<li><a href="/Statocles/pod/Statocles/Help/Theme.html">Customizable themes</a> using a simple syntax
-of embedded Perl</li>
-<li>A clean default theme using <a href="http://getskeleton.com">the Skeleton CSS library</a></li>
-<li>SEO-friendly features such as <a href="http://www.sitemaps.org">sitemaps (sitemap.xml)</a>.</li>
+
+<li><p><a href="/Statocles/pod/Statocles/Help/Policy.html">Statocles::Help::Policy</a> - Policy for deprecations</p>
+
+</li>
 </ul>
 
-<h2>Installing</h2>
-
-<p>Install the latest version of Statocles:</p>
-
-<pre><code>curl -L https://cpanmin.us | perl - -M https://cpan.metacpan.org -n Statocles
-</code></pre>
-
-<h2>Getting Started</h2>
-
-<p>Create a site using the <code>create</code> command:</p>
-
-<pre><code>statocles create www.example.com
-</code></pre>
-
-<p>See <a href="/Statocles/pod/Statocles/Help/Setup.html">the Statocles Setup guide</a> for more
-information.</p>
 
 
         </div>

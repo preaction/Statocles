@@ -99,6 +99,46 @@
 
             <article>
                 <header>
+                    <h1><a href="/Statocles/blog/2015/07/13/release-v0-052/">Release v0.052</a></h1>
+
+                    <p class="tags">Tags:
+                        <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
+                    </p>
+
+                    <aside>
+                        <p><time datetime="2015-07-13">
+                            Posted on 2015-07-13
+                        </time>
+                        </p>
+                    </aside>
+
+                </header>
+
+                <p>In the run up to v1.000, we&#39;ve added a <a href="/Statocles/pod/Statocles/Help/Policy.html">deprecation policy</a>.</p>
+
+<p>Our first deprecation: The site&#39;s &quot;index&quot; property should now be a full path to
+a page, and not the name of an app. This lets you choose any page at all to be
+the site index, and removes some of the magic around choosing an index page
+that caused quite a few bugs. See <a href="/Statocles/pod/Statocles/Help/Upgrading.html">the upgrading
+guide</a> for tips on how to fix the
+deprecation warnings.</p>
+
+<p>A couple bugfixes this release as well:</p>
+
+<ul>
+<li>The Bootstrap theme now correctly loads jQuery before the Bootstrap javascript</li>
+<li>A site can be built and tested without being able to deploy (if your deploy system
+is different from your development system).</li>
+</ul>
+
+<p>Full changelog below...</p>
+
+
+                    <p><a href="/Statocles/blog/2015/07/13/release-v0-052/#section-2">Continue reading Release v0.052...</a></p>
+
+            </article>
+            <article>
+                <header>
                     <h1><a href="/Statocles/blog/2015/07/06/release-v0-051/">Release v0.051</a></h1>
 
                     <p class="tags">Tags:
@@ -233,43 +273,6 @@ inside a list page.</p>
 
 
                     <p><a href="/Statocles/blog/2015/06/22/release-v0-048/#section-2">Continue reading Release v0.048...</a></p>
-
-            </article>
-            <article>
-                <header>
-                    <h1><a href="/Statocles/blog/2015/06/03/release-v0-047/">Release v0.047</a></h1>
-
-                    <p class="tags">Tags:
-                        <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
-                    </p>
-
-                    <aside>
-                        <p><time datetime="2015-06-03">
-                            Posted on 2015-06-03
-                        </time>
-                        </p>
-                    </aside>
-
-                </header>
-
-                <p>A bunch of bugfixes in this release, including one that could have prevented
-users from upgrading from previous versions due to a test failure.</p>
-
-<p>Most importantly, pagination in the blog is working again.</p>
-
-<p>Some additions to the <a href="/Statocles/pod/Statocles/Help/Content.html">Content help guide</a>
-about a the new features over the last few releases, and one new feature adding
-a <code>data</code> attribute to <a href="/Statocles/pod/Statocles/Document.html">Statocles::Document</a>,
-which allows for fun things when generating content.</p>
-
-<p>Finally, some of our dependencies have been removed, since their functionality
-overlapped with other dependencies (or turned out to be very easy to implement
-ourselves).</p>
-
-<p>Full changelog below</p>
-
-
-                    <p><a href="/Statocles/blog/2015/06/03/release-v0-047/#section-2">Continue reading Release v0.047...</a></p>
 
             </article>
         </main>

@@ -344,11 +344,11 @@ sub create_site {
     my ( $site ) = YAML::Load( $create_dir-&gt;child( &#39;site.yml&#39; )-&gt;slurp_utf8 );
 
     if ( $answer{flavor} == 1 ) {
-        $site-&gt;{site}{args}{index} = &quot;blog&quot;;
+        $site-&gt;{site}{args}{index} = &quot;/blog&quot;;
         $site-&gt;{site}{args}{nav}{main}[0]{href} = &quot;/&quot;;
     }
     elsif ( $answer{flavor} == 2 ) {
-        $site-&gt;{site}{args}{index} = &quot;page&quot;;
+        $site-&gt;{site}{args}{index} = &quot;/page&quot;;
         $site-&gt;{site}{args}{nav}{main}[0]{href} = &quot;/blog&quot;;
     }
 

@@ -99,6 +99,43 @@
 
             <article>
                 <header>
+                    <h1><a href="/Statocles/blog/2015/06/03/release-v0-047/">Release v0.047</a></h1>
+
+                    <p class="tags">Tags:
+                        <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
+                    </p>
+
+                    <aside>
+                        <p><time datetime="2015-06-03">
+                            Posted on 2015-06-03
+                        </time>
+                        </p>
+                    </aside>
+
+                </header>
+
+                <p>A bunch of bugfixes in this release, including one that could have prevented
+users from upgrading from previous versions due to a test failure.</p>
+
+<p>Most importantly, pagination in the blog is working again.</p>
+
+<p>Some additions to the <a href="/Statocles/pod/Statocles/Help/Content.html">Content help guide</a>
+about a the new features over the last few releases, and one new feature adding
+a <code>data</code> attribute to <a href="/Statocles/pod/Statocles/Document.html">Statocles::Document</a>,
+which allows for fun things when generating content.</p>
+
+<p>Finally, some of our dependencies have been removed, since their functionality
+overlapped with other dependencies (or turned out to be very easy to implement
+ourselves).</p>
+
+<p>Full changelog below</p>
+
+
+                    <p><a href="/Statocles/blog/2015/06/03/release-v0-047/#section-2">Continue reading Release v0.047...</a></p>
+
+            </article>
+            <article>
+                <header>
                     <h1><a href="/Statocles/blog/2015/05/24/release-v0-046/">Release v0.046</a></h1>
 
                     <p class="tags">Tags:
@@ -277,44 +314,6 @@ Moo 2.</p>
 
 
                     <p><a href="/Statocles/blog/2015/03/24/release-v0.043/#section-2">Continue reading Release v0.043...</a></p>
-
-            </article>
-            <article>
-                <header>
-                    <h1><a href="/Statocles/blog/2015/03/16/release-v0.042/">Release v0.042</a></h1>
-
-                    <p class="tags">Tags:
-                        <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
-                    </p>
-
-                    <aside>
-                        <p><time datetime="2015-03-16">
-                            Posted on 2015-03-16
-                        </time>
-                        </p>
-                    </aside>
-
-                </header>
-
-                <p>A slow week, but some needed features:</p>
-
-<p>The LinkCheck plugin now supports an <code>ignore</code> attribute, in case there are
-links that aren&#39;t managed by Statocles (like having Github project links in a
-Github user/organization site).</p>
-
-<p>A new <code>before_build_write</code> event was added to the Site object, so that plugins
-can edit pages after the App creates them, and even add pages to the site.</p>
-
-<p>The Site object now has full control over the Markdown object that turns
-Markdown into HTML, which lets you use the other attributes of
-<a href="/Statocles/blog/2015/03/16/release-v0.042/http://metacpan.org/pod/Text::Markdown">Text::Markdown</a>, or even use
-<a href="/Statocles/blog/2015/03/16/release-v0.042/http://metacpan.org/pod/Text::MultiMarkdown">Text::MultiMarkdown</a> or any
-object that exposes a <code>markdown</code> method.</p>
-
-<p>Full changelog below:</p>
-
-
-                    <p><a href="/Statocles/blog/2015/03/16/release-v0.042/#section-2">Continue reading Release v0.042...</a></p>
 
             </article>
         </main>

@@ -88,74 +88,69 @@
 
         </header>
         <div class="main container">
-            <div id="index-banner">
-<h1>Statocles <small>Static, App-capable Websites</small></h1>
-<div class="latest-release">
-    <a href="/Statocles/blog/2015/07/13/release-v0-052/index.html">
-        Latest release: v0.052
-        (<date>2015-07-13</date>)
-    </a>
+            <div class="crumbtrail">
+<ul>
+    <li>
+        <a href="/Statocles/pod/Statocles.html">Statocles</a>
+    </li>
+    <li>
+        <a href="/Statocles/pod/index.html">Help</a>
+    </li>
+    <li>
+        <a href="/Statocles/pod/Statocles/Help/Policy.html">Policy</a>
+    </li>
+</ul>
+(<a href="/Statocles/pod/Statocles/Help/Policy.src.html">source</a>)
 </div>
-</div>
+<h1 id="NAME">NAME</h1>
 
-<p>Statocles is a minimal web content management system with a focus on easy editing
-with any plain text editor.</p>
+<p>Statocles::Help::Policy - Development and deprecation policies</p>
 
-<div class="row" style="display: table">
-    <div class="one-half column" style="display: table-cell">
-        Markdown and YAML...
-        <pre style="margin-top: 0"><code style="white-space: pre-wrap">---
-title: Home
----
-# Welcome
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
 
-My name is *Housemoon* and this is [a website](http://example.com)
-</code></pre>
-    </div>
-    <div class="one-half column" style="display: table-cell">
-        Becomes HTML...
-        <div style="background: #F1F1F1; border: 1px solid #E1E1E1; border-radius: 4px; padding: 1rem 1.5rem; margin: 0 0.2rem;">
-            <h1>Welcome</h1>
-            <p>My name is <strong>Housemoon</strong> and this is <a href="#">a website</a></p>
-        </div>
-    </div>
-</div>
+<p>This document describes development and deprecation policies.</p>
 
-<h2>Features</h2>
+<h1 id="MAJOR-VERSIONS">MAJOR VERSIONS</h1>
+
+<p>Major versions are the only time when APIs can break. Major versions must be at least 6 months apart.</p>
+
+<h1 id="DEPRECATION">DEPRECATION</h1>
+
+<p>Features will be deprecated for an entire major version before they are removed.</p>
+
+<p>Deprecation will start in the current major version, but only in testing (when the <code>HARNESS_ACTIVE</code> environment variable set by <a href="https://metacpan.org/pod/Test::Harness" rel="external">the Test::Harness module</a> is true). All deprecations will be accompanied with the new feature when possible so users can switch immediately.</p>
+
+<p>When the next major version happens, the deprecation will warn always. When the major version after that happens, the deprecation will be fatal. Finally, after the next major version, the warning/exception will be removed (and so, things will probably fail in unexpected ways).</p>
+
+<p>So, for something deprecated in v1.28:</p>
 
 <ul>
-<li>A simple format combining YAML and Markdown for editing site content.</li>
-<li>A <a href="/Statocles/pod/Statocles/Command.html">command-line application</a> for building,
-deploying, and editing the site.</li>
-<li>A simple daemon to display a test site before it goes live.</li>
-<li>A <a href="/Statocles/pod/Statocles/App/Blog.html">blogging application</a> with
-<ul>
-<li>RSS and Atom syndication feeds.</li>
-<li>Tags to organize blog posts. Tags have their own custom feeds.</li>
-<li>Post-dated blog posts to appear automatically when the date is passed.</li>
-</ul></li>
-<li><a href="/Statocles/pod/Statocles/Help/Theme.html">Customizable themes</a> using a simple syntax
-of embedded Perl</li>
-<li>A clean default theme using <a href="http://getskeleton.com">the Skeleton CSS library</a></li>
-<li>SEO-friendly features such as <a href="http://www.sitemaps.org">sitemaps (sitemap.xml)</a>.</li>
+
+<li><p>Warning only when testing from v1.28 to v2.00</p>
+
+</li>
+<li><p>Warning in normal operation from v2.00 to v3.00</p>
+
+</li>
+<li><p>Fatal exception from v3.00 to v4.00</p>
+
+</li>
+<li><p>Exception removed in v4.00</p>
+
+</li>
 </ul>
 
-<h2>Installing</h2>
+<p>All deprecations will be recorded in <a href="/Statocles/pod/Statocles/Help/Upgrading.html">the upgrading guide</a> along with instructions on how to work through it.</p>
 
-<p>Install the latest version of Statocles:</p>
+<h1 id="SEE-ALSO">SEE ALSO</h1>
 
-<pre><code>curl -L https://cpanmin.us | perl - -M https://cpan.metacpan.org -n Statocles
-</code></pre>
+<ul>
 
-<h2>Getting Started</h2>
+<li><p><a href="/Statocles/pod/Statocles/Help/Upgrading.html">Statocles::Help::Upgrading</a> - Guide to fixing use of deprecated features</p>
 
-<p>Create a site using the <code>create</code> command:</p>
+</li>
+</ul>
 
-<pre><code>statocles create www.example.com
-</code></pre>
-
-<p>See <a href="/Statocles/pod/Statocles/Help/Setup.html">the Statocles Setup guide</a> for more
-information.</p>
 
 
         </div>

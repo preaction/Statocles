@@ -88,75 +88,53 @@
 
         </header>
         <div class="main container">
-            <div id="index-banner">
-<h1>Statocles <small>Static, App-capable Websites</small></h1>
-<div class="latest-release">
-    <a href="/Statocles/blog/2015/07/13/release-v0-052/index.html">
-        Latest release: v0.052
-        (<date>2015-07-13</date>)
-    </a>
-</div>
-</div>
+            <a href="/Statocles/pod/Statocles/Help/Upgrading.html">Back to documentation</a>
+<pre># PODNAME: Statocles::Help::Upgrading
+# ABSTRACT: A guide to pitfalls when upgrading Statocles
 
-<p>Statocles is a minimal web content management system with a focus on easy editing
-with any plain text editor.</p>
+=head1 DESCRIPTION
 
-<div class="row" style="display: table">
-    <div class="one-half column" style="display: table-cell">
-        Markdown and YAML...
-        <pre style="margin-top: 0"><code style="white-space: pre-wrap">---
-title: Home
----
-# Welcome
+This document describes deprecated features and other pitfalls to encounter
+when upgrading Statocles.
 
-My name is *Housemoon* and this is [a website](http://example.com)
-</code></pre>
-    </div>
-    <div class="one-half column" style="display: table-cell">
-        Becomes HTML...
-        <div style="background: #F1F1F1; border: 1px solid #E1E1E1; border-radius: 4px; padding: 1rem 1.5rem; margin: 0 0.2rem;">
-            <h1>Welcome</h1>
-            <p>My name is <strong>Housemoon</strong> and this is <a href="#">a website</a></p>
-        </div>
-    </div>
-</div>
+=head1 DEPRECATIONS
 
-<h2>Features</h2>
+=head2 v0
 
-<ul>
-<li>A simple format combining YAML and Markdown for editing site content.</li>
-<li>A <a href="/Statocles/pod/Statocles/Command.html">command-line application</a> for building,
-deploying, and editing the site.</li>
-<li>A simple daemon to display a test site before it goes live.</li>
-<li>A <a href="/Statocles/pod/Statocles/App/Blog.html">blogging application</a> with
-<ul>
-<li>RSS and Atom syndication feeds.</li>
-<li>Tags to organize blog posts. Tags have their own custom feeds.</li>
-<li>Post-dated blog posts to appear automatically when the date is passed.</li>
-</ul></li>
-<li><a href="/Statocles/pod/Statocles/Help/Theme.html">Customizable themes</a> using a simple syntax
-of embedded Perl</li>
-<li>A clean default theme using <a href="http://getskeleton.com">the Skeleton CSS library</a></li>
-<li>SEO-friendly features such as <a href="http://www.sitemaps.org">sitemaps (sitemap.xml)</a>.</li>
-</ul>
+=over 4
 
-<h2>Installing</h2>
+=item site &quot;index&quot; property should be absolute path to index page (got &quot;%s&quot;)
 
-<p>Install the latest version of Statocles:</p>
+The L&lt;site object|Statocles::Site&gt; &quot;index&quot; property used to be the name of the
+application that should be used as the index. For this to work, applications
+need to say which of their pages should be the site index, which they did by
+putting that page first in the list of pages returned. This was magic, and
+prone to breakage. It also doesn&#39;t allow the site author to choose any page
+they want as the site index.
 
-<pre><code>curl -L https://cpanmin.us | perl - -M https://cpan.metacpan.org -n Statocles
-</code></pre>
+To fix this, set the site&#39;s &quot;index&quot; property to the path to the page you want
+to be the index page, including the leading slash.
 
-<h2>Getting Started</h2>
+See the L&lt;docs for the index property of the Site object|Statocles::Site/index&gt;
+for more information.
 
-<p>Create a site using the <code>create</code> command:</p>
+Deprecated in v0.051. Fatal in v1.000. Exception removed in v2.000.
 
-<pre><code>statocles create www.example.com
-</code></pre>
+Thanks to L&lt;Kyle Sheely|https://github.com/kylesheely&gt; for the idea.
 
-<p>See <a href="/Statocles/pod/Statocles/Help/Setup.html">the Statocles Setup guide</a> for more
-information.</p>
+=back
 
+=head1 SEE ALSO
+
+=over 4
+
+=item *
+
+L&lt;Statocles::Help::Policy&gt; - Policy for deprecations
+
+=back
+
+</pre>
 
         </div>
         <footer>
