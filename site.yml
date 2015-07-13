@@ -33,7 +33,7 @@ site:
                   href: 'https://chat.mibbit.com/?channel=%23statocles&server=irc.perl.org'
         deploy:
             $ref: gh_pages
-        index: page
+        index: /
         theme:
             $ref: theme
         apps:
