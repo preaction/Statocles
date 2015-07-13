@@ -74,8 +74,9 @@ main img {
     max-width: 100%;
 }
 
-a[rel=external]::before {
+a[rel=external]::after {
     content: '\f08e';
+    padding-left: 0.2em;
     font-family: "FontAwesome";
     display: inline-block;
     font-size: smaller;

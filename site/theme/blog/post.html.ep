@@ -9,6 +9,7 @@
                     <a href="<%= $tag->href %>" rel="tag"><%= $tag->text %></a>
                 % }
                 </p>
+
                 <aside>
                     <p><time datetime="<%= $self->date->strftime('%Y-%m-%d') %>">
                         Posted on <%= $self->date->strftime('%Y-%m-%d') %>
@@ -18,15 +19,17 @@
                     % }
                     </p>
                 </aside>
+
                 % if ( $self->links( 'crosspost' ) ) {
                 <p>Originally posted as:
                     % for my $link ( $self->links( 'crosspost' ) ) {
-                        <a class="alert-link" href="<%= $link->href %>">
+                        <a href="<%= $link->href %>">
                             <em><%= $self->title %></em> on <%= $link->title %>.
                         </a>
                     % }
                 </p>
                 % }
+
             </header>
             % my @sections = $self->sections;
             % for my $i ( 0..$#sections ) {
