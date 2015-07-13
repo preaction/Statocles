@@ -1,6 +1,15 @@
 Changelog for Statocles
 
-0.051 2015-07-07T03:07:38
+0.052 2015-07-13T05:49:19
+ - enhance the docs about the site index property
+ - add deprecation policy and upgrading guide
+ - allow site to be built with no deploy dir
+ - add core prereq for Pod::Simple
+ - fix bootstrap theme missing jquery
+ - use page path for site index, not apps
+ - add release v0.051 announcement
+
+0.051 2015-07-07T03:07:38Z
  - make find_files skip documents by default
  - add method to check if a path is a document
  - allow "md" and other extensions for markdown files
