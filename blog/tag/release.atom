@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://preaction.github.io/Statocles/blog/tag/release/</id>
     <title>Statocles</title>
-    <updated>2015-07-13T01:01:53Z</updated>
+    <updated>2015-07-13T01:07:35Z</updated>
     <link href="http://preaction.github.io/Statocles/blog/tag/release.atom" rel="self" />
     <link href="http://preaction.github.io/Statocles/blog/tag/release/" rel="alternate" />
-    <generator version="0.051">Statocles</generator>
+    <generator version="0.052">Statocles</generator>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2015/07/13/release-v0-052/</id>
         <title>Release v0.052</title>
