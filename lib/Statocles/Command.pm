@@ -46,7 +46,7 @@ sub main {
     );
     return pod2usage(0) if $opt{help};
 
-    if ( $opt{version} ) {
+    if ( $opt{version} || ( $opt{verbose} && !@argv ) ) {
         say "Statocles version $Statocles::Command::VERSION (Perl $^V)";
         return 0;
     }

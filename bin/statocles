@@ -21,6 +21,7 @@ __END__
 
     statocles [-v] [--config <file>] [--site <site>] <command>
     statocles -h|--help
+    statocles -v|--version
 
 =head1 DESCRIPTION
 
@@ -67,4 +68,8 @@ Display diagnostic information:
 =head2 -h | --help
 
 Display this help file
+
+=head2 --version
+
+Display version information
 
