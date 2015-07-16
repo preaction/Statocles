@@ -27,6 +27,15 @@ L<Statocles::Help::Deploy>.
 To develop custom Statocles applications, custom ways to deploy, custom template
 languages, or other extensions, see L<Statocles::Help::Develop>.
 
+=head2 UPGRADING
+
+If you're upgrading from a previous version of Statocles, check
+L<Statocles::Help::Upgrading> for any potential problems.
+
+=head2 POLICIES
+
+For information on development and deprecation, see L<Statocles::Help::Policy>.
+
 =head1 MODULES
 
 =over 4
@@ -117,7 +126,15 @@ L<Statocles::Help::Develop> - Developing apps and plugins
 
 =item *
 
+L<Statocles::Help::Policy> - Project development and deprecation policies
+
+=item *
+
 L<Statocles::Help::Theme> - Develop themes and templates
+
+=item *
+
+L<Statocles::Help::Upgrading> - Upgrading themes, apps, and plugins
 
 =back
 
