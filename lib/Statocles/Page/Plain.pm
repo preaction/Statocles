@@ -19,6 +19,8 @@ has _content => (
 
 =method content
 
+    my $html = $page->content;
+
 Get the content for this page.
 
 =cut

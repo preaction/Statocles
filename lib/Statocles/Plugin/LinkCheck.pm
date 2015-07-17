@@ -23,7 +23,9 @@ has ignore => (
     default => sub { [] },
 );
 
-=method check_pages( event )
+=method check_pages
+
+    $plugin->check_pages( $event );
 
 Check the pages inside the given
 L<Statocles::Event::Pages|Statocles::Event::Pages> event.

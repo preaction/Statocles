@@ -78,7 +78,9 @@ has weave_config => (
 
 =method pages
 
-Render the requested modules as HTML.
+    my @pages = $app->pages;
+
+Render the requested modules as HTML. Returns an array of L<Statocles::Page> objects.
 
 =cut
 
@@ -212,12 +214,7 @@ sub _module_href {
     return $page_url;
 }
 
-=method _weave_module( $path )
-
-Run Pod::Weaver on the POD in the given path
-
-=cut
-
+# Run Pod::Weaver on the POD in the given path
 sub _weave_module {
     my ( $self, $path ) = @_;
 

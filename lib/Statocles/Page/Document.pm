@@ -86,7 +86,9 @@ sub _render_content_template {
     return $rendered;
 }
 
-=method content( vars )
+=method content
+
+    my $html = $page->content( %vars );
 
 Generate the document HTML by processing template directives and converting
 Markdown. C<vars> is a set of name-value pairs to give to the template.
@@ -102,6 +104,8 @@ sub content {
 
 =method vars
 
+    my %vars = $page->vars;
+
 Get the template variables for this page.
 
 =cut
@@ -115,8 +119,10 @@ sub vars {
 
 =method sections
 
-Get a list of content divided into sections. The Markdown "---" marker divides
-sections.
+    my @sections = $page->sections;
+
+Get a list of rendered HTML content divided into sections. The Markdown "---"
+marker divides sections.
 
 =cut
 
@@ -129,7 +135,9 @@ sub sections {
         @sections;
 }
 
-=method tags()
+=method tags
+
+    my @tags = $page->tags;
 
 Get the list of tags for this page.
 
@@ -140,9 +148,11 @@ sub tags {
     return @{ $self->_tags };
 }
 
-=method template()
+=method template
 
-The L<template|Statocles::Template> for this page. If the document has a template,
+    my $tmpl = $page->template;
+
+The L<template object|Statocles::Template> for this page. If the document has a template,
 it will be used. Otherwise, the L<template attribute|Statocles::Page/template> will
 be used.
 
@@ -156,9 +166,11 @@ around template => sub {
     return $self->$orig( @args );
 };
 
-=method layout()
+=method layout
 
-The L<layout template|Statocles::Template> for this page. If the document has a layout,
+    my $tmpl = $page->layout;
+
+The L<layout template object|Statocles::Template> for this page. If the document has a layout,
 it will be used. Otherwise, the L<layout attribute|Statocles::Page/layout> will
 be used.
 

@@ -82,7 +82,9 @@ sub BUILD {
     die "Link 'text' attribute is required" unless $self->text;
 }
 
-=method new_from_element( $element )
+=method new_from_element
+
+    my $link = Statocles::Link->new_from_element( $dom_elem );
 
 Construct a new Statocles::Link out of a Mojo::DOM element (either an <a> or a <link>).
 

@@ -17,9 +17,12 @@ has path => (
     default => sub { Path::Tiny->new( '.' ) },
 );
 
-=method deploy( FROM_STORE, MESSAGE )
+=method deploy
 
-Deploy the site, copying from the given store.
+    my @paths = $deploy->deploy( $from_store, $message );
+
+Deploy the site, copying from the given L<from_store|Statocles::Store> with the
+given commit message (if applicable). Returns the paths that were deployed.
 
 =cut
 

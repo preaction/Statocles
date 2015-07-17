@@ -8,7 +8,9 @@ our @EXPORT_OK = qw(
     dircopy
 );
 
-=sub dircopy $source, $destination;
+=sub dircopy
+
+    dircopy $source, $destination;
 
 Copy everything in $source to $destination, recursively.
 

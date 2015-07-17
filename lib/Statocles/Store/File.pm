@@ -53,7 +53,9 @@ has document_extensions => (
 
 All the L<documents|Statocles::Document> currently read by this store.
 
-=method clear()
+=method clear
+
+    $store->clear;
 
 Clear the cached documents in this Store.
 
@@ -95,9 +97,12 @@ sub DEMOLISH {
     }
 }
 
-=method read_documents()
+=method read_documents
 
-Read the directory C<path> and create the L<document|Statocles::Document> objects inside.
+    my $docs = $store->read_documents;
+
+Read the directory C<path> and create the L<document
+objects|Statocles::Document> inside.  Returns an arrayref of document objects.
 
 =cut
 
@@ -131,7 +136,9 @@ sub _is_owned_path {
     return 1;
 }
 
-=method read_document( path )
+=method read_document
+
+    my $doc = $store->read_document( $path )
 
 Read a single L<document|Statocles::Document> in Markdown with optional YAML
 frontmatter.
@@ -146,7 +153,9 @@ sub read_document {
     return Statocles::Document->new( %doc, path => $path );
 }
 
-=method parse_frontmatter( $from, $content )
+=method parse_frontmatter
+
+    my %doc_attrs = $store->parse_frontmatter( $from, $content )
 
 Parse a document with YAML frontmatter. $from is a string identifying where the
 content comes from (a path or other identifier). $content is the content to
@@ -212,10 +221,12 @@ sub parse_frontmatter {
     return %$doc;
 }
 
-=method write_document( $path, $doc )
+=method write_document
 
-Write a L<document|Statocles::Document> to the store. Returns the full path to
-the newly-updated document.
+    my $full_path = $store->write_document( $path, $doc );
+
+Write a L<document|Statocles::Document> to the store at the given store path.
+Returns the full path to the newly-updated document.
 
 The document is written in Frontmatter format.
 
@@ -254,7 +265,9 @@ sub _freeze_document {
     return $doc;
 }
 
-=method is_document( $path )
+=method is_document
+
+    my $bool = $store->is_document( $path );
 
 Returns true if the path looks like a document path (matches the L</document_extensions>).
 
@@ -266,7 +279,9 @@ sub is_document {
     return $path =~ /[.](?:$match)$/;
 }
 
-=method read_file( $path )
+=method read_file
+
+    my $content = $store->read_file( $path )
 
 Read the file from the given C<path>.
 
@@ -278,7 +293,9 @@ sub read_file {
     return $self->path->child( $path )->slurp_utf8;
 }
 
-=method has_file( $path )
+=method has_file
+
+    my $bool = $store->has_file( $path )
 
 Returns true if a file exists with the given C<path>.
 
@@ -292,7 +309,12 @@ sub has_file {
     return $self->path->child( $path )->is_file;
 }
 
-=method find_files( %opt )
+=method find_files
+
+    my $iter = $store->find_files( %opt )
+    while ( my $path = $iter->() ) {
+        # ...
+    }
 
 Returns an iterator that, when called, produces a single path suitable to be passed
 to L<read_file>.
@@ -320,7 +342,9 @@ sub find_files {
     };
 }
 
-=method open_file( $path )
+=method open_file
+
+    my $fh = $store->open_file( $path )
 
 Open the file with the given path. Returns a filehandle.
 
@@ -333,7 +357,9 @@ sub open_file {
     return $self->path->child( $path )->openr_raw;
 }
 
-=method write_file( $path, $content )
+=method write_file
+
+    $store->write_file( $path, $content );
 
 Write the given C<content> to the given C<path>. This is mostly used to write
 out L<page objects|Statocles::Page>.

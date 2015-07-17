@@ -77,7 +77,9 @@ has _post_pages => (
     default => sub { [] },
 );
 
-=method command( app_name, args )
+=method command
+
+    my $exitval = $app->command( $app_name, @args );
 
 Run a command on this app. The app name is used to build the help, so
 users get exactly what they need to run.
@@ -186,7 +188,9 @@ ENDHELP
     return 0;
 }
 
-=method make_slug( $title )
+=method make_slug
+
+    my $slug = $app->make_slug( $title );
 
 Given a post title, remove special characters to create a slug.
 
@@ -198,9 +202,11 @@ sub make_slug {
     return lc $slug;
 }
 
-=method post_pages()
+=method post_pages
 
-Get the individual post Statocles::Page objects.
+    my @pages = $app->post_pages;
+
+Get the individual post L<Statocles::Page> objects.
 
 =cut
 
@@ -211,9 +217,13 @@ sub post_pages {
     return @pages;
 }
 
-=method post_files()
+=method post_files
 
-Get all the post collateral files.
+    my @pages = $app->post_files;
+
+Get all the post collateral files as L<Statocles::Page> objects. Markdown
+files will be created as L<Statocles::Page::Document> objects, any other files
+will be L<Statocles::Page::File> objects.
 
 =cut
 
@@ -315,10 +325,12 @@ sub _make_post_page {
     );
 }
 
-=method index()
+=method index
 
-Get the index page (a L<list page|Statocles::Page::List>) for this application.
-This includes all the relevant feed pages.
+    my @pages = $app->index( @post_pages );
+
+Build the index page (a L<list page|Statocles::Page::List>) and all related feed pages
+out of the given post pages (built from L<the post_pages method|/post_pages>).
 
 =cut
 
@@ -399,9 +411,13 @@ sub index {
     return ( @pages, @feed_pages );
 }
 
-=method tag_pages()
+=method tag_pages
 
-Get L<pages|Statocles::Page> for the tags in the blog post documents.
+    my @pages = $app->tag_pages( @post_pages );
+
+Get L<pages|Statocles::Page> for the tags in the given blog post documents
+(build from L<the post_pages method|/post_pages>, including relevant feed
+pages.
 
 =cut
 
@@ -467,7 +483,9 @@ sub tag_pages {
     return @pages;
 }
 
-=method pages()
+=method pages
+
+    my @pages = $app->pages;
 
 Get all the L<pages|Statocles::Page> for this application.
 
@@ -483,7 +501,9 @@ sub pages {
     );
 }
 
-=method tags()
+=method tags
+
+    my @links = $app->tags;
 
 Get a set of L<link objects|Statocles::Link> suitable for creating a list of
 tag links. The common attributes are:
@@ -517,7 +537,9 @@ sub _tag_url {
     return $tag;
 }
 
-=method recent_posts( $count, %filter )
+=method recent_posts
+
+    my @pages = $app->recent_posts( $count, %filter );
 
 Get the last $count recent posts for this blog. Useful for templates and site
 index pages.
@@ -525,7 +547,13 @@ index pages.
 %filter is an optional set of filters to apply to only show recent posts
 matching the given criteria. The following filters are available:
 
-    tags        -> (string) Only show posts with the given tag
+=over 4
+
+=item tags
+
+(string) Only show posts with the given tag
+
+=back
 
 =cut
 
@@ -552,9 +580,12 @@ sub recent_posts {
     return @pages;
 }
 
-=method page_url( page )
+=method page_url
 
-Return the absolute URL to this page, removing the "/index.html" if necessary.
+    my $url = $app->page_url( $page )
+
+Return the absolute URL to this L<page object|Statocles::Page>, removing the
+"/index.html" if necessary.
 
 =cut
 

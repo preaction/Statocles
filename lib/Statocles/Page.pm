@@ -222,6 +222,8 @@ has search_priority => (
 
 =method vars
 
+    my %vars = $page->vars;
+
 Get extra template variables for this page
 
 =cut
@@ -230,8 +232,11 @@ sub vars { }
 
 =method render
 
+    my $html = $page->render( %vars );
+
 Render the page, using the L<template|Statocles::Page/template> and wrapping
-with the L<layout|Statocles::Page/layout>.
+with the L<layout|Statocles::Page/layout>. Give any extra C<%vars> to the
+template, layout, and page C<content> method (if applicable).
 
 =cut
 
@@ -246,6 +251,7 @@ sub render {
     );
 
     my $content = $self->template->render(
+        # XXX: This is suboptimal. Isn't vars() enough?
         ( $self->can( 'content' ) ? ( content => $self->content( %vars ) ) : () ),
         %vars,
     );
@@ -256,7 +262,10 @@ sub render {
     );
 }
 
-=method links( KEY )
+=method links
+
+    my @links = $page->links( $key );
+    my $link = $page->links( $key );
 
 Get the links set for the given key. See L<the links attribute|/links> for some
 commonly-used keys. Returns a list of L<link objects|Statocles::Link>. In
@@ -270,7 +279,9 @@ sub links {
     return wantarray ? @links : $links[0];
 }
 
-=method basename()
+=method basename
+
+    my $name = $page->basename;
 
 Get the base file name of this page. Everything after the last C</>.
 
@@ -281,7 +292,9 @@ sub basename {
     return $self->path->basename;
 }
 
-=method dirname()
+=method dirname
+
+    my $dir = $page->dirname;
 
 Get the full directory to this page. Anything that isn't part of L</basename>.
 

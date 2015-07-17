@@ -20,7 +20,9 @@ has store => (
 
 =method pages
 
-Get the L<pages|Statocles::Page> for this app.
+    my @pages = $app->pages;
+
+Get the L<page objects|Statocles::Page> for this app.
 
 =cut
 

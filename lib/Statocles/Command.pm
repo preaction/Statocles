@@ -21,7 +21,9 @@ has site => (
     isa => InstanceOf['Statocles::Site'],
 );
 
-=method main( @argv )
+=method main
+
+    my $exitval = $cmd->main( @argv );
 
 Run the command given in @argv. See L<statocles> for a list of commands and
 options.

@@ -43,7 +43,9 @@ has url_root => (
     required => 1,
 );
 
-=method pages()
+=method pages
+
+    my @pages = $app->pages;
 
 Get the pages for this app. Must return a list of L<Statocles::Page> objects.
 
@@ -72,10 +74,12 @@ around pages => sub {
     return @pages;
 };
 
-=method url( $url )
+=method url
 
-Get a URL to a page in this application. Prepends the L</url_root> if necessary. Strips
-"index.html" if possible.
+    my $app_url = $app->url( $path );
+
+Get a URL to a page in this application. Prepends the app's L<url_root
+attribute|/url_root> if necessary. Strips "index.html" if possible.
 
 =cut
 
@@ -91,10 +95,13 @@ sub url {
     return join "/", $base, $url;
 }
 
-=method link( %args )
+=method link
 
-Create a link to a page in this application. C<%args> are attributes to be given to
-L<Statocles::Link> constructor.
+    my $link = $app->link( %args )
+
+Create a link to a page in this application. C<%args> are attributes to be
+given to L<Statocles::Link> constructor. The app's L<url_root
+attribute|/url_root> is prepended, if necessary.
 
 =cut
 

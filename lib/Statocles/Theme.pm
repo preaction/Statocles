@@ -72,7 +72,9 @@ around BUILDARGS => sub {
     return $args;
 };
 
-=method read( $section => $name )
+=method read
+
+    my $tmpl = $theme->read( $section => $name )
 
 Read the template for the given C<section> and C<name> and create the
 L<template|Statocles::Template> object.
@@ -98,7 +100,9 @@ sub read {
     return $self->build_template( $path, $content );
 }
 
-=method build_template( $path, $content  )
+=method build_template
+
+    my $tmpl = $theme->build_template( $path, $content  )
 
 Build a new L<Statocles::Template> object with the given C<path> and C<content>.
 
@@ -114,7 +118,9 @@ sub build_template {
     );
 }
 
-=method template( $section => $name )
+=method template
+
+    my $tmpl = $theme->template( $section => $name )
 
 Get the L<template|Statocles::Template> from the given C<section> with the
 given C<name>.

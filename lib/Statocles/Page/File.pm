@@ -39,7 +39,9 @@ sub vars { die "Unimplemented" }
 
 =method render
 
-Return
+    my $fh = $page->render;
+
+Return the filehandle to the file containing the content for this page.
 
 =cut
 

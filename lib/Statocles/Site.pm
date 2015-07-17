@@ -229,7 +229,9 @@ sub BUILD {
     }
 }
 
-=method app( name )
+=method app
+
+    my $app = $site->app( $name );
 
 Get the app with the given C<name>.
 
@@ -240,9 +242,12 @@ sub app {
     return $self->apps->{ $name };
 }
 
-=method nav( name )
+=method nav
 
-Get the list of links for the given nav. Each link is a L<Statocles::Link> object.
+    my @links = $site->nav( $key );
+
+Get the list of links for the given nav C<key>. Each link is a
+L<Statocles::Link> object.
 
     title - The title of the link
     href - The href of the link
@@ -257,6 +262,8 @@ sub nav {
 }
 
 =method build
+
+    $site->build;
 
 Build the site in its build location.
 
@@ -450,6 +457,8 @@ sub build {
 
 =method deploy
 
+    $site->deploy;
+
 Deploy the site to its destination.
 
 =cut
@@ -462,7 +471,9 @@ sub deploy {
     $self->_clear_write_deploy;
 }
 
-=method url( path )
+=method url
+
+    my $url = $site->url( $page_url );
 
 Get the full URL to the given path by prepending the C<base_url>.
 

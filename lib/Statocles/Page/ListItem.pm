@@ -32,7 +32,7 @@ has rewrite_mode => (
     default => 'absolute',
 );
 
-=method DOES( $class )
+=method DOES
 
 This page proxies everything necessary to be a page object, without consuming
 the L<page role|Statocles::Page>.
@@ -70,7 +70,9 @@ sub AUTOLOAD {
     return $method->( $self->page, @args );
 }
 
-=method content()
+=method content
+
+    my $html = $page->content;
 
 Get the content for this page. Rewrite any links, images, or other according to the
 L<rewrite_mode attributes|/rewrite_mode>.
@@ -110,7 +112,9 @@ sub content {
     return $self->_rewrite_content( $content );
 }
 
-=method sections()
+=method sections
+
+    my @sections = $page->sections;
 
 Get a list of content divided into sections. The Markdown "---" marker divides
 sections. Rewrite any links, images, or other according to the L<rewrite_mode

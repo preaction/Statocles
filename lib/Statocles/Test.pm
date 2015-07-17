@@ -13,7 +13,9 @@ our @EXPORT_OK = qw(
     build_temp_site
 );
 
-=sub build_test_site( %site_args )
+=sub build_test_site
+
+    my $site = build_test_site( %site_args )
 
 Build a site for testing. The build and deploy will be set correctly to temporary
 directories. C<%site_args> will be given to the L<Statocles::Site|Statocles::Site>
@@ -47,12 +49,12 @@ sub build_test_site {
     );
 }
 
-=sub build_test_site_apps( $share_dir, %site_args )
+=sub build_test_site_apps
+
+    my ( $site, $build_dir, $deploy_dir ) = build_test_site_apps( $share_dir, %site_args );
 
 Build a site for testing, with some apps. Returns the site, the build dir, and the
 deploy dir.
-
-    my ( $site, $build_dir, $deploy_dir ) = build_test_site_apps( $share_dir, %site_args );
 
 =cut
 
@@ -104,7 +106,9 @@ sub build_test_site_apps {
     );
 }
 
-=sub test_constructor( class, args )
+=sub test_constructor
+
+    test_constructor( $class, %args )
 
 Test an object constructor. C<class> is the class to test. C<args> is a list of
 name/value pairs with the following keys:
@@ -167,7 +171,9 @@ sub test_constructor {
     };
 }
 
-=sub test_pages( site, app, tests )
+=sub test_pages
+
+    test_pages( $site, $app, %tests )
 
 Test the pages of the given app. C<tests> is a set of pairs of C<path> => C<callback>
 to test the pages returned by the app.
@@ -241,6 +247,8 @@ sub test_pages {
 }
 
 =sub build_temp_site
+
+    my ( $tmpdir, $config_fn, $config ) = build_temp_site( $share_dir );
 
 Build a config file so we can test config loading and still use
 temporary directories
