@@ -73,6 +73,12 @@ sub build_test_site_apps {
             page_size => 2,
         );
 
+        require Statocles::App::Plain;
+        my $plain = Statocles::App::Plain->new(
+            store => $share_dir->child( qw( app plain ) ),
+            url_root => '/',
+        );
+
         require Statocles::App::Static;
         my $static = Statocles::App::Static->new(
             store => $share_dir->child( qw( app static ) ),
@@ -82,6 +88,7 @@ sub build_test_site_apps {
         $site_args{apps} = {
             blog => $blog,
             static => $static,
+            plain => $plain,
         };
     }
 

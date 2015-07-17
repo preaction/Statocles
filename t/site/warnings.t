@@ -48,6 +48,10 @@ subtest 'app generates two pages with the same path' => sub {
         url_root => '/',
         pages => [
             Statocles::Page::Plain->new(
+                path => '/index.html',
+                content => 'Index',
+            ),
+            Statocles::Page::Plain->new(
                 path => '/foo.html',
                 content => 'Foo',
             ),

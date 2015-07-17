@@ -65,15 +65,16 @@ has apps => (
 
 =attr index
 
-The page path to use for the site index. Make sure to include the leading
-slash (but C</index.html> is optional).
+The page path to use for the site index. Make sure to include the leading slash
+(but C</index.html> is optional). Defaults to C</>, so any app with C<url_root>
+of C</> will be the index.
 
 =cut
 
 has index => (
     is => 'ro',
     isa => Str,
-    default => sub { '' },
+    default => sub { '/' },
 );
 
 =attr nav

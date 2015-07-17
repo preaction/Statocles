@@ -21,6 +21,7 @@ test_constructor(
     'Statocles::Site',
     required => \%required,
     default => {
+        index => '/',
         theme => Statocles::Theme->new( store => '::default' ),
         build_store => Statocles::Store::File->new( path => '.statocles/build' ),
     },
