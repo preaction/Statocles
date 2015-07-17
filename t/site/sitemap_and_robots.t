@@ -6,7 +6,7 @@ my $SHARE_DIR = path( __DIR__, '..', 'share' );
 
 my ( $site, $build_dir, $deploy_dir ) = build_test_site_apps(
     $SHARE_DIR,
-    index => 'blog',
+    index => '/blog',
     base_url => 'http://example.com',
 );
 

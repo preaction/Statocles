@@ -4,7 +4,11 @@ use Statocles::Plugin::LinkCheck;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
 
 subtest 'check links' => sub {
-    my ( $site, $build_dir, $deploy_dir ) = build_test_site_apps( $SHARE_DIR );
+    my $log_str;
+    open my $log_fh, '>', \$log_str;
+    my $log = Mojo::Log->new( level => 'warn', handle => $log_fh );
+
+    my ( $site, $build_dir, $deploy_dir ) = build_test_site_apps( $SHARE_DIR, log => $log );
     my $plugin = Statocles::Plugin::LinkCheck->new;
     $site->on( 'build', sub { $plugin->check_pages( @_ ) } );
 
@@ -27,7 +31,11 @@ subtest 'check links' => sub {
 subtest 'ignore patterns' => sub {
 
     subtest 'prefix matching' => sub {
-        my ( $site, $build_dir, $deploy_dir ) = build_test_site_apps( $SHARE_DIR );
+        my $log_str;
+        open my $log_fh, '>', \$log_str;
+        my $log = Mojo::Log->new( level => 'warn', handle => $log_fh );
+
+        my ( $site, $build_dir, $deploy_dir ) = build_test_site_apps( $SHARE_DIR, log => $log );
         my $plugin = Statocles::Plugin::LinkCheck->new(
             ignore => [
                 '/does_not_exist',
@@ -49,7 +57,11 @@ subtest 'ignore patterns' => sub {
     };
 
     subtest 'regex pattern' => sub {
-        my ( $site, $build_dir, $deploy_dir ) = build_test_site_apps( $SHARE_DIR );
+        my $log_str;
+        open my $log_fh, '>', \$log_str;
+        my $log = Mojo::Log->new( level => 'warn', handle => $log_fh );
+
+        my ( $site, $build_dir, $deploy_dir ) = build_test_site_apps( $SHARE_DIR, log => $log );
         my $plugin = Statocles::Plugin::LinkCheck->new(
             ignore => [
                 '.*/does_not_exist',
