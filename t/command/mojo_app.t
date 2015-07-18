@@ -82,24 +82,17 @@ subtest 'root site' => sub {
                 $doc->{content} = "This is some new content for our blog!";
                 $store->write_document( $path, $doc );
 
-                my $ioloop = Mojo::IOLoop->singleton;
-                # It sucks that we have to wait like this...
-                my $wait = $ioloop->timer( 2, sub {
-                    # Must stop before running the test because the test will
-                    # start the loop again
-                    Mojo::IOLoop->stop;
-
-                    # Check that /index.html gets the right content
-                    $t->get_ok( "/index.html" )
-                        ->status_is( 200 )
-                        ->content_is( $tmp->child( build_site => 'index.html' )->slurp_utf8 )
-                        ->content_like( qr{This is some new content for our blog!} )
-                        ->content_type_is( 'text/html;charset=UTF-8' )
-                        ;
-
-                } );
-
+                # Non-blocking start loop and wait 2
+                Mojo::IOLoop->timer( 2, sub { Mojo::IOLoop->stop } );
                 Mojo::IOLoop->start;
+
+                # Check that /index.html gets the right content
+                $t->get_ok( "/index.html" )
+                    ->status_is( 200 )
+                    ->content_is( $tmp->child( build_site => 'index.html' )->slurp_utf8 )
+                    ->content_like( qr{This is some new content for our blog!} )
+                    ->content_type_is( 'text/html;charset=UTF-8' )
+                    ;
             };
 
             subtest 'theme store' => sub {
@@ -109,46 +102,32 @@ subtest 'root site' => sub {
                 $tmpl =~ s{\Q</body>}{<p>Extra footer!</p></body>};
                 $store->write_file( $path, $tmpl );
 
-                my $ioloop = Mojo::IOLoop->singleton;
-                # It sucks that we have to wait like this...
-                my $wait = $ioloop->timer( 2, sub {
-                    # Must stop before running the test because the test will
-                    # start the loop again
-                    Mojo::IOLoop->stop;
-
-                    # Check that /index.html gets the right content
-                    $t->get_ok( "/index.html" )
-                        ->status_is( 200 )
-                        ->content_is( $tmp->child( build_site => 'index.html' )->slurp_utf8 )
-                        ->content_like( qr{<p>Extra footer!</p>} )
-                        ->content_type_is( 'text/html;charset=UTF-8' )
-                        ;
-
-                } );
-
+                # Non-blocking start loop and wait 2
+                Mojo::IOLoop->timer( 2, sub { Mojo::IOLoop->stop } );
                 Mojo::IOLoop->start;
+
+                # Check that /index.html gets the right content
+                $t->get_ok( "/index.html" )
+                    ->status_is( 200 )
+                    ->content_is( $tmp->child( build_site => 'index.html' )->slurp_utf8 )
+                    ->content_like( qr{<p>Extra footer!</p>} )
+                    ->content_type_is( 'text/html;charset=UTF-8' )
+                    ;
             };
 
             subtest 'build dir is ignored' => sub {
                 $tmp->child( 'build_site', 'index.html' )->spew_utf8( 'Trigger!' );
 
-                my $ioloop = Mojo::IOLoop->singleton;
-                # It sucks that we have to wait like this...
-                my $wait = $ioloop->timer( 2, sub {
-                    # Must stop before running the test because the test will
-                    # start the loop again
-                    Mojo::IOLoop->stop;
-
-                    # Check that /index.html gets the content we wrote, and was
-                    # not rebuilt
-                    $t->get_ok( "/index.html" )
-                        ->status_is( 200 )
-                        ->content_is( 'Trigger!' )
-                        ;
-
-                } );
-
+                # Non-blocking start loop and wait 2
+                Mojo::IOLoop->timer( 2, sub { Mojo::IOLoop->stop } );
                 Mojo::IOLoop->start;
+
+                # Check that /index.html gets the content we wrote, and was
+                # not rebuilt
+                $t->get_ok( "/index.html" )
+                    ->status_is( 200 )
+                    ->content_is( 'Trigger!' )
+                    ;
             };
 
         };
