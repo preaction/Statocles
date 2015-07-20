@@ -58,6 +58,10 @@ tags, and other information.
     tags: cookies, cinnamon
     ---
 
+Frontmatter is optional, but it's recommended that you have at least a title.
+Available frontmatter options are listed in the L<Statocles::Document
+attributes documentation|Statocles::Document/ATTRIBUTES>.
+
 =head2 Markdown
 
 Below the frontmatter, after the second C<--->, everything is
