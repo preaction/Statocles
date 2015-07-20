@@ -5,7 +5,7 @@ use Statocles::Base 'Class';
 
 =attr path
 
-The path to this document.
+The path to this document. This is not settable from the frontmatter.
 
 =cut
 
@@ -17,7 +17,7 @@ has path => (
 
 =attr title
 
-The title from this document.
+The title of this document.
 
 =cut
 
@@ -39,7 +39,8 @@ has author => (
 
 =attr content
 
-The raw content of this document, in markdown.
+The raw content of this document, in markdown. This is everything below
+the frontmatter.
 
 =cut
 
@@ -74,7 +75,7 @@ has tags => (
 
 Related links for this document. Links are used to build relationships
 to other web addresses. Link categories are named based on their
-relationship.
+relationship. Some possible categories are:
 
     alternate - The same document posted to another web site
 
@@ -164,3 +165,15 @@ L<Applications|Statocles::App> take documents to build
 L<pages|Statocles::Page>.
 
 This is the Model class in the Model-View-Controller pattern.
+
+=head1 SEE ALSO
+
+=over 4
+
+=item L<Statocles::Help::Content>
+
+The content guide describes how to edit content in Statocles sites, which are
+represented by Document objects.
+
+=back
+
