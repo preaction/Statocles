@@ -36,8 +36,15 @@ automatically open on the newly-created document.
 To creat a plain page using L<the plain app|Statocles::App::Plain>, we just have
 to create a new file:
 
+    ### Create /page/index.html
+    $ vim page/index.markdown
+
+    ### Create /page/about/index.html
     $ mkdir page/about
     $ vim page/about/index.markdown
+
+    ### Create /page/resume.html
+    $ vim page/resume.markdown
 
 =head2 Frontmatter
 
