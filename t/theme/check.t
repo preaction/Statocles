@@ -10,6 +10,7 @@ use Statocles::App::Blog;
 use Statocles::Site;
 use Statocles::Theme;
 use Statocles::Link;
+use Mojo::DOM;
 
 my $THEME_DIR = path( __DIR__, '..', '..', 'share', 'theme' );
 
@@ -102,6 +103,7 @@ my %app_vars = (
             doc => $documents[0],
         },
     },
+
     perldoc => {
         'pod.html.ep' => {
             %common_vars,
@@ -126,6 +128,7 @@ my %app_vars = (
             content => 'Fake content',
         },
     },
+
     site => {
         'layout.html.ep' => {
             %common_vars,
@@ -142,6 +145,21 @@ my %app_vars = (
     },
 );
 
+# These are individual template tests to ensure basic levels of app support
+# in the default themes
+my %content_tests = (
+    'site/layout.html.ep' => sub {
+        my ( $content ) = @_;
+        my $dom = Mojo::DOM->new( $content );
+        my $elem;
+        if ( ok $elem = $dom->at( 'meta[name=generator]' ), 'meta generator exists' ) {
+            is $elem->attr( 'content' ), "Statocles $Statocles::VERSION",
+                'generator has name and version';
+        }
+    },
+);
+
+
 my @theme_dirs = $THEME_DIR->children;
 for my $theme_dir ( @theme_dirs ) {
     subtest $theme_dir->basename => sub {
@@ -157,9 +175,15 @@ for my $theme_dir ( @theme_dirs ) {
             my $name = $path->basename;
             my $app = $path->parent->basename;
             my %args = %{ $app_vars{ $app }{ $name } };
+            my $content;
             lives_ok {
-                $tmpl->render( %args );
+                $content = $tmpl->render( %args );
             } join " - ", $app, $name;
+
+            my $rel_path = $path->relative( $theme_dir );
+            if ( my $test = $content_tests{ $rel_path } ) {
+                subtest "content test for $rel_path" => $test, $content;
+            }
         }
     };
 }
