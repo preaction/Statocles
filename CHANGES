@@ -1,6 +1,22 @@
 Changelog for Statocles
 
-0.052 2015-07-13T05:49:19
+0.053 2015-07-20T05:29:14
+ - expand the document documentation a bit more
+ - link to frontmatter options in the content guide
+ - add more examples of plain pages to content guide
+ - add meta generator information to default themes
+ - fix mojo ioloop tests when testing file events
+ - move method signature inside documentation body
+ - set '/' as the default site index
+ - silence log warnings from tests
+ - add upgrading and policy modules to help index
+ - make -v with no arguments show version information
+ - fix full urls falsely rewritten on list pages
+ - fix index to point to path
+ - update theme from statocles default
+ - add release v0.052 announcement
+
+0.052 2015-07-13T05:49:19Z
  - enhance the docs about the site index property
  - add deprecation policy and upgrading guide
  - allow site to be built with no deploy dir
