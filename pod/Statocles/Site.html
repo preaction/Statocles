@@ -145,7 +145,7 @@
 
 <h2 id="index">index</h2>
 
-<p>The page path to use for the site index. Make sure to include the leading slash (but <code>/index.html</code> is optional).</p>
+<p>The page path to use for the site index. Make sure to include the leading slash (but <code>/index.html</code> is optional). Defaults to <code>/</code>, so any app with <code>url_root</code> of <code>/</code> will be the index.</p>
 
 <h2 id="nav">nav</h2>
 
@@ -197,13 +197,17 @@
 
 <p>Register this site as the global site.</p>
 
-<h2 id="app-name">app( name )</h2>
+<h2 id="app">app</h2>
+
+<pre><code>    my $app = $site-&gt;app( $name );</code></pre>
 
 <p>Get the app with the given <code>name</code>.</p>
 
-<h2 id="nav-name">nav( name )</h2>
+<h2 id="nav1">nav</h2>
 
-<p>Get the list of links for the given nav. Each link is a <a href="/Statocles/pod/Statocles/Link.html">Statocles::Link</a> object.</p>
+<pre><code>    my @links = $site-&gt;nav( $key );</code></pre>
+
+<p>Get the list of links for the given nav <code>key</code>. Each link is a <a href="/Statocles/pod/Statocles/Link.html">Statocles::Link</a> object.</p>
 
 <pre><code>    title - The title of the link
     href - The href of the link</code></pre>
@@ -212,13 +216,19 @@
 
 <h2 id="build">build</h2>
 
+<pre><code>    $site-&gt;build;</code></pre>
+
 <p>Build the site in its build location.</p>
 
 <h2 id="deploy1">deploy</h2>
 
+<pre><code>    $site-&gt;deploy;</code></pre>
+
 <p>Deploy the site to its destination.</p>
 
-<h2 id="url-path">url( path )</h2>
+<h2 id="url">url</h2>
+
+<pre><code>    my $url = $site-&gt;url( $page_url );</code></pre>
 
 <p>Get the full URL to the given path by prepending the <code>base_url</code>.</p>
 

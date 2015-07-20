@@ -130,8 +130,15 @@ automatically open on the newly-created document.
 To creat a plain page using L&lt;the plain app|Statocles::App::Plain&gt;, we just have
 to create a new file:
 
+    ### Create /page/index.html
+    $ vim page/index.markdown
+
+    ### Create /page/about/index.html
     $ mkdir page/about
     $ vim page/about/index.markdown
+
+    ### Create /page/resume.html
+    $ vim page/resume.markdown
 
 =head2 Frontmatter
 
@@ -144,6 +151,10 @@ tags, and other information.
     author: preaction
     tags: cookies, cinnamon
     ---
+
+Frontmatter is optional, but it&#39;s recommended that you have at least a title.
+Available frontmatter options are listed in the L&lt;Statocles::Document
+attributes documentation|Statocles::Document/ATTRIBUTES&gt;.
 
 =head2 Markdown
 

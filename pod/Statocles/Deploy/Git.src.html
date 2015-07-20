@@ -130,9 +130,12 @@ has remote =&gt; (
     default =&gt; sub { &#39;origin&#39; },
 );
 
-=method deploy( FROM_STORE, MESSAGE )
+=method deploy
 
-Deploy the site, copying from the given store. Returns the files deployed.
+    my @paths = $deploy-&gt;deploy( $from_store, $message );
+
+Deploy the site, copying from the given L&lt;from_store|Statocles::Store&gt; with the
+given commit message (if applicable). Returns the paths that were deployed.
 
 =cut
 

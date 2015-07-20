@@ -133,7 +133,9 @@ sub vars { die &quot;Unimplemented&quot; }
 
 =method render
 
-Return
+    my $fh = $page-&gt;render;
+
+Return the filehandle to the file containing the content for this page.
 
 =cut
 

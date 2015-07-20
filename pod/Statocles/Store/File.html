@@ -139,43 +139,64 @@
 
 <h1 id="METHODS">METHODS</h1>
 
-<h2 id="clear">clear()</h2>
+<h2 id="clear">clear</h2>
+
+<pre><code>    $store-&gt;clear;</code></pre>
 
 <p>Clear the cached documents in this Store.</p>
 
-<h2 id="read_documents">read_documents()</h2>
+<h2 id="read_documents">read_documents</h2>
 
-<p>Read the directory <code>path</code> and create the <a href="/Statocles/pod/Statocles/Document.html">document</a> objects inside.</p>
+<pre><code>    my $docs = $store-&gt;read_documents;</code></pre>
 
-<h2 id="read_document-path">read_document( path )</h2>
+<p>Read the directory <code>path</code> and create the <a href="/Statocles/pod/Statocles/Document.html">document objects</a> inside. Returns an arrayref of document objects.</p>
+
+<h2 id="read_document">read_document</h2>
+
+<pre><code>    my $doc = $store-&gt;read_document( $path )</code></pre>
 
 <p>Read a single <a href="/Statocles/pod/Statocles/Document.html">document</a> in Markdown with optional YAML frontmatter.</p>
 
-<h2 id="parse_frontmatter-from-content">parse_frontmatter( $from, $content )</h2>
+<h2 id="parse_frontmatter">parse_frontmatter</h2>
+
+<pre><code>    my %doc_attrs = $store-&gt;parse_frontmatter( $from, $content )</code></pre>
 
 <p>Parse a document with YAML frontmatter. $from is a string identifying where the content comes from (a path or other identifier). $content is the content to parse for frontmatter.</p>
 
-<h2 id="write_document-path-doc">write_document( $path, $doc )</h2>
+<h2 id="write_document">write_document</h2>
 
-<p>Write a <a href="/Statocles/pod/Statocles/Document.html">document</a> to the store. Returns the full path to the newly-updated document.</p>
+<pre><code>    my $full_path = $store-&gt;write_document( $path, $doc );</code></pre>
+
+<p>Write a <a href="/Statocles/pod/Statocles/Document.html">document</a> to the store at the given store path. Returns the full path to the newly-updated document.</p>
 
 <p>The document is written in Frontmatter format.</p>
 
-<h2 id="is_document-path">is_document( $path )</h2>
+<h2 id="is_document">is_document</h2>
+
+<pre><code>    my $bool = $store-&gt;is_document( $path );</code></pre>
 
 <p>Returns true if the path looks like a document path (matches the <a href="#document_extensions">&quot;document_extensions&quot;</a>).</p>
 
-<h2 id="read_file-path">read_file( $path )</h2>
+<h2 id="read_file">read_file</h2>
+
+<pre><code>    my $content = $store-&gt;read_file( $path )</code></pre>
 
 <p>Read the file from the given <code>path</code>.</p>
 
-<h2 id="has_file-path">has_file( $path )</h2>
+<h2 id="has_file">has_file</h2>
+
+<pre><code>    my $bool = $store-&gt;has_file( $path )</code></pre>
 
 <p>Returns true if a file exists with the given <code>path</code>.</p>
 
 <p>NOTE: This should not be used to check for directories, as not all stores have directories.</p>
 
-<h2 id="find_files-opt">find_files( %opt )</h2>
+<h2 id="find_files">find_files</h2>
+
+<pre><code>    my $iter = $store-&gt;find_files( %opt )
+    while ( my $path = $iter-&gt;() ) {
+        # ...
+    }</code></pre>
 
 <p>Returns an iterator that, when called, produces a single path suitable to be passed to <a href="https://metacpan.org/pod/read_file" rel="external">read_file</a>.</p>
 
@@ -184,13 +205,17 @@
 <pre><code>    include_documents      - If true, will include files that look like documents.
                              Defaults to false.</code></pre>
 
-<h2 id="open_file-path">open_file( $path )</h2>
+<h2 id="open_file">open_file</h2>
+
+<pre><code>    my $fh = $store-&gt;open_file( $path )</code></pre>
 
 <p>Open the file with the given path. Returns a filehandle.</p>
 
 <p>The filehandle opened is using raw bytes, not UTF-8 characters.</p>
 
-<h2 id="write_file-path-content">write_file( $path, $content )</h2>
+<h2 id="write_file">write_file</h2>
+
+<pre><code>    $store-&gt;write_file( $path, $content );</code></pre>
 
 <p>Write the given <code>content</code> to the given <code>path</code>. This is mostly used to write out <a href="/Statocles/pod/Statocles/Page.html">page objects</a>.</p>
 

@@ -191,21 +191,32 @@
 
 <h2 id="vars">vars</h2>
 
+<pre><code>    my %vars = $page-&gt;vars;</code></pre>
+
 <p>Get extra template variables for this page</p>
 
 <h2 id="render">render</h2>
 
-<p>Render the page, using the <a href="/Statocles/pod/Statocles/Page#template.html">template</a> and wrapping with the <a href="/Statocles/pod/Statocles/Page#layout.html">layout</a>.</p>
+<pre><code>    my $html = $page-&gt;render( %vars );</code></pre>
 
-<h2 id="links-KEY">links( KEY )</h2>
+<p>Render the page, using the <a href="/Statocles/pod/Statocles/Page#template.html">template</a> and wrapping with the <a href="/Statocles/pod/Statocles/Page#layout.html">layout</a>. Give any extra <code>%vars</code> to the template, layout, and page <code>content</code> method (if applicable).</p>
+
+<h2 id="links1">links</h2>
+
+<pre><code>    my @links = $page-&gt;links( $key );
+    my $link = $page-&gt;links( $key );</code></pre>
 
 <p>Get the links set for the given key. See <a href="#links">the links attribute</a> for some commonly-used keys. Returns a list of <a href="/Statocles/pod/Statocles/Link.html">link objects</a>. In scalar context, returns the first link in the list.</p>
 
-<h2 id="basename">basename()</h2>
+<h2 id="basename">basename</h2>
+
+<pre><code>    my $name = $page-&gt;basename;</code></pre>
 
 <p>Get the base file name of this page. Everything after the last <code>/</code>.</p>
 
-<h2 id="dirname">dirname()</h2>
+<h2 id="dirname">dirname</h2>
+
+<pre><code>    my $dir = $page-&gt;dirname;</code></pre>
 
 <p>Get the full directory to this page. Anything that isn&#39;t part of <a href="#basename">&quot;basename&quot;</a>.</p>
 

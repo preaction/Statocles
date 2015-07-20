@@ -2,10 +2,34 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://preaction.github.io/Statocles/blog/</id>
     <title>Statocles</title>
-    <updated>2015-07-13T01:07:30Z</updated>
+    <updated>2015-07-20T00:39:39Z</updated>
     <link href="http://preaction.github.io/Statocles/blog/index.atom" rel="self" />
     <link href="http://preaction.github.io/Statocles/blog/" rel="alternate" />
-    <generator version="0.052">Statocles</generator>
+    <generator version="0.053">Statocles</generator>
+    <entry>
+        <id>http://preaction.github.io/Statocles/blog/2015/07/20/release-v0-053/</id>
+        <title>Release v0.053</title>
+        <link href="http://preaction.github.io/Statocles/blog/2015/07/20/release-v0-053/" rel="alternate" />
+        <content type="html"><![CDATA[
+            <p>A bunch of documentation fixes this week, including some additions to
+<a href="http://preaction.github.io/Statocles/pod/Statocles/Help/Content.html">the content guide</a> to help users get
+acclimated to managing content.</p>
+
+<p>A couple bugfixes as well: Full URLs in blog posts are no longer broken
+on the main page, and some tests that could have prevented installation
+have been fixed (thanks to <a href="http://metacpan.org/author/JBERGER">Joel
+Berger</a> for both of these).</p>
+
+<p>Full changelog below...</p>
+
+                <p><a href="http://preaction.github.io/Statocles/blog/2015/07/20/release-v0-053/#section-2">Continue reading...</a></p>
+            <p>Tags:
+                <a href="/blog/tag/release/">release</a>
+            </p>
+        ]]></content>
+        <updated>2015-07-20T00:00:00Z</updated>
+        <category term="release" />
+    </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2015/07/13/release-v0-052/</id>
         <title>Release v0.052</title>
@@ -51,7 +75,7 @@ pass in <code>include_documents =&gt; 1</code> to the method.</p>
 
 <p>That change was made to support &quot;.md&quot; as a document file extension. Previously, only
 &quot;.markdown&quot; was supported. This is a work-in-progress, so if there are any bugs,
-<a href="http://preaction.github.io/Statocles/blog/2015/07/06/release-v0-051/http://github.com/preaction/Statocles/issues">file a bug report</a>.</p>
+<a href="http://github.com/preaction/Statocles/issues">file a bug report</a>.</p>
 
 <p>Full changelog below...</p>
 
@@ -95,7 +119,7 @@ using <a href="http://preaction.github.io/Statocles/pod/Statocles/App/Plain.html
 on the filesystem&#39;s ordering or some other unpredictable thing. Now, this is fixed,
 so the plain app can be safely used as the index.</p>
 
-<p>This will be fixed/changed completely to <a href="http://preaction.github.io/Statocles/blog/2015/06/23/release-v0-049/https://github.com/preaction/Statocles/issues/326">allow any page to be the index in a future
+<p>This will be fixed/changed completely to <a href="https://github.com/preaction/Statocles/issues/326">allow any page to be the index in a future
 version</a>.</p>
 
 <p>Additionally, some footer styles were added to the default theme.</p>
@@ -108,40 +132,6 @@ version</a>.</p>
             </p>
         ]]></content>
         <updated>2015-06-23T00:00:00Z</updated>
-        <category term="release" />
-    </entry>
-    <entry>
-        <id>http://preaction.github.io/Statocles/blog/2015/06/22/release-v0-048/</id>
-        <title>Release v0.048</title>
-        <link href="http://preaction.github.io/Statocles/blog/2015/06/22/release-v0-048/" rel="alternate" />
-        <content type="html"><![CDATA[
-            <p>Here starts the road to v1.0! Some breaking changes in this release:</p>
-
-<p>Statocles::Page::Feed is now removed. The functionality has been added to all
-pages, and all the feed templates have been updated accordingly. This means you
-must update your themes to grab the new feed templates.</p>
-
-<p>To fix a long-standing bug with blog content not showing up correctly on the
-list pages (index, tag lists), the
-<a href="http://preaction.github.io/Statocles/pod/Statocles/Page/ListItem.html">Statocles::Page::ListItem</a> class was added.
-This class proxies another page and rewrites its content to survive intact
-inside a list page.</p>
-
-<p>Some minor things:</p>
-
-<p>External perldoc links are now explicitly labelled as such with a
-<a href="http://preaction.github.io/Statocles/blog/2015/06/22/release-v0-048/http://fontawesome.io">FontAwesome</a> icon.</p>
-
-<p>Some doc updates to start documenting the <a href="http://preaction.github.io/Statocles/pod/Statocles/App.html">App API</a>.</p>
-
-<p>Full changelog below...</p>
-
-                <p><a href="http://preaction.github.io/Statocles/blog/2015/06/22/release-v0-048/#section-2">Continue reading...</a></p>
-            <p>Tags:
-                <a href="/blog/tag/release/">release</a>
-            </p>
-        ]]></content>
-        <updated>2015-06-22T00:00:00Z</updated>
         <category term="release" />
     </entry>
 </feed>

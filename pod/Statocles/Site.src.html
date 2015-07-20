@@ -159,15 +159,16 @@ has apps =&gt; (
 
 =attr index
 
-The page path to use for the site index. Make sure to include the leading
-slash (but C&lt;/index.html&gt; is optional).
+The page path to use for the site index. Make sure to include the leading slash
+(but C&lt;/index.html&gt; is optional). Defaults to C&lt;/&gt;, so any app with C&lt;url_root&gt;
+of C&lt;/&gt; will be the index.
 
 =cut
 
 has index =&gt; (
     is =&gt; &#39;ro&#39;,
     isa =&gt; Str,
-    default =&gt; sub { &#39;&#39; },
+    default =&gt; sub { &#39;/&#39; },
 );
 
 =attr nav
@@ -322,7 +323,9 @@ sub BUILD {
     }
 }
 
-=method app( name )
+=method app
+
+    my $app = $site-&gt;app( $name );
 
 Get the app with the given C&lt;name&gt;.
 
@@ -333,9 +336,12 @@ sub app {
     return $self-&gt;apps-&gt;{ $name };
 }
 
-=method nav( name )
+=method nav
 
-Get the list of links for the given nav. Each link is a L&lt;Statocles::Link&gt; object.
+    my @links = $site-&gt;nav( $key );
+
+Get the list of links for the given nav C&lt;key&gt;. Each link is a
+L&lt;Statocles::Link&gt; object.
 
     title - The title of the link
     href - The href of the link
@@ -350,6 +356,8 @@ sub nav {
 }
 
 =method build
+
+    $site-&gt;build;
 
 Build the site in its build location.
 
@@ -543,6 +551,8 @@ sub build {
 
 =method deploy
 
+    $site-&gt;deploy;
+
 Deploy the site to its destination.
 
 =cut
@@ -555,7 +565,9 @@ sub deploy {
     $self-&gt;_clear_write_deploy;
 }
 
-=method url( path )
+=method url
+
+    my $url = $site-&gt;url( $page_url );
 
 Get the full URL to the given path by prepending the C&lt;base_url&gt;.
 

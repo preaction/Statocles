@@ -115,7 +115,9 @@ has site =&gt; (
     isa =&gt; InstanceOf[&#39;Statocles::Site&#39;],
 );
 
-=method main( @argv )
+=method main
+
+    my $exitval = $cmd-&gt;main( @argv );
 
 Run the command given in @argv. See L&lt;statocles&gt; for a list of commands and
 options.
@@ -140,7 +142,7 @@ sub main {
     );
     return pod2usage(0) if $opt{help};
 
-    if ( $opt{version} ) {
+    if ( $opt{version} || ( $opt{verbose} &amp;&amp; !@argv ) ) {
         say &quot;Statocles version $Statocles::Command::VERSION (Perl $^V)&quot;;
         return 0;
     }

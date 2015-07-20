@@ -193,7 +193,9 @@ has &#39;+search_priority&#39; =&gt; (
 
 =method paginate
 
-Build a paginated list of Statocles::Page::List objects.
+    my @pages = Statocles::Page::List-&gt;paginate( %args );
+
+Build a paginated list of L&lt;Statocles::Page::List&gt; objects.
 
 Takes a list of key-value pairs with the following keys:
 
@@ -245,6 +247,8 @@ sub paginate {
 }
 
 =method vars
+
+    my %vars = $page-&gt;vars;
 
 Get the template variables for this page.
 

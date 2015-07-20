@@ -134,8 +134,15 @@
 
 <p>To creat a plain page using <a href="/Statocles/pod/Statocles/App/Plain.html">the plain app</a>, we just have to create a new file:</p>
 
-<pre><code>    $ mkdir page/about
-    $ vim page/about/index.markdown</code></pre>
+<pre><code>    ### Create /page/index.html
+    $ vim page/index.markdown
+
+    ### Create /page/about/index.html
+    $ mkdir page/about
+    $ vim page/about/index.markdown
+
+    ### Create /page/resume.html
+    $ vim page/resume.markdown</code></pre>
 
 <h2 id="Frontmatter">Frontmatter</h2>
 
@@ -146,6 +153,8 @@
     author: preaction
     tags: cookies, cinnamon
     ---</code></pre>
+
+<p>Frontmatter is optional, but it&#39;s recommended that you have at least a title. Available frontmatter options are listed in the <a href="/Statocles/pod/Statocles/Document#ATTRIBUTES.html">Statocles::Document attributes documentation</a>.</p>
 
 <h2 id="Markdown">Markdown</h2>
 

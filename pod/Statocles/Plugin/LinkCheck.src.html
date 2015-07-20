@@ -117,7 +117,9 @@ has ignore =&gt; (
     default =&gt; sub { [] },
 );
 
-=method check_pages( event )
+=method check_pages
+
+    $plugin-&gt;check_pages( $event );
 
 Check the pages inside the given
 L&lt;Statocles::Event::Pages|Statocles::Event::Pages&gt; event.

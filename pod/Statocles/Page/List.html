@@ -143,7 +143,9 @@
 
 <h2 id="paginate">paginate</h2>
 
-<p>Build a paginated list of Statocles::Page::List objects.</p>
+<pre><code>    my @pages = Statocles::Page::List-&gt;paginate( %args );</code></pre>
+
+<p>Build a paginated list of <a href="/Statocles/pod/Statocles/Page/List.html">Statocles::Page::List</a> objects.</p>
 
 <p>Takes a list of key-value pairs with the following keys:</p>
 
@@ -156,6 +158,8 @@
 <p>Return a list of Statocles::Page::List objects in numerical order, the index page first (if any).</p>
 
 <h2 id="vars">vars</h2>
+
+<pre><code>    my %vars = $page-&gt;vars;</code></pre>
 
 <p>Get the template variables for this page.</p>
 

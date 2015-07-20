@@ -89,113 +89,68 @@
 
         </header>
         <div class="main container">
-            <div class="crumbtrail">
-<ul>
-    <li>
-        <a href="/Statocles/pod/Statocles.html">Statocles</a>
-    </li>
-    <li>
-        <a href="/Statocles/pod/Statocles/App.html">App</a>
-    </li>
+            <div class="row">
+
+    <div class="nine columns">
+        <main>
+            <header>
+                <h1>Release v0.053</h1>
+                <p class="tags">Tags:
+                    <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
+                </p>
+
+                <aside>
+                    <p><time datetime="2015-07-20">
+                        Posted on 2015-07-20
+                    </time>
+                    </p>
+                </aside>
+
+
+            </header>
+            <section id="section-1">
+                <p>A bunch of documentation fixes this week, including some additions to
+<a href="/Statocles/pod/Statocles/Help/Content.html">the content guide</a> to help users get
+acclimated to managing content.</p>
+
+<p>A couple bugfixes as well: Full URLs in blog posts are no longer broken
+on the main page, and some tests that could have prevented installation
+have been fixed (thanks to <a href="http://metacpan.org/author/JBERGER">Joel
+Berger</a> for both of these).</p>
+
+<p>Full changelog below...</p>
+
+            </section>
+            <section id="section-2">
+                <ul>
+<li><a href="https://github.com/preaction/Statocles/commit/2ddcc6b91a4bbd18e183603265aa99285c43e88b">expand the document documentation a bit more</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/d9935f03c997afe8d935992cd44dd3e2c02daca3">link to frontmatter options in the content guide</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/977b62cbf919a8336642b62be812b7ca2cd550ee">add more examples of plain pages to content guide</a> (<a href="https://github.com/preaction/Statocles/issues/364">#364</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/61dad19d39eb3902cedccf717bf8713221d1650a">add meta generator information to default themes</a> (<a href="https://github.com/preaction/Statocles/issues/365">#365</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/d7e6459fd03ad355f1f8cf5eb4fbe6dc8fde9939">fix mojo ioloop tests when testing file events</a> (<a href="https://github.com/preaction/Statocles/issues/353">#353</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/c954f65f2b4ec00bf8cc3d5ae98ce58bba900ff6">move method signature inside documentation body</a> (<a href="https://github.com/preaction/Statocles/issues/351">#351</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/c41e23348b6114589c2ce7d9155383acff184027">set &#39;/&#39; as the default site index</a> (<a href="https://github.com/preaction/Statocles/issues/354">#354</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/15f001ff0a7e9c3d840fd1ade7f89adbcb2cc750">silence log warnings from tests</a> (<a href="https://github.com/preaction/Statocles/issues/358">#358</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/aab007b1eab2a948152559ae16116714a9e8713f">add upgrading and policy modules to help index</a> (<a href="https://github.com/preaction/Statocles/issues/356">#356</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/4251d3bf9aacb1f86202c0ea32d89946725041f4">make -v with no arguments show version information</a> (<a href="https://github.com/preaction/Statocles/issues/357">#357</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/f78b04d328f89483e3fcd81c487053ef084d5142">fix full urls falsely rewritten on list pages</a> (<a href="https://github.com/preaction/Statocles/issues/355">#355</a>)</li>
 </ul>
-(<a href="/Statocles/pod/Statocles/App.src.html">source</a>)
+
+            </section>
+        </main>
+    </div>
+
+    <div class="three columns sidebar">
+        
+        <nav id="tags">
+            <h1>Tags</h1>
+            <ul class="list-inline">
+                <li><a href="/Statocles/blog/tag/release/">release</a></li>
+            </ul>
+        </nav>
+    </div>
+
 </div>
-<h1 id="NAME">NAME</h1>
-
-<p>Statocles::App - Base role for Statocles applications</p>
-
-<h1 id="SYNOPSIS">SYNOPSIS</h1>
-
-<pre><code>    package MyApp;
-    use Statocles::Base &#39;Class&#39;;
-    with &#39;Statocles::App&#39;;
-
-    sub pages {
-        return Statocles::Page::Content-&gt;new(
-            path =&gt; &#39;/index.html&#39;,
-            content =&gt; &#39;Hello, World&#39;,
-        );
-    }</code></pre>
-
-<h1 id="DESCRIPTION">DESCRIPTION</h1>
-
-<p>A Statocles App creates a set of <a href="/Statocles/pod/Statocles/Pages.html">pages</a> that can then be written to the filesystem (or served directly, if desired).</p>
-
-<p>Pages can be created from <a href="/Statocles/pod/Statocles/Documents.html">documents</a> stored in a <a href="/Statocles/pod/Statocles/Store.html">store</a> (see <a href="/Statocles/pod/Statocles/Page/Document.html">Statocles::Page::Document</a>), files stored in a store (see <a href="/Statocles/pod/Statocles/Page/File.html">Statocles::Page::File</a>), lists of content (see <a href="/Statocles/pod/Statocles/Page/List.html">Statocles::Page::List</a>), or anything at all (see <a href="/Statocles/pod/Statocles/Page/Content.html">Statocles::Page::Content</a>).</p>
-
-<h1 id="ATTRIBUTES">ATTRIBUTES</h1>
-
-<h2 id="site">site</h2>
-
-<p>The site this app is part of.</p>
-
-<h2 id="data">data</h2>
-
-<p>A hash of arbitrary data available to theme templates. This is a good place to put extra structured data like social network links or make easy customizations to themes like header image URLs.</p>
-
-<h2 id="url_root">url_root</h2>
-
-<p>The URL root of this application. All pages from this app will be under this root. Use this to ensure two apps do not try to write the same path.</p>
-
-<h1 id="METHODS">METHODS</h1>
-
-<h2 id="pages">pages</h2>
-
-<pre><code>    my @pages = $app-&gt;pages;</code></pre>
-
-<p>Get the pages for this app. Must return a list of <a href="/Statocles/pod/Statocles/Page.html">Statocles::Page</a> objects.</p>
-
-<h2 id="url">url</h2>
-
-<pre><code>    my $app_url = $app-&gt;url( $path );</code></pre>
-
-<p>Get a URL to a page in this application. Prepends the app&#39;s <a href="#url_root">url_root attribute</a> if necessary. Strips &quot;index.html&quot; if possible.</p>
-
-<h2 id="link">link</h2>
-
-<pre><code>    my $link = $app-&gt;link( %args )</code></pre>
-
-<p>Create a link to a page in this application. <code>%args</code> are attributes to be given to <a href="/Statocles/pod/Statocles/Link.html">Statocles::Link</a> constructor. The app&#39;s <a href="#url_root">url_root attribute</a> is prepended, if necessary.</p>
-
-<h1 id="INCLUDED-APPS">INCLUDED APPS</h1>
-
-<p>These applications are included with the core Statocles distribution.</p>
-
-<dl>
-
-<dt><a href="/Statocles/pod/Statocles/App/Blog.html">Statocles::App::Blog</a></dt>
-<dd>
-
-</dd>
-<dt><a href="/Statocles/pod/Statocles/App/Plain.html">Statocles::App::Plain</a></dt>
-<dd>
-
-</dd>
-<dt><a href="/Statocles/pod/Statocles/App/Static.html">Statocles::App::Static</a></dt>
-<dd>
-
-</dd>
-<dt><a href="/Statocles/pod/Statocles/App/Perldoc.html">Statocles::App::Perldoc</a></dt>
-<dd>
-
-</dd>
-</dl>
-
-<h1 id="SEE-ALSO">SEE ALSO</h1>
-
-<dl>
-
-<dt><a href="/Statocles/pod/Statocles/Store.html">Statocles::Store</a></dt>
-<dd>
-
-</dd>
-<dt><a href="https://metacpan.org/pod/Statocle::Page" rel="external">Statocle::Page</a></dt>
-<dd>
-
-</dd>
-</dl>
-
-
 
         </div>
         <footer>

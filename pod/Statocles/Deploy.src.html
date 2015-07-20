@@ -112,7 +112,9 @@ has base_url =&gt; (
     isa =&gt; Str,
 );
 
-=method deploy( FROM_STORE, MESSAGE )
+=method deploy
+
+    my @paths = $deploy-&gt;deploy( $from_store, $message );
 
 Deploy the site, copying from the given L&lt;store object|Statocles::Store&gt;, optionally
 committing with the given message. Returns a list of file paths deployed.

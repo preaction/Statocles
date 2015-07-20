@@ -127,7 +127,7 @@
 
 <h1 id="METHODS">METHODS</h1>
 
-<h2 id="DOES-class">DOES( $class )</h2>
+<h2 id="DOES">DOES</h2>
 
 <p>This page proxies everything necessary to be a page object, without consuming the <a href="/Statocles/pod/Statocles/Page.html">page role</a>.</p>
 
@@ -135,11 +135,15 @@
 
 <p>Methods are proxyed to the <a href="#page">page object</a> so that this object appears mostly as the page inside of it.</p>
 
-<h2 id="content">content()</h2>
+<h2 id="content">content</h2>
+
+<pre><code>    my $html = $page-&gt;content;</code></pre>
 
 <p>Get the content for this page. Rewrite any links, images, or other according to the <a href="#rewrite_mode">rewrite_mode attributes</a>.</p>
 
-<h2 id="sections">sections()</h2>
+<h2 id="sections">sections</h2>
+
+<pre><code>    my @sections = $page-&gt;sections;</code></pre>
 
 <p>Get a list of content divided into sections. The Markdown &quot;---&quot; marker divides sections. Rewrite any links, images, or other according to the <a href="#rewrite_mode">rewrite_mode attributes</a>.</p>
 

@@ -137,7 +137,9 @@ has url_root =&gt; (
     required =&gt; 1,
 );
 
-=method pages()
+=method pages
+
+    my @pages = $app-&gt;pages;
 
 Get the pages for this app. Must return a list of L&lt;Statocles::Page&gt; objects.
 
@@ -166,10 +168,12 @@ around pages =&gt; sub {
     return @pages;
 };
 
-=method url( $url )
+=method url
 
-Get a URL to a page in this application. Prepends the L&lt;/url_root&gt; if necessary. Strips
-&quot;index.html&quot; if possible.
+    my $app_url = $app-&gt;url( $path );
+
+Get a URL to a page in this application. Prepends the app&#39;s L&lt;url_root
+attribute|/url_root&gt; if necessary. Strips &quot;index.html&quot; if possible.
 
 =cut
 
@@ -185,10 +189,13 @@ sub url {
     return join &quot;/&quot;, $base, $url;
 }
 
-=method link( %args )
+=method link
 
-Create a link to a page in this application. C&lt;%args&gt; are attributes to be given to
-L&lt;Statocles::Link&gt; constructor.
+    my $link = $app-&gt;link( %args )
+
+Create a link to a page in this application. C&lt;%args&gt; are attributes to be
+given to L&lt;Statocles::Link&gt; constructor. The app&#39;s L&lt;url_root
+attribute|/url_root&gt; is prepended, if necessary.
 
 =cut
 

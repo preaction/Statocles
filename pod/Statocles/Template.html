@@ -124,15 +124,25 @@
 
 <h1 id="METHODS">METHODS</h1>
 
-<h2 id="BUILDARGS">BUILDARGS( )</h2>
+<h2 id="BUILDARGS">BUILDARGS</h2>
 
 <p>Set the default path to something useful for in-memory templates.</p>
 
-<h2 id="render-args">render( %args )</h2>
+<h2 id="render">render</h2>
+
+<pre><code>    my $html = $tmpl-&gt;render( %args )</code></pre>
 
 <p>Render this template, passing in %args. Each key in %args will be available as a scalar in the template.</p>
 
 <h2 id="coercion">coercion</h2>
+
+<pre><code>    my $coerce = Statocles::Template-&gt;coercion;
+
+    has template =&gt; (
+        is =&gt; &#39;ro&#39;,
+        isa =&gt; InstanceOf[&#39;Statocles::Template&#39;],
+        coerce =&gt; Statocles::Template-&gt;coercion,
+    );</code></pre>
 
 <p>A class method to returns a coercion sub to convert strings into template objects.</p>
 

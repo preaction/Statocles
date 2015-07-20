@@ -138,29 +138,41 @@
 
 <h1 id="METHODS">METHODS</h1>
 
-<h2 id="content-vars">content( vars )</h2>
+<h2 id="content">content</h2>
+
+<pre><code>    my $html = $page-&gt;content( %vars );</code></pre>
 
 <p>Generate the document HTML by processing template directives and converting Markdown. <code>vars</code> is a set of name-value pairs to give to the template.</p>
 
 <h2 id="vars">vars</h2>
 
+<pre><code>    my %vars = $page-&gt;vars;</code></pre>
+
 <p>Get the template variables for this page.</p>
 
 <h2 id="sections">sections</h2>
 
-<p>Get a list of content divided into sections. The Markdown &quot;---&quot; marker divides sections.</p>
+<pre><code>    my @sections = $page-&gt;sections;</code></pre>
 
-<h2 id="tags1">tags()</h2>
+<p>Get a list of rendered HTML content divided into sections. The Markdown &quot;---&quot; marker divides sections.</p>
+
+<h2 id="tags1">tags</h2>
+
+<pre><code>    my @tags = $page-&gt;tags;</code></pre>
 
 <p>Get the list of tags for this page.</p>
 
-<h2 id="template">template()</h2>
+<h2 id="template">template</h2>
 
-<p>The <a href="/Statocles/pod/Statocles/Template.html">template</a> for this page. If the document has a template, it will be used. Otherwise, the <a href="/Statocles/pod/Statocles/Page#template.html">template attribute</a> will be used.</p>
+<pre><code>    my $tmpl = $page-&gt;template;</code></pre>
 
-<h2 id="layout">layout()</h2>
+<p>The <a href="/Statocles/pod/Statocles/Template.html">template object</a> for this page. If the document has a template, it will be used. Otherwise, the <a href="/Statocles/pod/Statocles/Page#template.html">template attribute</a> will be used.</p>
 
-<p>The <a href="/Statocles/pod/Statocles/Template.html">layout template</a> for this page. If the document has a layout, it will be used. Otherwise, the <a href="/Statocles/pod/Statocles/Page#layout.html">layout attribute</a> will be used.</p>
+<h2 id="layout">layout</h2>
+
+<pre><code>    my $tmpl = $page-&gt;layout;</code></pre>
+
+<p>The <a href="/Statocles/pod/Statocles/Template.html">layout template object</a> for this page. If the document has a layout, it will be used. Otherwise, the <a href="/Statocles/pod/Statocles/Page#layout.html">layout attribute</a> will be used.</p>
 
 
 

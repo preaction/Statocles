@@ -126,7 +126,7 @@ has rewrite_mode =&gt; (
     default =&gt; &#39;absolute&#39;,
 );
 
-=method DOES( $class )
+=method DOES
 
 This page proxies everything necessary to be a page object, without consuming
 the L&lt;page role|Statocles::Page&gt;.
@@ -164,7 +164,9 @@ sub AUTOLOAD {
     return $method-&gt;( $self-&gt;page, @args );
 }
 
-=method content()
+=method content
+
+    my $html = $page-&gt;content;
 
 Get the content for this page. Rewrite any links, images, or other according to the
 L&lt;rewrite_mode attributes|/rewrite_mode&gt;.
@@ -180,13 +182,13 @@ sub _rewrite_content {
             my $url = $el-&gt;attr( $attr );
 
             # relative URLs must be absolute
-            if ( $url !~ m{^(?:[a-zA-Z]:)?//?} ) {
+            if ( $url !~ m{^(?:(?:[a-zA-Z]+:)|//?)} ) {
                 $url = $self-&gt;page-&gt;dirname . &#39;/&#39; . $url;
             }
 
             # absolute URLs may be full
             if ( $self-&gt;rewrite_mode eq &#39;full&#39; ) {
-                if ( $url !~ m{^(?:[a-zA-Z]:)?//} ) {
+                if ( $url !~ m{^(?:(?:[a-zA-Z]+:)|//)} ) {
                     $url = $self-&gt;page-&gt;site-&gt;url( $url );
                 }
             }
@@ -204,7 +206,9 @@ sub content {
     return $self-&gt;_rewrite_content( $content );
 }
 
-=method sections()
+=method sections
+
+    my @sections = $page-&gt;sections;
 
 Get a list of content divided into sections. The Markdown &quot;---&quot; marker divides
 sections. Rewrite any links, images, or other according to the L&lt;rewrite_mode

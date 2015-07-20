@@ -149,7 +149,7 @@ has include_stores =&gt; (
     },
 );
 
-=method BUILDARGS( )
+=method BUILDARGS
 
 Set the default path to something useful for in-memory templates.
 
@@ -174,7 +174,9 @@ around BUILDARGS =&gt; sub {
     return $args;
 };
 
-=method render( %args )
+=method render
+
+    my $html = $tmpl-&gt;render( %args )
 
 Render this template, passing in %args. Each key in %args will be available as
 a scalar in the template.
@@ -241,6 +243,14 @@ sub _include {
 }
 
 =method coercion
+
+    my $coerce = Statocles::Template-&gt;coercion;
+
+    has template =&gt; (
+        is =&gt; &#39;ro&#39;,
+        isa =&gt; InstanceOf[&#39;Statocles::Template&#39;],
+        coerce =&gt; Statocles::Template-&gt;coercion,
+    );
 
 A class method to returns a coercion sub to convert strings into template
 objects.

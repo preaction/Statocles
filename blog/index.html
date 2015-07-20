@@ -100,6 +100,38 @@
 
             <article>
                 <header>
+                    <h1><a href="/Statocles/blog/2015/07/20/release-v0-053/">Release v0.053</a></h1>
+
+                    <p class="tags">Tags:
+                        <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
+                    </p>
+
+                    <aside>
+                        <p><time datetime="2015-07-20">
+                            Posted on 2015-07-20
+                        </time>
+                        </p>
+                    </aside>
+
+                </header>
+
+                <p>A bunch of documentation fixes this week, including some additions to
+<a href="/Statocles/pod/Statocles/Help/Content.html">the content guide</a> to help users get
+acclimated to managing content.</p>
+
+<p>A couple bugfixes as well: Full URLs in blog posts are no longer broken
+on the main page, and some tests that could have prevented installation
+have been fixed (thanks to <a href="http://metacpan.org/author/JBERGER">Joel
+Berger</a> for both of these).</p>
+
+<p>Full changelog below...</p>
+
+
+                    <p><a href="/Statocles/blog/2015/07/20/release-v0-053/#section-2">Continue reading Release v0.053...</a></p>
+
+            </article>
+            <article>
+                <header>
                     <h1><a href="/Statocles/blog/2015/07/13/release-v0-052/">Release v0.052</a></h1>
 
                     <p class="tags">Tags:
@@ -163,7 +195,7 @@ pass in <code>include_documents =&gt; 1</code> to the method.</p>
 
 <p>That change was made to support &quot;.md&quot; as a document file extension. Previously, only
 &quot;.markdown&quot; was supported. This is a work-in-progress, so if there are any bugs,
-<a href="/Statocles/blog/2015/07/06/release-v0-051/http://github.com/preaction/Statocles/issues">file a bug report</a>.</p>
+<a href="http://github.com/preaction/Statocles/issues">file a bug report</a>.</p>
 
 <p>Full changelog below...</p>
 
@@ -223,7 +255,7 @@ using <a href="/Statocles/pod/Statocles/App/Plain.html">the plain app</a> as the
 on the filesystem&#39;s ordering or some other unpredictable thing. Now, this is fixed,
 so the plain app can be safely used as the index.</p>
 
-<p>This will be fixed/changed completely to <a href="/Statocles/blog/2015/06/23/release-v0-049/https://github.com/preaction/Statocles/issues/326">allow any page to be the index in a future
+<p>This will be fixed/changed completely to <a href="https://github.com/preaction/Statocles/issues/326">allow any page to be the index in a future
 version</a>.</p>
 
 <p>Additionally, some footer styles were added to the default theme.</p>
@@ -232,48 +264,6 @@ version</a>.</p>
 
 
                     <p><a href="/Statocles/blog/2015/06/23/release-v0-049/#section-2">Continue reading Release v0.049...</a></p>
-
-            </article>
-            <article>
-                <header>
-                    <h1><a href="/Statocles/blog/2015/06/22/release-v0-048/">Release v0.048</a></h1>
-
-                    <p class="tags">Tags:
-                        <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
-                    </p>
-
-                    <aside>
-                        <p><time datetime="2015-06-22">
-                            Posted on 2015-06-22
-                        </time>
-                        </p>
-                    </aside>
-
-                </header>
-
-                <p>Here starts the road to v1.0! Some breaking changes in this release:</p>
-
-<p>Statocles::Page::Feed is now removed. The functionality has been added to all
-pages, and all the feed templates have been updated accordingly. This means you
-must update your themes to grab the new feed templates.</p>
-
-<p>To fix a long-standing bug with blog content not showing up correctly on the
-list pages (index, tag lists), the
-<a href="/Statocles/pod/Statocles/Page/ListItem.html">Statocles::Page::ListItem</a> class was added.
-This class proxies another page and rewrites its content to survive intact
-inside a list page.</p>
-
-<p>Some minor things:</p>
-
-<p>External perldoc links are now explicitly labelled as such with a
-<a href="/Statocles/blog/2015/06/22/release-v0-048/http://fontawesome.io">FontAwesome</a> icon.</p>
-
-<p>Some doc updates to start documenting the <a href="/Statocles/pod/Statocles/App.html">App API</a>.</p>
-
-<p>Full changelog below...</p>
-
-
-                    <p><a href="/Statocles/blog/2015/06/22/release-v0-048/#section-2">Continue reading Release v0.048...</a></p>
 
             </article>
         </main>

@@ -162,52 +162,80 @@
 
 <h1 id="METHODS">METHODS</h1>
 
-<h2 id="command-app_name-args">command( app_name, args )</h2>
+<h2 id="command">command</h2>
+
+<pre><code>    my $exitval = $app-&gt;command( $app_name, @args );</code></pre>
 
 <p>Run a command on this app. The app name is used to build the help, so users get exactly what they need to run.</p>
 
-<h2 id="make_slug-title">make_slug( $title )</h2>
+<h2 id="make_slug">make_slug</h2>
+
+<pre><code>    my $slug = $app-&gt;make_slug( $title );</code></pre>
 
 <p>Given a post title, remove special characters to create a slug.</p>
 
-<h2 id="post_pages">post_pages()</h2>
+<h2 id="post_pages">post_pages</h2>
 
-<p>Get the individual post Statocles::Page objects.</p>
+<pre><code>    my @pages = $app-&gt;post_pages;</code></pre>
 
-<h2 id="post_files">post_files()</h2>
+<p>Get the individual post <a href="/Statocles/pod/Statocles/Page.html">Statocles::Page</a> objects.</p>
 
-<p>Get all the post collateral files.</p>
+<h2 id="post_files">post_files</h2>
 
-<h2 id="index">index()</h2>
+<pre><code>    my @pages = $app-&gt;post_files;</code></pre>
 
-<p>Get the index page (a <a href="/Statocles/pod/Statocles/Page/List.html">list page</a>) for this application. This includes all the relevant feed pages.</p>
+<p>Get all the post collateral files as <a href="/Statocles/pod/Statocles/Page.html">Statocles::Page</a> objects. Markdown files will be created as <a href="/Statocles/pod/Statocles/Page/Document.html">Statocles::Page::Document</a> objects, any other files will be <a href="/Statocles/pod/Statocles/Page/File.html">Statocles::Page::File</a> objects.</p>
 
-<h2 id="tag_pages">tag_pages()</h2>
+<h2 id="index">index</h2>
 
-<p>Get <a href="/Statocles/pod/Statocles/Page.html">pages</a> for the tags in the blog post documents.</p>
+<pre><code>    my @pages = $app-&gt;index( @post_pages );</code></pre>
 
-<h2 id="pages">pages()</h2>
+<p>Build the index page (a <a href="/Statocles/pod/Statocles/Page/List.html">list page</a>) and all related feed pages out of the given post pages (built from <a href="#post_pages">the post_pages method</a>).</p>
+
+<h2 id="tag_pages">tag_pages</h2>
+
+<pre><code>    my @pages = $app-&gt;tag_pages( @post_pages );</code></pre>
+
+<p>Get <a href="/Statocles/pod/Statocles/Page.html">pages</a> for the tags in the given blog post documents (build from <a href="#post_pages">the post_pages method</a>, including relevant feed pages.</p>
+
+<h2 id="pages">pages</h2>
+
+<pre><code>    my @pages = $app-&gt;pages;</code></pre>
 
 <p>Get all the <a href="/Statocles/pod/Statocles/Page.html">pages</a> for this application.</p>
 
-<h2 id="tags">tags()</h2>
+<h2 id="tags">tags</h2>
+
+<pre><code>    my @links = $app-&gt;tags;</code></pre>
 
 <p>Get a set of <a href="/Statocles/pod/Statocles/Link.html">link objects</a> suitable for creating a list of tag links. The common attributes are:</p>
 
 <pre><code>    text =&gt; &#39;The tag text&#39;
     href =&gt; &#39;The URL to the tag page&#39;</code></pre>
 
-<h2 id="recent_posts-count-filter">recent_posts( $count, %filter )</h2>
+<h2 id="recent_posts">recent_posts</h2>
+
+<pre><code>    my @pages = $app-&gt;recent_posts( $count, %filter );</code></pre>
 
 <p>Get the last $count recent posts for this blog. Useful for templates and site index pages.</p>
 
 <p>%filter is an optional set of filters to apply to only show recent posts matching the given criteria. The following filters are available:</p>
 
-<pre><code>    tags        -&gt; (string) Only show posts with the given tag</code></pre>
+<dl>
 
-<h2 id="page_url-page">page_url( page )</h2>
+<dt>tags</dt>
+<dd>
 
-<p>Return the absolute URL to this page, removing the &quot;/index.html&quot; if necessary.</p>
+<p>(string) Only show posts with the given tag</p>
+
+</dd>
+</dl>
+
+<h2 id="page_url">page_url</h2>
+
+<pre><code>    my $url = $app-&gt;page_url( $page )</code></pre>
+
+<p>Return the absolute URL to this <a href="/Statocles/pod/Statocles/Page.html">page object</a>, removing the &quot;/index.html&quot; if necessary.</p>
 
 <h1 id="COMMANDS">COMMANDS</h1>
 

@@ -316,6 +316,8 @@ has search_priority =&gt; (
 
 =method vars
 
+    my %vars = $page-&gt;vars;
+
 Get extra template variables for this page
 
 =cut
@@ -324,8 +326,11 @@ sub vars { }
 
 =method render
 
+    my $html = $page-&gt;render( %vars );
+
 Render the page, using the L&lt;template|Statocles::Page/template&gt; and wrapping
-with the L&lt;layout|Statocles::Page/layout&gt;.
+with the L&lt;layout|Statocles::Page/layout&gt;. Give any extra C&lt;%vars&gt; to the
+template, layout, and page C&lt;content&gt; method (if applicable).
 
 =cut
 
@@ -340,6 +345,7 @@ sub render {
     );
 
     my $content = $self-&gt;template-&gt;render(
+        # XXX: This is suboptimal. Isn&#39;t vars() enough?
         ( $self-&gt;can( &#39;content&#39; ) ? ( content =&gt; $self-&gt;content( %vars ) ) : () ),
         %vars,
     );
@@ -350,7 +356,10 @@ sub render {
     );
 }
 
-=method links( KEY )
+=method links
+
+    my @links = $page-&gt;links( $key );
+    my $link = $page-&gt;links( $key );
 
 Get the links set for the given key. See L&lt;the links attribute|/links&gt; for some
 commonly-used keys. Returns a list of L&lt;link objects|Statocles::Link&gt;. In
@@ -364,7 +373,9 @@ sub links {
     return wantarray ? @links : $links[0];
 }
 
-=method basename()
+=method basename
+
+    my $name = $page-&gt;basename;
 
 Get the base file name of this page. Everything after the last C&lt;/&gt;.
 
@@ -375,7 +386,9 @@ sub basename {
     return $self-&gt;path-&gt;basename;
 }
 
-=method dirname()
+=method dirname
+
+    my $dir = $page-&gt;dirname;
 
 Get the full directory to this page. Anything that isn&#39;t part of L&lt;/basename&gt;.
 
