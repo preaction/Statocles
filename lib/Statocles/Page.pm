@@ -1,5 +1,5 @@
 package Statocles::Page;
-# ABSTRACT: Render documents into HTML
+# ABSTRACT: Base class for rendering objects
 
 use Statocles::Base 'Role';
 use Statocles::Template;
