@@ -23,9 +23,7 @@ The title of the page.
 
 =cut
 
-has title => (
-    is => 'ro',
-    isa => Str,
+has '+title' => (
     lazy => 1,
     default => sub { $_[0]->document->title },
 );

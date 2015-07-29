@@ -41,6 +41,17 @@ has path => (
     required => 1,
 );
 
+=attr title
+
+The title of the page.
+
+=cut
+
+has title => (
+    is => 'ro',
+    isa => Str,
+);
+
 =attr type
 
 The MIME type of this page. By default, will use the L<path's|/path> file extention
