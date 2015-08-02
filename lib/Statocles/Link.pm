@@ -31,7 +31,7 @@ The text inside the link tag. Only useful for <a> links.
 
 has text => (
     is => 'ro',
-    isa => Str,
+    isa => Maybe[Str],
     lazy => 1,
     default => sub {
         # For ease of transition, let's default to title, which we used for the
@@ -73,14 +73,6 @@ has type => (
     is => 'ro',
     isa => Str,
 );
-
-sub BUILD {
-    my ( $self ) = @_;
-    # Either text or title must be set, so that we can set the text
-    # We want this to die as soon as possible, so we can't die in the attribute
-    # default builder
-    die "Link 'text' attribute is required" unless $self->text;
-}
 
 =method new_from_element
 

@@ -5,7 +5,6 @@ use Statocles::Link;
 
 subtest 'constructor' => sub {
     my %required = (
-        text => 'Link text',
         href => '/blog',
     );
 
@@ -30,7 +29,7 @@ subtest 'constructor' => sub {
 };
 
 subtest 'new_from_element' => sub {
-    subtest 'required items' => sub {
+    subtest 'basic items' => sub {
         my $dom = Mojo::DOM->new( '<a href="http://example.com">Link text</a>' );
         cmp_deeply(
             Statocles::Link->new_from_element( $dom->at( 'a' ) ),
