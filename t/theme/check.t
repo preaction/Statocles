@@ -20,6 +20,18 @@ my @documents = (
         title => 'Title One',
         author => 'preaction',
         content => 'Content One',
+        links => {
+            stylesheet => [
+                {
+                    href => '/theme/css/special.css',
+                },
+            ],
+            script => [
+                {
+                    href => '/theme/js/special.js',
+                },
+            ],
+        },
     ),
     Statocles::Document->new(
         path => 'DUMMY',
@@ -152,10 +164,27 @@ my %content_tests = (
         my ( $content ) = @_;
         my $dom = Mojo::DOM->new( $content );
         my $elem;
-        if ( ok $elem = $dom->at( 'meta[name=generator]' ), 'meta generator exists' ) {
-            is $elem->attr( 'content' ), "Statocles $Statocles::VERSION",
-                'generator has name and version';
-        }
+
+        subtest 'all themes must have meta generator' => sub {
+            if ( ok $elem = $dom->at( 'meta[name=generator]' ), 'meta generator exists' ) {
+                is $elem->attr( 'content' ), "Statocles $Statocles::VERSION",
+                    'generator has name and version';
+            }
+        };
+
+        subtest 'document stylesheet links get added in the layout' => sub {
+            if ( ok $elem = $dom->at( 'link[href=/theme/css/special.css]', 'document stylesheet exists' ) ) {
+                is $elem->attr( 'rel' ), 'stylesheet';
+                is $elem->attr( 'type' ), 'text/css';
+            }
+        };
+
+        subtest 'document script links get added in the layout' => sub {
+            if ( ok $elem = $dom->at( 'script[src=/theme/js/special.js]', 'document script exists' ) ) {
+                ok !$elem->text, 'no text inside';
+            }
+        };
+
     },
 );
 
@@ -168,6 +197,7 @@ for my $theme_dir ( @theme_dirs ) {
             next unless $path->is_file;
             next unless $path->basename =~ /[.]ep$/;
             next unless $path->stat->size > 0;
+
             my $tmpl = Statocles::Template->new(
                 path => $path,
                 include_stores => $theme_dir,

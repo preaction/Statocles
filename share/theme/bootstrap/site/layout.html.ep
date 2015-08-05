@@ -12,6 +12,12 @@
         <link rel="alternate" href="<%= $link->href %>" type="<%= $link->type %>" />
         % }
         %= include 'site/head_after.html.ep'
+        % for my $link ( $self->links( 'stylesheet' ) ) {
+        <link rel="stylesheet" href="<%= $link->href %>" type="<%= $link->type || 'text/css' %>" />
+        % }
+        % for my $link ( $self->links( 'script' ) ) {
+        <script src="<%= $link->href %>"></script>
+        % }
     </head>
     <body>
         <header>
