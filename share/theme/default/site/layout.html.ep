@@ -5,7 +5,7 @@
         <link rel="stylesheet" href="/theme/css/skeleton.css" />
         <link rel="stylesheet" href="/theme/css/statocles-default.css" />
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-        <title><%= $site->title %></title>
+        <title><%= $self->title ? $self->title . ' - ' : '' %><%= $site->title %></title>
         <meta name="generator" content="Statocles <%= $Statocles::VERSION %>" />
         % for my $link ( $self->links( 'feed' ) ) {
         <link rel="alternate" href="<%= $link->href %>" type="<%= $link->type %>" />

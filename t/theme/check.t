@@ -165,6 +165,13 @@ my %content_tests = (
         my $dom = Mojo::DOM->new( $content );
         my $elem;
 
+        subtest 'page title and site title' => sub {
+            if ( ok $elem = $dom->at( 'title' ), 'title element exists' ) {
+                is $elem->text, "Title One - Test Title",
+                    'title has document title and site title';
+            }
+        };
+
         subtest 'all themes must have meta generator' => sub {
             if ( ok $elem = $dom->at( 'meta[name=generator]' ), 'meta generator exists' ) {
                 is $elem->attr( 'content' ), "Statocles $Statocles::VERSION",
