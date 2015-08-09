@@ -198,6 +198,10 @@ my %content_tests = (
 
 my @theme_dirs = $THEME_DIR->children;
 for my $theme_dir ( @theme_dirs ) {
+    my $theme = Statocles::Theme->new(
+        store => $theme_dir,
+    );
+
     subtest $theme_dir->basename => sub {
         my $iter = $theme_dir->iterator({ recurse => 1 });
         while ( my $path = $iter->() ) {
@@ -205,10 +209,10 @@ for my $theme_dir ( @theme_dirs ) {
             next unless $path->basename =~ /[.]ep$/;
             next unless $path->stat->size > 0;
 
-            my $tmpl = Statocles::Template->new(
-                path => $path,
-                include_stores => $theme_dir,
-            );
+            my $tmpl_path = $path->relative( $theme_dir );
+            $tmpl_path =~ s/[.]ep$//;
+            my $tmpl = $theme->template( $tmpl_path );
+
             my $name = $path->basename;
             my $app = $path->parent->basename;
             my %args = %{ $app_vars{ $app }{ $name } };

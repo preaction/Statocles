@@ -53,7 +53,21 @@ has _templates => (
     isa => HashRef[InstanceOf['Statocles::Template']],
     default => sub { {} },
     lazy => 1,  # Must be lazy or the clearer won't re-init the default
-    clearer => 'clear',
+    clearer => '_clear_templates',
+);
+
+=attr _includes
+
+The cached template objects for the includes.
+
+=cut
+
+has _includes => (
+    is => 'ro',
+    isa => HashRef[InstanceOf['Statocles::Template']],
+    default => sub { {} },
+    lazy => 1,  # Must be lazy or the clearer won't re-init the default
+    clearer => '_clear_includes',
 );
 
 =method BUILDARGS
@@ -113,7 +127,7 @@ sub build_template {
     return Statocles::Template->new(
         path => $path,
         content => $content,
-        include_stores => [ @{ $self->include_stores }, $self->store ],
+        theme => $self,
     );
 }
 
@@ -133,6 +147,46 @@ sub template {
     return $self->_templates->{ $path } ||= $self->read( $path );
 }
 
+=method include
+
+    my $tmpl = $theme->include( $path );
+    my $tmpl = $theme->include( @path_parts );
+
+Get the desired L<template|Statocles::Template> to include based on the given
+C<path> or C<path_parts>. Looks through all the
+L<include_stores|/include_stores> before looking in the L<main store|/store>.
+
+=cut
+
+sub include {
+    my ( $self, @path ) = @_;
+    my $path = Path::Tiny->new( @path );
+
+    for my $store ( @{ $self->include_stores }, $self->store ) {
+        if ( $store->has_file( $path ) ) {
+            return $self->_includes->{ $path } ||= $self->build_template( $path, $store->read_file( $path ) );
+        }
+    }
+
+    die qq{Can not find include "$path"};
+}
+
+=method clear
+
+    $theme->clear;
+
+Clear out the cached templates and includes. Used by the daemon when it
+detects a change to the theme files.
+
+=cut
+
+sub clear {
+    my ( $self ) = @_;
+    $self->_clear_templates;
+    $self->_clear_includes;
+    return;
+}
+
 1;
 __END__
 
@@ -148,6 +202,9 @@ __END__
     my $layout     = $theme->template( qw( site include layout.html ) );
     my $blog_index = $theme->template( blog => 'index.html' );
     my $blog_post  = $theme->template( 'blog/post.html' );
+
+    # Clear out cached templates and includes
+    $theme->clear;
 
 =head1 DESCRIPTION
 

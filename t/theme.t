@@ -14,7 +14,7 @@ subtest 'attributes' => sub {
 };
 
 sub read_templates {
-    my ( $store ) = @_;
+    my ( $store, $theme ) = @_;
 
     my $dir = $store->path;
 
@@ -23,7 +23,7 @@ sub read_templates {
         path => $tmpl_fn->relative( $dir ),
         content => $tmpl_fn->slurp_utf8,
         store => $store,
-        include_stores => [ $store ],
+        theme => $theme,
     );
 
     my $index_fn = $dir->child( 'blog', 'index.html.ep' );
@@ -31,7 +31,7 @@ sub read_templates {
         path => $index_fn->relative( $dir ),
         content => $index_fn->slurp_utf8,
         store => $store,
-        include_stores => [ $store ],
+        theme => $theme,
     );
 
     my $rss_fn = $dir->child( 'blog', 'index.rss.ep' );
@@ -39,7 +39,7 @@ sub read_templates {
         path => $rss_fn->relative( $dir ),
         content => $rss_fn->slurp_utf8,
         store => $store,
-        include_stores => [ $store ],
+        theme => $theme,
     );
 
     my $atom_fn = $dir->child( 'blog', 'index.atom.ep' );
@@ -47,7 +47,7 @@ sub read_templates {
         path => $atom_fn->relative( $dir ),
         content => $atom_fn->slurp_utf8,
         store => $store,
-        include_stores => [ $store ],
+        theme => $theme,
     );
 
     my $layout_fn = $dir->child( 'site', 'layout.html.ep' );
@@ -55,7 +55,7 @@ sub read_templates {
         path => $layout_fn->relative( $dir ),
         content => $layout_fn->slurp_utf8,
         store => $store,
-        include_stores => [ $store ],
+        theme => $theme,
     );
 
     my $extra_fn = $dir->child( 'site', 'include', 'extra.html.ep' );
@@ -63,7 +63,7 @@ sub read_templates {
         path => $extra_fn->relative( $dir ),
         content => $extra_fn->slurp_utf8,
         store => $store,
-        include_stores => [ $store ],
+        theme => $theme,
     );
 
     return (
@@ -90,10 +90,10 @@ subtest 'templates from directory' => sub {
         my $store = Statocles::Store::File->new(
             path => $SHARE_DIR->child( 'theme' ),
         );
-        my %exp_templates = read_templates( $store );
         my $theme = Statocles::Theme->new(
             store => $SHARE_DIR->child( 'theme' ),
         );
+        my %exp_templates = read_templates( $store, $theme );
         for my $tmpl ( @templates ) {
             subtest $tmpl => sub {
                 cmp_deeply $theme->template( split m{/}, $tmpl ), $exp_templates{ $tmpl }, 'array of path parts';
@@ -111,10 +111,11 @@ subtest 'templates from directory' => sub {
             path => 'theme',
         );
 
-        my %exp_templates = read_templates( $store );
         my $theme = Statocles::Theme->new(
             store => 'theme',
         );
+        my %exp_templates = read_templates( $store, $theme );
+
         for my $tmpl ( @templates ) {
             subtest $tmpl => sub {
                 cmp_deeply $theme->template( split m{/}, $tmpl ), $exp_templates{ $tmpl }, 'array of path parts';

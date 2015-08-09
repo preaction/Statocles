@@ -13,7 +13,7 @@ my %args = (
 subtest 'include another template' => sub {
     my $tmpl = Statocles::Template->new(
         path => $SHARE_DIR->child( 'tmpl', 'include_with_template.html.ep' ),
-        include_stores => $SHARE_DIR->child( 'tmpl' ),
+        theme => $SHARE_DIR->child( 'tmpl' ),
     );
     is $tmpl->render( %args ), "INCLUDE Title\n ENDINCLUDE Title Content\n";
 };
@@ -21,7 +21,7 @@ subtest 'include another template' => sub {
 subtest 'include with arguments' => sub {
     my $tmpl = Statocles::Template->new(
         path => $SHARE_DIR->child( 'tmpl', 'include_with_template_args.html.ep' ),
-        include_stores => $SHARE_DIR->child( 'tmpl' ),
+        theme => $SHARE_DIR->child( 'tmpl' ),
     );
     eq_or_diff $tmpl->render( %args ), "INCLUDE New Title\n ENDINCLUDE Title Content\n";
 };
@@ -29,7 +29,7 @@ subtest 'include with arguments' => sub {
 subtest 'include a plain HTML file' => sub {
     my $tmpl = Statocles::Template->new(
         path => $SHARE_DIR->child( 'tmpl', 'include_with_html.html.ep' ),
-        include_stores => $SHARE_DIR->child( 'tmpl' ),
+        theme => $SHARE_DIR->child( 'tmpl' ),
     );
     is $tmpl->render( %args ), "INCLUDE INCLUDEDHTML\n ENDINCLUDE Title Content\n";
 };
@@ -37,7 +37,7 @@ subtest 'include a plain HTML file' => sub {
 subtest 'empty include' => sub {
     my $tmpl = Statocles::Template->new(
         path => $SHARE_DIR->child( 'tmpl', 'include_with_empty.html.ep' ),
-        include_stores => $SHARE_DIR->child( 'tmpl' ),
+        theme => $SHARE_DIR->child( 'tmpl' ),
     );
     my @warn;
     local $SIG{__WARN__} = sub { push @warn, @_ };
@@ -48,7 +48,7 @@ subtest 'empty include' => sub {
 subtest 'missing include dies' => sub {
     my $tmpl = Statocles::Template->new(
         path => $SHARE_DIR->child( 'tmpl', 'include_with_template.html.ep' ),
-        include_stores => $SHARE_DIR,
+        theme => $SHARE_DIR,
     );
     throws_ok {
         $tmpl->render( %args );
