@@ -58,26 +58,32 @@ sub read_templates {
         include_stores => [ $store ],
     );
 
+    my $extra_fn = $dir->child( 'site', 'include', 'extra.html.ep' );
+    my $extra = Statocles::Template->new(
+        path => $extra_fn->relative( $dir ),
+        content => $extra_fn->slurp_utf8,
+        store => $store,
+        include_stores => [ $store ],
+    );
+
     return (
-        blog => {
-            'post.html' => $tmpl,
-            'index.html' => $index,
-            'index.rss' => $rss,
-            'index.atom' => $atom,
-        },
-        site => {
-            'layout.html' => $layout,
-        },
+        'blog/post.html' => $tmpl,
+        'blog/index.html' => $index,
+        'blog/index.rss' => $rss,
+        'blog/index.atom' => $atom,
+        'site/layout.html' => $layout,
+        'site/include/extra.html' => $extra,
     );
 }
 
 subtest 'templates from directory' => sub {
     my @templates = (
-        [ blog => 'post.html' ],
-        [ blog => 'index.html' ],
-        [ blog => 'index.rss' ],
-        [ blog => 'index.atom' ],
-        [ site => 'layout.html' ],
+        'blog/post.html',
+        'blog/index.html',
+        'blog/index.rss',
+        'blog/index.atom',
+        'site/layout.html',
+        'site/include/extra.html',
     );
 
     subtest 'absolute directory' => sub {
@@ -89,7 +95,11 @@ subtest 'templates from directory' => sub {
             store => $SHARE_DIR->child( 'theme' ),
         );
         for my $tmpl ( @templates ) {
-            cmp_deeply $theme->template( @$tmpl ), $exp_templates{ $tmpl->[0] }{ $tmpl->[1] };
+            subtest $tmpl => sub {
+                cmp_deeply $theme->template( split m{/}, $tmpl ), $exp_templates{ $tmpl }, 'array of path parts';
+                cmp_deeply $theme->template( $tmpl ), $exp_templates{ $tmpl }, 'path with slashes';
+                cmp_deeply $theme->template( Path::Tiny->new( split m{/}, $tmpl ) ), $exp_templates{ $tmpl }, 'Path::Tiny object';
+            };
         }
     };
 
@@ -106,7 +116,11 @@ subtest 'templates from directory' => sub {
             store => 'theme',
         );
         for my $tmpl ( @templates ) {
-            cmp_deeply $theme->template( @$tmpl ), $exp_templates{ $tmpl->[0] }{ $tmpl->[1] };
+            subtest $tmpl => sub {
+                cmp_deeply $theme->template( split m{/}, $tmpl ), $exp_templates{ $tmpl }, 'array of path parts';
+                cmp_deeply $theme->template( $tmpl ), $exp_templates{ $tmpl }, 'path with slashes';
+                cmp_deeply $theme->template( Path::Tiny->new( split m{/}, $tmpl ) ), $exp_templates{ $tmpl }, 'Path::Tiny object';
+            };
         }
 
         chdir $cwd;

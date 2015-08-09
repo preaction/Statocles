@@ -50,7 +50,7 @@ The cached template objects for this theme.
 
 has _templates => (
     is => 'ro',
-    isa => HashRef[HashRef[InstanceOf['Statocles::Template']]],
+    isa => HashRef[InstanceOf['Statocles::Template']],
     default => sub { {} },
     lazy => 1,  # Must be lazy or the clearer won't re-init the default
     clearer => 'clear',
@@ -74,23 +74,22 @@ around BUILDARGS => sub {
 
 =method read
 
-    my $tmpl = $theme->read( $section => $name )
+    my $tmpl = $theme->read( $path )
 
-Read the template for the given C<section> and C<name> and create the
+Read the template for the given C<path> and create the
 L<template|Statocles::Template> object.
 
 =cut
 
 sub read {
-    my ( $self, $app, $template ) = @_;
-    $template .= '.ep';
-    my $path = Path::Tiny->new( $app, $template );
+    my ( $self, $path ) = @_;
+    $path .= '.ep';
 
     my $content = eval { $self->store->read_file( $path ); };
     if ( $@ ) {
         if ( blessed $@ && $@->isa( 'Path::Tiny::Error' ) && $@->{op} =~ /^open/ ) {
-            die sprintf 'ERROR: Template "%s/%s" does not exist in theme directory "%s"' . "\n",
-                $app, $template, $self->store->path;
+            die sprintf 'ERROR: Template "%s" does not exist in theme directory "%s"' . "\n",
+                $path, $self->store->path;
         }
         else {
             die $@;
@@ -120,16 +119,18 @@ sub build_template {
 
 =method template
 
-    my $tmpl = $theme->template( $section => $name )
+    my $tmpl = $theme->template( $path )
+    my $tmpl = $theme->template( @path_parts )
 
-Get the L<template|Statocles::Template> from the given C<section> with the
-given C<name>.
+Get the L<template|Statocles::Template> at the given C<path>, or with the
+given C<path_parts>.
 
 =cut
 
 sub template {
-    my ( $self, $app, $template ) = @_;
-    return $self->_templates->{ $app }{ $template } ||= $self->read( $app, $template );
+    my ( $self, @path ) = @_;
+    my $path = Path::Tiny->new( @path );
+    return $self->_templates->{ $path } ||= $self->read( $path );
 }
 
 1;
@@ -139,13 +140,14 @@ __END__
 
     # Template directory layout
     /theme/site/layout.html.ep
+    /theme/site/include/layout.html.ep
     /theme/blog/index.html.ep
     /theme/blog/post.html.ep
 
     my $theme      = Statocles::Theme->new( store => '/theme' );
-    my $layout     = $theme->template( site => 'layout.html' );
+    my $layout     = $theme->template( qw( site include layout.html ) );
     my $blog_index = $theme->template( blog => 'index.html' );
-    my $blog_post  = $theme->template( blog => 'post.html' );
+    my $blog_post  = $theme->template( 'blog/post.html' );
 
 =head1 DESCRIPTION
 
