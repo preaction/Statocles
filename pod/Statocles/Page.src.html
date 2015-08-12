@@ -93,7 +93,7 @@
     Back to documentation
 </a>
 <pre>package Statocles::Page;
-# ABSTRACT: Render documents into HTML
+# ABSTRACT: Base class for rendering objects
 
 use Statocles::Base &#39;Role&#39;;
 use Statocles::Template;
@@ -133,6 +133,17 @@ has path =&gt; (
     isa =&gt; Path,
     coerce =&gt; Path-&gt;coercion,
     required =&gt; 1,
+);
+
+=attr title
+
+The title of the page.
+
+=cut
+
+has title =&gt; (
+    is =&gt; &#39;ro&#39;,
+    isa =&gt; Str,
 );
 
 =attr type

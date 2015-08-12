@@ -89,116 +89,74 @@
 
         </header>
         <div class="main container">
-            <div class="crumbtrail">
+            <div class="row">
+
+    <div class="nine columns">
+        <main>
+            <header>
+                <h1>Release v0.054</h1>
+                <p class="tags">Tags:
+                    <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
+                </p>
+
+                <aside>
+                    <p><time datetime="2015-08-11">
+                        Posted on 2015-08-11
+                    </time>
+                    </p>
+                </aside>
+
+
+            </header>
+            <section id="section-1">
+                <p>Some important v1.0 changes here.</p>
+
 <ul>
-    <li>
-        <a href="/Statocles/pod/Statocles.html">Statocles</a>
-    </li>
-    <li>
-        <a href="/Statocles/pod/Statocles/Theme.html">Theme</a>
-    </li>
+<li>All pages now have a title, which means that we can have the page
+title in the <code>&lt;title&gt;</code> tag for better bookmarks</li>
+<li>Documents can add stylesheets and scripts, for those times when the
+content needs special design or interactivity. See <a href="/Statocles/pod/Statocles/Document.html">the Document
+object documentation</a> for more
+information.</li>
+<li>Template includes are now cached, which should dramatically improve
+the site build times. There is still a lot to do about performance,
+but this was a quick change.</li>
+<li>Templates can now be arbitrarily nested. Previously, the API only
+allowed for a single level of depth, called the &quot;category&quot;. Now,
+templates are simply given a full path, and organization is up to the
+app developer and theme author.</li>
 </ul>
-(<a href="/Statocles/pod/Statocles/Theme.src.html">source</a>)
+
+<p>Full changelog below...</p>
+
+            </section>
+            <section id="section-2">
+                <ul>
+<li><a href="https://github.com/preaction/Statocles/commit/a19975ad5998435045faab2d753403d1222822e2">move includes to theme and add caching</a> (<a href="https://github.com/preaction/Statocles/issues/377">#377</a>, <a href="https://github.com/preaction/Statocles/issues/378">#378</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/b43cf83e0edb2ef596688af8de6ebefb6f295c9c">refer to templates by path for more flexibility</a> (<a href="https://github.com/preaction/Statocles/issues/313">#313</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/848fee6650f60040ab50209c0aa5cdd35668a2dd">add page title to <title> tag in default themes (<a href="https://github.com/preaction/Statocles/issues/372">#372</a>)</title></a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/f098c2a090ff5c248978ddffcc064ebd611afc07">allow documents to add stylesheets and scripts</a> (<a href="https://github.com/preaction/Statocles/issues/376">#376</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/b27cb6a574b1185e08cf8aa7835f291a30caa492">allow links without text</a> (<a href="https://github.com/preaction/Statocles/issues/376">#376</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/6b5935ec6557dc9230997f0a7803f60c04e6444a">move title attribute to page role</a> (<a href="https://github.com/preaction/Statocles/issues/372">#372</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/6e8953b5111ec2ddc87e064caac3f3eb4f568787">fix abstracts on Statocles::Page</a> (<a href="https://github.com/preaction/Statocles/issues/370">#370</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/5109769b42f7256f84663c5b83ed0ff51f605c42">upgrade Path::Tiny to fix mkpath warning</a> (<a href="https://github.com/preaction/Statocles/issues/369">#369</a>)</li>
+</ul>
+
+            </section>
+        </main>
+    </div>
+
+    <div class="three columns sidebar">
+        
+        <nav id="tags">
+            <h1>Tags</h1>
+            <ul class="list-inline">
+                <li><a href="/Statocles/blog/tag/release/">release</a></li>
+            </ul>
+        </nav>
+    </div>
+
 </div>
-<h1 id="NAME">NAME</h1>
-
-<p>Statocles::Theme - Templates, headers, footers, and navigation</p>
-
-<h1 id="SYNOPSIS">SYNOPSIS</h1>
-
-<pre><code>    # Template directory layout
-    /theme/site/layout.html.ep
-    /theme/site/include/layout.html.ep
-    /theme/blog/index.html.ep
-    /theme/blog/post.html.ep
-
-    my $theme      = Statocles::Theme-&gt;new( store =&gt; &#39;/theme&#39; );
-    my $layout     = $theme-&gt;template( qw( site include layout.html ) );
-    my $blog_index = $theme-&gt;template( blog =&gt; &#39;index.html&#39; );
-    my $blog_post  = $theme-&gt;template( &#39;blog/post.html&#39; );
-
-    # Clear out cached templates and includes
-    $theme-&gt;clear;</code></pre>
-
-<h1 id="DESCRIPTION">DESCRIPTION</h1>
-
-<p>A Theme contains all the <a href="/Statocles/pod/Statocles/Template.html">templates</a> that <a href="/Statocles/pod/Statocles/App.html">applications</a> need. This class handles finding and parsing files into <a href="/Statocles/pod/Statocles/Template.html">template objects</a>.</p>
-
-<p>When the <a href="#store">&quot;store&quot;</a> is read, the templates inside are organized based on their name and their parent directory.</p>
-
-<h1 id="ATTRIBUTES">ATTRIBUTES</h1>
-
-<h2 id="store">store</h2>
-
-<p>The source <a href="/Statocles/pod/Statocles/Store.html">store</a> for this theme.</p>
-
-<p>If the path begins with ::, will pull one of the Statocles default themes from the Statocles share directory.</p>
-
-<h2 id="include_stores">include_stores</h2>
-
-<p>An array of <a href="/Statocles/pod/Statocles/Store.html">stores</a> to look for includes. The <a href="#store">&quot;store&quot;</a> is added at the end of this list.</p>
-
-<h2 id="templates">_templates</h2>
-
-<p>The cached template objects for this theme.</p>
-
-<h2 id="includes">_includes</h2>
-
-<p>The cached template objects for the includes.</p>
-
-<h1 id="METHODS">METHODS</h1>
-
-<h2 id="BUILDARGS">BUILDARGS</h2>
-
-<p>Handle the path :: share theme.</p>
-
-<h2 id="read">read</h2>
-
-<pre><code>    my $tmpl = $theme-&gt;read( $path )</code></pre>
-
-<p>Read the template for the given <code>path</code> and create the <a href="/Statocles/pod/Statocles/Template.html">template</a> object.</p>
-
-<h2 id="build_template">build_template</h2>
-
-<pre><code>    my $tmpl = $theme-&gt;build_template( $path, $content  )</code></pre>
-
-<p>Build a new <a href="/Statocles/pod/Statocles/Template.html">Statocles::Template</a> object with the given <code>path</code> and <code>content</code>.</p>
-
-<h2 id="template">template</h2>
-
-<pre><code>    my $tmpl = $theme-&gt;template( $path )
-    my $tmpl = $theme-&gt;template( @path_parts )</code></pre>
-
-<p>Get the <a href="/Statocles/pod/Statocles/Template.html">template</a> at the given <code>path</code>, or with the given <code>path_parts</code>.</p>
-
-<h2 id="include">include</h2>
-
-<pre><code>    my $tmpl = $theme-&gt;include( $path );
-    my $tmpl = $theme-&gt;include( @path_parts );</code></pre>
-
-<p>Get the desired <a href="/Statocles/pod/Statocles/Template.html">template</a> to include based on the given <code>path</code> or <code>path_parts</code>. Looks through all the <a href="#include_stores">include_stores</a> before looking in the <a href="#store">main store</a>.</p>
-
-<h2 id="clear">clear</h2>
-
-<pre><code>    $theme-&gt;clear;</code></pre>
-
-<p>Clear out the cached templates and includes. Used by the daemon when it detects a change to the theme files.</p>
-
-<h1 id="SEE-ALSO">SEE ALSO</h1>
-
-<dl>
-
-<dt><a href="/Statocles/pod/Statocles/Help/Theme.html">Statocles::Help::Theme</a></dt>
-<dd>
-
-</dd>
-<dt><a href="/Statocles/pod/Statocles/Template.html">Statocles::Template</a></dt>
-<dd>
-
-</dd>
-</dl>
-
-
 
         </div>
         <footer>

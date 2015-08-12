@@ -100,6 +100,47 @@
 
             <article>
                 <header>
+                    <h1><a href="/Statocles/blog/2015/08/11/release-v0-054/">Release v0.054</a></h1>
+
+                    <p class="tags">Tags:
+                        <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
+                    </p>
+
+                    <aside>
+                        <p><time datetime="2015-08-11">
+                            Posted on 2015-08-11
+                        </time>
+                        </p>
+                    </aside>
+
+                </header>
+
+                <p>Some important v1.0 changes here.</p>
+
+<ul>
+<li>All pages now have a title, which means that we can have the page
+title in the <code>&lt;title&gt;</code> tag for better bookmarks</li>
+<li>Documents can add stylesheets and scripts, for those times when the
+content needs special design or interactivity. See <a href="/Statocles/pod/Statocles/Document.html">the Document
+object documentation</a> for more
+information.</li>
+<li>Template includes are now cached, which should dramatically improve
+the site build times. There is still a lot to do about performance,
+but this was a quick change.</li>
+<li>Templates can now be arbitrarily nested. Previously, the API only
+allowed for a single level of depth, called the &quot;category&quot;. Now,
+templates are simply given a full path, and organization is up to the
+app developer and theme author.</li>
+</ul>
+
+<p>Full changelog below...</p>
+
+
+                    <p><a href="/Statocles/blog/2015/08/11/release-v0-054/#section-2">Continue reading Release v0.054...</a></p>
+
+            </article>
+            <article>
+                <header>
                     <h1><a href="/Statocles/blog/2015/07/20/release-v0-053/">Release v0.053</a></h1>
 
                     <p class="tags">Tags:
@@ -231,39 +272,6 @@ the default theme).</p>
 
 
                     <p><a href="/Statocles/blog/2015/06/28/release-v0-050/#section-2">Continue reading Release v0.050...</a></p>
-
-            </article>
-            <article>
-                <header>
-                    <h1><a href="/Statocles/blog/2015/06/23/release-v0-049/">Release v0.049</a></h1>
-
-                    <p class="tags">Tags:
-                        <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
-                    </p>
-
-                    <aside>
-                        <p><time datetime="2015-06-23">
-                            Posted on 2015-06-23
-                        </time>
-                        </p>
-                    </aside>
-
-                </header>
-
-                <p>A quick couple of bugfixes to solve an ongoing problem at $work. It turns out that
-using <a href="/Statocles/pod/Statocles/App/Plain.html">the plain app</a> as the index app was contingent
-on the filesystem&#39;s ordering or some other unpredictable thing. Now, this is fixed,
-so the plain app can be safely used as the index.</p>
-
-<p>This will be fixed/changed completely to <a href="https://github.com/preaction/Statocles/issues/326">allow any page to be the index in a future
-version</a>.</p>
-
-<p>Additionally, some footer styles were added to the default theme.</p>
-
-<p>Full changelog below...</p>
-
-
-                    <p><a href="/Statocles/blog/2015/06/23/release-v0-049/#section-2">Continue reading Release v0.049...</a></p>
 
             </article>
         </main>

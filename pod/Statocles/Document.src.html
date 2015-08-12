@@ -171,14 +171,37 @@ Related links for this document. Links are used to build relationships
 to other web addresses. Link categories are named based on their
 relationship. Some possible categories are:
 
-    alternate - The same document posted to another web site
+=over 4
+
+=item stylesheet
+
+Additional stylesheets for the content of this document.
+
+=item script
+
+Additional scripts for the content of this document.
+
+=item alternate
+
+A link to the same document in another format or posted to another web site
+
+=back
 
 Each category contains an arrayref of hashrefs of L&lt;link objects|Statocles::Link&gt;.
 See the L&lt;Statocles::Link|Statocles::Link&gt; documentation for a full list of
 supported attributes. The most common attributes are:
 
-    text - The text of the link
-    href - The URL for the link
+=over 4
+
+=item href
+
+The URL for the link.
+
+=item text
+
+The text of the link. Not needed for stylesheet or script links.
+
+=back
 
 =cut
 

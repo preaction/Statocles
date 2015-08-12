@@ -138,12 +138,45 @@
 
 <p>Related links for this document. Links are used to build relationships to other web addresses. Link categories are named based on their relationship. Some possible categories are:</p>
 
-<pre><code>    alternate - The same document posted to another web site</code></pre>
+<dl>
+
+<dt>stylesheet</dt>
+<dd>
+
+<p>Additional stylesheets for the content of this document.</p>
+
+</dd>
+<dt>script</dt>
+<dd>
+
+<p>Additional scripts for the content of this document.</p>
+
+</dd>
+<dt>alternate</dt>
+<dd>
+
+<p>A link to the same document in another format or posted to another web site</p>
+
+</dd>
+</dl>
 
 <p>Each category contains an arrayref of hashrefs of <a href="/Statocles/pod/Statocles/Link.html">link objects</a>. See the <a href="/Statocles/pod/Statocles/Link.html">Statocles::Link</a> documentation for a full list of supported attributes. The most common attributes are:</p>
 
-<pre><code>    text - The text of the link
-    href - The URL for the link</code></pre>
+<dl>
+
+<dt>href</dt>
+<dd>
+
+<p>The URL for the link.</p>
+
+</dd>
+<dt>text</dt>
+<dd>
+
+<p>The text of the link. Not needed for stylesheet or script links.</p>
+
+</dd>
+</dl>
 
 <h2 id="date">date</h2>
 

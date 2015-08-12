@@ -125,7 +125,7 @@ The text inside the link tag. Only useful for &lt;a&gt; links.
 
 has text =&gt; (
     is =&gt; &#39;ro&#39;,
-    isa =&gt; Str,
+    isa =&gt; Maybe[Str],
     lazy =&gt; 1,
     default =&gt; sub {
         # For ease of transition, let&#39;s default to title, which we used for the
@@ -167,14 +167,6 @@ has type =&gt; (
     is =&gt; &#39;ro&#39;,
     isa =&gt; Str,
 );
-
-sub BUILD {
-    my ( $self ) = @_;
-    # Either text or title must be set, so that we can set the text
-    # We want this to die as soon as possible, so we can&#39;t die in the attribute
-    # default builder
-    die &quot;Link &#39;text&#39; attribute is required&quot; unless $self-&gt;text;
-}
 
 =method new_from_element
 

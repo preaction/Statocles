@@ -2,10 +2,43 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://preaction.github.io/Statocles/blog/tag/release/</id>
     <title>Statocles</title>
-    <updated>2015-07-20T00:39:43Z</updated>
+    <updated>2015-08-11T21:33:00Z</updated>
     <link href="http://preaction.github.io/Statocles/blog/tag/release.atom" rel="self" />
     <link href="http://preaction.github.io/Statocles/blog/tag/release/" rel="alternate" />
-    <generator version="0.053">Statocles</generator>
+    <generator version="0.054">Statocles</generator>
+    <entry>
+        <id>http://preaction.github.io/Statocles/blog/2015/08/11/release-v0-054/</id>
+        <title>Release v0.054</title>
+        <link href="http://preaction.github.io/Statocles/blog/2015/08/11/release-v0-054/" rel="alternate" />
+        <content type="html"><![CDATA[
+            <p>Some important v1.0 changes here.</p>
+
+<ul>
+<li>All pages now have a title, which means that we can have the page
+title in the <code>&lt;title&gt;</code> tag for better bookmarks</li>
+<li>Documents can add stylesheets and scripts, for those times when the
+content needs special design or interactivity. See <a href="http://preaction.github.io/Statocles/pod/Statocles/Document.html">the Document
+object documentation</a> for more
+information.</li>
+<li>Template includes are now cached, which should dramatically improve
+the site build times. There is still a lot to do about performance,
+but this was a quick change.</li>
+<li>Templates can now be arbitrarily nested. Previously, the API only
+allowed for a single level of depth, called the &quot;category&quot;. Now,
+templates are simply given a full path, and organization is up to the
+app developer and theme author.</li>
+</ul>
+
+<p>Full changelog below...</p>
+
+                <p><a href="http://preaction.github.io/Statocles/blog/2015/08/11/release-v0-054/#section-2">Continue reading...</a></p>
+            <p>Tags:
+                <a href="/blog/tag/release/">release</a>
+            </p>
+        ]]></content>
+        <updated>2015-08-11T00:00:00Z</updated>
+        <category term="release" />
+    </entry>
     <entry>
         <id>http://preaction.github.io/Statocles/blog/2015/07/20/release-v0-053/</id>
         <title>Release v0.053</title>
@@ -107,31 +140,6 @@ the default theme).</p>
             </p>
         ]]></content>
         <updated>2015-06-28T00:00:00Z</updated>
-        <category term="release" />
-    </entry>
-    <entry>
-        <id>http://preaction.github.io/Statocles/blog/2015/06/23/release-v0-049/</id>
-        <title>Release v0.049</title>
-        <link href="http://preaction.github.io/Statocles/blog/2015/06/23/release-v0-049/" rel="alternate" />
-        <content type="html"><![CDATA[
-            <p>A quick couple of bugfixes to solve an ongoing problem at $work. It turns out that
-using <a href="http://preaction.github.io/Statocles/pod/Statocles/App/Plain.html">the plain app</a> as the index app was contingent
-on the filesystem&#39;s ordering or some other unpredictable thing. Now, this is fixed,
-so the plain app can be safely used as the index.</p>
-
-<p>This will be fixed/changed completely to <a href="https://github.com/preaction/Statocles/issues/326">allow any page to be the index in a future
-version</a>.</p>
-
-<p>Additionally, some footer styles were added to the default theme.</p>
-
-<p>Full changelog below...</p>
-
-                <p><a href="http://preaction.github.io/Statocles/blog/2015/06/23/release-v0-049/#section-2">Continue reading...</a></p>
-            <p>Tags:
-                <a href="/blog/tag/release/">release</a>
-            </p>
-        ]]></content>
-        <updated>2015-06-23T00:00:00Z</updated>
         <category term="release" />
     </entry>
 </feed>

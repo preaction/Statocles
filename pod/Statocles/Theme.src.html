@@ -144,10 +144,24 @@ The cached template objects for this theme.
 
 has _templates =&gt; (
     is =&gt; &#39;ro&#39;,
-    isa =&gt; HashRef[HashRef[InstanceOf[&#39;Statocles::Template&#39;]]],
+    isa =&gt; HashRef[InstanceOf[&#39;Statocles::Template&#39;]],
     default =&gt; sub { {} },
     lazy =&gt; 1,  # Must be lazy or the clearer won&#39;t re-init the default
-    clearer =&gt; &#39;clear&#39;,
+    clearer =&gt; &#39;_clear_templates&#39;,
+);
+
+=attr _includes
+
+The cached template objects for the includes.
+
+=cut
+
+has _includes =&gt; (
+    is =&gt; &#39;ro&#39;,
+    isa =&gt; HashRef[InstanceOf[&#39;Statocles::Template&#39;]],
+    default =&gt; sub { {} },
+    lazy =&gt; 1,  # Must be lazy or the clearer won&#39;t re-init the default
+    clearer =&gt; &#39;_clear_includes&#39;,
 );
 
 =method BUILDARGS
@@ -168,23 +182,22 @@ around BUILDARGS =&gt; sub {
 
 =method read
 
-    my $tmpl = $theme-&gt;read( $section =&gt; $name )
+    my $tmpl = $theme-&gt;read( $path )
 
-Read the template for the given C&lt;section&gt; and C&lt;name&gt; and create the
+Read the template for the given C&lt;path&gt; and create the
 L&lt;template|Statocles::Template&gt; object.
 
 =cut
 
 sub read {
-    my ( $self, $app, $template ) = @_;
-    $template .= &#39;.ep&#39;;
-    my $path = Path::Tiny-&gt;new( $app, $template );
+    my ( $self, $path ) = @_;
+    $path .= &#39;.ep&#39;;
 
     my $content = eval { $self-&gt;store-&gt;read_file( $path ); };
     if ( $@ ) {
         if ( blessed $@ &amp;&amp; $@-&gt;isa( &#39;Path::Tiny::Error&#39; ) &amp;&amp; $@-&gt;{op} =~ /^open/ ) {
-            die sprintf &#39;ERROR: Template &quot;%s/%s&quot; does not exist in theme directory &quot;%s&quot;&#39; . &quot;\n&quot;,
-                $app, $template, $self-&gt;store-&gt;path;
+            die sprintf &#39;ERROR: Template &quot;%s&quot; does not exist in theme directory &quot;%s&quot;&#39; . &quot;\n&quot;,
+                $path, $self-&gt;store-&gt;path;
         }
         else {
             die $@;
@@ -208,22 +221,64 @@ sub build_template {
     return Statocles::Template-&gt;new(
         path =&gt; $path,
         content =&gt; $content,
-        include_stores =&gt; [ @{ $self-&gt;include_stores }, $self-&gt;store ],
+        theme =&gt; $self,
     );
 }
 
 =method template
 
-    my $tmpl = $theme-&gt;template( $section =&gt; $name )
+    my $tmpl = $theme-&gt;template( $path )
+    my $tmpl = $theme-&gt;template( @path_parts )
 
-Get the L&lt;template|Statocles::Template&gt; from the given C&lt;section&gt; with the
-given C&lt;name&gt;.
+Get the L&lt;template|Statocles::Template&gt; at the given C&lt;path&gt;, or with the
+given C&lt;path_parts&gt;.
 
 =cut
 
 sub template {
-    my ( $self, $app, $template ) = @_;
-    return $self-&gt;_templates-&gt;{ $app }{ $template } ||= $self-&gt;read( $app, $template );
+    my ( $self, @path ) = @_;
+    my $path = Path::Tiny-&gt;new( @path );
+    return $self-&gt;_templates-&gt;{ $path } ||= $self-&gt;read( $path );
+}
+
+=method include
+
+    my $tmpl = $theme-&gt;include( $path );
+    my $tmpl = $theme-&gt;include( @path_parts );
+
+Get the desired L&lt;template|Statocles::Template&gt; to include based on the given
+C&lt;path&gt; or C&lt;path_parts&gt;. Looks through all the
+L&lt;include_stores|/include_stores&gt; before looking in the L&lt;main store|/store&gt;.
+
+=cut
+
+sub include {
+    my ( $self, @path ) = @_;
+    my $path = Path::Tiny-&gt;new( @path );
+
+    for my $store ( @{ $self-&gt;include_stores }, $self-&gt;store ) {
+        if ( $store-&gt;has_file( $path ) ) {
+            return $self-&gt;_includes-&gt;{ $path } ||= $self-&gt;build_template( $path, $store-&gt;read_file( $path ) );
+        }
+    }
+
+    die qq{Can not find include &quot;$path&quot;};
+}
+
+=method clear
+
+    $theme-&gt;clear;
+
+Clear out the cached templates and includes. Used by the daemon when it
+detects a change to the theme files.
+
+=cut
+
+sub clear {
+    my ( $self ) = @_;
+    $self-&gt;_clear_templates;
+    $self-&gt;_clear_includes;
+    return;
 }
 
 1;
@@ -233,13 +288,17 @@ __END__
 
     # Template directory layout
     /theme/site/layout.html.ep
+    /theme/site/include/layout.html.ep
     /theme/blog/index.html.ep
     /theme/blog/post.html.ep
 
     my $theme      = Statocles::Theme-&gt;new( store =&gt; &#39;/theme&#39; );
-    my $layout     = $theme-&gt;template( site =&gt; &#39;layout.html&#39; );
+    my $layout     = $theme-&gt;template( qw( site include layout.html ) );
     my $blog_index = $theme-&gt;template( blog =&gt; &#39;index.html&#39; );
-    my $blog_post  = $theme-&gt;template( blog =&gt; &#39;post.html&#39; );
+    my $blog_post  = $theme-&gt;template( &#39;blog/post.html&#39; );
+
+    # Clear out cached templates and includes
+    $theme-&gt;clear;
 
 =head1 DESCRIPTION
 
