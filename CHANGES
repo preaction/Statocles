@@ -1,6 +1,19 @@
 Changelog for Statocles
 
-0.053 2015-07-20T05:29:14
+0.054 2015-08-12T02:24:41
+ - move includes to theme and add caching
+ - refer to templates by path for more flexibility
+ - remove README
+ - add page title to <title> tag in defaul themes
+ - allow documents to add stylesheets and scripts
+ - allow links without text
+ - move title attribute to page role
+ - fix abstracts on Statocles::Page
+ - remove Build.PL file
+ - upgrade Path::Tiny to fix mkpath warning
+ - add release v0.053 announcement
+
+0.053 2015-07-20T05:29:14Z
  - expand the document documentation a bit more
  - link to frontmatter options in the content guide
  - add more examples of plain pages to content guide
