@@ -1,7 +1,7 @@
 package Statocles::App;
 # ABSTRACT: Base role for Statocles applications
 
-use Statocles::Base 'Role';
+use Statocles::Base 'Role', 'Emitter';
 use Statocles::Link;
 requires 'pages';
 
@@ -70,6 +70,8 @@ around pages => sub {
             }
         }
     }
+
+    $self->emit( 'build' => class => 'Statocles::Event::Pages', pages => \@pages );
 
     return @pages;
 };
@@ -140,6 +142,19 @@ L<store|Statocles::Store> (see L<Statocles::Page::Document>), files stored in a
 store (see L<Statocles::Page::File>), lists of content (see
 L<Statocles::Page::List>), or anything at all (see
 L<Statocles::Page::Content>).
+
+=head1 EVENTS
+
+All apps by default expose the following events:
+
+=head2 build
+
+This event is fired after the app pages have been prepares and are ready to
+be rendered. This event allows for modifying the pages before they are rendered.
+
+The event will be a
+L<Statocles::Event::Pages|Statocles::Event/Statocles::Event::Pages> object
+containing all the pages prepared by the app.
 
 =head1 INCLUDED APPS
 
