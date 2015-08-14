@@ -1,19 +1,16 @@
 
 use Statocles::Base 'Test';
 use Statocles::App;
-my $site = Statocles::Site->new( deploy => tempdir );
+use Test::Lib;
+use TestApp;
 
-{
-    package TestApp;
-    use Statocles::Base 'Class';
-    with 'Statocles::App';
-    sub pages { }
-}
+my $site = Statocles::Site->new( deploy => tempdir );
 
 subtest 'url' => sub {
 
     my $app = TestApp->new(
         url_root => '/blog/',
+        pages => [],
     );
 
     is $app->url( '/index.html' ), '/blog/';
