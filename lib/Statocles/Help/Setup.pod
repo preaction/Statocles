@@ -12,12 +12,12 @@ To use the site create command, run C<statocles create www.example.com>.
 =head1 CONFIGURATION
 
 To configure a Statocles site, see L<the Statocles config guide,
-Statocle::Help::Config|Statocles::Help::Config>.
+Statocles::Help::Config|Statocles::Help::Config>.
 
 =head1 CONTENT
 
 To begin working with the content on a Statocles site, see L<the Statocles
-content guide, Statocle::Help::Content|Statocles::Help::Content>.
+content guide, Statocles::Help::Content|Statocles::Help::Content>.
 
 =head1 SEE ALSO
 

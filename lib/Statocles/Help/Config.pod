@@ -79,7 +79,7 @@ transfer the pages to a CDN. See L<Statocles::Help::Deploy> for more information
 
 We could set up a theme (L<Statocles::Theme|Statocles::Theme>) to change how
 our site looks, but for now, we'll use the C<default> theme included with
-Statocles. See L<Statocle::Help::Theme> for information on how to change and
+Statocles. See L<Statocles::Help::Theme> for information on how to change and
 customize your theme.
 
 =head2 A Site

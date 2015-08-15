@@ -53,7 +53,7 @@ has content => (
 
 The tags for this document. Tags are used to categorize documents.
 
-Tags may be specified as an array or as a comma-seperated string of
+Tags may be specified as an array or as a comma-separated string of
 tags.
 
 =cut

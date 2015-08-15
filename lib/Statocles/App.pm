@@ -178,7 +178,7 @@ These applications are included with the core Statocles distribution.
 
 =item L<Statocles::Store>
 
-=item L<Statocle::Page>
+=item L<Statocles::Page>
 
 =back
 

@@ -54,7 +54,7 @@ has title => (
 
 =attr type
 
-The MIME type of this page. By default, will use the L<path's|/path> file extention
+The MIME type of this page. By default, will use the L<path's|/path> file extension
 to detect a likely type.
 
 =cut

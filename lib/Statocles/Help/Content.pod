@@ -33,7 +33,7 @@ automatically open on the newly-created document.
 
 =head3 Create a Plain Page
 
-To creat a plain page using L<the plain app|Statocles::App::Plain>, we just have
+To create a plain page using L<the plain app|Statocles::App::Plain>, we just have
 to create a new file:
 
     ### Create /page/index.html
@@ -183,7 +183,7 @@ the L<theme directory|Statocles::Help::Theme>.
 
 All documents are also run through L<the template
 processor|Statocles::Help::Theme/Writing-a-Template>, so we have access to
-L<template helpers|Statocle::Help::Theme/Helpers>, but we can also generate our
+L<template helpers|Statocles::Help::Theme/Helpers>, but we can also generate our
 content from the document's frontmatter data.
 
     ---

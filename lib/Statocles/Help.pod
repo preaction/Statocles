@@ -5,7 +5,7 @@
 
 =head2 CONFIGURATION
 
-To get started with your own Statocle site, run the C<statocles create>
+To get started with your own Statocles site, run the C<statocles create>
 command, or see L<the Statocles config help in
 Statocles::Help::Config|Statocles::Help::Config>.
 

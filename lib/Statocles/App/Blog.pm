@@ -628,7 +628,7 @@ subscribe to only those posts they care about.
 
 =item *
 
-Crosspost links to redirect users to a syndicated blog. Useful when you
+Cross-post links to redirect users to a syndicated blog. Useful when you
 participate in many blogs and want to drive traffic to them.
 
 =item *

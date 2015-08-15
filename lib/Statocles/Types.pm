@@ -92,7 +92,7 @@ An object that consumes the L<Statocles::Store> role.
 
 This can be coerced from any L<Path::Tiny> object or any String, which will be
 used as the filesystem path to the store's documents (the L<path
-attribute|Statocles::Store::File/path>). The coersion creates a
+attribute|Statocles::Store::File/path>). The coercion creates a
 L<Staticles::Store::File> object.
 
 =head2 Theme
