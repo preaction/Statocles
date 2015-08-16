@@ -17,7 +17,11 @@ has path => (
 
 =attr title
 
-The title of this document.
+    ---
+    title: My First Post
+    ---
+
+The title of this document. Used in the template and the main page title.
 
 =cut
 
@@ -28,7 +32,11 @@ has title => (
 
 =attr author
 
-The author of this document.
+    ---
+    author: preaction <doug@example.com>
+    ---
+
+The author of this document. Optional.
 
 =cut
 
@@ -40,7 +48,7 @@ has author => (
 =attr content
 
 The raw content of this document, in markdown. This is everything below
-the frontmatter.
+the ending C<---> of the frontmatter.
 
 =cut
 
@@ -50,6 +58,14 @@ has content => (
 );
 
 =attr tags
+
+    ---
+    tags: recipe, beef, cheese
+    tags:
+        - recipe
+        - beef
+        - cheese
+    ---
 
 The tags for this document. Tags are used to categorize documents.
 
@@ -72,6 +88,15 @@ has tags => (
 );
 
 =attr links
+
+    ---
+    links:
+        stylesheet:
+            - href: /theme/css/extra.css
+        alternate:
+            - href: http://example.com/blog/alternate
+              title: A contributed blog
+    ---
 
 Related links for this document. Links are used to build relationships
 to other web addresses. Link categories are named based on their
@@ -120,8 +145,15 @@ has links => (
 
 =attr date
 
+    ---
+    date: 2015-03-27
+    date: 2015-03-27 12:04:00
+    ---
+
 The date/time this document is for. For pages, this is the last modified date.
 For blog posts, this is the post's date.
+
+Should be in C<YYYY-MM-DD> or C<YYYY-MM-DD HH:MM:SS> format.
 
 =cut
 
@@ -133,9 +165,16 @@ has date => (
 
 =attr template
 
-A template override for this document. If set, the L<document
+    ---
+    template: /blog/recipe.html
+    ---
+
+The path to a template override for this document. If set, the L<document
 page|Statocles::Page::Document> will use this instead of the template provided
 by the application.
+
+The template path should not have the final extention (by default C<.ep>).
+Different template parsers will have different extentions.
 
 =cut
 
@@ -151,9 +190,16 @@ has template => (
 
 =attr layout
 
-A layout template override for this document. If set, the L<document
+    ---
+    layout: /site/layout-dark.html
+    ---
+
+The path to a layout template override for this document. If set, the L<document
 page|Statocles::Page::Document> will use this instead of the layout provided
 by the application.
+
+The template path should not have the final extention (by default C<.ep>).
+Different template parsers will have different extentions.
 
 =cut
 
@@ -169,8 +215,23 @@ has layout => (
 
 =attr data
 
-Any kind of miscellaneous data. This is available immediately in the document
-content.
+    ---
+    data:
+      - Eggs
+      - Milk
+      - Cheese
+    ---
+    % for my $item ( @{ $self->data } ) {
+        <%= $item %>
+    % }
+
+Any kind of extra data to attach to this document, either array (like above),
+hash, string, or number, or combinations of all of these. This is available
+immediately in the document content, and later in the page template.
+
+Every document's content is parsed as a template. The C<data> attribute can be
+used in the template to allow for some structured data that would be cumbersome
+to have to mark up time and again.
 
 =cut
 
@@ -187,7 +248,19 @@ A Statocles::Document is the base unit of content in Statocles.
 L<Applications|Statocles::App> take documents to build
 L<pages|Statocles::Page>.
 
-This is the Model class in the Model-View-Controller pattern.
+Documents are usually written as files, with the L<content|/content> in Markdown,
+and the other attributes as frontmatter, a block of YAML at the top of the file.
+
+An example file with frontmatter looks like:
+
+    ---
+    title: My Blog Post
+    author: preaction
+    links:
+        stylesheet:
+            - href: /theme/css/extra.css
+    ---
+    In my younger and more vulnerable years, my father gave me some
 
 =head1 SEE ALSO
 
