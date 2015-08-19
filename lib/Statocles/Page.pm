@@ -239,7 +239,14 @@ Get extra template variables for this page
 
 =cut
 
-sub vars { }
+sub vars {
+    my ( $self ) = @_;
+    return (
+        app => $self->app,
+        site => $self->site,
+        self => $self,
+    );
+}
 
 =method render
 
@@ -256,8 +263,6 @@ sub render {
     my %vars = (
         %{ $self->data },
         %args,
-        self => $self,
-        app => $self->app,
         $self->vars,
     );
 

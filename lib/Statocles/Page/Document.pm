@@ -108,12 +108,13 @@ Get the template variables for this page.
 
 =cut
 
-sub vars {
-    my ( $self ) = @_;
+around vars => sub {
+    my ( $orig, $self ) = @_;
     return (
+        $self->$orig,
         doc => $self->document,
     );
-}
+};
 
 =method sections
 

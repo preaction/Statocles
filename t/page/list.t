@@ -4,7 +4,7 @@ use Statocles::Page::Document;
 use Statocles::Document;
 use Statocles::Page::List;
 
-my $site = Statocles::Site->new( deploy => tempdir );
+my $site = Statocles::Site->new( deploy => tempdir, title => 'Test Site' );
 
 my @pages = (
     Statocles::Page::Document->new(
@@ -69,9 +69,10 @@ subtest 'extra args' => sub {
         pages => \@pages,
         next => '/blog/page-2.html',
         prev => '/blog/page--1.html',
-        layout => '<%= $site %> <%= $content %>',
+        layout => '<%= $foo %> <%= $content %>',
         template => <<'ENDTEMPLATE',
-<%= $site %>
+<%= $foo %>
+<%= $site->title %>
 % for my $page ( @$pages ) {
 % my $doc = $page->document;
 <%= $page->date %> <%= $page->path %> <%= $doc->title %> <%= $doc->author %> <%= $page->content %>
@@ -82,6 +83,7 @@ ENDTEMPLATE
     );
 
     my $html    = "hello hello\n"
+                . $site->title . "\n"
                 . join( "\n",
                     map {
                         join( " ",
@@ -92,7 +94,7 @@ ENDTEMPLATE
                     @pages
                 ) . "\n/blog/page--1.html\n/blog/page-2.html\n\n";
 
-    my $output = $list->render( site => 'hello', title => 'DOES NOT OVERRIDE' );
+    my $output = $list->render( foo => 'hello', title => 'DOES NOT OVERRIDE' );
     eq_or_diff $output, $html;
 };
 

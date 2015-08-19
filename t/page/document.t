@@ -8,6 +8,7 @@ use Text::Markdown;
 use Statocles::Site;
 my $site = Statocles::Site->new(
     deploy => tempdir,
+    title => 'Test Site',
     theme => $SHARE_DIR->child(qw( theme )),
 );
 my $md = Text::Markdown->new;
@@ -182,16 +183,16 @@ subtest 'extra args' => sub {
         document => $doc,
         path => '/path/to/page.html',
         template => join( ' ',
-            '<%= $site %>',
+            '<%= $foo %>',
             ( map { "<\%= \$self->$_ \%>" } qw( path ) ),
             ( map { "<\%= \$doc->$_ \%>" } qw( title author ) ),
             '<%= $content %>',
         ),
-        layout => '<%= $site %> HEAD <%= $content %> FOOT',
+        layout => '<%= $site->title %> HEAD <%= $content %> FOOT',
     );
 
-    my $output = $page->render( site => 'hello', title => 'DOES NOT OVERRIDE', );
-    my $expect = join " ", 'hello', 'HEAD', 'hello', $page->path, $doc->title,
+    my $output = $page->render( foo => 'hello', title => 'DOES NOT OVERRIDE', );
+    my $expect = join " ", $site->title, 'HEAD', 'hello', $page->path, $doc->title,
         $doc->author, $expect_content . "\n", 'FOOT' . "\n";
     eq_or_diff $output, $expect;
 };
