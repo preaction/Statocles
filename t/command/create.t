@@ -4,6 +4,19 @@ my $SHARE_DIR = path( __DIR__, '..', 'share' );
 use Statocles::Command;
 use Capture::Tiny qw( capture );
 use YAML;
+use File::Share qw( dist_dir );
+
+my ( undef, undef, undef, $day, $mon, $year ) = localtime;
+$year += 1900;
+$mon += 1;
+
+my @date_parts = (
+    sprintf( '%04i', $year ),
+    sprintf( '%02i', $mon ),
+    sprintf( '%02i', $day ),
+);
+
+my $create_dir = path( dist_dir( 'Statocles' ), 'create' );
 
 subtest 'create a site' => sub {
     my $cwd = cwd;
@@ -36,9 +49,17 @@ subtest 'create a site' => sub {
             'config is complete and correct';
 
         ok $tmp->child( 'example.com', 'blog' )->is_dir, 'blog dir exists';
+        eq_or_diff $tmp->child( 'example.com', 'blog', @date_parts, 'first-post', 'index.markdown' )->slurp,
+                   $create_dir->child( 'blog', 'post.markdown' )->slurp,
+                   'first post exists';
         ok $tmp->child( 'example.com', 'static' )->is_dir, 'static dir exists';
         ok $tmp->child( 'example.com', 'page' )->is_dir, 'page dir exists';
+        eq_or_diff $tmp->child( 'example.com', 'page', 'index.markdown' )->slurp,
+                   $create_dir->child( 'page', 'index.markdown' )->slurp,
+                   'first page exists';
         ok !$tmp->child( 'example.com', 'theme' )->exists, 'theme dir does not exists';
+
+        subtest 'build the site' => \&test_site_build, $tmp->child( 'example.com' );
 
         chdir $cwd;
     };
@@ -69,9 +90,17 @@ subtest 'create a site' => sub {
             'config is complete and correct';
 
         ok $tmp->child( 'example.com', 'blog' )->is_dir, 'blog dir exists';
+        eq_or_diff $tmp->child( 'example.com', 'blog', @date_parts, 'first-post', 'index.markdown' )->slurp,
+                   $create_dir->child( 'blog', 'post.markdown' )->slurp,
+                   'first post exists';
         ok $tmp->child( 'example.com', 'static' )->is_dir, 'static dir exists';
         ok $tmp->child( 'example.com', 'page' )->is_dir, 'page dir exists';
+        eq_or_diff $tmp->child( 'example.com', 'page', 'index.markdown' )->slurp,
+                   $create_dir->child( 'page', 'index.markdown' )->slurp,
+                   'first page exists';
         ok !$tmp->child( 'example.com', 'theme' )->exists, 'theme dir does not exists';
+
+        subtest 'build the site' => \&test_site_build, $tmp->child( 'example.com' );
 
         chdir $cwd;
     };
@@ -105,9 +134,17 @@ subtest 'create a site' => sub {
             'config is complete and correct';
 
         ok $tmp->child( 'blog' )->is_dir, 'blog dir exists';
+        eq_or_diff $tmp->child( 'blog', @date_parts, 'first-post', 'index.markdown' )->slurp,
+                   $create_dir->child( 'blog', 'post.markdown' )->slurp,
+                   'first post exists';
         ok $tmp->child( 'static' )->is_dir, 'static dir exists';
         ok $tmp->child( 'page' )->is_dir, 'page dir exists';
+        eq_or_diff $tmp->child( 'page', 'index.markdown' )->slurp,
+                   $create_dir->child( 'page', 'index.markdown' )->slurp,
+                   'first page exists';
         ok !$tmp->child( 'theme' )->exists, 'theme dir does not exists';
+
+        subtest 'build the site' => \&test_site_build, $tmp->child( 'example.com' );
 
         chdir $cwd;
     };
@@ -140,9 +177,17 @@ subtest 'create a site' => sub {
             'config is complete and correct';
 
         ok $tmp->child( 'blog' )->is_dir, 'blog dir exists';
+        eq_or_diff $tmp->child( 'blog', @date_parts, 'first-post', 'index.markdown' )->slurp,
+                   $create_dir->child( 'blog', 'post.markdown' )->slurp,
+                   'first post exists';
         ok $tmp->child( 'static' )->is_dir, 'static dir exists';
         ok $tmp->child( 'page' )->is_dir, 'page dir exists';
+        eq_or_diff $tmp->child( 'page', 'index.markdown' )->slurp,
+                   $create_dir->child( 'page', 'index.markdown' )->slurp,
+                   'first page exists';
         ok !$tmp->child( 'theme' )->exists, 'theme dir does not exists';
+
+        subtest 'build the site' => \&test_site_build, $tmp->child( 'example.com' );
 
         chdir $cwd;
     };
@@ -173,9 +218,17 @@ subtest 'create a site' => sub {
             'config is complete and correct';
 
         ok $tmp->child( 'example.com', 'blog' )->is_dir, 'blog dir exists';
+        eq_or_diff $tmp->child( 'example.com', 'blog', @date_parts, 'first-post', 'index.markdown' )->slurp,
+                   $create_dir->child( 'blog', 'post.markdown' )->slurp,
+                   'first post exists';
         ok $tmp->child( 'example.com', 'static' )->is_dir, 'static dir exists';
         ok $tmp->child( 'example.com', 'page' )->is_dir, 'page dir exists';
+        eq_or_diff $tmp->child( 'example.com', 'page', 'index.markdown' )->slurp,
+                   $create_dir->child( 'page', 'index.markdown' )->slurp,
+                   'first page exists';
         ok !$tmp->child( 'example.com', 'theme' )->exists, 'theme dir does not exists';
+
+        subtest 'build the site' => \&test_site_build, $tmp->child( 'example.com' );
 
         chdir $cwd;
     };
@@ -227,8 +280,14 @@ subtest 'git deploy' => sub {
             'config is complete and correct';
 
         ok $tmp->child( 'www.example.com', 'blog' )->is_dir, 'blog dir exists';
+        eq_or_diff $tmp->child( 'www.example.com', 'blog', @date_parts, 'first-post', 'index.markdown' )->slurp,
+                   $create_dir->child( 'blog', 'post.markdown' )->slurp,
+                   'first post exists';
         ok $tmp->child( 'www.example.com', 'static' )->is_dir, 'static dir exists';
         ok $tmp->child( 'www.example.com', 'page' )->is_dir, 'page dir exists';
+        eq_or_diff $tmp->child( 'www.example.com', 'page', 'index.markdown' )->slurp,
+                   $create_dir->child( 'page', 'index.markdown' )->slurp,
+                   'first page exists';
         ok $tmp->child( 'www.example.com', 'theme' )->is_dir, 'theme dir exists';
 
         ok $tmp->child( 'www.example.com', '.git' )->is_dir, 'git repository created';
@@ -236,6 +295,8 @@ subtest 'git deploy' => sub {
             qq{\n.statocles\n},
             'gitignore is created',
             ;
+
+        subtest 'build the site' => \&test_site_build, $tmp->child( 'www.example.com' );
 
         chdir $cwd;
     };
@@ -271,8 +332,14 @@ subtest 'git deploy' => sub {
             'config is complete and correct';
 
         ok $tmp->child( 'blog' )->is_dir, 'blog dir exists';
+        eq_or_diff $tmp->child( 'blog', @date_parts, 'first-post', 'index.markdown' )->slurp,
+                   $create_dir->child( 'blog', 'post.markdown' )->slurp,
+                   'first post exists';
         ok $tmp->child( 'static' )->is_dir, 'static dir exists';
         ok $tmp->child( 'page' )->is_dir, 'page dir exists';
+        eq_or_diff $tmp->child( 'page', 'index.markdown' )->slurp,
+                   $create_dir->child( 'page', 'index.markdown' )->slurp,
+                   'first page exists';
         ok $tmp->child( 'theme' )->is_dir, 'theme dir exists';
 
         ok $tmp->child( '.git' )->is_dir, 'git repository still exists';
@@ -281,12 +348,29 @@ subtest 'git deploy' => sub {
             'gitignore is added to',
             ;
 
+        subtest 'build the site' => \&test_site_build, $tmp;
+
         chdir $cwd;
     };
 
 };
 
 done_testing;
+
+sub test_site_build {
+    my ( $tmp ) = @_;
+    my $cwd = cwd;
+    chdir $tmp;
+    my ( $out, $err, $exit );
+    eval {
+        ( $out, $err, $exit ) = capture { Statocles::Command->main( 'build' ) };
+    };
+    ok !$@, 'completed successfully' or diag $@;
+    is $exit, 0;
+    ok !$err, 'nothing on stderr' or diag "STDERR: $err";
+    ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
+    chdir $cwd;
+}
 
 sub site_config {
     return {
