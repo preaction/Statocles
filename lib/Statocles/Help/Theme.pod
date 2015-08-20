@@ -11,9 +11,24 @@ templates from a L<Statocles::Store|Statocles::Store>.
 
 =head1 Default Themes
 
-There is a default theme included with Statocles, with more on the way. The
-default theme uses L<the Skeleton CSS boilerplate|http://getskeleton.com> to
-build a simple, clean starting point for your own theme.
+There are some default themes included with Statocles, with more on the way.
+To use a default theme, set your site's theme to C<::name>, where C<name> is
+the name of the theme. The currently-available default themes are:
+
+=over 4
+
+=item C<::default>
+
+The default theme uses L<the Skeleton CSS boilerplate|http://getskeleton.com>
+to build a simple, clean starting point for your own theme.
+
+=item C<::bootstrap>
+
+The bootstrap theme uses L<the Bootstrap library|http://getbootstrap.com> to
+provide an elegant and flexible theme. Sites like L<Bootswatch|http://bootswatch.com>
+can provide a custom look to your Bootstrap site.
+
+=back
 
 =head1 Making Minor Adjustments
 
