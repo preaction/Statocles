@@ -381,7 +381,7 @@ sub site_config {
                 nav => {
                     main => [
                         {
-                            title => 'Blog',
+                            text => 'Blog',
                             href => '/',
                         },
                     ],

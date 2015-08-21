@@ -8,7 +8,7 @@ site:
         title: 'My Statocles Site'
         nav:
             main:
-                - title: 'Blog'
+                - text: 'Blog'
                   href: '/'
         theme: { '$ref': 'theme' }
         apps:
