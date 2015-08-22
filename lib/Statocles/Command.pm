@@ -252,31 +252,50 @@ sub create_site {
     my $cwd = cwd;
     my $root = Path::Tiny->new( $site_root );
     $root->mkpath;
-    my ( $site ) = YAML::Load( $create_dir->child( 'site.yml' )->slurp_utf8 );
+    my $config_tmpl = Statocles::Template->new(
+        path => $create_dir->child( 'site.yml' ),
+    );
+    my %vars;
 
     if ( $answer{flavor} == 1 ) {
-        $site->{site}{args}{index} = "/blog";
-        $site->{site}{args}{nav}{main}[0]{href} = "/";
+        $vars{site}{index} = "/blog";
+        $vars{site}{nav}{main}[0] = {
+            href => "/",
+            text => "Blog",
+        };
     }
     elsif ( $answer{flavor} == 2 ) {
-        $site->{site}{args}{index} = "/page";
-        $site->{site}{args}{nav}{main}[0]{href} = "/blog";
+        $vars{site}{index} = "/page";
+        $vars{site}{nav}{main}[0] = {
+            href => "/blog",
+            text => "Blog",
+        };
+    }
+    else {
+        $vars{site}{index} = "/blog";
+        $vars{site}{nav}{main}[0] = {
+            href => "/",
+            text => "Blog",
+        };
     }
 
     if ( lc $answer{bundle_theme} eq 'y' ) {
         chdir $root;
         $self->bundle_theme( 'default', 'theme' );
         chdir $cwd;
-        $site->{theme}{args}{store} = 'theme';
+        $vars{theme}{args}{store} = 'theme';
+    }
+    else {
+        $vars{theme}{args}{store} = '::default';
     }
 
     if ( $answer{base_url} ) {
-        $site->{site}{args}{base_url} = $answer{base_url};
+        $vars{site}{base_url} = $answer{base_url};
     }
 
     if ( $answer{deploy_class} == 1 ) {
-        $site->{deploy}{class} = 'Statocles::Deploy::Git';
-        $site->{deploy}{args}{branch} = $answer{git_branch};
+        $vars{deploy}{class} = 'Statocles::Deploy::Git';
+        $vars{deploy}{args}{branch} = $answer{git_branch};
 
         # Create the git repo
         require Git::Repository;
@@ -288,16 +307,17 @@ sub create_site {
         $root->child( '.gitignore' )->append( "\n.statocles\n" );
     }
     elsif ( $answer{deploy_class} == 2 ) {
-        $site->{deploy}{class} = 'Statocles::Deploy::File';
-        $site->{deploy}{args}{path} = $answer{deploy_path};
+        $vars{deploy}{class} = 'Statocles::Deploy::File';
+        $vars{deploy}{args}{path} = $answer{deploy_path};
     }
     else {
         # We need a deploy in order to create a Site object
-        $site->{deploy}{class} = 'Statocles::Deploy::File';
-        $site->{deploy}{args}{path} = '.';
+        $vars{deploy}{class} = 'Statocles::Deploy::File';
+        $vars{deploy}{args}{path} = '.';
     }
 
-    $root->child( 'site.yml' )->spew_utf8( YAML::Dump( $site ) );
+    $root->child( 'site.yml' )->spew_utf8( $config_tmpl->render( %vars ) );
+    my ( $site ) = YAML::Load( $root->child( 'site.yml' )->slurp_utf8 );
 
     # Make required store directories
     for my $app ( map { $_->{'$ref'} } values %{ $site->{site}{args}{apps} } ) {
