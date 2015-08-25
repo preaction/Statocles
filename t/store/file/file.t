@@ -138,6 +138,40 @@ subtest 'write files' => sub {
     };
 };
 
+subtest 'remove' => sub {
+
+    subtest 'file' => sub {
+        my $tmpdir = tempdir;
+        my $file_path = $tmpdir->child( 'foo', 'bar', 'baz.txt' );
+        $file_path->parent->mkpath;
+        $file_path->spew( 'Hello');
+
+        my $store = Statocles::Store::File->new(
+            path => $tmpdir,
+        );
+        $store->remove( path( qw( foo bar baz.txt ) ) );
+
+        ok !$file_path->exists, 'file has been removed';
+        ok $file_path->parent->exists, 'parent dir is not removed';
+    };
+
+    subtest 'directory' => sub {
+        my $tmpdir = tempdir;
+        my $file_path = $tmpdir->child( 'foo', 'bar', 'baz.txt' );
+        $file_path->parent->mkpath;
+        $file_path->spew( 'Hello');
+
+        my $store = Statocles::Store::File->new(
+            path => $tmpdir,
+        );
+        $store->remove( path( qw( foo bar ) ) );
+
+        ok !$file_path->exists, 'file has been removed';
+        ok !$file_path->parent->exists, 'parent dir is removed';
+        ok $file_path->parent->parent->exists, 'grandparent dir is not removed';
+    };
+};
+
 subtest 'verbose' => sub {
 
     local $ENV{MOJO_LOG_LEVEL} = 'debug';

@@ -388,6 +388,21 @@ sub write_file {
     return;
 }
 
+=method remove
+
+    $store->remove( $path )
+
+Remove the given path from the store. If the path is a directory, the entire
+directory is removed.
+
+=cut
+
+sub remove {
+    my ( $self, $path ) = @_;
+    $self->path->child( $path )->remove_tree;
+    return;
+}
+
 1;
 __END__
 
