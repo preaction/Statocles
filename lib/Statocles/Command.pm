@@ -160,6 +160,10 @@ sub main {
         if ( !$app ) {
             return pod2usage("ERROR: Unknown command or app '$app_name'");
         }
+        elsif ( !$app->can( 'command' ) ) {
+            say STDERR sprintf 'ERROR: Application "%s" has no commands', $app_name;
+            return 1;
+        }
 
         return $cmd->site->apps->{ $app_name }->command( $app_name, @argv );
     }

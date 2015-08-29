@@ -7,8 +7,8 @@ with 'Statocles::App';
 has _pages => (
     is => 'ro',
     isa => ArrayRef[ConsumerOf['Statocles::Page']],
-    required => 1,
     init_arg => 'pages',
+    default => sub { [] },
 );
 
 sub pages {
