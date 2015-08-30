@@ -211,8 +211,8 @@ Get the individual post L<Statocles::Page> objects.
 =cut
 
 sub post_pages {
-    my ( $self ) = @_;
-    my @pages = map { $self->_make_post_page( $_ ) } $self->_sorted_docs;
+    my ( $self, %opt ) = @_;
+    my @pages = map { $self->_make_post_page( $_ ) } $self->_sorted_docs( $opt{date} );
     $self->_post_pages( [ @pages ] );
     return @pages;
 }
@@ -277,11 +277,11 @@ sub post_files {
 }
 
 # Return the post docs sorted by date, pruning any docs that are after
-# the current date
+# the given date
 sub _sorted_docs {
-    my ( $self ) = @_;
+    my ( $self, $today ) = @_;
 
-    my $today = Time::Piece->new->ymd;
+    $today ||= Time::Piece->new->ymd;
     my @doc_dates;
     for my $doc ( @{ $self->store->documents } ) {
         my @date_parts = $doc->path =~ m{/(\d{4})/(\d{2})/(\d{2})/[^/]+(?:/index[.]markdown)?$};
@@ -485,15 +485,25 @@ sub tag_pages {
 
 =method pages
 
-    my @pages = $app->pages;
+    my @pages = $app->pages( %options );
 
-Get all the L<pages|Statocles::Page> for this application.
+Get all the L<pages|Statocles::Page> for this application. Available options
+are:
+
+=over 4
+
+=item date
+
+The date to build for. Only posts on or before this date will be built.
+Defaults to the current date.
+
+=back
 
 =cut
 
 sub pages {
-    my ( $self ) = @_;
-    my @post_pages = $self->post_pages;
+    my ( $self, %opt ) = @_;
+    my @post_pages = $self->post_pages( %opt );
     return (
         ( map { $self->$_( @post_pages ) } qw( index tag_pages ) ),
         $self->post_files,

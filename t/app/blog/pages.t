@@ -868,4 +868,10 @@ subtest 'blog with no pages is still built' => sub {
     cmp_deeply \@pages, [];
 };
 
+subtest 'date option' => sub {
+    my @pages = $app->pages( date => '9999-12-31' );
+    my ( $found ) = grep { $_->path =~ m{^/blog/9999/12/31} } @pages;
+    ok $found;
+};
+
 done_testing;
