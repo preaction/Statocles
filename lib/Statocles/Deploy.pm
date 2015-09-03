@@ -47,6 +47,4 @@ otherwise.
 
 =item L<Statocles::Deploy::Git>
 
-=item L<Statocles::Store>
-
 =back
