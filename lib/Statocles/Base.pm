@@ -50,6 +50,7 @@ our %IMPORT_BUNDLES = (
     ],
 
     Emitter => [
+        'Beam::Emitter',
         'Statocles::Event',
         sub {
             my ( $bundles, $args ) = @_;
