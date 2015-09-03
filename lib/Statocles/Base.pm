@@ -36,7 +36,7 @@ our %IMPORT_BUNDLES = (
             build_temp_site
         )],
         'Statocles::Site',
-        sub { $Statocles::VERSION = 0.001; return }, # Set version normally done via dzil
+        sub { $Statocles::VERSION ||= 0.001; return }, # Set version normally done via dzil
     ],
 
     Class => [
