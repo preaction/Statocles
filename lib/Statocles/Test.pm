@@ -28,11 +28,11 @@ You must provide a C<theme> (probably using the one in C<t/share/theme>).
 sub build_test_site {
     my ( %site_args ) = @_;
     require Statocles::Site;
-    require Statocles::Store::File;
+    require Statocles::Store;
     require Statocles::Deploy::File;
 
     my $store   = $site_args{build_store}
-                ? Statocles::Store::File->new( delete $site_args{build_store} )
+                ? Statocles::Store->new( delete $site_args{build_store} )
                 : Path::Tiny->tempdir
                 ;
 
@@ -275,7 +275,7 @@ sub build_temp_site {
         },
 
         build => {
-            class => 'Statocles::Store::File',
+            class => 'Statocles::Store',
             args => {
                 path => $tmp->child( 'build_site' ),
             },
@@ -292,7 +292,7 @@ sub build_temp_site {
             'class' => 'Statocles::App::Blog',
             'args' => {
                 store => {
-                    '$class' => 'Statocles::Store::File',
+                    '$class' => 'Statocles::Store',
                     '$args' => {
                         path => $tmp->child( 'blog' ),
                     },
@@ -305,7 +305,7 @@ sub build_temp_site {
             'class' => 'Statocles::App::Plain',
             'args' => {
                 store => {
-                    '$class' => 'Statocles::Store::File',
+                    '$class' => 'Statocles::Store',
                     '$args' => {
                         path => "$tmp",
                     },
@@ -330,7 +330,7 @@ sub build_temp_site {
         },
 
         build_foo => {
-            class => 'Statocles::Store::File',
+            class => 'Statocles::Store',
             args => {
                 path => $tmp->child( 'build_foo' ),
             },

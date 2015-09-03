@@ -9,8 +9,8 @@ use Type::Utils -all;
 use Types::Standard -types;
 
 role_type Store, { role => "Statocles::Store" };
-coerce Store, from Str, via { Statocles::Store::File->new( path => $_ ) };
-coerce Store, from InstanceOf['Path::Tiny'], via { Statocles::Store::File->new( path => $_ ) };
+coerce Store, from Str, via { Statocles::Store->new( path => $_ ) };
+coerce Store, from InstanceOf['Path::Tiny'], via { Statocles::Store->new( path => $_ ) };
 
 class_type Theme, { class => "Statocles::Theme" };
 coerce Theme, from Str, via { Statocles::Theme->new( store => $_ ) };
@@ -45,7 +45,7 @@ coerce LinkHash, from HashRef[HashRef],
     };
 
 # Down here to resolve circular dependencies
-require Statocles::Store::File;
+require Statocles::Store;
 require Statocles::Theme;
 require Statocles::Link;
 
@@ -88,12 +88,12 @@ This is a L<type library|Type::Tiny::Manual::Library> for common Statocles types
 
 =head2 Store
 
-An object that consumes the L<Statocles::Store> role.
+A L<Statocles::Store> object.
 
 This can be coerced from any L<Path::Tiny> object or any String, which will be
 used as the filesystem path to the store's documents (the L<path
-attribute|Statocles::Store::File/path>). The coercion creates a
-L<Staticles::Store::File> object.
+attribute|Statocles::Store/path>). The coercion creates a
+L<Statocles::Store> object.
 
 =head2 Theme
 

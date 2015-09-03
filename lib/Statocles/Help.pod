@@ -180,7 +180,7 @@ L<Statocles::Site> - Main site class
 
 =item *
 
-L<Statocles::Store::File> - Storage for documents and files
+L<Statocles::Store> - Storage for documents and files
 
 =item *
 

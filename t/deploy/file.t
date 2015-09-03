@@ -9,7 +9,7 @@ if ( $ENV{ NO_CLEANUP } ) {
     @temp_args = ( CLEANUP => 0 );
 }
 
-my $build_store = Statocles::Store::File->new(
+my $build_store = Statocles::Store->new(
     path => $SHARE_DIR->child( qw( deploy ) ),
 );
 

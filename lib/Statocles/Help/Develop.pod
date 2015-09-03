@@ -56,8 +56,8 @@ easily editable with any text editor. A sample document looks like:
 
     This is a paragraph
 
-The document format is described in the L<Statocles::Store::File> documentation
-under L<Frontmatter Document Format|Statocles::Store::File/"Frontmatter
+The document format is described in the L<Statocles::Store> documentation
+under L<Frontmatter Document Format|Statocles::Store/"Frontmatter
 Document Format">.
 
 =head1 STORES
@@ -69,7 +69,7 @@ wherever you want!
 
 =over 4
 
-=item L<Statocles::Store::File>
+=item L<Statocles::Store>
 
 Read documents from the filesystem.
 

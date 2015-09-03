@@ -87,7 +87,7 @@ subtest 'templates from directory' => sub {
     );
 
     subtest 'absolute directory' => sub {
-        my $store = Statocles::Store::File->new(
+        my $store = Statocles::Store->new(
             path => $SHARE_DIR->child( 'theme' ),
         );
         my $theme = Statocles::Theme->new(
@@ -107,7 +107,7 @@ subtest 'templates from directory' => sub {
         my $cwd = getcwd();
         chdir $SHARE_DIR;
 
-        my $store = Statocles::Store::File->new(
+        my $store = Statocles::Store->new(
             path => 'theme',
         );
 

@@ -143,7 +143,7 @@ subtest 'deploy with submodules and ignored files' => sub {
     my $build_dir = $tmpdir->child( 'build' );
     $build_dir->mkpath;
     dircopy( $SHARE_DIR->child( qw( deploy ) ), $build_dir );
-    $build_store = Statocles::Store::File->new( path => $build_dir );
+    $build_store = Statocles::Store->new( path => $build_dir );
     $build_dir->child( 'test.swp' )->spew( 'ERROR!' );
     $build_dir->child( '.DS_Store' )->spew( 'ERROR!' );
     $build_dir->child( 'submodule' => 'README' )->touchpath->spew( 'ERROR!' );
@@ -265,7 +265,7 @@ sub make_deploy {
     _git_run( $remotegit, commit => -m => 'Initial commit' );
     _git_run( $workgit, pull => $args{remote} => 'master' );
 
-    my $build_store = Statocles::Store::File->new(
+    my $build_store = Statocles::Store->new(
         path => $SHARE_DIR->child( qw( deploy ) ),
     );
 

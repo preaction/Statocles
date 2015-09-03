@@ -1,9 +1,9 @@
 
 use Statocles::Base 'Test';
-use Statocles::Store::File;
+use Statocles::Store;
 use Statocles::Util qw( dircopy );
 use Capture::Tiny qw( capture );
-my $SHARE_DIR = path( __DIR__, '..', '..', 'share' );
+my $SHARE_DIR = path( __DIR__, '..', 'share' );
 build_test_site( theme => $SHARE_DIR->child( 'theme' ) );
 
 my $DT_FORMAT = '%Y-%m-%d %H:%M:%S';
@@ -121,12 +121,12 @@ my @ignored_docs = (
     ),
 );
 
-my $ignored_store = Statocles::Store::File->new(
+my $ignored_store = Statocles::Store->new(
     path => $SHARE_DIR->child( qw( store docs ignore ) ),
 );
 
 subtest 'read documents' => sub {
-    my $store = Statocles::Store::File->new(
+    my $store = Statocles::Store->new(
         path => $SHARE_DIR->child( qw( store docs ) ),
     );
     cmp_deeply $store->documents, bag( @exp_docs ) or diag explain $store->documents;
@@ -142,7 +142,7 @@ subtest 'read documents' => sub {
 };
 
 subtest 'parse frontmatter from content' => sub {
-    my $store = Statocles::Store::File->new(
+    my $store = Statocles::Store->new(
         path => tempdir,
     );
     my $path = $SHARE_DIR->child( qw( store docs required.markdown ) );
@@ -152,7 +152,7 @@ subtest 'parse frontmatter from content' => sub {
 subtest 'read with relative directory' => sub {
     my $cwd = cwd;
     chdir $SHARE_DIR;
-    my $store = Statocles::Store::File->new(
+    my $store = Statocles::Store->new(
         path => 'store/docs',
     );
     cmp_deeply $store->documents, bag( @exp_docs );
@@ -163,10 +163,10 @@ subtest 'path that has regex-special characters inside' => sub {
     my $tmpdir = tempdir;
     my $baddir = $tmpdir->child( '[regex](name).dir' );
     dircopy $SHARE_DIR->child( qw( store docs ) ), $baddir;
-    my $ignored_store = Statocles::Store::File->new(
+    my $ignored_store = Statocles::Store->new(
         path => $baddir->child( qw( ignore ) ),
     );
-    my $store = Statocles::Store::File->new(
+    my $store = Statocles::Store->new(
         path => $baddir,
     );
     cmp_deeply $store->documents, bag( @exp_docs )
@@ -175,21 +175,21 @@ subtest 'path that has regex-special characters inside' => sub {
 
 subtest 'bad documents' => sub {
     subtest 'no ending frontmatter mark' => sub {
-        my $store = Statocles::Store::File->new(
+        my $store = Statocles::Store->new(
             path => $SHARE_DIR->child( qw( store error missing-end-mark ) ),
         );
         throws_ok { $store->documents } qr{\QCould not find end of front matter (---) in};
     };
 
     subtest 'invalid yaml' => sub {
-        my $store = Statocles::Store::File->new(
+        my $store = Statocles::Store->new(
             path => $SHARE_DIR->child( qw( store error bad-yaml ) ),
         );
         throws_ok { $store->documents } qr{Error parsing YAML in};
     };
 
     subtest 'invalid date/time' => sub {
-        my $store = Statocles::Store::File->new(
+        my $store = Statocles::Store->new(
             path => $SHARE_DIR->child( qw( store error bad-dates ) ),
         );
         throws_ok { $store->documents }
@@ -202,7 +202,7 @@ subtest 'write document' => sub {
     no warnings 'once';
     local $YAML::Indent = 4; # Ensure our test output matches our indentation level
     my $tmpdir = tempdir;
-    my $store = Statocles::Store::File->new(
+    my $store = Statocles::Store->new(
         path => $tmpdir,
     );
     my $tp = Time::Piece->strptime( '2014-06-05 00:00:00', $DT_FORMAT );
@@ -276,7 +276,7 @@ subtest 'write document' => sub {
 
 subtest 'removing a store reveals formerly-ignored files' => sub {
     $ignored_store = undef;
-    my $store = Statocles::Store::File->new(
+    my $store = Statocles::Store->new(
         path => $SHARE_DIR->child( qw( store docs ) ),
     );
     cmp_deeply $store->documents, bag( @exp_docs, @ignored_docs )
@@ -289,7 +289,7 @@ subtest 'verbose' => sub {
 
     subtest 'write' => sub {
         my $tmpdir = tempdir;
-        my $store = Statocles::Store::File->new(
+        my $store = Statocles::Store->new(
             path => $tmpdir,
         );
 
@@ -301,7 +301,7 @@ subtest 'verbose' => sub {
 
     subtest 'read' => sub {
 
-        my $store = Statocles::Store::File->new(
+        my $store = Statocles::Store->new(
             path => $SHARE_DIR->child( qw( store docs ) ),
         );
         my $path = path( qw( required.markdown ) );
@@ -315,7 +315,7 @@ subtest 'verbose' => sub {
 };
 
 subtest 'check if a path is a document' => sub {
-    my $store = Statocles::Store::File->new(
+    my $store = Statocles::Store->new(
         path => $SHARE_DIR->child( qw( store ) ),
     );
     ok $store->is_document( Path::Tiny->new(qw( docs ext short.md )) );

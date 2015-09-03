@@ -3,7 +3,7 @@ package Statocles::App::Blog;
 
 use Statocles::Base 'Class';
 use Getopt::Long qw( GetOptionsFromArray );
-use Statocles::Store::File;
+use Statocles::Store;
 use Statocles::Page::Document;
 use Statocles::Page::List;
 

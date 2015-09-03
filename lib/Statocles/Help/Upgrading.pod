@@ -31,6 +31,20 @@ Deprecated in v0.051. Fatal in v1.000. Exception removed in v2.000.
 
 Thanks to L<Kyle Sheely|https://github.com/kylesheely> for the idea.
 
+=item Statocles::Store::File is deprecated
+
+Statocles::Store::File was created in anticipation of making other Store
+objects like MongoDB or Hadoop. But, having it merely complicates the API
+without actually changing whether other Stores could be created (apparently I
+forgot that polymorphism exists).
+
+Since the likelihood of those other Stores is low, and since having only one
+Statocles::Store doesn't prevent making a Statocles::Store::MongoDB or
+Statocles::Store::Custom class, it's better to remove this complexity before
+v1.000
+
+The shim module that remains in place will be removed in v1.000.
+
 =back
 
 =head1 SEE ALSO

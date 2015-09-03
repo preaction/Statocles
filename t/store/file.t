@@ -1,16 +1,16 @@
 
 use Statocles::Base 'Test';
-use Statocles::Store::File;
+use Statocles::Store;
 use Capture::Tiny qw( capture );
-my $SHARE_DIR = path( __DIR__, '..', '..', 'share' );
+my $SHARE_DIR = path( __DIR__, '..', 'share' );
 build_test_site( theme => $SHARE_DIR->child( 'theme' ) );
 
-my $ignored_store = Statocles::Store::File->new(
+my $ignored_store = Statocles::Store->new(
     path => $SHARE_DIR->child( qw( store files ignore ) ),
 );
 
 subtest 'read files' => sub {
-    my $store = Statocles::Store::File->new(
+    my $store = Statocles::Store->new(
         path => $SHARE_DIR->child( qw( store files ) ),
     );
     my $content = $store->read_file( path( 'text.txt' ) );
@@ -18,7 +18,7 @@ subtest 'read files' => sub {
 };
 
 subtest 'has file' => sub {
-    my $store = Statocles::Store::File->new(
+    my $store = Statocles::Store->new(
         path => $SHARE_DIR->child( qw( store files ) ),
     );
     ok $store->has_file( path( 'text.txt' ) );
@@ -26,7 +26,7 @@ subtest 'has file' => sub {
 };
 
 subtest 'find files' => sub {
-    my $store = Statocles::Store::File->new(
+    my $store = Statocles::Store->new(
         path => $SHARE_DIR->child( qw( store files ) ),
     );
     my @expect_paths = (
@@ -66,7 +66,7 @@ subtest 'find files' => sub {
 };
 
 subtest 'open file' => sub {
-    my $store = Statocles::Store::File->new(
+    my $store = Statocles::Store->new(
         path => $SHARE_DIR->child( qw( store files ) ),
     );
 
@@ -82,7 +82,7 @@ subtest 'write files' => sub {
         local $SIG{__WARN__} = sub { push @warnings, $_[0] };
 
         my $tmpdir = tempdir;
-        my $store = Statocles::Store::File->new(
+        my $store = Statocles::Store->new(
             path => $tmpdir,
         );
 
@@ -100,7 +100,7 @@ subtest 'write files' => sub {
 
     subtest 'filehandle' => sub {
         my $tmpdir = tempdir;
-        my $store = Statocles::Store::File->new(
+        my $store = Statocles::Store->new(
             path => $tmpdir,
         );
 
@@ -146,7 +146,7 @@ subtest 'remove' => sub {
         $file_path->parent->mkpath;
         $file_path->spew( 'Hello');
 
-        my $store = Statocles::Store::File->new(
+        my $store = Statocles::Store->new(
             path => $tmpdir,
         );
         $store->remove( path( qw( foo bar baz.txt ) ) );
@@ -161,7 +161,7 @@ subtest 'remove' => sub {
         $file_path->parent->mkpath;
         $file_path->spew( 'Hello');
 
-        my $store = Statocles::Store::File->new(
+        my $store = Statocles::Store->new(
             path => $tmpdir,
         );
         $store->remove( path( qw( foo bar ) ) );
@@ -178,7 +178,7 @@ subtest 'verbose' => sub {
 
     subtest 'write' => sub {
         my $tmpdir = tempdir;
-        my $store = Statocles::Store::File->new(
+        my $store = Statocles::Store->new(
             path => $tmpdir,
         );
 
@@ -189,7 +189,7 @@ subtest 'verbose' => sub {
     };
 
     subtest 'read' => sub {
-        my $store = Statocles::Store::File->new(
+        my $store = Statocles::Store->new(
             path => $SHARE_DIR->child( 'theme' ),
         );
         my $path = path( qw( blog post.html.ep ) );

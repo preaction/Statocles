@@ -57,13 +57,13 @@ __END__
 
 This class allows a site to be deployed to a folder on the filesystem.
 
-This class extends L<Statocles::Store::File|Statocles::Store::File>.
+This class extends L<Statocles::Store|Statocles::Store>.
 
 =head1 SEE ALSO
 
 =over 4
 
-=item L<Statocles::Store::File>
+=item L<Statocles::Store>
 
 =item L<Statocles::Deploy>
 

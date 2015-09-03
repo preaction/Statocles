@@ -42,7 +42,7 @@ More on that later.
 A L<Statocles app|Statocles::App> is the driver that turns documents into
 L<pages|Statocles::Page>. To build pages, we need a store full of documents. We
 define our store with the string C<blog>, which will get magically coerced into
-a L<file store object|Statocles::Store::File>.
+a L<store object|Statocles::Store>.
 
 Since we're building a blog site, we'll use the
 L<Statocles blog app|Statocles::App::Blog>:

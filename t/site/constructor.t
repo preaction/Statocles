@@ -2,7 +2,7 @@
 use Statocles::Base 'Test';
 use Statocles::Site;
 use Statocles::Theme;
-use Statocles::Store::File;
+use Statocles::Store;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
 
 my $cwd = cwd;
@@ -23,7 +23,7 @@ test_constructor(
     default => {
         index => '/',
         theme => Statocles::Theme->new( store => '::default' ),
-        build_store => Statocles::Store::File->new( path => '.statocles/build' ),
+        build_store => Statocles::Store->new( path => '.statocles/build' ),
     },
 );
 
