@@ -167,7 +167,8 @@ ENDHELP
             # I can see no good way to test this automatically
             my $slug = $self->make_slug( $doc{title} || "new post" );
             my $path = Path::Tiny->new( @date_parts, $slug, "index.markdown" );
-            my $tmp_path = $self->store->write_document( $path => \%doc );
+            $self->store->write_document( $path => \%doc );
+            my $tmp_path = $self->store->path->child( $path );
             system $ENV{EDITOR}, $tmp_path;
             %doc = %{ $self->store->read_document( $path ) };
             $self->store->path->child( $path )->remove;
@@ -175,7 +176,8 @@ ENDHELP
 
         my $slug = $self->make_slug( $doc{title} );
         my $path = Path::Tiny->new( @date_parts, $slug, "index.markdown" );
-        my $full_path = $self->store->write_document( $path => \%doc );
+        $self->store->write_document( $path => \%doc );
+        my $full_path = $self->store->path->child( $path );
         say "New post at: $full_path";
 
     }

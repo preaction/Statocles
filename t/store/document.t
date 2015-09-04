@@ -224,11 +224,11 @@ subtest 'write document' => sub {
         my @warnings;
         local $SIG{__WARN__} = sub { push @warnings, $_[0] };
 
-        my $full_path = $store->write_document( 'example.markdown' => $doc  );
-        is $full_path, $store->path->child( 'example.markdown' );
+        $store->write_document( 'example.markdown' => $doc  );
         cmp_deeply $store->read_document( 'example.markdown' ),
             Statocles::Document->new( path => 'example.markdown', %$doc )
                 or diag explain $store->read_document( 'example.markdown' );
+        my $full_path = $store->path->child( 'example.markdown' );
         eq_or_diff path( $full_path )->slurp_utf8,
             $SHARE_DIR->child( qw( store write doc.markdown ) )->slurp_utf8;
 
@@ -241,9 +241,9 @@ subtest 'write document' => sub {
         local $SIG{__WARN__} = sub { push @warnings, $_[0] };
 
         my $path = path(qw( blog 2014 05 28 example.markdown ));
-        my $full_path = $store->write_document( $path => $doc );
-        is $full_path, $tmpdir->child( $path );
+        $store->write_document( $path => $doc );
         cmp_deeply $store->read_document( $path ), Statocles::Document->new( path => $path, %$doc );
+        my $full_path = $tmpdir->child( $path );
         eq_or_diff path( $full_path )->slurp_utf8,
             $SHARE_DIR->child( qw( store write doc.markdown ) )->slurp_utf8;
 
@@ -260,8 +260,8 @@ subtest 'write document' => sub {
             %$doc,
         );
 
-        my $full_path = $store->write_document( 'doc_obj.markdown' => $doc_obj );
-        is $full_path, $store->path->child( 'doc_obj.markdown' );
+        $store->write_document( 'doc_obj.markdown' => $doc_obj );
+        my $full_path = $store->path->child( 'doc_obj.markdown' );
         cmp_deeply $store->read_document( 'doc_obj.markdown' ),
             Statocles::Document->new( path => 'doc_obj.markdown', %$doc )
                 or diag explain $store->read_document( 'doc_obj.markdown' );

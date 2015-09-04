@@ -45,6 +45,19 @@ v1.000
 
 The shim module that remains in place will be removed in v1.000.
 
+=item Statocles::Store->write_document returning a value is deprecated
+
+The C<write_document> method for L<Statocles::Store|Statocles::Store> used to
+return the full path to the document written. This was for display purposes
+only, as developers should be using the store object to deal with the
+filesystem. It was thought that this would provide encapsulation, but that was
+misguided at best.
+
+With Statocles::Store::File removed, there's no need for a write method to
+return anything. Now, C<write_document> and C<write_file> work the same.
+
+The return value will be removed in v1.000.
+
 =back
 
 =head1 SEE ALSO

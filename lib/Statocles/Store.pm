@@ -222,10 +222,9 @@ sub parse_frontmatter {
 
 =method write_document
 
-    my $full_path = $store->write_document( $path, $doc );
+    $store->write_document( $path, $doc );
 
 Write a L<document|Statocles::Document> to the store at the given store path.
-Returns the full path to the newly-updated document.
 
 The document is written in Frontmatter format.
 
@@ -247,6 +246,9 @@ sub write_document {
     my $full_path = $self->path->child( $path );
     $full_path->touchpath->spew_utf8( join "\n", $header, '---', $content );
 
+    if ( defined wantarray ) {
+        warn "Statocles::Store->write_document returning a value is deprecated and will be removed in v1.0. Use Statocles::Store->path to find the full path to the document.";
+    }
     return $full_path;
 }
 
