@@ -60,6 +60,27 @@ The return value will be removed in v1.000.
 
 =back
 
+=head1 BREAKING CHANGES
+
+=head2 v0.055
+
+=over 4
+
+=item Perldoc application paths have changed
+
+The L<Perldoc app|Statocles::App::Perldoc> now creates directories so that
+documentation paths no longer need a C<.html> at the end.
+
+    /pod/Statocles/App.html -> /pod/Statocles/App
+
+The documentation page path now ends with C</index.html>, and the source
+page is in the same directory and named C</source.html>.
+
+This change was made to make the URLs look nicer, but also to hopefully allow
+for extra documentation collateral in the future, like images and diagrams.
+
+=back
+
 =head1 SEE ALSO
 
 =over 4

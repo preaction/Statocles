@@ -146,7 +146,7 @@ sub pages {
 
         }
 
-        my $source_path = "$module.src.html";
+        my $source_path = "$module/source.html";
         $source_path =~ s{::}{/}g;
 
         my ( @parts ) = split m{::}, $module;
@@ -206,10 +206,10 @@ sub pages {
 sub _module_href {
     my ( $self, $module ) = @_;
     if ( $module eq $self->index_module ) {
-        return join '/', 'index.html';
+        return '/index.html';
     }
 
-    my $page_url = "$module.html";
+    my $page_url = "$module/index.html";
     $page_url =~ s{::}{/}g;
     return $page_url;
 }

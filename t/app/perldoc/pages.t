@@ -26,22 +26,22 @@ my @page_tests = (
         }
 
         # Use <p> to match in body, not crumbtrail
-        ok $dom->at( 'p a[href="/pod/My.html"]' ), 'internal link';
-        ok $dom->at( 'a[href="/pod/My/Internal.src.html"]' ), 'source link exists';
+        ok $dom->at( 'p a[href="/pod/My/"]' ), 'internal link';
+        ok $dom->at( 'a[href="/pod/My/Internal/source.html"]' ), 'source link exists';
 
         my @crumbtrail = $dom->find( '.crumbtrail li' )->each;
         is scalar @crumbtrail, 2;
         is $crumbtrail[0]->at( 'a' )->text, 'My';
-        is $crumbtrail[0]->at( 'a' )->attr( 'href' ), '/pod/My.html';
+        is $crumbtrail[0]->at( 'a' )->attr( 'href' ), '/pod/My/';
         is $crumbtrail[1]->at( 'a' )->text, 'Internal';
-        is $crumbtrail[1]->at( 'a' )->attr( 'href' ), '/pod/index.html';
+        is $crumbtrail[1]->at( 'a' )->attr( 'href' ), '/pod/';
 
         if ( ok $node = $dom->at( 'footer #app-info' ) ) {
             is $node->text, 'This is the app info', 'app-info is correct';
         }
     },
 
-    '/pod/My.html' => sub {
+    '/pod/My/index.html' => sub {
         my ( $html, $dom ) = @_;
         # XXX: Find the layout and template
         my $node;
@@ -59,24 +59,24 @@ my @page_tests = (
         }
 
         # Use <p> to match in body, not crumbtrail
-        ok $dom->at( 'p a[href="/pod/index.html"]' ), 'internal link to index page';
-        ok !$dom->at( 'p a[href="/pod/index.html"]' )->attr( 'rel' ), 'internal link has no rel';
+        ok $dom->at( 'p a[href="/pod/"]' ), 'internal link to index page';
+        ok !$dom->at( 'p a[href="/pod/"]' )->attr( 'rel' ), 'internal link has no rel';
         ok $dom->at( 'p a[href="https://metacpan.org/pod/External"]' ), 'external link exists';
         is $dom->at( 'p a[href="https://metacpan.org/pod/External"]' )->attr( 'rel' ), 'external', 'external link has rel=external';
-        ok $dom->at( 'a[href="/pod/My.src.html"]' ), 'source link exists';
-        ok !$dom->at( 'a[href="/pod/My.src.html"]' )->attr( 'rel' ), 'source link has no rel';
+        ok $dom->at( 'a[href="/pod/My/source.html"]' ), 'source link exists';
+        ok !$dom->at( 'a[href="/pod/My/source.html"]' )->attr( 'rel' ), 'source link has no rel';
 
         my @crumbtrail = $dom->find( '.crumbtrail li' )->each;
         is scalar @crumbtrail, 1;
         is $crumbtrail[0]->at( 'a' )->text, 'My';
-        is $crumbtrail[0]->at( 'a' )->attr( 'href' ), '/pod/My.html';
+        is $crumbtrail[0]->at( 'a' )->attr( 'href' ), '/pod/My/';
 
         if ( ok $node = $dom->at( 'footer #app-info' ) ) {
             is $node->text, 'This is the app info', 'app-info is correct';
         }
     },
 
-    '/pod/command.html' => sub {
+    '/pod/command/index.html' => sub {
         my ( $html, $dom ) = @_;
         # XXX: Find the layout and template
         my $node;
@@ -94,20 +94,20 @@ my @page_tests = (
         }
 
         # Use <p> to match in body, not crumbtrail
-        ok $dom->at( 'p a[href="/pod/command.html"]' ), 'internal link to same page';
-        ok $dom->at( 'a[href="/pod/command.src.html"]' ), 'source link exists';
+        ok $dom->at( 'p a[href="/pod/command/"]' ), 'internal link to same page';
+        ok $dom->at( 'a[href="/pod/command/source.html"]' ), 'source link exists';
 
         my @crumbtrail = $dom->find( '.crumbtrail li' )->each;
         is scalar @crumbtrail, 1;
         is $crumbtrail[0]->at( 'a' )->text, 'command';
-        is $crumbtrail[0]->at( 'a' )->attr( 'href' ), '/pod/command.html';
+        is $crumbtrail[0]->at( 'a' )->attr( 'href' ), '/pod/command/';
 
         if ( ok $node = $dom->at( 'footer #app-info' ) ) {
             is $node->text, 'This is the app info', 'app-info is correct';
         }
     },
 
-    '/pod/shellcmd.html' => sub {
+    '/pod/shellcmd/index.html' => sub {
         my ( $html, $dom ) = @_;
         # XXX: Find the layout and template
         my $node;
@@ -125,13 +125,13 @@ my @page_tests = (
         }
 
         # Use <p> to match in body, not crumbtrail
-        ok $dom->at( 'p a[href="/pod/shellcmd.html"]' ), 'internal link to same page';
-        ok $dom->at( 'a[href="/pod/shellcmd.src.html"]' ), 'source link exists';
+        ok $dom->at( 'p a[href="/pod/shellcmd/"]' ), 'internal link to same page';
+        ok $dom->at( 'a[href="/pod/shellcmd/source.html"]' ), 'source link exists';
 
         my @crumbtrail = $dom->find( '.crumbtrail li' )->each;
         is scalar @crumbtrail, 1;
         is $crumbtrail[0]->at( 'a' )->text, 'shellcmd';
-        is $crumbtrail[0]->at( 'a' )->attr( 'href' ), '/pod/shellcmd.html';
+        is $crumbtrail[0]->at( 'a' )->attr( 'href' ), '/pod/shellcmd/';
 
         if ( ok $node = $dom->at( 'footer #app-info' ) ) {
             is $node->text, 'This is the app info', 'app-info is correct';
@@ -158,25 +158,25 @@ subtest 'without Pod::Weaver' => sub {
     test_pages(
         $site, $app, @page_tests,
 
-        '/pod/My.src.html' => sub {
+        '/pod/My/source.html' => sub {
             my ( $html, $dom ) = @_;
             eq_or_diff $dom->at( 'pre' )->text,
                 $SHARE_DIR->child( qw( app perldoc lib My.pm ) )->slurp_utf8;
         },
 
-        '/pod/My/Internal.src.html' => sub {
+        '/pod/My/Internal/source.html' => sub {
             my ( $html, $dom ) = @_;
             eq_or_diff $dom->at( 'pre' )->text,
                 $SHARE_DIR->child( qw( app perldoc lib My Internal.pm ) )->slurp_utf8;
         },
 
-        '/pod/command.src.html' => sub {
+        '/pod/command/source.html' => sub {
             my ( $html, $dom ) = @_;
             eq_or_diff $dom->at( 'pre' )->text,
                 $SHARE_DIR->child( qw( app perldoc bin command.pl ) )->slurp_utf8;
         },
 
-        '/pod/shellcmd.src.html' => sub {
+        '/pod/shellcmd/source.html' => sub {
             my ( $html, $dom ) = @_;
             eq_or_diff $dom->at( 'pre' )->text,
                 $SHARE_DIR->child( qw( app perldoc bin shellcmd ) )->slurp_utf8;
@@ -227,25 +227,25 @@ subtest 'with Pod::Weaver' => sub {
     test_pages(
         $site, $app, @page_tests,
 
-        '/pod/My.src.html' => sub {
+        '/pod/My/source.html' => sub {
             my ( $html, $dom ) = @_;
             eq_or_diff $dom->at( 'pre' )->text,
                 $SHARE_DIR->child( qw( app perldoc lib-weaver My.pm ) )->slurp_utf8;
         },
 
-        '/pod/My/Internal.src.html' => sub {
+        '/pod/My/Internal/source.html' => sub {
             my ( $html, $dom ) = @_;
             eq_or_diff $dom->at( 'pre' )->text,
                 $SHARE_DIR->child( qw( app perldoc lib-weaver My Internal.pm ) )->slurp_utf8;
         },
 
-        '/pod/command.src.html' => sub {
+        '/pod/command/source.html' => sub {
             my ( $html, $dom ) = @_;
             eq_or_diff $dom->at( 'pre' )->text,
                 $SHARE_DIR->child( qw( app perldoc bin-weaver command.pl ) )->slurp_utf8;
         },
 
-        '/pod/shellcmd.src.html' => sub {
+        '/pod/shellcmd/source.html' => sub {
             my ( $html, $dom ) = @_;
             eq_or_diff $dom->at( 'pre' )->text,
                 $SHARE_DIR->child( qw( app perldoc bin-weaver shellcmd ) )->slurp_utf8;
