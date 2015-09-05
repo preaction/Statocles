@@ -19,19 +19,34 @@ has path => (
 
 =method deploy
 
-    my @paths = $deploy->deploy( $from_store, $message );
+    my @paths = $deploy->deploy( $from_store, %options );
 
-Deploy the site, copying from the given L<from_store|Statocles::Store> with the
-given commit message (if applicable). Returns the paths that were deployed.
+Deploy the site, copying from the given L<from_store|Statocles::Store>.
+Returns the paths that were deployed.
+
+Possible options are:
+
+=over 4
+
+=item clean
+
+Remove all the current contents of the deploy directory before copying the
+new content.
+
+=back
 
 =cut
 
 sub deploy {
-    my ( $self, $from_store, $message ) = @_;
+    my ( $self, $from_store, %options ) = @_;
 
     die sprintf 'Deploy directory "%s" does not exist (did you forget to make it?)',
         $self->path
             if !$self->path->is_dir;
+
+    if ( $options{ clean } ) {
+        $_->remove_tree for $self->path->children;
+    }
 
     my @files;
     my $iter = $from_store->find_files( include_documents => 1 );

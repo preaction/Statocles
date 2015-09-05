@@ -50,6 +50,28 @@ subtest 'deploy' => sub {
     };
 };
 
+subtest '--clean' => sub {
+    my $tmpdir = tempdir( @temp_args );
+    diag "TMP: " . $tmpdir if @temp_args;
+
+    # Add some files that should be cleaned up
+    $tmpdir->child( 'needs-cleaning.txt' )->spew_utf8( 'Ha ha!' );
+
+    my $deploy = Statocles::Deploy::File->new(
+        path => $tmpdir,
+    );
+
+    subtest 'deploy without clean does not remove files' => sub {
+        $deploy->deploy( $build_store );
+        ok $tmpdir->child( 'needs-cleaning.txt' )->is_file, 'default deploy did not remove file';
+    };
+
+    subtest 'deploy with clean removes files first' => sub {
+        $deploy->deploy( $build_store, clean => 1 );
+        ok !$tmpdir->child( 'needs-cleaning.txt' )->is_file, 'default deploy remove files';
+    };
+};
+
 subtest 'missing directory' => sub {
     my $store;
     lives_ok { $store = Statocles::Deploy::File->new( path => 'DOES_NOT_EXIST' ) };

@@ -205,6 +205,45 @@ subtest 'deploy to subdirectory in git repo' => sub {
 
 };
 
+subtest '--clean' => sub {
+    my $tmpdir = tempdir( @temp_args );
+    diag "TMP: " . $tmpdir if @temp_args;
+
+    my ( $deploy, $build_store, $workdir, $remotedir ) = make_deploy( $tmpdir );
+    my $remotework = $tmpdir->child( 'remote_work' );
+    $remotework->mkpath;
+    my $remotegit = Git::Repository->new( git_dir => "$remotedir", work_tree => "$remotework" );
+
+    # Add some files that should be cleaned up
+    $workdir->child( 'needs-cleaning.txt' )->spew_utf8( 'Ha ha!' );
+    my $workgit = Git::Repository->new( work_tree => "$workdir" );
+    # Create the branch first
+    _git_run( $workgit, checkout => '--orphan', 'gh-pages' );
+    _git_run( $workgit, 'rm', '-r', '-f', '.' );
+    _git_run( $workgit, add => 'needs-cleaning.txt' );
+    _git_run( $workgit, commit => '-m' => 'add new file outside of site' );
+    _git_run( $workgit, push => origin => 'gh-pages' );
+    _git_run( $workgit, checkout => 'master' );
+
+    subtest 'deploy without clean does not remove files' => sub {
+        $deploy->deploy( $build_store );
+        _git_run( $workgit, checkout => 'gh-pages' );
+        ok $workdir->child( 'needs-cleaning.txt' )->is_file, 'default deploy did not remove file';
+        _git_run( $workgit, checkout => 'master' );
+        _git_run( $remotegit, checkout => '-f', 'gh-pages' );
+        ok $remotework->child( 'needs-cleaning.txt' )->is_file, 'pushed to remote';
+    };
+
+    subtest 'deploy with clean removes files first' => sub {
+        $deploy->deploy( $build_store, clean => 1 );
+        _git_run( $workgit, checkout => 'gh-pages' );
+        ok !$workdir->child( 'needs-cleaning.txt' )->is_file, 'default deploy remove files';
+        _git_run( $workgit, checkout => 'master' );
+        _git_run( $remotegit, checkout => '-f', 'gh-pages' );
+        ok !$remotework->child( 'needs-cleaning.txt' )->is_file, 'pushed to remote';
+    };
+};
+
 subtest 'errors' => sub {
     subtest 'not in a git repo' => sub {
         my $tmpdir = tempdir;

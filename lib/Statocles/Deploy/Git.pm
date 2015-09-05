@@ -38,15 +38,30 @@ has remote => (
 
 =method deploy
 
-    my @paths = $deploy->deploy( $from_store, $message );
+    my @paths = $deploy->deploy( $from_store, %options );
 
-Deploy the site, copying from the given L<from_store|Statocles::Store> with the
-given commit message (if applicable). Returns the paths that were deployed.
+Deploy the site, copying from the given L<from_store|Statocles::Store>.
+Returns the paths that were deployed.
+
+Possible options are:
+
+=over 4
+
+=item clean
+
+Remove all the current contents of the deploy directory before copying the
+new content.
+
+=item message
+
+An optional commit message to use. Defaults to a generic message.
+
+=back
 
 =cut
 
 around 'deploy' => sub {
-    my ( $orig, $self, $from_store, $message ) = @_;
+    my ( $orig, $self, $from_store, %options ) = @_;
 
     my $deploy_dir = $self->path;
 
@@ -75,8 +90,13 @@ around 'deploy' => sub {
         _git_run( $git, checkout => $self->branch );
     }
 
+    if ( $options{ clean } ) {
+        _git_run( $git, 'rm', '-r', '-f', '.' );
+        delete $options{ clean };
+    }
+
     # Copy the files
-    my @files = $self->$orig( $from_store, $message );
+    my @files = $self->$orig( $from_store, %options );
 
     # Check to see which files were changed
     # --porcelain was added in 1.7.0
@@ -102,7 +122,7 @@ around 'deploy' => sub {
     return if !@files;
 
     _git_run( $git, add => @files );
-    _git_run( $git, commit => -m => $message || "Site update" );
+    _git_run( $git, commit => -m => $options{message} || "Site update" );
     if ( _has_remote( $git, $self->remote ) ) {
         _git_run( $git, push => $self->remote => $self->branch );
     }
