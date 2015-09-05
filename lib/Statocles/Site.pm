@@ -344,7 +344,13 @@ sub build {
 
     # XXX: Do we want to allow sites with no index page ever?
     if ( $self->index && !exists $seen_paths{ '/index.html' } ) {
-        die sprintf qq{ERROR: Index path "%s" does not exist}, $self->index
+        my $index_document = $self->index;
+        unless ( $index_document =~ s{[.]html?}{.markdown} ) {
+            $index_document .= '/index.markdown';
+        }
+        die sprintf qq{ERROR: Index path "%s" does not exist. Do you need to create "%s"?},
+            $self->index,
+            $index_document;
     }
 
     for my $path ( keys %seen_paths ) {

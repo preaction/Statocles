@@ -46,7 +46,7 @@ subtest 'index.html is optional' => \&test_site, build_test_site_apps(
 
 subtest 'error messages' => sub {
 
-    subtest 'index does not exist' => sub {
+    subtest 'index directory does not exist' => sub {
         throws_ok {
             Statocles::Site->new(
                 title => 'Example Site',
@@ -54,7 +54,18 @@ subtest 'error messages' => sub {
                 deploy => tempdir,
                 index => '/DOES_NOT_EXIST',
             )->build;
-        } qr{ERROR: Index path "/DOES_NOT_EXIST" does not exist};
+        } qr{\QERROR: Index path "/DOES_NOT_EXIST" does not exist. Do you need to create "/DOES_NOT_EXIST/index.markdown"?};
+    };
+
+    subtest 'index file does not exist' => sub {
+        throws_ok {
+            Statocles::Site->new(
+                title => 'Example Site',
+                build_store => tempdir,
+                deploy => tempdir,
+                index => '/DOES_NOT_EXIST.html',
+            )->build;
+        } qr{\QERROR: Index path "/DOES_NOT_EXIST.html" does not exist. Do you need to create "/DOES_NOT_EXIST.markdown"?};
     };
 
 };
