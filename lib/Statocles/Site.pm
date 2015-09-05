@@ -463,17 +463,18 @@ sub build {
 
 =method deploy
 
-    $site->deploy;
+    $site->deploy( %options );
 
-Deploy the site to its destination.
+Deploy the site to its destination. The C<%options> are passed to the appropriate
+L<deploy object|Statocles::Deploy>.
 
 =cut
 
 sub deploy {
-    my ( $self ) = @_;
+    my ( $self, %options ) = @_;
     $self->_write_deploy( $self->_deploy );
     $self->build;
-    $self->_deploy->deploy( $self->build_store );
+    $self->_deploy->deploy( $self->build_store, %options );
     $self->_clear_write_deploy;
 }
 

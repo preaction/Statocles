@@ -71,6 +71,15 @@ subtest 'deploy site' => sub {
         @args,
         '-vv',
     );
+
+    subtest '--clean' => sub {
+        $tmp->child( 'deploy_site', 'needs-cleaning.txt' )->spew_utf8( 'Ha Ha!' );
+        subtest 'deploy with --clean' => test_site(
+            $tmp->child( 'deploy_site' ),
+            @args, '--clean',
+        );
+        ok !$tmp->child( 'deploy_site', 'needs-cleaning.txt' )->exists, 'file was cleaned';
+    };
 };
 
 done_testing;

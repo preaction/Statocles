@@ -90,8 +90,17 @@ sub main {
         $cmd->site->log->level( $VERBOSE[ $opt{verbose} ] );
     }
 
-    if ( grep { $_ eq $method } qw( build deploy ) ) {
-        $cmd->site->$method;
+    if ( $method eq 'build' ) {
+        $cmd->site->build;
+        return 0;
+    }
+    elsif ( $method eq 'deploy' ) {
+        my %deploy_opt;
+        GetOptionsFromArray( \@argv, \%deploy_opt,
+            'clean',
+        );
+        $cmd->site->deploy( %deploy_opt );
+
         return 0;
     }
     elsif ( $method eq 'apps' ) {

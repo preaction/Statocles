@@ -39,7 +39,7 @@ The command to run. Available commands:
     create <url>                - Create a new site
     build                       - Build the site
     daemon [-p <port>]          - Run an HTTP daemon to test the site
-    deploy                      - Deploy the site
+    deploy [--clean]            - Deploy the site
     bundle theme <name> <dir>   - Bundle a theme in the given directory
     apps                        - List the applications in this site
     <app> help                  - Get help for a specific application
@@ -60,6 +60,13 @@ C<site>.
 =head2 -p <port>
 
 When running the daemon, choose which port to listen on. Defaults to C<3000>.
+
+=head2 --clean
+
+When running C<deploy>, delete the current site content before deploying. By
+default, old build files may be kept around after their source file is deleted.
+The C<--clean> option removes all the files, so the site only contains what
+was built.
 
 =head2 -v | --verbose
 
