@@ -187,6 +187,17 @@ my @page_tests = (
         cmp_deeply [ $content_dom->find( 'a' )->map( attr => 'href' )->each ],
             superbagof( 'http://example.com/blog/2014/06/02/more_tags/docs.html' ),
             'relative link is fixed on feed page';
+
+        my @posts = $dom->find( 'entry content' )
+                    ->map( sub { Mojo::DOM->new( shift->child_nodes->first->content ) } )
+                    ->each;
+
+        is scalar @posts, 2, 'a full page of posts';
+        for my $post ( @posts ) {
+            for my $link ( $post->find( 'a[href]' )->each ) {
+                like $link->attr( 'href' ), qr{^(?:http:|mailto:|//)}, 'all urls in feed are full';
+            }
+        }
     },
 
     '/blog/index.rss' => sub {
@@ -215,6 +226,17 @@ my @page_tests = (
         cmp_deeply [ $dom->find( 'item pubDate' )->map( 'text' )->each ],
             array_each( re( qr{\w{3}, \d{2} \w{3} \w{4} \d{2}:\d{2}:\d{2} [-+]\d{4}} ) ),
             'pubDate is correct';
+
+        my @posts = $dom->find( 'item description' )
+                    ->map( sub { Mojo::DOM->new( $_[0]->child_nodes->first->content ) } )
+                    ->each;
+
+        is scalar @posts, 2, 'a full page of posts';
+        for my $post ( @posts ) {
+            for my $link ( $post->find( 'a[href]' )->each ) {
+                like $link->attr( 'href' ), qr{^(?:http:|mailto:|//)}, 'all urls in feed are full';
+            }
+        }
     },
 
     # Tag pages

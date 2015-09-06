@@ -61,6 +61,16 @@ my %page = (
         path => 'document.html',
         document => $documents[0],
         date => Time::Piece->new,
+        tags => [
+            Statocles::Link->new(
+                href => '/blog/tag/foo',
+                text => 'foo',
+            ),
+            Statocles::Link->new(
+                href => '/blog/tag/bar',
+                text => 'bar',
+            ),
+        ],
     ),
 );
 
@@ -189,6 +199,23 @@ my %content_tests = (
         subtest 'document script links get added in the layout' => sub {
             if ( ok $elem = $dom->at( 'script[src=/theme/js/special.js]', 'document script exists' ) ) {
                 ok !$elem->text, 'no text inside';
+            }
+        };
+
+    },
+
+    'blog/index.rss.ep' => sub {
+        my ( $content ) = @_;
+        my $xml = Mojo::DOM->new( $content );
+        my @posts = $xml->find( 'item description' )->map( sub { Mojo::DOM->new( $_[0]->child_nodes->first->content ) } )->each;
+
+        subtest 'all links must be full URLs' => sub {
+            for my $post ( @posts ) {
+                my @links = $post->find( 'a[href]' )->each;
+                ok scalar @links, 'some links were found';
+                for my $link ( @links ) {
+                    like $link->attr( 'href' ), qr{^(?:https?:|mailto:|//)}, 'full URL';
+                }
             }
         };
 

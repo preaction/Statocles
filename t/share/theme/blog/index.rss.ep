@@ -36,7 +36,7 @@
                 % }
                 <p>Tags:
                 % for my $link ( $p->tags ) {
-                    <a href="<%= $link->href %>"><%= $link->text %></a>
+                    <a href="<%= $site->url( $link->href ) %>"><%= $link->text %></a>
                 % }
                 </p>
             ]]></description>
