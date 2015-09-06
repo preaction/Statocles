@@ -1,6 +1,7 @@
 
 use Statocles::Base 'Test';
 use Statocles::App::Static;
+use Statocles::App::Blog;
 use Mojo::DOM;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
 
@@ -34,14 +35,26 @@ sub test_site {
     };
 }
 
+my $blog = Statocles::App::Blog->new(
+    store => $SHARE_DIR->child( qw( app blog ) ),
+    url_root => '/blog',
+    page_size => 2,
+);
+
 subtest 'full index path' => \&test_site, build_test_site_apps(
     $SHARE_DIR,
     index => '/blog/index.html',
+    apps => {
+        blog => $blog,
+    },
 );
 
 subtest 'index.html is optional' => \&test_site, build_test_site_apps(
     $SHARE_DIR,
     index => '/blog',
+    apps => {
+        blog => $blog,
+    },
 );
 
 subtest 'error messages' => sub {
@@ -54,7 +67,8 @@ subtest 'error messages' => sub {
                 deploy => tempdir,
                 index => '/DOES_NOT_EXIST',
             )->build;
-        } qr{\QERROR: Index path "/DOES_NOT_EXIST" does not exist. Do you need to create "/DOES_NOT_EXIST/index.markdown"?};
+        } qr{\QERROR: Index path "/DOES_NOT_EXIST" does not exist. Do you need to create "/DOES_NOT_EXIST/index.markdown"?},
+        'error message is correct';
     };
 
     subtest 'index file does not exist' => sub {
@@ -65,7 +79,8 @@ subtest 'error messages' => sub {
                 deploy => tempdir,
                 index => '/DOES_NOT_EXIST.html',
             )->build;
-        } qr{\QERROR: Index path "/DOES_NOT_EXIST.html" does not exist. Do you need to create "/DOES_NOT_EXIST.markdown"?};
+        } qr{\QERROR: Index path "/DOES_NOT_EXIST.html" does not exist. Do you need to create "/DOES_NOT_EXIST.markdown"?},
+        'error message is correct';
     };
 
 };
