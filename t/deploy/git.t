@@ -244,6 +244,23 @@ subtest '--clean' => sub {
     };
 };
 
+subtest '--message' => sub {
+    my $tmpdir = tempdir( @temp_args );
+    diag "TMP: " . $tmpdir if @temp_args;
+
+    my ( $deploy, $build_store, $workdir, $remotedir ) = make_deploy( $tmpdir );
+    my $remotegit = Git::Repository->new( git_dir => "$remotedir" );
+    my $workgit = Git::Repository->new( work_tree => "$workdir" );
+
+    $deploy->deploy( $build_store, message => 'My commit message' );
+
+    my $worklog = $workgit->run( log => 'gh-pages' );
+    like $worklog, qr{My commit message}, 'commit message committed';
+
+    my $remotelog = $remotegit->run( log => 'gh-pages' );
+    like $remotelog, qr{My commit message}, 'commit message pushed';
+};
+
 subtest 'errors' => sub {
     subtest 'not in a git repo' => sub {
         my $tmpdir = tempdir;
