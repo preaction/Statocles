@@ -3,6 +3,7 @@ use Statocles::Base 'Test';
 use Capture::Tiny qw( capture );
 use Statocles::Command;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
+use Test::Lib;
 
 sub test_site {
     my ( $root, @args ) = @_;
@@ -81,5 +82,139 @@ subtest 'deploy site' => sub {
         ok !$tmp->child( 'deploy_site', 'needs-cleaning.txt' )->exists, 'file was cleaned';
     };
 };
+
+subtest 'special options' => sub {
+
+    subtest 'Deploy::Git' => sub {
+        require Statocles::Deploy::Git;
+        my $git_version = Statocles::Deploy::Git->_git_version;
+        if ( !$git_version ) {
+            plan skip_all => 'Git not installed';
+            return;
+        }
+        diag "Git version: $git_version";
+        if ( $git_version <= 1.007002 ) {
+            plan skip_all => 'Git 1.7.2 or higher required';
+            return;
+        }
+        require Git::Repository;
+
+        subtest '--message' => sub {
+            my $tmp = tempdir;
+            $tmp->child( 'deploy' )->mkpath;
+            my $conf = {
+                site => {
+                    class => 'Statocles::Site',
+                    args => {
+                        base_url => 'http://example.com',
+                        deploy => {
+                            '$class' => 'Statocles::Deploy::Git',
+                            '$args' => {
+                                path => $tmp->child( 'deploy' )->stringify,
+                            },
+                        },
+                        theme => $SHARE_DIR->child( 'theme' )->stringify,
+                        apps => {
+                            test => {
+                                '$class' => 'TestApp',
+                                '$args' => {
+                                    url_root => '/',
+                                    pages => [
+                                        {
+                                            path => '/index.html',
+                                            title => 'Test Page',
+                                            content => 'Test Content',
+                                        },
+                                    ],
+                                },
+                            },
+                        },
+                    },
+                },
+            };
+            YAML::DumpFile( $tmp->child( 'site.yml' ), $conf );
+
+            Git::Repository->run( init => "$tmp" );
+            my $git = Git::Repository->new( work_tree => "$tmp" );
+            $git->run( config => 'user.name' => 'Statocles Test User' );
+            $git->run( config => 'user.email' => 'statocles@example.com' );
+            $git->run( add => $tmp->child( 'site.yml' ) );
+            $git->run( commit => -m => 'Add site config' );
+
+            my @args = (
+                '--config' => $tmp->child( 'site.yml' )->stringify,
+                'deploy',
+                '--message',
+                'My custom commit message',
+            );
+
+            my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+            is $exit, 0, 'exit code';
+            ok !$err, "no errors/warnings on stderr" or diag $err;
+
+            my $log = $git->run( 'log' );
+            like $log, qr{My custom commit message}, 'commit message exists';
+        };
+
+        subtest '-m' => sub {
+            my $tmp = tempdir;
+            $tmp->child( 'deploy' )->mkpath;
+            my $conf = {
+                site => {
+                    class => 'Statocles::Site',
+                    args => {
+                        base_url => 'http://example.com',
+                        deploy => {
+                            '$class' => 'Statocles::Deploy::Git',
+                            '$args' => {
+                                path => $tmp->child( 'deploy' )->stringify,
+                            },
+                        },
+                        theme => $SHARE_DIR->child( 'theme' )->stringify,
+                        apps => {
+                            test => {
+                                '$class' => 'TestApp',
+                                '$args' => {
+                                    url_root => '/',
+                                    pages => [
+                                        {
+                                            path => '/index.html',
+                                            title => 'Test Page',
+                                            content => 'Test Content',
+                                        },
+                                    ],
+                                },
+                            },
+                        },
+                    },
+                },
+            };
+            YAML::DumpFile( $tmp->child( 'site.yml' ), $conf );
+
+            Git::Repository->run( init => "$tmp" );
+            my $git = Git::Repository->new( work_tree => "$tmp" );
+            $git->run( config => 'user.name' => 'Statocles Test User' );
+            $git->run( config => 'user.email' => 'statocles@example.com' );
+            $git->run( add => $tmp->child( 'site.yml' ) );
+            $git->run( commit => -m => 'Add site config' );
+
+            my @args = (
+                '--config' => $tmp->child( 'site.yml' )->stringify,
+                'deploy',
+                '-m',
+                'My custom commit message',
+            );
+
+            my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+            is $exit, 0, 'exit code';
+            ok !$err, "no errors/warnings on stderr" or diag $err;
+
+            my $log = $git->run( 'log' );
+            like $log, qr{My custom commit message}, 'commit message exists';
+        };
+
+    };
+};
+
 
 done_testing;

@@ -98,6 +98,7 @@ sub main {
         my %deploy_opt;
         GetOptionsFromArray( \@argv, \%deploy_opt,
             'clean',
+            'message|m=s',
         );
         $cmd->site->deploy( %deploy_opt );
 
