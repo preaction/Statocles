@@ -19,6 +19,7 @@ The site title, used in templates.
 has title => (
     is => 'ro',
     isa => Str,
+    default => sub { '' },
 );
 
 =attr base_url
