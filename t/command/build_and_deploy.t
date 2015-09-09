@@ -85,6 +85,66 @@ subtest 'deploy site' => sub {
 
 subtest 'special options' => sub {
 
+    subtest 'App::Blog' => sub {
+
+        subtest '--date' => sub {
+            my $tmp = tempdir;
+            $tmp->child( 'deploy' )->mkpath;
+            my $conf = {
+                site => {
+                    class => 'Statocles::Site',
+                    args => {
+                        base_url => 'http://example.com',
+                        deploy => $tmp->child( 'deploy' )->stringify,
+                        build_store => $tmp->child( 'build' )->stringify,
+                        theme => $SHARE_DIR->child( 'theme' )->stringify,
+                        apps => {
+                            test => {
+                                '$class' => 'Statocles::App::Blog',
+                                '$args' => {
+                                    url_root => '/',
+                                    store => $SHARE_DIR->child( 'app', 'blog' )->stringify,
+                                },
+                            },
+                        },
+                    },
+                },
+            };
+            YAML::DumpFile( $tmp->child( 'site.yml' ), $conf );
+
+            subtest 'build' => sub {
+                my @args = (
+                    '--config' => $tmp->child( 'site.yml' )->stringify,
+                    'build',
+                    '--date', '9999-12-31',
+                );
+
+                my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+                is $exit, 0, 'exit code';
+                ok !$err, "no errors/warnings on stderr" or diag $err;
+
+                my $post = $tmp->child( 'build', '9999', '12', '31', 'forever-is-a-long-time', 'index.html' );
+                ok $post->is_file, 'very far future post exists';
+            };
+
+            subtest 'deploy' => sub {
+                my @args = (
+                    '--config' => $tmp->child( 'site.yml' )->stringify,
+                    'deploy',
+                    '--date', '9999-12-31',
+                );
+
+                my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+                is $exit, 0, 'exit code';
+                ok !$err, "no errors/warnings on stderr" or diag $err;
+
+                my $post = $tmp->child( 'deploy', '9999', '12', '31', 'forever-is-a-long-time', 'index.html' );
+                ok $post->is_file, 'very far future post exists';
+            };
+
+        };
+    };
+
     subtest 'Deploy::Git' => sub {
         require Statocles::Deploy::Git;
         my $git_version = Statocles::Deploy::Git->_git_version;

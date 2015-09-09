@@ -37,9 +37,9 @@ This command also helps to manage content in Statocles apps.
 The command to run. Available commands:
 
     create <url>                - Create a new site
-    build                       - Build the site
-    daemon [-p <port>]          - Run an HTTP daemon to test the site
-    deploy [--clean]            - Deploy the site
+    build [--date YYYY-MM-DD]   - Build the site
+    daemon [-p <port>] [--date] - Run an HTTP daemon to test the site
+    deploy [--clean] [--date]   - Deploy the site
     bundle theme <name> <dir>   - Bundle a theme in the given directory
     apps                        - List the applications in this site
     <app> help                  - Get help for a specific application
@@ -60,6 +60,14 @@ C<site>.
 =head2 -p <port>
 
 When running the daemon, choose which port to listen on. Defaults to C<3000>.
+
+=head2 --date <date>
+
+When running C<build>, C<deploy>, and C<daemon>, set the current date for
+applications. This forces, for example, the L<blog app|Statocles::App::Blog>
+to show entries in the future.
+
+Date should be in C<YYYY-MM-DD> format.
 
 =head2 --clean
 

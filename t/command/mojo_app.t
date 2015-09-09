@@ -203,4 +203,43 @@ subtest 'nonroot site' => sub {
 
 };
 
+subtest '--date option' => sub {
+    my $site = Beam::Wire->new( file => "$config_fn" )->get( 'site' );
+
+    my $t = Test::Mojo->new(
+        Statocles::Command::_MOJOAPP->new(
+            site => $site,
+            options => {
+                date => '9999-12-31',
+            },
+        ),
+    );
+
+    is $t->app->options->{ date }, '9999-12-31', 'fake test';
+
+    if ( eval { require Mac::FSEvents; 1; } ) {
+        subtest 'rebuild with date option' => sub {
+
+            my $path = Path::Tiny->new( qw( 9999 12 31 forever-is-a-long-time index.markdown ) );
+            my $store = $t->app->site->app( 'blog' )->store;
+            my $doc = $store->read_document( $path );
+            $doc->{content} = "This is some new content for our blog!";
+            $store->write_document( $path, $doc );
+
+            # Non-blocking start loop and wait 2
+            Mojo::IOLoop->timer( 2, sub { Mojo::IOLoop->stop } );
+            Mojo::IOLoop->start;
+
+            # Check that /index.html gets the right content
+            $t->get_ok( "/index.html" )
+                ->status_is( 200 )
+                ->content_is( $tmp->child( build_site => 'index.html' )->slurp_utf8 )
+                ->content_like( qr{This is some new content for our blog!} )
+                ->content_type_is( 'text/html;charset=UTF-8' )
+                ;
+        };
+    }
+
+};
+
 done_testing;

@@ -116,4 +116,34 @@ subtest 'listen on a specific port' => sub {
         'contains http port information';
 };
 
+subtest '--date' => sub {
+    my ( $tmp, $config_fn, $config ) = build_temp_site( $SHARE_DIR );
+
+    # We need to stop the daemon after it starts
+    my $timeout = Mojo::IOLoop->timer( 0, sub {
+        my $daemon = $Statocles::Command::daemon;
+        $daemon->stop;
+        Mojo::IOLoop->stop;
+    } );
+
+    # We want it to pick a random port
+    local $ENV{MOJO_LISTEN} = 'http://127.0.0.1';
+
+    my @args = (
+        '--config' => "$config_fn",
+        'daemon',
+        '--date', '9999-12-31',
+    );
+
+    my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+    undef $timeout;
+
+    ok !$err, 'nothing on stderr' or diag "STDERR: $err";
+    is $exit, 0;
+
+    my $post = $tmp->child( 'build_site', 'blog', '9999', '12', '31', 'forever-is-a-long-time', 'index.html' );
+    ok $post->exists, 'future post was built';
+    ok !$tmp->child( 'deploy_site', 'index.html' )->exists, 'site was not deployed';
+};
+
 done_testing;

@@ -91,12 +91,17 @@ sub main {
     }
 
     if ( $method eq 'build' ) {
-        $cmd->site->build;
+        my %build_opt;
+        GetOptionsFromArray( \@argv, \%build_opt,
+            'date|d=s',
+        );
+        $cmd->site->build( %build_opt );
         return 0;
     }
     elsif ( $method eq 'deploy' ) {
         my %deploy_opt;
         GetOptionsFromArray( \@argv, \%deploy_opt,
+            'date|d=s',
             'clean',
             'message|m=s',
         );
@@ -117,14 +122,20 @@ sub main {
     elsif ( $method eq 'daemon' ) {
         # Build the site first no matter what.  We may end up watching for
         # future changes, but assume they meant to build first
-        $cmd->site->build;
+        my %build_opt;
+        GetOptionsFromArray( \@argv, \%build_opt,
+            'date|d=s',
+        );
+        $cmd->site->build( %build_opt );
 
         require Mojo::Server::Daemon;
+        my $app = Statocles::Command::_MOJOAPP->new(
+            site => $cmd->site,
+            options => \%build_opt,
+        );
         our $daemon = Mojo::Server::Daemon->new(
             silent => 1,
-            app => Statocles::Command::_MOJOAPP->new(
-                site => $cmd->site,
-            ),
+            app => $app,
         );
 
         if ( $opt{port} ) {
@@ -410,6 +421,7 @@ sub bundle_theme {
     use Scalar::Util qw( weaken );
     use File::Share qw( dist_dir );
     has 'site';
+    has options => sub { {} };
     has cleanup => sub { Mojo::Collection->new };
 
     sub DESTROY {
@@ -497,7 +509,7 @@ sub bundle_theme {
                     }
 
                     if ( $rebuild ) {
-                        $self->site->build;
+                        $self->site->build( %{ $self->options } );
                     }
                 } );
                 $ioloop->reactor->watch( $handle, 1, 0 );

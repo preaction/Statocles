@@ -264,9 +264,11 @@ sub nav {
 
 =method build
 
-    $site->build;
+    $site->build( %options );
 
-Build the site in its build location.
+Build the site in its build location. The C<%options> hash is passed in to every
+app's C<pages> method, allowing for customization of app behavior based on
+command-line.
 
 =cut
 
@@ -275,7 +277,7 @@ our %PAGE_PRIORITY = (
 );
 
 sub build {
-    my ( $self ) = @_;
+    my ( $self, %options ) = @_;
 
     my $store = $self->build_store;
 
@@ -302,7 +304,7 @@ sub build {
     for my $app_name ( keys %{ $apps } ) {
         my $app = $apps->{$app_name};
 
-        my @app_pages = $app->pages;
+        my @app_pages = $app->pages( %options );
 
         # DEPRECATED: Index as app name
         if ( $app_name eq $index_path ) {
@@ -474,7 +476,7 @@ L<deploy object|Statocles::Deploy>.
 sub deploy {
     my ( $self, %options ) = @_;
     $self->_write_deploy( $self->_deploy );
-    $self->build;
+    $self->build( %options );
     $self->_deploy->deploy( $self->build_store, %options );
     $self->_clear_write_deploy;
 }
