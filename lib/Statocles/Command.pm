@@ -407,8 +407,15 @@ sub bundle_theme {
     # We could fix this in the future by moving this out into its own module,
     # that is only loaded after we are done passing @ARGV into main(), above.
     use Mojo::Base 'Mojolicious';
+    use Scalar::Util qw( weaken );
     use File::Share qw( dist_dir );
     has 'site';
+    has cleanup => sub { Mojo::Collection->new };
+
+    sub DESTROY {
+        my ( $self ) = @_;
+        $self->cleanup->each( sub { $_->() } );
+    }
 
     sub startup {
         my ( $self ) = @_;
@@ -458,6 +465,8 @@ sub bundle_theme {
             my $ioloop = Mojo::IOLoop->singleton;
             my $build_dir = $self->site->build_store->path->realpath;
 
+            weaken $self;
+
             for my $path ( keys %watches ) {
                 $self->log->info( "Watching for changes in '$path'" );
 
@@ -465,8 +474,13 @@ sub bundle_theme {
                     path => "$path",
                     latency => 1.0,
                 } );
-
                 my $handle = $fs->watch;
+
+                push @{ $self->cleanup }, sub {
+                    $fs->stop;
+                    Mojo::IOLoop->remove( $handle );
+                };
+
                 $ioloop->reactor->io( $handle, sub {
                     my ( $reactor, $writable ) = @_;
 
@@ -501,14 +515,14 @@ sub bundle_theme {
             return $c->render( status => 400, text => "You didn't say the magic word" )
                 if $path->canonicalize->parts->[0] eq '..';
 
-            my $asset = $self->static->file( $path );
+            my $asset = $c->app->static->file( $path );
             if ( !$asset ) {
                 if ( $path =~ m{/$} ) {
                     # Check for index.html
                     $path = Mojo::Path->new( $c->stash->{path} . "/index.html" );
-                    $asset = $self->static->file( $path );
+                    $asset = $c->app->static->file( $path );
                 }
-                elsif ( $self->site->build_store->path->child( $path )->is_dir ) {
+                elsif ( $c->app->site->build_store->path->child( $path )->is_dir ) {
                     return $c->redirect_to( "/$path/" );
                 }
             }
