@@ -126,7 +126,6 @@ sub main {
         GetOptionsFromArray( \@argv, \%build_opt,
             'date|d=s',
         );
-        $cmd->site->build( %build_opt );
 
         require Mojo::Server::Daemon;
         my $app = Statocles::Command::_MOJOAPP->new(
@@ -432,6 +431,9 @@ sub bundle_theme {
     sub startup {
         my ( $self ) = @_;
         $self->log( $self->site->log );
+
+        # First build the site
+        $self->site->build( %{ $self->options } );
 
         my $base;
         if ( $self->site->base_url ) {

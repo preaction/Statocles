@@ -15,7 +15,6 @@ my ( $tmp, $config_fn, $config ) = build_temp_site( $SHARE_DIR );
 subtest 'root site' => sub {
 
     my $site = Beam::Wire->new( file => "$config_fn" )->get( 'site' );
-    $site->build;
 
     my $t = Test::Mojo->new(
         Statocles::Command::_MOJOAPP->new(
