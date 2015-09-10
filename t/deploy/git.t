@@ -277,6 +277,25 @@ subtest 'errors' => sub {
             qr{Deploy path "$not_git_path" is not in a git repository\n};
 
     };
+
+    subtest 'deploy from branch not yet born' => sub {
+        my $tmpdir = tempdir( @temp_args );
+        diag "TMP: " . $tmpdir if @temp_args;
+        my $work_git = make_git( $tmpdir );
+
+        my $build_store = Statocles::Store->new(
+            path => $SHARE_DIR->child( qw( deploy ) ),
+        );
+
+        my $deploy = Statocles::Deploy::Git->new(
+            path => $tmpdir,
+            branch => 'gh-pages',
+        );
+
+        throws_ok { $deploy->deploy( $build_store ) }
+            qr{Repository has no branches\. Please create a commit before deploying\n};
+    };
+
 };
 
 done_testing;

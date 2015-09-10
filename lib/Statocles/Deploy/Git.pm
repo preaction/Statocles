@@ -78,8 +78,12 @@ around 'deploy' => sub {
 
     my $git = Git::Repository->new( work_tree => "$root" );
 
-    # Switch to the right branch
     my $current_branch = _current_branch( $git );
+    if ( !$current_branch ) {
+        die qq{Repository has no branches. Please create a commit before deploying\n};
+    }
+
+    # Switch to the right branch
     if ( !_has_branch( $git, $self->branch ) ) {
         # Create a new, orphan branch
         # Orphan branches were introduced in git 1.7.2
