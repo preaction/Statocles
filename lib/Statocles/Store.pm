@@ -6,6 +6,7 @@ use Scalar::Util qw( weaken blessed );
 use Statocles::Document;
 use YAML;
 use File::Spec::Functions qw( splitdir );
+use Module::Runtime qw( use_module );
 
 my $DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S';
 my $DATE_FORMAT = '%Y-%m-%d';
@@ -149,7 +150,8 @@ sub read_document {
     site->log->debug( "Read document: " . $path );
     my $full_path = $self->path->child( $path );
     my %doc = $self->parse_frontmatter( $full_path, $full_path->slurp_utf8 );
-    return Statocles::Document->new( %doc, path => $path );
+    my $class = $doc{class} ? use_module( delete $doc{class} ) : 'Statocles::Document';
+    return $class->new( %doc, path => $path );
 }
 
 =method parse_frontmatter

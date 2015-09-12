@@ -3,6 +3,8 @@ use Statocles::Base 'Test';
 use Statocles::Store;
 use Statocles::Util qw( dircopy );
 use Capture::Tiny qw( capture );
+use Test::Lib;
+use TestDocument;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
 build_test_site( theme => $SHARE_DIR->child( 'theme' ) );
 
@@ -110,7 +112,11 @@ my @exp_docs = (
         layout => [qw( site slash.html.ep )],
     ),
 
-
+    TestDocument->new(
+        path => '/class/test_document.markdown',
+        title => 'Test Class',
+        content => "This is a custom class\n",
+    ),
 );
 
 my @ignored_docs = (
