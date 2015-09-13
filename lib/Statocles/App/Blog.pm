@@ -6,6 +6,7 @@ use Getopt::Long qw( GetOptionsFromArray );
 use Statocles::Store;
 use Statocles::Page::Document;
 use Statocles::Page::List;
+use Statocles::Util qw( run_editor );
 
 with 'Statocles::App';
 
@@ -163,20 +164,23 @@ ENDHELP
             sprintf( '%02i', $day ),
         );
 
-        if ( $ENV{EDITOR} ) {
-            my $slug = $self->make_slug( $doc{title} || "new post" );
-            my $path = Path::Tiny->new( @date_parts, $slug, "index.markdown" );
-            $self->store->write_document( $path => \%doc );
-            my $tmp_path = $self->store->path->child( $path );
-            system split( /\s+/, $ENV{EDITOR} ), $tmp_path;
-            %doc = %{ $self->store->read_document( $path ) };
-            $self->store->path->child( $path->parent )->remove_tree;
-        }
-
-        my $slug = $self->make_slug( $doc{title} );
+        my $slug = $self->make_slug( $doc{title} || "new post" );
         my $path = Path::Tiny->new( @date_parts, $slug, "index.markdown" );
         $self->store->write_document( $path => \%doc );
         my $full_path = $self->store->path->child( $path );
+
+        if ( run_editor( $full_path ) ) {
+            my $old_title = $doc{title};
+            %doc = %{ $self->store->read_document( $path ) };
+            if ( $doc{title} ne $old_title ) {
+                $self->store->path->child( $path->parent )->remove_tree;
+                $slug = $self->make_slug( $doc{title} || "new post" );
+                $path = Path::Tiny->new( @date_parts, $slug, "index.markdown" );
+                $self->store->write_document( $path => \%doc );
+                $full_path = $self->store->path->child( $path );
+            }
+        }
+
         say "New post at: $full_path";
 
     }

@@ -3,6 +3,7 @@ package Statocles::App::Plain;
 
 use Statocles::Base 'Class';
 use Statocles::Page::Document;
+use Statocles::Util qw( run_editor );
 with 'Statocles::App';
 
 =attr store
@@ -111,10 +112,7 @@ sub command {
         }
         my $full_path = $self->store->path->child( $path );
 
-        if ( $ENV{EDITOR} ) {
-            system split( /\s+/, $ENV{EDITOR} ), $full_path;
-        }
-        else {
+        if ( !run_editor( $full_path ) ) {
             say "New page at: $full_path";
         }
 
