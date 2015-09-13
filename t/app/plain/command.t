@@ -54,7 +54,9 @@ subtest 'edit' => sub {
     subtest 'create new page' => sub {
 
         subtest 'full path' => sub {
-            local $ENV{EDITOR}; # We can't very well open vim...
+            local $ENV{EDITOR} = "$^X " . $SHARE_DIR->child( 'bin', 'editor.pl' );
+            local $ENV{STATOCLES_TEST_EDITOR_CONTENT} = "".$SHARE_DIR->child(qw( app plain index.markdown ));
+
             my $doc_path = $tmpdir->child( "plain", "resume.markdown" );
 
             subtest 'run the command' => sub {
@@ -62,31 +64,17 @@ subtest 'edit' => sub {
                 my ( $out, $err, $exit ) = capture { $app->command( @args ) };
                 ok !$err, 'nothing on stdout';
                 is $exit, 0;
-                like $out, qr{New page at: \Q$doc_path},
-                    'contains blog post document path';
+                ok !$out, 'EDITOR silences STDOUT';
             };
 
             subtest 'check the generated document' => sub {
                 my $path = $doc_path->relative( $tmpdir->child('plain') );
-                my $doc = $app->store->read_document( $path );
-                cmp_deeply $doc, Statocles::Document->new(
-                    path => $path,
-                    title => '',
-                    content => <<'ENDMARKDOWN',
-Markdown content goes here.
-ENDMARKDOWN
-                );
-                eq_or_diff $doc_path->slurp, <<ENDCONTENT;
----
-title: ''
----
-Markdown content goes here.
-ENDCONTENT
+                eq_or_diff $doc_path->slurp, $SHARE_DIR->child(qw( app plain index.markdown ))->slurp;
             };
         };
 
         subtest 'path without extension' => sub {
-            local $ENV{EDITOR}; # We can't very well open vim...
+            local $ENV{EDITOR}; # Test without EDITOR
             my $doc_path = $tmpdir->child( "plain", "resume", "index.markdown" );
 
             subtest 'run the command' => sub {
@@ -95,7 +83,7 @@ ENDCONTENT
                 ok !$err, 'nothing on stdout';
                 is $exit, 0;
                 like $out, qr{New page at: \Q$doc_path},
-                    'contains blog post document path';
+                    'no EDITOR has path on STDOUT';
             };
 
             subtest 'check the generated document' => sub {

@@ -112,8 +112,7 @@ sub command {
         my $full_path = $self->store->path->child( $path );
 
         if ( $ENV{EDITOR} ) {
-            # I can see no good way to test this automatically
-            system $ENV{EDITOR}, $full_path;
+            system split( /\s+/, $ENV{EDITOR} ), $full_path;
         }
         else {
             say "New page at: $full_path";
