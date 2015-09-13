@@ -164,14 +164,13 @@ ENDHELP
         );
 
         if ( $ENV{EDITOR} ) {
-            # I can see no good way to test this automatically
             my $slug = $self->make_slug( $doc{title} || "new post" );
             my $path = Path::Tiny->new( @date_parts, $slug, "index.markdown" );
             $self->store->write_document( $path => \%doc );
             my $tmp_path = $self->store->path->child( $path );
-            system $ENV{EDITOR}, $tmp_path;
+            system split( /\s+/, $ENV{EDITOR} ), $tmp_path;
             %doc = %{ $self->store->read_document( $path ) };
-            $self->store->path->child( $path )->remove;
+            $self->store->path->child( $path->parent )->remove_tree;
         }
 
         my $slug = $self->make_slug( $doc{title} );

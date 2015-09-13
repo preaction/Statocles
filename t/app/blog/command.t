@@ -288,6 +288,47 @@ ENDMARKDOWN
 
         };
 
+
+        subtest 'title change creates different folder' => sub {
+            local $ENV{EDITOR} = "$^X " . $SHARE_DIR->child( 'bin', 'editor.pl' );
+            local $ENV{STATOCLES_TEST_EDITOR_CONTENT} = "".$SHARE_DIR->child(qw( app blog draft a-draft-post.markdown ));
+
+            my ( undef, undef, undef, $day, $mon, $year ) = localtime;
+            my $doc_path = $tmpdir->child(
+                'blog',
+                sprintf( '%04i', $year + 1900 ),
+                sprintf( '%02i', $mon + 1 ),
+                sprintf( '%02i', $day ),
+                'a-draft',
+                'index.markdown',
+            );
+
+            subtest 'run the command' => sub {
+                my @args = qw( blog post );
+                my ( $out, $err, $exit ) = capture { $app->command( @args ) };
+                ok !$err, 'nothing on stdout' or diag $err;
+                is $exit, 0;
+                like $out, qr{New post at: \Q$doc_path},
+                    'contains blog post document path';
+            };
+
+            subtest 'check the generated document' => sub {
+                my $path = $doc_path->relative( $tmpdir->child('blog') );
+                my $doc = $app->store->read_document( $path );
+                cmp_deeply $doc, Statocles::Document->new(
+                    path => $path,
+                    title => 'A Draft',
+                    author => 'preaction',
+                    date => Time::Piece->strptime( '2014-06-21 00:06:00', '%Y-%m-%d %H:%M:%S' ),
+                    content => <<'ENDMARKDOWN',
+Draft body content
+ENDMARKDOWN
+                );
+
+                ok !$doc_path->parent->parent->child( 'new-post' )->exists, 'new-post dir is cleaned up';
+            };
+        };
+
     };
 };
 
