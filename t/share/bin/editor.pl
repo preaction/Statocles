@@ -14,7 +14,14 @@ use warnings;
 my $ENV_OUT = "STATOCLES_TEST_EDITOR_OUTPUT";
 my $ENV_IN = "STATOCLES_TEST_EDITOR_CONTENT";
 
-my ( $file ) = @ARGV;
+my ( $file, $extra ) = @ARGV;
+
+if ( $file eq '--exit' ) {
+    exit $extra;
+}
+if ( $file eq '--signal' ) {
+    kill $extra, $$;
+}
 
 if ( $ENV{$ENV_OUT} ) {
     open my $out_fh, '>', $ENV{$ENV_OUT} or die "Could not open $ENV{$ENV_OUT} for writing: $!";
