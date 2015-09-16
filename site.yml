@@ -70,6 +70,9 @@ site:
 
         data:
             google_analytics_id: 'UA-61295159-3'
+            disqus:
+                shortname: 'statocles'
+
     on:
         - build:
             $class: Statocles::Plugin::LinkCheck
