@@ -322,6 +322,30 @@ Along with the blog app and our other settings, here is our new, complete site.y
 If we're satisfied with our new About page, we can deploy our site with
 C<statocles deploy>.
 
+=head1 ADVANCED CONFIGURATION
+
+The configuration file is a L<Beam::Wire> container. This means that any
+object attributes (in the C<ATTRIBUTES> section of their documentation)
+can be set from the config file. Some examples are below:
+
+=head2 Custom Markdown
+
+To use a custom Markdown parser, like L<Text::MultiMarkdown>, which has L<some
+extra syntax
+features|https://rawgit.com/fletcher/human-markdown-reference/master/index.html>,
+you can use the L<site object's C<markdown> attribute|Statocles::Site/markdown>
+to configure a custom object with C<$class> and optional C<$args>:
+
+    # site.yml
+    site:
+        class: Statocles::Site
+        args:
+            # ...
+            markdown:
+                $class: Text::MultiMarkdown
+                $args:
+                    use_metadata: false
+
 =head1 SEE ALSO
 
 =over 4
