@@ -350,11 +350,11 @@ to configure a custom object with C<$class> and optional C<$args>:
 
 =over 4
 
-=item L<How to edit content with Statocles|Statocles::Help::Content>
+=item L<Statocles::Help::Content - How to edit content with Statocles|Statocles::Help::Content>
 
-=item L<How to deploy a Statocles site|Statocles::Help::Deploy>
+=item L<Statocles::Help::Deploy - How to deploy a Statocles site|Statocles::Help::Deploy>
 
-=item L<How to customize a Statocles theme|Statocles::Help::Theme>
+=item L<Statocles::Help::Theme - How to customize a Statocles theme|Statocles::Help::Theme>
 
 =back
 
