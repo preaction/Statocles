@@ -48,7 +48,7 @@ The title of the page.
 =cut
 
 has title => (
-    is => 'ro',
+    is => 'rw',
     isa => Str,
 );
 
@@ -96,7 +96,7 @@ The date of this page. Used for last updated date and blog post dates.
 =cut
 
 has date => (
-    is => 'ro',
+    is => 'rw',
     isa => InstanceOf['Time::Piece'],
     lazy => 1,
     default => sub { Time::Piece->new },
@@ -149,7 +149,7 @@ Any object with a "markdown" method will work.
 =cut
 
 has markdown => (
-    is => 'ro',
+    is => 'rw',
     isa => HasMethods['markdown'],
     default => sub { $_[0]->site->markdown },
 );
@@ -162,7 +162,7 @@ wrapped in the L<layout template|/layout>.
 =cut
 
 my @template_attrs = (
-    is => 'ro',
+    is => 'rw',
     isa => InstanceOf['Statocles::Template'],
     coerce => Statocles::Template->coercion,
     default => sub {
@@ -205,7 +205,7 @@ while. C<never> is mainly used for archived pages or permanent links.
 =cut
 
 has search_change_frequency => (
-    is => 'ro',
+    is => 'rw',
     isa => Enum[qw( always hourly daily weekly monthly yearly never )],
     default => sub { 'weekly' },
 );
@@ -226,7 +226,7 @@ protocol|http://sitemaps.org> for details.
 =cut
 
 has search_priority => (
-    is => 'ro',
+    is => 'rw',
     isa => Num,
     default => sub { 0.5 },
 );

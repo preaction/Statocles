@@ -35,7 +35,7 @@ The author of the page.
 =cut
 
 has author => (
-    is => 'ro',
+    is => 'rw',
     isa => Str,
     lazy => 1,
     default => sub { $_[0]->document->author || '' },
@@ -66,7 +66,7 @@ most important attributes are:
 =cut
 
 has _tags => (
-    is => 'ro',
+    is => 'rw',
     isa => LinkArray,
     default => sub { [] },
     coerce => LinkArray->coercion,
@@ -143,7 +143,10 @@ Get the list of tags for this page.
 =cut
 
 sub tags {
-    my ( $self ) = @_;
+    my ( $self, $new_tags ) = @_;
+    if ( $new_tags ) {
+        return $self->_tags( $new_tags );
+    }
     return @{ $self->_tags };
 }
 
