@@ -62,7 +62,17 @@ sub pages {
         push @paths, $path;
     }
 
+    PATH:
     for my $path ( @paths ) {
+
+        # Check for hidden files and folders
+        next if $path->basename =~ /^[.]/;
+        my $parent = $path->parent;
+        while ( !$parent->is_rootdir ) {
+            next PATH if $parent->basename =~ /^[.]/;
+            $parent = $parent->parent;
+        }
+
         if ( $self->store->is_document( $path ) ) {
             my $page_path = $path;
             $page_path =~ s{[.]\w+$}{.html};
