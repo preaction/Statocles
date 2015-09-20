@@ -2,56 +2,14 @@ package Statocles::App::Plain;
 # ABSTRACT: Plain documents made into pages with no extras
 
 use Statocles::Base 'Class';
-use Statocles::Page::Document;
 use Statocles::Util qw( run_editor );
-with 'Statocles::App';
+with 'Statocles::App::Role::Store';
 
 =attr store
 
 The L<store|Statocles::Store> containing this app's documents. Required.
 
 =cut
-
-has store => (
-    is => 'ro',
-    isa => Store,
-    required => 1,
-    coerce => Store->coercion,
-);
-
-=method pages
-
-    my @pages = $app->pages;
-
-Get the L<page objects|Statocles::Page> for this app.
-
-=cut
-
-sub pages {
-    my ( $self ) = @_;
-    my @pages;
-
-    for my $doc ( @{ $self->store->documents } ) {
-        my $url = $doc->path;
-        $url =~ s/[.]markdown$/.html/;
-
-        my $page = Statocles::Page::Document->new(
-            app => $self,
-            path => $url,
-            document => $doc,
-            layout => $self->site->theme->template( site => 'layout.html' ),
-        );
-
-        if ( $url =~ m{^/?index[.]html$} ) {
-            unshift @pages, $page;
-        }
-        else {
-            push @pages, $page;
-        }
-    }
-
-    return @pages;
-}
 
 =method command
 
