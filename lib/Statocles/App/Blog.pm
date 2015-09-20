@@ -8,20 +8,13 @@ use Statocles::Page::Document;
 use Statocles::Page::List;
 use Statocles::Util qw( run_editor );
 
-with 'Statocles::App';
+with 'Statocles::App::Role::Store';
 
 =attr store
 
 The L<store|Statocles::Store> to read for documents.
 
 =cut
-
-has store => (
-    is => 'ro',
-    isa => Store,
-    coerce => Store->coercion,
-    required => 1,
-);
 
 =attr tag_text
 
@@ -75,7 +68,7 @@ has index_tags => (
 has _post_pages => (
     is => 'rw',
     isa => ArrayRef,
-    default => sub { [] },
+    predicate => '_has_cached_post_pages',
 );
 
 =method command
@@ -207,135 +200,12 @@ sub make_slug {
     return lc $slug;
 }
 
-=method post_pages
-
-    my @pages = $app->post_pages;
-
-Get the individual post L<Statocles::Page> objects.
-
-=cut
-
-sub post_pages {
-    my ( $self, %opt ) = @_;
-    my @pages = map { $self->_make_post_page( $_ ) } $self->_sorted_docs( $opt{date} );
-    $self->_post_pages( [ @pages ] );
-    return @pages;
-}
-
-=method post_files
-
-    my @pages = $app->post_files;
-
-Get all the post collateral files as L<Statocles::Page> objects. Markdown
-files will be created as L<Statocles::Page::Document> objects, any other files
-will be L<Statocles::Page::File> objects.
-
-=cut
-
-sub post_files {
-    my ( $self ) = @_;
-    my @pages;
-
-    my @paths;
-    my $iter = $self->store->find_files( include_documents => 1 );
-    while ( my $path = $iter->() ) {
-        push @paths, $path;
-    }
-
-    for my $path ( @paths ) {
-        # Files must be in folders
-        next unless $path =~ m{^/(\d{4})/(\d{2})/(\d{2})/[^/]+/};
-
-        # index.markdown is the post itself
-        next if $path =~ m{/index[.]markdown$};
-        next if $path =~ m{/index[.]html$};
-
-        if ( $self->store->is_document( $path ) ) {
-            my $page_path = $path;
-            $page_path =~ s{[.]\w+$}{.html};
-
-            my %args = (
-                path => $page_path,
-                app => $self,
-                layout => $self->site->theme->template( site => 'layout.html' ),
-                document => $self->store->read_document( $path ),
-            );
-
-            push @pages, Statocles::Page::Document->new( %args );
-        }
-        else {
-            # If there's a markdown file, don't keep the html file
-            if ( $path =~ /[.]html$/ ) {
-                my $doc_path = "$path";
-                $doc_path =~ s/[.]html$/.markdown/;
-                next if grep { $_ eq $doc_path } @paths;
-            }
-
-            push @pages, Statocles::Page::File->new(
-                path => $path,
-                file_path => $self->store->path->child( $path ),
-            );
-        }
-    }
-
-    return @pages;
-}
-
-# Return the post docs sorted by date, pruning any docs that are after
-# the given date
-sub _sorted_docs {
-    my ( $self, $today ) = @_;
-
-    $today ||= Time::Piece->new->ymd;
-    my @doc_dates;
-    for my $doc ( @{ $self->store->documents } ) {
-        my @date_parts = $doc->path =~ m{/(\d{4})/(\d{2})/(\d{2})/[^/]+(?:/index[.]markdown)?$};
-        next unless @date_parts;
-        my $date = join "-", @date_parts;
-
-        next if $date gt $today;
-
-        push @doc_dates, [ $doc, $date ];
-    }
-
-    return map { $_->[0] } sort { $b->[1] cmp $a->[1] } @doc_dates;
-}
-
-sub _make_post_page {
-    my ( $self, $doc ) = @_;
-
-    my $path = $doc->path;
-    $path =~ s{/{2,}}{/}g;
-    $path =~ s{[.]\w+$}{.html};
-
-    my @date_parts = $doc->path =~ m{/(\d{4})/(\d{2})/(\d{2})/[^/]+(?:/index[.]markdown)?$};
-    my $date = join "-", @date_parts;
-
-    my @tags;
-    for my $tag ( @{ $doc->tags } ) {
-        push @tags, $self->link(
-            text => $tag,
-            href => join( "/", 'tag', $self->_tag_url( $tag ), '' ),
-        );
-    }
-
-    return Statocles::Page::Document->new(
-        app => $self,
-        layout => $self->site->theme->template( site => 'layout.html' ),
-        template => $self->site->theme->template( blog => 'post.html' ),
-        document => $doc,
-        path => $path,
-        date => $doc->has_date ? $doc->date : Time::Piece->strptime( $date, '%Y-%m-%d' ),
-        tags => \@tags,
-    );
-}
-
 =method index
 
-    my @pages = $app->index( @post_pages );
+    my @pages = $app->index( \@post_pages );
 
-Build the index page (a L<list page|Statocles::Page::List>) and all related feed pages
-out of the given post pages (built from L<the post_pages method|/post_pages>).
+Build the index page (a L<list page|Statocles::Page::List>) and all related
+feed pages out of the given array reference of post pages.
 
 =cut
 
@@ -351,11 +221,11 @@ my %FEEDS = (
 );
 
 sub index {
-    my ( $self, @all_post_pages ) = @_;
+    my ( $self, $all_post_pages ) = @_;
 
     # Filter the index_tags
     my @index_post_pages;
-    PAGE: for my $page ( @all_post_pages ) {
+    PAGE: for my $page ( @$all_post_pages ) {
         my $add = 1;
         for my $tag_spec ( @{ $self->index_tags } ) {
             my $flag = substr $tag_spec, 0, 1;
@@ -369,8 +239,8 @@ sub index {
 
     my @pages = Statocles::Page::List->paginate(
         after => $self->page_size,
-        path => '/page/%i/index.html',
-        index => '/index.html',
+        path => $self->url_root . '/page/%i/index.html',
+        index => $self->url_root . '/index.html',
         # Sorting by path just happens to also sort by date
         pages => [ sort { $b->path cmp $a->path } @index_post_pages ],
         app => $self,
@@ -387,7 +257,7 @@ sub index {
         my $page = Statocles::Page::List->new(
             app => $self,
             pages => $index->pages,
-            path => 'index.' . $feed,
+            path => $self->url_root . '/index.' . $feed,
             template => $self->site->theme->template( blog => $FEEDS{$feed}{template} ),
             links => {
                 alternate => [
@@ -418,7 +288,7 @@ sub index {
 
 =method tag_pages
 
-    my @pages = $app->tag_pages( @post_pages );
+    my @pages = $app->tag_pages( \%tag_pages );
 
 Get L<pages|Statocles::Page> for the tags in the given blog post documents
 (build from L<the post_pages method|/post_pages>, including relevant feed
@@ -427,18 +297,16 @@ pages.
 =cut
 
 sub tag_pages {
-    my ( $self, @post_pages ) = @_;
-
-    my %tagged_docs = $self->_tag_docs( @post_pages );
+    my ( $self, $tagged_docs ) = @_;
 
     my @pages;
-    for my $tag ( keys %tagged_docs ) {
+    for my $tag ( keys %$tagged_docs ) {
         my @tag_pages = Statocles::Page::List->paginate(
             after => $self->page_size,
-            path => join( "/", '', 'tag', $self->_tag_url( $tag ), 'page/%i/index.html' ),
-            index => join( "/", '', 'tag', $self->_tag_url( $tag ), 'index.html' ),
+            path => join( "/", $self->url_root, 'tag', $self->_tag_url( $tag ), 'page/%i/index.html' ),
+            index => join( "/", $self->url_root, 'tag', $self->_tag_url( $tag ), 'index.html' ),
             # Sorting by path just happens to also sort by date
-            pages => [ sort { $b->path cmp $a->path } @{ $tagged_docs{ $tag } } ],
+            pages => [ sort { $b->path cmp $a->path } @{ $tagged_docs->{ $tag } } ],
             app => $self,
             template => $self->site->theme->template( blog => 'index.html' ),
             layout => $self->site->theme->template( site => 'layout.html' ),
@@ -456,7 +324,7 @@ sub tag_pages {
             my $page = Statocles::Page::List->new(
                 app => $self,
                 pages => $index->pages,
-                path => join( "/", 'tag', $tag_file ),
+                path => join( "/", $self->url_root, 'tag', $tag_file ),
                 template => $self->site->theme->template( blog => $FEEDS{$feed}{template} ),
                 links => {
                     alternate => [
@@ -506,15 +374,62 @@ Defaults to the current date.
 
 =cut
 
-sub pages {
-    my ( $self, %opt ) = @_;
-    my @post_pages = $self->post_pages( %opt );
-    return (
-        ( map { $self->$_( @post_pages ) } qw( index tag_pages ) ),
-        $self->post_files,
-        @post_pages,
-    );
-}
+# sub pages
+around pages => sub {
+    my ( $orig, $self, %opt ) = @_;
+    $opt{date} ||= Time::Piece->new->ymd;
+    my $root = $self->url_root;
+    my $is_dated_path = qr{^$root/?(\d{4})/(\d{2})/(\d{2})/};
+    my @parent_pages = $self->$orig( %opt );
+    my @pages =
+        map { $_->[0] }
+        # Sort by date
+        sort { $b->[1] cmp $a->[1] }
+        # Only pages today or before
+        grep { $_->[1] le $opt{date} }
+        # Create the page's date
+        map { [ $_, join "-", $_->path =~ $is_dated_path ] }
+        # Only dated pages
+        grep { $_->path =~ $is_dated_path }
+        #$self->$orig( %opt );
+        @parent_pages;
+    my @post_pages;
+    my %tag_pages;
+
+    for my $page ( @pages ) {
+
+        if ( $page->isa( 'Statocles::Page::Document' ) ) {
+
+            if ( $page->path =~ m{$is_dated_path [^/]+ (?:/index)? [.]html$}x ) {
+                my $date = join "-", $1, $2, $3;
+
+                push @post_pages, $page;
+
+                my $doc = $page->document;
+                $page->date( $doc->has_date ? $doc->date : Time::Piece->strptime( $date, '%Y-%m-%d' ) );
+
+                my @tags;
+                for my $tag ( @{ $doc->tags } ) {
+                    push @{ $tag_pages{ $tag } }, $page;
+                    push @tags, $self->link(
+                        text => $tag,
+                        href => join( "/", 'tag', $self->_tag_url( $tag ), '' ),
+                    );
+                }
+                $page->tags( \@tags );
+
+                $page->template( $self->site->theme->template( blog => 'post.html' ) );
+            }
+        }
+    }
+
+    # Cache the post pages for this build
+    # XXX: This needs to be handled more intelligently with proper dependencies
+    $self->_post_pages( \@post_pages );
+
+    my @all_pages = ( $self->index( \@post_pages ), $self->tag_pages( \%tag_pages ), @pages );
+    return @all_pages;
+};
 
 =method tags
 
@@ -530,20 +445,15 @@ tag links. The common attributes are:
 
 sub tags {
     my ( $self ) = @_;
-    my %tagged_docs = $self->_tag_docs( @{ $self->_post_pages } );
-    return map {; $self->link( text => $_, href => join( "/", 'tag', $self->_tag_url( $_ ), '' ) ) }
-        sort keys %tagged_docs
-}
-
-sub _tag_docs {
-    my ( $self, @post_pages ) = @_;
-    my %tagged_docs;
-    for my $page ( @post_pages ) {
+    my %tags;
+    my @pages = @{ $self->_post_pages || [] };
+    for my $page ( @pages ) {
         for my $tag ( @{ $page->document->tags } ) {
-            push @{ $tagged_docs{ $tag } }, $page;
+            $tags{ $tag }++;
         }
     }
-    return %tagged_docs;
+    return map {; $self->link( text => $_, href => join( "/", 'tag', $self->_tag_url( $_ ), '' ) ) }
+        sort keys %tags;
 }
 
 sub _tag_url {
@@ -575,24 +485,24 @@ matching the given criteria. The following filters are available:
 sub recent_posts {
     my ( $self, $count, %filter ) = @_;
 
-    my $today = Time::Piece->new->ymd;
-    my @pages;
-    my @docs = $self->_sorted_docs;
-    DOC: for my $doc ( @docs ) {
+    my $root = $self->url_root;
+    my @pages = $self->_has_cached_post_pages ? @{ $self->_post_pages } : $self->pages;
+    my @found_pages;
+    PAGE: for my $page ( @pages ) {
+        next PAGE unless $page->path =~ qr{^$root/?(\d{4})/(\d{2})/(\d{2})/[^/]+(?:/index)?[.]html$};
+
         QUERY: for my $attr ( keys %filter ) {
             my $value = $filter{ $attr };
             if ( $attr eq 'tags' ) {
-                next DOC unless grep { $_ eq $value } @{ $doc->tags };
+                next PAGE unless grep { $_ eq $value } @{ $page->document->tags };
             }
         }
 
-        my $page = $self->_make_post_page( $doc );
-        $page->path( join "/", $self->url_root, $page->path );
-        push @pages, $page;
-        last if @pages >= $count;
+        push @found_pages, $page;
+        last if @found_pages >= $count;
     }
 
-    return @pages;
+    return @found_pages;
 }
 
 =method page_url
