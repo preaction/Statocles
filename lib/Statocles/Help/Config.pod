@@ -167,10 +167,10 @@ content.
 In addition to our blog app, we also want to add some plain Markdown content, and some
 images.
 
-=head2 Plain Markdown
+=head2 Basic Pages
 
-For plain markdown, there is the L<plain app:
-Statocles::App::Plain|Statocles::App::Plain>. The plain app takes the same
+For basic pages with no structure or extras, there is the L<basic app:
+Statocles::App::Basic|Statocles::App::Basic>. The basic app takes the same
 YAML-and-Markdown-formatted documents as the blog app and creates HTML pages,
 without the lists, tags, and feeds the blog generates.
 
@@ -180,8 +180,8 @@ we're using the root directory for our documents, we'll use the root URL for
 our destination C</>.
 
     # site.yml
-    plain_app:
-        class: Statocles::App::Plain
+    basic_app:
+        class: Statocles::App::Basic
         args:
             url_root: '/'
             store: '.'
@@ -213,8 +213,8 @@ To enable the new apps, we just need to add them to the site's C<apps>.
             apps:
                 blog:
                     $ref: blog_app
-                plain:
-                    $ref: plain_app
+                basic:
+                    $ref: basic_app
                 static:
                     $ref: static_app
             deploy:
@@ -226,9 +226,9 @@ To enable the new apps, we just need to add them to the site's C<apps>.
                     - title: Blog
                       href: /
 
-=head2 Add Plain Content
+=head2 Add Basic Content
 
-Now, we just need some content for our plain app to deploy. The plain app uses the same
+Now, we just need some content for our basic app to deploy. The basic app uses the same
 format as the blog, so we need a YAML header followed by some Markdown content:
 
 Create a file named C<about.markdown> with the following content:
@@ -251,8 +251,8 @@ Now we should probably make a link in our main nav to the new about page:
             apps:
                 blog:
                     $ref: blog_app
-                plain:
-                    $ref: plain_app
+                basic:
+                    $ref: basic_app
                 static:
                     $ref: static_app
             deploy:
@@ -279,8 +279,8 @@ Along with the blog app and our other settings, here is our new, complete site.y
             url_root: /blog
             store: 'blog'
 
-    plain_app:
-        class: Statocles::App::Plain
+    basic_app:
+        class: Statocles::App::Basic
         args:
             url_root: '/'
             store: '.'
@@ -302,8 +302,8 @@ Along with the blog app and our other settings, here is our new, complete site.y
             apps:
                 blog:
                     $ref: blog_app
-                plain:
-                    $ref: plain_app
+                basic:
+                    $ref: basic_app
                 static:
                     $ref: static_app
 

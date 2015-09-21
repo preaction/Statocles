@@ -82,9 +82,10 @@ turn them into the pages that can be written out to the filesystem.
 
 =over 4
 
-=item L<Statocles::App::Plain>
+=item L<Statocles::App::Basic>
 
-Plain markdown documents are turned into pages with no special arrangement.
+Basic markdown documents are turned into pages with no special arrangement. Also
+allows for collateral images and other files.
 
 =item L<Statocles::App::Blog>
 

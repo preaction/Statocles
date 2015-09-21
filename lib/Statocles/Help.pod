@@ -54,15 +54,15 @@ L<Statocles::App> - Base app role
 
 =item *
 
+L<Statocles::App::Basic> - Basic pages and files
+
+=item *
+
 L<Statocles::App::Blog> - Blog application
 
 =item *
 
 L<Statocles::App::Perldoc> - POD application
-
-=item *
-
-L<Statocles::App::Plain> - Plain Markdown pages
 
 =item *
 

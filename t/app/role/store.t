@@ -26,7 +26,7 @@ my $site = build_test_site(
 my $app = MyApp->new(
     url_root => '/my',
     site => $site,
-    store => $SHARE_DIR->child( qw( app plain ) ),
+    store => $SHARE_DIR->child( qw( app basic ) ),
     data => {
         info => "This is some info",
     },

@@ -1,6 +1,6 @@
 
 use Statocles::Base 'Test';
-use Statocles::App::Plain;
+use Statocles::App::Basic;
 
 my $SHARE_DIR = path( __DIR__ )->parent->parent->child( 'share' );
 my $site = build_test_site(
@@ -8,10 +8,10 @@ my $site = build_test_site(
 );
 
 test_constructor(
-    "Statocles::App::Plain",
+    "Statocles::App::Basic",
     required => {
         url_root => '/',
-        store => $SHARE_DIR->child( qw( app plain ) ),
+        store => $SHARE_DIR->child( qw( app basic ) ),
     },
 );
 

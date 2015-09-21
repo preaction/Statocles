@@ -31,9 +31,9 @@ Everything after C<post> will be used as the title of the post.
 If you have the C<EDITOR> environment variable set, your editor will
 automatically open on the newly-created document.
 
-=head3 Create a Plain Page
+=head3 Create a Page
 
-To create a plain page using L<the plain app|Statocles::App::Plain>, we just have
+To create a page using L<the basic app|Statocles::App::Basic>, we just have
 to create a new file:
 
     ### Create /page/index.html

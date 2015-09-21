@@ -1,16 +1,16 @@
 
 use Statocles::Base 'Test';
-use Statocles::App::Plain;
+use Statocles::App::Basic;
 
 my $SHARE_DIR = path( __DIR__ )->parent->parent->child( 'share' );
 my $site = build_test_site(
     theme => $SHARE_DIR->child( 'theme' ),
 );
 
-my $app = Statocles::App::Plain->new(
+my $app = Statocles::App::Basic->new(
     url_root => '/',
     site => $site,
-    store => $SHARE_DIR->child( qw( app plain ) ),
+    store => $SHARE_DIR->child( qw( app basic ) ),
     data => {
         info => "This is some info",
     },

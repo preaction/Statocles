@@ -2,14 +2,17 @@ package Statocles::App::Plain;
 # ABSTRACT: Plain documents made into pages with no extras
 
 use Statocles::Base 'Class';
-use Statocles::Util qw( run_editor );
-with 'Statocles::App::Role::Store';
+extends 'Statocles::App::Basic';
 
 =attr store
 
 The L<store|Statocles::Store> containing this app's documents. Required.
 
 =cut
+
+before pages => sub {
+    warn qq{Statocles::App::Plain has been renamed to Statocles::App::Basic and will be removed in 2.0. Change the app class to "Statocles::App::Basic" to silence this message.\n};
+};
 
 =method command
 
@@ -20,69 +23,9 @@ viewing pages.
 
 =cut
 
-my $USAGE_INFO = <<'ENDHELP';
-Usage:
-    $name help -- This help file
-    $name edit <path> -- Edit a page, creating it if necessary
-ENDHELP
-
-sub command {
-    my ( $self, $name, @argv ) = @_;
-
-    if ( !$argv[0] ) {
-        say STDERR "ERROR: Missing command";
-        say STDERR eval "qq{$USAGE_INFO}";
-        return 1;
-    }
-
-    if ( $argv[0] eq 'help' ) {
-        say eval "qq{$USAGE_INFO}";
-        return 0;
-    }
-
-    if ( $argv[0] eq 'edit' ) {
-        $argv[1] =~ s{^/}{};
-        my $path = Path::Tiny->new(
-            $argv[1] =~ /[.](?:markdown|md)$/ ? $argv[1] : "$argv[1]/index.markdown",
-        );
-
-        my %doc;
-        # Read post content on STDIN
-        if ( !-t *STDIN ) {
-            my $content = do { local $/; <STDIN> };
-            %doc = (
-                %doc,
-                $self->store->parse_frontmatter( "<STDIN>", $content ),
-            );
-
-            # Re-open STDIN as the TTY so that the editor (vim) can use it
-            # XXX Is this also a problem on Windows?
-            if ( -e '/dev/tty' ) {
-                close STDIN;
-                open STDIN, '/dev/tty';
-            }
-        }
-
-        if ( !$self->store->has_file( $path ) || keys %doc ) {
-            $doc{title} ||= '';
-            $doc{content} ||= "Markdown content goes here.\n";
-            $self->store->write_document( $path => \%doc );
-        }
-        my $full_path = $self->store->path->child( $path );
-
-        if ( !run_editor( $full_path ) ) {
-            say "New page at: $full_path";
-        }
-
-    }
-    else {
-        say STDERR qq{ERROR: Unknown command "$argv[0]"};
-        say STDERR eval "qq{$USAGE_INFO}";
-        return 1;
-    }
-
-    return 0;
-}
+before command => sub {
+    warn qq{Statocles::App::Plain has been renamed to Statocles::App::Basic and will be removed in 2.0. Change the app class to "Statocles::App::Basic" to silence this message.\n};
+};
 
 1;
 __END__
@@ -96,6 +39,9 @@ __END__
     my @pages = $app->pages;
 
 =head1 DESCRIPTION
+
+B<NOTE:> This application has been renamed L<Statocles::App::Basic>. This
+class will be removed with v2.0. See L<Statocles::Help::Upgrading>.
 
 This application builds simple pages based on L<documents|Statocles::Document>. Use this
 to have basic informational pages like "About Us" and "Contact Us".

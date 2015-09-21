@@ -75,9 +75,9 @@ sub build_test_site_apps {
             page_size => 2,
         );
 
-        require Statocles::App::Plain;
-        my $plain = Statocles::App::Plain->new(
-            store => $share_dir->child( qw( app plain ) ),
+        require Statocles::App::Basic;
+        my $plain = Statocles::App::Basic->new(
+            store => $share_dir->child( qw( app basic ) ),
             url_root => '/',
         );
 
@@ -302,7 +302,7 @@ sub build_temp_site {
         },
 
         plain => {
-            'class' => 'Statocles::App::Plain',
+            'class' => 'Statocles::App::Basic',
             'args' => {
                 store => {
                     '$class' => 'Statocles::Store',

@@ -4,7 +4,7 @@ use Capture::Tiny qw( capture );
 use Statocles::Site;
 use Statocles::Page::Plain;
 use Statocles::App::Static;
-use Statocles::App::Plain;
+use Statocles::App::Basic;
 use Mojo::DOM;
 use Test::Lib;
 use TestApp;
@@ -13,8 +13,8 @@ my $SHARE_DIR = path( __DIR__, '..', 'share' );
 subtest 'build two pages with same path' => sub {
     local $ENV{MOJO_LOG_LEVEL} = "warn";
 
-    my $plain = Statocles::App::Plain->new(
-        store => $SHARE_DIR->child( qw( app plain ) ),
+    my $basic = Statocles::App::Basic->new(
+        store => $SHARE_DIR->child( qw( app basic ) ),
         url_root => '/',
     );
 
@@ -27,20 +27,20 @@ subtest 'build two pages with same path' => sub {
         $SHARE_DIR,
         apps => {
             static => $static,
-            plain => $plain,
+            basic => $basic,
         },
     );
 
     my ( $out, $err, $exit ) = capture {
         $site->build;
     };
-    like $err, qr{\Q[warn] Duplicate page "/index.html" from apps: plain, static. Using plain};
+    like $err, qr{\Q[warn] Duplicate page "/index.html" from apps: basic, static. Using basic};
     ok !$out or diag $out;
 
     my $dom = Mojo::DOM->new( $build_dir->child( 'index.html' )->slurp_utf8 );
 
     # This test will only fail randomly if it fails, because of hash ordering
-    is $dom->at('h1')->text, 'Index Page', q{plain app always wins because it's generated};
+    is $dom->at('h1')->text, 'Index Page', q{basic app always wins because it's generated};
 };
 
 subtest 'app generates two pages with the same path' => sub {

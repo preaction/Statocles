@@ -435,7 +435,7 @@ sub site_config {
         },
 
         page_app => {
-            class => 'Statocles::App::Plain',
+            class => 'Statocles::App::Basic',
             args => {
                 store => 'page',
                 url_root => '/page',

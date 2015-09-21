@@ -5,7 +5,7 @@ my $SHARE_DIR = path( __DIR__, 'share' );
 
 subtest 'dircopy' => sub {
     my $tmp_dest = tempdir;
-    dircopy $SHARE_DIR->child( qw( app plain ) ), $tmp_dest;
+    dircopy $SHARE_DIR->child( qw( app basic ) ), $tmp_dest;
     ok $tmp_dest->child( 'index.markdown' )->is_file;
     ok $tmp_dest->child( 'foo' )->is_dir;
     ok $tmp_dest->child( qw( foo index.markdown ) )->is_file;
@@ -15,7 +15,7 @@ subtest 'dircopy' => sub {
     subtest 'dir does not exist yet' => sub {
         my $tmp_dest = tempdir;
 
-        dircopy $SHARE_DIR->child( qw( app plain ) ), $tmp_dest->child( 'missing' );
+        dircopy $SHARE_DIR->child( qw( app basic ) ), $tmp_dest->child( 'missing' );
         ok $tmp_dest->child( qw( missing index.markdown ) )->is_file;
         ok $tmp_dest->child( qw( missing foo ) )->is_dir;
         ok $tmp_dest->child( qw( missing foo index.markdown ) )->is_file;

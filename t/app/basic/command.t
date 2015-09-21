@@ -1,7 +1,7 @@
 
 use Statocles::Base 'Test';
 use Capture::Tiny qw( capture );
-use Statocles::App::Plain;
+use Statocles::App::Basic;
 my $SHARE_DIR = path( __DIR__ )->parent->parent->child( 'share' );
 
 my $site = build_test_site(
@@ -10,11 +10,11 @@ my $site = build_test_site(
 
 # We need an app we can edit
 my $tmpdir = tempdir;
-$tmpdir->child( 'plain' )->mkpath;
+$tmpdir->child( 'basic' )->mkpath;
 
-my $app = Statocles::App::Plain->new(
-    store => $tmpdir->child( 'plain' ),
-    url_root => '/plain',
+my $app = Statocles::App::Basic->new(
+    store => $tmpdir->child( 'basic' ),
+    url_root => '/basic',
     site => $site,
 );
 
@@ -55,9 +55,9 @@ subtest 'edit' => sub {
 
         subtest 'full path' => sub {
             local $ENV{EDITOR} = "$^X " . $SHARE_DIR->child( 'bin', 'editor.pl' );
-            local $ENV{STATOCLES_TEST_EDITOR_CONTENT} = "".$SHARE_DIR->child(qw( app plain index.markdown ));
+            local $ENV{STATOCLES_TEST_EDITOR_CONTENT} = "".$SHARE_DIR->child(qw( app basic index.markdown ));
 
-            my $doc_path = $tmpdir->child( "plain", "resume.markdown" );
+            my $doc_path = $tmpdir->child( "basic", "resume.markdown" );
 
             subtest 'run the command' => sub {
                 my @args = qw( page edit /resume.markdown );
@@ -68,14 +68,14 @@ subtest 'edit' => sub {
             };
 
             subtest 'check the generated document' => sub {
-                my $path = $doc_path->relative( $tmpdir->child('plain') );
-                eq_or_diff $doc_path->slurp, $SHARE_DIR->child(qw( app plain index.markdown ))->slurp;
+                my $path = $doc_path->relative( $tmpdir->child('basic') );
+                eq_or_diff $doc_path->slurp, $SHARE_DIR->child(qw( app basic index.markdown ))->slurp;
             };
         };
 
         subtest 'path without extension' => sub {
             local $ENV{EDITOR}; # Test without EDITOR
-            my $doc_path = $tmpdir->child( "plain", "resume", "index.markdown" );
+            my $doc_path = $tmpdir->child( "basic", "resume", "index.markdown" );
 
             subtest 'run the command' => sub {
                 my @args = qw( page edit /resume );
@@ -87,7 +87,7 @@ subtest 'edit' => sub {
             };
 
             subtest 'check the generated document' => sub {
-                my $path = $doc_path->relative( $tmpdir->child('plain') );
+                my $path = $doc_path->relative( $tmpdir->child('basic') );
                 my $doc = $app->store->read_document( $path );
                 cmp_deeply $doc, Statocles::Document->new(
                     path => $path,
@@ -108,7 +108,7 @@ ENDCONTENT
         subtest 'content from STDIN' => sub {
             subtest 'without frontmatter' => sub {
                 local $ENV{EDITOR}; # We can't very well open vim...
-                my $doc_path = $tmpdir->child( "plain", "home.markdown" );
+                my $doc_path = $tmpdir->child( "basic", "home.markdown" );
 
                 subtest 'run the command' => sub {
                     diag -t *STDIN
@@ -133,7 +133,7 @@ ENDCONTENT
                 };
 
                 subtest 'check the generated document' => sub {
-                    my $path = $doc_path->relative( $tmpdir->child('plain') );
+                    my $path = $doc_path->relative( $tmpdir->child('basic') );
                     my $doc = $app->store->read_document( $path );
                     cmp_deeply $doc, Statocles::Document->new(
                         path => $path,
@@ -147,7 +147,7 @@ ENDMARKDOWN
 
             subtest 'with frontmatter' => sub {
                 local $ENV{EDITOR}; # We can't very well open vim...
-                my $doc_path = $tmpdir->child( "plain", "frontmatter", "index.markdown" );
+                my $doc_path = $tmpdir->child( "basic", "frontmatter", "index.markdown" );
 
                 subtest 'run the command' => sub {
                     diag -t *STDIN
@@ -178,7 +178,7 @@ ENDSTDIN
                 };
 
                 subtest 'check the generated document' => sub {
-                    my $path = $doc_path->relative( $tmpdir->child('plain') );
+                    my $path = $doc_path->relative( $tmpdir->child('basic') );
                     my $doc = $app->store->read_document( $path );
                     cmp_deeply $doc, Statocles::Document->new(
                         path => $path,

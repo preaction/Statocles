@@ -1,6 +1,11 @@
 
 use Statocles::Base 'Test';
-my $site = Statocles::Site->new( deploy => tempdir );
+use Capture::Tiny qw( capture );
+my $SHARE_DIR = path( __DIR__ )->child( 'share' );
+my $site = Statocles::Site->new(
+    deploy => tempdir,
+    theme => $SHARE_DIR->child( 'theme' ),
+);
 
 subtest 'Statocles::Site index app' => sub {
     require Mojo::DOM;
@@ -92,6 +97,38 @@ subtest 'Statocles::Store->write_* should not return anything' => sub {
     else {
         ok !@warnings, 'warning was removed';
         ok !$foo, 'value was not returned';
+    }
+};
+
+subtest 'Statocles::App::Plain' => sub {
+
+    if ( $Statocles::VERSION < 2 ) {
+        require Statocles::App::Plain;
+        my $app = Statocles::App::Plain->new(
+            url_root => '/',
+            site => $site,
+            store => $SHARE_DIR->child( qw( app basic ) ),
+        );
+
+        subtest 'pages shows warning' => sub {
+            my @warnings;
+            local $SIG{__WARN__} = sub { push @warnings, @_ };
+            $app->pages;
+            like $warnings[0], qr{\QStatocles::App::Plain has been renamed to Statocles::App::Basic and will be removed in 2.0. Change the app class to "Statocles::App::Basic" to silence this message.}, 'warn on pages method';
+        };
+
+        subtest 'command shows warning' => sub {
+            my @warnings;
+            local $SIG{__WARN__} = sub { push @warnings, @_ };
+            capture {
+                $app->command( 'name', 'help' );
+            };
+            like $warnings[0], qr{\QStatocles::App::Plain has been renamed to Statocles::App::Basic and will be removed in 2.0. Change the app class to "Statocles::App::Basic" to silence this message.}, 'warn on pages method';
+        };
+    }
+    else {
+        eval { require Statocles::App::Plain; };
+        ok $@, 'unable to load Statocles::App::Plain because it was deleted';
     }
 };
 

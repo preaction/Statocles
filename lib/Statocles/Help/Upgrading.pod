@@ -58,6 +58,16 @@ return anything. Now, C<write_document> and C<write_file> work the same.
 
 The return value will be removed in v1.000.
 
+=item Statocles::App::Plain has been renamed to Statocles::App::Basic
+
+The name "Plain" did not really explain well what the app was. The name "Basic"
+implies that it is the base functionality for Statocles apps.
+
+Simply switching your existing Plain apps to Basic apps will solve this problem
+with no change to functionality.
+
+The Plain app stub will be removed in v2.000.
+
 =back
 
 =head1 BREAKING CHANGES

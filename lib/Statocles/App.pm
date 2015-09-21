@@ -164,7 +164,7 @@ These applications are included with the core Statocles distribution.
 
 =item L<Statocles::App::Blog>
 
-=item L<Statocles::App::Plain>
+=item L<Statocles::App::Basic>
 
 =item L<Statocles::App::Static>
 
