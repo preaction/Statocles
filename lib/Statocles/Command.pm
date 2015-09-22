@@ -424,7 +424,8 @@ sub bundle_theme {
     has cleanup => sub { Mojo::Collection->new };
 
     sub DESTROY {
-        my ( $self ) = @_;
+        my ( $self, $in_global_destruction ) = @_;
+        return unless $self->cleanup;
         $self->cleanup->each( sub { $_->() } );
     }
 
@@ -491,6 +492,7 @@ sub bundle_theme {
                 my $handle = $fs->watch;
 
                 push @{ $self->cleanup }, sub {
+                    return if !$fs || !$handle;
                     $fs->stop;
                     Mojo::IOLoop->remove( $handle );
                 };
