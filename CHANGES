@@ -1,6 +1,63 @@
 Changelog for Statocles
 
-0.054 2015-08-12T02:24:41
+0.055 2015-09-22T05:09:12
+ - fix cleanup warning during global destruction
+ - add disqus setup notes to Config guide
+ - replace the Static app with the Basic app
+ - rename the Plain app to the Basic app
+ - refactor Blog app to use Store app role
+ - allow writing most page attributes
+ - skip hidden files and directories in the Plain app
+ - add static content to Plain app
+ - fix doc links to show module being linked to
+ - add custom markdown object example to config guide
+ - add disqus to statocles site
+ - update site templates from statocles default
+ - add disqus blocks to the default themes
+ - add store role for applications that use stores
+ - use run_editor helper in blog and plain apps
+ - add run_editor utility to invoke the user's editor
+ - fix new-post directory getting left behind in blog
+ - test that the interactive editor is invoked
+ - add class frontmatter for custom document classes
+ - add error if repository has no commits
+ - move daemon build inside the mojo app
+ - add --date option to build, daemon, and deploy
+ - fix daemon shutdown and cleanup to remove cycles
+ - add default site title to silence warnings
+ - add --message option to the deploy command
+ - allow plain hashrefs in test app
+ - add test for git deploy message option
+ - fix tag links in blog feeds into full urls
+ - clean up test to remove warnings from log
+ - add --clean option to statocles deploy command
+ - add clean option to file and git deploys
+ - remove ".html" from Perldoc documentation pages
+ - clarify index path missing to show possible remedy
+ - move all deprecation tests into one place
+ - deprecate write_document method return value
+ - skip deprecated module in compile test
+ - remove docs implying deploys inherit from stores
+ - move Statocles::Store::File to Statocles::Store
+ - only set version during test if no version exists
+ - fix emitter base bundle not applying
+ - add edit command to plain app
+ - add date option to build blog pages from the future
+ - add better error message when app has no commands
+ - add remove method to Store
+ - generate the site config from the template
+ - change title to text in site creator link
+ - add comments to the site creator config file
+ - add note about how to use default themes
+ - add skeleton site content during site creation
+ - add $app and $site to all templates
+ - expand document documentation to add examples
+ - fix a bunch of misspellings in the documentation
+ - remove duplicate test app
+ - add build event to apps for plugins to edit pages
+ - add release v0.054 announcement
+
+0.054 2015-08-12T02:24:41Z
  - move includes to theme and add caching
  - refer to templates by path for more flexibility
  - remove README
