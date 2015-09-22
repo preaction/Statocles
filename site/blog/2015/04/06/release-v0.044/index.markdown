@@ -6,8 +6,8 @@ title: Release v0.044
 A few small features, and some small breaking changes in this release.
 
 The `read_document` and `write_document` method of
-[Statocles::Store::File](/pod/Statocles/Store/File.html) now use
-[Statocles::Document](/pod/Statocles/Document.html) instead of plain hashrefs.
+[Statocles::Store::File](/pod/Statocles/Store/File) now use
+[Statocles::Document](/pod/Statocles/Document) instead of plain hashrefs.
 It was weird to have one method (`read_documents` with an `s`) get document
 objects, and everything else use hashes. The important
 serialization/deserialization routines are in Statocles::Document, so it is
@@ -25,9 +25,9 @@ current posts, you must fix them manually.
 An upgrade to [Beam::Wire](http://metacpan.org/pod/Beam::Wire) now allows you
 to compose roles in the Statocles configuration file, so additional behavior
 can be added to existing applications. See [the Develop
-Guide](/pod/Statocles/Help/Develop.html) for more information.
+Guide](/pod/Statocles/Help/Develop) for more information.
 
-Finally, [the Blog app](/pod/Statocles/App/Blog.html) now has a `recent_posts()`
+Finally, [the Blog app](/pod/Statocles/App/Blog) now has a `recent_posts()`
 method that can be used in templates and markdown to display the most recent
 posts in a blog.
 

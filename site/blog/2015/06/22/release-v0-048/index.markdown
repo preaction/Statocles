@@ -12,7 +12,7 @@ must update your themes to grab the new feed templates.
 
 To fix a long-standing bug with blog content not showing up correctly on the
 list pages (index, tag lists), the
-[Statocles::Page::ListItem](/pod/Statocles/Page/ListItem.html) class was added.
+[Statocles::Page::ListItem](/pod/Statocles/Page/ListItem) class was added.
 This class proxies another page and rewrites its content to survive intact
 inside a list page.
 
@@ -21,7 +21,7 @@ Some minor things:
 External perldoc links are now explicitly labelled as such with a
 [FontAwesome](http://fontawesome.io) icon.
 
-Some doc updates to start documenting the [App API](/pod/Statocles/App.html).
+Some doc updates to start documenting the [App API](/pod/Statocles/App).
 
 Full changelog below...
 

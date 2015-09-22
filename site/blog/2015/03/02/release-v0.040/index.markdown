@@ -5,10 +5,10 @@ title: Release v0.040
 ---
 
 The biggest new thing in this release is the new [LinkCheck
-plugin](/pod/Statocles/Plugin/LinkCheck.html) that checks all the pages for
+plugin](/pod/Statocles/Plugin/LinkCheck) that checks all the pages for
 broken links and images. This introduces a new event-handling API into
 Statocles, which will be called Plugins. See [the developer
-docs](/pod/Statocles/Help/Develop.html) for more information on plugins.
+docs](/pod/Statocles/Help/Develop) for more information on plugins.
 
 A bunch of bug fixes for the `create` command. It now actually works, instead
 of creating an unusable `site.yml` file.

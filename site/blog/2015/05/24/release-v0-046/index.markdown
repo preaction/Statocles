@@ -9,8 +9,8 @@ A few new features and a bunch of bugfixes in this release.
 Page objects now have a generic "data" attribute. This allows adding miscellaneous
 extra information to the Page, which is then available to the template.
 
-Using this, the [Perldoc app](/pod/Statocles/App/Perldoc.html) now has a crumbtrail
-and a link to the module source, and the [blog app](/pod/Statocles/App/Blog.html) can
+Using this, the [Perldoc app](/pod/Statocles/App/Perldoc) now has a crumbtrail
+and a link to the module source, and the [blog app](/pod/Statocles/App/Blog) can
 now have introductory text for the tags that show up on the tag page.
 
 There were some changes to the default theme to make extending it a bit easier.
@@ -20,8 +20,8 @@ There were some changes to the default theme to make extending it a bit easier.
 * The grid columns are centered in their margin, so adding a background color
   to the columns looks better.
 
-Finally, a [document](/pod/Statocles/Document.html) is now allowed to override its
-template and layout. The [document page](/pod/Statocles/Page/Document.html) uses
+Finally, a [document](/pod/Statocles/Document) is now allowed to override its
+template and layout. The [document page](/pod/Statocles/Page/Document) uses
 the document template to override the template provided by the app.
 
 Because of this, we can now allow extra pages in blog posts. Just put the extra page

@@ -4,13 +4,13 @@ tags:
 title: Release v0.052
 ---
 
-In the run up to v1.000, we've added a [deprecation policy](/pod/Statocles/Help/Policy.html).
+In the run up to v1.000, we've added a [deprecation policy](/pod/Statocles/Help/Policy).
 
 Our first deprecation: The site's "index" property should now be a full path to
 a page, and not the name of an app. This lets you choose any page at all to be
 the site index, and removes some of the magic around choosing an index page
 that caused quite a few bugs. See [the upgrading
-guide](/pod/Statocles/Help/Upgrading.html) for tips on how to fix the
+guide](/pod/Statocles/Help/Upgrading) for tips on how to fix the
 deprecation warnings.
 
 A couple bugfixes this release as well:

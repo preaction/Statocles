@@ -39,13 +39,7 @@ site:
         apps:
 
             page:
-                $class: Statocles::App::Plain
-                $args:
-                    url_root: /
-                    store: site/
-
-            static:
-                $class: Statocles::App::Static
+                $class: Statocles::App::Basic
                 $args:
                     url_root: /
                     store: site/

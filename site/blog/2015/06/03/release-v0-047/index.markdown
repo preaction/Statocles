@@ -9,9 +9,9 @@ users from upgrading from previous versions due to a test failure.
 
 Most importantly, pagination in the blog is working again.
 
-Some additions to the [Content help guide](/pod/Statocles/Help/Content.html)
+Some additions to the [Content help guide](/pod/Statocles/Help/Content)
 about a the new features over the last few releases, and one new feature adding
-a `data` attribute to [Statocles::Document](/pod/Statocles/Document.html),
+a `data` attribute to [Statocles::Document](/pod/Statocles/Document),
 which allows for fun things when generating content.
 
 Finally, some of our dependencies have been removed, since their functionality

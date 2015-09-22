@@ -22,7 +22,7 @@ This site is generated with Statocles, and so is [my blog](http://preaction.gith
 ## Getting Started
 
 [Get Statocles from CPAN](http://metacpan.org/pod/Statocles) and [follow the Statocles
-Setup guide](/pod/Statocles/Help/Setup.html). If you have any issues, report them on
+Setup guide](/pod/Statocles/Help/Setup). If you have any issues, report them on
 [the Statocles Githup Repo](https://github.com/preaction/Statocles). If you have questions,
 [join us on IRC on irc.perl.org #statocles](https://chat.mibbit.com/?channel=%23statocles&server=irc.perl.org)!
 

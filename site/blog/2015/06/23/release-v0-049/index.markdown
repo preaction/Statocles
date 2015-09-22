@@ -5,7 +5,7 @@ title: Release v0.049
 ---
 
 A quick couple of bugfixes to solve an ongoing problem at $work. It turns out that
-using [the plain app](/pod/Statocles/App/Plain.html) as the index app was contingent
+using [the plain app](/pod/Statocles/App/Plain) as the index app was contingent
 on the filesystem's ordering or some other unpredictable thing. Now, this is fixed,
 so the plain app can be safely used as the index.
 

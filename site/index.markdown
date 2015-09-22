@@ -39,14 +39,14 @@ My name is *Housemoon* and this is [a website](http://example.com)
 ## Features
 
 * A simple format combining YAML and Markdown for editing site content.
-* A [command-line application](/pod/Statocles/Command.html) for building,
+* A [command-line application](/pod/Statocles/Command) for building,
   deploying, and editing the site.
 * A simple daemon to display a test site before it goes live.
-* A [blogging application](/pod/Statocles/App/Blog.html) with
+* A [blogging application](/pod/Statocles/App/Blog) with
     * RSS and Atom syndication feeds.
     * Tags to organize blog posts. Tags have their own custom feeds.
     * Post-dated blog posts to appear automatically when the date is passed.
-* [Customizable themes](/pod/Statocles/Help/Theme.html) using a simple syntax
+* [Customizable themes](/pod/Statocles/Help/Theme) using a simple syntax
   of embedded Perl
 * A clean default theme using [the Skeleton CSS library](http://getskeleton.com)
 * SEO-friendly features such as [sitemaps (sitemap.xml)](http://www.sitemaps.org).
@@ -63,6 +63,6 @@ Create a site using the `create` command:
 
     statocles create www.example.com
 
-See [the Statocles Setup guide](/pod/Statocles/Help/Setup.html) for more
+See [the Statocles Setup guide](/pod/Statocles/Help/Setup) for more
 information.
 

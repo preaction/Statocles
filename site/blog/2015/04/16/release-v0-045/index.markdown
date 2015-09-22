@@ -11,7 +11,7 @@ it a lot easier to add images to blogs. You don't need to configure a global
 `/images` directory. You can put your image in `/blog/YYYY/MM/DD/post-title`.
 Even better, you get to refer to it in your post as `![](image.jpg)`.
 
-The [link check plugin](/pod/Statocles/Plugin/LinkCheck.html) now correctly finds
+The [link check plugin](/pod/Statocles/Plugin/LinkCheck) now correctly finds
 links the URL encoded characters.
 
 The recent posts helper now allows filtering by tag, if, for example, you want to

@@ -5,7 +5,7 @@ title: Release v0.053
 ---
 
 A bunch of documentation fixes this week, including some additions to
-[the content guide](/pod/Statocles/Help/Content.html) to help users get
+[the content guide](/pod/Statocles/Help/Content) to help users get
 acclimated to managing content.
 
 A couple bugfixes as well: Full URLs in blog posts are no longer broken

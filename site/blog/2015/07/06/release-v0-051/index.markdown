@@ -6,7 +6,7 @@ title: Release v0.051
 
 The Bootstrap theme is back as an option! Use `::bootstrap` as your theme to get it!
 
-A breaking change: The [Store's find_files method](/pod/Statocles/Store/File.html#find_files)
+A breaking change: The [Store's find_files method](/pod/Statocles/Store/File#find_files)
 now skips paths that look like documents by default. If you need to old behavior,
 pass in `include_documents => 1` to the method.
 

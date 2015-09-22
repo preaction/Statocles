@@ -48,6 +48,10 @@ of new features.
 
 ## New Features
 
+* There is a new [Basic app](/pod/Statocles/App/Basic). This application
+  supports Markdown files and collateral images and files. It is the
+  basic functionality of all Statocles apps.
+
 * The default themes now support Disqus. [Disqus](http://disqus.com)
   allows adding comments even to otherwise static websites. Until the
   [Dynamocles project](http://github.com/preaction/Dynamocles) allows
@@ -78,7 +82,7 @@ of new features.
 
   Using the `--date` option to `statocles build`, `statocles daemon`,
   and `statocles deploy` will render the site as though it was the given
-  date. See [the statocles command help for more information](/pod/statocles).
+  date. See the `statocles help` command for more information.
 
 Full changelog below...
 

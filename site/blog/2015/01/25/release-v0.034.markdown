@@ -7,12 +7,12 @@ title: Release v0.034
 Lots of breaking changes in this release, in our ramp-up to the [beta
 announcement](https://github.com/preaction/Statocles/milestones/beta).
 
-The biggest change in this release is the new [Deploy object](/pod/Statocles/Deploy.html).
+The biggest change in this release is the new [Deploy object](/pod/Statocles/Deploy).
 The deploy object handles deploying the site to a folder or a Git repository. Future
 possibilities include rsync or FTP, or any command at all.
 
 *NOTE:* This change breaks your site.yml file, so please read [the config help
-file](/pod/Statocles/Help/Config.html) to fix it.
+file](/pod/Statocles/Help/Config) to fix it.
 
 Some major theme changes were also added, and a new default theme (using [the
 Skeleton CSS library](http://getskeleton.com)) was added, removing the need for

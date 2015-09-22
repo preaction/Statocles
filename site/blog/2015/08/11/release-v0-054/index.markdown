@@ -10,7 +10,7 @@ Some important v1.0 changes here.
   title in the `<title>` tag for better bookmarks
 * Documents can add stylesheets and scripts, for those times when the
   content needs special design or interactivity. See [the Document
-  object documentation](/pod/Statocles/Document.html) for more
+  object documentation](/pod/Statocles/Document) for more
   information.
 * Template includes are now cached, which should dramatically improve
   the site build times. There is still a lot to do about performance,

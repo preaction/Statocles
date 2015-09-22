@@ -17,7 +17,7 @@ to files, so that the URLs are a bit easier to read. `/blog/page-2.html` is now
 `/blog/tag/mytag/page/2`
 
 A new help file was added, [all about deploying
-Statocles](/pod/Statocles/Help/Deploy.html). As part of that, a lot of defaults were
+Statocles](/pod/Statocles/Help/Deploy). As part of that, a lot of defaults were
 updated to be more intuitive: The build directory gets automatically created, and the
 default build directory is set to `.statocles-build`.
 

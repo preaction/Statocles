@@ -15,7 +15,7 @@ variables inside them.  This breaks all existing themes, so make sure to
 re-bundle your theme with `statocles bundle theme`.
 
 Some getting started information was added to [the Theme
-guide](/pod/Statocles/Help/Theme.html). In short, the best way to make your own
+guide](/pod/Statocles/Help/Theme). In short, the best way to make your own
 theme is to start from one of the existing themes.
 
 Finally, the static app now works correctly when it is not at the root of the site.

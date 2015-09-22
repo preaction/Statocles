@@ -16,7 +16,7 @@ URLs and links with the right URL root.
 
 It's now a lot easier to use a default Theme and still get some minor
 customizations by specifying one or more include directories. See [the
-Statocles Theme guide](/pod/Statocles/Help/Theme.html) for more information.
+Statocles Theme guide](/pod/Statocles/Help/Theme) for more information.
 
 A single Git repository can now have any number of site deploys inside. Just make
 sure the path is somewhere in the Git repository's working tree.
