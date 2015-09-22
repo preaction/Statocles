@@ -322,6 +322,48 @@ Along with the blog app and our other settings, here is our new, complete site.y
 If we're satisfied with our new About page, we can deploy our site with
 C<statocles deploy>.
 
+=head1 DEFAULT THEME FEATURES
+
+There are special features built-in to all default themes that can be enabled
+by adding C<data> sections to the site object or app objects.
+
+=over 4
+
+=item Disqus
+
+Disqus is a free, hosted comment system that can be easily added to static
+sites to provide some user interaction.
+
+To add L<Disqus comments|http://disqus.com> to your blog, add your Disqus
+shortname (from C<http://YOUR_NAME.disqus.com/admin>) to the site data, like
+so:
+
+    # site.yml
+    site:
+        class: Statocles::Site
+        args:
+            # ...
+            data:
+                disqus:
+                    shortname: 'YOUR_NAME'
+
+This will add a comments section to the bottom of your blog posts, and show
+the number of comments in the blog list pages.
+
+=over 4
+
+=item *
+
+L<What is a short name?|https://help.disqus.com/customer/portal/articles/466208>
+
+=item *
+
+L<Sign up for Disqus|https://disqus.com/admin/signup/>
+
+=back
+
+=back
+
 =head1 ADVANCED CONFIGURATION
 
 The configuration file is a L<Beam::Wire> container. This means that any
