@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+        <title>Statocles</title>
+        <meta content="Statocles 0.055" name="generator">
+        <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
+<style>
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Forum', sans-serif;
+        font-weight: bold;
+    }
+
+    #index-banner {
+        font-family: 'Forum', sans-serif;
+        height: 300px;
+        position: relative;
+        margin-bottom: 1em;
+        border-bottom: 1px solid #777
+    }
+    #index-banner:before, #index-banner:after {
+        width: 60px;
+        height: 300px;
+        content: url(/Statocles/theme/images/column.png);
+    }
+    #index-banner:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #index-banner:after {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    #index-banner h1 {
+        padding-top: 1em;
+        text-transform: uppercase;
+        font-size: 72px;
+        text-align: center;
+    }
+    #index-banner h1 small {
+        display: block;
+        font-size: 24px;
+    }
+
+    #index-banner .latest-release {
+        text-align: center;
+    }
+
+</style>
+
+    </head>
+    <body>
+        <header>
+            <nav class="navbar">
+                <div class="container">
+                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <ul>
+                        <li>
+                            <a href="/Statocles/blog">Blog</a>
+                        </li>
+                        <li>
+                            <a href="/Statocles/pod">Docs</a>
+                        </li>
+                        <li>
+                            <a href="/Statocles/gallery">Gallery</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles">Code</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles/issues">Bugs</a>
+                        </li>
+                        <li>
+                            <a href="http://metacpan.org/pod/Statocles">CPAN</a>
+                        </li>
+                        <li>
+                            <a href="https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">IRC</a>
+                        </li>
+                    </ul>
+                    
+                </div>
+            </nav>
+            <a href="https://github.com/preaction/Statocles"><img alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; z-index: 1000; border: 0;"></a>
+
+        </header>
+        <div class="main container">
+            <a class="button" href="/Statocles/pod/Statocles/Theme/">
+    Back to documentation
+</a>
+<pre>package Statocles::Theme;
+# ABSTRACT: Templates, headers, footers, and navigation
+
+use Statocles::Base &#39;Class&#39;;
+use File::Share qw( dist_dir );
+use Scalar::Util qw( blessed );
+use Statocles::Template;
+
+=attr store
+
+The source L&lt;store|Statocles::Store&gt; for this theme.
+
+If the path begins with ::, will pull one of the Statocles default
+themes from the Statocles share directory.
+
+=cut
+
+has store =&gt; (
+    is =&gt; &#39;ro&#39;,
+    isa =&gt; Store,
+    coerce =&gt; Store-&gt;coercion,
+    required =&gt; 1,
+);
+
+=attr include_stores
+
+An array of L&lt;stores|Statocles::Store&gt; to look for includes. The L&lt;/store&gt; is
+added at the end of this list.
+
+=cut
+
+has include_stores =&gt; (
+    is =&gt; &#39;ro&#39;,
+    isa =&gt; ArrayRef[Store],
+    default =&gt; sub { [] },
+    coerce =&gt; sub {
+        my ( $thing ) = @_;
+        if ( ref $thing eq &#39;ARRAY&#39; ) {
+            return [ map { Store-&gt;coercion-&gt;( $_ ) } @$thing ];
+        }
+        return [ Store-&gt;coercion-&gt;( $thing ) ];
+    },
+);
+
+=attr _templates
+
+The cached template objects for this theme.
+
+=cut
+
+has _templates =&gt; (
+    is =&gt; &#39;ro&#39;,
+    isa =&gt; HashRef[InstanceOf[&#39;Statocles::Template&#39;]],
+    default =&gt; sub { {} },
+    lazy =&gt; 1,  # Must be lazy or the clearer won&#39;t re-init the default
+    clearer =&gt; &#39;_clear_templates&#39;,
+);
+
+=attr _includes
+
+The cached template objects for the includes.
+
+=cut
+
+has _includes =&gt; (
+    is =&gt; &#39;ro&#39;,
+    isa =&gt; HashRef[InstanceOf[&#39;Statocles::Template&#39;]],
+    default =&gt; sub { {} },
+    lazy =&gt; 1,  # Must be lazy or the clearer won&#39;t re-init the default
+    clearer =&gt; &#39;_clear_includes&#39;,
+);
+
+=method BUILDARGS
+
+Handle the path :: share theme.
+
+=cut
+
+around BUILDARGS =&gt; sub {
+    my ( $orig, $self, @args ) = @_;
+    my $args = $self-&gt;$orig( @args );
+    if ( $args-&gt;{store} &amp;&amp; !ref $args-&gt;{store} &amp;&amp; $args-&gt;{store} =~ /^::/ ) {
+        my $name = substr $args-&gt;{store}, 2;
+        $args-&gt;{store} = Path::Tiny-&gt;new( dist_dir( &#39;Statocles&#39; ) )-&gt;child( &#39;theme&#39;, $name );
+    }
+    return $args;
+};
+
+=method read
+
+    my $tmpl = $theme-&gt;read( $path )
+
+Read the template for the given C&lt;path&gt; and create the
+L&lt;template|Statocles::Template&gt; object.
+
+=cut
+
+sub read {
+    my ( $self, $path ) = @_;
+    $path .= &#39;.ep&#39;;
+
+    my $content = eval { $self-&gt;store-&gt;read_file( $path ); };
+    if ( $@ ) {
+        if ( blessed $@ &amp;&amp; $@-&gt;isa( &#39;Path::Tiny::Error&#39; ) &amp;&amp; $@-&gt;{op} =~ /^open/ ) {
+            die sprintf &#39;ERROR: Template &quot;%s&quot; does not exist in theme directory &quot;%s&quot;&#39; . &quot;\n&quot;,
+                $path, $self-&gt;store-&gt;path;
+        }
+        else {
+            die $@;
+        }
+    }
+
+    return $self-&gt;build_template( $path, $content );
+}
+
+=method build_template
+
+    my $tmpl = $theme-&gt;build_template( $path, $content  )
+
+Build a new L&lt;Statocles::Template&gt; object with the given C&lt;path&gt; and C&lt;content&gt;.
+
+=cut
+
+sub build_template {
+    my ( $self, $path, $content ) = @_;
+
+    return Statocles::Template-&gt;new(
+        path =&gt; $path,
+        content =&gt; $content,
+        theme =&gt; $self,
+    );
+}
+
+=method template
+
+    my $tmpl = $theme-&gt;template( $path )
+    my $tmpl = $theme-&gt;template( @path_parts )
+
+Get the L&lt;template|Statocles::Template&gt; at the given C&lt;path&gt;, or with the
+given C&lt;path_parts&gt;.
+
+=cut
+
+sub template {
+    my ( $self, @path ) = @_;
+    my $path = Path::Tiny-&gt;new( @path );
+    return $self-&gt;_templates-&gt;{ $path } ||= $self-&gt;read( $path );
+}
+
+=method include
+
+    my $tmpl = $theme-&gt;include( $path );
+    my $tmpl = $theme-&gt;include( @path_parts );
+
+Get the desired L&lt;template|Statocles::Template&gt; to include based on the given
+C&lt;path&gt; or C&lt;path_parts&gt;. Looks through all the
+L&lt;include_stores|/include_stores&gt; before looking in the L&lt;main store|/store&gt;.
+
+=cut
+
+sub include {
+    my ( $self, @path ) = @_;
+    my $path = Path::Tiny-&gt;new( @path );
+
+    for my $store ( @{ $self-&gt;include_stores }, $self-&gt;store ) {
+        if ( $store-&gt;has_file( $path ) ) {
+            return $self-&gt;_includes-&gt;{ $path } ||= $self-&gt;build_template( $path, $store-&gt;read_file( $path ) );
+        }
+    }
+
+    die qq{Can not find include &quot;$path&quot;};
+}
+
+=method clear
+
+    $theme-&gt;clear;
+
+Clear out the cached templates and includes. Used by the daemon when it
+detects a change to the theme files.
+
+=cut
+
+sub clear {
+    my ( $self ) = @_;
+    $self-&gt;_clear_templates;
+    $self-&gt;_clear_includes;
+    return;
+}
+
+1;
+__END__
+
+=head1 SYNOPSIS
+
+    # Template directory layout
+    /theme/site/layout.html.ep
+    /theme/site/include/layout.html.ep
+    /theme/blog/index.html.ep
+    /theme/blog/post.html.ep
+
+    my $theme      = Statocles::Theme-&gt;new( store =&gt; &#39;/theme&#39; );
+    my $layout     = $theme-&gt;template( qw( site include layout.html ) );
+    my $blog_index = $theme-&gt;template( blog =&gt; &#39;index.html&#39; );
+    my $blog_post  = $theme-&gt;template( &#39;blog/post.html&#39; );
+
+    # Clear out cached templates and includes
+    $theme-&gt;clear;
+
+=head1 DESCRIPTION
+
+A Theme contains all the L&lt;templates|Statocles::Template&gt; that
+L&lt;applications|Statocles::App&gt; need. This class handles finding and parsing
+files into L&lt;template objects|Statocles::Template&gt;.
+
+When the L&lt;/store&gt; is read, the templates inside are organized based on
+their name and their parent directory.
+
+=head1 SEE ALSO
+
+=over 4
+
+=item L&lt;Statocles::Help::Theme&gt;
+
+=item L&lt;Statocles::Template&gt;
+
+=back
+</pre>
+
+        </div>
+        <footer>
+            <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61295159-3', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+            <div class="container tagline">
+                <a href="http://preaction.github.io/Statocles">Made with Statocles</a><br>
+                <a href="http://www.perl.org">Powered by Perl</a>
+            </div>
+        </footer>
+    </body>
+</html>

@@ -6,6 +6,7 @@
         <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <title>Statocles</title>
+        <meta content="Statocles 0.055" name="generator">
         <link href="/Statocles/blog/index.atom" rel="alternate" type="application/atom+xml">
         <link href="/Statocles/blog/index.rss" rel="alternate" type="application/rss+xml">
         <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
@@ -100,6 +101,46 @@
 
             <article>
                 <header>
+                    <h1><a href="/Statocles/blog/2015/04/16/release-v0-045/">Release v0.045</a></h1>
+
+                    <p class="tags">Tags:
+                        <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
+                    </p>
+
+                    <aside>
+                        <p><time datetime="2015-04-16">
+                            Posted on 2015-04-16
+                        </time>
+                        <a data-disqus-identifier="/2015/04/16/release-v0-045/index.markdown" href="/Statocles/blog/2015/04/16/release-v0-045/#disqus_thread">0 comments</a>
+                        </p>
+                    </aside>
+
+                </header>
+
+                <p>A couple small changes in this release:</p>
+
+<p>Blog posts are now allowed to have images inside the post directory. This makes
+it a lot easier to add images to blogs. You don&#39;t need to configure a global
+<code>/images</code> directory. You can put your image in <code>/blog/YYYY/MM/DD/post-title</code>.
+Even better, you get to refer to it in your post as <code>![](image.jpg)</code>.</p>
+
+<p>The <a href="/Statocles/pod/Statocles/Plugin/LinkCheck">link check plugin</a> now correctly finds
+links the URL encoded characters.</p>
+
+<p>The recent posts helper now allows filtering by tag, if, for example, you want to
+display only the last <code>release</code> blog and not any other blog post.</p>
+
+<p><code>statocles daemon</code> now allows setting <code>-p &lt;port&gt;</code>, in case port 3000 is in-use, or
+you need to run multiple instances.</p>
+
+<p>Full changelog below:</p>
+
+
+                    <p><a href="/Statocles/blog/2015/04/16/release-v0-045/#section-2">Continue reading Release v0.045...</a></p>
+
+            </article>
+            <article>
+                <header>
                     <h1><a href="/Statocles/blog/2015/04/06/release-v0.044/">Release v0.044</a></h1>
 
                     <p class="tags">Tags:
@@ -110,6 +151,7 @@
                         <p><time datetime="2015-04-06">
                             Posted on 2015-04-06
                         </time>
+                        <a data-disqus-identifier="/2015/04/06/release-v0.044/index.markdown" href="/Statocles/blog/2015/04/06/release-v0.044/#disqus_thread">0 comments</a>
                         </p>
                     </aside>
 
@@ -118,8 +160,8 @@
                 <p>A few small features, and some small breaking changes in this release.</p>
 
 <p>The <code>read_document</code> and <code>write_document</code> method of
-<a href="/Statocles/pod/Statocles/Store/File.html">Statocles::Store::File</a> now use
-<a href="/Statocles/pod/Statocles/Document.html">Statocles::Document</a> instead of plain hashrefs.
+<a href="/Statocles/pod/Statocles/Store/File">Statocles::Store::File</a> now use
+<a href="/Statocles/pod/Statocles/Document">Statocles::Document</a> instead of plain hashrefs.
 It was weird to have one method (<code>read_documents</code> with an <code>s</code>) get document
 objects, and everything else use hashes. The important
 serialization/deserialization routines are in Statocles::Document, so it is
@@ -136,10 +178,10 @@ current posts, you must fix them manually.</p>
 
 <p>An upgrade to <a href="http://metacpan.org/pod/Beam::Wire">Beam::Wire</a> now allows you
 to compose roles in the Statocles configuration file, so additional behavior
-can be added to existing applications. See <a href="/Statocles/pod/Statocles/Help/Develop.html">the Develop
+can be added to existing applications. See <a href="/Statocles/pod/Statocles/Help/Develop">the Develop
 Guide</a> for more information.</p>
 
-<p>Finally, <a href="/Statocles/pod/Statocles/App/Blog.html">the Blog app</a> now has a <code>recent_posts()</code>
+<p>Finally, <a href="/Statocles/pod/Statocles/App/Blog">the Blog app</a> now has a <code>recent_posts()</code>
 method that can be used in templates and markdown to display the most recent
 posts in a blog.</p>
 
@@ -161,6 +203,7 @@ posts in a blog.</p>
                         <p><time datetime="2015-03-24">
                             Posted on 2015-03-24
                         </time>
+                        <a data-disqus-identifier="/2015/03/24/release-v0.043/index.markdown" href="/Statocles/blog/2015/03/24/release-v0.043/#disqus_thread">0 comments</a>
                         </p>
                     </aside>
 
@@ -178,7 +221,7 @@ this work, some new methods were added to the Statocles::App class to build
 URLs and links with the right URL root.</p>
 
 <p>It&#39;s now a lot easier to use a default Theme and still get some minor
-customizations by specifying one or more include directories. See <a href="/Statocles/pod/Statocles/Help/Theme.html">the
+customizations by specifying one or more include directories. See <a href="/Statocles/pod/Statocles/Help/Theme">the
 Statocles Theme guide</a> for more information.</p>
 
 <p>A single Git repository can now have any number of site deploys inside. Just make
@@ -205,6 +248,7 @@ Moo 2.</p>
                         <p><time datetime="2015-03-16">
                             Posted on 2015-03-16
                         </time>
+                        <a data-disqus-identifier="/2015/03/16/release-v0.042/index.markdown" href="/Statocles/blog/2015/03/16/release-v0.042/#disqus_thread">0 comments</a>
                         </p>
                     </aside>
 
@@ -243,6 +287,7 @@ object that exposes a <code>markdown</code> method.</p>
                         <p><time datetime="2015-03-08">
                             Posted on 2015-03-08
                         </time>
+                        <a data-disqus-identifier="/2015/03/08/release-v0.041/index.markdown" href="/Statocles/blog/2015/03/08/release-v0.041/#disqus_thread">0 comments</a>
                         </p>
                     </aside>
 
@@ -267,45 +312,6 @@ site&#39;s directory.</p>
 
 
                     <p><a href="/Statocles/blog/2015/03/08/release-v0.041/#section-2">Continue reading Release v0.041...</a></p>
-
-            </article>
-            <article>
-                <header>
-                    <h1><a href="/Statocles/blog/2015/03/02/release-v0.040/">Release v0.040</a></h1>
-
-                    <p class="tags">Tags:
-                        <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
-                    </p>
-
-                    <aside>
-                        <p><time datetime="2015-03-02">
-                            Posted on 2015-03-02
-                        </time>
-                        </p>
-                    </aside>
-
-                </header>
-
-                <p>The biggest new thing in this release is the new <a href="/Statocles/pod/Statocles/Plugin/LinkCheck.html">LinkCheck
-plugin</a> that checks all the pages for
-broken links and images. This introduces a new event-handling API into
-Statocles, which will be called Plugins. See <a href="/Statocles/pod/Statocles/Help/Develop.html">the developer
-docs</a> for more information on plugins.</p>
-
-<p>A bunch of bug fixes for the <code>create</code> command. It now actually works, instead
-of creating an unusable <code>site.yml</code> file.</p>
-
-<p>The default build directory is now <code>.statocles/build</code> instead of <code>.statocles-build</code>.
-It is anticipated we might use the <code>.statocles</code> directory for some additional
-site metadata.</p>
-
-<p>With <a href="http://mojolicio.us">Mojolicious</a> 6.0 release, there were a few breaking
-changes that we needed to fix in Statocles. We now require 6.0.</p>
-
-<p>Full changelog below:</p>
-
-
-                    <p><a href="/Statocles/blog/2015/03/02/release-v0.040/#section-2">Continue reading Release v0.040...</a></p>
 
             </article>
         </main>
@@ -347,6 +353,16 @@ changes that we needed to fix in Statocles. We now require 6.0.</p>
     </div>
 
 </div>
+
+<script type="text/javascript">
+    var disqus_shortname = 'statocles';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
 
         </div>
         <footer>

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+        <title>Statocles</title>
+        <meta content="Statocles 0.055" name="generator">
+        <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
+<style>
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Forum', sans-serif;
+        font-weight: bold;
+    }
+
+    #index-banner {
+        font-family: 'Forum', sans-serif;
+        height: 300px;
+        position: relative;
+        margin-bottom: 1em;
+        border-bottom: 1px solid #777
+    }
+    #index-banner:before, #index-banner:after {
+        width: 60px;
+        height: 300px;
+        content: url(/Statocles/theme/images/column.png);
+    }
+    #index-banner:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #index-banner:after {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    #index-banner h1 {
+        padding-top: 1em;
+        text-transform: uppercase;
+        font-size: 72px;
+        text-align: center;
+    }
+    #index-banner h1 small {
+        display: block;
+        font-size: 24px;
+    }
+
+    #index-banner .latest-release {
+        text-align: center;
+    }
+
+</style>
+
+    </head>
+    <body>
+        <header>
+            <nav class="navbar">
+                <div class="container">
+                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <ul>
+                        <li>
+                            <a href="/Statocles/blog">Blog</a>
+                        </li>
+                        <li>
+                            <a href="/Statocles/pod">Docs</a>
+                        </li>
+                        <li>
+                            <a href="/Statocles/gallery">Gallery</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles">Code</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles/issues">Bugs</a>
+                        </li>
+                        <li>
+                            <a href="http://metacpan.org/pod/Statocles">CPAN</a>
+                        </li>
+                        <li>
+                            <a href="https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">IRC</a>
+                        </li>
+                    </ul>
+                    
+                </div>
+            </nav>
+            <a href="https://github.com/preaction/Statocles"><img alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; z-index: 1000; border: 0;"></a>
+
+        </header>
+        <div class="main container">
+            <div class="crumbtrail">
+<ul>
+    <li>
+        <a href="/Statocles/pod/Statocles/">Statocles</a>
+    </li>
+    <li>
+        <a href="/Statocles/pod/Statocles/App/">App</a>
+    </li>
+    <li>
+        <a href="/Statocles/pod/Statocles/App/Blog/">Blog</a>
+    </li>
+</ul>
+(<a href="/Statocles/pod/Statocles/App/Blog/source.html">source</a>)
+</div>
+<h1 id="NAME">NAME</h1>
+
+<p>Statocles::App::Blog - A blog application</p>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>This is a simple blog application for Statocles.</p>
+
+<h2 id="FEATURES">FEATURES</h2>
+
+<ul>
+
+<li><p>Content dividers. By dividing your main content with &quot;---&quot;, you create sections. Only the first section will show up on the index page or in RSS feeds.</p>
+
+</li>
+<li><p>RSS and Atom syndication feeds.</p>
+
+</li>
+<li><p>Tags to organize blog posts. Tags have their own custom feeds so users can subscribe to only those posts they care about.</p>
+
+</li>
+<li><p>Cross-post links to redirect users to a syndicated blog. Useful when you participate in many blogs and want to drive traffic to them.</p>
+
+</li>
+<li><p>Post-dated blog posts to appear automatically when the date is passed. If a blog post is set in the future, it will not be added to the site when running <code>build</code> or <code>deploy</code>.</p>
+
+<p>In order to ensure that post-dated blogs get added, you may want to run <code>deploy</code> in a nightly cron job.</p>
+
+</li>
+</ul>
+
+<h1 id="ATTRIBUTES">ATTRIBUTES</h1>
+
+<h2 id="store">store</h2>
+
+<p>The <a href="/Statocles/pod/Statocles/Store/">store</a> to read for documents.</p>
+
+<h2 id="tag_text">tag_text</h2>
+
+<p>A hash of tag and descriptions to introduce tags. Having a description is optional.</p>
+
+<h2 id="page_size">page_size</h2>
+
+<p>The number of posts to put in a page (the main page and the tag pages). Defaults to 5.</p>
+
+<h2 id="index_tags">index_tags</h2>
+
+<p>Filter the tags shown in the index page. An array of tags prefixed with either a + or a -. By prefixing the tag with a &quot;-&quot;, it will be removed from the index, unless a later tag prefixed with a &quot;+&quot; also matches.</p>
+
+<p>By default, all tags are shown on the index page.</p>
+
+<p>So, given a document with tags &quot;foo&quot;, and &quot;bar&quot;:</p>
+
+<pre><code>    index_tags =&gt; [ ];                  # document will be included
+    index_tags =&gt; [ &#39;-foo&#39; ];           # document will not be included
+    index_tags =&gt; [ &#39;-foo&#39;, &#39;+bar&#39; ];   # document will be included</code></pre>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="command">command</h2>
+
+<pre><code>    my $exitval = $app-&gt;command( $app_name, @args );</code></pre>
+
+<p>Run a command on this app. The app name is used to build the help, so users get exactly what they need to run.</p>
+
+<h2 id="make_slug">make_slug</h2>
+
+<pre><code>    my $slug = $app-&gt;make_slug( $title );</code></pre>
+
+<p>Given a post title, remove special characters to create a slug.</p>
+
+<h2 id="index">index</h2>
+
+<pre><code>    my @pages = $app-&gt;index( \@post_pages );</code></pre>
+
+<p>Build the index page (a <a href="/Statocles/pod/Statocles/Page/List/">list page</a>) and all related feed pages out of the given array reference of post pages.</p>
+
+<h2 id="tag_pages">tag_pages</h2>
+
+<pre><code>    my @pages = $app-&gt;tag_pages( \%tag_pages );</code></pre>
+
+<p>Get <a href="/Statocles/pod/Statocles/Page/">pages</a> for the tags in the given blog post documents (build from <a href="#post_pages">the post_pages method</a>, including relevant feed pages.</p>
+
+<h2 id="pages">pages</h2>
+
+<pre><code>    my @pages = $app-&gt;pages( %options );</code></pre>
+
+<p>Get all the <a href="/Statocles/pod/Statocles/Page/">pages</a> for this application. Available options are:</p>
+
+<dl>
+
+<dt>date</dt>
+<dd>
+
+<p>The date to build for. Only posts on or before this date will be built. Defaults to the current date.</p>
+
+</dd>
+</dl>
+
+<h2 id="tags">tags</h2>
+
+<pre><code>    my @links = $app-&gt;tags;</code></pre>
+
+<p>Get a set of <a href="/Statocles/pod/Statocles/Link/">link objects</a> suitable for creating a list of tag links. The common attributes are:</p>
+
+<pre><code>    text =&gt; &#39;The tag text&#39;
+    href =&gt; &#39;The URL to the tag page&#39;</code></pre>
+
+<h2 id="recent_posts">recent_posts</h2>
+
+<pre><code>    my @pages = $app-&gt;recent_posts( $count, %filter );</code></pre>
+
+<p>Get the last $count recent posts for this blog. Useful for templates and site index pages.</p>
+
+<p>%filter is an optional set of filters to apply to only show recent posts matching the given criteria. The following filters are available:</p>
+
+<dl>
+
+<dt>tags</dt>
+<dd>
+
+<p>(string) Only show posts with the given tag</p>
+
+</dd>
+</dl>
+
+<h2 id="page_url">page_url</h2>
+
+<pre><code>    my $url = $app-&gt;page_url( $page )</code></pre>
+
+<p>Return the absolute URL to this <a href="/Statocles/pod/Statocles/Page/">page object</a>, removing the &quot;/index.html&quot; if necessary.</p>
+
+<h1 id="COMMANDS">COMMANDS</h1>
+
+<h2 id="post">post</h2>
+
+<pre><code>    post [--date &lt;date&gt;] &lt;title&gt;</code></pre>
+
+<p>Create a new blog post, optionally setting an initial <code>title</code>. The post will be created in a directory according to the current date.</p>
+
+<p>Initial post content can be read from <code>STDIN</code>. This lets you write other programs to generate content for blog posts (for example, to help automate release blog posts).</p>
+
+<h1 id="THEME">THEME</h1>
+
+<dl>
+
+<dt>blog =&gt; index</dt>
+<dd>
+
+<p>The index page template. Gets the following template variables:</p>
+
+<dl>
+
+<dt>site</dt>
+<dd>
+
+<p>The <a href="/Statocles/pod/Statocles/Site/">Statocles::Site</a> object.</p>
+
+</dd>
+<dt>pages</dt>
+<dd>
+
+<p>An array reference containing all the blog post pages. Each page is a hash reference with the following keys:</p>
+
+<dl>
+
+<dt>content</dt>
+<dd>
+
+<p>The post content</p>
+
+</dd>
+<dt>title</dt>
+<dd>
+
+<p>The post title</p>
+
+</dd>
+<dt>author</dt>
+<dd>
+
+<p>The post author</p>
+
+</dd>
+</dl>
+
+</dd>
+<dt>blog =&gt; post</dt>
+<dd>
+
+<p>The main post page template. Gets the following template variables:</p>
+
+<dl>
+
+<dt>site</dt>
+<dd>
+
+<p>The <a href="/Statocles/pod/Statocles/Site/">Statocles::Site</a> object</p>
+
+</dd>
+<dt>content</dt>
+<dd>
+
+<p>The post content</p>
+
+</dd>
+<dt>title</dt>
+<dd>
+
+<p>The post title</p>
+
+</dd>
+<dt>author</dt>
+<dd>
+
+<p>The post author</p>
+
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+<h1 id="SEE-ALSO">SEE ALSO</h1>
+
+<dl>
+
+<dt><a href="/Statocles/pod/Statocles/App/">Statocles::App</a></dt>
+<dd>
+
+</dd>
+</dl>
+
+
+
+        </div>
+        <footer>
+            <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61295159-3', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+            <div class="container tagline">
+                <a href="http://preaction.github.io/Statocles">Made with Statocles</a><br>
+                <a href="http://www.perl.org">Powered by Perl</a>
+            </div>
+        </footer>
+    </body>
+</html>

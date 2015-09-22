@@ -5,7 +5,102 @@
         <link>http://preaction.github.io/Statocles/blog/</link>
         <atom:link href="http://preaction.github.io/Statocles/blog/index.rss" rel="self" type="application/rss+xml" />
         <description>Blog feed of Statocles</description>
-        <generator>Statocles 0.054</generator>
+        <generator>Statocles 0.055</generator>
+        <item>
+            <title>Release v0.055</title>
+            <link>http://preaction.github.io/Statocles/blog/2015/09/22/release-v0-055/</link>
+            <guid>http://preaction.github.io/Statocles/blog/2015/09/22/release-v0-055/</guid>
+            <description><![CDATA[
+                <p>We&#39;re in the <a href="https://github.com/preaction/Statocles/milestones/v1.000">run up to v1.0, the first stable
+release</a>. As a
+result, there were quite a few deprecations in this release, and a lot
+of new features.</p>
+
+<h2>Breaking Changes</h2>
+
+<ul>
+<li><p>The <a href="http://preaction.github.io/Statocles/pod/Statocles/App/Perldoc">Perldoc app</a> now creates folders
+instead of files for the POD. This means the link to <code>My::Module</code> will
+now be <code>/My/Module</code> and not <code>/My/Module.html</code>.</p>
+
+<p>This is being done outside a deprecation policy in the hope that
+nobody&#39;s started using the app extensively enough to be hurt. Having
+both sets of pages (.html and non-.html) was deemed too much for a
+non-stable release. If something like this happens after v1.0, we will
+build both sets of pages (with a switch to turn off the old set).</p></li>
+</ul>
+
+<h2>Deprecations</h2>
+
+<ul>
+<li><p>The <a href="http://preaction.github.io/Statocles/pod/Statocles/App/Static">Static app</a> and
+<a href="http://preaction.github.io/Statocles/pod/Statocles/App/Plain">Plain app</a> are both deprecated in favor of
+the new <a href="http://preaction.github.io/Statocles/pod/Statocles/App/Basic">Basic app</a>. The Basic app has all
+the functionality of both the Static and Plain apps.</p>
+
+<p>Using either the Static or Plain apps will give a warning. To fix this
+warning, change the app&#39;s <code>class</code> to <code>Statocles::App::Basic</code>. See
+<a href="http://preaction.github.io/Statocles/pod/Statocles/Help/Upgrading">Statocles::Help::Upgrading</a> for
+details.</p></li>
+<li><p>The <a href="http://preaction.github.io/Statocles/pod/Statocles/Store/File">File store</a> is now just
+<a href="http://preaction.github.io/Statocles/pod/Statocles/Store">Statocles::Store</a>. Likely this requires no
+changes in your config, unless you&#39;ve referenced
+<code>Statocles::Store::File</code> directly (just change it to
+<code>Statocles::Store</code> to silence the deprecation warnings).</p></li>
+<li><p>The <a href="http://preaction.github.io/Statocles/pod/Statocles/Store#write_document">Store write_document method</a>
+used to return the full path to the document written. This was
+confusing, as one generally does not expect a write method to return
+anything (unless it&#39;s a true/false value for success/failure). As of
+right now, you can get the document path by calling the <code>child()</code>
+method of the <a href="http://preaction.github.io/Statocles/pod/Statocles/Store#path">Store&#39;s path attribute</a>.</p></li>
+</ul>
+
+<h2>New Features</h2>
+
+<ul>
+<li><p>There is a new <a href="http://preaction.github.io/Statocles/pod/Statocles/App/Basic">Basic app</a>. This application
+supports Markdown files and collateral images and files. It is the
+basic functionality of all Statocles apps.</p></li>
+<li><p>The default themes now support Disqus. <a href="http://disqus.com">Disqus</a>
+allows adding comments even to otherwise static websites. Until the
+<a href="http://github.com/preaction/Dynamocles">Dynamocles project</a> allows
+for a dynamic partner to Statocles sites, Disqus is an easy way to
+provide some user engagement.</p></li>
+<li><p>If you want extra frontmatter document metadata, you can now create
+your own <a href="http://preaction.github.io/Statocles/pod/Statocles/Document">Statocles::Document</a> sub-classes,
+and refer to them in your frontmatter using <code>class: &#39;My::Document&#39;</code>.</p>
+
+<p>This enables you to add custom attributes and other such to your
+documents. It could also allow for non-Markdown documents, and other
+interesting things in the future.</p></li>
+<li><p>The site creator command (<code>statocles create</code>) now creates a
+fully-ready site with skeleton content. The configuration file it
+creates now comes with comments to make it easier to edit.</p></li>
+<li><p><a href="http://preaction.github.io/Statocles/pod/Statocles/Help/Develop">Plugins</a> can now be added to individual
+applications, because <a href="http://preaction.github.io/Statocles/pod/Statocles/App#EVENTS">every app now comes with a <code>build</code>
+event</a>. If you only want to check links on
+a single application, or if you want to modify the application&#39;s pages
+without writing an entire app subclass, this is a good way to do it.</p></li>
+<li><p>When writing pre-dated entries, to be posted sometime in the future,
+there is now a way to test how the site will look in the future when
+that post is deployed.</p>
+
+<p>Using the <code>--date</code> option to <code>statocles build</code>, <code>statocles daemon</code>,
+and <code>statocles deploy</code> will render the site as though it was the given
+date. See the <code>statocles help</code> command for more information.</p></li>
+</ul>
+
+<p>Full changelog below...</p>
+
+                    <p><a href="http://preaction.github.io/Statocles/blog/2015/09/22/release-v0-055/#section-2">Continue reading...</a></p>
+                <p>Tags:
+                    <a href="http://preaction.github.io/Statocles/blog/tag/release/">release</a>
+                </p>
+            ]]></description>
+            <pubDate>
+                Tue, 22 Sep 2015 00:00:00 +0000
+            </pubDate>
+        </item>
         <item>
             <title>Release v0.054</title>
             <link>http://preaction.github.io/Statocles/blog/2015/08/11/release-v0-054/</link>
@@ -17,7 +112,7 @@
 <li>All pages now have a title, which means that we can have the page
 title in the <code>&lt;title&gt;</code> tag for better bookmarks</li>
 <li>Documents can add stylesheets and scripts, for those times when the
-content needs special design or interactivity. See <a href="http://preaction.github.io/Statocles/pod/Statocles/Document.html">the Document
+content needs special design or interactivity. See <a href="http://preaction.github.io/Statocles/pod/Statocles/Document">the Document
 object documentation</a> for more
 information.</li>
 <li>Template includes are now cached, which should dramatically improve
@@ -33,7 +128,7 @@ app developer and theme author.</li>
 
                     <p><a href="http://preaction.github.io/Statocles/blog/2015/08/11/release-v0-054/#section-2">Continue reading...</a></p>
                 <p>Tags:
-                    <a href="/blog/tag/release/">release</a>
+                    <a href="http://preaction.github.io/Statocles/blog/tag/release/">release</a>
                 </p>
             ]]></description>
             <pubDate>
@@ -46,7 +141,7 @@ app developer and theme author.</li>
             <guid>http://preaction.github.io/Statocles/blog/2015/07/20/release-v0-053/</guid>
             <description><![CDATA[
                 <p>A bunch of documentation fixes this week, including some additions to
-<a href="http://preaction.github.io/Statocles/pod/Statocles/Help/Content.html">the content guide</a> to help users get
+<a href="http://preaction.github.io/Statocles/pod/Statocles/Help/Content">the content guide</a> to help users get
 acclimated to managing content.</p>
 
 <p>A couple bugfixes as well: Full URLs in blog posts are no longer broken
@@ -58,7 +153,7 @@ Berger</a> for both of these).</p>
 
                     <p><a href="http://preaction.github.io/Statocles/blog/2015/07/20/release-v0-053/#section-2">Continue reading...</a></p>
                 <p>Tags:
-                    <a href="/blog/tag/release/">release</a>
+                    <a href="http://preaction.github.io/Statocles/blog/tag/release/">release</a>
                 </p>
             ]]></description>
             <pubDate>
@@ -70,12 +165,12 @@ Berger</a> for both of these).</p>
             <link>http://preaction.github.io/Statocles/blog/2015/07/13/release-v0-052/</link>
             <guid>http://preaction.github.io/Statocles/blog/2015/07/13/release-v0-052/</guid>
             <description><![CDATA[
-                <p>In the run up to v1.000, we&#39;ve added a <a href="http://preaction.github.io/Statocles/pod/Statocles/Help/Policy.html">deprecation policy</a>.</p>
+                <p>In the run up to v1.000, we&#39;ve added a <a href="http://preaction.github.io/Statocles/pod/Statocles/Help/Policy">deprecation policy</a>.</p>
 
 <p>Our first deprecation: The site&#39;s &quot;index&quot; property should now be a full path to
 a page, and not the name of an app. This lets you choose any page at all to be
 the site index, and removes some of the magic around choosing an index page
-that caused quite a few bugs. See <a href="http://preaction.github.io/Statocles/pod/Statocles/Help/Upgrading.html">the upgrading
+that caused quite a few bugs. See <a href="http://preaction.github.io/Statocles/pod/Statocles/Help/Upgrading">the upgrading
 guide</a> for tips on how to fix the
 deprecation warnings.</p>
 
@@ -91,7 +186,7 @@ is different from your development system).</li>
 
                     <p><a href="http://preaction.github.io/Statocles/blog/2015/07/13/release-v0-052/#section-2">Continue reading...</a></p>
                 <p>Tags:
-                    <a href="/blog/tag/release/">release</a>
+                    <a href="http://preaction.github.io/Statocles/blog/tag/release/">release</a>
                 </p>
             ]]></description>
             <pubDate>
@@ -105,7 +200,7 @@ is different from your development system).</li>
             <description><![CDATA[
                 <p>The Bootstrap theme is back as an option! Use <code>::bootstrap</code> as your theme to get it!</p>
 
-<p>A breaking change: The <a href="http://preaction.github.io/Statocles/pod/Statocles/Store/File.html#find_files">Store&#39;s find_files method</a>
+<p>A breaking change: The <a href="http://preaction.github.io/Statocles/pod/Statocles/Store/File#find_files">Store&#39;s find_files method</a>
 now skips paths that look like documents by default. If you need to old behavior,
 pass in <code>include_documents =&gt; 1</code> to the method.</p>
 
@@ -117,34 +212,11 @@ pass in <code>include_documents =&gt; 1</code> to the method.</p>
 
                     <p><a href="http://preaction.github.io/Statocles/blog/2015/07/06/release-v0-051/#section-2">Continue reading...</a></p>
                 <p>Tags:
-                    <a href="/blog/tag/release/">release</a>
+                    <a href="http://preaction.github.io/Statocles/blog/tag/release/">release</a>
                 </p>
             ]]></description>
             <pubDate>
                 Mon, 06 Jul 2015 00:00:00 +0000
-            </pubDate>
-        </item>
-        <item>
-            <title>Release v0.050</title>
-            <link>http://preaction.github.io/Statocles/blog/2015/06/28/release-v0-050/</link>
-            <guid>http://preaction.github.io/Statocles/blog/2015/06/28/release-v0-050/</guid>
-            <description><![CDATA[
-                <p>Some minor doc fixes, and a fix to ensure that all links are properly rewritten
-to include the site base URL.</p>
-
-<p>Also, a reverse from the last release that added an annoying background color
-to the footer of the default theme (and, by extention, any theme extended from
-the default theme).</p>
-
-<p>Full changelog below...</p>
-
-                    <p><a href="http://preaction.github.io/Statocles/blog/2015/06/28/release-v0-050/#section-2">Continue reading...</a></p>
-                <p>Tags:
-                    <a href="/blog/tag/release/">release</a>
-                </p>
-            ]]></description>
-            <pubDate>
-                Sun, 28 Jun 2015 00:00:00 +0000
             </pubDate>
         </item>
     </channel>

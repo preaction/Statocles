@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+        <title>Statocles</title>
+        <meta content="Statocles 0.055" name="generator">
+        <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
+<style>
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Forum', sans-serif;
+        font-weight: bold;
+    }
+
+    #index-banner {
+        font-family: 'Forum', sans-serif;
+        height: 300px;
+        position: relative;
+        margin-bottom: 1em;
+        border-bottom: 1px solid #777
+    }
+    #index-banner:before, #index-banner:after {
+        width: 60px;
+        height: 300px;
+        content: url(/Statocles/theme/images/column.png);
+    }
+    #index-banner:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #index-banner:after {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    #index-banner h1 {
+        padding-top: 1em;
+        text-transform: uppercase;
+        font-size: 72px;
+        text-align: center;
+    }
+    #index-banner h1 small {
+        display: block;
+        font-size: 24px;
+    }
+
+    #index-banner .latest-release {
+        text-align: center;
+    }
+
+</style>
+
+    </head>
+    <body>
+        <header>
+            <nav class="navbar">
+                <div class="container">
+                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <ul>
+                        <li>
+                            <a href="/Statocles/blog">Blog</a>
+                        </li>
+                        <li>
+                            <a href="/Statocles/pod">Docs</a>
+                        </li>
+                        <li>
+                            <a href="/Statocles/gallery">Gallery</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles">Code</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles/issues">Bugs</a>
+                        </li>
+                        <li>
+                            <a href="http://metacpan.org/pod/Statocles">CPAN</a>
+                        </li>
+                        <li>
+                            <a href="https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">IRC</a>
+                        </li>
+                    </ul>
+                    
+                </div>
+            </nav>
+            <a href="https://github.com/preaction/Statocles"><img alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; z-index: 1000; border: 0;"></a>
+
+        </header>
+        <div class="main container">
+            <a class="button" href="/Statocles/pod/Statocles/Help/Deploy/">
+    Back to documentation
+</a>
+<pre># PODNAME: Statocles::Help::Deploy
+# ABSTRACT: How to deploy a Statocles site
+
+=head1 DESCRIPTION
+
+This document describes various ways to deploy a Statocles site.
+
+=head2 C&lt;base_url&gt;
+
+Both the site and every deploy can have a C&lt;base_url&gt;, which should be set
+to the full URL the site will be deployed to, like C&lt;http://example.com/&gt; or
+C&lt;http://example.com/path&gt;.
+
+Any time a full URL is needed, the C&lt;base_url&gt; will be used to create one. Even better,
+if there is a C&lt;/path&gt;, all internal links will be rewritten to prepend the C&lt;/path&gt;,
+making it easy to move a site to a different URL path.
+
+=head1 Github Pages
+
+By far the easiest way is to deploy to a L&lt;Github Pages|http://pages.github.com&gt;
+site (though you can L&lt;make your own Git-based deployment|/&quot;Custom Git Deploy&quot;&gt;
+as well).
+
+=head2 user.github.io
+
+To make a user site, accessed at http://user.github.io, you need to create a
+repository called &quot;&lt;user&gt;.github.io&quot;, replacing &lt;user&gt; with your username.
+
+Once you have that, you can start your Statocles site. Your deploy is
+configured very simply, with the default branch of &quot;master&quot; being correct:
+
+    # site.yml
+    gh_deploy:
+        class: Statocles::Deploy::Git
+
+    site:
+        class: Statocles::Site
+        args:
+            deploy: { $ref: gh_deploy }
+
+=head2 user.github.io/project
+
+If you have an existing project that you want to add a Github Pages site to,
+you can do so by creating a branch named &quot;gh-pages&quot;. Create the branch as an
+orphan branch so that you don&#39;t attach yourself to the regular history of the
+project. Leaving the branch attached to the main history can make things a bit
+more complicated if that history needs to change, but git will also show the
+branches as related in a graph (which they are not).
+
+    $ git checkout -b --orphan gh-pages
+    $ git reset --hard &#39;HEAD&#39;
+    $ git add .gitignore
+    $ git commit -m&#39;starting github pages site&#39;
+    $ git checkout master
+
+Now we just have to configure a Git deploy to point to our &quot;gh-pages&quot; branch,
+and make sure to rewrite our page URLs to the right directory.
+
+    # site.yml
+    gh_deploy:
+        class: Statocles::Deploy::Git
+        args:
+            branch: gh-pages
+            base_url: http://user.github.io/project
+
+    site:
+        class: Statocles::Site
+        args:
+            deploy: { $ref: gh_deploy }
+
+=head1 Custom Git Deploy
+
+To create a Github-Pages-like deploy without hosting on Github, you need a few things:
+
+=over 4
+
+=item 1
+
+A bare repository to push to
+
+=item 2
+
+A git hook to check out the site&#39;s files
+
+=back
+
+To set up a bare repository to push to, I recommend
+L&lt;gitolite|http://gitolite.com&gt;. Gitolite manages git repositories for you,
+making it easy to add/remove them.
+
+If you do not want to use gitolite, you can probably just use SSH:
+
+    $ ssh example.com
+    $ mkdir www.example.com
+    $ cd www.example.com
+    $ git init --bare
+
+Before we&#39;re done on the server, we need to add our git hook. Since a bare repo
+doesn&#39;t have a working copy of the files, the hook is going to check out the
+site&#39;s HTML files into a directory we specify (we&#39;ll use
+C&lt;/var/www/www.example.com&gt; for this example... dot com)
+
+    $ mkdir /var/www/www.example.com
+    $ echo &quot;GIT_WORK_TREE=/var/www/www.example.com git checkout -f&quot; &gt; hooks/post-receive
+    $ chmod +x hooks/post-receive
+    $ exit
+
+Now that the bare repository is ready, you can deploy your site. First, we add
+the remote manually:
+
+    $ git remote add deploy ssh://example.com/www.example.com.git
+
+Now we can set up our Deploy object:
+
+    # site.yml
+    git_deploy:
+        class: Statocles::Deploy::Git
+        args:
+            remote: deploy
+
+And give it to our site:
+
+    # site.yml
+    site:
+        class: Statocles::Site
+        args:
+            deploy: { $ref: git_deploy }
+
+Now when we run C&lt;statocles deploy&gt;, our repository will be updated and so will
+our web root C&lt;/var/www/www.example.com&gt;.
+
+=head1 File
+
+If you only need to copy the files to another directory to serve them, if
+you&#39;re writing the site on the web server, or you&#39;ve got a Jenkins server that
+can build the site, you can use the L&lt;File deploy|Statocles::Deploy::File&gt;.
+This deploy simply copies the built website to another directory.
+
+    # site.yml
+    file_deploy:
+        class: Statocles::Deploy::File
+        args:
+            path: /var/www/www.example.com
+
+    site:
+        class: Statocles::Site
+        args:
+            deploy: { $ref: file_deploy }
+
+This is the default deploy. If you just give a path to the site object, the
+site will be copied to that path:
+
+    site:
+        class: Statocles::Site
+        args:
+            deploy: /var/www/www.example.com
+
+=begin comment
+
+# XXX: Make Statocles::Deploy::Command for this!
+
+=head1 Deploy Command
+
+Any command can be used to deploy a Statocles site with
+L&lt;Statocles::Deploy::Command&gt;. If you use C&lt;rsync&gt; or C&lt;sftp&gt; or C&lt;scp&gt; or C&lt;ftp&gt;, you
+can deploy your Statocles site.
+
+To deploy via rsync, set up your command like so:
+
+    # site.yml
+    rsync_deploy:
+        class: Statocles::Deploy::Command
+        args:
+            command: &#39;rsync -avz www.example.com:/var/www/www.example.com&#39;
+
+By default, the build directory will get appended to the command, so the full
+command that will be run is:
+
+    $ rsync -avz example.com:/var/www/www.example.com .statocles-build
+
+If you need to put the build directory somewhere other than the end of the
+command, you can use C&lt;{}&gt; to indicate where the build directory should be
+placed.
+
+    # site.yml
+    cp_deploy:
+        class: Statocles::Deploy::Command
+        args:
+            command: &#39;cp -R {}/* /var/www/www.example.com&#39;
+
+=end comment
+
+=head1 Custom Deploy Module
+
+If none of these work for you, you can build your own deploy module. See
+L&lt;Statocles::Deploy&gt; for details.
+
+</pre>
+
+        </div>
+        <footer>
+            <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61295159-3', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+            <div class="container tagline">
+                <a href="http://preaction.github.io/Statocles">Made with Statocles</a><br>
+                <a href="http://www.perl.org">Powered by Perl</a>
+            </div>
+        </footer>
+    </body>
+</html>

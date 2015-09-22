@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+        <title>Release v0.055 - Statocles</title>
+        <meta content="Statocles 0.055" name="generator">
+        <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
+<style>
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Forum', sans-serif;
+        font-weight: bold;
+    }
+
+    #index-banner {
+        font-family: 'Forum', sans-serif;
+        height: 300px;
+        position: relative;
+        margin-bottom: 1em;
+        border-bottom: 1px solid #777
+    }
+    #index-banner:before, #index-banner:after {
+        width: 60px;
+        height: 300px;
+        content: url(/Statocles/theme/images/column.png);
+    }
+    #index-banner:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #index-banner:after {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    #index-banner h1 {
+        padding-top: 1em;
+        text-transform: uppercase;
+        font-size: 72px;
+        text-align: center;
+    }
+    #index-banner h1 small {
+        display: block;
+        font-size: 24px;
+    }
+
+    #index-banner .latest-release {
+        text-align: center;
+    }
+
+</style>
+
+    </head>
+    <body>
+        <header>
+            <nav class="navbar">
+                <div class="container">
+                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <ul>
+                        <li>
+                            <a href="/Statocles/blog">Blog</a>
+                        </li>
+                        <li>
+                            <a href="/Statocles/pod">Docs</a>
+                        </li>
+                        <li>
+                            <a href="/Statocles/gallery">Gallery</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles">Code</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles/issues">Bugs</a>
+                        </li>
+                        <li>
+                            <a href="http://metacpan.org/pod/Statocles">CPAN</a>
+                        </li>
+                        <li>
+                            <a href="https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">IRC</a>
+                        </li>
+                    </ul>
+                    
+                </div>
+            </nav>
+            <a href="https://github.com/preaction/Statocles"><img alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; z-index: 1000; border: 0;"></a>
+
+        </header>
+        <div class="main container">
+            <div class="row">
+
+    <div class="nine columns">
+        <main>
+            <header>
+                <h1>Release v0.055</h1>
+                <p class="tags">Tags:
+                    <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
+                </p>
+
+                <aside>
+                    <p><time datetime="2015-09-22">
+                        Posted on 2015-09-22
+                    </time>
+                    </p>
+                </aside>
+
+
+            </header>
+            <section id="section-1">
+                <p>We&#39;re in the <a href="https://github.com/preaction/Statocles/milestones/v1.000">run up to v1.0, the first stable
+release</a>. As a
+result, there were quite a few deprecations in this release, and a lot
+of new features.</p>
+
+<h2>Breaking Changes</h2>
+
+<ul>
+<li><p>The <a href="/Statocles/pod/Statocles/App/Perldoc">Perldoc app</a> now creates folders
+instead of files for the POD. This means the link to <code>My::Module</code> will
+now be <code>/My/Module</code> and not <code>/My/Module.html</code>.</p>
+
+<p>This is being done outside a deprecation policy in the hope that
+nobody&#39;s started using the app extensively enough to be hurt. Having
+both sets of pages (.html and non-.html) was deemed too much for a
+non-stable release. If something like this happens after v1.0, we will
+build both sets of pages (with a switch to turn off the old set).</p></li>
+</ul>
+
+<h2>Deprecations</h2>
+
+<ul>
+<li><p>The <a href="/Statocles/pod/Statocles/App/Static">Static app</a> and
+<a href="/Statocles/pod/Statocles/App/Plain">Plain app</a> are both deprecated in favor of
+the new <a href="/Statocles/pod/Statocles/App/Basic">Basic app</a>. The Basic app has all
+the functionality of both the Static and Plain apps.</p>
+
+<p>Using either the Static or Plain apps will give a warning. To fix this
+warning, change the app&#39;s <code>class</code> to <code>Statocles::App::Basic</code>. See
+<a href="/Statocles/pod/Statocles/Help/Upgrading">Statocles::Help::Upgrading</a> for
+details.</p></li>
+<li><p>The <a href="/Statocles/pod/Statocles/Store/File">File store</a> is now just
+<a href="/Statocles/pod/Statocles/Store">Statocles::Store</a>. Likely this requires no
+changes in your config, unless you&#39;ve referenced
+<code>Statocles::Store::File</code> directly (just change it to
+<code>Statocles::Store</code> to silence the deprecation warnings).</p></li>
+<li><p>The <a href="/Statocles/pod/Statocles/Store#write_document">Store write_document method</a>
+used to return the full path to the document written. This was
+confusing, as one generally does not expect a write method to return
+anything (unless it&#39;s a true/false value for success/failure). As of
+right now, you can get the document path by calling the <code>child()</code>
+method of the <a href="/Statocles/pod/Statocles/Store#path">Store&#39;s path attribute</a>.</p></li>
+</ul>
+
+<h2>New Features</h2>
+
+<ul>
+<li><p>There is a new <a href="/Statocles/pod/Statocles/App/Basic">Basic app</a>. This application
+supports Markdown files and collateral images and files. It is the
+basic functionality of all Statocles apps.</p></li>
+<li><p>The default themes now support Disqus. <a href="http://disqus.com">Disqus</a>
+allows adding comments even to otherwise static websites. Until the
+<a href="http://github.com/preaction/Dynamocles">Dynamocles project</a> allows
+for a dynamic partner to Statocles sites, Disqus is an easy way to
+provide some user engagement.</p></li>
+<li><p>If you want extra frontmatter document metadata, you can now create
+your own <a href="/Statocles/pod/Statocles/Document">Statocles::Document</a> sub-classes,
+and refer to them in your frontmatter using <code>class: &#39;My::Document&#39;</code>.</p>
+
+<p>This enables you to add custom attributes and other such to your
+documents. It could also allow for non-Markdown documents, and other
+interesting things in the future.</p></li>
+<li><p>The site creator command (<code>statocles create</code>) now creates a
+fully-ready site with skeleton content. The configuration file it
+creates now comes with comments to make it easier to edit.</p></li>
+<li><p><a href="/Statocles/pod/Statocles/Help/Develop">Plugins</a> can now be added to individual
+applications, because <a href="/Statocles/pod/Statocles/App#EVENTS">every app now comes with a <code>build</code>
+event</a>. If you only want to check links on
+a single application, or if you want to modify the application&#39;s pages
+without writing an entire app subclass, this is a good way to do it.</p></li>
+<li><p>When writing pre-dated entries, to be posted sometime in the future,
+there is now a way to test how the site will look in the future when
+that post is deployed.</p>
+
+<p>Using the <code>--date</code> option to <code>statocles build</code>, <code>statocles daemon</code>,
+and <code>statocles deploy</code> will render the site as though it was the given
+date. See the <code>statocles help</code> command for more information.</p></li>
+</ul>
+
+<p>Full changelog below...</p>
+
+            </section>
+            <section id="section-2">
+                <ul>
+<li><a href="https://github.com/preaction/Statocles/commit/d8692b990194d6c22bbadf39b2722ecc007d763c">fix cleanup warning during global destruction</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/b25d9d2d82e0cd3fe981dadd5a592373efc42d3e">add disqus setup notes to Config guide</a> (<a href="https://github.com/preaction/Statocles/issues/109">#109</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/a6f9ee33a7953c462748957fc95d789b6acd2d9c">replace the Static app with the Basic app</a> (<a href="https://github.com/preaction/Statocles/issues/380">#380</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/02b3d3b7c0d9efbca5a848d60cf3e8b1d762423d">rename the Plain app to the Basic app</a> (<a href="https://github.com/preaction/Statocles/issues/380">#380</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/4504fe0d501b965da7e5ba1faeb2868523b8aaa0">refactor Blog app to use Store app role</a> (<a href="https://github.com/preaction/Statocles/issues/343">#343</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/db9ca5f711f76669b5a2470e8938ffcbefec0236">allow writing most page attributes</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/6a6d21ac9acd8b7dccc27363b4e176778733bb5f">skip hidden files and directories in the Plain app</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/4a453c285020985447263b9223bc7413335a73d9">add static content to Plain app</a> (<a href="https://github.com/preaction/Statocles/issues/343">#343</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/4156aa3efcf4f1ba52ec2f2e9add3ff5898fd075">fix doc links to show module being linked to</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/90a7b8fa2964c057b459adc29cec6ae345bf4784">add custom markdown object example to config guide</a> (<a href="https://github.com/preaction/Statocles/issues/389">#389</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/54a2e91f0992fad9ec6dad4b637fe9194035e68b">add disqus blocks to the default themes</a> (<a href="https://github.com/preaction/Statocles/issues/109">#109</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/402c2807e28d557ae0f2f391158b4b86bc2992db">add store role for applications that use stores</a> (<a href="https://github.com/preaction/Statocles/issues/343">#343</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/1ad4d17c0a6645eeb3a74a5704de55f555dec611">use run_editor helper in blog and plain apps</a> (<a href="https://github.com/preaction/Statocles/issues/212">#212</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/ae718ea603128dd4d6240eed1e1be6ddeb26b1f9">add run_editor utility to invoke the user&#39;s editor</a> (<a href="https://github.com/preaction/Statocles/issues/212">#212</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/7cc294da73ca7cc522a3a799d1a21e1aafbc9d37">fix new-post directory getting left behind in blog</a> (<a href="https://github.com/preaction/Statocles/issues/295">#295</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/99a0c283f8c381dfef79ed62b745aa31ce0629b2">test that the interactive editor is invoked</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/1b1504105ce9214e98126ba24532f3f4431e9024">add class frontmatter for custom document classes</a> (<a href="https://github.com/preaction/Statocles/issues/48">#48</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/8967da098d54ba872ed8a5b4b1ea7c03e63bf397">add error if repository has no commits</a> (<a href="https://github.com/preaction/Statocles/issues/386">#386</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/b21297f6515710f70f8e6ba9520546bfc5303214">move daemon build inside the mojo app</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/12b51c895bad0ba44e0a8efc117e65d6e35bf7af">add --date option to build, daemon, and deploy</a> (<a href="https://github.com/preaction/Statocles/issues/246">#246</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/2fa25ce4b4e818b0e8d13dfa726fd38f7f50fca6">fix daemon shutdown and cleanup to remove cycles</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/92c674f5fd4f1e1fa6aa02f3b8054e00eb3bfa28">add default site title to silence warnings</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/aa635852327be05d8ad1bef0ac328ce6080c08c5">add --message option to the deploy command</a> (<a href="https://github.com/preaction/Statocles/issues/34">#34</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/344b56b13189b61d2100c75824a177264012718d">allow plain hashrefs in test app</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/6cc0ac4d0b04e73a1169022ae0dc557fc3b1a437">add test for git deploy message option</a> (<a href="https://github.com/preaction/Statocles/issues/34">#34</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/a533a40b9a14f3c443fec146051cfa4a9a8f64eb">fix tag links in blog feeds into full urls</a> (<a href="https://github.com/preaction/Statocles/issues/385">#385</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/ddd5f66e60989443c9029def761a90c0721876f4">clean up test to remove warnings from log</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/c48fb92ed3fea2ea0795ffd44ff4cf317f2956c3">add --clean option to statocles deploy command</a> (<a href="https://github.com/preaction/Statocles/issues/71">#71</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/25023190fc9bc81907c0327b5db86bc45c800c49">add clean option to file and git deploys</a> (<a href="https://github.com/preaction/Statocles/issues/71">#71</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/d85047aa3209fd4a4959d2ede56e41e614113c4a">remove &quot;.html&quot; from Perldoc documentation pages</a> (<a href="https://github.com/preaction/Statocles/issues/367">#367</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/67f4719bc72fddd222890d02930f959ab75c8ab4">clarify index path missing to show possible remedy</a> (<a href="https://github.com/preaction/Statocles/issues/363">#363</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/7144d7f7cd68f820771a3d244ccc044c72dd44b8">move all deprecation tests into one place</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/c09f1f5ee62591edb88852f6b3612488a71393b8">deprecate write_document method return value</a> (<a href="https://github.com/preaction/Statocles/issues/382">#382</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/01e3f566c39a756f980bd2951e62e561d3592dd0">skip deprecated module in compile test</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/3ddafbcb2c52b4fae16a80a6f2bd0c56ec47a675">remove docs implying deploys inherit from stores</a> (<a href="https://github.com/preaction/Statocles/issues/383">#383</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/2ef4c8e3c3ff6e3fbd2c5c8376dcf688f32fb21d">move Statocles::Store::File to Statocles::Store</a> (<a href="https://github.com/preaction/Statocles/issues/381">#381</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/c01b4fd76b42b43ea0876d3148e85727ac816927">only set version during test if no version exists</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/f35619c6ca85589f3d0168a5d732175f04660ed9">fix emitter base bundle not applying</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/f7d7a8ab3555d6934799dda7ac8fb65763deb719">add edit command to plain app</a> (<a href="https://github.com/preaction/Statocles/issues/338">#338</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/67d8930491543177bd101ee22e0fe1c4fe3b0946">add date option to build blog pages from the future</a> (<a href="https://github.com/preaction/Statocles/issues/246">#246</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/a4e4aa5e6f198f14d96599a4df7338707e7ba050">add better error message when app has no commands</a> (<a href="https://github.com/preaction/Statocles/issues/379">#379</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/3ad51d40a1313d316c70ac008c1ce367ff61a217">add remove method to Store</a> (<a href="https://github.com/preaction/Statocles/issues/196">#196</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/e0cf8d6aba17a043e65e4c27393d85016134945e">generate the site config from the template</a> (<a href="https://github.com/preaction/Statocles/issues/324">#324</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/658da7977339a694116ce57b1d25f7219716d663">add comments to the site creator config file</a> (<a href="https://github.com/preaction/Statocles/issues/324">#324</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/6d4378354c0280b3c85e5eee5b4570fa9ab87708">change title to text in site creator link</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/b61f597f1bea682b75e34dbaef5d374dcad09152">add note about how to use default themes</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/28cda3dbd4f5774be60554225372cdbeb5c5bf53">add skeleton site content during site creation</a> (<a href="https://github.com/preaction/Statocles/issues/362">#362</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/98d6ae4f5337b693eaf310c0aa56ccfe1947f667">add $app and $site to all templates</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/a73f058bc11b1355d416db6f521a81da46402d9c">expand document documentation to add examples</a> (<a href="https://github.com/preaction/Statocles/issues/368">#368</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/7eddbf5fe7895a8f527c78db93c3da5ed6c63688">fix a bunch of misspellings in the documentation</a></li>
+<li><a href="https://github.com/preaction/Statocles/commit/49618494e0eb2f5f214630e94c13b314fdb9ed74">remove duplicate test app</a> (<a href="https://github.com/preaction/Statocles/issues/319">#319</a>)</li>
+<li><a href="https://github.com/preaction/Statocles/commit/45578a8524ffc6dea777368e872b18ec392e4b9d">add build event to apps for plugins to edit pages</a> (<a href="https://github.com/preaction/Statocles/issues/276">#276</a>)</li>
+</ul>
+
+            </section>
+        </main>
+
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            var disqus_shortname = 'statocles';
+            var disqus_identifier = '/2015/09/22/release-v0-055/index.markdown';
+            var disqus_url = 'http://preaction.github.io/Statocles/blog/2015/09/22/release-v0-055/';
+            (function() {
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+    </div>
+
+    <div class="three columns sidebar">
+        
+        <nav id="tags">
+            <h1>Tags</h1>
+            <ul class="list-inline">
+                <li><a href="/Statocles/blog/tag/release/">release</a></li>
+            </ul>
+        </nav>
+    </div>
+
+</div>
+
+        </div>
+        <footer>
+            <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61295159-3', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+            <div class="container tagline">
+                <a href="http://preaction.github.io/Statocles">Made with Statocles</a><br>
+                <a href="http://www.perl.org">Powered by Perl</a>
+            </div>
+        </footer>
+    </body>
+</html>

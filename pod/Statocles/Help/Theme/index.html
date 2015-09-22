@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+        <title>Statocles</title>
+        <meta content="Statocles 0.055" name="generator">
+        <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
+<style>
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Forum', sans-serif;
+        font-weight: bold;
+    }
+
+    #index-banner {
+        font-family: 'Forum', sans-serif;
+        height: 300px;
+        position: relative;
+        margin-bottom: 1em;
+        border-bottom: 1px solid #777
+    }
+    #index-banner:before, #index-banner:after {
+        width: 60px;
+        height: 300px;
+        content: url(/Statocles/theme/images/column.png);
+    }
+    #index-banner:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #index-banner:after {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    #index-banner h1 {
+        padding-top: 1em;
+        text-transform: uppercase;
+        font-size: 72px;
+        text-align: center;
+    }
+    #index-banner h1 small {
+        display: block;
+        font-size: 24px;
+    }
+
+    #index-banner .latest-release {
+        text-align: center;
+    }
+
+</style>
+
+    </head>
+    <body>
+        <header>
+            <nav class="navbar">
+                <div class="container">
+                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <ul>
+                        <li>
+                            <a href="/Statocles/blog">Blog</a>
+                        </li>
+                        <li>
+                            <a href="/Statocles/pod">Docs</a>
+                        </li>
+                        <li>
+                            <a href="/Statocles/gallery">Gallery</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles">Code</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles/issues">Bugs</a>
+                        </li>
+                        <li>
+                            <a href="http://metacpan.org/pod/Statocles">CPAN</a>
+                        </li>
+                        <li>
+                            <a href="https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">IRC</a>
+                        </li>
+                    </ul>
+                    
+                </div>
+            </nav>
+            <a href="https://github.com/preaction/Statocles"><img alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; z-index: 1000; border: 0;"></a>
+
+        </header>
+        <div class="main container">
+            <div class="crumbtrail">
+<ul>
+    <li>
+        <a href="/Statocles/pod/Statocles/">Statocles</a>
+    </li>
+    <li>
+        <a href="/Statocles/pod/">Help</a>
+    </li>
+    <li>
+        <a href="/Statocles/pod/Statocles/Help/Theme/">Theme</a>
+    </li>
+</ul>
+(<a href="/Statocles/pod/Statocles/Help/Theme/source.html">source</a>)
+</div>
+<h1 id="NAME">NAME</h1>
+
+<p>Statocles::Help::Theme - A guide to making Statocles themes</p>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>A Theme is the &quot;View&quot; class of Statocles. Themes build <a href="/Statocles/pod/Statocles/Template/">Statocles::Template</a> objects that apps can then attach to a page. Each template has a category and a name. The category usually maps to the application name, or &quot;site&quot; for global site templates. Themes get their templates from a <a href="/Statocles/pod/Statocles/Store/">Statocles::Store</a>.</p>
+
+<h1 id="Default-Themes">Default Themes</h1>
+
+<p>There are some default themes included with Statocles, with more on the way. To use a default theme, set your site&#39;s theme to <code>::name</code>, where <code>name</code> is the name of the theme. The currently-available default themes are:</p>
+
+<dl>
+
+<dt><code>::default</code></dt>
+<dd>
+
+<p>The default theme uses <a href="http://getskeleton.com" rel="external">the Skeleton CSS boilerplate</a> to build a simple, clean starting point for your own theme.</p>
+
+</dd>
+<dt><code>::bootstrap</code></dt>
+<dd>
+
+<p>The bootstrap theme uses <a href="http://getbootstrap.com" rel="external">the Bootstrap library</a> to provide an elegant and flexible theme. Sites like <a href="http://bootswatch.com" rel="external">Bootswatch</a> can provide a custom look to your Bootstrap site.</p>
+
+</dd>
+</dl>
+
+<h1 id="Making-Minor-Adjustments">Making Minor Adjustments</h1>
+
+<h2 id="Include-Stores">Include Stores</h2>
+
+<p>Before going to editing the entire theme, you can change the theme includes by adding <a href="/Statocles/pod/Statocles/Theme#include_stores/">include_stores</a>.</p>
+
+<p>Some examples of files you can edit are:</p>
+
+<dl>
+
+<dt>site/head_after.html.ep</dt>
+<dd>
+
+<p>This include is after all the default <code>&lt;head&gt;</code> content. You can add links to new scripts and stylesheets here.</p>
+
+</dd>
+<dt>site/header_after.html.ep</dt>
+<dd>
+
+<p>This include is after the nav bar and page header. You can add banners and such here.</p>
+
+</dd>
+<dt>site/footer.html.ep</dt>
+<dd>
+
+<p>The entire site footer is up to you to edit.</p>
+
+</dd>
+<dt>site/sidebar_before.html.ep</dt>
+<dd>
+
+<p>If the page has a sidebar, this include will be placed before it.</p>
+
+</dd>
+</dl>
+
+<h1 id="Editing-a-Theme">Editing a Theme</h1>
+
+<h2 id="Start-From-the-Default-Theme">Start From the Default Theme</h2>
+
+<p>It is unlikely that the default themes will do things exactly as you need. So, Statocles has a command to copy one of the default themes into your site directory so that you can edit it as you need.</p>
+
+<pre><code>    # Bundle the default theme
+    $ statocles bundle theme default site/theme
+    Theme &quot;default&quot; written to &quot;site/theme&quot;
+    Make sure to update &quot;site.yml&quot;</code></pre>
+
+<p>This command will copy the &quot;default&quot; Statocles theme into the &quot;site/theme&quot; directory. Now we need to update our <code>site.yml</code> to point to our new theme:</p>
+
+<pre><code>    # site.yml
+    site:
+        class: Statocles::Site
+        args:
+            theme: site/theme</code></pre>
+
+<h1 id="Writing-a-Template">Writing a Template</h1>
+
+<p>The default <a href="/Statocles/pod/Statocles/Theme/">Statocles::Theme</a> uses <a href="https://metacpan.org/pod/Mojo::Template" rel="external">Mojo::Template</a>, the template class from <a href="https://metacpan.org/pod/Mojolicious" rel="external">Mojolicious</a>. In the template, there are a few directives that allow you to evaluate Perl code, which is why the templates are also called &quot;.ep&quot; for Embedded Perl.</p>
+
+<pre><code>    # A single leading % means the rest of the line is Perl
+    % if ( $self-&gt;path eq &#39;/index.html&#39; ) {
+
+    # A leading %= means replace with the return value
+    %= $self-&gt;path
+
+    # Inline code can be wrapped in &lt;% ... %&gt;
+    # &lt;%= ... %&gt; is replaced with the return value
+    My name is &lt;%= $self-&gt;name %&gt;
+
+    # Comments are %# and &lt;%# %&gt;
+    %# This is in the template, but not the result
+    &lt;%# A comment %&gt;</code></pre>
+
+<h2 id="Template-Variables">Template Variables</h2>
+
+<p>When an application assembles a <a href="/Statocles/pod/Statocles/Page/">page object</a>, it sets values inside. The page then gives those values to the template. The common values in every template are:</p>
+
+<dl>
+
+<dt><code>$self</code> - The current <a href="/Statocles/pod/Statocles/Page/">Statocles::Page</a> object</dt>
+<dd>
+
+</dd>
+<dt><code>$site</code> - The current <a href="/Statocles/pod/Statocles/Site/">Statocles::Site</a> object</dt>
+<dd>
+
+</dd>
+<dt><code>$app</code> - The current <a href="/Statocles/pod/Statocles/App/">Statocles::App</a> object</dt>
+<dd>
+
+</dd>
+</dl>
+
+<p>These objects hold all the data we need to render the page. Since you are writing Perl, you can use any of the methods from those objects. Some useful methods to note are:</p>
+
+<dl>
+
+<dt><code>data()</code></dt>
+<dd>
+
+<p>All of the objects above, Page, Site, and App, have a <code>data()</code> method that allows for arbitrary key/values. Site and App data are configured in the Site&#39;s config file, so these can be used as hooks for template authors to add additional features, such as social media links or metrics tools. Page objects data come from the App, and add information that may not fit anywhere else.</p>
+
+</dd>
+<dt><a href="/Statocles/pod/Statocles/Page/Document#sections/"><code>$self-&gt;sections</code></a></dt>
+<dd>
+
+<p>The <code>sections</code> method works on <a href="/Statocles/pod/Statocles/Page/Document/">document pages</a> and gives you all of the content split into sections on the section marker (<code>---</code>).</p>
+
+<pre><code>    # Get only the first section
+    my ( $first_section ) = $self-&gt;sections;
+
+    # Loop over the sections
+    % for my $section ( $self-&gt;sections ) {
+        &lt;%= $section %&gt;
+    % }</code></pre>
+
+</dd>
+</dl>
+
+<h2 id="Helpers">Helpers</h2>
+
+<p>Helpers are extra functions available to the template.</p>
+
+<dl>
+
+<dt>include</dt>
+<dd>
+
+<p>The <code>include</code> helper allows you to include another template or file. The include will be searched for in the theme directory.</p>
+
+<pre><code>    # Include a template, passing the same variables as the current template
+    %= include &quot;site/before_header.html.ep&quot;
+
+    # Include a file without template processing
+    %= include &quot;site/before_header.html&quot;</code></pre>
+
+<p>If the included path ends with &quot;.ep&quot;, it is treated as a template. Otherwise, it&#39;s just written directly with no processing.</p>
+
+</dd>
+</dl>
+
+<h1 id="Layouts">Layouts</h1>
+
+<p>When a page object is built, it is given a template and a layout. The layout is a special template called <code>layout.html.ep</code> in the <code>site</code> category that wraps the content from the template, allowing a consistent site style in a single place.</p>
+
+<p>The layout generally adds the site&#39;s scaffolding: &lt;html&gt;, &lt;head&gt;, &lt;body&gt;, scripts and stylesheets, header and footer.</p>
+
+<p>The layout gets the exact same template variables that the current page&#39;s template gets, so you have the current page (<code>$self</code>), current site (<code>$site</code>), and current app (<code>$app</code>), in case you need it for the layout.</p>
+
+<h1 id="Stylesheets-and-Scripts">Stylesheets and Scripts</h1>
+
+<p>A site&#39;s theme is deployed to the &quot;/theme&quot; path. If a theme needs extra files, like stylesheets, scripts, and images, they can be added to the theme&#39;s directory and referenced in the HTML from &quot;/theme&quot;.</p>
+
+<pre><code>    # Reference a stylesheet in theme/css/normalize.css
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;/theme/css/normalize.css&quot; /&gt;</code></pre>
+
+<h1 id="SEE-ALSO">SEE ALSO</h1>
+
+<dl>
+
+<dt><a href="/Statocles/pod/Statocles/Theme/">Statocles::Theme</a></dt>
+<dd>
+
+</dd>
+<dt><a href="/Statocles/pod/Statocles/Template/">Statocles::Template</a></dt>
+<dd>
+
+</dd>
+</dl>
+
+
+
+        </div>
+        <footer>
+            <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61295159-3', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+            <div class="container tagline">
+                <a href="http://preaction.github.io/Statocles">Made with Statocles</a><br>
+                <a href="http://www.perl.org">Powered by Perl</a>
+            </div>
+        </footer>
+    </body>
+</html>

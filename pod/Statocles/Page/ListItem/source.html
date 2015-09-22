@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+        <title>Statocles</title>
+        <meta content="Statocles 0.055" name="generator">
+        <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
+<style>
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Forum', sans-serif;
+        font-weight: bold;
+    }
+
+    #index-banner {
+        font-family: 'Forum', sans-serif;
+        height: 300px;
+        position: relative;
+        margin-bottom: 1em;
+        border-bottom: 1px solid #777
+    }
+    #index-banner:before, #index-banner:after {
+        width: 60px;
+        height: 300px;
+        content: url(/Statocles/theme/images/column.png);
+    }
+    #index-banner:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #index-banner:after {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    #index-banner h1 {
+        padding-top: 1em;
+        text-transform: uppercase;
+        font-size: 72px;
+        text-align: center;
+    }
+    #index-banner h1 small {
+        display: block;
+        font-size: 24px;
+    }
+
+    #index-banner .latest-release {
+        text-align: center;
+    }
+
+</style>
+
+    </head>
+    <body>
+        <header>
+            <nav class="navbar">
+                <div class="container">
+                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <ul>
+                        <li>
+                            <a href="/Statocles/blog">Blog</a>
+                        </li>
+                        <li>
+                            <a href="/Statocles/pod">Docs</a>
+                        </li>
+                        <li>
+                            <a href="/Statocles/gallery">Gallery</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles">Code</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles/issues">Bugs</a>
+                        </li>
+                        <li>
+                            <a href="http://metacpan.org/pod/Statocles">CPAN</a>
+                        </li>
+                        <li>
+                            <a href="https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">IRC</a>
+                        </li>
+                    </ul>
+                    
+                </div>
+            </nav>
+            <a href="https://github.com/preaction/Statocles"><img alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; z-index: 1000; border: 0;"></a>
+
+        </header>
+        <div class="main container">
+            <a class="button" href="/Statocles/pod/Statocles/Page/ListItem/">
+    Back to documentation
+</a>
+<pre>package Statocles::Page::ListItem;
+# ABSTRACT: An item in a List page
+
+use Statocles::Base &#39;Class&#39;;
+use Mojo::DOM;
+
+=attr page
+
+The L&lt;page object|Statocles::Page&gt; for this item in the list.
+
+=cut
+
+has page =&gt; (
+    is =&gt; &#39;ro&#39;,
+    isa =&gt; ConsumerOf[ &#39;Statocles::Page&#39; ],
+);
+
+=attr rewrite_mode
+
+One of &quot;absolute&quot; or &quot;full&quot;. Defaults to &quot;absolute&quot;.
+
+If &quot;absolute&quot;, will rewrite the content using the absolute path of the page.
+
+If &quot;full&quot;, will use the full URL (the site base_url and the page URL) when 
+rewriting the content.
+
+=cut
+
+has rewrite_mode =&gt; (
+    is =&gt; &#39;ro&#39;,
+    isa =&gt; Enum[qw( absolute full )],
+    default =&gt; &#39;absolute&#39;,
+);
+
+=method DOES
+
+This page proxies everything necessary to be a page object, without consuming
+the L&lt;page role|Statocles::Page&gt;.
+
+=cut
+
+sub DOES {
+    my ( $self, $class ) = @_;
+    return $self-&gt;page-&gt;DOES( $class );
+}
+
+=method AUTOLOAD
+
+Methods are proxyed to the L&lt;page object|/page&gt; so that this object appears
+mostly as the page inside of it.
+
+=cut
+
+our $AUTOLOAD;
+sub AUTOLOAD {
+    my ( $self, @args ) = @_;
+    my ( $method_name ) = $AUTOLOAD =~ /::([^:]+)$/;
+
+    # We must be able to destroy ourselves
+    # This issue is fixed in perl 5.18
+    return if $method_name eq &#39;DESTROY&#39;;
+
+    my $method = $self-&gt;page-&gt;can( $method_name );
+    if ( !$method ) {
+        die sprintf q{ListItem page (%s %s) has no method &quot;%s&quot;},
+            $self-&gt;page-&gt;path,
+            ref $self-&gt;page,
+            $method_name;
+    }
+    return $method-&gt;( $self-&gt;page, @args );
+}
+
+=method content
+
+    my $html = $page-&gt;content;
+
+Get the content for this page. Rewrite any links, images, or other according to the
+L&lt;rewrite_mode attributes|/rewrite_mode&gt;.
+
+=cut
+
+sub _rewrite_content {
+    my ( $self, $content ) = @_;
+
+    my $dom = Mojo::DOM-&gt;new( $content );
+    for my $attr ( qw( src href ) ) {
+        for my $el ( $dom-&gt;find( &quot;[$attr]&quot; )-&gt;each ) {
+            my $url = $el-&gt;attr( $attr );
+
+            # relative URLs must be absolute
+            if ( $url !~ m{^(?:(?:[a-zA-Z]+:)|//?)} ) {
+                $url = $self-&gt;page-&gt;dirname . &#39;/&#39; . $url;
+            }
+
+            # absolute URLs may be full
+            if ( $self-&gt;rewrite_mode eq &#39;full&#39; ) {
+                if ( $url !~ m{^(?:(?:[a-zA-Z]+:)|//)} ) {
+                    $url = $self-&gt;page-&gt;site-&gt;url( $url );
+                }
+            }
+
+            $el-&gt;attr( $attr =&gt; $url );
+        }
+    }
+
+    return &quot;$dom&quot;;
+}
+
+sub content {
+    my ( $self, @args ) = @_;
+    my $content = $self-&gt;page-&gt;content( @args );
+    return $self-&gt;_rewrite_content( $content );
+}
+
+=method sections
+
+    my @sections = $page-&gt;sections;
+
+Get a list of content divided into sections. The Markdown &quot;---&quot; marker divides
+sections. Rewrite any links, images, or other according to the L&lt;rewrite_mode
+attributes|/rewrite_mode&gt;.
+
+=cut
+
+sub sections {
+    my ( $self, @args ) = @_;
+    return map { $self-&gt;_rewrite_content( $_ ) } $self-&gt;page-&gt;sections( @args );
+}
+
+1;
+__END__
+
+=head1 DESCRIPTION
+
+This page wraps another page for use inside of a L&lt;list
+page|Statocles::Page::List&gt;.  This page will rewrite content to ensure that
+relative links in the page work correctly when moved into the list page.
+
+</pre>
+
+        </div>
+        <footer>
+            <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61295159-3', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+            <div class="container tagline">
+                <a href="http://preaction.github.io/Statocles">Made with Statocles</a><br>
+                <a href="http://www.perl.org">Powered by Perl</a>
+            </div>
+        </footer>
+    </body>
+</html>

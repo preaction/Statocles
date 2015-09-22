@@ -6,6 +6,7 @@
         <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <title>Statocles</title>
+        <meta content="Statocles 0.055" name="generator">
         <link href="/Statocles/blog/index.atom" rel="alternate" type="application/atom+xml">
         <link href="/Statocles/blog/index.rss" rel="alternate" type="application/rss+xml">
         <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
@@ -100,6 +101,46 @@
 
             <article>
                 <header>
+                    <h1><a href="/Statocles/blog/2015/03/02/release-v0.040/">Release v0.040</a></h1>
+
+                    <p class="tags">Tags:
+                        <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
+                    </p>
+
+                    <aside>
+                        <p><time datetime="2015-03-02">
+                            Posted on 2015-03-02
+                        </time>
+                        <a data-disqus-identifier="/2015/03/02/release-v0.040/index.markdown" href="/Statocles/blog/2015/03/02/release-v0.040/#disqus_thread">0 comments</a>
+                        </p>
+                    </aside>
+
+                </header>
+
+                <p>The biggest new thing in this release is the new <a href="/Statocles/pod/Statocles/Plugin/LinkCheck">LinkCheck
+plugin</a> that checks all the pages for
+broken links and images. This introduces a new event-handling API into
+Statocles, which will be called Plugins. See <a href="/Statocles/pod/Statocles/Help/Develop">the developer
+docs</a> for more information on plugins.</p>
+
+<p>A bunch of bug fixes for the <code>create</code> command. It now actually works, instead
+of creating an unusable <code>site.yml</code> file.</p>
+
+<p>The default build directory is now <code>.statocles/build</code> instead of <code>.statocles-build</code>.
+It is anticipated we might use the <code>.statocles</code> directory for some additional
+site metadata.</p>
+
+<p>With <a href="http://mojolicio.us">Mojolicious</a> 6.0 release, there were a few breaking
+changes that we needed to fix in Statocles. We now require 6.0.</p>
+
+<p>Full changelog below:</p>
+
+
+                    <p><a href="/Statocles/blog/2015/03/02/release-v0.040/#section-2">Continue reading Release v0.040...</a></p>
+
+            </article>
+            <article>
+                <header>
                     <h1><a href="/Statocles/blog/2015/02/22/statocles-beta-(release-v0.039)/">Statocles Beta (Release v0.039)</a></h1>
 
                     <p class="tags">Tags:
@@ -110,6 +151,7 @@
                         <p><time datetime="2015-02-22">
                             Posted on 2015-02-22
                         </time>
+                        <a data-disqus-identifier="/2015/02/22/statocles-beta-(release-v0.039)/index.markdown" href="/Statocles/blog/2015/02/22/statocles-beta-(release-v0.039)/#disqus_thread">0 comments</a>
                         </p>
                     </aside>
 
@@ -144,6 +186,7 @@ easier to understand.</p>
                         <p><time datetime="2015-02-14">
                             Posted on 2015-02-14
                         </time>
+                        <a data-disqus-identifier="/2015/02/14/release-v0.038.markdown" href="/Statocles/blog/2015/02/14/release-v0.038.html#disqus_thread">0 comments</a>
                         </p>
                     </aside>
 
@@ -175,6 +218,7 @@ slightly older versions of git.</p>
                         <p><time datetime="2015-02-12">
                             Posted on 2015-02-12
                         </time>
+                        <a data-disqus-identifier="/2015/02/12/release-v0.037.markdown" href="/Statocles/blog/2015/02/12/release-v0.037.html#disqus_thread">0 comments</a>
                         </p>
                     </aside>
 
@@ -202,6 +246,7 @@ by CPAN Testers.</p>
                         <p><time datetime="2015-02-11">
                             Posted on 2015-02-11
                         </time>
+                        <a data-disqus-identifier="/2015/02/11/release-v0.036.markdown" href="/Statocles/blog/2015/02/11/release-v0.036.html#disqus_thread">0 comments</a>
                         </p>
                     </aside>
 
@@ -217,7 +262,7 @@ Also, all the default includes are now templates, so you can use template
 variables inside them.  This breaks all existing themes, so make sure to
 re-bundle your theme with <code>statocles bundle theme</code>.</p>
 
-<p>Some getting started information was added to <a href="/Statocles/pod/Statocles/Help/Theme.html">the Theme
+<p>Some getting started information was added to <a href="/Statocles/pod/Statocles/Help/Theme">the Theme
 guide</a>. In short, the best way to make your own
 theme is to start from one of the existing themes.</p>
 
@@ -227,55 +272,6 @@ theme is to start from one of the existing themes.</p>
 
 
                     <p><a href="/Statocles/blog/2015/02/11/release-v0.036.html#section-2">Continue reading Release v0.036...</a></p>
-
-            </article>
-            <article>
-                <header>
-                    <h1><a href="/Statocles/blog/2015/02/08/release-v0.035.html">Release v0.035</a></h1>
-
-                    <p class="tags">Tags:
-                        <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
-                    </p>
-
-                    <aside>
-                        <p><time datetime="2015-02-08">
-                            Posted on 2015-02-08
-                        </time>
-                        </p>
-                    </aside>
-
-                </header>
-
-                <p>Almost ready for the beta announcement now! Only <a href="https://github.com/preaction/Statocles/milestones/beta">a few issues remain before we
-can announce beta</a>.</p>
-
-<p>Content is now always processed through the template parser. This lets us have
-includes in the content, so we can have widget templates or plugins that generate
-related posts for example. This is a new feature, so I&#39;m excited to see what can
-be done with it.</p>
-
-<p>There was some cleanup on the URLs we generate: Directories are being preferred
-to files, so that the URLs are a bit easier to read. <code>/blog/page-2.html</code> is now
-<code>/blog/page/2</code>, and <code>/blog/tag/mytag/page-2.html</code> is now
-<code>/blog/tag/mytag/page/2</code></p>
-
-<p>A new help file was added, <a href="/Statocles/pod/Statocles/Help/Deploy.html">all about deploying
-Statocles</a>. As part of that, a lot of defaults were
-updated to be more intuitive: The build directory gets automatically created, and the
-default build directory is set to <code>.statocles-build</code>.</p>
-
-<p>A bunch of things were fixed for Windows development, along with a nasty
-platform difference in <code>strftime()</code>.</p>
-
-<p>The <code>bundle theme</code> command is now actually useful and allows you to specify
-where you want the theme to be copied. So now, if you want to customize the
-default theme, you can <code>statocles bundle theme default mytheme</code> to copy the
-default theme to the <code>mytheme</code> directory.</p>
-
-<p>Full changelog below</p>
-
-
-                    <p><a href="/Statocles/blog/2015/02/08/release-v0.035.html#section-2">Continue reading Release v0.035...</a></p>
 
             </article>
         </main>
@@ -317,6 +313,16 @@ default theme to the <code>mytheme</code> directory.</p>
     </div>
 
 </div>
+
+<script type="text/javascript">
+    var disqus_shortname = 'statocles';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
 
         </div>
         <footer>

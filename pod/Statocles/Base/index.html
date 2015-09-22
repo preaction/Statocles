@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+        <title>Statocles</title>
+        <meta content="Statocles 0.055" name="generator">
+        <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
+<style>
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Forum', sans-serif;
+        font-weight: bold;
+    }
+
+    #index-banner {
+        font-family: 'Forum', sans-serif;
+        height: 300px;
+        position: relative;
+        margin-bottom: 1em;
+        border-bottom: 1px solid #777
+    }
+    #index-banner:before, #index-banner:after {
+        width: 60px;
+        height: 300px;
+        content: url(/Statocles/theme/images/column.png);
+    }
+    #index-banner:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #index-banner:after {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    #index-banner h1 {
+        padding-top: 1em;
+        text-transform: uppercase;
+        font-size: 72px;
+        text-align: center;
+    }
+    #index-banner h1 small {
+        display: block;
+        font-size: 24px;
+    }
+
+    #index-banner .latest-release {
+        text-align: center;
+    }
+
+</style>
+
+    </head>
+    <body>
+        <header>
+            <nav class="navbar">
+                <div class="container">
+                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <ul>
+                        <li>
+                            <a href="/Statocles/blog">Blog</a>
+                        </li>
+                        <li>
+                            <a href="/Statocles/pod">Docs</a>
+                        </li>
+                        <li>
+                            <a href="/Statocles/gallery">Gallery</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles">Code</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles/issues">Bugs</a>
+                        </li>
+                        <li>
+                            <a href="http://metacpan.org/pod/Statocles">CPAN</a>
+                        </li>
+                        <li>
+                            <a href="https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">IRC</a>
+                        </li>
+                    </ul>
+                    
+                </div>
+            </nav>
+            <a href="https://github.com/preaction/Statocles"><img alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; z-index: 1000; border: 0;"></a>
+
+        </header>
+        <div class="main container">
+            <div class="crumbtrail">
+<ul>
+    <li>
+        <a href="/Statocles/pod/Statocles/">Statocles</a>
+    </li>
+    <li>
+        <a href="/Statocles/pod/Statocles/Base/">Base</a>
+    </li>
+</ul>
+(<a href="/Statocles/pod/Statocles/Base/source.html">source</a>)
+</div>
+<h1 id="NAME">NAME</h1>
+
+<p>Statocles::Base - Base module for Statocles modules</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>    package MyModule;
+    use Statocles::Base;
+
+    use Statocles::Base &#39;Class&#39;;
+    use Statocles::Base &#39;Role&#39;;
+    use Statocles::Base &#39;Test&#39;;</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>This is the base module that all Statocles modules should use.</p>
+
+<h1 id="MODULES">MODULES</h1>
+
+<p>This module always imports the following into your namespace:</p>
+
+<dl>
+
+<dt><a href="/Statocles/pod/Statocles/">Statocles</a></dt>
+<dd>
+
+<p>The base module is imported to make sure that <a href="https://metacpan.org/pod/File::Share" rel="external">File::Share</a> can find the right share directory.</p>
+
+</dd>
+<dt><a href="https://metacpan.org/pod/strict" rel="external">strict</a></dt>
+<dd>
+
+</dd>
+<dt><a href="https://metacpan.org/pod/warnings" rel="external">warnings</a></dt>
+<dd>
+
+</dd>
+<dt><a href="https://metacpan.org/pod/feature" rel="external">feature</a></dt>
+<dd>
+
+<p>Currently the 5.10 feature bundle</p>
+
+</dd>
+<dt><a href="https://metacpan.org/pod/Path::Tiny" rel="external">Path::Tiny</a> qw( path rootdir )</dt>
+<dd>
+
+<p>We do a lot of work with the filesystem.</p>
+
+</dd>
+<dt><a href="https://metacpan.org/pod/Time::Piece" rel="external">Time::Piece</a></dt>
+<dd>
+
+</dd>
+</dl>
+
+<h1 id="BUNDLES">BUNDLES</h1>
+
+<p>The following bundles are available. You may import one or more of these by name.</p>
+
+<h2 id="Class">Class</h2>
+
+<p>The class bundle makes your package into a class and includes:</p>
+
+<dl>
+
+<dt><a href="https://metacpan.org/pod/Moo" rel="external">Moo</a></dt>
+<dd>
+
+</dd>
+<dt><a href="https://metacpan.org/pod/Types::Standard" rel="external">Types::Standard</a> &#39;:all&#39;</dt>
+<dd>
+
+</dd>
+<dt><a href="https://metacpan.org/pod/Types::Path::Tiny" rel="external">Types::Path::Tiny</a> &#39;:all&#39;</dt>
+<dd>
+
+</dd>
+<dt><a href="/Statocles/pod/Statocles/Types/">Statocles::Types</a> &#39;:all&#39;</dt>
+<dd>
+
+</dd>
+</dl>
+
+<h2 id="Role">Role</h2>
+
+<p>The role bundle makes your package into a role and includes:</p>
+
+<dl>
+
+<dt><a href="https://metacpan.org/pod/Moo::Role" rel="external">Moo::Role</a></dt>
+<dd>
+
+</dd>
+<dt><a href="https://metacpan.org/pod/Types::Standard" rel="external">Types::Standard</a> &#39;:all&#39;</dt>
+<dd>
+
+</dd>
+<dt><a href="https://metacpan.org/pod/Types::Path::Tiny" rel="external">Types::Path::Tiny</a> &#39;:all&#39;</dt>
+<dd>
+
+</dd>
+<dt><a href="/Statocles/pod/Statocles/Types/">Statocles::Types</a> &#39;:all&#39;</dt>
+<dd>
+
+</dd>
+</dl>
+
+<h2 id="Test">Test</h2>
+
+<p>The test bundle includes:</p>
+
+<dl>
+
+<dt><a href="https://metacpan.org/pod/Test::More" rel="external">Test::More</a></dt>
+<dd>
+
+</dd>
+<dt><a href="https://metacpan.org/pod/Test::Deep" rel="external">Test::Deep</a></dt>
+<dd>
+
+</dd>
+<dt><a href="https://metacpan.org/pod/Test::Differences" rel="external">Test::Differences</a></dt>
+<dd>
+
+</dd>
+<dt><a href="https://metacpan.org/pod/Test::Exception" rel="external">Test::Exception</a></dt>
+<dd>
+
+</dd>
+<dt><a href="https://metacpan.org/pod/Dir::Self" rel="external">Dir::Self</a> &#39;__DIR__&#39;</dt>
+<dd>
+
+</dd>
+<dt><a href="https://metacpan.org/pod/Path::Tiny" rel="external">Path::Tiny</a> &#39;path&#39;, &#39;tempdir&#39;</dt>
+<dd>
+
+</dd>
+<dt><a href="/Statocles/pod/Statocles/Test/">Statocles::Test</a></dt>
+<dd>
+
+<p>Some common test routines for Statocles.</p>
+
+</dd>
+<dt><a href="/Statocles/pod/Statocles/Site/">Statocles::Site</a></dt>
+<dd>
+
+<p>In order to have logging, a site object must be created.</p>
+
+</dd>
+</dl>
+
+<h1 id="SEE-ALSO">SEE ALSO</h1>
+
+<dl>
+
+<dt><a href="https://metacpan.org/pod/Import::Base" rel="external">Import::Base</a></dt>
+<dd>
+
+</dd>
+</dl>
+
+
+
+        </div>
+        <footer>
+            <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61295159-3', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+            <div class="container tagline">
+                <a href="http://preaction.github.io/Statocles">Made with Statocles</a><br>
+                <a href="http://www.perl.org">Powered by Perl</a>
+            </div>
+        </footer>
+    </body>
+</html>

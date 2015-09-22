@@ -6,6 +6,7 @@
         <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <title>Statocles</title>
+        <meta content="Statocles 0.055" name="generator">
         <link href="/Statocles/blog/tag/release.atom" rel="alternate" type="application/atom+xml">
         <link href="/Statocles/blog/tag/release.rss" rel="alternate" type="application/rss+xml">
         <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
@@ -100,6 +101,37 @@
 
             <article>
                 <header>
+                    <h1><a href="/Statocles/blog/2015/06/28/release-v0-050/">Release v0.050</a></h1>
+
+                    <p class="tags">Tags:
+                        <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
+                    </p>
+
+                    <aside>
+                        <p><time datetime="2015-06-28">
+                            Posted on 2015-06-28
+                        </time>
+                        <a data-disqus-identifier="/2015/06/28/release-v0-050/index.markdown" href="/Statocles/blog/2015/06/28/release-v0-050/#disqus_thread">0 comments</a>
+                        </p>
+                    </aside>
+
+                </header>
+
+                <p>Some minor doc fixes, and a fix to ensure that all links are properly rewritten
+to include the site base URL.</p>
+
+<p>Also, a reverse from the last release that added an annoying background color
+to the footer of the default theme (and, by extention, any theme extended from
+the default theme).</p>
+
+<p>Full changelog below...</p>
+
+
+                    <p><a href="/Statocles/blog/2015/06/28/release-v0-050/#section-2">Continue reading Release v0.050...</a></p>
+
+            </article>
+            <article>
+                <header>
                     <h1><a href="/Statocles/blog/2015/06/23/release-v0-049/">Release v0.049</a></h1>
 
                     <p class="tags">Tags:
@@ -110,13 +142,14 @@
                         <p><time datetime="2015-06-23">
                             Posted on 2015-06-23
                         </time>
+                        <a data-disqus-identifier="/2015/06/23/release-v0-049/index.markdown" href="/Statocles/blog/2015/06/23/release-v0-049/#disqus_thread">0 comments</a>
                         </p>
                     </aside>
 
                 </header>
 
                 <p>A quick couple of bugfixes to solve an ongoing problem at $work. It turns out that
-using <a href="/Statocles/pod/Statocles/App/Plain.html">the plain app</a> as the index app was contingent
+using <a href="/Statocles/pod/Statocles/App/Plain">the plain app</a> as the index app was contingent
 on the filesystem&#39;s ordering or some other unpredictable thing. Now, this is fixed,
 so the plain app can be safely used as the index.</p>
 
@@ -143,6 +176,7 @@ version</a>.</p>
                         <p><time datetime="2015-06-22">
                             Posted on 2015-06-22
                         </time>
+                        <a data-disqus-identifier="/2015/06/22/release-v0-048/index.markdown" href="/Statocles/blog/2015/06/22/release-v0-048/#disqus_thread">0 comments</a>
                         </p>
                     </aside>
 
@@ -156,7 +190,7 @@ must update your themes to grab the new feed templates.</p>
 
 <p>To fix a long-standing bug with blog content not showing up correctly on the
 list pages (index, tag lists), the
-<a href="/Statocles/pod/Statocles/Page/ListItem.html">Statocles::Page::ListItem</a> class was added.
+<a href="/Statocles/pod/Statocles/Page/ListItem">Statocles::Page::ListItem</a> class was added.
 This class proxies another page and rewrites its content to survive intact
 inside a list page.</p>
 
@@ -165,7 +199,7 @@ inside a list page.</p>
 <p>External perldoc links are now explicitly labelled as such with a
 <a href="http://fontawesome.io">FontAwesome</a> icon.</p>
 
-<p>Some doc updates to start documenting the <a href="/Statocles/pod/Statocles/App.html">App API</a>.</p>
+<p>Some doc updates to start documenting the <a href="/Statocles/pod/Statocles/App">App API</a>.</p>
 
 <p>Full changelog below...</p>
 
@@ -185,6 +219,7 @@ inside a list page.</p>
                         <p><time datetime="2015-06-03">
                             Posted on 2015-06-03
                         </time>
+                        <a data-disqus-identifier="/2015/06/03/release-v0-047/index.markdown" href="/Statocles/blog/2015/06/03/release-v0-047/#disqus_thread">0 comments</a>
                         </p>
                     </aside>
 
@@ -195,9 +230,9 @@ users from upgrading from previous versions due to a test failure.</p>
 
 <p>Most importantly, pagination in the blog is working again.</p>
 
-<p>Some additions to the <a href="/Statocles/pod/Statocles/Help/Content.html">Content help guide</a>
+<p>Some additions to the <a href="/Statocles/pod/Statocles/Help/Content">Content help guide</a>
 about a the new features over the last few releases, and one new feature adding
-a <code>data</code> attribute to <a href="/Statocles/pod/Statocles/Document.html">Statocles::Document</a>,
+a <code>data</code> attribute to <a href="/Statocles/pod/Statocles/Document">Statocles::Document</a>,
 which allows for fun things when generating content.</p>
 
 <p>Finally, some of our dependencies have been removed, since their functionality
@@ -222,6 +257,7 @@ ourselves).</p>
                         <p><time datetime="2015-05-24">
                             Posted on 2015-05-24
                         </time>
+                        <a data-disqus-identifier="/2015/05/24/release-v0-046/index.markdown" href="/Statocles/blog/2015/05/24/release-v0-046/#disqus_thread">0 comments</a>
                         </p>
                     </aside>
 
@@ -232,8 +268,8 @@ ourselves).</p>
 <p>Page objects now have a generic &quot;data&quot; attribute. This allows adding miscellaneous
 extra information to the Page, which is then available to the template.</p>
 
-<p>Using this, the <a href="/Statocles/pod/Statocles/App/Perldoc.html">Perldoc app</a> now has a crumbtrail
-and a link to the module source, and the <a href="/Statocles/pod/Statocles/App/Blog.html">blog app</a> can
+<p>Using this, the <a href="/Statocles/pod/Statocles/App/Perldoc">Perldoc app</a> now has a crumbtrail
+and a link to the module source, and the <a href="/Statocles/pod/Statocles/App/Blog">blog app</a> can
 now have introductory text for the tags that show up on the tag page.</p>
 
 <p>There were some changes to the default theme to make extending it a bit easier.</p>
@@ -245,8 +281,8 @@ body is less surprising.</li>
 to the columns looks better.</li>
 </ul>
 
-<p>Finally, a <a href="/Statocles/pod/Statocles/Document.html">document</a> is now allowed to override its
-template and layout. The <a href="/Statocles/pod/Statocles/Page/Document.html">document page</a> uses
+<p>Finally, a <a href="/Statocles/pod/Statocles/Document">document</a> is now allowed to override its
+template and layout. The <a href="/Statocles/pod/Statocles/Page/Document">document page</a> uses
 the document template to override the template provided by the app.</p>
 
 <p>Because of this, we can now allow extra pages in blog posts. Just put the extra page
@@ -256,45 +292,6 @@ inside the blog post&#39;s directory.</p>
 
 
                     <p><a href="/Statocles/blog/2015/05/24/release-v0-046/#section-2">Continue reading Release v0.046...</a></p>
-
-            </article>
-            <article>
-                <header>
-                    <h1><a href="/Statocles/blog/2015/04/16/release-v0-045/">Release v0.045</a></h1>
-
-                    <p class="tags">Tags:
-                        <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
-                    </p>
-
-                    <aside>
-                        <p><time datetime="2015-04-16">
-                            Posted on 2015-04-16
-                        </time>
-                        </p>
-                    </aside>
-
-                </header>
-
-                <p>A couple small changes in this release:</p>
-
-<p>Blog posts are now allowed to have images inside the post directory. This makes
-it a lot easier to add images to blogs. You don&#39;t need to configure a global
-<code>/images</code> directory. You can put your image in <code>/blog/YYYY/MM/DD/post-title</code>.
-Even better, you get to refer to it in your post as <code>![](image.jpg)</code>.</p>
-
-<p>The <a href="/Statocles/pod/Statocles/Plugin/LinkCheck.html">link check plugin</a> now correctly finds
-links the URL encoded characters.</p>
-
-<p>The recent posts helper now allows filtering by tag, if, for example, you want to
-display only the last <code>release</code> blog and not any other blog post.</p>
-
-<p><code>statocles daemon</code> now allows setting <code>-p &lt;port&gt;</code>, in case port 3000 is in-use, or
-you need to run multiple instances.</p>
-
-<p>Full changelog below:</p>
-
-
-                    <p><a href="/Statocles/blog/2015/04/16/release-v0-045/#section-2">Continue reading Release v0.045...</a></p>
 
             </article>
         </main>
@@ -336,6 +333,16 @@ you need to run multiple instances.</p>
     </div>
 
 </div>
+
+<script type="text/javascript">
+    var disqus_shortname = 'statocles';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
 
         </div>
         <footer>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+        <title>Statocles</title>
+        <meta content="Statocles 0.055" name="generator">
+        <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
+<style>
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Forum', sans-serif;
+        font-weight: bold;
+    }
+
+    #index-banner {
+        font-family: 'Forum', sans-serif;
+        height: 300px;
+        position: relative;
+        margin-bottom: 1em;
+        border-bottom: 1px solid #777
+    }
+    #index-banner:before, #index-banner:after {
+        width: 60px;
+        height: 300px;
+        content: url(/Statocles/theme/images/column.png);
+    }
+    #index-banner:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #index-banner:after {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    #index-banner h1 {
+        padding-top: 1em;
+        text-transform: uppercase;
+        font-size: 72px;
+        text-align: center;
+    }
+    #index-banner h1 small {
+        display: block;
+        font-size: 24px;
+    }
+
+    #index-banner .latest-release {
+        text-align: center;
+    }
+
+</style>
+
+    </head>
+    <body>
+        <header>
+            <nav class="navbar">
+                <div class="container">
+                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <ul>
+                        <li>
+                            <a href="/Statocles/blog">Blog</a>
+                        </li>
+                        <li>
+                            <a href="/Statocles/pod">Docs</a>
+                        </li>
+                        <li>
+                            <a href="/Statocles/gallery">Gallery</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles">Code</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles/issues">Bugs</a>
+                        </li>
+                        <li>
+                            <a href="http://metacpan.org/pod/Statocles">CPAN</a>
+                        </li>
+                        <li>
+                            <a href="https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">IRC</a>
+                        </li>
+                    </ul>
+                    
+                </div>
+            </nav>
+            <a href="https://github.com/preaction/Statocles"><img alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; z-index: 1000; border: 0;"></a>
+
+        </header>
+        <div class="main container">
+            <div class="crumbtrail">
+<ul>
+    <li>
+        <a href="/Statocles/pod/Statocles/">Statocles</a>
+    </li>
+    <li>
+        <a href="/Statocles/pod/">Help</a>
+    </li>
+    <li>
+        <a href="/Statocles/pod/Statocles/Help/Content/">Content</a>
+    </li>
+</ul>
+(<a href="/Statocles/pod/Statocles/Help/Content/source.html">source</a>)
+</div>
+<h1 id="NAME">NAME</h1>
+
+<p>Statocles::Help::Content - How to use Statocles to write content</p>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>This guide describes how to use <a href="https://metacpan.org/pod/statocles" rel="external">the statocles command</a> to manage site content, build, test, and deploy the site.</p>
+
+<h1 id="BASIC-CONTENT">BASIC CONTENT</h1>
+
+<h2 id="Run-an-App-Command">Run an App Command</h2>
+
+<p>Every application in a Statocles site has a name. The name is the key in the <a href="/Statocles/pod/Statocles/Site/">site object&#39;s</a> <code>apps</code> attribute in the <a href="/Statocles/pod/Statocles/Help/Config/">site.yml config file</a>. We can use that name to access the app&#39;s command-line commands.</p>
+
+<p>Not all applications have or need commands. See <a href="/Statocles/pod/Statocles/App#SEE-ALSO/">the application documentation</a> for more information.</p>
+
+<h3 id="Create-a-Blog-Post">Create a Blog Post</h3>
+
+<p>To create a new blog post using <a href="/Statocles/pod/Statocles/App/Blog/">the blog app</a>, we can use the <code>post</code> command:</p>
+
+<pre><code>    $ statocles blog post Snickerdoodles
+    New post at: blog/2014/06/04/snickerdoodles</code></pre>
+
+<p>Everything after <code>post</code> will be used as the title of the post.</p>
+
+<p>If you have the <code>EDITOR</code> environment variable set, your editor will automatically open on the newly-created document.</p>
+
+<h3 id="Create-a-Page">Create a Page</h3>
+
+<p>To create a page using <a href="/Statocles/pod/Statocles/App/Basic/">the basic app</a>, we just have to create a new file:</p>
+
+<pre><code>    ### Create /page/index.html
+    $ vim page/index.markdown
+
+    ### Create /page/about/index.html
+    $ mkdir page/about
+    $ vim page/about/index.markdown
+
+    ### Create /page/resume.html
+    $ vim page/resume.markdown</code></pre>
+
+<h2 id="Frontmatter">Frontmatter</h2>
+
+<p>Statocles documents start out with a block of YAML, called the frontmatter. This header holds metadata about the document, such as the title, author, date, tags, and other information.</p>
+
+<pre><code>    ---
+    title: Snickerdoodles
+    author: preaction
+    tags: cookies, cinnamon
+    ---</code></pre>
+
+<p>Frontmatter is optional, but it&#39;s recommended that you have at least a title. Available frontmatter options are listed in the <a href="/Statocles/pod/Statocles/Document#ATTRIBUTES/">Statocles::Document attributes documentation</a>.</p>
+
+<h2 id="Markdown">Markdown</h2>
+
+<p>Below the frontmatter, after the second <code>---</code>, everything is <a href="http://daringfireball.net/projects/markdown/syntax" rel="external">Markdown</a>, a simple, text-based language that will be generated into HTML.</p>
+
+<pre><code>    # Snickerdoodles
+
+    Snickerdoodles are a simple, chewy, cinnamon cookie.
+
+    ## Ingredients
+
+    * 1/2 c butter
+    * 1 c sugar</code></pre>
+
+<p>This will be parsed into</p>
+
+<pre><code>    &lt;h1&gt;Snickerdoodles&lt;/h1&gt;
+
+    &lt;p&gt;Snickerdoodles are a simple, chewy, cinnamon cookie.&lt;/p&gt;
+
+    &lt;h2&gt;Ingredients&lt;/h2&gt;
+
+    &lt;ul&gt;
+        &lt;li&gt;1/2 c butter&lt;/li&gt;
+        &lt;li&gt;1 c sugar&lt;/li&gt;
+    &lt;/ul&gt;</code></pre>
+
+<p>Markdown has some simple formatting for basic things. For more advanced needs, you can embed raw HTML directly. See <a href="http://daringfireball.net/projects/markdown/syntax" rel="external">the Markdown website</a> for full documentation on Markdown syntax.</p>
+
+<h2 id="Build-The-Site">Build The Site</h2>
+
+<pre><code>    $ statocles build</code></pre>
+
+<p>Running the <code>build</code> command will write all our pages to the <code>.statocles-build</code> directory. We can open up this directory and look at the files to make sure that our deploy will be correct.</p>
+
+<h2 id="Test-The-Site">Test The Site</h2>
+
+<pre><code>    $ statocles daemon
+    Listening on http://*:3000</code></pre>
+
+<p>Run the <code>daemon</code> command to start an HTTP server to view your built site. This will automatically build the site, so if you forgot to run <code>build</code>, don&#39;t worry.</p>
+
+<p>If you edit any content, running <code>build</code> again will update the site. On Mac OS X, editing any content will automatically rebuild the site.</p>
+
+<h2 id="Commit-Your-Changes">Commit Your Changes</h2>
+
+<pre><code>    $ git add blog/2014/06/04/my-first-post.markdown
+    $ git commit -m&#39;My first post&#39;</code></pre>
+
+<p>Once the build looks good, we&#39;ll want to commit our changes. The major feature of having a website in a git repository is change tracking.</p>
+
+<h2 id="Deploy-The-Site">Deploy The Site</h2>
+
+<pre><code>    $ statocles deploy</code></pre>
+
+<p>Running the <code>deploy</code> command will, in the case of the Git deploy, commit the updated pages to the Git repository. <code>deploy</code> will try to do a <code>git push</code> automatically, so your changes are now live on Github Pages!</p>
+
+<h1 id="ADVANCED-FEATURES">ADVANCED FEATURES</h1>
+
+<p>Most of the content in a Statocles site consists of <a href="/Statocles/pod/Statocles/Document/">documents</a>. This section explains some of the options available when writing documents.</p>
+
+<h2 id="Content-Sections">Content Sections</h2>
+
+<p>After the frontmatter, you can use <code>---</code> to divide the document into sections. This may have meaning for an app. For example, <a href="/Statocles/pod/Statocles/App/Blog/">the blog app</a> shows only the first content section on the index page, tag pages, and feeds, hiding the rest of the post behind a &quot;Continue reading&quot; link.</p>
+
+<pre><code>    ---
+    title: My Long Post
+    ---
+
+    # A Long Post
+
+    This is a long post. Since I don&#39;t want you to have to skip past all the content,
+    I will instead put a &quot;Read more&quot; link below.
+
+    ---
+
+    Turns out this isn&#39;t that long of a post. Made you click!</code></pre>
+
+<h2 id="Custom-Template-and-Layout">Custom Template and Layout</h2>
+
+<p>Every document can have its own custom template and layout. This allows you to have multiple kinds of posts in a blog, or additional customization for particular pages.</p>
+
+<p>You can specify a custom template or layout by using the <code>template</code> or <code>layout</code> key in the frontmatter:</p>
+
+<pre><code>    ---
+    title: Chocolate-Chip Cookies
+    template: document/recipe.html
+    ---
+
+    # Chocolate-Chip Cookies
+
+    This is really the best cookie ever!</code></pre>
+
+<p>When the page is created, the <code>document/recipe.html.ep</code> template will be read from the <a href="/Statocles/pod/Statocles/Help/Theme/">theme directory</a>.</p>
+
+<h2 id="Generated-Content">Generated Content</h2>
+
+<p>All documents are also run through <a href="/Statocles/pod/Statocles/Help/Theme#Writing-a-Template/">the template processor</a>, so we have access to <a href="/Statocles/pod/Statocles/Help/Theme#Helpers/">template helpers</a>, but we can also generate our content from the document&#39;s frontmatter data.</p>
+
+<pre><code>    ---
+    title: Cheddar Cheese Sauce
+    data:
+        ingredients:
+            - 1 tbsp flour
+            - 1 tbsp butter
+            - 1 c milk
+            - 2 c cheddar cheese
+    ---
+
+    % for my $ingredient ( @{ $self-&gt;data-&gt;{ingredients} } ) {
+    * &lt;%= $ingredient %&gt;&lt;/li&gt;
+    % }</code></pre>
+
+<p>Since this template is generated before the Markdown is parsed, you can generate HTML or Markdown from your template.</p>
+
+<p>When the content is being generated, you have access to the following variables:</p>
+
+<dl>
+
+<dt><code>$self</code> - The current <a href="/Statocles/pod/Statocles/Document/">document object</a></dt>
+<dd>
+
+</dd>
+<dt><code>$site</code> - The current <a href="/Statocles/pod/Statocles/Site/">site object</a></dt>
+<dd>
+
+</dd>
+<dt><code>$app</code> - The current <a href="/Statocles/pod/Statocles/App/">app object</a></dt>
+<dd>
+
+</dd>
+</dl>
+
+<h1 id="SEE-ALSO">SEE ALSO</h1>
+
+<dl>
+
+<dt><a href="/Statocles/pod/Statocles/Document/">Statocles::Document</a></dt>
+<dd>
+
+<p>These objects are created from document files.</p>
+
+</dd>
+</dl>
+
+
+
+        </div>
+        <footer>
+            <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61295159-3', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+            <div class="container tagline">
+                <a href="http://preaction.github.io/Statocles">Made with Statocles</a><br>
+                <a href="http://www.perl.org">Powered by Perl</a>
+            </div>
+        </footer>
+    </body>
+</html>

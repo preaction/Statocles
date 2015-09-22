@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+        <title>Statocles</title>
+        <meta content="Statocles 0.055" name="generator">
+        <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
+<style>
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Forum', sans-serif;
+        font-weight: bold;
+    }
+
+    #index-banner {
+        font-family: 'Forum', sans-serif;
+        height: 300px;
+        position: relative;
+        margin-bottom: 1em;
+        border-bottom: 1px solid #777
+    }
+    #index-banner:before, #index-banner:after {
+        width: 60px;
+        height: 300px;
+        content: url(/Statocles/theme/images/column.png);
+    }
+    #index-banner:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #index-banner:after {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    #index-banner h1 {
+        padding-top: 1em;
+        text-transform: uppercase;
+        font-size: 72px;
+        text-align: center;
+    }
+    #index-banner h1 small {
+        display: block;
+        font-size: 24px;
+    }
+
+    #index-banner .latest-release {
+        text-align: center;
+    }
+
+</style>
+
+    </head>
+    <body>
+        <header>
+            <nav class="navbar">
+                <div class="container">
+                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <ul>
+                        <li>
+                            <a href="/Statocles/blog">Blog</a>
+                        </li>
+                        <li>
+                            <a href="/Statocles/pod">Docs</a>
+                        </li>
+                        <li>
+                            <a href="/Statocles/gallery">Gallery</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles">Code</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles/issues">Bugs</a>
+                        </li>
+                        <li>
+                            <a href="http://metacpan.org/pod/Statocles">CPAN</a>
+                        </li>
+                        <li>
+                            <a href="https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">IRC</a>
+                        </li>
+                    </ul>
+                    
+                </div>
+            </nav>
+            <a href="https://github.com/preaction/Statocles"><img alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; z-index: 1000; border: 0;"></a>
+
+        </header>
+        <div class="main container">
+            <a class="button" href="/Statocles/pod/Statocles/Help/Config/">
+    Back to documentation
+</a>
+<pre># PODNAME: Statocles::Help::Config
+# ABSTRACT: A guide to configuring a Statocles site
+
+=head1 DESCRIPTION
+
+This document describes how to set up a simple blog web site suitable to
+be deployed to GitHub Pages using Statocles.
+
+This document explains how to build a configuration file without using
+the C&lt;statocles create&gt; command.
+
+=head1 Building site.yml - The Main Configuration File
+
+Statocles uses L&lt;Beam::Wire|Beam::Wire&gt;, a dependency-injection module, for
+configuration. The format is L&lt;YAML|http://yaml.org&gt; and contains the data
+needed to build the objects: Arguments to the object&#39;s constructor.  This means
+that any C&lt;ATTRIBUTES&gt; defined in the documentation can be used in the
+configuration file.
+
+The configuration file is, by default, called C&lt;site.yml&gt;. See
+L&lt;the statocles command documentation|statocles&gt; if you want to have multiple
+site configuration files.
+
+=head2 A Source
+
+Statocles takes simple, YAML-and-Markdown-formatted
+L&lt;document|Statocles::Document&gt; files and builds HTML pages out of them.
+
+So we need a place to put our source documents. A L&lt;store|Statocles::Store&gt;
+fills multiple roles relating to reading and writing files. Right now, we need
+it to hold on to our blog posts. We&#39;ll put our blog posts in the C&lt;blog&gt;
+directory.
+
+    $ mkdir blog
+
+The L&lt;blog application|Statocles::App::Blog&gt; will use this store to add new
+blog posts and build web pages from the documents in the C&lt;blog&gt; directory.
+More on that later.
+
+=head2 An App
+
+A L&lt;Statocles app|Statocles::App&gt; is the driver that turns documents into
+L&lt;pages|Statocles::Page&gt;. To build pages, we need a store full of documents. We
+define our store with the string C&lt;blog&gt;, which will get magically coerced into
+a L&lt;store object|Statocles::Store&gt;.
+
+Since we&#39;re building a blog site, we&#39;ll use the
+L&lt;Statocles blog app|Statocles::App::Blog&gt;:
+
+    # site.yml
+    blog_app:
+        class: Statocles::App::Blog
+        args:
+            url_root: /blog
+            store: &#39;blog&#39;
+
+We put our blog app under the root URL C&lt;/blog&gt;. All pages that come from this
+app will start with C&lt;/blog&gt; (except the index page, we&#39;ll move that to
+C&lt;/&gt;, later).
+
+=head2 A Deploy
+
+To deploy our site to Github, we need to build a L&lt;deploy
+object|Statocles::Deploy&gt; for Git repositories using
+L&lt;Statocles::Deploy::Git|Statocles::Deploy::Git&gt;. Our deploy object will copy
+our built pages into the Git repository and commit them. Our deploy will happen
+in the root directory of our site on the C&lt;gh-pages&gt; branch.
+
+    # site.yml
+    github_deploy:
+        class: Statocles::Deploy::Git
+        args:
+            branch: gh-pages
+
+Though we are going to deploy to Git, we could also deploy to SFTP or FTP or
+transfer the pages to a CDN. See L&lt;Statocles::Help::Deploy&gt; for more information.
+
+=head2 A Theme
+
+We could set up a theme (L&lt;Statocles::Theme|Statocles::Theme&gt;) to change how
+our site looks, but for now, we&#39;ll use the C&lt;default&gt; theme included with
+Statocles. See L&lt;Statocles::Help::Theme&gt; for information on how to change and
+customize your theme.
+
+=head2 A Site
+
+Now that we&#39;re ready, we can tie it all together. A L&lt;site|Statocles::Site&gt; is
+a collection of apps that build and deploy to the same place.
+
+    # site.yml
+    site:
+        class: Statocles::Site
+        args:
+            apps:
+                blog:
+                    $ref: blog_app
+            deploy:
+                $ref: github_deploy
+            title: My Site
+            index: /blog
+            nav:
+                main:
+                    - title: Blog
+                      href: /
+
+When adding apps to our site, we give them a name (in this case C&lt;blog&gt;) so
+that we can refer to them on the command-line (later).
+
+As part of the default template, we can provide a site C&lt;title&gt;.
+
+The C&lt;index&gt; attribute gives the path to the page to use as our index page.
+Since the blog&#39;s C&lt;url_root&gt; is C&lt;/blog&gt;, this will move the main blog page
+to the main site index C&lt;/&gt;.
+
+Finally, we can define a C&lt;nav&gt; list, again giving a name: C&lt;main&gt;. The
+default template uses the C&lt;main&gt; nav across the top.
+
+=head2 The Complete site.yml
+
+Combine it all together and you get this. Feel free to copy and paste to start
+your own site.
+
+    # site.yml
+    blog_app:
+        class: Statocles::App::Blog
+        args:
+            url_root: /blog
+            store: &#39;blog&#39;
+
+    github_deploy:
+        class: Statocles::Deploy::Git
+        args:
+            branch: gh-pages
+
+    site:
+        class: Statocles::Site
+        args:
+            apps:
+                blog:
+                    $ref: blog_app
+            deploy:
+                $ref: github_deploy
+            title: My Site
+            index: /blog
+            nav:
+                main:
+                    - title: Blog
+                      href: /
+
+B&lt;NOTE:&gt; One of the most useful things about using a dependency injection
+module is that you can easily plug-in your own classes. If you want to use your
+own template format, you can build your own Statocles::Theme class that
+provides a different kind of Statocles::Template object and use that instead.
+If you want to use your own document format, you can make your own
+Statocles::Store class that reads from a database.
+
+=head1 The C&lt;statocles&gt; Command
+
+Now that we have a C&lt;site.yml&gt;, we can run the L&lt;statocles|statocles&gt; command
+to manage our site.
+
+See L&lt;Statocles::Help::Content&gt; for more information about editing the site&#39;s
+content.
+
+=head1 Adding More Apps
+
+In addition to our blog app, we also want to add some plain Markdown content, and some
+images.
+
+=head2 Basic Pages
+
+For basic pages with no structure or extras, there is the L&lt;basic app:
+Statocles::App::Basic|Statocles::App::Basic&gt;. The basic app takes the same
+YAML-and-Markdown-formatted documents as the blog app and creates HTML pages,
+without the lists, tags, and feeds the blog generates.
+
+Like the blog, we need a store to find our documents. This time, we&#39;ll use the
+root directory of our repository, C&lt;.&gt;. Finally, we&#39;ll need a URL root. Since
+we&#39;re using the root directory for our documents, we&#39;ll use the root URL for
+our destination C&lt;/&gt;.
+
+    # site.yml
+    basic_app:
+        class: Statocles::App::Basic
+        args:
+            url_root: &#39;/&#39;
+            store: &#39;.&#39;
+
+Now we just need to add this app to our site, but before we do, we&#39;ll create an
+app for our static files.
+
+=head2 Static Files
+
+Lastly, we wanted a place to put any file at all. No processing. No templates.
+Just a simple copy from one store to another. For this one, we&#39;ll put
+everything in the C&lt;/static&gt; directory, and give a URL root to match.
+
+    # site.yml
+    static_app:
+        class: Statocles::App::Static
+        args:
+            url_root: &#39;/static&#39;
+            store: &#39;static&#39;
+
+=head2 Add the New Apps
+
+To enable the new apps, we just need to add them to the site&#39;s C&lt;apps&gt;.
+
+    # site.yml
+    site:
+        class: Statocles::Site
+        args:
+            apps:
+                blog:
+                    $ref: blog_app
+                basic:
+                    $ref: basic_app
+                static:
+                    $ref: static_app
+            deploy:
+                $ref: github_deploy
+            title: My Site
+            index: /blog
+            nav:
+                main:
+                    - title: Blog
+                      href: /
+
+=head2 Add Basic Content
+
+Now, we just need some content for our basic app to deploy. The basic app uses the same
+format as the blog, so we need a YAML header followed by some Markdown content:
+
+Create a file named C&lt;about.markdown&gt; with the following content:
+
+    ---
+    title: About
+    ---
+    # About Me
+
+    This is a personal website!
+
+Then, run C&lt;statocles daemon&gt; to test the new page.
+
+Now we should probably make a link in our main nav to the new about page:
+
+    # site.yml
+    site:
+        class: Statocles::Site
+        args:
+            apps:
+                blog:
+                    $ref: blog_app
+                basic:
+                    $ref: basic_app
+                static:
+                    $ref: static_app
+            deploy:
+                $ref: github_deploy
+            title: My Site
+            index: /blog
+            nav:
+                main:
+                    - title: Blog
+                      href: /
+                    - title: About
+                      href: /about.html
+
+Now, if we run C&lt;statocles build&gt; again, we can see the link in our header.
+
+=head2 The Complete site.yml - With More Apps
+
+Along with the blog app and our other settings, here is our new, complete site.yml:
+
+    # site.yml
+    blog_app:
+        class: Statocles::App::Blog
+        args:
+            url_root: /blog
+            store: &#39;blog&#39;
+
+    basic_app:
+        class: Statocles::App::Basic
+        args:
+            url_root: &#39;/&#39;
+            store: &#39;.&#39;
+
+    static_app:
+        class: Statocles::App::Static
+        args:
+            url_root: &#39;/static&#39;
+            store: &#39;static&#39;
+
+    github_deploy:
+        class: Statocles::Deploy::Git
+        args:
+            branch: gh-pages
+
+    site:
+        class: Statocles::Site
+        args:
+            apps:
+                blog:
+                    $ref: blog_app
+                basic:
+                    $ref: basic_app
+                static:
+                    $ref: static_app
+
+            deploy:
+                $ref: github_deploy
+
+            title: My Site
+            index: /blog
+            nav:
+                main:
+                    - title: Blog
+                      href: /
+                    - title: About
+                      href: /about.html
+
+If we&#39;re satisfied with our new About page, we can deploy our site with
+C&lt;statocles deploy&gt;.
+
+=head1 DEFAULT THEME FEATURES
+
+There are special features built-in to all default themes that can be enabled
+by adding C&lt;data&gt; sections to the site object or app objects.
+
+=over 4
+
+=item Disqus
+
+Disqus is a free, hosted comment system that can be easily added to static
+sites to provide some user interaction.
+
+To add L&lt;Disqus comments|http://disqus.com&gt; to your blog, add your Disqus
+shortname (from C&lt;http://YOUR_NAME.disqus.com/admin&gt;) to the site data, like
+so:
+
+    # site.yml
+    site:
+        class: Statocles::Site
+        args:
+            # ...
+            data:
+                disqus:
+                    shortname: &#39;YOUR_NAME&#39;
+
+This will add a comments section to the bottom of your blog posts, and show
+the number of comments in the blog list pages.
+
+=over 4
+
+=item *
+
+L&lt;What is a short name?|https://help.disqus.com/customer/portal/articles/466208&gt;
+
+=item *
+
+L&lt;Sign up for Disqus|https://disqus.com/admin/signup/&gt;
+
+=back
+
+=back
+
+=head1 ADVANCED CONFIGURATION
+
+The configuration file is a L&lt;Beam::Wire&gt; container. This means that any
+object attributes (in the C&lt;ATTRIBUTES&gt; section of their documentation)
+can be set from the config file. Some examples are below:
+
+=head2 Custom Markdown
+
+To use a custom Markdown parser, like L&lt;Text::MultiMarkdown&gt;, which has L&lt;some
+extra syntax
+features|https://rawgit.com/fletcher/human-markdown-reference/master/index.html&gt;,
+you can use the L&lt;site object&#39;s C&lt;markdown&gt; attribute|Statocles::Site/markdown&gt;
+to configure a custom object with C&lt;$class&gt; and optional C&lt;$args&gt;:
+
+    # site.yml
+    site:
+        class: Statocles::Site
+        args:
+            # ...
+            markdown:
+                $class: Text::MultiMarkdown
+                $args:
+                    use_metadata: false
+
+=head1 SEE ALSO
+
+=over 4
+
+=item L&lt;Statocles::Help::Content - How to edit content with Statocles|Statocles::Help::Content&gt;
+
+=item L&lt;Statocles::Help::Deploy - How to deploy a Statocles site|Statocles::Help::Deploy&gt;
+
+=item L&lt;Statocles::Help::Theme - How to customize a Statocles theme|Statocles::Help::Theme&gt;
+
+=back
+
+</pre>
+
+        </div>
+        <footer>
+            <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61295159-3', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+            <div class="container tagline">
+                <a href="http://preaction.github.io/Statocles">Made with Statocles</a><br>
+                <a href="http://www.perl.org">Powered by Perl</a>
+            </div>
+        </footer>
+    </body>
+</html>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
+        <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+        <title>Statocles</title>
+        <meta content="Statocles 0.055" name="generator">
+        <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
+<style>
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Forum', sans-serif;
+        font-weight: bold;
+    }
+
+    #index-banner {
+        font-family: 'Forum', sans-serif;
+        height: 300px;
+        position: relative;
+        margin-bottom: 1em;
+        border-bottom: 1px solid #777
+    }
+    #index-banner:before, #index-banner:after {
+        width: 60px;
+        height: 300px;
+        content: url(/Statocles/theme/images/column.png);
+    }
+    #index-banner:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #index-banner:after {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    #index-banner h1 {
+        padding-top: 1em;
+        text-transform: uppercase;
+        font-size: 72px;
+        text-align: center;
+    }
+    #index-banner h1 small {
+        display: block;
+        font-size: 24px;
+    }
+
+    #index-banner .latest-release {
+        text-align: center;
+    }
+
+</style>
+
+    </head>
+    <body>
+        <header>
+            <nav class="navbar">
+                <div class="container">
+                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <ul>
+                        <li>
+                            <a href="/Statocles/blog">Blog</a>
+                        </li>
+                        <li>
+                            <a href="/Statocles/pod">Docs</a>
+                        </li>
+                        <li>
+                            <a href="/Statocles/gallery">Gallery</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles">Code</a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/preaction/Statocles/issues">Bugs</a>
+                        </li>
+                        <li>
+                            <a href="http://metacpan.org/pod/Statocles">CPAN</a>
+                        </li>
+                        <li>
+                            <a href="https://chat.mibbit.com/?channel=%23statocles&amp;server=irc.perl.org">IRC</a>
+                        </li>
+                    </ul>
+                    
+                </div>
+            </nav>
+            <a href="https://github.com/preaction/Statocles"><img alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" style="position: absolute; top: 0; right: 0; z-index: 1000; border: 0;"></a>
+
+        </header>
+        <div class="main container">
+            <a class="button" href="/Statocles/pod/Statocles/App/">
+    Back to documentation
+</a>
+<pre>package Statocles::App;
+# ABSTRACT: Base role for Statocles applications
+
+use Statocles::Base &#39;Role&#39;, &#39;Emitter&#39;;
+use Statocles::Link;
+requires &#39;pages&#39;;
+
+=attr site
+
+The site this app is part of.
+
+=cut
+
+has site =&gt; (
+    is =&gt; &#39;rw&#39;,
+    isa =&gt; InstanceOf[&#39;Statocles::Site&#39;],
+);
+
+=attr data
+
+A hash of arbitrary data available to theme templates. This is a good place to
+put extra structured data like social network links or make easy customizations
+to themes like header image URLs.
+
+=cut
+
+has data =&gt; (
+    is =&gt; &#39;ro&#39;,
+    isa =&gt; HashRef,
+    default =&gt; sub { {} },
+);
+
+=attr url_root
+
+The URL root of this application. All pages from this app will be under this
+root. Use this to ensure two apps do not try to write the same path.
+
+=cut
+
+has url_root =&gt; (
+    is =&gt; &#39;ro&#39;,
+    isa =&gt; Str,
+    required =&gt; 1,
+);
+
+=method pages
+
+    my @pages = $app-&gt;pages;
+
+Get the pages for this app. Must return a list of L&lt;Statocles::Page&gt; objects.
+
+=cut
+
+around pages =&gt; sub {
+    my ( $orig, $self, @args ) = @_;
+    my @pages = $self-&gt;$orig( @args );
+
+    # Add the url_root
+    my $url_root = $self-&gt;url_root;
+    for my $page ( @pages ) {
+        my @url_attrs = qw( path );
+
+        if ( $page-&gt;isa( &#39;Statocles::Page::List&#39; ) ) {
+            push @url_attrs, qw( next prev );
+        }
+
+        for my $attr ( @url_attrs ) {
+            if ( $page-&gt;$attr &amp;&amp; $page-&gt;$attr !~ /^$url_root/ ) {
+                $page-&gt;$attr( join &quot;/&quot;, $url_root, $page-&gt;$attr );
+            }
+        }
+    }
+
+    $self-&gt;emit( &#39;build&#39; =&gt; class =&gt; &#39;Statocles::Event::Pages&#39;, pages =&gt; \@pages );
+
+    return @pages;
+};
+
+=method url
+
+    my $app_url = $app-&gt;url( $path );
+
+Get a URL to a page in this application. Prepends the app&#39;s L&lt;url_root
+attribute|/url_root&gt; if necessary. Strips &quot;index.html&quot; if possible.
+
+=cut
+
+sub url {
+    my ( $self, $url ) = @_;
+    my $base = $self-&gt;url_root;
+    $url =~ s{/index[.]html$}{/};
+
+    # Remove the / from both sides of the join so we don&#39;t double up
+    $base =~ s{/$}{};
+    $url =~ s{^/}{};
+
+    return join &quot;/&quot;, $base, $url;
+}
+
+=method link
+
+    my $link = $app-&gt;link( %args )
+
+Create a link to a page in this application. C&lt;%args&gt; are attributes to be
+given to L&lt;Statocles::Link&gt; constructor. The app&#39;s L&lt;url_root
+attribute|/url_root&gt; is prepended, if necessary.
+
+=cut
+
+sub link {
+    my ( $self, %args ) = @_;
+    my $url_root = $self-&gt;url_root;
+    if ( $args{href} !~ /^$url_root/ ) {
+        $args{href} = $self-&gt;url( $args{href} );
+    }
+    return Statocles::Link-&gt;new( %args );
+}
+
+1;
+__END__
+
+=head1 SYNOPSIS
+
+    package MyApp;
+    use Statocles::Base &#39;Class&#39;;
+    with &#39;Statocles::App&#39;;
+
+    sub pages {
+        return Statocles::Page::Content-&gt;new(
+            path =&gt; &#39;/index.html&#39;,
+            content =&gt; &#39;Hello, World&#39;,
+        );
+    }
+
+=head1 DESCRIPTION
+
+A Statocles App creates a set of L&lt;pages|Statocles::Pages&gt; that can then be
+written to the filesystem (or served directly, if desired).
+
+Pages can be created from L&lt;documents|Statocles::Documents&gt; stored in a
+L&lt;store|Statocles::Store&gt; (see L&lt;Statocles::Page::Document&gt;), files stored in a
+store (see L&lt;Statocles::Page::File&gt;), lists of content (see
+L&lt;Statocles::Page::List&gt;), or anything at all (see
+L&lt;Statocles::Page::Content&gt;).
+
+=head1 EVENTS
+
+All apps by default expose the following events:
+
+=head2 build
+
+This event is fired after the app pages have been prepares and are ready to
+be rendered. This event allows for modifying the pages before they are rendered.
+
+The event will be a
+L&lt;Statocles::Event::Pages|Statocles::Event/Statocles::Event::Pages&gt; object
+containing all the pages prepared by the app.
+
+=head1 INCLUDED APPS
+
+These applications are included with the core Statocles distribution.
+
+=over 4
+
+=item L&lt;Statocles::App::Blog&gt;
+
+=item L&lt;Statocles::App::Basic&gt;
+
+=item L&lt;Statocles::App::Static&gt;
+
+=item L&lt;Statocles::App::Perldoc&gt;
+
+=back
+
+=head1 SEE ALSO
+
+=over 4
+
+=item L&lt;Statocles::Store&gt;
+
+=item L&lt;Statocles::Page&gt;
+
+=back
+
+</pre>
+
+        </div>
+        <footer>
+            <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61295159-3', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+            <div class="container tagline">
+                <a href="http://preaction.github.io/Statocles">Made with Statocles</a><br>
+                <a href="http://www.perl.org">Powered by Perl</a>
+            </div>
+        </footer>
+    </body>
+</html>
