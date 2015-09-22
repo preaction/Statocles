@@ -3,7 +3,7 @@ use Statocles::Base 'Test';
 use Mojo::DOM;
 use Time::Piece;
 use Statocles::App::Blog;
-use Statocles::App::Static;
+use Statocles::App::Basic;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
 
 my $blog = Statocles::App::Blog->new(
@@ -12,16 +12,10 @@ my $blog = Statocles::App::Blog->new(
     page_size => 2,
 );
 
-my $static = Statocles::App::Static->new(
-    store => $SHARE_DIR->child( qw( app static ) ),
-    url_root => '/static',
-);
-
 my ( $site, $build_dir, $deploy_dir ) = build_test_site_apps(
     $SHARE_DIR,
     apps => {
         blog => $blog,
-        static => $static,
     },
     index => '/blog',
     base_url => 'http://example.com',

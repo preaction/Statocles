@@ -68,6 +68,14 @@ with no change to functionality.
 
 The Plain app stub will be removed in v2.000.
 
+=item Statocles::App::Static has been replaced by Statocles::App::Basic
+
+Since every application now has the ability to copy static files, there's no
+real reason to have an app specifically for static files. To host static files
+without bells and whistles, the Basic app can be used.
+
+The Static app will be removed in v2.000.
+
 =back
 
 =head1 BREAKING CHANGES

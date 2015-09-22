@@ -143,7 +143,7 @@ page_app:
 
 # static_app: These are the settings for the static application.
 static_app:
-    class: 'Statocles::App::Static'
+    class: 'Statocles::App::Basic'
     args:
         store: 'static'
         url_root: '/static'

@@ -3,7 +3,7 @@ use Statocles::Base 'Test';
 use Capture::Tiny qw( capture );
 use Statocles::Site;
 use Statocles::Page::Plain;
-use Statocles::App::Static;
+use Statocles::Page::File;
 use Statocles::App::Basic;
 use Mojo::DOM;
 use Test::Lib;
@@ -18,9 +18,15 @@ subtest 'build two pages with same path' => sub {
         url_root => '/',
     );
 
-    my $static = Statocles::App::Static->new(
-        store => $SHARE_DIR->child( qw( app static_index ) ),
+    my $static = TestApp->new(
         url_root => '/',
+        pages => [
+            {
+                class => 'Statocles::Page::File',
+                path => '/index.html',
+                file_path => $SHARE_DIR->child( qw( app basic static.txt ) ),
+            },
+        ],
     );
 
     my ( $site, $build_dir, $deploy_dir ) = build_test_site_apps(

@@ -76,21 +76,14 @@ sub build_test_site_apps {
         );
 
         require Statocles::App::Basic;
-        my $plain = Statocles::App::Basic->new(
+        my $basic = Statocles::App::Basic->new(
             store => $share_dir->child( qw( app basic ) ),
             url_root => '/',
         );
 
-        require Statocles::App::Static;
-        my $static = Statocles::App::Static->new(
-            store => $share_dir->child( qw( app static ) ),
-            url_root => '/static',
-        );
-
         $site_args{apps} = {
             blog => $blog,
-            static => $static,
-            plain => $plain,
+            basic => $basic,
         };
     }
 

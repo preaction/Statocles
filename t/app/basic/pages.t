@@ -7,17 +7,7 @@ my $site = build_test_site(
     theme => $SHARE_DIR->child( 'theme' ),
 );
 
-my $app = Statocles::App::Basic->new(
-    url_root => '/',
-    site => $site,
-    store => $SHARE_DIR->child( qw( app basic ) ),
-    data => {
-        info => "This is some info",
-    },
-);
-
-test_pages(
-    $site, $app,
+my %pages = (
     '/index.html' => sub {
         my ( $html, $dom ) = @_;
         # XXX: Find the layout and template
@@ -33,7 +23,7 @@ test_pages(
         }
 
         if ( ok $node = $dom->at( 'footer #app-info' ) ) {
-            is $node->text, $app->data->{info}, 'app-info is correct';
+            is $node->text, 'This is some info', 'app-info is correct';
         }
 
     },
@@ -58,7 +48,7 @@ test_pages(
         }
 
         if ( ok $node = $dom->at( 'footer #app-info' ) ) {
-            is $node->text, $app->data->{info}, 'app-info is correct';
+            is $node->text, 'This is some info', 'app-info is correct';
         }
     },
 
@@ -77,7 +67,7 @@ test_pages(
         }
 
         if ( ok $node = $dom->at( 'footer #app-info' ) ) {
-            is $node->text, $app->data->{info}, 'app-info is correct';
+            is $node->text, 'This is some info', 'app-info is correct';
         }
     },
 
@@ -95,9 +85,42 @@ test_pages(
         }
 
         if ( ok $node = $dom->at( 'footer #app-info' ) ) {
-            is $node->text, $app->data->{info}, 'app-info is correct';
+            is $node->text, 'This is some info', 'app-info is correct';
         }
     },
+
+    '/static.txt' => sub {
+        my ( $text ) = @_;
+        eq_or_diff $text, $SHARE_DIR->child( qw( app basic static.txt ) )->slurp_utf8;
+    },
 );
+
+my $app = Statocles::App::Basic->new(
+    url_root => '/',
+    site => $site,
+    store => $SHARE_DIR->child( qw( app basic ) ),
+    data => {
+        info => "This is some info",
+    },
+);
+
+test_pages( $site, $app, %pages );
+
+subtest 'non-root app' => sub {
+    my $app = Statocles::App::Basic->new(
+        url_root => '/nonroot',
+        site => $site,
+        store => $SHARE_DIR->child( qw( app basic ) ),
+        data => {
+            info => "This is some info",
+        },
+    );
+
+    test_pages(
+        $site, $app, { noindex => 1 },
+
+        ( map {; "/nonroot$_" => $pages{ $_ } } keys %pages ),
+    );
+};
 
 done_testing;

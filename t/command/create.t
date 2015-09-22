@@ -443,7 +443,7 @@ sub site_config {
         },
 
         static_app => {
-            class => 'Statocles::App::Static',
+            class => 'Statocles::App::Basic',
             args => {
                 store => 'static',
                 url_root => '/static',

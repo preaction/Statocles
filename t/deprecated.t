@@ -48,7 +48,7 @@ subtest 'Statocles::Site index app' => sub {
 
             # Empty Static app
             my $tmpdir = tempdir;
-            my $static = Statocles::App::Static->new(
+            my $static = Statocles::App::Basic->new(
                 store => $tmpdir,
                 url_root => '/static',
             );
@@ -56,13 +56,13 @@ subtest 'Statocles::Site index app' => sub {
             my ( $site ) = build_test_site_apps(
                 $SHARE_DIR,
                 apps => {
-                    static => $static,
+                    basic => $static,
                 },
-                index => 'static',
+                index => 'basic',
                 log => $log,
             );
 
-            throws_ok { $site->build } qr{ERROR: Index app "static" did not generate any pages};
+            throws_ok { $site->build } qr{ERROR: Index app "basic" did not generate any pages};
         };
 
     };
@@ -129,6 +129,29 @@ subtest 'Statocles::App::Plain' => sub {
     else {
         eval { require Statocles::App::Plain; };
         ok $@, 'unable to load Statocles::App::Plain because it was deleted';
+    }
+};
+
+subtest 'Statocles::App::Static' => sub {
+
+    if ( $Statocles::VERSION < 2 ) {
+        require Statocles::App::Static;
+        my $app = Statocles::App::Static->new(
+            url_root => '/',
+            site => $site,
+            store => $SHARE_DIR->child( qw( app basic ) ),
+        );
+
+        subtest 'pages shows warning' => sub {
+            my @warnings;
+            local $SIG{__WARN__} = sub { push @warnings, @_ };
+            $app->pages;
+            like $warnings[0], qr{\QStatocles::App::Static has been replaced by Statocles::App::Basic and will be removed in 2.0. Change the app class to "Statocles::App::Basic" to silence this message.}, 'warn on pages method';
+        };
+    }
+    else {
+        eval { require Statocles::App::Static; };
+        ok $@, 'unable to load Statocles::App::Static because it was deleted';
     }
 };
 

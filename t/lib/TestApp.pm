@@ -15,7 +15,7 @@ has _pages => (
 
 sub pages {
     my ( $self ) = @_;
-    return map { blessed $_ ? $_ : Statocles::Page::Plain->new( %$_ ) } @{ $self->_pages };
+    return map { blessed $_ ? $_ : ( $_->{class} || "Statocles::Page::Plain" )->new( %$_ ) } @{ $self->_pages };
 }
 
 1;

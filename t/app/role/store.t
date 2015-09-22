@@ -125,6 +125,11 @@ test_pages(
             is $node->text, $app->data->{info}, 'app-info is correct';
         }
     },
+
+    '/my/static.txt' => sub {
+        my ( $text ) = @_;
+        eq_or_diff $text, $SHARE_DIR->child( qw( app basic static.txt ) )->slurp_utf8;
+    },
 );
 
 

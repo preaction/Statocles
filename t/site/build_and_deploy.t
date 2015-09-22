@@ -44,23 +44,11 @@ subtest 'build' => sub {
     $site->build;
 
     my @pages;
-    for my $page ( $site->app( 'blog' )->pages, $site->app( 'static' )->pages ) {
+    for my $page ( $site->app( 'blog' )->pages, $site->app( 'basic' )->pages ) {
         ok $build_dir->child( $page->path )->exists, $page->path . ' built';
         ok !$deploy_dir->child( $page->path )->exists, $page->path . ' not deployed yet';
         push @pages, $page->path;
     }
-
-    subtest 'check static content' => sub {
-        for my $page ( $site->app( 'static' )->pages ) {
-            my $fh = $page->render;
-            my $content = do { local $/; <$fh> };
-            ok $build_dir->child( $page->path )->slurp_raw eq $content,
-                $page->path . ' content is correct';
-            ok !$deploy_dir->child( $page->path )->exists,
-                $page->path . ' is not deployed';
-            push @pages, $page->path;
-        }
-    };
 
     subtest 'check theme' => sub {
         my $iter = $site->theme->store->find_files;
@@ -88,19 +76,10 @@ subtest 'build' => sub {
 subtest 'deploy' => sub {
     $site->deploy;
 
-    for my $page ( $site->app( 'blog' )->pages, $site->app( 'static' )->pages ) {
+    for my $page ( $site->app( 'blog' )->pages, $site->app( 'basic' )->pages ) {
         ok $build_dir->child( $page->path )->exists, $page->path . ' built';
         ok $deploy_dir->child( $page->path )->exists, $page->path . ' deployed';
     }
-
-    subtest 'check static content' => sub {
-        for my $page ( $site->app( 'static' )->pages ) {
-            my $fh = $page->render;
-            my $content = do { local $/; <$fh> };
-            ok $deploy_dir->child( $page->path )->slurp_raw eq $content,
-                $page->path . ' content is correct';
-        }
-    };
 
     subtest 'check theme' => sub {
         my $iter = $site->theme->store->find_files;
@@ -136,15 +115,6 @@ subtest 'base URL with folder rewrites content' => sub {
             ok !$deploy_dir->child( $page->path )->exists, 'not deployed yet';
         }
 
-        subtest 'check static content' => sub {
-            for my $page ( $site->app( 'static' )->pages ) {
-                my $fh = $page->render;
-                my $content = do { local $/; <$fh> };
-                is $build_dir->child( $page->path )->slurp_raw, $content,
-                    $page->path . ' content is correct';
-            }
-        };
-
     };
 
     subtest 'deploy' => sub {
@@ -159,15 +129,6 @@ subtest 'base URL with folder rewrites content' => sub {
                     => \&test_base_url, 'http://example.com/deploy', $page, $deploy_dir;
             }
         }
-
-        subtest 'check static content' => sub {
-            for my $page ( $site->app( 'static' )->pages ) {
-                my $fh = $page->render;
-                my $content = do { local $/; <$fh> };
-                is $deploy_dir->child( $page->path )->slurp_raw, $content,
-                    $page->path . ' content is correct';
-            }
-        };
 
     };
 };
