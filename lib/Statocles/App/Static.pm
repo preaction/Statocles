@@ -1,5 +1,5 @@
 package Statocles::App::Static;
-# ABSTRACT: Manage static files like CSS, JS, images, and other untemplated content
+# ABSTRACT: (DEPRECATED) Manage static files like CSS, JS, images, and other untemplated content
 
 use Statocles::Base 'Class';
 use Statocles::Page::File;
@@ -55,6 +55,10 @@ sub pages {
 __END__
 
 =head1 DESCRIPTION
+
+B<NOTE:> This application's functionality has been added to
+L<Statocles::App::Basic>. You can use the Basic app to replace this app. This
+class will be removed with v2.0. See L<Statocles::Help::Upgrading>.
 
 This L<Statocles::App|Statocles::App> manages static content with no processing,
 perfect for images, stylesheets, scripts, or already-built HTML.

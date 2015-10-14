@@ -64,10 +64,6 @@ L<Statocles::App::Blog> - Blog application
 
 L<Statocles::App::Perldoc> - POD application
 
-=item *
-
-L<Statocles::App::Static> - Static files
-
 =back
 
 =item *
