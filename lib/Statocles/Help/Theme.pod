@@ -169,6 +169,15 @@ will be searched for in the theme directory.
 If the included path ends with ".ep", it is treated as a template. Otherwise,
 it's just written directly with no processing.
 
+=item markdown
+
+The C<markdown> helper allows you to render Markdown to HTML. This is useful
+when you're using extra C<data()> (see above) or for things like L<the blog app
+tag_text attribute|Statocles::App::Blog/tag_text>.
+
+    # Render Markdown as HTML
+    %= markdown $self->data->{markdown}
+
 =back
 
 =head1 Layouts

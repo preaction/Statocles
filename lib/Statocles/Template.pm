@@ -100,6 +100,14 @@ sub render {
             my $inner_tmpl = $self->theme->include( $name );
             return $inner_tmpl->render( %args, %extra_args ) || '';
         };
+
+        local *{"@{[$t->namespace]}::markdown"} = sub {
+            my ( $text, %extra_args ) = @_;
+            die "Cannot use markdown helper: No site object given to template"
+                unless exists $args{site};
+            return $args{site}->markdown->markdown( $text );
+        };
+
         $content = $t->render( $self->content, \%args );
     }
 
