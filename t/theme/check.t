@@ -43,6 +43,13 @@ my @documents = (
 my $blog = Statocles::App::Blog->new(
     url_root => '/blog',
     store => '.',
+    tag_text => {
+        foo => <<ENDMARKDOWN,
+# Foo!
+
+Bar, baz, and fuzz!
+ENDMARKDOWN
+    },
 );
 
 my $site = Statocles::Site->new(
@@ -80,6 +87,9 @@ $page{ list } = Statocles::Page::List->new(
     pages => [ $page{ document } ],
     next => 'page-0.html',
     prev => 'page-1.html',
+    data => {
+        tag_text => $blog->tag_text->{ foo },
+    },
 );
 
 $page{ feed } = Statocles::Page::List->new(
@@ -219,6 +229,20 @@ my %content_tests = (
             }
         };
 
+    },
+
+    'blog/index.html.ep' => sub {
+        my ( $content ) = @_;
+        my $dom = Mojo::DOM->new( $content );
+
+        subtest 'tag text exists and is processed as Markdown' => sub {
+            if ( ok my $h1 = $dom->at( 'main > h1' ), 'tag text h1 exists' ) {
+                is $h1->text, 'Foo!', 'h1 text is correct';
+            }
+            if ( ok my $p = $dom->at( 'main > p' ), 'tag text p exists' ) {
+                is $p->text, 'Bar, baz, and fuzz!', 'p text is correct';
+            }
+        };
     },
 );
 

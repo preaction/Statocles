@@ -5,7 +5,7 @@
         <main>
 
             % if ( my $tag_text = $self->data->{ tag_text } ) {
-            <p><%= $tag_text %></p>
+            <%= markdown $tag_text %>
             % }
 
             % for my $page ( @$pages ) {
