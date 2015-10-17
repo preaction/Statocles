@@ -12,13 +12,53 @@ with 'Statocles::App::Role::Store';
 
 =attr store
 
-The L<store|Statocles::Store> to read for documents.
+    # site.yml
+    blog:
+        class: Statocles::App::Blog
+        args:
+            store: _posts
+
+The L<store directory path|Statocles::Store> to read for blog posts. Required.
+
+The Blog directory is organized in a tree by date, with a directory for the
+year, month, day, and post. Each blog post is its own directory to allow for
+additional files for the post, like images or additional pages.
 
 =cut
 
 =attr tag_text
 
-A hash of tag and descriptions to introduce tags. Having a description is optional.
+    # site.yml
+    blog:
+        class: Statocles::App::Blog
+        args:
+            tag_text:
+                software: Posts about software and development
+                travel: My travelogue around the world!
+
+A hash of tag and introductory Markdown that will be shown on the tag's main
+page. Having a description is optional.
+
+Using L<Beam::Wire's $config directive|Beam::Wire/Config Services>, you can
+put the tag text in an external file:
+
+    # site.yml
+    blog:
+        class: Statocles::App::Blog
+        args:
+            tag_text:
+                $config: tags.yml
+
+    # tags.yml
+    software: |-
+        # Software
+
+        Posts about software development, mostly in [Perl](http://perl.org)
+
+    travel: |-
+        # Travel
+
+        My travelogue around the world! [Also visit my Instagram!](http://example.com)
 
 =cut
 
@@ -29,6 +69,12 @@ has tag_text => (
 );
 
 =attr page_size
+
+    # site.yml
+    blog:
+        class: Statocles::App::Blog
+        args:
+            page_size: 5
 
 The number of posts to put in a page (the main page and the tag pages). Defaults
 to 5.
@@ -43,6 +89,12 @@ has page_size => (
 
 =attr index_tags
 
+    # site.yml
+    blog:
+        class: Statocles::App::Blog
+        args:
+            index_tags: [ '-private', '+important' ]
+
 Filter the tags shown in the index page. An array of tags prefixed with either
 a + or a -. By prefixing the tag with a "-", it will be removed from the index,
 unless a later tag prefixed with a "+" also matches.
@@ -51,9 +103,9 @@ By default, all tags are shown on the index page.
 
 So, given a document with tags "foo", and "bar":
 
-    index_tags => [ ];                  # document will be included
-    index_tags => [ '-foo' ];           # document will not be included
-    index_tags => [ '-foo', '+bar' ];   # document will be included
+    index_tags: [ ]                 # document will be included
+    index_tags: [ '-foo' ]          # document will not be included
+    index_tags: [ '-foo', '+bar' ]  # document will be included
 
 =cut
 
