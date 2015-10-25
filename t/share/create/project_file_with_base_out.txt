@@ -81,7 +81,7 @@ For static content, add files to the "static" directory.
 To learn about editing content, see Statocles::Help::Content.
 
 If you have any problems, report them on the Statocles website:
-http://preaction.github.io/Statocles
+http://preaction.me/statocles
 
 Thanks for using Statocles!
 

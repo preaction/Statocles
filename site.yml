@@ -10,11 +10,19 @@ gh_pages:
         path: '.'
         branch: gh-pages
 
+personal:
+    class: Statocles::Deploy::Git
+    args:
+        base_url: http://preaction.me/statocles
+        path: '.'
+        remote: www
+        branch: deploy
+
 site:
     class: Statocles::Site
     args:
         title: Statocles
-        base_url: http://preaction.github.io/Statocles/
+        base_url: http://preaction.me/statocles/
         nav:
             main:
                 - title: Blog
@@ -32,7 +40,7 @@ site:
                 - title: IRC
                   href: 'https://chat.mibbit.com/?channel=%23statocles&server=irc.perl.org'
         deploy:
-            $ref: gh_pages
+            $ref: personal
         index: /
         theme:
             $ref: theme

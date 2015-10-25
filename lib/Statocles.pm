@@ -107,4 +107,4 @@ To get started with Statocles, L<consult the Statocles::Help guides|Statocles::H
 =head1 SEE ALSO
 
 For news and documentation, L<visit the Statocles website at
-http://preaction.github.io/Statocles|http://preaction.github.io/Statocles>.
+http://preaction.me/statocles|http://preaction.me/statocles>.

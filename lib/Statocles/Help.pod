@@ -213,5 +213,5 @@ Be patient, it's a slow channel.
 =head1 SEE ALSO
 
 For news and documentation, L<visit the Statocles website at
-http:E<sol>E<sol>preaction.github.ioE<sol>Statocles|http://preaction.github.io/Statocles>.
+http:E<sol>E<sol>preaction.me<sol>statocles|http://preaction.me/statocles>.
 

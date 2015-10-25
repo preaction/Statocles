@@ -17,7 +17,7 @@ This initial release includes:
 * Plain pages, for things like About Us and Contact Us
 * A POD renderer for documentation of Perl projects
 
-This site is generated with Statocles, and so is [my blog](http://preaction.github.io).
+This site is generated with Statocles, and so is [my blog](http://preaction.me).
 
 ## Getting Started
 
