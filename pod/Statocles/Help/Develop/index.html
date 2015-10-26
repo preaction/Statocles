@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
-        <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
-        <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <link href="/statocles/theme/css/normalize.css" rel="stylesheet">
+        <link href="/statocles/theme/css/skeleton.css" rel="stylesheet">
+        <link href="/statocles/theme/css/statocles-default.css" rel="stylesheet">
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <title>Statocles</title>
         <meta content="Statocles 0.056" name="generator">
@@ -53,10 +53,10 @@
     }
 
 </style>
-<link href="http://preaction.github.io/Statocles/pod/Statocles/Help/Develop/" rel="canonical">
+<link href="http://preaction.me/statocles/pod/Statocles/Help/Develop/" rel="canonical">
 <script>
     if ( location.href.indexOf( "http://preaction.me/statocles/" ) == -1 ) {
-        location.href = "http://preaction.github.io/Statocles/pod/Statocles/Help/Develop/";
+        location.href = "http://preaction.me/statocles/pod/Statocles/Help/Develop/";
     }
 </script>
 
@@ -65,16 +65,16 @@
         <header>
             <nav class="navbar">
                 <div class="container">
-                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <a class="brand" href="/statocles/">Statocles</a>
                     <ul>
                         <li>
-                            <a href="/Statocles/blog">Blog</a>
+                            <a href="/statocles/blog">Blog</a>
                         </li>
                         <li>
-                            <a href="/Statocles/pod">Docs</a>
+                            <a href="/statocles/pod">Docs</a>
                         </li>
                         <li>
-                            <a href="/Statocles/gallery">Gallery</a>
+                            <a href="/statocles/gallery">Gallery</a>
                         </li>
                         <li>
                             <a href="http://github.com/preaction/Statocles">Code</a>
@@ -99,16 +99,16 @@
             <div class="crumbtrail">
 <ul>
     <li>
-        <a href="/Statocles/pod/Statocles/">Statocles</a>
+        <a href="/statocles/pod/Statocles/">Statocles</a>
     </li>
     <li>
-        <a href="/Statocles/pod/">Help</a>
+        <a href="/statocles/pod/">Help</a>
     </li>
     <li>
-        <a href="/Statocles/pod/Statocles/Help/Develop/">Develop</a>
+        <a href="/statocles/pod/Statocles/Help/Develop/">Develop</a>
     </li>
 </ul>
-(<a href="/Statocles/pod/Statocles/Help/Develop/source.html">source</a>)
+(<a href="/statocles/pod/Statocles/Help/Develop/source.html">source</a>)
 </div>
 <h1 id="NAME">NAME</h1>
 
@@ -124,29 +124,29 @@
 
 <ul>
 
-<li><p>User creates <a href="/Statocles/pod/Statocles/Document/">Documents</a>.</p>
+<li><p>User creates <a href="/statocles/pod/Statocles/Document/">Documents</a>.</p>
 
 </li>
-<li><p><a href="/Statocles/pod/Statocles/Store/">Stores</a> read and write documents.</p>
+<li><p><a href="/statocles/pod/Statocles/Store/">Stores</a> read and write documents.</p>
 
 </li>
-<li><p><a href="/Statocles/pod/Statocles/App/">Applications</a> use Stores to read documents and create <a href="/Statocles/pod/Statocles/Page/">Pages</a>.</p>
+<li><p><a href="/statocles/pod/Statocles/App/">Applications</a> use Stores to read documents and create <a href="/statocles/pod/Statocles/Page/">Pages</a>.</p>
 
 </li>
-<li><p><a href="/Statocles/pod/Statocles/Site/">Sites</a> collect a set of Applications.</p>
+<li><p><a href="/statocles/pod/Statocles/Site/">Sites</a> collect a set of Applications.</p>
 
 </li>
-<li><p>Sites have a <a href="/Statocles/pod/Statocles/Theme/">Themes</a> that builds <a href="/Statocles/pod/Statocles/Template/">Templates</a> that are given to Pages.</p>
+<li><p>Sites have a <a href="/statocles/pod/Statocles/Theme/">Themes</a> that builds <a href="/statocles/pod/Statocles/Template/">Templates</a> that are given to Pages.</p>
 
 </li>
-<li><p>Finally, the Site writes the Page to a <a href="/Statocles/pod/Statocles/Deploy/">Deploy</a>.</p>
+<li><p>Finally, the Site writes the Page to a <a href="/statocles/pod/Statocles/Deploy/">Deploy</a>.</p>
 
 </li>
 </ul>
 
 <h1 id="DOCUMENTS">DOCUMENTS</h1>
 
-<p>A <a href="/Statocles/pod/Statocles/Document/">document</a> is the main content of the site. The user does all the work with documents: adding, editing, and removing documents.</p>
+<p>A <a href="/statocles/pod/Statocles/Document/">document</a> is the main content of the site. The user does all the work with documents: adding, editing, and removing documents.</p>
 
 <p>The default store reads documents in a Markdown format with a YAML header, easily editable with any text editor. A sample document looks like:</p>
 
@@ -158,15 +158,15 @@
 
     This is a paragraph</code></pre>
 
-<p>The document format is described in the <a href="/Statocles/pod/Statocles/Store/">Statocles::Store</a> documentation under <a href="/Statocles/pod/Statocles/Store#Frontmatter-Document-Format/">Frontmatter Document Format</a>.</p>
+<p>The document format is described in the <a href="/statocles/pod/Statocles/Store/">Statocles::Store</a> documentation under <a href="/statocles/pod/Statocles/Store#Frontmatter-Document-Format/">Frontmatter Document Format</a>.</p>
 
 <h1 id="STORES">STORES</h1>
 
-<p>A <a href="/Statocles/pod/Statocles/Store/">Statocles::Store</a> reads and writes documents and pages. The default store reads documents in YAML and writes pages to a file, but stores could read documents as JSON, or from a Mongo database, and write pages to a database, or wherever you want!</p>
+<p>A <a href="/statocles/pod/Statocles/Store/">Statocles::Store</a> reads and writes documents and pages. The default store reads documents in YAML and writes pages to a file, but stores could read documents as JSON, or from a Mongo database, and write pages to a database, or wherever you want!</p>
 
 <dl>
 
-<dt><a href="/Statocles/pod/Statocles/Store/">Statocles::Store</a></dt>
+<dt><a href="/statocles/pod/Statocles/Store/">Statocles::Store</a></dt>
 <dd>
 
 <p>Read documents from the filesystem.</p>
@@ -180,19 +180,19 @@
 
 <dl>
 
-<dt><a href="/Statocles/pod/Statocles/App/Basic/">Statocles::App::Basic</a></dt>
+<dt><a href="/statocles/pod/Statocles/App/Basic/">Statocles::App::Basic</a></dt>
 <dd>
 
 <p>Basic markdown documents are turned into pages with no special arrangement. Also allows for collateral images and other files.</p>
 
 </dd>
-<dt><a href="/Statocles/pod/Statocles/App/Blog/">Statocles::App::Blog</a></dt>
+<dt><a href="/statocles/pod/Statocles/App/Blog/">Statocles::App::Blog</a></dt>
 <dd>
 
 <p>A simple blogging application.</p>
 
 </dd>
-<dt><a href="/Statocles/pod/Statocles/App/Static/">Statocles::App::Static</a></dt>
+<dt><a href="/statocles/pod/Statocles/App/Static/">Statocles::App::Static</a></dt>
 <dd>
 
 <p>Static files, like images and other site collateral, are copied into the site with no processing whatsoever.</p>
@@ -202,29 +202,29 @@
 
 <h1 id="PAGES">PAGES</h1>
 
-<p>A <a href="/Statocles/pod/Statocles/Page/">Statocles::Page</a> is collected information ready to be rendered into HTML (or whatever). Statocles Applications generate pages from the documents that the user provides. One document may generate multiple pages, and pages may have multiple formats like HTML or RSS.</p>
+<p>A <a href="/statocles/pod/Statocles/Page/">Statocles::Page</a> is collected information ready to be rendered into HTML (or whatever). Statocles Applications generate pages from the documents that the user provides. One document may generate multiple pages, and pages may have multiple formats like HTML or RSS.</p>
 
 <dl>
 
-<dt><a href="/Statocles/pod/Statocles/Page/Document/">Statocles::Page::Document</a></dt>
+<dt><a href="/statocles/pod/Statocles/Page/Document/">Statocles::Page::Document</a></dt>
 <dd>
 
 <p>This page renders a single document. This is used for the main page of a blog post, for example.</p>
 
 </dd>
-<dt><a href="/Statocles/pod/Statocles/Page/List/">Statocles::Page::List</a></dt>
+<dt><a href="/statocles/pod/Statocles/Page/List/">Statocles::Page::List</a></dt>
 <dd>
 
 <p>This page renders a list of other pages (not documents). This is used for index pages and feed pages.</p>
 
 </dd>
-<dt><a href="/Statocles/pod/Statocles/Page/Plain/">Statocles::Page::Plain</a></dt>
+<dt><a href="/statocles/pod/Statocles/Page/Plain/">Statocles::Page::Plain</a></dt>
 <dd>
 
 <p>This page adds a layout, but does not require a document. Good if you&#39;ve already got HTML.</p>
 
 </dd>
-<dt><a href="/Statocles/pod/Statocles/Page/File/">Statocles::Page::File</a></dt>
+<dt><a href="/statocles/pod/Statocles/Page/File/">Statocles::Page::File</a></dt>
 <dd>
 
 <p>This page is used for non-rendered static files like images. No processing is done.</p>
@@ -234,13 +234,13 @@
 
 <h1 id="SITES">SITES</h1>
 
-<p>A <a href="/Statocles/pod/Statocles/Site/">Statocles::Site</a> manages a bunch of applications, writing and deploying the resulting pages.</p>
+<p>A <a href="/statocles/pod/Statocles/Site/">Statocles::Site</a> manages a bunch of applications, writing and deploying the resulting pages.</p>
 
 <p>The site controls the entire workflow, reading pages from the applications and writing them to the appropriate deploy.</p>
 
 <h1 id="THEMES">THEMES</h1>
 
-<p>A <a href="/Statocles/pod/Statocles/Theme/">Statocles::Theme</a> creates <a href="/Statocles/pod/Statocles/Template/">Statocles::Template</a> objects using <a href="https://metacpan.org/pod/Mojo::Template" rel="external">Mojo::Template</a>.</p>
+<p>A <a href="/statocles/pod/Statocles/Theme/">Statocles::Theme</a> creates <a href="/statocles/pod/Statocles/Template/">Statocles::Template</a> objects using <a href="https://metacpan.org/pod/Mojo::Template" rel="external">Mojo::Template</a>.</p>
 
 <p>If you want to use Template Toolkit or Text::Xslate, you would create a new Theme class that provides a different Template object.</p>
 
@@ -250,13 +250,13 @@
 
 <dl>
 
-<dt><a href="/Statocles/pod/Statocles/Deploy/File/">Statocles::Deploy::File</a></dt>
+<dt><a href="/statocles/pod/Statocles/Deploy/File/">Statocles::Deploy::File</a></dt>
 <dd>
 
 <p>Copy the site&#39;s files to a given local path.</p>
 
 </dd>
-<dt><a href="/Statocles/pod/Statocles/Deploy/Git/">Statocles::Deploy::Git</a></dt>
+<dt><a href="/statocles/pod/Statocles/Deploy/Git/">Statocles::Deploy::Git</a></dt>
 <dd>
 
 <p>Copy the files to a git repository and push them out. This is how a Github Pages site is deployed.</p>
@@ -266,7 +266,7 @@
 
 <h1 id="PLUGINS">PLUGINS</h1>
 
-<p>Plugins are used to respond to events in the Statocles workflow. For example, when a site is built, an event is fired containing all the built pages. Then, the <a href="/Statocles/pod/Statocles/Plugin/LinkCheck/">Statocles::Plugin::LinkCheck</a> plugin can search all the pages for broken links.</p>
+<p>Plugins are used to respond to events in the Statocles workflow. For example, when a site is built, an event is fired containing all the built pages. Then, the <a href="/statocles/pod/Statocles/Plugin/LinkCheck/">Statocles::Plugin::LinkCheck</a> plugin can search all the pages for broken links.</p>
 
 <p>Any class can be a plugin, it just needs a method. The event listener is wired up using the configuration file:</p>
 

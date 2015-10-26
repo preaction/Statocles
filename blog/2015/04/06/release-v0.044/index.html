@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
-        <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
-        <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <link href="/statocles/theme/css/normalize.css" rel="stylesheet">
+        <link href="/statocles/theme/css/skeleton.css" rel="stylesheet">
+        <link href="/statocles/theme/css/statocles-default.css" rel="stylesheet">
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <title>Release v0.044 - Statocles</title>
         <meta content="Statocles 0.056" name="generator">
@@ -53,10 +53,10 @@
     }
 
 </style>
-<link href="http://preaction.github.io/Statocles/blog/2015/04/06/release-v0.044/" rel="canonical">
+<link href="http://preaction.me/statocles/blog/2015/04/06/release-v0.044/" rel="canonical">
 <script>
     if ( location.href.indexOf( "http://preaction.me/statocles/" ) == -1 ) {
-        location.href = "http://preaction.github.io/Statocles/blog/2015/04/06/release-v0.044/";
+        location.href = "http://preaction.me/statocles/blog/2015/04/06/release-v0.044/";
     }
 </script>
 
@@ -65,16 +65,16 @@
         <header>
             <nav class="navbar">
                 <div class="container">
-                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <a class="brand" href="/statocles/">Statocles</a>
                     <ul>
                         <li>
-                            <a href="/Statocles/blog">Blog</a>
+                            <a href="/statocles/blog">Blog</a>
                         </li>
                         <li>
-                            <a href="/Statocles/pod">Docs</a>
+                            <a href="/statocles/pod">Docs</a>
                         </li>
                         <li>
-                            <a href="/Statocles/gallery">Gallery</a>
+                            <a href="/statocles/gallery">Gallery</a>
                         </li>
                         <li>
                             <a href="http://github.com/preaction/Statocles">Code</a>
@@ -103,7 +103,7 @@
             <header>
                 <h1>Release v0.044</h1>
                 <p class="tags">Tags:
-                    <a href="/Statocles/blog/tag/release/" rel="tag">release</a>
+                    <a href="/statocles/blog/tag/release/" rel="tag">release</a>
                 </p>
 
                 <aside>
@@ -119,8 +119,8 @@
                 <p>A few small features, and some small breaking changes in this release.</p>
 
 <p>The <code>read_document</code> and <code>write_document</code> method of
-<a href="/Statocles/pod/Statocles/Store/File">Statocles::Store::File</a> now use
-<a href="/Statocles/pod/Statocles/Document">Statocles::Document</a> instead of plain hashrefs.
+<a href="/statocles/pod/Statocles/Store/File">Statocles::Store::File</a> now use
+<a href="/statocles/pod/Statocles/Document">Statocles::Document</a> instead of plain hashrefs.
 It was weird to have one method (<code>read_documents</code> with an <code>s</code>) get document
 objects, and everything else use hashes. The important
 serialization/deserialization routines are in Statocles::Document, so it is
@@ -137,10 +137,10 @@ current posts, you must fix them manually.</p>
 
 <p>An upgrade to <a href="http://metacpan.org/pod/Beam::Wire">Beam::Wire</a> now allows you
 to compose roles in the Statocles configuration file, so additional behavior
-can be added to existing applications. See <a href="/Statocles/pod/Statocles/Help/Develop">the Develop
+can be added to existing applications. See <a href="/statocles/pod/Statocles/Help/Develop">the Develop
 Guide</a> for more information.</p>
 
-<p>Finally, <a href="/Statocles/pod/Statocles/App/Blog">the Blog app</a> now has a <code>recent_posts()</code>
+<p>Finally, <a href="/statocles/pod/Statocles/App/Blog">the Blog app</a> now has a <code>recent_posts()</code>
 method that can be used in templates and markdown to display the most recent
 posts in a blog.</p>
 
@@ -172,7 +172,7 @@ posts in a blog.</p>
         <script type="text/javascript">
             var disqus_shortname = 'statocles';
             var disqus_identifier = '/2015/04/06/release-v0.044/index.markdown';
-            var disqus_url = 'http://preaction.github.io/Statocles/blog/2015/04/06/release-v0.044/';
+            var disqus_url = 'http://preaction.me/statocles/blog/2015/04/06/release-v0.044/';
             (function() {
                 var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
                 dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
@@ -188,7 +188,7 @@ posts in a blog.</p>
         <nav id="tags">
             <h1>Tags</h1>
             <ul class="list-inline">
-                <li><a href="/Statocles/blog/tag/release/">release</a></li>
+                <li><a href="/statocles/blog/tag/release/">release</a></li>
             </ul>
         </nav>
     </div>

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
-        <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
-        <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <link href="/statocles/theme/css/normalize.css" rel="stylesheet">
+        <link href="/statocles/theme/css/skeleton.css" rel="stylesheet">
+        <link href="/statocles/theme/css/statocles-default.css" rel="stylesheet">
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <title>Statocles</title>
         <meta content="Statocles 0.056" name="generator">
@@ -53,10 +53,10 @@
     }
 
 </style>
-<link href="http://preaction.github.io/Statocles/pod/Statocles/Document/" rel="canonical">
+<link href="http://preaction.me/statocles/pod/Statocles/Document/" rel="canonical">
 <script>
     if ( location.href.indexOf( "http://preaction.me/statocles/" ) == -1 ) {
-        location.href = "http://preaction.github.io/Statocles/pod/Statocles/Document/";
+        location.href = "http://preaction.me/statocles/pod/Statocles/Document/";
     }
 </script>
 
@@ -65,16 +65,16 @@
         <header>
             <nav class="navbar">
                 <div class="container">
-                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <a class="brand" href="/statocles/">Statocles</a>
                     <ul>
                         <li>
-                            <a href="/Statocles/blog">Blog</a>
+                            <a href="/statocles/blog">Blog</a>
                         </li>
                         <li>
-                            <a href="/Statocles/pod">Docs</a>
+                            <a href="/statocles/pod">Docs</a>
                         </li>
                         <li>
-                            <a href="/Statocles/gallery">Gallery</a>
+                            <a href="/statocles/gallery">Gallery</a>
                         </li>
                         <li>
                             <a href="http://github.com/preaction/Statocles">Code</a>
@@ -99,13 +99,13 @@
             <div class="crumbtrail">
 <ul>
     <li>
-        <a href="/Statocles/pod/Statocles/">Statocles</a>
+        <a href="/statocles/pod/Statocles/">Statocles</a>
     </li>
     <li>
-        <a href="/Statocles/pod/Statocles/Document/">Document</a>
+        <a href="/statocles/pod/Statocles/Document/">Document</a>
     </li>
 </ul>
-(<a href="/Statocles/pod/Statocles/Document/source.html">source</a>)
+(<a href="/statocles/pod/Statocles/Document/source.html">source</a>)
 </div>
 <h1 id="NAME">NAME</h1>
 
@@ -113,7 +113,7 @@
 
 <h1 id="DESCRIPTION">DESCRIPTION</h1>
 
-<p>A Statocles::Document is the base unit of content in Statocles. <a href="/Statocles/pod/Statocles/App/">Applications</a> take documents to build <a href="/Statocles/pod/Statocles/Page/">pages</a>.</p>
+<p>A Statocles::Document is the base unit of content in Statocles. <a href="/statocles/pod/Statocles/App/">Applications</a> take documents to build <a href="/statocles/pod/Statocles/Page/">pages</a>.</p>
 
 <p>Documents are usually written as files, with the <a href="#content">content</a> in Markdown, and the other attributes as frontmatter, a block of YAML at the top of the file.</p>
 
@@ -203,7 +203,7 @@
 </dd>
 </dl>
 
-<p>Each category contains an arrayref of hashrefs of <a href="/Statocles/pod/Statocles/Link/">link objects</a>. See the <a href="/Statocles/pod/Statocles/Link/">Statocles::Link</a> documentation for a full list of supported attributes. The most common attributes are:</p>
+<p>Each category contains an arrayref of hashrefs of <a href="/statocles/pod/Statocles/Link/">link objects</a>. See the <a href="/statocles/pod/Statocles/Link/">Statocles::Link</a> documentation for a full list of supported attributes. The most common attributes are:</p>
 
 <dl>
 
@@ -238,7 +238,7 @@
     template: /blog/recipe.html
     ---</code></pre>
 
-<p>The path to a template override for this document. If set, the <a href="/Statocles/pod/Statocles/Page/Document/">document page</a> will use this instead of the template provided by the application.</p>
+<p>The path to a template override for this document. If set, the <a href="/statocles/pod/Statocles/Page/Document/">document page</a> will use this instead of the template provided by the application.</p>
 
 <p>The template path should not have the final extention (by default <code>.ep</code>). Different template parsers will have different extentions.</p>
 
@@ -248,7 +248,7 @@
     layout: /site/layout-dark.html
     ---</code></pre>
 
-<p>The path to a layout template override for this document. If set, the <a href="/Statocles/pod/Statocles/Page/Document/">document page</a> will use this instead of the layout provided by the application.</p>
+<p>The path to a layout template override for this document. If set, the <a href="/statocles/pod/Statocles/Page/Document/">document page</a> will use this instead of the layout provided by the application.</p>
 
 <p>The template path should not have the final extention (by default <code>.ep</code>). Different template parsers will have different extentions.</p>
 
@@ -272,7 +272,7 @@
 
 <dl>
 
-<dt><a href="/Statocles/pod/Statocles/Help/Content/">Statocles::Help::Content</a></dt>
+<dt><a href="/statocles/pod/Statocles/Help/Content/">Statocles::Help::Content</a></dt>
 <dd>
 
 <p>The content guide describes how to edit content in Statocles sites, which are represented by Document objects.</p>

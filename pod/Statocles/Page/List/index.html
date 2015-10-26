@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
-        <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
-        <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <link href="/statocles/theme/css/normalize.css" rel="stylesheet">
+        <link href="/statocles/theme/css/skeleton.css" rel="stylesheet">
+        <link href="/statocles/theme/css/statocles-default.css" rel="stylesheet">
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <title>Statocles</title>
         <meta content="Statocles 0.056" name="generator">
@@ -53,10 +53,10 @@
     }
 
 </style>
-<link href="http://preaction.github.io/Statocles/pod/Statocles/Page/List/" rel="canonical">
+<link href="http://preaction.me/statocles/pod/Statocles/Page/List/" rel="canonical">
 <script>
     if ( location.href.indexOf( "http://preaction.me/statocles/" ) == -1 ) {
-        location.href = "http://preaction.github.io/Statocles/pod/Statocles/Page/List/";
+        location.href = "http://preaction.me/statocles/pod/Statocles/Page/List/";
     }
 </script>
 
@@ -65,16 +65,16 @@
         <header>
             <nav class="navbar">
                 <div class="container">
-                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <a class="brand" href="/statocles/">Statocles</a>
                     <ul>
                         <li>
-                            <a href="/Statocles/blog">Blog</a>
+                            <a href="/statocles/blog">Blog</a>
                         </li>
                         <li>
-                            <a href="/Statocles/pod">Docs</a>
+                            <a href="/statocles/pod">Docs</a>
                         </li>
                         <li>
-                            <a href="/Statocles/gallery">Gallery</a>
+                            <a href="/statocles/gallery">Gallery</a>
                         </li>
                         <li>
                             <a href="http://github.com/preaction/Statocles">Code</a>
@@ -99,16 +99,16 @@
             <div class="crumbtrail">
 <ul>
     <li>
-        <a href="/Statocles/pod/Statocles/">Statocles</a>
+        <a href="/statocles/pod/Statocles/">Statocles</a>
     </li>
     <li>
-        <a href="/Statocles/pod/Statocles/Page/">Page</a>
+        <a href="/statocles/pod/Statocles/Page/">Page</a>
     </li>
     <li>
-        <a href="/Statocles/pod/Statocles/Page/List/">List</a>
+        <a href="/statocles/pod/Statocles/Page/List/">List</a>
     </li>
 </ul>
-(<a href="/Statocles/pod/Statocles/Page/List/source.html">source</a>)
+(<a href="/statocles/pod/Statocles/Page/List/source.html">source</a>)
 </div>
 <h1 id="NAME">NAME</h1>
 
@@ -138,11 +138,11 @@
 
 <h2 id="search_change_frequency">search_change_frequency</h2>
 
-<p>Override the default <a href="/Statocles/pod/Statocles/Page#search_change_frequency/">search_change_frequency</a> to <code>daily</code>, because these pages aggregate other pages.</p>
+<p>Override the default <a href="/statocles/pod/Statocles/Page#search_change_frequency/">search_change_frequency</a> to <code>daily</code>, because these pages aggregate other pages.</p>
 
 <h2 id="search_priority">search_priority</h2>
 
-<p>Override the default <a href="/Statocles/pod/Statocles/Page#search_priority/">search_priority</a> to reduce the rank of list pages to <code>0.3</code>.</p>
+<p>Override the default <a href="/statocles/pod/Statocles/Page#search_priority/">search_priority</a> to reduce the rank of list pages to <code>0.3</code>.</p>
 
 <p>It is more important for users to get to the full page than to get to this list page, which may contain truncated content, and whose relevant content may appear 3-4 items down the page.</p>
 
@@ -152,7 +152,7 @@
 
 <pre><code>    my @pages = Statocles::Page::List-&gt;paginate( %args );</code></pre>
 
-<p>Build a paginated list of <a href="/Statocles/pod/Statocles/Page/List/">Statocles::Page::List</a> objects.</p>
+<p>Build a paginated list of <a href="/statocles/pod/Statocles/Page/List/">Statocles::Page::List</a> objects.</p>
 
 <p>Takes a list of key-value pairs with the following keys:</p>
 

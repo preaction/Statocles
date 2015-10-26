@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
-        <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
-        <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <link href="/statocles/theme/css/normalize.css" rel="stylesheet">
+        <link href="/statocles/theme/css/skeleton.css" rel="stylesheet">
+        <link href="/statocles/theme/css/statocles-default.css" rel="stylesheet">
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <title>Statocles</title>
         <meta content="Statocles 0.056" name="generator">
@@ -53,10 +53,10 @@
     }
 
 </style>
-<link href="http://preaction.github.io/Statocles/pod/Statocles/App/Blog/" rel="canonical">
+<link href="http://preaction.me/statocles/pod/Statocles/App/Blog/" rel="canonical">
 <script>
     if ( location.href.indexOf( "http://preaction.me/statocles/" ) == -1 ) {
-        location.href = "http://preaction.github.io/Statocles/pod/Statocles/App/Blog/";
+        location.href = "http://preaction.me/statocles/pod/Statocles/App/Blog/";
     }
 </script>
 
@@ -65,16 +65,16 @@
         <header>
             <nav class="navbar">
                 <div class="container">
-                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <a class="brand" href="/statocles/">Statocles</a>
                     <ul>
                         <li>
-                            <a href="/Statocles/blog">Blog</a>
+                            <a href="/statocles/blog">Blog</a>
                         </li>
                         <li>
-                            <a href="/Statocles/pod">Docs</a>
+                            <a href="/statocles/pod">Docs</a>
                         </li>
                         <li>
-                            <a href="/Statocles/gallery">Gallery</a>
+                            <a href="/statocles/gallery">Gallery</a>
                         </li>
                         <li>
                             <a href="http://github.com/preaction/Statocles">Code</a>
@@ -99,16 +99,16 @@
             <div class="crumbtrail">
 <ul>
     <li>
-        <a href="/Statocles/pod/Statocles/">Statocles</a>
+        <a href="/statocles/pod/Statocles/">Statocles</a>
     </li>
     <li>
-        <a href="/Statocles/pod/Statocles/App/">App</a>
+        <a href="/statocles/pod/Statocles/App/">App</a>
     </li>
     <li>
-        <a href="/Statocles/pod/Statocles/App/Blog/">Blog</a>
+        <a href="/statocles/pod/Statocles/App/Blog/">Blog</a>
     </li>
 </ul>
-(<a href="/Statocles/pod/Statocles/App/Blog/source.html">source</a>)
+(<a href="/statocles/pod/Statocles/App/Blog/source.html">source</a>)
 </div>
 <h1 id="NAME">NAME</h1>
 
@@ -151,7 +151,7 @@
         args:
             store: _posts</code></pre>
 
-<p>The <a href="/Statocles/pod/Statocles/Store/">store directory path</a> to read for blog posts. Required.</p>
+<p>The <a href="/statocles/pod/Statocles/Store/">store directory path</a> to read for blog posts. Required.</p>
 
 <p>The Blog directory is organized in a tree by date, with a directory for the year, month, day, and post. Each blog post is its own directory to allow for additional files for the post, like images or additional pages.</p>
 
@@ -233,19 +233,19 @@
 
 <pre><code>    my @pages = $app-&gt;index( \@post_pages );</code></pre>
 
-<p>Build the index page (a <a href="/Statocles/pod/Statocles/Page/List/">list page</a>) and all related feed pages out of the given array reference of post pages.</p>
+<p>Build the index page (a <a href="/statocles/pod/Statocles/Page/List/">list page</a>) and all related feed pages out of the given array reference of post pages.</p>
 
 <h2 id="tag_pages">tag_pages</h2>
 
 <pre><code>    my @pages = $app-&gt;tag_pages( \%tag_pages );</code></pre>
 
-<p>Get <a href="/Statocles/pod/Statocles/Page/">pages</a> for the tags in the given blog post documents (build from <a href="#post_pages">the post_pages method</a>, including relevant feed pages.</p>
+<p>Get <a href="/statocles/pod/Statocles/Page/">pages</a> for the tags in the given blog post documents (build from <a href="#post_pages">the post_pages method</a>, including relevant feed pages.</p>
 
 <h2 id="pages">pages</h2>
 
 <pre><code>    my @pages = $app-&gt;pages( %options );</code></pre>
 
-<p>Get all the <a href="/Statocles/pod/Statocles/Page/">pages</a> for this application. Available options are:</p>
+<p>Get all the <a href="/statocles/pod/Statocles/Page/">pages</a> for this application. Available options are:</p>
 
 <dl>
 
@@ -261,7 +261,7 @@
 
 <pre><code>    my @links = $app-&gt;tags;</code></pre>
 
-<p>Get a set of <a href="/Statocles/pod/Statocles/Link/">link objects</a> suitable for creating a list of tag links. The common attributes are:</p>
+<p>Get a set of <a href="/statocles/pod/Statocles/Link/">link objects</a> suitable for creating a list of tag links. The common attributes are:</p>
 
 <pre><code>    text =&gt; &#39;The tag text&#39;
     href =&gt; &#39;The URL to the tag page&#39;</code></pre>
@@ -288,7 +288,7 @@
 
 <pre><code>    my $url = $app-&gt;page_url( $page )</code></pre>
 
-<p>Return the absolute URL to this <a href="/Statocles/pod/Statocles/Page/">page object</a>, removing the &quot;/index.html&quot; if necessary.</p>
+<p>Return the absolute URL to this <a href="/statocles/pod/Statocles/Page/">page object</a>, removing the &quot;/index.html&quot; if necessary.</p>
 
 <h1 id="COMMANDS">COMMANDS</h1>
 
@@ -314,7 +314,7 @@
 <dt>site</dt>
 <dd>
 
-<p>The <a href="/Statocles/pod/Statocles/Site/">Statocles::Site</a> object.</p>
+<p>The <a href="/statocles/pod/Statocles/Site/">Statocles::Site</a> object.</p>
 
 </dd>
 <dt>pages</dt>
@@ -355,7 +355,7 @@
 <dt>site</dt>
 <dd>
 
-<p>The <a href="/Statocles/pod/Statocles/Site/">Statocles::Site</a> object</p>
+<p>The <a href="/statocles/pod/Statocles/Site/">Statocles::Site</a> object</p>
 
 </dd>
 <dt>content</dt>
@@ -388,7 +388,7 @@
 
 <dl>
 
-<dt><a href="/Statocles/pod/Statocles/App/">Statocles::App</a></dt>
+<dt><a href="/statocles/pod/Statocles/App/">Statocles::App</a></dt>
 <dd>
 
 </dd>

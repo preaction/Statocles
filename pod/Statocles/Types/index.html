@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
-        <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
-        <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <link href="/statocles/theme/css/normalize.css" rel="stylesheet">
+        <link href="/statocles/theme/css/skeleton.css" rel="stylesheet">
+        <link href="/statocles/theme/css/statocles-default.css" rel="stylesheet">
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <title>Statocles</title>
         <meta content="Statocles 0.056" name="generator">
@@ -53,10 +53,10 @@
     }
 
 </style>
-<link href="http://preaction.github.io/Statocles/pod/Statocles/Types/" rel="canonical">
+<link href="http://preaction.me/statocles/pod/Statocles/Types/" rel="canonical">
 <script>
     if ( location.href.indexOf( "http://preaction.me/statocles/" ) == -1 ) {
-        location.href = "http://preaction.github.io/Statocles/pod/Statocles/Types/";
+        location.href = "http://preaction.me/statocles/pod/Statocles/Types/";
     }
 </script>
 
@@ -65,16 +65,16 @@
         <header>
             <nav class="navbar">
                 <div class="container">
-                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <a class="brand" href="/statocles/">Statocles</a>
                     <ul>
                         <li>
-                            <a href="/Statocles/blog">Blog</a>
+                            <a href="/statocles/blog">Blog</a>
                         </li>
                         <li>
-                            <a href="/Statocles/pod">Docs</a>
+                            <a href="/statocles/pod">Docs</a>
                         </li>
                         <li>
-                            <a href="/Statocles/gallery">Gallery</a>
+                            <a href="/statocles/gallery">Gallery</a>
                         </li>
                         <li>
                             <a href="http://github.com/preaction/Statocles">Code</a>
@@ -99,13 +99,13 @@
             <div class="crumbtrail">
 <ul>
     <li>
-        <a href="/Statocles/pod/Statocles/">Statocles</a>
+        <a href="/statocles/pod/Statocles/">Statocles</a>
     </li>
     <li>
-        <a href="/Statocles/pod/Statocles/Types/">Types</a>
+        <a href="/statocles/pod/Statocles/Types/">Types</a>
     </li>
 </ul>
-(<a href="/Statocles/pod/Statocles/Types/source.html">source</a>)
+(<a href="/statocles/pod/Statocles/Types/source.html">source</a>)
 </div>
 <h1 id="NAME">NAME</h1>
 
@@ -147,31 +147,31 @@
 
 <h2 id="Store">Store</h2>
 
-<p>A <a href="/Statocles/pod/Statocles/Store/">Statocles::Store</a> object.</p>
+<p>A <a href="/statocles/pod/Statocles/Store/">Statocles::Store</a> object.</p>
 
-<p>This can be coerced from any <a href="https://metacpan.org/pod/Path::Tiny" rel="external">Path::Tiny</a> object or any String, which will be used as the filesystem path to the store&#39;s documents (the <a href="/Statocles/pod/Statocles/Store#path/">path attribute</a>). The coercion creates a <a href="/Statocles/pod/Statocles/Store/">Statocles::Store</a> object.</p>
+<p>This can be coerced from any <a href="https://metacpan.org/pod/Path::Tiny" rel="external">Path::Tiny</a> object or any String, which will be used as the filesystem path to the store&#39;s documents (the <a href="/statocles/pod/Statocles/Store#path/">path attribute</a>). The coercion creates a <a href="/statocles/pod/Statocles/Store/">Statocles::Store</a> object.</p>
 
 <h2 id="Theme">Theme</h2>
 
-<p>A <a href="/Statocles/pod/Statocles/Theme/">Statocles::Theme</a> object.</p>
+<p>A <a href="/statocles/pod/Statocles/Theme/">Statocles::Theme</a> object.</p>
 
-<p>This can be coerced from any <a href="https://metacpan.org/pod/Path::Tiny" rel="external">Path::Tiny</a> object or any String, which will be used as the <a href="/Statocles/pod/Statocles/Theme#store/">store attribute</a> (which will then be given to the Store&#39;s path attribute).</p>
+<p>This can be coerced from any <a href="https://metacpan.org/pod/Path::Tiny" rel="external">Path::Tiny</a> object or any String, which will be used as the <a href="/statocles/pod/Statocles/Theme#store/">store attribute</a> (which will then be given to the Store&#39;s path attribute).</p>
 
 <h2 id="Link">Link</h2>
 
-<p>A <a href="/Statocles/pod/Statocles/Link/">Statocles::Link</a> object.</p>
+<p>A <a href="/statocles/pod/Statocles/Link/">Statocles::Link</a> object.</p>
 
 <p>This can be coerced from any HashRef.</p>
 
 <h2 id="LinkArray">LinkArray</h2>
 
-<p>An arrayref of <a href="/Statocles/pod/Statocles/Link/">Statocles::Link</a> objects.</p>
+<p>An arrayref of <a href="/statocles/pod/Statocles/Link/">Statocles::Link</a> objects.</p>
 
 <p>This can be coerced from any ArrayRef of HashRefs.</p>
 
 <h2 id="LinkHash">LinkHash</h2>
 
-<p>A hashref of arrayrefs of <a href="/Statocles/pod/Statocles/Link/">Statocles::Link</a> objects. Useful for the named links like <a href="/Statocles/pod/Statocles/Site#nav/">site navigation</a>.</p>
+<p>A hashref of arrayrefs of <a href="/statocles/pod/Statocles/Link/">Statocles::Link</a> objects. Useful for the named links like <a href="/statocles/pod/Statocles/Site#nav/">site navigation</a>.</p>
 
 <p>This can be coerced from any HashRef of ArrayRef of HashRefs.</p>
 

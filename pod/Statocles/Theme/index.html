@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
-        <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
-        <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <link href="/statocles/theme/css/normalize.css" rel="stylesheet">
+        <link href="/statocles/theme/css/skeleton.css" rel="stylesheet">
+        <link href="/statocles/theme/css/statocles-default.css" rel="stylesheet">
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <title>Statocles</title>
         <meta content="Statocles 0.056" name="generator">
@@ -53,10 +53,10 @@
     }
 
 </style>
-<link href="http://preaction.github.io/Statocles/pod/Statocles/Theme/" rel="canonical">
+<link href="http://preaction.me/statocles/pod/Statocles/Theme/" rel="canonical">
 <script>
     if ( location.href.indexOf( "http://preaction.me/statocles/" ) == -1 ) {
-        location.href = "http://preaction.github.io/Statocles/pod/Statocles/Theme/";
+        location.href = "http://preaction.me/statocles/pod/Statocles/Theme/";
     }
 </script>
 
@@ -65,16 +65,16 @@
         <header>
             <nav class="navbar">
                 <div class="container">
-                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <a class="brand" href="/statocles/">Statocles</a>
                     <ul>
                         <li>
-                            <a href="/Statocles/blog">Blog</a>
+                            <a href="/statocles/blog">Blog</a>
                         </li>
                         <li>
-                            <a href="/Statocles/pod">Docs</a>
+                            <a href="/statocles/pod">Docs</a>
                         </li>
                         <li>
-                            <a href="/Statocles/gallery">Gallery</a>
+                            <a href="/statocles/gallery">Gallery</a>
                         </li>
                         <li>
                             <a href="http://github.com/preaction/Statocles">Code</a>
@@ -99,13 +99,13 @@
             <div class="crumbtrail">
 <ul>
     <li>
-        <a href="/Statocles/pod/Statocles/">Statocles</a>
+        <a href="/statocles/pod/Statocles/">Statocles</a>
     </li>
     <li>
-        <a href="/Statocles/pod/Statocles/Theme/">Theme</a>
+        <a href="/statocles/pod/Statocles/Theme/">Theme</a>
     </li>
 </ul>
-(<a href="/Statocles/pod/Statocles/Theme/source.html">source</a>)
+(<a href="/statocles/pod/Statocles/Theme/source.html">source</a>)
 </div>
 <h1 id="NAME">NAME</h1>
 
@@ -129,7 +129,7 @@
 
 <h1 id="DESCRIPTION">DESCRIPTION</h1>
 
-<p>A Theme contains all the <a href="/Statocles/pod/Statocles/Template/">templates</a> that <a href="/Statocles/pod/Statocles/App/">applications</a> need. This class handles finding and parsing files into <a href="/Statocles/pod/Statocles/Template/">template objects</a>.</p>
+<p>A Theme contains all the <a href="/statocles/pod/Statocles/Template/">templates</a> that <a href="/statocles/pod/Statocles/App/">applications</a> need. This class handles finding and parsing files into <a href="/statocles/pod/Statocles/Template/">template objects</a>.</p>
 
 <p>When the <a href="#store">&quot;store&quot;</a> is read, the templates inside are organized based on their name and their parent directory.</p>
 
@@ -137,13 +137,13 @@
 
 <h2 id="store">store</h2>
 
-<p>The source <a href="/Statocles/pod/Statocles/Store/">store</a> for this theme.</p>
+<p>The source <a href="/statocles/pod/Statocles/Store/">store</a> for this theme.</p>
 
 <p>If the path begins with ::, will pull one of the Statocles default themes from the Statocles share directory.</p>
 
 <h2 id="include_stores">include_stores</h2>
 
-<p>An array of <a href="/Statocles/pod/Statocles/Store/">stores</a> to look for includes. The <a href="#store">&quot;store&quot;</a> is added at the end of this list.</p>
+<p>An array of <a href="/statocles/pod/Statocles/Store/">stores</a> to look for includes. The <a href="#store">&quot;store&quot;</a> is added at the end of this list.</p>
 
 <h2 id="templates">_templates</h2>
 
@@ -163,27 +163,27 @@
 
 <pre><code>    my $tmpl = $theme-&gt;read( $path )</code></pre>
 
-<p>Read the template for the given <code>path</code> and create the <a href="/Statocles/pod/Statocles/Template/">template</a> object.</p>
+<p>Read the template for the given <code>path</code> and create the <a href="/statocles/pod/Statocles/Template/">template</a> object.</p>
 
 <h2 id="build_template">build_template</h2>
 
 <pre><code>    my $tmpl = $theme-&gt;build_template( $path, $content  )</code></pre>
 
-<p>Build a new <a href="/Statocles/pod/Statocles/Template/">Statocles::Template</a> object with the given <code>path</code> and <code>content</code>.</p>
+<p>Build a new <a href="/statocles/pod/Statocles/Template/">Statocles::Template</a> object with the given <code>path</code> and <code>content</code>.</p>
 
 <h2 id="template">template</h2>
 
 <pre><code>    my $tmpl = $theme-&gt;template( $path )
     my $tmpl = $theme-&gt;template( @path_parts )</code></pre>
 
-<p>Get the <a href="/Statocles/pod/Statocles/Template/">template</a> at the given <code>path</code>, or with the given <code>path_parts</code>.</p>
+<p>Get the <a href="/statocles/pod/Statocles/Template/">template</a> at the given <code>path</code>, or with the given <code>path_parts</code>.</p>
 
 <h2 id="include">include</h2>
 
 <pre><code>    my $tmpl = $theme-&gt;include( $path );
     my $tmpl = $theme-&gt;include( @path_parts );</code></pre>
 
-<p>Get the desired <a href="/Statocles/pod/Statocles/Template/">template</a> to include based on the given <code>path</code> or <code>path_parts</code>. Looks through all the <a href="#include_stores">include_stores</a> before looking in the <a href="#store">main store</a>.</p>
+<p>Get the desired <a href="/statocles/pod/Statocles/Template/">template</a> to include based on the given <code>path</code> or <code>path_parts</code>. Looks through all the <a href="#include_stores">include_stores</a> before looking in the <a href="#store">main store</a>.</p>
 
 <h2 id="clear">clear</h2>
 
@@ -195,11 +195,11 @@
 
 <dl>
 
-<dt><a href="/Statocles/pod/Statocles/Help/Theme/">Statocles::Help::Theme</a></dt>
+<dt><a href="/statocles/pod/Statocles/Help/Theme/">Statocles::Help::Theme</a></dt>
 <dd>
 
 </dd>
-<dt><a href="/Statocles/pod/Statocles/Template/">Statocles::Template</a></dt>
+<dt><a href="/statocles/pod/Statocles/Template/">Statocles::Template</a></dt>
 <dd>
 
 </dd>

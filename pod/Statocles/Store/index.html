@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
-        <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
-        <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <link href="/statocles/theme/css/normalize.css" rel="stylesheet">
+        <link href="/statocles/theme/css/skeleton.css" rel="stylesheet">
+        <link href="/statocles/theme/css/statocles-default.css" rel="stylesheet">
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <title>Statocles</title>
         <meta content="Statocles 0.056" name="generator">
@@ -53,10 +53,10 @@
     }
 
 </style>
-<link href="http://preaction.github.io/Statocles/pod/Statocles/Store/" rel="canonical">
+<link href="http://preaction.me/statocles/pod/Statocles/Store/" rel="canonical">
 <script>
     if ( location.href.indexOf( "http://preaction.me/statocles/" ) == -1 ) {
-        location.href = "http://preaction.github.io/Statocles/pod/Statocles/Store/";
+        location.href = "http://preaction.me/statocles/pod/Statocles/Store/";
     }
 </script>
 
@@ -65,16 +65,16 @@
         <header>
             <nav class="navbar">
                 <div class="container">
-                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <a class="brand" href="/statocles/">Statocles</a>
                     <ul>
                         <li>
-                            <a href="/Statocles/blog">Blog</a>
+                            <a href="/statocles/blog">Blog</a>
                         </li>
                         <li>
-                            <a href="/Statocles/pod">Docs</a>
+                            <a href="/statocles/pod">Docs</a>
                         </li>
                         <li>
-                            <a href="/Statocles/gallery">Gallery</a>
+                            <a href="/statocles/gallery">Gallery</a>
                         </li>
                         <li>
                             <a href="http://github.com/preaction/Statocles">Code</a>
@@ -99,13 +99,13 @@
             <div class="crumbtrail">
 <ul>
     <li>
-        <a href="/Statocles/pod/Statocles/">Statocles</a>
+        <a href="/statocles/pod/Statocles/">Statocles</a>
     </li>
     <li>
-        <a href="/Statocles/pod/Statocles/Store/">Store</a>
+        <a href="/statocles/pod/Statocles/Store/">Store</a>
     </li>
 </ul>
-(<a href="/Statocles/pod/Statocles/Store/source.html">source</a>)
+(<a href="/statocles/pod/Statocles/Store/source.html">source</a>)
 </div>
 <h1 id="NAME">NAME</h1>
 
@@ -113,9 +113,9 @@
 
 <h1 id="DESCRIPTION">DESCRIPTION</h1>
 
-<p>A Statocles::Store reads and writes <a href="/Statocles/pod/Statocles/Document/">documents</a> and files (mostly <a href="/Statocles/pod/Statocles/Page/">pages</a>).</p>
+<p>A Statocles::Store reads and writes <a href="/statocles/pod/Statocles/Document/">documents</a> and files (mostly <a href="/statocles/pod/Statocles/Page/">pages</a>).</p>
 
-<p>This class also handles the parsing and inflating of <a href="/Statocles/pod/Statocles/Document/">&quot;document objects&quot;</a>.</p>
+<p>This class also handles the parsing and inflating of <a href="/statocles/pod/Statocles/Document/">&quot;document objects&quot;</a>.</p>
 
 <h2 id="Frontmatter-Document-Format">Frontmatter Document Format</h2>
 
@@ -133,7 +133,7 @@
 
 <h2 id="path">path</h2>
 
-<p>The path to the directory containing the <a href="/Statocles/pod/Statocles/Document/">documents</a>.</p>
+<p>The path to the directory containing the <a href="/statocles/pod/Statocles/Document/">documents</a>.</p>
 
 <h2 id="document_extensions">document_extensions</h2>
 
@@ -141,7 +141,7 @@
 
 <h2 id="documents">documents</h2>
 
-<p>All the <a href="/Statocles/pod/Statocles/Document/">documents</a> currently read by this store.</p>
+<p>All the <a href="/statocles/pod/Statocles/Document/">documents</a> currently read by this store.</p>
 
 <h1 id="METHODS">METHODS</h1>
 
@@ -155,13 +155,13 @@
 
 <pre><code>    my $docs = $store-&gt;read_documents;</code></pre>
 
-<p>Read the directory <code>path</code> and create the <a href="/Statocles/pod/Statocles/Document/">document objects</a> inside. Returns an arrayref of document objects.</p>
+<p>Read the directory <code>path</code> and create the <a href="/statocles/pod/Statocles/Document/">document objects</a> inside. Returns an arrayref of document objects.</p>
 
 <h2 id="read_document">read_document</h2>
 
 <pre><code>    my $doc = $store-&gt;read_document( $path )</code></pre>
 
-<p>Read a single <a href="/Statocles/pod/Statocles/Document/">document</a> in Markdown with optional YAML frontmatter.</p>
+<p>Read a single <a href="/statocles/pod/Statocles/Document/">document</a> in Markdown with optional YAML frontmatter.</p>
 
 <h2 id="parse_frontmatter">parse_frontmatter</h2>
 
@@ -173,7 +173,7 @@
 
 <pre><code>    $store-&gt;write_document( $path, $doc );</code></pre>
 
-<p>Write a <a href="/Statocles/pod/Statocles/Document/">document</a> to the store at the given store path.</p>
+<p>Write a <a href="/statocles/pod/Statocles/Document/">document</a> to the store at the given store path.</p>
 
 <p>The document is written in Frontmatter format.</p>
 
@@ -223,7 +223,7 @@
 
 <pre><code>    $store-&gt;write_file( $path, $content );</code></pre>
 
-<p>Write the given <code>content</code> to the given <code>path</code>. This is mostly used to write out <a href="/Statocles/pod/Statocles/Page/">page objects</a>.</p>
+<p>Write the given <code>content</code> to the given <code>path</code>. This is mostly used to write out <a href="/statocles/pod/Statocles/Page/">page objects</a>.</p>
 
 <p><code>content</code> may be a simple string or a filehandle. If given a string, will write the string using UTF-8 characters. If given a filehandle, will write out the raw bytes read from it with no special encoding.</p>
 

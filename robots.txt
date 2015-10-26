@@ -1,4 +1,4 @@
-Sitemap: http://preaction.github.io/Statocles/sitemap.xml
+Sitemap: http://preaction.me/statocles/sitemap.xml
 User-Agent: *
 Disallow:
 

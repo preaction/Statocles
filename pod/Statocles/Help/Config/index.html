@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
-        <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
-        <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <link href="/statocles/theme/css/normalize.css" rel="stylesheet">
+        <link href="/statocles/theme/css/skeleton.css" rel="stylesheet">
+        <link href="/statocles/theme/css/statocles-default.css" rel="stylesheet">
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <title>Statocles</title>
         <meta content="Statocles 0.056" name="generator">
@@ -53,10 +53,10 @@
     }
 
 </style>
-<link href="http://preaction.github.io/Statocles/pod/Statocles/Help/Config/" rel="canonical">
+<link href="http://preaction.me/statocles/pod/Statocles/Help/Config/" rel="canonical">
 <script>
     if ( location.href.indexOf( "http://preaction.me/statocles/" ) == -1 ) {
-        location.href = "http://preaction.github.io/Statocles/pod/Statocles/Help/Config/";
+        location.href = "http://preaction.me/statocles/pod/Statocles/Help/Config/";
     }
 </script>
 
@@ -65,16 +65,16 @@
         <header>
             <nav class="navbar">
                 <div class="container">
-                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <a class="brand" href="/statocles/">Statocles</a>
                     <ul>
                         <li>
-                            <a href="/Statocles/blog">Blog</a>
+                            <a href="/statocles/blog">Blog</a>
                         </li>
                         <li>
-                            <a href="/Statocles/pod">Docs</a>
+                            <a href="/statocles/pod">Docs</a>
                         </li>
                         <li>
-                            <a href="/Statocles/gallery">Gallery</a>
+                            <a href="/statocles/gallery">Gallery</a>
                         </li>
                         <li>
                             <a href="http://github.com/preaction/Statocles">Code</a>
@@ -99,16 +99,16 @@
             <div class="crumbtrail">
 <ul>
     <li>
-        <a href="/Statocles/pod/Statocles/">Statocles</a>
+        <a href="/statocles/pod/Statocles/">Statocles</a>
     </li>
     <li>
-        <a href="/Statocles/pod/">Help</a>
+        <a href="/statocles/pod/">Help</a>
     </li>
     <li>
-        <a href="/Statocles/pod/Statocles/Help/Config/">Config</a>
+        <a href="/statocles/pod/Statocles/Help/Config/">Config</a>
     </li>
 </ul>
-(<a href="/Statocles/pod/Statocles/Help/Config/source.html">source</a>)
+(<a href="/statocles/pod/Statocles/Help/Config/source.html">source</a>)
 </div>
 <h1 id="NAME">NAME</h1>
 
@@ -128,19 +128,19 @@
 
 <h2 id="A-Source">A Source</h2>
 
-<p>Statocles takes simple, YAML-and-Markdown-formatted <a href="/Statocles/pod/Statocles/Document/">document</a> files and builds HTML pages out of them.</p>
+<p>Statocles takes simple, YAML-and-Markdown-formatted <a href="/statocles/pod/Statocles/Document/">document</a> files and builds HTML pages out of them.</p>
 
-<p>So we need a place to put our source documents. A <a href="/Statocles/pod/Statocles/Store/">store</a> fills multiple roles relating to reading and writing files. Right now, we need it to hold on to our blog posts. We&#39;ll put our blog posts in the <code>blog</code> directory.</p>
+<p>So we need a place to put our source documents. A <a href="/statocles/pod/Statocles/Store/">store</a> fills multiple roles relating to reading and writing files. Right now, we need it to hold on to our blog posts. We&#39;ll put our blog posts in the <code>blog</code> directory.</p>
 
 <pre><code>    $ mkdir blog</code></pre>
 
-<p>The <a href="/Statocles/pod/Statocles/App/Blog/">blog application</a> will use this store to add new blog posts and build web pages from the documents in the <code>blog</code> directory. More on that later.</p>
+<p>The <a href="/statocles/pod/Statocles/App/Blog/">blog application</a> will use this store to add new blog posts and build web pages from the documents in the <code>blog</code> directory. More on that later.</p>
 
 <h2 id="An-App">An App</h2>
 
-<p>A <a href="/Statocles/pod/Statocles/App/">Statocles app</a> is the driver that turns documents into <a href="/Statocles/pod/Statocles/Page/">pages</a>. To build pages, we need a store full of documents. We define our store with the string <code>blog</code>, which will get magically coerced into a <a href="/Statocles/pod/Statocles/Store/">store object</a>.</p>
+<p>A <a href="/statocles/pod/Statocles/App/">Statocles app</a> is the driver that turns documents into <a href="/statocles/pod/Statocles/Page/">pages</a>. To build pages, we need a store full of documents. We define our store with the string <code>blog</code>, which will get magically coerced into a <a href="/statocles/pod/Statocles/Store/">store object</a>.</p>
 
-<p>Since we&#39;re building a blog site, we&#39;ll use the <a href="/Statocles/pod/Statocles/App/Blog/">Statocles blog app</a>:</p>
+<p>Since we&#39;re building a blog site, we&#39;ll use the <a href="/statocles/pod/Statocles/App/Blog/">Statocles blog app</a>:</p>
 
 <pre><code>    # site.yml
     blog_app:
@@ -153,7 +153,7 @@
 
 <h2 id="A-Deploy">A Deploy</h2>
 
-<p>To deploy our site to Github, we need to build a <a href="/Statocles/pod/Statocles/Deploy/">deploy object</a> for Git repositories using <a href="/Statocles/pod/Statocles/Deploy/Git/">Statocles::Deploy::Git</a>. Our deploy object will copy our built pages into the Git repository and commit them. Our deploy will happen in the root directory of our site on the <code>gh-pages</code> branch.</p>
+<p>To deploy our site to Github, we need to build a <a href="/statocles/pod/Statocles/Deploy/">deploy object</a> for Git repositories using <a href="/statocles/pod/Statocles/Deploy/Git/">Statocles::Deploy::Git</a>. Our deploy object will copy our built pages into the Git repository and commit them. Our deploy will happen in the root directory of our site on the <code>gh-pages</code> branch.</p>
 
 <pre><code>    # site.yml
     github_deploy:
@@ -161,15 +161,15 @@
         args:
             branch: gh-pages</code></pre>
 
-<p>Though we are going to deploy to Git, we could also deploy to SFTP or FTP or transfer the pages to a CDN. See <a href="/Statocles/pod/Statocles/Help/Deploy/">Statocles::Help::Deploy</a> for more information.</p>
+<p>Though we are going to deploy to Git, we could also deploy to SFTP or FTP or transfer the pages to a CDN. See <a href="/statocles/pod/Statocles/Help/Deploy/">Statocles::Help::Deploy</a> for more information.</p>
 
 <h2 id="A-Theme">A Theme</h2>
 
-<p>We could set up a theme (<a href="/Statocles/pod/Statocles/Theme/">Statocles::Theme</a>) to change how our site looks, but for now, we&#39;ll use the <code>default</code> theme included with Statocles. See <a href="/Statocles/pod/Statocles/Help/Theme/">Statocles::Help::Theme</a> for information on how to change and customize your theme.</p>
+<p>We could set up a theme (<a href="/statocles/pod/Statocles/Theme/">Statocles::Theme</a>) to change how our site looks, but for now, we&#39;ll use the <code>default</code> theme included with Statocles. See <a href="/statocles/pod/Statocles/Help/Theme/">Statocles::Help::Theme</a> for information on how to change and customize your theme.</p>
 
 <h2 id="A-Site">A Site</h2>
 
-<p>Now that we&#39;re ready, we can tie it all together. A <a href="/Statocles/pod/Statocles/Site/">site</a> is a collection of apps that build and deploy to the same place.</p>
+<p>Now that we&#39;re ready, we can tie it all together. A <a href="/statocles/pod/Statocles/Site/">site</a> is a collection of apps that build and deploy to the same place.</p>
 
 <pre><code>    # site.yml
     site:
@@ -232,7 +232,7 @@
 
 <p>Now that we have a <code>site.yml</code>, we can run the <a href="https://metacpan.org/pod/statocles" rel="external">statocles</a> command to manage our site.</p>
 
-<p>See <a href="/Statocles/pod/Statocles/Help/Content/">Statocles::Help::Content</a> for more information about editing the site&#39;s content.</p>
+<p>See <a href="/statocles/pod/Statocles/Help/Content/">Statocles::Help::Content</a> for more information about editing the site&#39;s content.</p>
 
 <h1 id="Adding-More-Apps">Adding More Apps</h1>
 
@@ -240,7 +240,7 @@
 
 <h2 id="Basic-Pages">Basic Pages</h2>
 
-<p>For basic pages with no structure or extras, there is the <a href="/Statocles/pod/Statocles/App/Basic/">basic app: Statocles::App::Basic</a>. The basic app takes the same YAML-and-Markdown-formatted documents as the blog app and creates HTML pages, without the lists, tags, and feeds the blog generates.</p>
+<p>For basic pages with no structure or extras, there is the <a href="/statocles/pod/Statocles/App/Basic/">basic app: Statocles::App::Basic</a>. The basic app takes the same YAML-and-Markdown-formatted documents as the blog app and creates HTML pages, without the lists, tags, and feeds the blog generates.</p>
 
 <p>Like the blog, we need a store to find our documents. This time, we&#39;ll use the root directory of our repository, <code>.</code>. Finally, we&#39;ll need a URL root. Since we&#39;re using the root directory for our documents, we&#39;ll use the root URL for our destination <code>/</code>.</p>
 
@@ -425,7 +425,7 @@
 
 <h2 id="Custom-Markdown">Custom Markdown</h2>
 
-<p>To use a custom Markdown parser, like <a href="https://metacpan.org/pod/Text::MultiMarkdown" rel="external">Text::MultiMarkdown</a>, which has <a href="https://rawgit.com/fletcher/human-markdown-reference/master/index.html" rel="external">some extra syntax features</a>, you can use the <a href="/Statocles/pod/Statocles/Site#markdown/">site object&#39;s <code>markdown</code> attribute</a> to configure a custom object with <code>$class</code> and optional <code>$args</code>:</p>
+<p>To use a custom Markdown parser, like <a href="https://metacpan.org/pod/Text::MultiMarkdown" rel="external">Text::MultiMarkdown</a>, which has <a href="https://rawgit.com/fletcher/human-markdown-reference/master/index.html" rel="external">some extra syntax features</a>, you can use the <a href="/statocles/pod/Statocles/Site#markdown/">site object&#39;s <code>markdown</code> attribute</a> to configure a custom object with <code>$class</code> and optional <code>$args</code>:</p>
 
 <pre><code>    # site.yml
     site:
@@ -441,15 +441,15 @@
 
 <dl>
 
-<dt><a href="/Statocles/pod/Statocles/Help/Content/">Statocles::Help::Content - How to edit content with Statocles</a></dt>
+<dt><a href="/statocles/pod/Statocles/Help/Content/">Statocles::Help::Content - How to edit content with Statocles</a></dt>
 <dd>
 
 </dd>
-<dt><a href="/Statocles/pod/Statocles/Help/Deploy/">Statocles::Help::Deploy - How to deploy a Statocles site</a></dt>
+<dt><a href="/statocles/pod/Statocles/Help/Deploy/">Statocles::Help::Deploy - How to deploy a Statocles site</a></dt>
 <dd>
 
 </dd>
-<dt><a href="/Statocles/pod/Statocles/Help/Theme/">Statocles::Help::Theme - How to customize a Statocles theme</a></dt>
+<dt><a href="/statocles/pod/Statocles/Help/Theme/">Statocles::Help::Theme - How to customize a Statocles theme</a></dt>
 <dd>
 
 </dd>

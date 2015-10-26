@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
-        <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
-        <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <link href="/statocles/theme/css/normalize.css" rel="stylesheet">
+        <link href="/statocles/theme/css/skeleton.css" rel="stylesheet">
+        <link href="/statocles/theme/css/statocles-default.css" rel="stylesheet">
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <title>Statocles</title>
         <meta content="Statocles 0.056" name="generator">
@@ -53,10 +53,10 @@
     }
 
 </style>
-<link href="http://preaction.github.io/Statocles/pod/Statocles/Help/Content/" rel="canonical">
+<link href="http://preaction.me/statocles/pod/Statocles/Help/Content/" rel="canonical">
 <script>
     if ( location.href.indexOf( "http://preaction.me/statocles/" ) == -1 ) {
-        location.href = "http://preaction.github.io/Statocles/pod/Statocles/Help/Content/";
+        location.href = "http://preaction.me/statocles/pod/Statocles/Help/Content/";
     }
 </script>
 
@@ -65,16 +65,16 @@
         <header>
             <nav class="navbar">
                 <div class="container">
-                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <a class="brand" href="/statocles/">Statocles</a>
                     <ul>
                         <li>
-                            <a href="/Statocles/blog">Blog</a>
+                            <a href="/statocles/blog">Blog</a>
                         </li>
                         <li>
-                            <a href="/Statocles/pod">Docs</a>
+                            <a href="/statocles/pod">Docs</a>
                         </li>
                         <li>
-                            <a href="/Statocles/gallery">Gallery</a>
+                            <a href="/statocles/gallery">Gallery</a>
                         </li>
                         <li>
                             <a href="http://github.com/preaction/Statocles">Code</a>
@@ -99,16 +99,16 @@
             <div class="crumbtrail">
 <ul>
     <li>
-        <a href="/Statocles/pod/Statocles/">Statocles</a>
+        <a href="/statocles/pod/Statocles/">Statocles</a>
     </li>
     <li>
-        <a href="/Statocles/pod/">Help</a>
+        <a href="/statocles/pod/">Help</a>
     </li>
     <li>
-        <a href="/Statocles/pod/Statocles/Help/Content/">Content</a>
+        <a href="/statocles/pod/Statocles/Help/Content/">Content</a>
     </li>
 </ul>
-(<a href="/Statocles/pod/Statocles/Help/Content/source.html">source</a>)
+(<a href="/statocles/pod/Statocles/Help/Content/source.html">source</a>)
 </div>
 <h1 id="NAME">NAME</h1>
 
@@ -122,13 +122,13 @@
 
 <h2 id="Run-an-App-Command">Run an App Command</h2>
 
-<p>Every application in a Statocles site has a name. The name is the key in the <a href="/Statocles/pod/Statocles/Site/">site object&#39;s</a> <code>apps</code> attribute in the <a href="/Statocles/pod/Statocles/Help/Config/">site.yml config file</a>. We can use that name to access the app&#39;s command-line commands.</p>
+<p>Every application in a Statocles site has a name. The name is the key in the <a href="/statocles/pod/Statocles/Site/">site object&#39;s</a> <code>apps</code> attribute in the <a href="/statocles/pod/Statocles/Help/Config/">site.yml config file</a>. We can use that name to access the app&#39;s command-line commands.</p>
 
-<p>Not all applications have or need commands. See <a href="/Statocles/pod/Statocles/App#SEE-ALSO/">the application documentation</a> for more information.</p>
+<p>Not all applications have or need commands. See <a href="/statocles/pod/Statocles/App#SEE-ALSO/">the application documentation</a> for more information.</p>
 
 <h3 id="Create-a-Blog-Post">Create a Blog Post</h3>
 
-<p>To create a new blog post using <a href="/Statocles/pod/Statocles/App/Blog/">the blog app</a>, we can use the <code>post</code> command:</p>
+<p>To create a new blog post using <a href="/statocles/pod/Statocles/App/Blog/">the blog app</a>, we can use the <code>post</code> command:</p>
 
 <pre><code>    $ statocles blog post Snickerdoodles
     New post at: blog/2014/06/04/snickerdoodles</code></pre>
@@ -139,7 +139,7 @@
 
 <h3 id="Create-a-Page">Create a Page</h3>
 
-<p>To create a page using <a href="/Statocles/pod/Statocles/App/Basic/">the basic app</a>, we just have to create a new file:</p>
+<p>To create a page using <a href="/statocles/pod/Statocles/App/Basic/">the basic app</a>, we just have to create a new file:</p>
 
 <pre><code>    ### Create /page/index.html
     $ vim page/index.markdown
@@ -161,7 +161,7 @@
     tags: cookies, cinnamon
     ---</code></pre>
 
-<p>Frontmatter is optional, but it&#39;s recommended that you have at least a title. Available frontmatter options are listed in the <a href="/Statocles/pod/Statocles/Document#ATTRIBUTES/">Statocles::Document attributes documentation</a>.</p>
+<p>Frontmatter is optional, but it&#39;s recommended that you have at least a title. Available frontmatter options are listed in the <a href="/statocles/pod/Statocles/Document#ATTRIBUTES/">Statocles::Document attributes documentation</a>.</p>
 
 <h2 id="Markdown">Markdown</h2>
 
@@ -221,11 +221,11 @@
 
 <h1 id="ADVANCED-FEATURES">ADVANCED FEATURES</h1>
 
-<p>Most of the content in a Statocles site consists of <a href="/Statocles/pod/Statocles/Document/">documents</a>. This section explains some of the options available when writing documents.</p>
+<p>Most of the content in a Statocles site consists of <a href="/statocles/pod/Statocles/Document/">documents</a>. This section explains some of the options available when writing documents.</p>
 
 <h2 id="Content-Sections">Content Sections</h2>
 
-<p>After the frontmatter, you can use <code>---</code> to divide the document into sections. This may have meaning for an app. For example, <a href="/Statocles/pod/Statocles/App/Blog/">the blog app</a> shows only the first content section on the index page, tag pages, and feeds, hiding the rest of the post behind a &quot;Continue reading&quot; link.</p>
+<p>After the frontmatter, you can use <code>---</code> to divide the document into sections. This may have meaning for an app. For example, <a href="/statocles/pod/Statocles/App/Blog/">the blog app</a> shows only the first content section on the index page, tag pages, and feeds, hiding the rest of the post behind a &quot;Continue reading&quot; link.</p>
 
 <pre><code>    ---
     title: My Long Post
@@ -255,11 +255,11 @@
 
     This is really the best cookie ever!</code></pre>
 
-<p>When the page is created, the <code>document/recipe.html.ep</code> template will be read from the <a href="/Statocles/pod/Statocles/Help/Theme/">theme directory</a>.</p>
+<p>When the page is created, the <code>document/recipe.html.ep</code> template will be read from the <a href="/statocles/pod/Statocles/Help/Theme/">theme directory</a>.</p>
 
 <h2 id="Generated-Content">Generated Content</h2>
 
-<p>All documents are also run through <a href="/Statocles/pod/Statocles/Help/Theme#Writing-a-Template/">the template processor</a>, so we have access to <a href="/Statocles/pod/Statocles/Help/Theme#Helpers/">template helpers</a>, but we can also generate our content from the document&#39;s frontmatter data.</p>
+<p>All documents are also run through <a href="/statocles/pod/Statocles/Help/Theme#Writing-a-Template/">the template processor</a>, so we have access to <a href="/statocles/pod/Statocles/Help/Theme#Helpers/">template helpers</a>, but we can also generate our content from the document&#39;s frontmatter data.</p>
 
 <pre><code>    ---
     title: Cheddar Cheese Sauce
@@ -281,15 +281,15 @@
 
 <dl>
 
-<dt><code>$self</code> - The current <a href="/Statocles/pod/Statocles/Document/">document object</a></dt>
+<dt><code>$self</code> - The current <a href="/statocles/pod/Statocles/Document/">document object</a></dt>
 <dd>
 
 </dd>
-<dt><code>$site</code> - The current <a href="/Statocles/pod/Statocles/Site/">site object</a></dt>
+<dt><code>$site</code> - The current <a href="/statocles/pod/Statocles/Site/">site object</a></dt>
 <dd>
 
 </dd>
-<dt><code>$app</code> - The current <a href="/Statocles/pod/Statocles/App/">app object</a></dt>
+<dt><code>$app</code> - The current <a href="/statocles/pod/Statocles/App/">app object</a></dt>
 <dd>
 
 </dd>
@@ -299,7 +299,7 @@
 
 <dl>
 
-<dt><a href="/Statocles/pod/Statocles/Document/">Statocles::Document</a></dt>
+<dt><a href="/statocles/pod/Statocles/Document/">Statocles::Document</a></dt>
 <dd>
 
 <p>These objects are created from document files.</p>

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
-        <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
-        <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <link href="/statocles/theme/css/normalize.css" rel="stylesheet">
+        <link href="/statocles/theme/css/skeleton.css" rel="stylesheet">
+        <link href="/statocles/theme/css/statocles-default.css" rel="stylesheet">
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <title>Statocles</title>
         <meta content="Statocles 0.056" name="generator">
@@ -53,10 +53,10 @@
     }
 
 </style>
-<link href="http://preaction.github.io/Statocles/pod/Statocles/Site/" rel="canonical">
+<link href="http://preaction.me/statocles/pod/Statocles/Site/" rel="canonical">
 <script>
     if ( location.href.indexOf( "http://preaction.me/statocles/" ) == -1 ) {
-        location.href = "http://preaction.github.io/Statocles/pod/Statocles/Site/";
+        location.href = "http://preaction.me/statocles/pod/Statocles/Site/";
     }
 </script>
 
@@ -65,16 +65,16 @@
         <header>
             <nav class="navbar">
                 <div class="container">
-                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <a class="brand" href="/statocles/">Statocles</a>
                     <ul>
                         <li>
-                            <a href="/Statocles/blog">Blog</a>
+                            <a href="/statocles/blog">Blog</a>
                         </li>
                         <li>
-                            <a href="/Statocles/pod">Docs</a>
+                            <a href="/statocles/pod">Docs</a>
                         </li>
                         <li>
-                            <a href="/Statocles/gallery">Gallery</a>
+                            <a href="/statocles/gallery">Gallery</a>
                         </li>
                         <li>
                             <a href="http://github.com/preaction/Statocles">Code</a>
@@ -99,13 +99,13 @@
             <div class="crumbtrail">
 <ul>
     <li>
-        <a href="/Statocles/pod/Statocles/">Statocles</a>
+        <a href="/statocles/pod/Statocles/">Statocles</a>
     </li>
     <li>
-        <a href="/Statocles/pod/Statocles/Site/">Site</a>
+        <a href="/statocles/pod/Statocles/Site/">Site</a>
     </li>
 </ul>
-(<a href="/Statocles/pod/Statocles/Site/source.html">source</a>)
+(<a href="/statocles/pod/Statocles/Site/source.html">source</a>)
 </div>
 <h1 id="NAME">NAME</h1>
 
@@ -128,7 +128,7 @@
 
 <h1 id="DESCRIPTION">DESCRIPTION</h1>
 
-<p>A Statocles::Site is a collection of <a href="/Statocles/pod/Statocles/App/">applications</a>.</p>
+<p>A Statocles::Site is a collection of <a href="/statocles/pod/Statocles/App/">applications</a>.</p>
 
 <h1 id="ATTRIBUTES">ATTRIBUTES</h1>
 
@@ -140,11 +140,11 @@
 
 <p>The base URL of the site, including protocol and domain. Used mostly for feeds.</p>
 
-<p>This can be overridden by <a href="/Statocles/pod/Statocles/Deploy#base_url/">base_url in Deploy</a>.</p>
+<p>This can be overridden by <a href="/statocles/pod/Statocles/Deploy#base_url/">base_url in Deploy</a>.</p>
 
 <h2 id="theme">theme</h2>
 
-<p>The <a href="/Statocles/pod/Statocles/Theme/">theme</a> for this site. All apps share the same theme.</p>
+<p>The <a href="/statocles/pod/Statocles/Theme/">theme</a> for this site. All apps share the same theme.</p>
 
 <h2 id="apps">apps</h2>
 
@@ -161,7 +161,7 @@
 <pre><code>    title - The title of the link
     href - The href of the link</code></pre>
 
-<p>The most likely name for your navigation will be <code>main</code>. Navigation names are defined by your <a href="/Statocles/pod/Statocles/Theme/">theme</a>. For example:</p>
+<p>The most likely name for your navigation will be <code>main</code>. Navigation names are defined by your <a href="/statocles/pod/Statocles/Theme/">theme</a>. For example:</p>
 
 <pre><code>    {
         main =&gt; [
@@ -178,11 +178,11 @@
 
 <h2 id="build_store">build_store</h2>
 
-<p>The <a href="/Statocles/pod/Statocles/Store/">store</a> object to use for <code>build()</code>. This is a workspace and will be rebuilt often, using the <code>build</code> and <code>daemon</code> commands. This is also the store the <code>daemon</code> command reads to serve the site.</p>
+<p>The <a href="/statocles/pod/Statocles/Store/">store</a> object to use for <code>build()</code>. This is a workspace and will be rebuilt often, using the <code>build</code> and <code>daemon</code> commands. This is also the store the <code>daemon</code> command reads to serve the site.</p>
 
 <h2 id="deploy">deploy</h2>
 
-<p>The <a href="/Statocles/pod/Statocles/Deploy/">deploy object</a> to use for <code>deploy()</code>. This is intended to be the production deployment of the site. A build gets promoted to production by using the <code>deploy</code> command.</p>
+<p>The <a href="/statocles/pod/Statocles/Deploy/">deploy object</a> to use for <code>deploy()</code>. This is intended to be the production deployment of the site. A build gets promoted to production by using the <code>deploy</code> command.</p>
 
 <h2 id="data">data</h2>
 
@@ -214,7 +214,7 @@
 
 <pre><code>    my @links = $site-&gt;nav( $key );</code></pre>
 
-<p>Get the list of links for the given nav <code>key</code>. Each link is a <a href="/Statocles/pod/Statocles/Link/">Statocles::Link</a> object.</p>
+<p>Get the list of links for the given nav <code>key</code>. Each link is a <a href="/statocles/pod/Statocles/Link/">Statocles::Link</a> object.</p>
 
 <pre><code>    title - The title of the link
     href - The href of the link</code></pre>
@@ -231,7 +231,7 @@
 
 <pre><code>    $site-&gt;deploy( %options );</code></pre>
 
-<p>Deploy the site to its destination. The <code>%options</code> are passed to the appropriate <a href="/Statocles/pod/Statocles/Deploy/">deploy object</a>.</p>
+<p>Deploy the site to its destination. The <code>%options</code> are passed to the appropriate <a href="/statocles/pod/Statocles/Deploy/">deploy object</a>.</p>
 
 <h2 id="url">url</h2>
 
@@ -249,13 +249,13 @@
 
 <p>You can use this event to add new pages or edit the pages already created.</p>
 
-<p>The event will be a <a href="/Statocles/pod/Statocles/Event#Statocles/Event/Pages/">Statocles::Event::Pages</a> object containing all the pages built by the apps.</p>
+<p>The event will be a <a href="/statocles/pod/Statocles/Event#Statocles/Event/Pages/">Statocles::Event::Pages</a> object containing all the pages built by the apps.</p>
 
 <h2 id="build1">build</h2>
 
 <p>This event is fired after the site has been built and the pages written to the <code>build_store</code>.</p>
 
-<p>The event will be a <a href="/Statocles/pod/Statocles/Event#Statocles/Event/Pages/">Statocles::Event::Pages</a> object containing all the pages built by the site.</p>
+<p>The event will be a <a href="/statocles/pod/Statocles/Event#Statocles/Event/Pages/">Statocles::Event::Pages</a> object containing all the pages built by the site.</p>
 
 
 

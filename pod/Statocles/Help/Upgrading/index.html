@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link href="/Statocles/theme/css/normalize.css" rel="stylesheet">
-        <link href="/Statocles/theme/css/skeleton.css" rel="stylesheet">
-        <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
+        <link href="/statocles/theme/css/normalize.css" rel="stylesheet">
+        <link href="/statocles/theme/css/skeleton.css" rel="stylesheet">
+        <link href="/statocles/theme/css/statocles-default.css" rel="stylesheet">
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <title>Statocles</title>
         <meta content="Statocles 0.056" name="generator">
@@ -53,10 +53,10 @@
     }
 
 </style>
-<link href="http://preaction.github.io/Statocles/pod/Statocles/Help/Upgrading/" rel="canonical">
+<link href="http://preaction.me/statocles/pod/Statocles/Help/Upgrading/" rel="canonical">
 <script>
     if ( location.href.indexOf( "http://preaction.me/statocles/" ) == -1 ) {
-        location.href = "http://preaction.github.io/Statocles/pod/Statocles/Help/Upgrading/";
+        location.href = "http://preaction.me/statocles/pod/Statocles/Help/Upgrading/";
     }
 </script>
 
@@ -65,16 +65,16 @@
         <header>
             <nav class="navbar">
                 <div class="container">
-                    <a class="brand" href="/Statocles/">Statocles</a>
+                    <a class="brand" href="/statocles/">Statocles</a>
                     <ul>
                         <li>
-                            <a href="/Statocles/blog">Blog</a>
+                            <a href="/statocles/blog">Blog</a>
                         </li>
                         <li>
-                            <a href="/Statocles/pod">Docs</a>
+                            <a href="/statocles/pod">Docs</a>
                         </li>
                         <li>
-                            <a href="/Statocles/gallery">Gallery</a>
+                            <a href="/statocles/gallery">Gallery</a>
                         </li>
                         <li>
                             <a href="http://github.com/preaction/Statocles">Code</a>
@@ -99,16 +99,16 @@
             <div class="crumbtrail">
 <ul>
     <li>
-        <a href="/Statocles/pod/Statocles/">Statocles</a>
+        <a href="/statocles/pod/Statocles/">Statocles</a>
     </li>
     <li>
-        <a href="/Statocles/pod/">Help</a>
+        <a href="/statocles/pod/">Help</a>
     </li>
     <li>
-        <a href="/Statocles/pod/Statocles/Help/Upgrading/">Upgrading</a>
+        <a href="/statocles/pod/Statocles/Help/Upgrading/">Upgrading</a>
     </li>
 </ul>
-(<a href="/Statocles/pod/Statocles/Help/Upgrading/source.html">source</a>)
+(<a href="/statocles/pod/Statocles/Help/Upgrading/source.html">source</a>)
 </div>
 <h1 id="NAME">NAME</h1>
 
@@ -127,11 +127,11 @@
 <dt>site &quot;index&quot; property should be absolute path to index page (got &quot;%s&quot;)</dt>
 <dd>
 
-<p>The <a href="/Statocles/pod/Statocles/Site/">site object</a> &quot;index&quot; property used to be the name of the application that should be used as the index. For this to work, applications need to say which of their pages should be the site index, which they did by putting that page first in the list of pages returned. This was magic, and prone to breakage. It also doesn&#39;t allow the site author to choose any page they want as the site index.</p>
+<p>The <a href="/statocles/pod/Statocles/Site/">site object</a> &quot;index&quot; property used to be the name of the application that should be used as the index. For this to work, applications need to say which of their pages should be the site index, which they did by putting that page first in the list of pages returned. This was magic, and prone to breakage. It also doesn&#39;t allow the site author to choose any page they want as the site index.</p>
 
 <p>To fix this, set the site&#39;s &quot;index&quot; property to the path to the page you want to be the index page, including the leading slash.</p>
 
-<p>See the <a href="/Statocles/pod/Statocles/Site#index/">docs for the index property of the Site object</a> for more information.</p>
+<p>See the <a href="/statocles/pod/Statocles/Site#index/">docs for the index property of the Site object</a> for more information.</p>
 
 <p>Deprecated in v0.051. Fatal in v1.000. Exception removed in v2.000.</p>
 
@@ -151,7 +151,7 @@
 <dt>Statocles::Store-&gt;write_document returning a value is deprecated</dt>
 <dd>
 
-<p>The <code>write_document</code> method for <a href="/Statocles/pod/Statocles/Store/">Statocles::Store</a> used to return the full path to the document written. This was for display purposes only, as developers should be using the store object to deal with the filesystem. It was thought that this would provide encapsulation, but that was misguided at best.</p>
+<p>The <code>write_document</code> method for <a href="/statocles/pod/Statocles/Store/">Statocles::Store</a> used to return the full path to the document written. This was for display purposes only, as developers should be using the store object to deal with the filesystem. It was thought that this would provide encapsulation, but that was misguided at best.</p>
 
 <p>With Statocles::Store::File removed, there&#39;s no need for a write method to return anything. Now, <code>write_document</code> and <code>write_file</code> work the same.</p>
 
@@ -187,7 +187,7 @@
 <dt>Perldoc application paths have changed</dt>
 <dd>
 
-<p>The <a href="/Statocles/pod/Statocles/App/Perldoc/">Perldoc app</a> now creates directories so that documentation paths no longer need a <code>.html</code> at the end.</p>
+<p>The <a href="/statocles/pod/Statocles/App/Perldoc/">Perldoc app</a> now creates directories so that documentation paths no longer need a <code>.html</code> at the end.</p>
 
 <pre><code>    /pod/Statocles/App.html -&gt; /pod/Statocles/App</code></pre>
 
@@ -202,7 +202,7 @@
 
 <ul>
 
-<li><p><a href="/Statocles/pod/Statocles/Help/Policy/">Statocles::Help::Policy</a> - Policy for deprecations</p>
+<li><p><a href="/statocles/pod/Statocles/Help/Policy/">Statocles::Help::Policy</a> - Policy for deprecations</p>
 
 </li>
 </ul>
