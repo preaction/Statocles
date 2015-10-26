@@ -15,7 +15,7 @@
     #index-banner:before, #index-banner:after {
         width: 60px;
         height: 300px;
-        content: url(/Statocles/theme/images/column.png);
+        content: url(<%= $site->base_url %>/theme/images/column.png);
     }
     #index-banner:before {
         position: absolute;
@@ -44,3 +44,9 @@
     }
 
 </style>
+<link rel="canonical" href="http://preaction.me/statocles/<%= $self->path %>" />
+<script>
+    if ( location.href.indexOf( "http://preaction.me/statocles" ) == -1 ) {
+        location.href = "http://preaction.me/statocles/<%= $self->path %>";
+    }
+</script>

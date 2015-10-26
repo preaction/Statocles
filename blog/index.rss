@@ -5,7 +5,7 @@
         <link>http://preaction.github.io/Statocles/blog/</link>
         <atom:link href="http://preaction.github.io/Statocles/blog/index.rss" rel="self" type="application/rss+xml" />
         <description>Blog feed of Statocles</description>
-        <generator>Statocles 0.055</generator>
+        <generator>Statocles 0.056</generator>
         <item>
             <title>Release v0.055</title>
             <link>http://preaction.github.io/Statocles/blog/2015/09/22/release-v0-055/</link>

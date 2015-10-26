@@ -6,7 +6,7 @@
         <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <title>Statocles</title>
-        <meta content="Statocles 0.055" name="generator">
+        <meta content="Statocles 0.056" name="generator">
         <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
 <style>
     h1, h2, h3, h4, h5, h6 {
@@ -24,7 +24,7 @@
     #index-banner:before, #index-banner:after {
         width: 60px;
         height: 300px;
-        content: url(/Statocles/theme/images/column.png);
+        content: url(http://preaction.me/statocles//theme/images/column.png);
     }
     #index-banner:before {
         position: absolute;
@@ -53,6 +53,12 @@
     }
 
 </style>
+<link href="http://preaction.me/statocles//pod/Statocles/App/Blog/index.html" rel="canonical">
+<script>
+    if ( location.href.indexOf( "http://preaction.me/statocles" ) == -1 ) {
+        location.href = "http://preaction.me/statocles//pod/Statocles/App/Blog/index.html";
+    }
+</script>
 
     </head>
     <body>
@@ -139,17 +145,65 @@
 
 <h2 id="store">store</h2>
 
-<p>The <a href="/Statocles/pod/Statocles/Store/">store</a> to read for documents.</p>
+<pre><code>    # site.yml
+    blog:
+        class: Statocles::App::Blog
+        args:
+            store: _posts</code></pre>
+
+<p>The <a href="/Statocles/pod/Statocles/Store/">store directory path</a> to read for blog posts. Required.</p>
+
+<p>The Blog directory is organized in a tree by date, with a directory for the year, month, day, and post. Each blog post is its own directory to allow for additional files for the post, like images or additional pages.</p>
 
 <h2 id="tag_text">tag_text</h2>
 
-<p>A hash of tag and descriptions to introduce tags. Having a description is optional.</p>
+<pre><code>    # site.yml
+    blog:
+        class: Statocles::App::Blog
+        args:
+            tag_text:
+                software: Posts about software and development
+                travel: My travelogue around the world!</code></pre>
+
+<p>A hash of tag and introductory Markdown that will be shown on the tag&#39;s main page. Having a description is optional.</p>
+
+<p>Using <a href="https://metacpan.org/pod/Beam::Wire#Config-Services" rel="external">Beam::Wire&#39;s $config directive</a>, you can put the tag text in an external file:</p>
+
+<pre><code>    # site.yml
+    blog:
+        class: Statocles::App::Blog
+        args:
+            tag_text:
+                $config: tags.yml
+
+    # tags.yml
+    software: |-
+        # Software
+
+        Posts about software development, mostly in [Perl](http://perl.org)
+
+    travel: |-
+        # Travel
+
+        My travelogue around the world! [Also visit my Instagram!](http://example.com)</code></pre>
 
 <h2 id="page_size">page_size</h2>
+
+<pre><code>    # site.yml
+    blog:
+        class: Statocles::App::Blog
+        args:
+            page_size: 5</code></pre>
 
 <p>The number of posts to put in a page (the main page and the tag pages). Defaults to 5.</p>
 
 <h2 id="index_tags">index_tags</h2>
+
+<pre><code>    # site.yml
+    blog:
+        class: Statocles::App::Blog
+        args:
+            index_tags: [ &#39;-private&#39;, &#39;+important&#39; ]</code></pre>
 
 <p>Filter the tags shown in the index page. An array of tags prefixed with either a + or a -. By prefixing the tag with a &quot;-&quot;, it will be removed from the index, unless a later tag prefixed with a &quot;+&quot; also matches.</p>
 
@@ -157,9 +211,9 @@
 
 <p>So, given a document with tags &quot;foo&quot;, and &quot;bar&quot;:</p>
 
-<pre><code>    index_tags =&gt; [ ];                  # document will be included
-    index_tags =&gt; [ &#39;-foo&#39; ];           # document will not be included
-    index_tags =&gt; [ &#39;-foo&#39;, &#39;+bar&#39; ];   # document will be included</code></pre>
+<pre><code>    index_tags: [ ]                 # document will be included
+    index_tags: [ &#39;-foo&#39; ]          # document will not be included
+    index_tags: [ &#39;-foo&#39;, &#39;+bar&#39; ]  # document will be included</code></pre>
 
 <h1 id="METHODS">METHODS</h1>
 

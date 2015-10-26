@@ -6,7 +6,7 @@
         <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <title>Statocles</title>
-        <meta content="Statocles 0.055" name="generator">
+        <meta content="Statocles 0.056" name="generator">
         <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
 <style>
     h1, h2, h3, h4, h5, h6 {
@@ -24,7 +24,7 @@
     #index-banner:before, #index-banner:after {
         width: 60px;
         height: 300px;
-        content: url(/Statocles/theme/images/column.png);
+        content: url(http://preaction.me/statocles//theme/images/column.png);
     }
     #index-banner:before {
         position: absolute;
@@ -53,6 +53,12 @@
     }
 
 </style>
+<link href="http://preaction.me/statocles//pod/Statocles/App/Static/source.html" rel="canonical">
+<script>
+    if ( location.href.indexOf( "http://preaction.me/statocles" ) == -1 ) {
+        location.href = "http://preaction.me/statocles//pod/Statocles/App/Static/source.html";
+    }
+</script>
 
     </head>
     <body>
@@ -94,7 +100,7 @@
     Back to documentation
 </a>
 <pre>package Statocles::App::Static;
-# ABSTRACT: Manage static files like CSS, JS, images, and other untemplated content
+# ABSTRACT: (DEPRECATED) Manage static files like CSS, JS, images, and other untemplated content
 
 use Statocles::Base &#39;Class&#39;;
 use Statocles::Page::File;
@@ -150,6 +156,10 @@ sub pages {
 __END__
 
 =head1 DESCRIPTION
+
+B&lt;NOTE:&gt; This application&#39;s functionality has been added to
+L&lt;Statocles::App::Basic&gt;. You can use the Basic app to replace this app. This
+class will be removed with v2.0. See L&lt;Statocles::Help::Upgrading&gt;.
 
 This L&lt;Statocles::App|Statocles::App&gt; manages static content with no processing,
 perfect for images, stylesheets, scripts, or already-built HTML.

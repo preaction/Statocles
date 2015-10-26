@@ -6,7 +6,7 @@
         <link href="/Statocles/theme/css/statocles-default.css" rel="stylesheet">
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <title>Statocles</title>
-        <meta content="Statocles 0.055" name="generator">
+        <meta content="Statocles 0.056" name="generator">
         <link href="http://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css">
 <style>
     h1, h2, h3, h4, h5, h6 {
@@ -24,7 +24,7 @@
     #index-banner:before, #index-banner:after {
         width: 60px;
         height: 300px;
-        content: url(/Statocles/theme/images/column.png);
+        content: url(http://preaction.me/statocles//theme/images/column.png);
     }
     #index-banner:before {
         position: absolute;
@@ -53,6 +53,12 @@
     }
 
 </style>
+<link href="http://preaction.me/statocles//pod/Statocles/Help/Theme/index.html" rel="canonical">
+<script>
+    if ( location.href.indexOf( "http://preaction.me/statocles" ) == -1 ) {
+        location.href = "http://preaction.me/statocles//pod/Statocles/Help/Theme/index.html";
+    }
+</script>
 
     </head>
     <body>
@@ -269,6 +275,15 @@
     %= include &quot;site/before_header.html&quot;</code></pre>
 
 <p>If the included path ends with &quot;.ep&quot;, it is treated as a template. Otherwise, it&#39;s just written directly with no processing.</p>
+
+</dd>
+<dt>markdown</dt>
+<dd>
+
+<p>The <code>markdown</code> helper allows you to render Markdown to HTML. This is useful when you&#39;re using extra <code>data()</code> (see above) or for things like <a href="/Statocles/pod/Statocles/App/Blog#tag_text/">the blog app tag_text attribute</a>.</p>
+
+<pre><code>    # Render Markdown as HTML
+    %= markdown $self-&gt;data-&gt;{markdown}</code></pre>
 
 </dd>
 </dl>
