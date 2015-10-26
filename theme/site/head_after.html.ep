@@ -46,7 +46,7 @@
 </style>
 <link rel="canonical" href="<%= $site->url( $self->path ) %>" />
 <script>
-    if ( location.href.indexOf( "http://preaction.me/statocles" ) == -1 ) {
+    if ( location.href.indexOf( "<%= $site->base_url %>" ) == -1 ) {
         location.href = "<%= $site->url( $self->path ) %>";
     }
 </script>
