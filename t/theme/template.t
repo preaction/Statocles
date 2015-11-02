@@ -4,7 +4,7 @@ use Statocles::Theme;
 use Statocles::Template;
 use Cwd qw( getcwd );
 use Scalar::Util qw( refaddr );
-my $SHARE_DIR = path( __DIR__, 'share' );
+my $SHARE_DIR = path( __DIR__, '..', 'share' );
 build_test_site( theme => $SHARE_DIR->child( 'theme' ) );
 
 subtest 'attributes' => sub {
