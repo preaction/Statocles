@@ -13,8 +13,8 @@ coerce Store, from Str, via { Statocles::Store->new( path => $_ ) };
 coerce Store, from InstanceOf['Path::Tiny'], via { Statocles::Store->new( path => $_ ) };
 
 class_type Theme, { class => "Statocles::Theme" };
-coerce Theme, from Str, via { Statocles::Theme->new( store => $_ ) };
-coerce Theme, from InstanceOf['Path::Tiny'], via { Statocles::Theme->new( store => $_ ) };
+coerce Theme, from Str, via { require Statocles::Theme; Statocles::Theme->new( store => $_ ) };
+coerce Theme, from InstanceOf['Path::Tiny'], via { require Statocles::Theme; Statocles::Theme->new( store => $_ ) };
 
 class_type Link, { class => "Statocles::Link" };
 coerce Link, from HashRef, via { Statocles::Link->new( $_ ) };
@@ -46,7 +46,6 @@ coerce LinkHash, from HashRef[HashRef],
 
 # Down here to resolve circular dependencies
 require Statocles::Store;
-require Statocles::Theme;
 require Statocles::Link;
 
 1;

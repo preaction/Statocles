@@ -47,6 +47,7 @@ has theme => (
     isa => Theme,
     coerce => Theme->coercion,
     default => sub {
+        require Statocles::Theme;
         Statocles::Theme->new( store => '::default' );
     },
 );
