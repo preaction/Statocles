@@ -189,6 +189,22 @@ sub clear {
     return;
 }
 
+=method pages
+
+Get the extra, non-template files to deploy with the rest of the site, like CSS,
+JavaScript, and images.
+
+Templates, files that end in C<.ep>, will not be deployed with the rest of the
+site.
+
+=cut
+
+around pages => sub {
+    my ( $orig, $self, %args ) = @_;
+    my @pages = $self->$orig( %args );
+    return grep { $_->path !~ /[.]ep$/ } @pages;
+};
+
 1;
 __END__
 

@@ -27,7 +27,6 @@ subtest 'build events' => sub {
 
             ok !grep( { $_->path =~ m{\Q/robots.txt} } @{ $event->pages } ), 'robots.txt not made yet';
             ok !grep( { $_->path =~ m{\Q/sitemap.xml} } @{ $event->pages } ), 'sitemap.xml not made yet';
-            ok !grep( { $_->path =~ m{\Q/theme/site/layout.html.ep} } @{ $event->pages } ), 'theme not written yet';
 
             # Add a new page in the plugin
             push @{ $event->pages }, Statocles::Page::Plain->new(
@@ -51,7 +50,6 @@ subtest 'build events' => sub {
 
             cmp_deeply $event->pages,
                 superbagof(
-                    methods( path => re( qr{^\Q/theme/site/layout.html.ep} ) ),
                     methods( path => re( qr{^\Q/robots.txt} ) ),
                     methods( path => re( qr{^\Q/sitemap.xml} ) ),
                     # Page we added before_build_write exists
