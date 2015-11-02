@@ -5,6 +5,15 @@ use Statocles::Base 'Class';
 use File::Share qw( dist_dir );
 use Scalar::Util qw( blessed );
 use Statocles::Template;
+with 'Statocles::App::Role::Store';
+
+=attr url_root
+
+The root URL for this application. Defaults to C</theme>.
+
+=cut
+
+has '+url_root' => ( default => sub { '/theme' } );
 
 =attr store
 
@@ -14,13 +23,6 @@ If the path begins with ::, will pull one of the Statocles default
 themes from the Statocles share directory.
 
 =cut
-
-has store => (
-    is => 'ro',
-    isa => Store,
-    coerce => Store->coercion,
-    required => 1,
-);
 
 =attr include_stores
 

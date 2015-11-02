@@ -449,14 +449,9 @@ sub build {
     $store->write_file( 'robots.txt', $robots->render );
 
     # Add the theme
-    my $theme_iter = $self->theme->store->find_files();
-    while ( my $theme_file = $theme_iter->() ) {
-        my $fh = $self->theme->store->open_file( $theme_file );
-        push @pages, Statocles::Page::File->new(
-            path => join( '/', '', 'theme', $theme_file ),
-            fh => $fh,
-        );
-        $store->write_file( Path::Tiny->new( 'theme', $theme_file ), $fh );
+    for my $page ( $self->theme->pages ) {
+        push @pages, $page;
+        $store->write_file( $page->path, $page );
     }
 
     $self->emit( build => class => 'Statocles::Event::Pages', pages => \@pages );
