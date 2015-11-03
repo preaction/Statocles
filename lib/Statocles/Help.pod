@@ -122,6 +122,10 @@ L<Statocles::Help::Develop> - Developing apps and plugins
 
 =item *
 
+L<Statocles::Help::Error> - How to resolve error messages from Statocles
+
+=item *
+
 L<Statocles::Help::Policy> - Project development and deprecation policies
 
 =item *

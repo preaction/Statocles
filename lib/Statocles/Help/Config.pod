@@ -392,6 +392,8 @@ to configure a custom object with C<$class> and optional C<$args>:
 
 =over 4
 
+=item L<Statocles::Help::Error - How to fix error messages from Statocles|Statocles::Help::Error>
+
 =item L<Statocles::Help::Content - How to edit content with Statocles|Statocles::Help::Content>
 
 =item L<Statocles::Help::Deploy - How to deploy a Statocles site|Statocles::Help::Deploy>
