@@ -95,7 +95,7 @@ subtest 'site object missing' => sub {
 
 };
 
-subtest 'site object broken' => sub {
+subtest 'site config broken' => sub {
     subtest 'reference missing' => sub {
         my $config = $SHARE_DIR->child( config => 'bad_ref.yml' );
 
@@ -106,6 +106,50 @@ subtest 'site object broken' => sub {
         like $err, qr{\QERROR: Could not create site object "site": \E.*missing_object}
             or diag $err;
         isnt $exit, 0;
+    };
+
+    subtest 'bad character in YAML' => sub {
+        my $config = $SHARE_DIR->child( config => 'bad_char.yml' );
+
+        my ( $out, $err, $exit ) = capture {
+            Statocles::Command->main( '--config', "$config", 'build' )
+        };
+        ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
+        like $err, qr{ERROR: Could not load config file "$config"[.] Check that you are not using tabs for indentation[.] For more information, run with the "--verbose" option or check Statocles::Help::Error.}
+            or diag $err;
+        isnt $exit, 0;
+
+        subtest '--verbose shows raw error message' => sub {
+            my ( $out, $err, $exit ) = capture {
+                Statocles::Command->main( '-v', '--config', "$config", 'build' )
+            };
+            ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
+            like $err, qr{ERROR: Could not load config file "$config"[.] Check that you are not using tabs for indentation[.] For more information, check Statocles::Help::Error[.].+Raw error: Could not load container file}s
+                or diag $err;
+            isnt $exit, 0;
+        };
+    };
+
+    subtest 'bad indenting in YAML' => sub {
+        my $config = $SHARE_DIR->child( config => 'bad_indent.yml' );
+
+        my ( $out, $err, $exit ) = capture {
+            Statocles::Command->main( '--config', "$config", 'build' )
+        };
+        ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
+        like $err, qr{ERROR: Could not load config file "$config"[.] Check your indentation[.] For more information, run with the "--verbose" option or check Statocles::Help::Error[.]}
+            or diag $err;
+        isnt $exit, 0;
+
+        subtest '--verbose shows raw error message' => sub {
+            my ( $out, $err, $exit ) = capture {
+                Statocles::Command->main( '-v', '--config', "$config", 'build' )
+            };
+            ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
+        like $err, qr{ERROR: Could not load config file "$config"[.] Check your indentation[.] For more information, check Statocles::Help::Error[.].+Raw error: Could not load container file}s
+                or diag $err;
+            isnt $exit, 0;
+        };
     };
 };
 

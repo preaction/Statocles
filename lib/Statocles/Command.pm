@@ -66,7 +66,33 @@ sub main {
         return 1;
     }
 
-    my $wire = Beam::Wire->new( file => $opt{config} );
+    my $wire = eval { Beam::Wire->new( file => $opt{config} ) };
+
+    if ( $@ ) {
+        if ( blessed $@ && $@->isa( 'Beam::Wire::Exception::Config' ) ) {
+            my $remedy;
+            if ( $@ =~ /found character that cannot start any token/ ) {
+                $remedy = "Check that you are not using tabs for indentation. ";
+            }
+            elsif ( $@ =~ /did not find expected key/ ) {
+                $remedy = "Check your indentation. ";
+            }
+
+            my $more_info = ( !$opt{verbose} ? qq{run with the "--verbose" option or } : "" )
+                          . "check Statocles::Help::Error";
+
+            warn sprintf qq{ERROR: Could not load config file "%s". %sFor more information, %s.%s},
+                $opt{config},
+                $remedy,
+                $more_info,
+                ( $opt{verbose} ? "\n\nRaw error: $@" : "" )
+                ;
+
+            return 1;
+        }
+        die $@;
+    }
+
     my $site = eval { $wire->get( $opt{site} ) };
 
     if ( $@ ) {
