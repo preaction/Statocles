@@ -136,8 +136,9 @@ sub pages {
 
             # Rewrite links for modules that we will be serving locally
             if ( grep { $href =~ /^$pod_base$_/ } @{ $self->modules } ) {
-                my ( $module ) = $href =~ /^$pod_base(.+)$/;
-                $node->attr( href => $self->url( $self->_module_href( $module ) ) );
+                my ( $module, $section ) = $href =~ /^$pod_base([^#]+)(?:\#(.*))?$/;
+                my $url = $self->url( $self->_module_href( $module ) );
+                $node->attr( href => $section ? join( "#", $url, $section ) : $url );
             }
             # Add rel="external" for remaining external links
             elsif ( $href =~ m{(?:[^:]+:)?//} ) {

@@ -66,6 +66,9 @@ my @page_tests = (
         ok $dom->at( 'a[href="/pod/My/source.html"]' ), 'source link exists';
         ok !$dom->at( 'a[href="/pod/My/source.html"]' )->attr( 'rel' ), 'source link has no rel';
 
+        ok $dom->at( 'a[href="/pod/#SYNOPSIS"]' ), 'fragment link exists'
+            or diag join "\n", $dom->find( 'a' )->map( attr => 'href' )->each;
+
         my @crumbtrail = $dom->find( '.crumbtrail li' )->each;
         is scalar @crumbtrail, 1;
         is $crumbtrail[0]->at( 'a' )->text, 'My';

@@ -18,6 +18,9 @@ I have to do links to L<internal modules|My::Internal> so that I can test
 that links are rewritten. I also have to link to external modules like L<External>
 which this thing uses to test that external modules are linked to metacpan.org.
 
+I also want to link to the L<synopsis fragment|My::Internal/SYNOPSIS> and that
+should create a proper link.
+
 =head1 METHODS
 
 =head2 new
