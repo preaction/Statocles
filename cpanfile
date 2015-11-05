@@ -1,5 +1,5 @@
 requires "Beam::Emitter" => "0.007";
-requires "Beam::Wire" => "1.013";
+requires "Beam::Wire" => "1.014";
 requires "Encode" => "0";
 requires "File::Share" => "0";
 requires "Git::Repository" => "0";
@@ -7,7 +7,7 @@ requires "Import::Base" => "0.012";
 requires "Mojolicious" => "6.0";
 requires "Moo" => "2.000001";
 requires "Path::Tiny" => "0.072";
-requires "Pod::Simple" => "0";
+requires "Pod::Simple" => "3.31";
 requires "Pod::Usage::Return" => "0";
 requires "Text::Markdown" => "0";
 requires "Time::Piece" => "0";

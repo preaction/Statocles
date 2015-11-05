@@ -1,6 +1,25 @@
 Changelog for Statocles
 
-0.055 2015-09-22T05:09:12
+0.056 2015-11-05T20:38:32
+ - fix inner links do not work in perldoc app
+ - add better error messages for bad config files
+ - add guide to help resolve error messages
+ - update Pod::Simple required version
+ - fix problem with overriding Moo role attributes
+ - do not deploy template files with the site
+ - make Theme into an App
+ - move theme test to appropriate directory
+ - redirect users from github pages
+ - fix header images to use site base url
+ - move site to personal server
+ - add config examples for all blog attributes
+ - process Blog tag text as Markdown
+ - add markdown template helper
+ - mark plain/static apps as deprecated
+ - fix Perldoc links from new version of Statocles
+ - add release v0.055 announcement
+
+0.055 2015-09-22T05:09:12Z
  - fix cleanup warning during global destruction
  - add disqus setup notes to Config guide
  - replace the Static app with the Basic app

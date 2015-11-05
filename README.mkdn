@@ -4,7 +4,7 @@ Statocles - A static site generator
 
 # VERSION
 
-version 0.055
+version 0.056
 
 # STATUS
 
@@ -58,7 +58,7 @@ To get started with Statocles, [consult the Statocles::Help guides](https://meta
 # SEE ALSO
 
 For news and documentation, [visit the Statocles website at
-http://preaction.github.io/Statocles](http://preaction.github.io/Statocles).
+http://preaction.me/statocles](http://preaction.me/statocles).
 
 # AUTHOR
 
