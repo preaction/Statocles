@@ -71,10 +71,10 @@ sub main {
     if ( $@ ) {
         if ( blessed $@ && $@->isa( 'Beam::Wire::Exception::Config' ) ) {
             my $remedy;
-            if ( $@ =~ /found character that cannot start any token/ ) {
+            if ( $@ =~ /found character that cannot start any token/ || $@ =~ /YAML_PARSE_ERR_NONSPACE_INDENTATION/ ) {
                 $remedy = "Check that you are not using tabs for indentation. ";
             }
-            elsif ( $@ =~ /did not find expected key/ ) {
+            elsif ( $@ =~ /did not find expected key/ || $@ =~ /YAML_PARSE_ERR_INCONSISTENT_INDENTATION/ ) {
                 $remedy = "Check your indentation. ";
             }
 
