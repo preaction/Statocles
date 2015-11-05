@@ -1,6 +1,10 @@
 Changelog for Statocles
 
-0.056 2015-11-05T20:38:32
+0.057 2015-11-05T21:37:11
+ - also detect pure-Perl YAML error
+ - add release v0.056 announcement
+
+0.056 2015-11-05T20:38:32Z
  - fix inner links do not work in perldoc app
  - add better error messages for bad config files
  - add guide to help resolve error messages

@@ -4,7 +4,7 @@ Statocles - A static site generator
 
 # VERSION
 
-version 0.056
+version 0.057
 
 # STATUS
 
