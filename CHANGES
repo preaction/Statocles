@@ -1,6 +1,10 @@
 Changelog for Statocles
 
-0.058 2015-11-12T01:52:49
+0.059 2015-11-12T17:25:34
+ - skip compile check for HTMLLint plugin
+ - add release 0.058 announcement
+
+0.058 2015-11-12T01:52:49Z
  - correctly render theme include files
  - do not load site class for every test
  - fix "Can't locate method new" error in create
