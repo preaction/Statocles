@@ -1,6 +1,13 @@
 Changelog for Statocles
 
-0.057 2015-11-05T21:37:11
+0.058 2015-11-12T01:52:49
+ - correctly render theme include files
+ - do not load site class for every test
+ - fix "Can't locate method new" error in create
+ - add html lint plugin
+ - add release v0.057 announcement
+
+0.057 2015-11-05T21:37:11Z
  - also detect pure-Perl YAML error
  - add release v0.056 announcement
 

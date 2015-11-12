@@ -17,6 +17,7 @@ requires "YAML" => "0";
 requires "perl" => "5.010";
 requires "strict" => "0";
 requires "warnings" => "0";
+recommends "HTML::Lint::Pluggable" => "0.06";
 recommends "PPI" => "0";
 recommends "Pod::Elemental" => "0";
 recommends "Pod::Weaver" => "0";
