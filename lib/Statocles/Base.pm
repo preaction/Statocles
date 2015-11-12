@@ -35,7 +35,6 @@ our %IMPORT_BUNDLES = (
             test_constructor test_pages build_test_site build_test_site_apps
             build_temp_site
         )],
-        'Statocles::Site',
         sub { $Statocles::VERSION ||= 0.001; return }, # Set version normally done via dzil
     ],
 

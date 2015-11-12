@@ -4,6 +4,7 @@ BEGIN {
     eval { require HTML::Lint::Pluggable; 1 } or plan skip_all => 'HTML::Lint::Pluggable needed';
 };
 
+use Mojo::Log;
 use Statocles::Plugin::HTMLLint;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
 

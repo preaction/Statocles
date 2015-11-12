@@ -1,5 +1,6 @@
 
 use Statocles::Base 'Test';
+use Statocles::Site;
 use Capture::Tiny qw( capture );
 my $SHARE_DIR = path( __DIR__ )->child( 'share' );
 my $site = Statocles::Site->new(

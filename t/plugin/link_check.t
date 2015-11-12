@@ -1,5 +1,6 @@
 
 use Statocles::Base 'Test';
+use Mojo::Log;
 use Statocles::Plugin::LinkCheck;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
 

@@ -1,5 +1,6 @@
 
 use Statocles::Base 'Test';
+use Statocles::Site;
 use Statocles::Page::ListItem;
 use Statocles::Page::Document;
 use Statocles::Document;

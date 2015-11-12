@@ -1,5 +1,6 @@
 
 use Statocles::Base 'Test';
+use Statocles::Site;
 use Statocles::App;
 use Test::Lib;
 use TestApp;

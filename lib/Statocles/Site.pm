@@ -8,7 +8,6 @@ use Mojo::URL;
 use Mojo::DOM;
 use Mojo::Log;
 use Statocles::Page::Plain;
-use Statocles::Page::File;
 
 =attr title
 
