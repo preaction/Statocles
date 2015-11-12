@@ -56,7 +56,11 @@ subtest 'build' => sub {
             next if $theme_file =~ /[.]ep$/;
             my $path = path( 'theme' => $theme_file );
             ok $build_dir->child( $path )->exists,
-                'theme file ' . $theme_file . 'exists in build dir';
+                'theme file ' . $theme_file . ' exists in build dir';
+            eq_or_diff
+                $build_dir->child( $path )->slurp_utf8,
+                $site->theme->store->path->child( $theme_file )->slurp_utf8,
+                'theme file ' . $theme_file . ' content is correct';
             ok !$deploy_dir->child( $path )->exists,
                 'theme file ' . $theme_file . 'not in deploy dir';
             push @pages, $path;
@@ -88,6 +92,10 @@ subtest 'deploy' => sub {
             next if $theme_file =~ /[.]ep$/;
             ok $deploy_dir->child( 'theme', $theme_file )->exists,
                 'theme file ' . $theme_file . 'exists in deploy dir';
+            eq_or_diff
+                $build_dir->child( theme => $theme_file )->slurp_utf8,
+                $site->theme->store->path->child( $theme_file )->slurp_utf8,
+                'theme file ' . $theme_file . ' content is correct';
         }
     };
 

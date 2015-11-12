@@ -451,7 +451,7 @@ sub build {
     # Add the theme
     for my $page ( $self->theme->pages ) {
         push @pages, $page;
-        $store->write_file( $page->path, $page );
+        $store->write_file( $page->path, $page->render( %args ) );
     }
 
     $self->emit( build => class => 'Statocles::Event::Pages', pages => \@pages );
