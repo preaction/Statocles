@@ -7,6 +7,7 @@ use Getopt::Long qw( GetOptionsFromArray :config pass_through bundling no_auto_a
 use Pod::Usage::Return qw( pod2usage );
 use File::Share qw( dist_dir );
 use Beam::Wire;
+use Statocles::Template;
 
 my @VERBOSE = ( "warn", "info", "debug", "trace" );
 
