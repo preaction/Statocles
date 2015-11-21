@@ -231,6 +231,16 @@ has search_priority => (
     default => sub { 0.5 },
 );
 
+# _rendered_html
+#
+# The HTML rendered from the page. Cached.
+
+has _rendered_html => (
+    is => 'rw',
+    isa => Str,
+    predicate => '_has_rendered_html',
+);
+
 =method vars
 
     my %vars = $page->vars;
@@ -256,10 +266,15 @@ Render the page, using the L<template|Statocles::Page/template> and wrapping
 with the L<layout|Statocles::Page/layout>. Give any extra C<%vars> to the
 template, layout, and page C<content> method (if applicable).
 
+The result of this method is cached.
+
 =cut
 
 sub render {
     my ( $self, %args ) = @_;
+
+    return $self->_rendered_html if $self->_has_rendered_html;
+
     my %vars = (
         %{ $self->data },
         %args,
@@ -272,10 +287,13 @@ sub render {
         %vars,
     );
 
-    return $self->layout->render(
+    my $html = $self->layout->render(
         content => $content,
         %vars,
     );
+
+    $self->_rendered_html( $html );
+    return $html;
 }
 
 =method links
