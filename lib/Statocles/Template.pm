@@ -49,6 +49,20 @@ has theme => (
     coerce => Theme->coercion,
 );
 
+has _template => (
+    is => 'ro',
+    isa => InstanceOf['Mojo::Template'],
+    lazy => 1,
+    default => sub {
+        my ( $self ) = @_;
+        my $t = Mojo::Template->new(
+            name => $self->path,
+        );
+        $t->parse( $self->content )->build;
+        return $t;
+    },
+);
+
 =method BUILDARGS
 
 Set the default path to something useful for in-memory templates.
@@ -85,9 +99,7 @@ a scalar in the template.
 
 sub render {
     my ( $self, %args ) = @_;
-    my $t = Mojo::Template->new(
-        name => $self->path,
-    );
+    my $t = $self->_template;
     $t->prepend( $self->_prelude( '_tmpl', keys %args ) );
 
     my $content;
@@ -108,7 +120,11 @@ sub render {
             return $args{site}->markdown->markdown( $text );
         };
 
-        $content = $t->render( $self->content, \%args );
+        my $err = $t->compile;
+        if ( $err ) {
+            die "Error in template: " . $err;
+        }
+        $content = $t->interpret( \%args );
     }
 
     if ( blessed $content && $content->isa( 'Mojo::Exception' ) ) {
