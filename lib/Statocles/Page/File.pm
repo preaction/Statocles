@@ -47,7 +47,7 @@ Return the filehandle to the file containing the content for this page.
 
 sub render {
     my ( $self ) = @_;
-    return $self->file_path ? $self->file_path->openr_raw : $self->fh;
+    return $self->file_path ? $self->file_path : $self->fh;
 }
 
 1;

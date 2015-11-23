@@ -28,11 +28,9 @@ subtest 'file path' => sub {
         file_path => $SHARE_DIR->child( qw( store files text.txt ) ),
     );
 
-    my $got_fh = $page->render;
-    is ref $got_fh, 'GLOB', 'got a filehandle';
-
-    my $got_content = do { local $/; <$got_fh> };
-    is $got_content, $SHARE_DIR->child( qw( store files text.txt ) )->slurp;
+    my $got_path = $page->render;
+    isa_ok $got_path, 'Path::Tiny', 'got a Path::Tiny object';
+    is $got_path, $SHARE_DIR->child( qw( store files text.txt ) );
 };
 
 subtest 'images' => sub {
@@ -41,11 +39,9 @@ subtest 'images' => sub {
         file_path => $SHARE_DIR->child( qw( store files image.png ) ),
     );
 
-    my $got_fh = $page->render;
-    is ref $got_fh, 'GLOB', 'got a filehandle';
-
-    my $got_content = do { local $/; <$got_fh> };
-    is $got_content, $SHARE_DIR->child( qw( store files image.png ) )->slurp;
+    my $got_path = $page->render;
+    isa_ok $got_path, 'Path::Tiny', 'got a Path::Tiny object';
+    is $got_path, $SHARE_DIR->child( qw( store files image.png ) );
 };
 
 

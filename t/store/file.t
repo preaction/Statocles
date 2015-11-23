@@ -136,6 +136,45 @@ subtest 'write files' => sub {
         };
 
     };
+
+    subtest 'Path::Tiny object' => sub {
+        my $tmpdir = tempdir;
+        my $store = Statocles::Store->new(
+            path => $tmpdir,
+        );
+
+        subtest 'plain text files' => sub {
+            my @warnings;
+            local $SIG{__WARN__} = sub { push @warnings, $_[0] };
+
+            my $source_path = $SHARE_DIR->child( qw( store files text.txt ) );
+
+            $store->write_file( path( qw( store files text.txt ) ), $source_path );
+
+            my $dest_path = $tmpdir->child( qw( store files text.txt ) );
+            eq_or_diff $dest_path->slurp_raw, $source_path->slurp_raw;
+
+            ok !@warnings, 'no warnings from write'
+                or diag "Got warnings: \n\t" . join "\n\t", @warnings;
+        };
+
+        subtest 'images' => sub {
+            my @warnings;
+            local $SIG{__WARN__} = sub { push @warnings, $_[0] };
+
+            my $source_path = $SHARE_DIR->child( qw( store files image.png ) );
+
+            $store->write_file( path( qw( store files image.png ) ), $source_path );
+
+            my $dest_path = $tmpdir->child( qw( store files image.png ) );
+            ok $dest_path->slurp_raw eq $source_path->slurp_raw,
+                'image content is correct';
+
+            ok !@warnings, 'no warnings from write'
+                or diag "Got warnings: \n\t" . join "\n\t", @warnings;
+        };
+
+    };
 };
 
 subtest 'remove' => sub {

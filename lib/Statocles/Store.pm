@@ -384,6 +384,9 @@ sub write_file {
             $fh->print( $line );
         }
     }
+    elsif ( blessed $content && $content->isa( 'Path::Tiny' ) ) {
+        $content->copy( $full_path->touchpath );
+    }
     else {
         $full_path->touchpath->spew_utf8( $content );
     }

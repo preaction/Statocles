@@ -217,9 +217,14 @@ sub test_pages {
         }
 
         my $output = $page->render( site => $site );
+
         # Handle filehandles from render
         if ( ref $output eq 'GLOB' ) {
             $output = do { local $/; <$output> };
+        }
+        # Handle Path::Tiny from render
+        elsif ( Scalar::Util::blessed( $output ) && $output->isa( 'Path::Tiny' ) ) {
+            $output = $output->slurp_raw;
         }
 
         if ( $page->path =~ /[.](?:html|rss|atom)$/ ) {
