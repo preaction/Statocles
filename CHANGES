@@ -1,6 +1,13 @@
 Changelog for Statocles
 
-0.059 2015-11-12T17:25:34
+0.060 2015-11-23T10:42:25
+ - use path objects to make copying files faster
+ - cache rendered document sections
+ - cache the mojo template for performance
+ - cache rendered page HTML for performance
+ - add release v0.059 announcement
+
+0.059 2015-11-12T17:25:34Z
  - skip compile check for HTMLLint plugin
  - add release 0.058 announcement
 
