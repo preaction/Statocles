@@ -125,13 +125,27 @@ marker divides sections.
 
 =cut
 
+has _rendered_sections => (
+    is => 'rw',
+    isa => ArrayRef,
+    predicate => '_has_rendered_sections',
+);
+
 sub sections {
     my ( $self ) = @_;
-    my @sections = split /\n---\n/, $self->document->content;
-    return
+
+    if ( $self->_has_rendered_sections ) {
+        return @{ $self->_rendered_sections };
+    }
+
+    my @sections =
         map { $self->markdown->markdown( $_ ) }
         map { $self->_render_content_template( $_, {} ) }
-        @sections;
+        split /\n---\n/,
+        $self->document->content;
+
+    $self->_rendered_sections( \@sections );
+    return @sections;
 }
 
 =method tags
