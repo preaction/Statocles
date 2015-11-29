@@ -3,7 +3,7 @@ package Statocles::Plugin::HTMLLint;
 
 use Statocles::Base 'Class';
 BEGIN {
-    eval { require HTML::Lint::Pluggable; 1 }
+    eval { require HTML::Lint::Pluggable; HTML::Lint::Pluggable->VERSION( 0.06 ); 1 }
         or die "Error loading Statocles::Plugin::HTMLLint. To use this plugin, install HTML::Lint::Pluggable";
 };
 

@@ -1,7 +1,7 @@
 
 use Statocles::Base 'Test';
 BEGIN {
-    eval { require HTML::Lint::Pluggable; 1 } or plan skip_all => 'HTML::Lint::Pluggable needed';
+    eval { require HTML::Lint::Pluggable; HTML::Lint::Pluggable->VERSION( 0.06 ); 1 } or plan skip_all => 'HTML::Lint::Pluggable v0.06 or higher needed';
 };
 
 use Mojo::Log;
