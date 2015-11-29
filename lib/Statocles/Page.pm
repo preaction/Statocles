@@ -50,6 +50,7 @@ The title of the page.
 has title => (
     is => 'rw',
     isa => Str,
+    default => '',
 );
 
 =attr type
