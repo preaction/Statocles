@@ -3,7 +3,7 @@
     <head>
         <link rel="stylesheet" href="/theme/css/normalize.css" />
         <link rel="stylesheet" href="//cdn.example.com/css/cdn.css" />
-        <title><%= $site->title %></title>
+        <title><%= $self->title %> - <%= $site->title %></title>
     </head>
     <body>
         <a class="brand" href="/">Home</a>

@@ -10,8 +10,11 @@ my $site = build_test_site(
 my @page_tests = (
     '/pod/index.html' => sub {
         my ( $html, $dom ) = @_;
-        # XXX: Find the layout and template
         my $node;
+
+        if ( ok $node = $dom->at( 'title' ), 'title tag exists' ) {
+            like $node->text, qr{\QMy::Internal}, 'title contains module name';
+        }
 
         if ( ok $node = $dom->at( 'h1#NAME' ) ) {
             is $node->text, 'NAME';
@@ -43,8 +46,11 @@ my @page_tests = (
 
     '/pod/My/index.html' => sub {
         my ( $html, $dom ) = @_;
-        # XXX: Find the layout and template
         my $node;
+
+        if ( ok $node = $dom->at( 'title' ), 'title tag exists' ) {
+            like $node->text, qr{\QMy}, 'title contains module name';
+        }
 
         if ( ok $node = $dom->at( 'h1#NAME' ) ) {
             is $node->text, 'NAME';
@@ -81,8 +87,11 @@ my @page_tests = (
 
     '/pod/command/index.html' => sub {
         my ( $html, $dom ) = @_;
-        # XXX: Find the layout and template
         my $node;
+
+        if ( ok $node = $dom->at( 'title' ), 'title tag exists' ) {
+            like $node->text, qr{\Qcommand}, 'title contains module name';
+        }
 
         if ( ok $node = $dom->at( 'h1#NAME' ) ) {
             is $node->text, 'NAME';
@@ -112,8 +121,11 @@ my @page_tests = (
 
     '/pod/shellcmd/index.html' => sub {
         my ( $html, $dom ) = @_;
-        # XXX: Find the layout and template
         my $node;
+
+        if ( ok $node = $dom->at( 'title' ), 'title tag exists' ) {
+            like $node->text, qr{\Qshellcmd}, 'title contains module name';
+        }
 
         if ( ok $node = $dom->at( 'h1#NAME' ) ) {
             is $node->text, 'NAME';
@@ -163,24 +175,48 @@ subtest 'without Pod::Weaver' => sub {
 
         '/pod/My/source.html' => sub {
             my ( $html, $dom ) = @_;
+            my $node;
+
+            if ( ok $node = $dom->at( 'title' ), 'title tag exists' ) {
+                like $node->text, qr{\QMy (source)}, 'title contains module name and source tag';
+            }
+
             eq_or_diff $dom->at( 'pre' )->text,
                 $SHARE_DIR->child( qw( app perldoc lib My.pm ) )->slurp_utf8;
         },
 
         '/pod/My/Internal/source.html' => sub {
             my ( $html, $dom ) = @_;
+            my $node;
+
+            if ( ok $node = $dom->at( 'title' ), 'title tag exists' ) {
+                like $node->text, qr{\QMy::Internal (source)}, 'title contains module name and source tag';
+            }
+
             eq_or_diff $dom->at( 'pre' )->text,
                 $SHARE_DIR->child( qw( app perldoc lib My Internal.pm ) )->slurp_utf8;
         },
 
         '/pod/command/source.html' => sub {
             my ( $html, $dom ) = @_;
+            my $node;
+
+            if ( ok $node = $dom->at( 'title' ), 'title tag exists' ) {
+                like $node->text, qr{\Qcommand (source)}, 'title contains module name and source tag';
+            }
+
             eq_or_diff $dom->at( 'pre' )->text,
                 $SHARE_DIR->child( qw( app perldoc bin command.pl ) )->slurp_utf8;
         },
 
         '/pod/shellcmd/source.html' => sub {
             my ( $html, $dom ) = @_;
+            my $node;
+
+            if ( ok $node = $dom->at( 'title' ), 'title tag exists' ) {
+                like $node->text, qr{\Qshellcmd (source)}, 'title contains module name and source tag';
+            }
+
             eq_or_diff $dom->at( 'pre' )->text,
                 $SHARE_DIR->child( qw( app perldoc bin shellcmd ) )->slurp_utf8;
         },
@@ -232,24 +268,48 @@ subtest 'with Pod::Weaver' => sub {
 
         '/pod/My/source.html' => sub {
             my ( $html, $dom ) = @_;
+            my $node;
+
+            if ( ok $node = $dom->at( 'title' ), 'title tag exists' ) {
+                like $node->text, qr{\QMy (source)}, 'title contains module name and source tag';
+            }
+
             eq_or_diff $dom->at( 'pre' )->text,
                 $SHARE_DIR->child( qw( app perldoc lib-weaver My.pm ) )->slurp_utf8;
         },
 
         '/pod/My/Internal/source.html' => sub {
             my ( $html, $dom ) = @_;
+            my $node;
+
+            if ( ok $node = $dom->at( 'title' ), 'title tag exists' ) {
+                like $node->text, qr{\QMy::Internal (source)}, 'title contains module name and source tag';
+            }
+
             eq_or_diff $dom->at( 'pre' )->text,
                 $SHARE_DIR->child( qw( app perldoc lib-weaver My Internal.pm ) )->slurp_utf8;
         },
 
         '/pod/command/source.html' => sub {
             my ( $html, $dom ) = @_;
+            my $node;
+
+            if ( ok $node = $dom->at( 'title' ), 'title tag exists' ) {
+                like $node->text, qr{\Qcommand (source)}, 'title contains module name and source tag';
+            }
+
             eq_or_diff $dom->at( 'pre' )->text,
                 $SHARE_DIR->child( qw( app perldoc bin-weaver command.pl ) )->slurp_utf8;
         },
 
         '/pod/shellcmd/source.html' => sub {
             my ( $html, $dom ) = @_;
+            my $node;
+
+            if ( ok $node = $dom->at( 'title' ), 'title tag exists' ) {
+                like $node->text, qr{\Qshellcmd (source)}, 'title contains module name and source tag';
+            }
+
             eq_or_diff $dom->at( 'pre' )->text,
                 $SHARE_DIR->child( qw( app perldoc bin-weaver shellcmd ) )->slurp_utf8;
         },

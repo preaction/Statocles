@@ -170,6 +170,7 @@ sub pages {
         my %page_args = (
             layout => $self->site->theme->template( site => 'layout.html' ),
             template => $self->site->theme->template( perldoc => 'pod.html' ),
+            title => $module,
             content => "$dom",
             app => $self,
             path => $self->_module_href( $module ),
@@ -191,6 +192,7 @@ sub pages {
             path => $source_path,
             layout => $self->site->theme->template( site => 'layout.html' ),
             template => $self->site->theme->template( perldoc => 'source.html' ),
+            title => "$module (source)",
             content => Path::Tiny->new( $path )->slurp,
             app => $self,
             data => {
