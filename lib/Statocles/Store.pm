@@ -260,9 +260,9 @@ sub _freeze_document {
     if ( exists $doc->{date} ) {
         $doc->{date} = $doc->{date}->strftime( $DATETIME_FORMAT );
     }
-    if ( exists $doc->{links} ) {
-        if ( !keys %{ $doc->{links} } ) {
-            delete $doc->{links};
+    for my $hash_type ( qw( links images ) ) {
+        if ( exists $doc->{ $hash_type } && !keys %{ $doc->{ $hash_type } } ) {
+            delete $doc->{ $hash_type };
         }
     }
     return $doc;

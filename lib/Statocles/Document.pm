@@ -2,6 +2,7 @@ package Statocles::Document;
 # ABSTRACT: Base class for all Statocles documents
 
 use Statocles::Base 'Class';
+use Statocles::Image;
 
 =attr path
 
@@ -141,6 +142,58 @@ has links => (
     isa => LinkHash,
     default => sub { +{} },
     coerce => LinkHash->coercion,
+);
+
+=attr images
+
+    ---
+    images:
+        title:
+            src: title.jpg
+            alt: A title image for this post
+        banner: banner.jpg
+    ---
+
+Related images for this document. These are used by themes to display
+images in appropriate templates. Each image has a category, like C<title>,
+C<banner>, or C<thumbnail>, mapped to an L<image object|Statocles::Image>.
+See the L<Statocles::Image|Statocles::Image> documentation for a full
+list of supported attributes. The most common attributes are:
+
+=over 4
+
+=item src
+
+The source path of the image. Relative paths will be resolved relative
+to this document.
+
+=item alt
+
+The alternative text to display if the image cannot be downloaded or
+rendered. Also the text to use for non-visual media.
+
+=back
+
+=cut
+
+has images => (
+    is => 'ro',
+    isa => HashRef[InstanceOf['Statocles::Image']],
+    default => sub { +{} },
+    coerce => sub {
+        my ( $ref ) = @_;
+        my %img;
+        for my $name ( keys %$ref ) {
+            my $attrs = $ref->{ $name };
+            if ( !ref $attrs ) {
+                $attrs = { src => $attrs };
+            }
+            $img{ $name } = Statocles::Image->new(
+                %{ $attrs },
+            );
+        }
+        return \%img;
+    },
 );
 
 =attr date
