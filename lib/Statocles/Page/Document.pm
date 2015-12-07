@@ -77,6 +77,11 @@ has '+_links' => (
     default => sub { $_[0]->document->links },
 );
 
+has '+_images' => (
+    default => sub { $_[0]->document->images },
+);
+
+
 sub _render_content_template {
     my ( $self, $content, $vars ) = @_;
     my $tmpl = $self->site->theme->build_template( $self->path, $content );

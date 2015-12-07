@@ -140,6 +140,22 @@ has _links => (
     init_arg => 'links',
 );
 
+=attr images
+
+A hash of images related to this page. Each value should be an L<image
+object|Statocles::Image>.  These are used by themes to show images next
+to articles, thumbnails, and/or shortcut icons.
+
+=cut
+
+has _images => (
+    is => 'ro',
+    isa => HashRef[InstanceOf['Statocles::Image']],
+    lazy => 1,
+    default => sub { +{} },
+    init_arg => 'images',
+);
+
 =attr markdown
 
 The markdown object to render document Markdown. Defaults to L<the markdown
@@ -312,6 +328,24 @@ sub links {
     my ( $self, $name ) = @_;
     my @links = $self->_links->{ $name } ? @{ $self->_links->{ $name } } : ();
     return wantarray ? @links : $links[0];
+}
+
+=method images
+
+    my $image = $page->images( $key );
+
+Get the images for the given key. See L<the images attribute|/images> for some
+commonly-used keys. Returns an L<image object|Statocles::Image>.
+
+=cut
+
+sub images {
+    my ( $self, $name ) = @_;
+    # This exists here as a placeholder in case we ever need to handle
+    # arrays of images, which I anticipate will happen when we build
+    # image galleries or want to be able to pick a single random image
+    # from an array.
+    return $self->_images->{ $name };
 }
 
 =method basename
