@@ -1,6 +1,22 @@
 Changelog for Statocles
 
-0.060 2015-11-23T10:42:25
+0.061 2015-12-13T23:21:12
+ - fix deploy staying on branch when nothing to do
+ - add a testable log object to the test sites
+ - add logging to deploys
+ - add site object to deploy objects
+ - fix git version parsing when version isn't last
+ - speed up deploy by using copy method
+ - add help section to main web page
+ - add images to page objects
+ - add images attribute to documents
+ - add image class to hold refs to images
+ - set a default empty title to stop undef warnings
+ - add module name to page title in perldoc app
+ - check for version of HTML::Lint::Pluggable in test
+ - add release v0.060 announcement
+
+0.060 2015-11-23T10:42:25Z
  - use path objects to make copying files faster
  - cache rendered document sections
  - cache the mojo template for performance
