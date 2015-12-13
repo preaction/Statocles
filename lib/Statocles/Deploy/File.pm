@@ -53,13 +53,7 @@ sub deploy {
     while ( my $path = $iter->() ) {
         # Git versions before 1.7.4.1 require a relative path to 'git add'
         push @files, $path->relative( "/" )->stringify;
-
-        # XXX Implement a friendlier way to copy files from Stores
-        my $in_fh = $from_store->open_file( $path );
-        my $out_fh = $self->path->child( $path )->touchpath->openw_raw;
-        while ( my $line = <$in_fh> ) {
-            $out_fh->print( $line );
-        }
+        $from_store->path->child( $path )->copy( $self->path->child( $path )->touchpath );
     }
 
     return @files;
