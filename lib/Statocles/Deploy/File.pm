@@ -48,6 +48,7 @@ sub deploy {
         $_->remove_tree for $self->path->children;
     }
 
+    $self->site->log->info( "Copying files from build dir to deploy dir" );
     my @files;
     my $iter = $from_store->find_files( include_documents => 1 );
     while ( my $path = $iter->() ) {

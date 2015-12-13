@@ -87,15 +87,17 @@ around 'deploy' => sub {
     if ( !_has_branch( $git, $self->branch ) ) {
         # Create a new, orphan branch
         # Orphan branches were introduced in git 1.7.2
-        _git_run( $git, checkout => '--orphan', $self->branch );
-        _git_run( $git, 'rm', '-r', '-f', '.' );
+        $self->site->log->info( sprintf 'Creating deploy branch "%s"', $self->branch );
+        $self->_run( $git, checkout => '--orphan', $self->branch );
+        $self->_run( $git, 'rm', '-r', '-f', '.' );
     }
     else {
-        _git_run( $git, checkout => $self->branch );
+        $self->_run( $git, checkout => $self->branch );
     }
 
     if ( $options{ clean } ) {
-        _git_run( $git, 'rm', '-r', '-f', '.' );
+        $self->site->log->info( sprintf 'Cleaning old content', $self->branch );
+        $self->_run( $git, 'rm', '-r', '-f', '.' );
         delete $options{ clean };
     }
 
@@ -123,19 +125,32 @@ around 'deploy' => sub {
                 @files;
 
     #; say "Committing: " . Dumper \@files;
-    return if !@files;
+    if ( !@files ) {
+        $self->site->log->warn( 'No files changed. Stopping.' );
+        return;
+    }
 
-    _git_run( $git, add => @files );
-    _git_run( $git, commit => -m => $options{message} || "Site update" );
+    $self->site->log->info( sprintf 'Deploying %d changed files', scalar @files );
+
+    $self->_run( $git, add => @files );
+    $self->_run( $git, commit => -m => $options{message} || "Site update" );
     if ( _has_remote( $git, $self->remote ) ) {
-        _git_run( $git, push => $self->remote => $self->branch );
+        $self->_run( $git, push => $self->remote => $self->branch );
     }
 
     # Tidy up
-    _git_run( $git, checkout => $current_branch );
+    $self->_run( $git, checkout => $current_branch );
 
     return @files;
 };
+
+# Run the given git command on the given git repository, logging the
+# command for those running in debug mode
+sub _run {
+    my ( $self, $git, @args ) = @_;
+    $self->site->log->debug( "Running git command: " . join " ", @args );
+    return _git_run( $git, @args );
+}
 
 sub _git_run {
     my ( $git, @args ) = @_;
