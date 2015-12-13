@@ -170,7 +170,8 @@ sub _has_remote {
 }
 
 sub _git_version {
-    my $git_version = ( split ' ', `git --version` )[-1];
+    my $output = `git --version`;
+    my ( $git_version ) = $output =~ /git version (\d+[.]\d+[.]\d+)/;
     return unless $git_version;
     my $v = sprintf '%i.%03i%03i', split /[.]/, $git_version;
     return $v;
