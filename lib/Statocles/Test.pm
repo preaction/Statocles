@@ -41,10 +41,19 @@ sub build_test_site {
                 : Path::Tiny->tempdir
                 ;
 
+    # Give a testable logger by default, but only if we haven't asked
+    # for some verbose logging from the environment
+    my $log     = $site_args{log}
+                || Mojo::Log->new(
+                    level => 'warn',
+                    max_history_size => 500,
+                );
+
     return Statocles::Site->new(
         title => 'Example Site',
         build_store => $store,
         deploy => $deploy,
+        log => $log,
         %site_args,
     );
 }
