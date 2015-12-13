@@ -127,6 +127,7 @@ around 'deploy' => sub {
     #; say "Committing: " . Dumper \@files;
     if ( !@files ) {
         $self->site->log->warn( 'No files changed. Stopping.' );
+        $self->_run( $git, checkout => $current_branch );
         return;
     }
 

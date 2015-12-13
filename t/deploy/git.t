@@ -54,6 +54,7 @@ subtest 'deploy' => sub {
     _git_run( $git, checkout => $deploy->branch );
 
     my $log = $git->run( log => -u => -n => 1 );
+    my ( $commit_id ) = $log =~ /commit (\S+)/;
     like $log, qr{Site update};
     unlike $log, qr{NEWFILE};
 
@@ -77,6 +78,16 @@ subtest 'deploy' => sub {
             ok $remotedir->child( $file->path )->exists, $file->path . ' deployed';
         }
         ok !$remotedir->child( 'README' )->exists, 'gh-pages branch is orphan and clean';
+    };
+
+    subtest 'nothing to deploy bails out without commit' => sub {
+        $deploy->deploy( $build_store );
+        is current_branch( $git ), 'master', 'deploy leaves us on the branch we came from';
+        _git_run( $git, checkout => $deploy->branch );
+        my $log = $git->run( log => -u => -n => 1 );
+        like $log, qr/commit $commit_id/, 'no new commit created';
+        like $deploy->site->log->history->[-1][2], qr{\QNo files changed. Stopping.},
+            'we warned the user that we did nothing';
     };
 };
 
