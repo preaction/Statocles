@@ -28,6 +28,7 @@ subtest 'deploy' => sub {
 
     my $deploy = Statocles::Deploy::File->new(
         path => $tmpdir,
+        site => build_test_site,
     );
     $deploy->deploy( $build_store );
 
@@ -59,6 +60,7 @@ subtest '--clean' => sub {
 
     my $deploy = Statocles::Deploy::File->new(
         path => $tmpdir,
+        site => build_test_site,
     );
 
     subtest 'deploy without clean does not remove files' => sub {

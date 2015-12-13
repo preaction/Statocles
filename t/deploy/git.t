@@ -184,6 +184,7 @@ subtest 'deploy to subdirectory in git repo' => sub {
     $workdir->child( 'subdir' )->mkpath;
 
     my $deploy = Statocles::Deploy::Git->new(
+        site => build_test_site,
         path => $workdir->child( 'subdir' ),
     );
 
@@ -270,6 +271,7 @@ subtest 'errors' => sub {
 
         my $not_git_path = tempdir;
         my $deploy = Statocles::Deploy::Git->new(
+            site => build_test_site,
             path => $not_git_path,
         );
 
@@ -288,6 +290,7 @@ subtest 'errors' => sub {
         );
 
         my $deploy = Statocles::Deploy::Git->new(
+            site => build_test_site,
             path => $tmpdir,
             branch => 'gh-pages',
         );
@@ -346,6 +349,7 @@ sub make_deploy {
 
     my $deploy = Statocles::Deploy::Git->new(
         path => $workdir,
+        site => build_test_site,
         branch => $args{branch},
         remote => $args{remote},
     );

@@ -18,6 +18,18 @@ has base_url => (
     isa => Str,
 );
 
+=attr site
+
+The site this deploy is deploying for. This will be set before the site calls
+L<the deploy method|/deploy>.
+
+=cut
+
+has site => (
+    is => 'rw',
+    isa => InstanceOf['Statocles::Site'],
+);
+
 =method deploy
 
     my @paths = $deploy->deploy( $from_store, $message );
