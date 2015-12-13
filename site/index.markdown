@@ -66,3 +66,9 @@ Create a site using the `create` command:
 See [the Statocles Setup guide](/pod/Statocles/Help/Setup) for more
 information.
 
+## Help
+
+* [Get online help with our IRC channel, #statocles on
+  irc.perl.org](https://chat.mibbit.com/?channel=%23statocles&server=irc.perl.org).
+* [Report any issues or questions to the Statocles issue tracker on
+  Github](http://github.com/preaction/Statocles/issues).
