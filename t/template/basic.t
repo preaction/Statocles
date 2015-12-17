@@ -12,7 +12,7 @@ my %args = (
 
 subtest 'template string' => sub {
     my $t = Statocles::Template->new(
-        content => '<%= $title %> <%= $content %>',
+        content => '<%= $title %> <%= content %>',
     );
     is $t->render( %args ), "Title Content\n";
 };

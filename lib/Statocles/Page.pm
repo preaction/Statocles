@@ -183,7 +183,7 @@ my @template_attrs = (
     isa => InstanceOf['Statocles::Template'],
     coerce => Statocles::Template->coercion,
     default => sub {
-        Statocles::Template->new( content => '<%= $content %>' ),
+        Statocles::Template->new( content => '<%= content %>' ),
     },
 );
 

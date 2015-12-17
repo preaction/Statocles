@@ -86,11 +86,11 @@ subtest 'constructor' => sub {
             search_priority => 0.5,
             layout => sub {
                 isa_ok $_, 'Statocles::Template';
-                is $_->content, '<%= $content %>';
+                is $_->content, '<%= content %>';
             },
             template => sub {
                 isa_ok $_, 'Statocles::Template';
-                is $_->content, '<%= $content %>';
+                is $_->content, '<%= content %>';
             },
             date => $doc->date,
         },

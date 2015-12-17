@@ -120,6 +120,11 @@ sub render {
             return $args{site}->markdown->markdown( $text );
         };
 
+        local *{"@{[$t->namespace]}::content"} = sub {
+            my ( $section ) = @_;
+            return $args{content};
+        };
+
         my $err = $t->compile;
         if ( $err ) {
             die "Error in template: " . $err;
