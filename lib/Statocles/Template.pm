@@ -202,6 +202,46 @@ be available as a simple scalar:
         ]
     );
 
+=head1 DEFAULT HELPERS
+
+The following functions are available to the template by default.
+
+=head2 content
+
+    %= content
+    <%= content %>
+
+Add the main content of the template. This will be the HTML from the document
+or page.
+
+=head2 include
+
+    %= include 'path/file.html.ep'
+    %= include 'path/file.markdown', var => 'value'
+
+Include a file into this one. The file will be parsed as a template and
+given the same variables as the current template. Optionally, additional
+name-value pairs can be given to the included template. These additional
+template variables override any current variables.
+
+Including markdown files does not automatically translate them into
+HTML. If you're in a page template or layout template, use the
+L<markdown helper|/markdown> to render the markdown into HTML.
+
+=head2 markdown
+
+    %= markdown $markdown_text
+    %= markdown $app->{data}{description}
+    %= markdown include 'path/include.markdown'
+
+Render the given markdown text into HTML. This is useful for allowing users to
+write markdown in L<site data|Statocles::Site/data>, and L<app data|Statocles::App/data> in
+the L<configuration file|Statocles::Help::Config/data>,
+or L<document data|Statocles::Document/data> attributes in the document frontmatter.
+
+Combining the C<markdown> and L<include|/include> helpers allows for adding
+template directives to any included markdown file.
+
 =head1 SEE ALSO
 
 =over 4
