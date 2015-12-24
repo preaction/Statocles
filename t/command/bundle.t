@@ -7,13 +7,13 @@ my $SHARE_DIR = path( __DIR__, '..', 'share' );
 my ( $tmp, $config_fn, $config ) = build_temp_site( $SHARE_DIR );
 
 subtest 'theme' => sub {
-    my $theme_dir = $tmp->child( qw( theme ) );
+    my $theme_dir = $tmp->child( qw( new_theme ) );
     my @args = (
         '--config' => "$config_fn",
         bundle => theme => 'default', "$theme_dir"
     );
-    my @site_layout = qw( theme site layout.html.ep );
-    my @site_footer = qw( theme site footer.html.ep );
+    my @site_layout = qw( new_theme site layout.html.ep );
+    my @site_footer = qw( new_theme site footer.html.ep );
 
     subtest 'first time creates directories' => sub {
         my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
@@ -42,6 +42,39 @@ subtest 'theme' => sub {
         is $tmp->child( @site_layout )->slurp_utf8,
             $SHARE_DIR->parent->parent->child( qw( share theme default site layout.html.ep ) )->slurp_utf8;
         is $tmp->child( @site_footer )->slurp_utf8, 'SITE FOOTER';
+    };
+
+    subtest 'do not mention updating config if unnecessary' => sub {
+
+        subtest 'absolute theme dir' => sub {
+            $config->{theme}{args}{store} = $tmp->child( 'new_theme' );
+            $config_fn->spew( YAML::Dump( $config ) );
+
+            my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+
+            is $exit, 0;
+            ok !$err, 'nothing on stderr' or diag "STDERR: $err";
+            like $out, qr(Theme "default" written to "$theme_dir");
+            unlike $out, qr{Make sure to update "$config_fn"};
+        };
+
+        subtest 'relative theme dir' => sub {
+            $config->{theme}{args}{store} = $tmp->child( 'new_theme' )->relative( $tmp );
+            $config_fn->spew( YAML::Dump( $config ) );
+
+            my $cwd = Path::Tiny->cwd;
+            chdir $tmp;
+            my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+            chdir $cwd;
+
+            is $exit, 0;
+            ok !$err, 'nothing on stderr' or diag "STDERR: $err";
+            like $out, qr(Theme "default" written to "$theme_dir");
+            unlike $out, qr{Make sure to update "$config_fn"};
+        };
+
+        $config->{theme}{args}{store} = $tmp->child( 'theme' );
+        $config_fn->spew( YAML::Dump( $config ) );
     };
 
     subtest 'errors' => sub {

@@ -195,9 +195,12 @@ sub main {
                 return 1;
             }
 
-            $cmd->bundle_theme( $theme_name, $argv[2] );
-            say qq{Theme "$theme_name" written to "$argv[2]"};
-            say qq(Make sure to update "$opt{config}");
+            my $dest_dir = Path::Tiny->new( $argv[2] );
+            $cmd->bundle_theme( $theme_name, $dest_dir );
+            say qq{Theme "$theme_name" written to "$dest_dir"};
+            if ( !$site->theme->store->path->realpath->subsumes( $dest_dir->realpath ) ) {
+                say qq(Make sure to update "$opt{config}");
+            }
         }
     }
     else {
