@@ -2,7 +2,7 @@
 use Statocles::Base 'Test';
 use Statocles::Store;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
-build_test_site( theme => $SHARE_DIR->child( 'theme' ) );
+my $site = build_test_site( theme => $SHARE_DIR->child( 'theme' ) );
 
 test_constructor(
     'Statocles::Store',
@@ -11,19 +11,16 @@ test_constructor(
     },
 );
 
-subtest 'path must exist and be a directory' => sub {
-    throws_ok {
+subtest 'warn if path does not exist' => sub {
+    my $path = $SHARE_DIR->child( qw( DOES_NOT_EXIST ) );
+    lives_ok {
         Statocles::Store->new(
-            path => $SHARE_DIR->child( qw( DOES_NOT_EXIST ) ),
-        );
-    } qr{Store path '[^']+DOES_NOT_EXIST' does not exist};
+            path => $path,
+        )->read_documents;
+    } 'store created with nonexistent path';
 
-    throws_ok {
-        Statocles::Store->new(
-            path => $SHARE_DIR->child( qw( store docs required.markdown ) ),
-        );
-    } qr{Store path '[^']+required\.markdown' is not a directory};
-
+    cmp_deeply $site->log->history->[-1], [ ignore(), 'warn', qq{Store path "$path" does not exist} ]
+        or diag explain $site->log->history->[-1];
 };
 
 done_testing;

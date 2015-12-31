@@ -77,15 +77,29 @@ has _realpath => (
     default => sub { $_[0]->path->realpath },
 );
 
+# If true, we've already checked if this store's path exists. We need to
+# check this lazily to ensure the site is created and the logger is
+# ready to go.
+#
+# XXX: Making sure the logger is ready before the thing that needs it is
+# the entire reason that dependency injection exists. We should use the
+# container to make sure the logger is wired up with every object that
+# needs it...
+has _check_exists => (
+    is => 'rw',
+    isa => Bool,
+    lazy => 1,
+    default => sub {
+        my ( $self ) = @_;
+        if ( !$self->path->exists ) {
+            site->log->warn( sprintf qq{Store path "%s" does not exist}, $self->path );
+        }
+        return 1;
+    },
+);
+
 sub BUILD {
     my ( $self ) = @_;
-    if ( !$self->path->exists ) {
-        die sprintf "Store path '%s' does not exist", $self->path->stringify;
-    }
-    elsif ( !$self->path->is_dir ) {
-        die sprintf "Store path '%s' is not a directory", $self->path->stringify;
-    }
-
     $FILE_STORES{ $self->_realpath }++;
 }
 
@@ -108,6 +122,7 @@ objects|Statocles::Document> inside.  Returns an arrayref of document objects.
 
 sub read_documents {
     my ( $self ) = @_;
+    $self->_check_exists;
     my $root_path = $self->path;
     my @docs;
     my $iter = $root_path->iterator( { recurse => 1, follow_symlinks => 1 } );
@@ -331,6 +346,7 @@ Available options are:
 
 sub find_files {
     my ( $self, %opt ) = @_;
+    $self->_check_exists;
     my $iter = $self->path->iterator({ recurse => 1 });
     return sub {
         my $path;
