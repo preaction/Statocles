@@ -18,6 +18,7 @@ coerce Theme, from InstanceOf['Path::Tiny'], via { require Statocles::Theme; Sta
 
 class_type Link, { class => "Statocles::Link" };
 coerce Link, from HashRef, via { Statocles::Link->new( $_ ) };
+coerce Link, from Str, via { Statocles::Link->new( href => $_ ) };
 
 declare LinkArray, as ArrayRef[Link], coerce => 1;
 coerce LinkArray, from ArrayRef[HashRef],
