@@ -107,6 +107,19 @@ sub render {
         # Add the helper subs, like Mojolicious::Plugin::EPRenderer does
         no strict 'refs';
         no warnings 'redefine';
+
+        # Add theme helpers first, to ensure default helpers do not get
+        # overridden.
+        if ( $self->theme ) {
+            my %theme_helpers = %{ $self->theme->_helpers };
+            for my $helper ( keys %theme_helpers ) {
+                *{"@{[$t->namespace]}::$helper"} = sub {
+                    $theme_helpers{ $helper }->( \%args, @_ );
+                };
+            }
+        }
+
+        # Add default helpers
         local *{"@{[$t->namespace]}::include"} = sub {
             my ( $name, %extra_args ) = @_;
             my $inner_tmpl = $self->theme->include( $name );

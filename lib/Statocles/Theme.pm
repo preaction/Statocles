@@ -72,6 +72,14 @@ has _includes => (
     clearer => '_clear_includes',
 );
 
+# The helpers added to this theme.
+has _helpers => (
+    is => 'ro',
+    isa => HashRef[CodeRef],
+    default => sub { {} },
+    init_arg => 'helpers', # Allow initialization via config file
+);
+
 =method BUILDARGS
 
 Handle the path :: share theme.
@@ -171,6 +179,22 @@ sub include {
     }
 
     die qq{Can not find include "$path"};
+}
+
+=method helper
+
+    $theme->helper( $name, $sub );
+
+Register a helper on this theme. Helpers are functions that are added to
+the template to allow for additional features. Helpers are usually added
+by plugins.
+
+=cut
+
+sub helper {
+    my ( $self, $name, $sub ) = @_;
+    $self->_helpers->{ $name } = $sub;
+    return;
 }
 
 =method clear
