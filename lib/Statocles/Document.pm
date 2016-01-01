@@ -22,7 +22,9 @@ has path => (
     title: My First Post
     ---
 
-The title of this document. Used in the template and the main page title.
+The title of this document. Used in the template and the main page
+title. Any unsafe characters in the title (C<E<lt>>, C<E<gt>>, C<">, and
+C<&>) will be escaped by the template, so no HTML allowed.
 
 =cut
 

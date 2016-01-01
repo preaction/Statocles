@@ -9,7 +9,7 @@
     % for my $p ( @$pages ) {
     <entry>
         <id><%= $site->url( $p->path ) %></id>
-        <title><%= $p->title %></title>
+        <title><%== $p->title %></title>
         % if ( $p->author ) {
         <author><name><%= $p->author %></name></author>
         % }

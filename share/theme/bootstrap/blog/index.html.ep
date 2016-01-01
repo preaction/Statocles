@@ -11,7 +11,7 @@
             % for my $page ( @$pages ) {
             <article>
                 <header>
-                    <h1><a href="<%= $app->page_url( $page ) %>"><%= $page->title %></a></h1>
+                    <h1><a href="<%= $app->page_url( $page ) %>"><%== $page->title %></a></h1>
 
                     <p class="tags">Tags:
                     % for my $tag ( $page->tags ) {

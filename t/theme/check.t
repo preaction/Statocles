@@ -11,32 +11,38 @@ use Statocles::Site;
 use Statocles::Theme;
 use Statocles::Link;
 use Mojo::DOM;
+use Mojo::Util qw( xml_escape );
 
 my $THEME_DIR = path( __DIR__, '..', '..', 'share', 'theme' );
 
-my @documents = (
-    Statocles::Document->new(
+my %document_common = (
+    links => {
+        stylesheet => [
+            {
+                href => '/theme/css/special.css',
+            },
+        ],
+        script => [
+            {
+                href => '/theme/js/special.js',
+            },
+        ],
+    },
+);
+
+my %document = (
+    normal => Statocles::Document->new(
         path => 'DUMMY',
-        title => 'Title One',
+        title => 'Page Title',
         author => 'preaction',
         content => 'Content One',
-        links => {
-            stylesheet => [
-                {
-                    href => '/theme/css/special.css',
-                },
-            ],
-            script => [
-                {
-                    href => '/theme/js/special.js',
-                },
-            ],
-        },
+        %document_common,
     ),
-    Statocles::Document->new(
-        path => 'DUMMY',
-        title => 'Title Two',
-        content => 'Content Two',
+    escaped => Statocles::Document->new(
+        path => '/$escape/@this/(correctly)/index.html',
+        title => '<ESCAPE>',
+        content => '<b>Must not be escaped</b>',
+        %document_common,
     ),
 );
 
@@ -56,7 +62,7 @@ my $site = Statocles::Site->new(
     base_url => 'http://example.com',
     build_store => '.',
     deploy => '.',
-    title => 'Test Title',
+    title => '<Site Title>',
     theme => '.',
     apps => {
         blog => $blog,
@@ -64,9 +70,9 @@ my $site = Statocles::Site->new(
 );
 
 my %page = (
-    document => Statocles::Page::Document->new(
+    normal => Statocles::Page::Document->new(
         path => 'document.html',
-        document => $documents[0],
+        document => $document{normal},
         date => Time::Piece->new,
         tags => [
             Statocles::Link->new(
@@ -79,12 +85,18 @@ my %page = (
             ),
         ],
     ),
+    escaped => Statocles::Page::Document->new(
+        path => '/$escape/@this/(correctly)/index.html',
+        document => $document{escaped},
+        date => Time::Piece->new,
+    ),
+
 );
 
 $page{ list } = Statocles::Page::List->new(
     app => $blog,
     path => 'list.html',
-    pages => [ $page{ document } ],
+    pages => [ $page{ normal }, $page{ escaped } ],
     next => 'page-0.html',
     prev => 'page-1.html',
     data => {
@@ -117,23 +129,30 @@ my %app_vars = (
         'index.html.ep' => {
             %common_vars,
             self => $page{ list },
-            pages => [ $page{ document } ],
+            pages => [ $page{ normal }, $page{ escaped } ],
         },
         'index.rss.ep' => {
             %common_vars,
             self => $page{ feed },
-            pages => [ $page{ document } ],
+            pages => [ $page{ normal }, $page{ escaped } ],
         },
         'index.atom.ep' => {
             %common_vars,
             self => $page{ feed },
-            pages => [ $page{ document } ],
+            pages => [ $page{ normal }, $page{ escaped } ],
         },
-        'post.html.ep' => {
-            %common_vars,
-            self => $page{ document },
-            doc => $documents[0],
-        },
+        'post.html.ep' => [
+            {
+                %common_vars,
+                self => $page{ normal },
+                doc => $document{ normal },
+            },
+            {
+                %common_vars,
+                self => $page{ escaped },
+                doc => $document{ escaped },
+            },
+        ],
     },
 
     perldoc => {
@@ -162,14 +181,21 @@ my %app_vars = (
     },
 
     site => {
-        'layout.html.ep' => {
-            %common_vars,
-            self => $page{ document },
-            app => $blog,
-        },
+        'layout.html.ep' => [
+            {
+                %common_vars,
+                self => $page{ normal },
+                app => $blog,
+            },
+            {
+                %common_vars,
+                self => $page{ escaped },
+                doc => $document{ escaped },
+            },
+        ],
         'sitemap.xml.ep' => {
             site => $site,
-            pages => [ $page{ list }, $page{ document } ],
+            pages => [ $page{ list }, $page{ normal }, $page{ escaped } ],
         },
         'robots.txt.ep' => {
             site => $site,
@@ -181,14 +207,14 @@ my %app_vars = (
 # in the default themes
 my %content_tests = (
     'site/layout.html.ep' => sub {
-        my ( $content ) = @_;
+        my ( $content, %args ) = @_;
         my $dom = Mojo::DOM->new( $content );
         my $elem;
 
         subtest 'page title and site title' => sub {
             if ( ok $elem = $dom->at( 'title' ), 'title element exists' ) {
-                is $elem->text, "Title One - Test Title",
-                    'title has document title and site title';
+                like $elem->text, qr{@{[quotemeta $args{self}->title]}}, 'title has document title';
+                like $elem->text, qr{@{[quotemeta $site->title]}}, 'title has site title';
             }
         };
 
@@ -215,7 +241,7 @@ my %content_tests = (
     },
 
     'blog/index.rss.ep' => sub {
-        my ( $content ) = @_;
+        my ( $content, %args ) = @_;
         my $xml = Mojo::DOM->new( $content );
         my @posts = $xml->find( 'item description' )->map( sub { Mojo::DOM->new( $_[0]->child_nodes->first->content ) } )->each;
 
@@ -229,10 +255,34 @@ my %content_tests = (
             }
         };
 
+        subtest 'item title' => sub {
+            my @titles = $xml->find( 'item title' )->each;
+            is scalar @titles, scalar @{ $args{pages} }, 'right number of item titles found';
+            for my $i ( 0..$#titles ) {
+                my $elem = $titles[ $i ];
+                like $elem->text, qr{@{[quotemeta $args{pages}[$i]->title]}}, 'title has document title';
+                unlike $elem->text, qr{@{[quotemeta $site->title]}}, 'title must not have site title';
+            }
+        };
+    },
+
+    'blog/index.atom.ep' => sub {
+        my ( $content, %args ) = @_;
+        my $xml = Mojo::DOM->new( $content );
+
+        subtest 'entry title' => sub {
+            my @titles = $xml->find( 'entry title' )->each;
+            is scalar @titles, scalar @{ $args{pages} }, 'right number of entry titles found';
+            for my $i ( 0..$#titles ) {
+                my $elem = $titles[ $i ];
+                like $elem->text, qr{@{[quotemeta $args{pages}[$i]->title]}}, 'title has document title';
+                unlike $elem->text, qr{@{[quotemeta $site->title]}}, 'title must not have site title';
+            }
+        };
     },
 
     'blog/index.html.ep' => sub {
-        my ( $content ) = @_;
+        my ( $content, %args ) = @_;
         my $dom = Mojo::DOM->new( $content );
 
         subtest 'tag text exists and is processed as Markdown' => sub {
@@ -242,6 +292,31 @@ my %content_tests = (
             if ( ok my $p = $dom->at( 'main > p' ), 'tag text p exists' ) {
                 is $p->text, 'Bar, baz, and fuzz!', 'p text is correct';
             }
+        };
+
+        subtest 'post titles' => sub {
+            # Article titles should be isolated from the body by using
+            # the <header> tag
+            my @post_titles = $dom->find( 'article header h1' )->each;
+            is scalar @post_titles, scalar @{ $args{pages} }, 'right number of post titles found (article header h1)';
+            for my $i ( 0..$#post_titles ) {
+                ok my $elem = $post_titles[ $i ]->at( 'a' ), "article titles must be a link to the article";
+                next unless $elem;
+                like $elem->text, qr{@{[quotemeta $args{pages}[$i]->title]}}, 'title has document title';
+            }
+        };
+    },
+
+    'blog/post.html.ep' => sub {
+        my ( $content, %args ) = @_;
+        my $dom = Mojo::DOM->new( $content );
+
+        subtest 'post title' => sub {
+            # Article title should be isolated from the body by using
+            # the <header> tag
+            ok my $elem = $dom->at( 'main header h1' ), 'post title found (main header h1)';
+            return unless $elem;
+            like $elem->text, qr{@{[quotemeta $args{self}->title]}}, 'title has document title';
         };
     },
 );
@@ -266,15 +341,25 @@ for my $theme_dir ( @theme_dirs ) {
 
             my $name = $path->basename;
             my $app = $path->parent->basename;
-            my %args = %{ $app_vars{ $app }{ $name } };
-            my $content;
-            lives_ok {
-                $content = $tmpl->render( %args );
-            } join " - ", $app, $name;
 
-            my $rel_path = $path->relative( $theme_dir );
-            if ( my $test = $content_tests{ $rel_path } ) {
-                subtest "content test for $rel_path" => $test, $content;
+            my $arg_sets = $app_vars{ $app }{ $name };
+            if ( ref $arg_sets ne 'ARRAY' ) {
+                $arg_sets = [ $arg_sets ];
+            }
+
+            for my $i ( 0..$#$arg_sets ) {
+                my $arg_set = $arg_sets->[ $i ];
+                my %args = %{ $arg_set };
+                my $content;
+                lives_ok {
+                    $content = $tmpl->render( %args );
+                } sprintf "%s - %s (%d)", $app, $name, $i;
+
+                my $rel_path = $path->relative( $theme_dir );
+                if ( my $test = $content_tests{ $rel_path } ) {
+                    subtest "content test for $rel_path ($i)"
+                        => $test, $content, %args;
+                }
             }
         }
     };

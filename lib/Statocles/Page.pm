@@ -43,7 +43,9 @@ has path => (
 
 =attr title
 
-The title of the page.
+The title of the page. Any unsafe characters in the title (C<E<lt>>,
+C<E<gt>>, C<">, and C<&>) will be escaped by the template, so no HTML
+allowed.
 
 =cut
 

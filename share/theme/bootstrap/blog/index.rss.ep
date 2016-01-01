@@ -13,7 +13,7 @@
         <generator>Statocles <%= $Statocles::VERSION %></generator>
         % for my $p ( @$pages ) {
         <item>
-            <title><%= $p->title %></title>
+            <title><%== $p->title %></title>
             <link><%= $site->url( $p->path ) %></link>
             <guid><%= $site->url( $p->path ) %></guid>
             <description><![CDATA[
