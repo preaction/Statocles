@@ -58,4 +58,111 @@ subtest 'links' => sub {
 
 };
 
+subtest 'add links' => sub {
+
+    subtest 'append to existing' => sub {
+        my $existing_link = Statocles::Link->new(
+            text => 'Atom',
+            href => '/index.atom',
+            type => 'application/atom+xml',
+        );
+
+        subtest 'plain string' => sub {
+            my $page = TestPage->new(
+                path => '/index.rss',
+                links => { alternate => [ $existing_link ] },
+            );
+            $page->links( alternate => "http://example.com" );
+            cmp_deeply
+                [ $page->links( 'alternate' ) ],
+                [
+                    $existing_link,
+                    Statocles::Link->new( href => 'http://example.com' ),
+                ],
+                'URL is coerced into Link object and appended';
+        };
+
+        subtest 'hashref' => sub {
+            my $page = TestPage->new(
+                path => '/index.rss',
+                links => { alternate => [ $existing_link ] },
+            );
+            $page->links( alternate => { type => 'text/html', href => "http://example.com" } );
+            cmp_deeply
+                [ $page->links( 'alternate' ) ],
+                [
+                    $existing_link,
+                    Statocles::Link->new( type => 'text/html', href => 'http://example.com' ),
+                ],
+                'Hashref is coerced into Link object and appended';
+        };
+
+        subtest 'link object' => sub {
+            my $page = TestPage->new(
+                path => '/index.rss',
+                links => { alternate => [ $existing_link ] },
+            );
+            $page->links(
+                alternate => Statocles::Link->new(
+                    type => 'text/html',
+                    href => "http://example.com",
+                )
+            );
+            cmp_deeply
+                [ $page->links( 'alternate' ) ],
+                [
+                    $existing_link,
+                    Statocles::Link->new( type => 'text/html', href => 'http://example.com' ),
+                ],
+                'Link object is appended';
+        };
+    };
+
+    subtest 'add new key' => sub {
+        subtest 'plain string' => sub {
+            my $page = TestPage->new(
+                path => '/index.rss',
+            );
+            $page->links( alternate => "http://example.com" );
+            cmp_deeply
+                [ $page->links( 'alternate' ) ],
+                [
+                    Statocles::Link->new( href => 'http://example.com' ),
+                ],
+                'URL is coerced into Link object and appended';
+        };
+
+        subtest 'hashref' => sub {
+            my $page = TestPage->new(
+                path => '/index.rss',
+            );
+            $page->links( alternate => { type => 'text/html', href => "http://example.com" } );
+            cmp_deeply
+                [ $page->links( 'alternate' ) ],
+                [
+                    Statocles::Link->new( type => 'text/html', href => 'http://example.com' ),
+                ],
+                'Hashref is coerced into Link object and appended';
+        };
+
+        subtest 'link object' => sub {
+            my $page = TestPage->new(
+                path => '/index.rss',
+            );
+            $page->links(
+                alternate => Statocles::Link->new(
+                    type => 'text/html',
+                    href => "http://example.com",
+                )
+            );
+            cmp_deeply
+                [ $page->links( 'alternate' ) ],
+                [
+                    Statocles::Link->new( type => 'text/html', href => 'http://example.com' ),
+                ],
+                'Link object is appended';
+        };
+    };
+};
+
 done_testing;

@@ -319,15 +319,28 @@ sub render {
 
     my @links = $page->links( $key );
     my $link = $page->links( $key );
+    $page->links( $key => $add_link );
 
-Get the links set for the given key. See L<the links attribute|/links> for some
-commonly-used keys. Returns a list of L<link objects|Statocles::Link>. In
-scalar context, returns the first link in the list.
+Get or append to the links set for the given key. See L<the links
+attribute|/links> for some commonly-used keys.
+
+If only one argument is given, returns a list of L<link
+objects|Statocles::Link>. In scalar context, returns the first link in
+the list.
+
+If two arguments are given, append the new link to the given key.
+C<$add_link> may be a URL string, a hash reference of L<link
+attributes|Statocles::Link/ATTRIBUTES>, or a L<Statocles::Link
+object|Statocles::Link>. When adding links, nothing is returned.
 
 =cut
 
 sub links {
-    my ( $self, $name ) = @_;
+    my ( $self, $name, $add_link ) = @_;
+    if ( $add_link ) {
+        push @{ $self->_links->{ $name } }, Link->coerce( $add_link );
+        return;
+    }
     my @links = $self->_links->{ $name } ? @{ $self->_links->{ $name } } : ();
     return wantarray ? @links : $links[0];
 }
