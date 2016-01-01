@@ -64,6 +64,18 @@ has apps => (
     default => sub { {} },
 );
 
+=attr plugins
+
+The plugins in this site. Each plugin has a name that can be used later.
+
+=cut
+
+has plugins => (
+    is => 'ro',
+    isa => HashRef[ConsumerOf['Statocles::Plugin']],
+    default => sub { {} },
+);
+
 =attr index
 
 The page path to use for the site index. Make sure to include the leading slash
@@ -227,6 +239,9 @@ sub BUILD {
     $Statocles::SITE = $self;
     for my $app ( values %{ $self->apps } ) {
         $app->site( $self );
+    }
+    for my $plugin ( values %{ $self->plugins } ) {
+        $plugin->register( $self );
     }
 }
 
