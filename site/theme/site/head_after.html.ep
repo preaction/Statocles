@@ -46,7 +46,8 @@
 </style>
 <link rel="canonical" href="<%= $site->url( $self->path ) %>" />
 <script>
-    if ( location.href.indexOf( "<%= $site->base_url %>" ) == -1 ) {
+    if ( location.href.indexOf( "<%= $site->base_url %>" ) == -1 &&
+            location.href.indexOf( "localhost" ) == -1 ) {
         location.href = "<%= $site->url( $self->path ) %>";
     }
 </script>
