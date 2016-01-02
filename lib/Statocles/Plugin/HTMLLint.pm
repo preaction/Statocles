@@ -2,6 +2,7 @@ package Statocles::Plugin::HTMLLint;
 # ABSTRACT: Check HTML for common errors and issues
 
 use Statocles::Base 'Class';
+with 'Statocles::Plugin';
 BEGIN {
     eval { require HTML::Lint::Pluggable; HTML::Lint::Pluggable->VERSION( 0.06 ); 1 }
         or die "Error loading Statocles::Plugin::HTMLLint. To use this plugin, install HTML::Lint::Pluggable";
@@ -53,6 +54,17 @@ sub check_pages {
     }
 }
 
+=method register
+
+Register this plugin to install its event handlers. Called automatically.
+
+=cut
+
+sub register {
+    my ( $self, $site ) = @_;
+    $site->on( build => sub { $self->check_pages( @_ ) } );
+}
+
 1;
 
 =head1 SYNOPSIS
@@ -60,10 +72,10 @@ sub check_pages {
     # site.yml
     site:
         class: Statocles::Site
-        on:
-            - build:
-                $class: Statocles::Plugin::HTMLLint
-                $method: check_pages
+        args:
+            plugins:
+                lint:
+                    $class: Statocles::Plugin::HTMLLint
 
 =head1 DESCRIPTION
 

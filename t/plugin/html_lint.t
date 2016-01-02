@@ -15,8 +15,7 @@ subtest 'check html' => sub {
 
     my ( $site, $build_dir, $deploy_dir ) = build_test_site_apps( $SHARE_DIR, log => $log );
     my $plugin = Statocles::Plugin::HTMLLint->new;
-    $site->on( 'build', sub { $plugin->check_pages( @_ ) } );
-
+    $plugin->register( $site );
     $site->build;
 
     cmp_deeply $site->log->history,

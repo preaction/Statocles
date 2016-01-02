@@ -11,7 +11,7 @@ subtest 'check links' => sub {
 
     my ( $site, $build_dir, $deploy_dir ) = build_test_site_apps( $SHARE_DIR, log => $log );
     my $plugin = Statocles::Plugin::LinkCheck->new;
-    $site->on( 'build', sub { $plugin->check_pages( @_ ) } );
+    $plugin->register( $site );
 
     $site->build;
 
@@ -42,7 +42,7 @@ subtest 'ignore patterns' => sub {
                 '/does_not_exist',
             ]
         );
-        $site->on( 'build', sub { $plugin->check_pages( @_ ) } );
+        $plugin->register( $site );
 
         $site->build;
 
@@ -69,7 +69,7 @@ subtest 'ignore patterns' => sub {
                 '.*/with spaces[.]png',
             ]
         );
-        $site->on( 'build', sub { $plugin->check_pages( @_ ) } );
+        $plugin->register( $site );
 
         $site->build;
 

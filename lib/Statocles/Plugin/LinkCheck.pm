@@ -2,6 +2,7 @@ package Statocles::Plugin::LinkCheck;
 # ABSTRACT: Check links and images for validity during build
 
 use Statocles::Base 'Class';
+with 'Statocles::Plugin';
 use Mojo::DOM;
 use Mojo::Util qw( url_escape url_unescape );
 
@@ -70,6 +71,17 @@ sub check_pages {
 
 }
 
+=method register
+
+Register this plugin to install its event handlers. Called automatically.
+
+=cut
+
+sub register {
+    my ( $self, $site ) = @_;
+    $site->on( build => sub { $self->check_pages( @_ ) } );
+}
+
 1;
 
 =head1 SYNOPSIS
@@ -77,10 +89,10 @@ sub check_pages {
     # site.yml
     site:
         class: Statocles::Site
-        on:
-            - build:
-                $class: Statocles::Plugin::LinkCheck
-                $method: check_pages
+        args:
+            plugins:
+                link_check:
+                    $class: Statocles::Plugin::LinkCheck
 
 =head1 DESCRIPTION
 
