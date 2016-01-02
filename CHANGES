@@ -1,6 +1,30 @@
 Changelog for Statocles
 
-0.061 2015-12-13T23:21:12
+0.062 2016-01-02T05:31:43
+ - update develop help guide for new plugin class
+ - fix site creator to use plugins not event handler
+ - make existing plugins consume new plugin role
+ - add plugins to main module list
+ - pass the current page into document templates
+ - add plugin docs to the help guides
+ - add highlight plugin to statocles project site
+ - fix highlight plugin to work with begin/end
+ - allow project website to be viewed on localhost
+ - add syntax highlighting plugin
+ - allow adding links to pages
+ - allow coercing link objects from strings
+ - add site plugins
+ - add custom helpers to theme object
+ - escape document title to fix special characters
+ - switch to warn that a store path doesn't exist
+ - fix doc links in default content
+ - remove unneeded reminder to update theme config
+ - add helper examples to the template documentation
+ - add content template helper
+ - add release v0.061 announcement
+ - fix homepage meta data
+
+0.061 2015-12-13T23:21:12Z
  - fix deploy staying on branch when nothing to do
  - add a testable log object to the test sites
  - add logging to deploys

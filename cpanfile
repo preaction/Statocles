@@ -21,6 +21,7 @@ recommends "HTML::Lint::Pluggable" => "0.06";
 recommends "PPI" => "0";
 recommends "Pod::Elemental" => "0";
 recommends "Pod::Weaver" => "0";
+recommends "Syntax::Highlight::Engine::Kate" => "0";
 
 on 'test' => sub {
   requires "Capture::Tiny" => "0";
