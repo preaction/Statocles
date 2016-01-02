@@ -70,6 +70,12 @@ site:
                     store: site/blog
                     url_root: /blog
 
+        plugins:
+            highlight:
+                $class: Statocles::Plugin::Highlight
+                $args:
+                    style: solarized-light
+
         data:
             google_analytics_id: 'UA-61295159-3'
             disqus:
