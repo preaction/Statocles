@@ -73,10 +73,30 @@ subtest 'register' => sub {
 
 subtest 'test helper interaction' => sub {
 
-    subtest 'highlight an included file' => sub {
-        my $plugin = Statocles::Plugin::Highlight->new(
-            style => 'solarized-dark',
+    subtest 'begin/end' => sub {
+        my $plugin = Statocles::Plugin::Highlight->new;
+
+        my $site = build_test_site(
+            theme => $SHARE_DIR->child( 'theme' ),
+            plugins => {
+                highlight => $plugin,
+            }
         );
+
+        my $tmpl = $site->theme->build_template(
+            test => <<ENDTMPL,
+<%= highlight html => begin %><h1>Title</h1><% end %>
+ENDTMPL
+        );
+
+        is $tmpl->render,
+            qq{<span class="hljs-keyword">&lt;h1&gt;</span>Title<span class="hljs-keyword">&lt;/h1&gt;</span>\n},
+            'highlight works with begin/end';
+
+    };
+
+    subtest 'highlight an included file' => sub {
+        my $plugin = Statocles::Plugin::Highlight->new;
 
         my $site = build_test_site(
             theme => $SHARE_DIR->child( 'theme' ),

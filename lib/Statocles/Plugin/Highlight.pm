@@ -134,6 +134,13 @@ my $hl = Syntax::Highlight::Engine::Kate->new(
 sub highlight {
     my ( $self, $args, $type, $text ) = @_;
 
+    # Handle Mojolicious begin/end
+    if ( ref $text eq 'CODE' ) {
+        $text = $text->();
+        # This adds an extra newline to the first line, so remove it
+        $text =~ s/^\n//;
+    }
+
     # XXX We need to normalize this so that the current page is always
     # `$args->{page}`
     my $page = $args->{page} || $args->{self};
