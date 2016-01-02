@@ -46,3 +46,18 @@ created.
 requires 'register';
 
 1;
+__END__
+
+=head1 BUNDLED PLUGINS
+
+These plugins come with Statocles. L<More plugins may be available from
+CPAN|http://metacpan.org>.
+
+=over 4
+
+=item L<Statocles::Plugin::Highlight>
+
+Syntax highlighting for code and configuration
+
+=back
+

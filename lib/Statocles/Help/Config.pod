@@ -368,7 +368,29 @@ L<Sign up for Disqus|https://disqus.com/admin/signup/>
 
 The configuration file is a L<Beam::Wire> container. This means that any
 object attributes (in the C<ATTRIBUTES> section of their documentation)
-can be set from the config file. Some examples are below:
+can be set from the config file.
+
+=head2 Plugins
+
+Additional functionality can be added by plugins using the site's
+C<plugins> attribute:
+
+    # site.yml
+    site:
+        class: Statocles::Site
+        args:
+            # ...
+            plugins:
+                highlight:
+                    $class: Statocles::Plugin::Highlight
+                    $args:
+                        theme: solarized-light
+
+Each plugin has a name (C<highlight>), and requires a C<$class> (the
+class name of the plugin) and optional C<$args> (the plugin's
+attributes).
+
+See L<the list of bundled plugins|Statocles::Plugin/BUNDLED PLUGINS>.
 
 =head2 Custom Markdown
 

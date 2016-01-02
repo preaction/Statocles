@@ -215,6 +215,25 @@ When the content is being generated, you have access to the following variables:
 
 =back
 
+=head2 Helper Functions
+
+Like the L<theme's templates|Statocles::Help::Theme>, the document has
+access to the theme's helper functions, like L<the Highlight
+plugin|Statocles::Plugin::Highlight>:
+
+    ---
+    title: How to use Perl
+    ---
+
+    Here is the basic `Hello, World!` in Perl:
+
+    %= highlight Perl => begin
+    print "Hello, World!\n";
+    % end
+
+Don't forget to L<add the plugin to your
+configuration|Statocles::Help::Config/Plugins>!
+
 =head1 SEE ALSO
 
 =over 4
