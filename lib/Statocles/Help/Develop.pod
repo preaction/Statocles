@@ -164,13 +164,45 @@ site is deployed.
 
 =head1 PLUGINS
 
-Plugins are used to respond to events in the Statocles workflow. For example,
-when a site is built, an event is fired containing all the built pages. Then,
-the L<Statocles::Plugin::LinkCheck> plugin can search all the pages for broken
-links.
+Plugins are used to add template functions and respond to events in the
+Statocles workflow. For example, when a site is built, an event is fired
+containing all the built pages. Then, the
+L<Statocles::Plugin::LinkCheck> plugin can search all the pages for
+broken links. For another example, the L<Statocles::Plugin::Highlight>
+plugin adds the C<highlight> function to all the templates in the site.
 
-Any class can be a plugin, it just needs a method. The event listener is wired
-up using the configuration file:
+Plugins consume the L<Statocles::Plugin role|Statocles::Plugin> and must
+implement the C<register> method to add themselves where they need to be
+added.
+
+    # Statocles::Plugin::LinkCheck
+    sub register {
+        my ( $self, $site ) = @_;
+        $site->on( build => sub { $self->check_pages( @_ ) } );
+    }
+
+    sub check_pages { ... }
+
+When the C<build> event fires, the LinkCheck method C<check_pages> will be called,
+with the event object given as the argument.
+
+Plugins are added to the Site object's C<plugins> attribute:
+
+    # site.yml
+    site:
+        class: Statocles::Site
+        args:
+            plugins:
+                link_check:
+                    $class: 'Statocles::Plugin::LinkCheck'
+
+=head2 Event Handlers
+
+Instead of making an entire Statocles::Plugin, we can respond only to
+certain events using Beam::Wire's event handling API.
+
+In this example, we're going to enable the same LinkCheck plugin as
+above, but manually using a C<build> event handler:
 
     # site.yml
     site:
@@ -179,9 +211,6 @@ up using the configuration file:
             - build:
                 $class: Statocles::Plugin::LinkCheck
                 $sub: check_pages
-
-When the C<build> event fires, the LinkCheck method C<check_pages> will be called,
-with the event object given as the argument.
 
 =head1 ROLES
 
