@@ -29,11 +29,6 @@
 site:
     class: 'Statocles::Site'
 
-    on:
-        - build:
-            $class: 'Statocles::Plugin::LinkCheck'
-            $sub: 'check_pages'
-
     args:
 
         # title: This is the title of the site, shown in the <title> tag
@@ -63,6 +58,12 @@ site:
             # static: This app does no processing at all. Good for images
             static:
                 $ref: 'static_app'
+
+        # plugins: These are plugins that can add features and alter the
+        # content of the site.
+        plugins:
+            link_check:
+                $class: 'Statocles::Plugin::LinkCheck'
 
         # theme: The theme builds and manages the templates. Use themes to
         # change how your site looks.

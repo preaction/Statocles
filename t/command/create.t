@@ -415,15 +415,12 @@ sub site_config {
                 },
                 index => '/blog',
                 deploy => { '$ref' => 'deploy' },
-            },
-            on => [
-                {
-                    build => {
+                plugins => {
+                    link_check => {
                         '$class' => 'Statocles::Plugin::LinkCheck',
-                        '$sub' => 'check_pages',
                     },
                 },
-            ],
+            },
         },
 
         blog_app => {
