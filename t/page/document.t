@@ -261,7 +261,7 @@ ENDTEMPLATE
     };
 };
 
-subtest 'page includes' => sub {
+subtest 'document template' => sub {
     my $site = Statocles::Site->new(
         theme => $SHARE_DIR->child( 'theme' ),
         deploy => tempdir,
@@ -278,6 +278,7 @@ This is a paragraph of markdown.
 
 %= include "include/test.markdown.ep", title => $self->title
 %= $self->data
+%= $page->path
 MARKDOWN
     );
 
@@ -293,7 +294,8 @@ MARKDOWN
 
 <h1>Page Title</h1>
 
-<p>Hello, Darling</p>
+<p>Hello, Darling
+/path/to/page.html</p>
 
 
 ENDHTML

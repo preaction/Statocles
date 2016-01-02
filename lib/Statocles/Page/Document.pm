@@ -85,7 +85,7 @@ has '+_images' => (
 sub _render_content_template {
     my ( $self, $content, $vars ) = @_;
     my $tmpl = $self->site->theme->build_template( $self->path, $content );
-    my $rendered = $tmpl->render( %$vars, $self->vars, self => $self->document );
+    my $rendered = $tmpl->render( %$vars, $self->vars, self => $self->document, page => $self );
     return $rendered;
 }
 
