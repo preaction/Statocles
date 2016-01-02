@@ -172,7 +172,23 @@ L<Statocles::Page::Plain> - Page with pre-generated HTML
 
 =item *
 
+L<Statocles::Plugin> - Base class for Statocles plugins
+
+=over 4
+
+=item *
+
+L<Statocles::Plugin::Highlight> - Highlight code sections in your site
+
+=item *
+
+L<Statocles::Plugin::HTMLLint> - Check your HTML for correctness
+
+=item *
+
 L<Statocles::Plugin::LinkCheck> - Check for broken links in the site
+
+=back
 
 =item *
 
