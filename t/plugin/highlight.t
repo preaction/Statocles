@@ -1,5 +1,10 @@
 
 use Statocles::Base 'Test';
+
+BEGIN {
+    eval { require Syntax::Highlight::Plugin::Kate; 1 } or plan skip_all => 'Syntax::Highlight::Plugin::Kate needed';
+};
+
 use Statocles::Plugin::Highlight;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
 
