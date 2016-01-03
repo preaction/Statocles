@@ -1,6 +1,11 @@
 Changelog for Statocles
 
-0.062 2016-01-02T05:31:43
+0.063 2016-01-03T07:08:33
+ - skip highlight test if highlighter not found
+ - add release v0.062 announcement
+ - update copyright year
+
+0.062 2016-01-02T05:31:43Z
  - update develop help guide for new plugin class
  - fix site creator to use plugins not event handler
  - make existing plugins consume new plugin role
