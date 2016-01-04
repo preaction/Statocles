@@ -62,9 +62,9 @@ subtest 'edit' => sub {
             subtest 'run the command' => sub {
                 my @args = qw( page edit /resume.markdown );
                 my ( $out, $err, $exit ) = capture { $app->command( @args ) };
-                ok !$err, 'nothing on stdout';
+                ok !$err, 'nothing on stderr' or diag $err;
                 is $exit, 0;
-                ok !$out, 'EDITOR silences STDOUT';
+                ok !$out, 'EDITOR silences STDOUT' or diag $out;
             };
 
             subtest 'check the generated document' => sub {
