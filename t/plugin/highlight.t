@@ -2,7 +2,7 @@
 use Statocles::Base 'Test';
 
 BEGIN {
-    eval { require Syntax::Highlight::Plugin::Kate; 1 } or plan skip_all => 'Syntax::Highlight::Plugin::Kate needed';
+    eval { require Syntax::Highlight::Engine::Kate; 1 } or plan skip_all => 'Syntax::Highlight::Engine::Kate needed';
 };
 
 use Statocles::Plugin::Highlight;
