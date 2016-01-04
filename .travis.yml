@@ -24,6 +24,7 @@ before_install:
     - source ~/travis-perl-helpers/init
     - build-perl
     - perl -V
+    - cpan-install Devel::Hide
     - build-dist
     - cd $BUILD_DIR
 
