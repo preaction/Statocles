@@ -15,7 +15,7 @@ matrix:
         - perl: "5.20"
           env: COVERAGE=1
         - perl: "5.20"
-          env: PERL5OPT="-MDevel::Hide" DEVEL_HIDE_VERBOSE=0 DEVEL_HIDE_PM="HTML::Lint::Pluggable Syntax::Highlight::Engine::Kate"
+          env: DEVEL_HIDE_PM="HTML::Lint::Pluggable Syntax::Highlight::Engine::Kate"
     allow_failures:
         - perl: "blead"
 
@@ -38,6 +38,8 @@ before_script:
 script:
     - perl Makefile.PL
     - make
+    - export PERL5OPT="-MDevel::Hide"
+    - export DEVEL_HIDE_VERBOSE=0
     - prove -bl -s -j$(test-jobs) $(test-files)
 
 after_success:
