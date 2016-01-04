@@ -10,21 +10,31 @@ my ( $tmp, $config_fn, $config ) = build_temp_site( $SHARE_DIR );
 local $0 = path( $FindBin::Bin, '..', '..', 'bin', 'statocles' )->stringify;
 
 subtest 'no command specified' => sub {
+    my $cwd = cwd;
+    chdir $tmp;
+
     my ( $out, $err, $exit ) = capture { Statocles::Command->main };
     ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
     like $err, qr{ERROR: Missing command};
     like $err, qr{statocles -h},
         'reports pod from bin/statocles, not Statocles::Command';
     isnt $exit, 0;
+
+    chdir $cwd;
 };
 
 subtest 'unknown command specified' => sub {
+    my $cwd = cwd;
+    chdir $tmp;
+
     my ( $out, $err, $exit ) = capture { Statocles::Command->main( 'daemin' ) };
     ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
     like $err, qr{ERROR: Unknown command or app 'daemin'};
     like $err, qr{statocles -h},
         'reports pod from bin/statocles, not Statocles::Command';
     isnt $exit, 0;
+
+    chdir $cwd;
 };
 
 
