@@ -14,6 +14,8 @@ matrix:
     include:
         - perl: "5.20"
           env: COVERAGE=1
+        - perl: "5.20"
+          env: PERL5OPT="-MDevel::Hide" DEVEL_HIDE_VERBOSE=0 DEVEL_HIDE_PM="HTML::Lint::Pluggable Syntax::Highlight::Engine::Kate"
     allow_failures:
         - perl: "blead"
 
