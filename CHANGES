@@ -1,6 +1,15 @@
 Changelog for Statocles
 
-0.063 2016-01-03T07:08:33
+0.064 2016-01-04T06:44:14
+ - use fake site for command error tests
+ - report stdout/stderr on test failure
+ - do not test Highlight plugin compile
+ - only load Devel::Hide during test
+ - install Devel::Hide during travis build
+ - add travis build that hides optional dependencies
+ - add release v0.063 announcement
+
+0.063 2016-01-03T07:08:33Z
  - skip highlight test if highlighter not found
  - add release v0.062 announcement
  - update copyright year
