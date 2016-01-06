@@ -36,12 +36,14 @@ my %document = (
         title => 'Page Title',
         author => 'preaction',
         content => 'Content One',
+        date => '2015-01-01 00:00:00',
         %document_common,
     ),
     escaped => Statocles::Document->new(
         path => '/$escape/@this/(correctly)/index.html',
         title => '<ESCAPE>',
         content => '<b>Must not be escaped</b>',
+        date => '2015-01-02 00:00:00',
         %document_common,
     ),
 );
@@ -73,7 +75,6 @@ my %page = (
     normal => Statocles::Page::Document->new(
         path => 'document.html',
         document => $document{normal},
-        date => Time::Piece->new,
         tags => [
             Statocles::Link->new(
                 href => '/blog/tag/foo',
@@ -88,7 +89,6 @@ my %page = (
     escaped => Statocles::Page::Document->new(
         path => '/$escape/@this/(correctly)/index.html',
         document => $document{escaped},
-        date => Time::Piece->new,
     ),
 
 );
@@ -276,6 +276,13 @@ my %content_tests = (
     'blog/index.atom.ep' => sub {
         my ( $content, %args ) = @_;
         my $xml = Mojo::DOM->new( $content );
+
+        subtest 'feed updated' => sub {
+            if ( ok my $elem = $xml->at( 'feed > updated' ), 'feed has updated element' ) {
+                like $elem->text, qr{^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$}, 'date in iso8601 format';
+                is $elem->text, '2015-01-02T00:00:00Z', 'date is latest of all pages';
+            }
+        };
 
         subtest 'entry title' => sub {
             my @titles = $xml->find( 'entry title' )->each;
