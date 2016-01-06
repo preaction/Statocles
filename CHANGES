@@ -1,6 +1,18 @@
 Changelog for Statocles
 
-0.064 2016-01-04T06:44:14
+0.065 2016-01-06T06:00:22
+ - fix list of bundled plugins
+ - add recent features to the feature list
+ - fix atom feed updated time to be more accurate
+ - fix list page date to be max of all pages in list
+ - allow coercing Time::Piece from date/time strings
+ - fix no order in sitemap causing spurious commits
+ - update theme from statocles default
+ - fix highlight breaking with Markdown code blocks
+ - fix test not running because of misspelled module
+ - add release v0.064 announcement
+
+0.064 2016-01-04T06:44:14Z
  - use fake site for command error tests
  - report stdout/stderr on test failure
  - do not test Highlight plugin compile

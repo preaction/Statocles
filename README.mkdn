@@ -4,7 +4,7 @@ Statocles - A static site generator
 
 # VERSION
 
-version 0.064
+version 0.065
 
 # STATUS
 
@@ -50,6 +50,10 @@ content.
 language](https://metacpan.org/pod/Mojo::Template#SYNTAX).
 - A clean default theme using [the Skeleton CSS library](http://getskeleton.com).
 - SEO-friendly features such as [sitemaps (sitemap.xml)](http://www.sitemaps.org).
+- [Automatic checking for broken links](https://metacpan.org/pod/Statocles::Plugin::LinkCheck).
+- [Syntax highlighting](https://metacpan.org/pod/Statocles::Plugin::Highlight) for code and configuration blocks.
+- Hooks to add [your own plugins](https://metacpan.org/pod/Statocles::Plugin) and [your own custom
+applications](https://metacpan.org/pod/Statocles::App).  =back
 
 # GETTING STARTED
 
@@ -76,3 +80,11 @@ This software is copyright (c) 2016 by Doug Bell.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
+
+# POD ERRORS
+
+Hey! **The above document had some coding errors, which are explained below:**
+
+- Around line 103:
+
+    You forgot a '=back' before '=head1'
