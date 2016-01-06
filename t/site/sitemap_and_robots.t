@@ -68,37 +68,39 @@ my @lists = qw(
     /blog/tag/even-more-tags/
 );
 
-my @expect = (
-    ( # List pages
-        map {;
-            {
-                loc => "http://example.com$_",
-                priority => '0.3',
-                changefreq => 'daily',
-                lastmod => $page_mod{ $_ },
+# Must be sorted to prevent spurous deploy commits
+my @expect = sort { $a->{loc} cmp $b->{loc} }
+    (
+        ( # List pages
+            map {;
+                {
+                    loc => "http://example.com$_",
+                    priority => '0.3',
+                    changefreq => 'daily',
+                    lastmod => $page_mod{ $_ },
+                }
             }
-        }
-        @lists
-    ),
-    ( # Post pages
-        map {
-            {
-                loc => "http://example.com$_",
-                priority => '0.5',
-                changefreq => 'weekly',
-                lastmod => $page_mod{ $_ },
+            @lists
+        ),
+        ( # Post pages
+            map {
+                {
+                    loc => "http://example.com$_",
+                    priority => '0.5',
+                    changefreq => 'weekly',
+                    lastmod => $page_mod{ $_ },
+                }
             }
-        }
-        @posts
-    )
-);
+            @posts
+        )
+    );
 
 subtest 'build' => sub {
     $site->build;
     my $dom = Mojo::DOM->new( $build_dir->child( 'sitemap.xml' )->slurp );
     if ( ok my $elem = $dom->at('urlset'), 'urlset exists' ) {;
         my @urls = $dom->at('urlset')->children->map( $to_href )->each;
-        cmp_deeply \@urls, bag( @expect ) or diag explain \@urls, \@expect;
+        cmp_deeply \@urls, \@expect or diag explain \@urls, \@expect;
     }
 
     cmp_deeply
@@ -117,7 +119,7 @@ subtest 'deploy' => sub {
     my $dom = Mojo::DOM->new( $deploy_dir->child( 'sitemap.xml' )->slurp );
     if ( ok my $elem = $dom->at('urlset'), 'urlset exists' ) {;
         my @urls = $dom->at('urlset')->children->map( $to_href )->each;
-        cmp_deeply \@urls, bag( @expect ) or diag explain \@urls, \@expect;
+        cmp_deeply \@urls, \@expect or diag explain \@urls, \@expect;
     }
 
     cmp_deeply

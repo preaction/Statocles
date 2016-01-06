@@ -444,7 +444,12 @@ sub build {
 
     # Build the sitemap.xml
     # html files only
-    my @indexed_pages = grep { $_->path =~ /[.]html?$/ } @pages;
+    # sorted by path to keep order and prevent spurious deploy commits
+    my @indexed_pages = map { $_->[0] }
+                        sort { $a->[1] cmp $b->[1] }
+                        map { [ $_, $self->url( $_->path ) ] }
+                        grep { $_->path =~ /[.]html?$/ }
+                        @pages;
     my $tmpl = $self->theme->template( site => 'sitemap.xml' );
     my $sitemap = Statocles::Page::Plain->new(
         path => '/sitemap.xml',

@@ -240,6 +240,13 @@ my %content_tests = (
 
     },
 
+    'site/sitemap.xml.ep' => sub {
+        my ( $content, %args ) = @_;
+        my $xml = Mojo::DOM->new( $content );
+        my @got_loc = $xml->find( 'loc' )->map( 'text' )->each;
+        cmp_deeply \@got_loc, array_each( re( qr{^http://example[.]com/} ) ), 'all pages are full urls';
+    },
+
     'blog/index.rss.ep' => sub {
         my ( $content, %args ) = @_;
         my $xml = Mojo::DOM->new( $content );
