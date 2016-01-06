@@ -1,13 +1,12 @@
 /*
 
 Original highlight.js style (c) Ivan Sagalaev <maniac@softwaremaniacs.org>
+Modified for Statocles
 
 */
 
 .hljs {
-  display: block;
   overflow-x: auto;
-  padding: 0.5em;
   background: #F0F0F0;
 }
 

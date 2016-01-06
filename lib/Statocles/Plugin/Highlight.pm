@@ -16,11 +16,9 @@ package Statocles::Plugin::Highlight;
                         style: default
 
     # --- Usage
-    <pre><code class="hljs">
     <%= highlight perl => begin %>
     print "Hello, World!\n";
     <% end %>
-    </code></pre>
 
 =head1 DESCRIPTION
 
@@ -90,14 +88,10 @@ To highlight an included file, use the C<include> helper:
 
     %= highlight Perl => include 'test.pl'
 
-The highlight function does not add any C<pre> or C<code> tags, so you
-can use it inline with other text. To make sure the background is
-correct, add the C<hljs> class to the C<code> tag. For example:
+The highlight function adds both C<pre> and C<code> tags.
 
-    <p>The example Perl code
-    <code class="hljs"><%= highlight Perl => 'print "Hello, World\n"' %></code>
-    prints the string `Hello, World` to the screen,
-    followed by a newline character.</p>
+    <p>This example Perl code prints the string "Hello, World" to the screen:</p>
+    %= highlight Perl => 'print "Hello, World\n"'
 
 =cut
 
@@ -137,8 +131,6 @@ sub highlight {
     # Handle Mojolicious begin/end
     if ( ref $text eq 'CODE' ) {
         $text = $text->();
-        # This adds an extra newline to the first line, so remove it
-        $text =~ s/^\n//;
     }
 
     # XXX We need to normalize this so that the current page is always
@@ -168,7 +160,13 @@ sub highlight {
     }
 
     $hl->language( $found_lang );
-    return $hl->highlightText( $text );
+
+    # Wrap the output in <pre> and <code> to ensure the right background is set
+    my $wrap_start = '<pre><code class="hljs">';
+    my $wrap_end = '</code></pre>';
+    my $output = $wrap_start . $hl->highlightText( $text ) . $wrap_end;
+
+    return $output;
 }
 
 =method register

@@ -1,13 +1,12 @@
 /*
 
 Orginal Style from ethanschoonover.com/solarized (c) Jeremy Hull <sourdrums@gmail.com>
+Modified for Statocles
 
 */
 
 .hljs {
-  display: block;
   overflow-x: auto;
-  padding: 0.5em;
   background: #002b36;
   color: #839496;
 }

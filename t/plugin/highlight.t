@@ -20,13 +20,15 @@ print foo( 1 + 2, 4 . 5 );
 ENDPERL
 
 my $expect_perl = <<'ENDHTML';
-<span class="hljs-keyword">sub </span><span class="hljs-function">foo</span> {
+<pre><code class="hljs"><span class="hljs-keyword">sub </span><span class="hljs-function">foo</span> {
     <span class="hljs-keyword">my</span> ( <span class="hljs-type">$self</span>, <span class="hljs-type">@args</span> ) = <span class="hljs-type">@_</span>;
     <span class="hljs-keyword">return</span> <span class="hljs-function">grep</span> { <span class="hljs-variable">$_</span> &lt; <span class="hljs-number">1</span> &amp;&amp; <span class="hljs-variable">$_</span> &gt; <span class="hljs-number">-1</span> } <span class="hljs-type">@args</span>;
 }
 
 <span class="hljs-function">print</span> foo( <span class="hljs-number">1</span> + <span class="hljs-number">2</span>, 4 . <span class="hljs-number">5</span> );
+</code></pre>
 ENDHTML
+chomp $expect_perl;
 
 subtest 'highlight' => sub {
 
@@ -71,8 +73,8 @@ subtest 'register' => sub {
     my $tmpl = $site->theme->build_template(
         test => '<%= highlight Perl => "print q{hello}" %>',
     );
-    is $tmpl->render,
-        qq{<span class="hljs-function">print</span> q{<span class="hljs-string">hello</span>}\n},
+    eq_or_diff $tmpl->render,
+        qq{<pre><code class="hljs"><span class="hljs-function">print</span> q{<span class="hljs-string">hello</span>}</code></pre>\n},
         'highlight sub works in template';
 };
 
@@ -94,8 +96,8 @@ subtest 'test helper interaction' => sub {
 ENDTMPL
         );
 
-        is $tmpl->render,
-            qq{<span class="hljs-keyword">&lt;h1&gt;</span>Title<span class="hljs-keyword">&lt;/h1&gt;</span>\n},
+        eq_or_diff $tmpl->render,
+            qq{<pre><code class="hljs"><span class="hljs-keyword">&lt;h1&gt;</span>Title<span class="hljs-keyword">&lt;/h1&gt;</span></code></pre>\n},
             'highlight works with begin/end';
 
     };
@@ -111,13 +113,14 @@ ENDTMPL
         );
 
         my $tmpl = $site->theme->build_template(
-            test => '<%= highlight html => include "include/test.markdown.ep" %>',
+            test => '<%= highlight html => begin %><%= include "include/test.markdown.ep" %><%= end %>',
         );
-        is $tmpl->render( title => "Title" ),
-            qq{<span class="hljs-keyword">&lt;h1&gt;</span>Title<span class="hljs-keyword">&lt;/h1&gt;</span>\n\n},
+        eq_or_diff $tmpl->render( title => "Title" ),
+            qq{<pre><code class="hljs"><span class="hljs-keyword">&lt;h1&gt;</span>Title<span class="hljs-keyword">&lt;/h1&gt;</span>\n</code></pre>\n},
             'highlight works with include';
 
     };
+
 };
 
 done_testing;
