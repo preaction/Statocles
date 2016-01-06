@@ -29,7 +29,7 @@ my @pages = (
         ),
     ),
     Statocles::Page::Document->new(
-        date => Time::Piece->strptime( '2014-04-23', '%Y-%m-%d' ),
+        date => Time::Piece->strptime( '2014-08-23', '%Y-%m-%d' ),
         path => '/blog/2014/04/23/slug.html',
         document => Statocles::Document->new(
             path => '/2014/04/23/slug.markdown',
@@ -61,7 +61,7 @@ subtest 'date' => sub {
         pages => \@pages,
     );
     isa_ok $list->date, 'Time::Piece';
-    is $list->date->datetime, $pages[0]->date->datetime;
+    is $list->date->datetime, $pages[2]->date->datetime;
 };
 
 subtest 'extra args' => sub {
@@ -137,27 +137,27 @@ subtest 'pagination' => sub {
                     path => '/blog/page-1.html',
                     pages => [ $pages[0] ],
                     next => '/blog/page-2.html',
-                    date => $pages[0]->date,
+                    date => $pages[2]->date,
                 ),
                 Statocles::Page::List->new(
                     path => '/blog/page-2.html',
                     pages => [ $pages[1] ],
                     next => '/blog/page-3.html',
                     prev => '/blog/page-1.html',
-                    date => $pages[0]->date,
+                    date => $pages[2]->date,
                 ),
                 Statocles::Page::List->new(
                     path => '/blog/page-3.html',
                     pages => [ $pages[2] ],
                     prev => '/blog/page-2.html',
-                    date => $pages[0]->date,
+                    date => $pages[2]->date,
                 ),
             );
 
             cmp_deeply \@paged_lists, \@exp_pages,
                 or diag explain \@paged_lists, \@exp_pages;
             cmp_deeply \@paged_lists,
-                array_each( methods( date => $pages[0]->date ) ),
+                array_each( methods( date => $pages[2]->date ) ),
                 'all paginated pages have the same date';
         };
         subtest 'single page' => sub {
@@ -171,14 +171,14 @@ subtest 'pagination' => sub {
                 Statocles::Page::List->new(
                     path => '/blog/page-1.html',
                     pages => [ @pages ],
-                    date => $pages[0]->date,
+                    date => $pages[2]->date,
                 ),
             );
 
             cmp_deeply \@paged_lists, \@exp_pages,
                 or diag explain \@paged_lists, \@exp_pages;
             cmp_deeply \@paged_lists,
-                array_each( methods( date => $pages[0]->date ) ),
+                array_each( methods( date => $pages[2]->date ) ),
                 'all paginated pages have the same date';
         };
     };
@@ -197,20 +197,20 @@ subtest 'pagination' => sub {
                     path => '/blog/index.html',
                     pages => [ $pages[0] ],
                     next => '/blog/page-2.html',
-                    date => $pages[0]->date,
+                    date => $pages[2]->date,
                 ),
                 Statocles::Page::List->new(
                     path => '/blog/page-2.html',
                     pages => [ $pages[1] ],
                     next => '/blog/page-3.html',
                     prev => '/blog',
-                    date => $pages[0]->date,
+                    date => $pages[2]->date,
                 ),
                 Statocles::Page::List->new(
                     path => '/blog/page-3.html',
                     pages => [ $pages[2] ],
                     prev => '/blog/page-2.html',
-                    date => $pages[0]->date,
+                    date => $pages[2]->date,
                 ),
             );
 
@@ -229,14 +229,14 @@ subtest 'pagination' => sub {
                 Statocles::Page::List->new(
                     path => '/blog/index.html',
                     pages => [ @pages ],
-                    date => $pages[0]->date,
+                    date => $pages[2]->date,
                 ),
             );
 
             cmp_deeply \@paged_lists, \@exp_pages,
                 or diag explain \@paged_lists, \@exp_pages;
             cmp_deeply \@paged_lists,
-                array_each( methods( date => $pages[0]->date ) ),
+                array_each( methods( date => $pages[2]->date ) ),
                 'all paginated pages have the same date';
         };
     };
@@ -255,20 +255,20 @@ subtest 'pagination' => sub {
                     path => '/blog/index.html',
                     pages => [ $pages[0] ],
                     next => '/blog/page/2',
-                    date => $pages[0]->date,
+                    date => $pages[2]->date,
                 ),
                 Statocles::Page::List->new(
                     path => '/blog/page/2/index.html',
                     pages => [ $pages[1] ],
                     next => '/blog/page/3',
                     prev => '/blog',
-                    date => $pages[0]->date,
+                    date => $pages[2]->date,
                 ),
                 Statocles::Page::List->new(
                     path => '/blog/page/3/index.html',
                     pages => [ $pages[2] ],
                     prev => '/blog/page/2',
-                    date => $pages[0]->date,
+                    date => $pages[2]->date,
                 ),
             );
 
@@ -287,14 +287,14 @@ subtest 'pagination' => sub {
                 Statocles::Page::List->new(
                     path => '/blog/index.html',
                     pages => [ @pages ],
-                    date => $pages[0]->date,
+                    date => $pages[2]->date,
                 ),
             );
 
             cmp_deeply \@paged_lists, \@exp_pages,
                 or diag explain \@paged_lists, \@exp_pages;
             cmp_deeply \@paged_lists,
-                array_each( methods( date => $pages[0]->date ) ),
+                array_each( methods( date => $pages[2]->date ) ),
                 'all paginated pages have the same date';
         };
     };

@@ -3,7 +3,7 @@ package Statocles::Page::List;
 
 use Statocles::Base 'Class';
 with 'Statocles::Page';
-use List::Util qw( max );
+use List::Util qw( reduce );
 use Statocles::Template;
 use Statocles::Page::ListItem;
 
@@ -67,7 +67,10 @@ has '+date' => (
     lazy => 1,
     default => sub {
         my ( $self ) = @_;
-        $self->pages->[0]->date;
+        my $date = reduce { $a->epoch gt $b->epoch ? $a : $b }
+                    map { $_->date }
+                    @{ $self->pages };
+        return $date;
     },
 );
 
@@ -125,6 +128,12 @@ sub paginate {
     my $path_format = delete $args{path};
     my $index = delete $args{index};
 
+    # The date is the max of all input pages, since input pages get moved between
+    # all the list pages
+    my $date = reduce { $a->epoch gt $b->epoch ? $a : $b }
+                map { $_->date }
+                @$pages;
+
     my @sets;
     for my $i ( 0..$#{$pages} ) {
         push @{ $sets[ int( $i / $after ) ] }, $pages->[ $i ];
@@ -144,7 +153,7 @@ sub paginate {
             pages => $sets[$i],
             ( $next ? ( next => $next ) : () ),
             ( $i > 0 ? ( prev => $prev ) : () ),
-            date => $pages->[0]->date,
+            date => $date,
             %args,
         );
     }
