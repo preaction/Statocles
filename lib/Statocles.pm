@@ -98,7 +98,18 @@ A clean default theme using L<the Skeleton CSS library|http://getskeleton.com>.
 
 SEO-friendly features such as L<sitemaps (sitemap.xml)|http://www.sitemaps.org>.
 
-=back
+=item *
+
+L<Automatic checking for broken links|Statocles::Plugin::LinkCheck>.
+
+=item *
+
+L<Syntax highlighting|Statocles::Plugin::Highlight> for code and configuration blocks.
+
+=item *
+
+Hooks to add L<your own plugins|Statocles::Plugin> and L<your own custom
+applications|Statocles::App>.  =back
 
 =head1 GETTING STARTED
 
