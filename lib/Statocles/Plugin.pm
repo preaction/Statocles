@@ -55,9 +55,17 @@ CPAN|http://metacpan.org>.
 
 =over 4
 
+=item L<Statocles::Plugin::LinkCheck>
+
+Check your site for broken links and images.
+
 =item L<Statocles::Plugin::Highlight>
 
-Syntax highlighting for code and configuration
+Syntax highlighting for code and configuration.
+
+=item L<Statocles::Plugin::HTMLLint>
+
+Check your HTML for best practices.
 
 =back
 
