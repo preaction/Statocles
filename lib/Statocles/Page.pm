@@ -100,7 +100,8 @@ The date of this page. Used for last updated date and blog post dates.
 
 has date => (
     is => 'rw',
-    isa => InstanceOf['Time::Piece'],
+    isa => TimePiece,
+    coerce => TimePiece->coercion,
     lazy => 1,
     default => sub { Time::Piece->new },
 );

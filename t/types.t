@@ -1,6 +1,6 @@
 
 use Statocles::Base 'Test';
-use Statocles::Types qw( Link LinkArray LinkHash );
+use Statocles::Types qw( Link LinkArray LinkHash TimePiece );
 
 subtest 'Link types' => sub {
 
@@ -96,6 +96,22 @@ subtest 'Link types' => sub {
 
             };
         };
+    };
+};
+
+subtest 'TimePiece' => sub {
+    subtest 'date string' => sub {
+        my $got = TimePiece->coerce( '2015-01-01' );
+        my $expect = Time::Piece->strptime( '2015-01-01', '%Y-%m-%d' );
+        cmp_deeply $got, $expect, 'parse Time::Piece from "YYYY-MM-DD"'
+            or diag explain $got, $expect;
+    };
+
+    subtest 'datetime string' => sub {
+        my $got = TimePiece->coerce( '2015-01-01 12:00:00' );
+        my $expect = Time::Piece->strptime( '2015-01-01 12:00:00', '%Y-%m-%d %H:%M:%S' );
+        cmp_deeply $got, $expect, 'parse Time::Piece from "YYYY-MM-DD HH:MM:SS"'
+            or diag explain $got, $expect;
     };
 };
 

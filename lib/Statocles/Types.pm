@@ -4,9 +4,12 @@ package Statocles::Types;
 use strict;
 use warnings;
 use feature qw( :5.10 );
-use Type::Library -base, -declare => qw( Store Theme Link LinkArray LinkHash );
+use Type::Library -base, -declare => qw(
+    Store Theme Link LinkArray LinkHash TimePiece DateStr DateTimeStr
+);
 use Type::Utils -all;
 use Types::Standard -types;
+use Time::Piece;
 
 role_type Store, { role => "Statocles::Store" };
 coerce Store, from Str, via { Statocles::Store->new( path => $_ ) };
@@ -45,6 +48,15 @@ coerce LinkHash, from HashRef[HashRef],
         return $out;
     };
 
+my $DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S';
+my $DATE_FORMAT = '%Y-%m-%d';
+
+class_type TimePiece, { class => 'Time::Piece' };
+declare DateStr, as Str, where { m{^\d{4}-?\d{2}-?\d{2}$} };
+declare DateTimeStr, as Str, where { m{^\d{4}-?\d{2}-?\d{2} \d{2}:\d{2}:\d{2}$} };
+coerce TimePiece, from DateStr, via { Time::Piece->strptime( $_, $DATE_FORMAT ) };
+coerce TimePiece, from DateTimeStr, via { Time::Piece->strptime( $_, $DATETIME_FORMAT ) };
+
 # Down here to resolve circular dependencies
 require Statocles::Store;
 require Statocles::Link;
@@ -78,6 +90,11 @@ __END__
     has nav => (
         isa => LinkHash,
         coerce => LinkHash->coercion,
+    );
+
+    has date => (
+        isa => TimePiece,
+        coerce => TimePiece->coercion,
     );
 
 =head1 DESCRIPTION
@@ -121,3 +138,9 @@ A hashref of arrayrefs of L<Statocles::Link> objects. Useful for the named links
 L<site navigation|Statocles::Site/nav>.
 
 This can be coerced from any HashRef of ArrayRef of HashRefs.
+
+=head2 TimePiece
+
+A L<Time::Piece> object representing a date/time. This can be coerced from a
+C<YYYY-MM-DD> string or a C<YYYY-MM-DD HH:MM:SS> string.
+

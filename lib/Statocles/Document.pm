@@ -214,7 +214,8 @@ Should be in C<YYYY-MM-DD> or C<YYYY-MM-DD HH:MM:SS> format.
 
 has date => (
     is => 'rw',
-    isa => InstanceOf['Time::Piece'],
+    isa => TimePiece,
+    coerce => TimePiece->coercion,
     predicate => 'has_date',
 );
 
