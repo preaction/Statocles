@@ -131,6 +131,9 @@ sub highlight {
     # Handle Mojolicious begin/end
     if ( ref $text eq 'CODE' ) {
         $text = $text->();
+        # begin/end starts with a newline, so remove it to prevent too
+        # much top space
+        $text =~ s/^\n//;
     }
 
     # XXX We need to normalize this so that the current page is always

@@ -92,12 +92,14 @@ subtest 'test helper interaction' => sub {
 
         my $tmpl = $site->theme->build_template(
             test => <<ENDTMPL,
-<%= highlight html => begin %><h1>Title</h1><% end %>
+<%= highlight html => begin %>
+<h1>Title</h1>
+<% end %>
 ENDTMPL
         );
 
         eq_or_diff $tmpl->render,
-            qq{<pre><code class="hljs"><span class="hljs-keyword">&lt;h1&gt;</span>Title<span class="hljs-keyword">&lt;/h1&gt;</span></code></pre>\n},
+            qq{<pre><code class="hljs"><span class="hljs-keyword">&lt;h1&gt;</span>Title<span class="hljs-keyword">&lt;/h1&gt;</span>\n</code></pre>\n},
             'highlight works with begin/end';
 
     };
@@ -113,7 +115,7 @@ ENDTMPL
         );
 
         my $tmpl = $site->theme->build_template(
-            test => '<%= highlight html => begin %><%= include "include/test.markdown.ep" %><%= end %>',
+            test => '<%= highlight html => include "include/test.markdown.ep" %>',
         );
         eq_or_diff $tmpl->render( title => "Title" ),
             qq{<pre><code class="hljs"><span class="hljs-keyword">&lt;h1&gt;</span>Title<span class="hljs-keyword">&lt;/h1&gt;</span>\n</code></pre>\n},
