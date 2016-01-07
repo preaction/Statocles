@@ -84,7 +84,7 @@ To highlight a block of code, use C<begin>/C<end>:
     print "Hello, World!\n";
     % end
 
-To highlight an included file, use the C<include> helper:
+To highlight an included file, use the L<include helper|Statocles::Template/include>:
 
     %= highlight Perl => include 'test.pl'
 

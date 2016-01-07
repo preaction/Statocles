@@ -237,6 +237,12 @@ given the same variables as the current template. Optionally, additional
 name-value pairs can be given to the included template. These additional
 template variables override any current variables.
 
+Includes will be searched for in the L<Theme's C<include_stores>
+attribute|Statocles::Theme/include_stores>. For content documents
+rendered by the L<Statocles::Page::Document
+class|Statocles::Page::Document>, this includes the document's parent
+directory.
+
 Including markdown files does not automatically translate them into
 HTML. If you're in a page template or layout template, use the
 L<markdown helper|/markdown> to render the markdown into HTML.
