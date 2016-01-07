@@ -49,6 +49,27 @@ has theme => (
     coerce => Theme->coercion,
 );
 
+=attr include_stores
+
+An array of L<stores|Statocles::Store> to look for includes. Will be
+used in addition to the L<include_stores from the
+Theme|Statocles::Theme/include_stores>.
+
+=cut
+
+has include_stores => (
+    is => 'ro',
+    isa => ArrayRef[Store],
+    default => sub { [] },
+    coerce => sub {
+        my ( $thing ) = @_;
+        if ( ref $thing eq 'ARRAY' ) {
+            return [ map { Store->coercion->( $_ ) } @$thing ];
+        }
+        return [ Store->coercion->( $thing ) ];
+    },
+);
+
 has _template => (
     is => 'ro',
     isa => InstanceOf['Mojo::Template'],
@@ -122,7 +143,7 @@ sub render {
         # Add default helpers
         local *{"@{[$t->namespace]}::include"} = sub {
             my ( $name, %extra_args ) = @_;
-            my $inner_tmpl = $self->theme->include( $name );
+            my $inner_tmpl = $self->include( $name );
             return $inner_tmpl->render( %args, %extra_args ) || '';
         };
 
@@ -161,6 +182,30 @@ sub _prelude {
         'my $vars = shift;',
         map( { "my \$$_ = \$vars->{'$_'};" } @vars ),
         ;
+}
+
+=method include
+
+    my $tmpl = $tmpl->include( $path );
+    my $tmpl = $tmpl->include( @path_parts );
+
+Get the desired L<template|Statocles::Template> to include based on the given
+C<path> or C<path_parts>. Looks through all the L<include_stores|/include_stores>.
+If nothing is found, looks in the L<theme includes|Statocles::Theme/include>.
+
+=cut
+
+sub include {
+    my ( $self, @path ) = @_;
+    my $path = Path::Tiny->new( @path );
+
+    for my $store ( @{ $self->include_stores } ) {
+        if ( $store->has_file( $path ) ) {
+            return $self->theme->build_template( $path, $store->read_file( $path ) );
+        }
+    }
+
+    return $self->theme->include( @path );
 }
 
 =method coercion

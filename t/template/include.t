@@ -55,4 +55,29 @@ subtest 'missing include dies' => sub {
     } qr{Error in template: Can not find include "included_template[.]html[.]ep"};
 };
 
+subtest 'add template include store' => sub {
+
+    subtest 'template include overrides theme include' => sub {
+        my $tmpl = Statocles::Template->new(
+            path => $SHARE_DIR->child( 'tmpl', 'include_with_template.html.ep' ),
+            theme => $SHARE_DIR->child( 'theme' ),
+            include_stores => [
+                $SHARE_DIR->child( 'tmpl' ),
+            ],
+        );
+        is $tmpl->render( %args ), "INCLUDE Title\n ENDINCLUDE Title Content\n";
+    };
+
+    subtest 'falls back to theme include' => sub {
+        my $tmpl = Statocles::Template->new(
+            path => $SHARE_DIR->child( 'tmpl', 'include_theme_file.html.ep' ),
+            theme => $SHARE_DIR->child( 'theme' ),
+            include_stores => [
+                $SHARE_DIR->child( 'tmpl' ),
+            ],
+        );
+        is $tmpl->render( %args ), "INCLUDE # Title\n ENDINCLUDE Title Content\n";
+    };
+};
+
 done_testing;
