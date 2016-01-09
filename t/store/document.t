@@ -10,122 +10,114 @@ build_test_site( theme => $SHARE_DIR->child( 'theme' ) );
 
 my $DT_FORMAT = '%Y-%m-%d %H:%M:%S';
 
-my %required_attrs = (
-    title => 'Required Document',
-    author => 'preaction',
-    content => "No optional things in here, at all!\n",
-);
+sub expect_docs {
+    my ( $store ) = @_;
 
-my @exp_docs = (
-    Statocles::Document->new(
-        path => '/required.markdown',
-        %required_attrs,
-    ),
+    return (
+        Statocles::Document->new(
+            path => '/required.markdown',
+            title => 'Required Document',
+            author => 'preaction',
+            content => "No optional things in here, at all!\n",
+        ),
 
-    Statocles::Document->new(
-        path => '/ext/short.md',
-        title => 'Short Extension',
-        content => "This is a short extension\n",
-    ),
+        Statocles::Document->new(
+            path => '/ext/short.md',
+            title => 'Short Extension',
+            content => "This is a short extension\n",
+        ),
 
-    Statocles::Document->new(
-        path => '/no-frontmatter.markdown',
-        content => "\n# This Document has no frontmatter!\n\nDocuments are not required to have frontmatter!\n",
-    ),
+        Statocles::Document->new(
+            path => '/no-frontmatter.markdown',
+            content => "\n# This Document has no frontmatter!\n\nDocuments are not required to have frontmatter!\n",
+        ),
 
-    Statocles::Document->new(
-        path => '/path.markdown',
-        title => 'Document with path inside',
-        author => 'preaction',
-        content => "The path is in the file, and it must be ignored.\n",
-    ),
+        Statocles::Document->new(
+            path => '/path.markdown',
+            title => 'Document with path inside',
+            author => 'preaction',
+            content => "The path is in the file, and it must be ignored.\n",
+        ),
 
-    Statocles::Document->new(
-        path => '/datetime.markdown',
-        title => 'Datetime Document',
-        author => 'preaction',
-        date => Time::Piece->strptime( '2014-04-30 15:34:32', $DT_FORMAT ),
-        content => "Parses date/time for date\n",
-    ),
+        Statocles::Document->new(
+            path => '/datetime.markdown',
+            title => 'Datetime Document',
+            author => 'preaction',
+            date => Time::Piece->strptime( '2014-04-30 15:34:32', $DT_FORMAT ),
+            content => "Parses date/time for date\n",
+        ),
 
-    Statocles::Document->new(
-        path => '/date.markdown',
-        title => 'Date Document',
-        author => 'preaction',
-        date => Time::Piece->strptime( '2014-04-30', '%Y-%m-%d' ),
-        content => "Parses date only for date\n",
-    ),
+        Statocles::Document->new(
+            path => '/date.markdown',
+            title => 'Date Document',
+            author => 'preaction',
+            date => Time::Piece->strptime( '2014-04-30', '%Y-%m-%d' ),
+            content => "Parses date only for date\n",
+        ),
 
-    Statocles::Document->new(
-        path => '/links/alternate_single.markdown',
-        title => 'Linked Document',
-        author => 'preaction',
-        content => "This document has a single alternate link\n",
-        links => {
-            alternate => [
-                {
-                    title => 'blogs.perl.org',
-                    href => 'http://blogs.perl.org/preaction/404.html',
-                },
-            ],
-        },
-    ),
+        Statocles::Document->new(
+            path => '/links/alternate_single.markdown',
+            title => 'Linked Document',
+            author => 'preaction',
+            content => "This document has a single alternate link\n",
+            links => {
+                alternate => [
+                    {
+                        title => 'blogs.perl.org',
+                        href => 'http://blogs.perl.org/preaction/404.html',
+                    },
+                ],
+            },
+        ),
 
-    Statocles::Document->new(
-        path => '/tags/single.markdown',
-        title => 'Tagged (Single) Document',
-        author => 'preaction',
-        tags => [qw( single )],
-        content => "This document has a single tag\n",
-    ),
+        Statocles::Document->new(
+            path => '/tags/single.markdown',
+            title => 'Tagged (Single) Document',
+            author => 'preaction',
+            tags => [qw( single )],
+            content => "This document has a single tag\n",
+        ),
 
-    Statocles::Document->new(
-        path => '/tags/array.markdown',
-        title => 'Tagged (Array) Document',
-        author => 'preaction',
-        tags => [ 'multiple', 'tags', 'in an', 'array' ],
-        content => "This document has multiple tags in an array\n",
-    ),
+        Statocles::Document->new(
+            path => '/tags/array.markdown',
+            title => 'Tagged (Array) Document',
+            author => 'preaction',
+            tags => [ 'multiple', 'tags', 'in an', 'array' ],
+            content => "This document has multiple tags in an array\n",
+        ),
 
-    Statocles::Document->new(
-        path => '/tags/comma.markdown',
-        title => 'Tagged (Comma) Document',
-        author => 'preaction',
-        tags => [ "multiple", "tags", "separated by", "commas" ],
-        content => "This document has multiple tags separated by commas\n",
-    ),
+        Statocles::Document->new(
+            path => '/tags/comma.markdown',
+            title => 'Tagged (Comma) Document',
+            author => 'preaction',
+            tags => [ "multiple", "tags", "separated by", "commas" ],
+            content => "This document has multiple tags separated by commas\n",
+        ),
 
 
-    Statocles::Document->new(
-        path => '/template/basic.markdown',
-        title => 'Template document',
-        content => "This document has a template\n",
-        template => [qw( document basic.html.ep )],
-        layout => [qw( site basic.html.ep )],
-    ),
+        Statocles::Document->new(
+            path => '/template/basic.markdown',
+            title => 'Template document',
+            content => "This document has a template\n",
+            template => [qw( document basic.html.ep )],
+            layout => [qw( site basic.html.ep )],
+        ),
 
-    Statocles::Document->new(
-        path => '/template/leading-slash.markdown',
-        title => 'Template (Slash) document',
-        content => "This document has a template with a leading slash\n",
-        template => [qw( document slash.html.ep )],
-        layout => [qw( site slash.html.ep )],
-    ),
+        Statocles::Document->new(
+            path => '/template/leading-slash.markdown',
+            title => 'Template (Slash) document',
+            content => "This document has a template with a leading slash\n",
+            template => [qw( document slash.html.ep )],
+            layout => [qw( site slash.html.ep )],
+        ),
 
-    TestDocument->new(
-        path => '/class/test_document.markdown',
-        title => 'Test Class',
-        content => "This is a custom class\n",
-    ),
-);
-
-my @ignored_docs = (
-    Statocles::Document->new(
-        path => '/ignore/ignored.markdown',
-        title => 'This document is ignored',
-        content => "This document is ignored because it's being used by another Store\n",
-    ),
-);
+        TestDocument->new(
+            path => '/class/test_document.markdown',
+            title => 'Test Class',
+            content => "This is a custom class\n",
+        ),
+    );
+}
 
 my $ignored_store = Statocles::Store->new(
     path => $SHARE_DIR->child( qw( store docs ignore ) ),
@@ -135,7 +127,7 @@ subtest 'read documents' => sub {
     my $store = Statocles::Store->new(
         path => $SHARE_DIR->child( qw( store docs ) ),
     );
-    cmp_deeply $store->documents, bag( @exp_docs ) or diag explain $store->documents;
+    cmp_deeply $store->documents, bag( expect_docs( $store ) ) or diag explain $store->documents;
 
     subtest 'clear documents' => sub {
         # Edit the document
@@ -143,7 +135,7 @@ subtest 'read documents' => sub {
         # Clear all the documents
         $store->clear;
         # Re-read them from disk
-        cmp_deeply $store->documents, bag( @exp_docs ) or diag explain $store->documents;
+        cmp_deeply $store->documents, bag( expect_docs( $store ) ) or diag explain $store->documents;
     };
 };
 
@@ -152,7 +144,13 @@ subtest 'parse frontmatter from content' => sub {
         path => tempdir,
     );
     my $path = $SHARE_DIR->child( qw( store docs required.markdown ) );
-    cmp_deeply { $store->parse_frontmatter( $path, $path->slurp_utf8 ) }, \%required_attrs;
+    cmp_deeply
+        { $store->parse_frontmatter( $path, $path->slurp_utf8 ) },
+        {
+            title => 'Required Document',
+            author => 'preaction',
+            content => "No optional things in here, at all!\n",
+        };
 };
 
 subtest 'read with relative directory' => sub {
@@ -161,7 +159,7 @@ subtest 'read with relative directory' => sub {
     my $store = Statocles::Store->new(
         path => 'store/docs',
     );
-    cmp_deeply $store->documents, bag( @exp_docs );
+    cmp_deeply $store->documents, bag( expect_docs( $store ) );
     chdir $cwd;
 };
 
@@ -175,7 +173,7 @@ subtest 'path that has regex-special characters inside' => sub {
     my $store = Statocles::Store->new(
         path => $baddir,
     );
-    cmp_deeply $store->documents, bag( @exp_docs )
+    cmp_deeply $store->documents, bag( expect_docs( $store ) )
         or diag join "\n", map { $_->path->stringify } @{ $store->documents };
 };
 
@@ -285,7 +283,13 @@ subtest 'removing a store reveals formerly-ignored files' => sub {
     my $store = Statocles::Store->new(
         path => $SHARE_DIR->child( qw( store docs ) ),
     );
-    cmp_deeply $store->documents, bag( @exp_docs, @ignored_docs )
+    my $ignored_doc = Statocles::Document->new(
+        path => '/ignore/ignored.markdown',
+        title => 'This document is ignored',
+        content => "This document is ignored because it's being used by another Store\n",
+        store => $store,
+    );
+    cmp_deeply $store->documents, bag( expect_docs( $store ), $ignored_doc )
         or diag explain $store->documents;
 };
 
