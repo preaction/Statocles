@@ -199,6 +199,10 @@ ENDHTML
     my $tmpl = $theme->build_template( "test/path.html", $content );
     eq_or_diff $tmpl->render( %vars ), $expect;
 
+    subtest 'include not found' => sub {
+        my $tmpl = $theme->build_template( "test/path.html", '%= include "NOT_FOUND"' );
+        throws_ok { $tmpl->render } qr{Error in template: Can not find include "NOT_FOUND" in include directories: "[^"]+/theme_include", "[^"]+/default"}
+    };
 };
 
 subtest 'error messages' => sub {

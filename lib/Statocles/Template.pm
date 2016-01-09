@@ -199,13 +199,21 @@ sub include {
     my ( $self, @path ) = @_;
     my $path = Path::Tiny->new( @path );
 
+    my @stores = @{ $self->include_stores };
     for my $store ( @{ $self->include_stores } ) {
         if ( $store->has_file( $path ) ) {
             return $self->theme->build_template( $path, $store->read_file( $path ) );
         }
     }
 
-    return $self->theme->include( @path );
+    my $include = eval { $self->theme->include( @path ) };
+    if ( $@ && $@ =~ /^Can not find include/ ) {
+        die qq{Can not find include "$path" in include directories: }
+            . join( ", ", map { sprintf q{"%s"}, $_->path } @stores, @{ $self->theme->include_stores }, $self->theme->store )
+            . "\n";
+    }
+
+    return $include;
 }
 
 =method coercion

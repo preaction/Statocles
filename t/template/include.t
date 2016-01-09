@@ -49,10 +49,13 @@ subtest 'missing include dies' => sub {
     my $tmpl = Statocles::Template->new(
         path => $SHARE_DIR->child( 'tmpl', 'include_with_template.html.ep' ),
         theme => $SHARE_DIR,
+        include_stores => [
+            $SHARE_DIR->child( 'store', 'docs' ),
+        ],
     );
     throws_ok {
         $tmpl->render( %args );
-    } qr{Error in template: Can not find include "included_template[.]html[.]ep"};
+    } qr{Error in template: Can not find include "included_template[.]html[.]ep" in include directories: "[^"]+/share/store/docs", "[^"]+/share"};
 };
 
 subtest 'add template include store' => sub {

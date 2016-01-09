@@ -172,13 +172,16 @@ sub include {
     my ( $self, @path ) = @_;
     my $path = Path::Tiny->new( @path );
 
-    for my $store ( @{ $self->include_stores }, $self->store ) {
+    my @stores = ( @{ $self->include_stores }, $self->store );
+    for my $store ( @stores ) {
         if ( $store->has_file( $path ) ) {
             return $self->_includes->{ $path } ||= $self->build_template( $path, $store->read_file( $path ) );
         }
     }
 
-    die qq{Can not find include "$path"};
+    die qq{Can not find include "$path" in include directories: }
+        . join( ", ", map { sprintf q{"%s"}, $_->path } @stores )
+        . "\n";
 }
 
 =method helper
