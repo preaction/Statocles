@@ -16,6 +16,19 @@ has path => (
     coerce => Path->coercion,
 );
 
+=attr store
+
+The Store this document comes from. This is not settable from the
+frontmatter.
+
+=cut
+
+has store => (
+    is => 'ro',
+    isa => Store,
+    coerce => Store->coercion,
+);
+
 =attr title
 
     ---

@@ -166,7 +166,7 @@ sub read_document {
     my $full_path = $self->path->child( $path );
     my %doc = $self->parse_frontmatter( $full_path, $full_path->slurp_utf8 );
     my $class = $doc{class} ? use_module( delete $doc{class} ) : 'Statocles::Document';
-    return $class->new( %doc, path => $path );
+    return $class->new( %doc, path => $path, store => $self );
 }
 
 =method parse_frontmatter
@@ -272,6 +272,7 @@ sub write_document {
 sub _freeze_document {
     my ( $self, $doc ) = @_;
     delete $doc->{path}; # Path should not be in the document
+    delete $doc->{store};
     if ( exists $doc->{date} ) {
         $doc->{date} = $doc->{date}->strftime( $DATETIME_FORMAT );
     }

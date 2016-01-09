@@ -19,17 +19,20 @@ sub expect_docs {
             title => 'Required Document',
             author => 'preaction',
             content => "No optional things in here, at all!\n",
+            store => $store,
         ),
 
         Statocles::Document->new(
             path => '/ext/short.md',
             title => 'Short Extension',
             content => "This is a short extension\n",
+            store => $store,
         ),
 
         Statocles::Document->new(
             path => '/no-frontmatter.markdown',
             content => "\n# This Document has no frontmatter!\n\nDocuments are not required to have frontmatter!\n",
+            store => $store,
         ),
 
         Statocles::Document->new(
@@ -37,6 +40,7 @@ sub expect_docs {
             title => 'Document with path inside',
             author => 'preaction',
             content => "The path is in the file, and it must be ignored.\n",
+            store => $store,
         ),
 
         Statocles::Document->new(
@@ -45,6 +49,7 @@ sub expect_docs {
             author => 'preaction',
             date => Time::Piece->strptime( '2014-04-30 15:34:32', $DT_FORMAT ),
             content => "Parses date/time for date\n",
+            store => $store,
         ),
 
         Statocles::Document->new(
@@ -53,6 +58,7 @@ sub expect_docs {
             author => 'preaction',
             date => Time::Piece->strptime( '2014-04-30', '%Y-%m-%d' ),
             content => "Parses date only for date\n",
+            store => $store,
         ),
 
         Statocles::Document->new(
@@ -68,6 +74,7 @@ sub expect_docs {
                     },
                 ],
             },
+            store => $store,
         ),
 
         Statocles::Document->new(
@@ -76,6 +83,7 @@ sub expect_docs {
             author => 'preaction',
             tags => [qw( single )],
             content => "This document has a single tag\n",
+            store => $store,
         ),
 
         Statocles::Document->new(
@@ -84,6 +92,7 @@ sub expect_docs {
             author => 'preaction',
             tags => [ 'multiple', 'tags', 'in an', 'array' ],
             content => "This document has multiple tags in an array\n",
+            store => $store,
         ),
 
         Statocles::Document->new(
@@ -92,6 +101,7 @@ sub expect_docs {
             author => 'preaction',
             tags => [ "multiple", "tags", "separated by", "commas" ],
             content => "This document has multiple tags separated by commas\n",
+            store => $store,
         ),
 
 
@@ -101,6 +111,7 @@ sub expect_docs {
             content => "This document has a template\n",
             template => [qw( document basic.html.ep )],
             layout => [qw( site basic.html.ep )],
+            store => $store,
         ),
 
         Statocles::Document->new(
@@ -109,12 +120,14 @@ sub expect_docs {
             content => "This document has a template with a leading slash\n",
             template => [qw( document slash.html.ep )],
             layout => [qw( site slash.html.ep )],
+            store => $store,
         ),
 
         TestDocument->new(
             path => '/class/test_document.markdown',
             title => 'Test Class',
             content => "This is a custom class\n",
+            store => $store,
         ),
     );
 }
@@ -230,7 +243,7 @@ subtest 'write document' => sub {
 
         $store->write_document( 'example.markdown' => $doc  );
         cmp_deeply $store->read_document( 'example.markdown' ),
-            Statocles::Document->new( path => 'example.markdown', %$doc )
+            Statocles::Document->new( path => 'example.markdown', store => $store, %$doc )
                 or diag explain $store->read_document( 'example.markdown' );
         my $full_path = $store->path->child( 'example.markdown' );
         eq_or_diff path( $full_path )->slurp_utf8,
@@ -246,7 +259,7 @@ subtest 'write document' => sub {
 
         my $path = path(qw( blog 2014 05 28 example.markdown ));
         $store->write_document( $path => $doc );
-        cmp_deeply $store->read_document( $path ), Statocles::Document->new( path => $path, %$doc );
+        cmp_deeply $store->read_document( $path ), Statocles::Document->new( path => $path, store => $store, %$doc );
         my $full_path = $tmpdir->child( $path );
         eq_or_diff path( $full_path )->slurp_utf8,
             $SHARE_DIR->child( qw( store write doc.markdown ) )->slurp_utf8;
@@ -261,13 +274,14 @@ subtest 'write document' => sub {
 
         my $doc_obj = Statocles::Document->new(
             path => 'example.markdown',
+            store => $store,
             %$doc,
         );
 
         $store->write_document( 'doc_obj.markdown' => $doc_obj );
         my $full_path = $store->path->child( 'doc_obj.markdown' );
         cmp_deeply $store->read_document( 'doc_obj.markdown' ),
-            Statocles::Document->new( path => 'doc_obj.markdown', %$doc )
+            Statocles::Document->new( path => 'doc_obj.markdown', store => $store, %$doc )
                 or diag explain $store->read_document( 'doc_obj.markdown' );
         eq_or_diff path( $full_path )->slurp_utf8,
             $SHARE_DIR->child( qw( store write doc_obj.markdown ) )->slurp_utf8;

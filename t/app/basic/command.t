@@ -95,6 +95,7 @@ subtest 'edit' => sub {
                     content => <<'ENDMARKDOWN',
 Markdown content goes here.
 ENDMARKDOWN
+                    store => $app->store,
                 );
                 eq_or_diff $doc_path->slurp, <<ENDCONTENT;
 ---
@@ -141,6 +142,7 @@ ENDCONTENT
                         content => <<'ENDMARKDOWN',
 This is content from STDIN
 ENDMARKDOWN
+                        store => $app->store,
                     );
                 };
             };
@@ -187,6 +189,7 @@ ENDSTDIN
                         content => <<'ENDMARKDOWN',
 This is content from STDIN
 ENDMARKDOWN
+                        store => $app->store,
                     );
                 };
             };
