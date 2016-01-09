@@ -14,11 +14,23 @@ my $site = Statocles::Site->new(
 my $md = Text::Markdown->new;
 
 my $doc = Statocles::Document->new(
-    path => '/path/to/document.markdown',
+    path => '/required.markdown',
     title => 'Page Title',
     author => 'preaction',
     tags => [qw( foo bar baz )],
     date => Time::Piece->new( time - 600 ),
+    images => {
+        title => {
+            src => '/foo.jpg',
+        },
+    },
+    links => {
+        alternate => [
+            {
+                href => '/foo.html',
+            },
+        ],
+    },
     content => <<'MARKDOWN',
 # Subtitle
 
@@ -93,6 +105,8 @@ subtest 'constructor' => sub {
                 is $_->content, '<%= content %>';
             },
             date => $doc->date,
+            _images => $doc->images,
+            _links => $doc->links,
         },
     );
 
@@ -112,7 +126,7 @@ subtest 'page date overridden by published date' => sub {
 
 subtest 'document template/layout override' => sub {
     my $doc = Statocles::Document->new(
-        path => '/path/to/doc.markdown',
+        path => '/required.markdown',
         title => 'Page Title',
         content => 'Page content',
         template => '/document/recipe.html',
@@ -268,9 +282,10 @@ subtest 'document template' => sub {
     );
 
     my $doc = Statocles::Document->new(
-        path => '/path/to/document.markdown',
+        path => '/required.markdown',
         title => 'Page Title',
         data => 'Hello, Darling',
+        store => $SHARE_DIR->child( 'store', 'docs' ),
         content => <<'MARKDOWN',
 # Subtitle
 
@@ -301,6 +316,62 @@ MARKDOWN
 ENDHTML
 
     eq_or_diff $page->render, $expect;
+
+    subtest 'include in document directory' => sub {
+
+        my $doc = Statocles::Document->new(
+            path => '/required.markdown',
+            title => 'Page Title',
+            data => 'Hello, Darling',
+            store => $SHARE_DIR->child( 'store', 'docs' ),
+            content => <<'MARKDOWN',
+%= include "no-frontmatter.markdown"
+MARKDOWN
+        );
+
+        my $page = Statocles::Page::Document->new(
+            document => $doc,
+            path => '/path/to/page.html',
+        );
+
+        my $expect = <<'ENDHTML';
+<h1>This Document has no frontmatter!</h1>
+
+<p>Documents are not required to have frontmatter!</p>
+
+
+ENDHTML
+
+        eq_or_diff $page->render, $expect;
+    };
+
+    subtest 'include in parent directory' => sub {
+
+        my $doc = Statocles::Document->new(
+            path => '/links/alternate_single.markdown',
+            title => 'Page Title',
+            data => 'Hello, Darling',
+            store => $SHARE_DIR->child( 'store', 'docs' ),
+            content => <<'MARKDOWN',
+%= include "../no-frontmatter.markdown"
+MARKDOWN
+        );
+
+        my $page = Statocles::Page::Document->new(
+            document => $doc,
+            path => '/path/to/page.html',
+        );
+
+        my $expect = <<'ENDHTML';
+<h1>This Document has no frontmatter!</h1>
+
+<p>Documents are not required to have frontmatter!</p>
+
+
+ENDHTML
+
+        eq_or_diff $page->render, $expect;
+    };
 };
 
 done_testing;

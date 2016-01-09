@@ -4,6 +4,7 @@ package Statocles::Page::Document;
 use Statocles::Base 'Class';
 with 'Statocles::Page';
 use Statocles::Template;
+use Statocles::Store;
 
 =attr document
 
@@ -85,7 +86,12 @@ has '+_images' => (
 sub _render_content_template {
     my ( $self, $content, $vars ) = @_;
     my $tmpl = $self->site->theme->build_template( $self->path, $content );
-    my $rendered = $tmpl->render( %$vars, $self->vars, self => $self->document, page => $self );
+    my $doc = $self->document;
+    if ( $doc->store ) {
+        my $document_path = $doc->store->path->child( $doc->path )->parent;
+        push @{ $tmpl->include_stores }, Statocles::Store->new( path => $document_path );
+    }
+    my $rendered = $tmpl->render( %$vars, $self->vars, self => $doc, page => $self );
     return $rendered;
 }
 
