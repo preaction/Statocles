@@ -16,6 +16,18 @@ my @pages = (
             title => 'Third post',
             author => 'preaction',
             content => "Not as good body content",
+            links => {
+                stylesheet => [
+                    {
+                        href => '/css/style.css',
+                    },
+                ],
+                canonical => [
+                    {
+                        href => 'http://example.com/',
+                    },
+                ],
+            },
         ),
     ),
     Statocles::Page::Document->new(
@@ -26,6 +38,18 @@ my @pages = (
             title => 'Second post',
             author => 'preaction',
             content => "Better body content\n---\nSecond section\n---\nThird section",
+            links => {
+                stylesheet => [
+                    {
+                        href => '/css/style2.css',
+                    },
+                ],
+                script => [
+                    {
+                        href => '/js/app.js',
+                    },
+                ],
+            },
         ),
     ),
     Statocles::Page::Document->new(
@@ -121,6 +145,86 @@ ENDTEMPLATE
         ;
 
     eq_or_diff $output, $html;
+};
+
+subtest 'links' => sub {
+
+    subtest 'script and stylesheets from children are added' => sub {
+        # Should be added before list to allow for overriding?
+        my $list = Statocles::Page::List->new(
+            path => '/blog/index.html',
+            pages => \@pages,
+            links => {
+                stylesheet => [
+                    Statocles::Link->new(
+                        href => '/css/list.css',
+                    ),
+                ],
+                script => [
+                    Statocles::Link->new(
+                        href => '/js/list.js',
+                    ),
+                ],
+                canonical => [
+                    Statocles::Link->new(
+                        href => 'http://www.example.org',
+                    ),
+                ],
+            },
+        );
+
+        cmp_deeply [ $list->links( 'stylesheet' ) ],
+            [
+                Statocles::Link->new(
+                    href => '/css/style.css',
+                ),
+                Statocles::Link->new(
+                    href => '/css/style2.css',
+                ),
+                Statocles::Link->new(
+                    href => '/css/list.css',
+                ),
+            ],
+            'stylesheet links combined from child pages, children first';
+
+        cmp_deeply [ $list->links( 'script' ) ],
+            [
+                Statocles::Link->new(
+                    href => '/js/app.js',
+                ),
+                Statocles::Link->new(
+                    href => '/js/list.js',
+                ),
+            ],
+            'script links combined from child pages, children first';
+
+        cmp_deeply [ $list->links( 'canonical' ) ],
+            [ Statocles::Link->new( href => 'http://www.example.org' ) ],
+            'canonical link from children are not added';
+
+        subtest 'adding links appends on the list only' => sub {
+            my $ret = $list->links( stylesheet => '/css/list-2.css' );
+            ok !$ret, 'nothing returned';
+
+            cmp_deeply $list->_links->{stylesheet},
+                [
+                    Statocles::Link->new(
+                        href => '/css/list.css',
+                    ),
+                    Statocles::Link->new(
+                        href => '/css/list-2.css',
+                    ),
+                ],
+                'link is added to list links';
+
+            ok !(
+                    grep { $_->href eq '/css/list-2.css' }
+                    map { $_->links( 'stylesheet' ) }
+                    @pages
+                ),
+                'link is not added to any child page';
+        };
+    };
 };
 
 subtest 'pagination' => sub {

@@ -177,6 +177,34 @@ around vars => sub {
     );
 };
 
+=method links
+
+    my @links = $page->links( $key );
+
+Get the given set of links for this page. See L<the links
+attribute|Statocles::Page/links> for some commonly-used keys.
+
+For List pages, C<stylesheet> and C<script> links are also collected
+from the L<inner pages|/pages>, to ensure that content in those pages
+works correctly.
+
+=cut
+
+around links => sub {
+    my ( $orig, $self, @args ) = @_;
+
+    if ( @args > 1 || $args[0] !~ /^(?:stylesheet|script)$/ ) {
+        return $self->$orig( @args );
+    }
+
+    my @links;
+    for my $page ( @{ $self->pages } ) {
+        push @links, $page->links( @args );
+    }
+    push @links, $self->$orig( @args );
+    return @links;
+};
+
 1;
 __END__
 
