@@ -3,6 +3,7 @@ package Statocles::Page;
 
 use Statocles::Base 'Role';
 use Statocles::Template;
+use Statocles::Util qw( uniq_by );
 
 =attr site
 
@@ -342,7 +343,8 @@ sub links {
         push @{ $self->_links->{ $name } }, Link->coerce( $add_link );
         return;
     }
-    my @links = $self->_links->{ $name } ? @{ $self->_links->{ $name } } : ();
+    my @links = uniq_by { $_->href }
+        $self->_links->{ $name } ? @{ $self->_links->{ $name } } : ();
     return wantarray ? @links : $links[0];
 }
 

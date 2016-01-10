@@ -41,6 +41,9 @@ my @pages = (
             links => {
                 stylesheet => [
                     {
+                        href => '/css/style.css',
+                    },
+                    {
                         href => '/css/style2.css',
                     },
                 ],

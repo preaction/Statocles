@@ -165,4 +165,44 @@ subtest 'add links' => sub {
     };
 };
 
+subtest 'links should be unique' => sub {
+    my $page = TestPage->new(
+        path => '/index.rss',
+        links => {
+            alternate => [
+                Statocles::Link->new(
+                    text => 'Main',
+                    href => '/index.html',
+                    type => 'text/html',
+                ),
+                Statocles::Link->new(
+                    text => 'Atom',
+                    href => '/index.atom',
+                    type => 'application/atom+xml',
+                ),
+                Statocles::Link->new(
+                    text => 'Atom',
+                    href => '/index.atom',
+                    type => 'application/atom+xml',
+                ),
+            ],
+        },
+    );
+
+    cmp_deeply [ $page->links( 'alternate' ) ],
+        [
+            Statocles::Link->new(
+                text => 'Main',
+                href => '/index.html',
+                type => 'text/html',
+            ),
+            Statocles::Link->new(
+                text => 'Atom',
+                href => '/index.atom',
+                type => 'application/atom+xml',
+            ),
+        ],
+        'links must be filtered for uniqueness based on href';
+};
+
 done_testing;

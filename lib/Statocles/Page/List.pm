@@ -6,6 +6,7 @@ with 'Statocles::Page';
 use List::Util qw( reduce );
 use Statocles::Template;
 use Statocles::Page::ListItem;
+use Statocles::Util qw( uniq_by );
 
 =attr pages
 
@@ -202,7 +203,7 @@ around links => sub {
         push @links, $page->links( @args );
     }
     push @links, $self->$orig( @args );
-    return @links;
+    return uniq_by { $_->href } @links;
 };
 
 1;
