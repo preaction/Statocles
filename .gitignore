@@ -8,3 +8,6 @@
 ; Don't store the git repo and built versions
 /xt/git/git
 /xt/git/versions
+
+; Directory to hold temporary experiments
+ex
