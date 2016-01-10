@@ -5,7 +5,7 @@ use Statocles::Base;
 use Exporter 'import';
 
 our @EXPORT_OK = qw(
-    dircopy run_editor
+    dircopy run_editor uniq_by
 );
 
 =sub dircopy
@@ -59,6 +59,25 @@ sub run_editor {
         die sprintf qq{Editor "%s" exited with error (non-zero) status: %d\n}, $ENV{EDITOR}, $exit;
     }
     return 1;
+}
+
+=sub uniq_by
+
+    my @uniq_links = uniq_by { $_->href } @links;
+
+Filter a list into its unique items based on the result of the passed-in block.
+This lets us get unique links from their C<href> attribute.
+
+=cut
+
+sub uniq_by(&@) {
+    my ( $sub, @list ) = @_;
+    my ( %found, @out );
+    for my $i ( @list ) {
+        local $_ = $i;
+        push @out, $i if !$found{ $sub->() }++;
+    }
+    return @out;
 }
 
 1;

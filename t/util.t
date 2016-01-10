@@ -1,6 +1,7 @@
 
 use Statocles::Base 'Test';
-use Statocles::Util qw( dircopy run_editor );
+use Statocles::Util qw( dircopy run_editor uniq_by );
+use Statocles::Link;
 my $SHARE_DIR = path( __DIR__, 'share' );
 
 subtest 'dircopy' => sub {
@@ -62,6 +63,17 @@ subtest 'run_editor' => sub {
             run_editor( $tmp->child( 'index.markdown' ) );
         } qr[Editor "$ENV{EDITOR}" exited with error \(non-zero\) status: 1\n];
     };
+};
+
+subtest 'uniq_by' => sub {
+    my @links = map { Statocles::Link->new( href => $_ ) } qw(
+        /foo.html
+        /bar.html
+        /baz.html
+        /foo.html
+    );
+
+    cmp_deeply [ uniq_by { $_->href } @links ], [ @links[0,1,2] ];
 };
 
 done_testing;
