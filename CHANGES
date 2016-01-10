@@ -1,6 +1,20 @@
 Changelog for Statocles
 
-0.065 2016-01-06T06:00:22
+0.066 2016-01-10T02:02:37
+ - fix duplicate links showing up in pages
+ - add uniq_by util to filter items based on a sub
+ - add child page scripts and styles to the list page
+ - fix bad =back in main module documentation
+ - add better error message when include not found
+ - add parent dir to includes when rendering document
+ - add store object to the document as its read
+ - refactor store document test
+ - add include_stores to template for added includes
+ - add links to default template helpers
+ - fix too much space on the top of highlight blocks
+ - add release v0.065 announcement
+
+0.065 2016-01-06T06:00:22Z
  - fix list of bundled plugins
  - add recent features to the feature list
  - fix atom feed updated time to be more accurate
