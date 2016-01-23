@@ -123,6 +123,66 @@ has _nav => (
     init_arg => 'nav',
 );
 
+=attr images
+
+    # site.yml
+    images:
+        icon: /images/icon.png
+
+Related images for this document. These are used by themes to display
+images in appropriate templates. Each image has a category, like
+C<title>, C<banner>, or C<icon>, mapped to an L<image
+object|Statocles::Image>.  See the L<Statocles::Image|Statocles::Image>
+documentation for a full list of supported attributes. The most common
+attributes are:
+
+=over 4
+
+=item src
+
+The source path of the image. Relative paths will be resolved relative
+to this document.
+
+=item alt
+
+The alternative text to display if the image cannot be downloaded or
+rendered. Also the text to use for non-visual media.
+
+=back
+
+Useful image names are:
+
+=over 4
+
+=item icon
+
+The shortcut icon for the site.
+
+=back
+
+=cut
+
+has images => (
+    is => 'ro',
+    isa => HashRef[InstanceOf['Statocles::Image']],
+    default => sub { +{} },
+    coerce => sub {
+        my ( $ref ) = @_;
+        my %img;
+        for my $name ( keys %$ref ) {
+            my $attrs = $ref->{ $name };
+            if ( !ref $attrs ) {
+                $attrs = { src => $attrs };
+            }
+            $img{ $name } = Statocles::Image->new(
+                %{ $attrs },
+            );
+        }
+        return \%img;
+    },
+);
+
+
 =attr build_store
 
 The L<store|Statocles::Store> object to use for C<build()>. This is a workspace
