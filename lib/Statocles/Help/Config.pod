@@ -172,7 +172,9 @@ images.
 For basic pages with no structure or extras, there is the L<basic app:
 Statocles::App::Basic|Statocles::App::Basic>. The basic app takes the same
 YAML-and-Markdown-formatted documents as the blog app and creates HTML pages,
-without the lists, tags, and feeds the blog generates.
+without the lists, tags, and feeds the blog generates. The basic app
+also takes any other files (HTML, images, audio, video, and other
+formats) and copies them into the deployed site..
 
 Like the blog, we need a store to find our documents. This time, we'll use the
 root directory of our repository, C<.>. Finally, we'll need a URL root. Since
@@ -186,25 +188,9 @@ our destination C</>.
             url_root: '/'
             store: '.'
 
-Now we just need to add this app to our site, but before we do, we'll create an
-app for our static files.
-
-=head2 Static Files
-
-Lastly, we wanted a place to put any file at all. No processing. No templates.
-Just a simple copy from one store to another. For this one, we'll put
-everything in the C</static> directory, and give a URL root to match.
-
-    # site.yml
-    static_app:
-        class: Statocles::App::Static
-        args:
-            url_root: '/static'
-            store: 'static'
-
 =head2 Add the New Apps
 
-To enable the new apps, we just need to add them to the site's C<apps>.
+To enable the new app, we just need to add it to the site's C<apps>.
 
     # site.yml
     site:
@@ -215,8 +201,6 @@ To enable the new apps, we just need to add them to the site's C<apps>.
                     $ref: blog_app
                 basic:
                     $ref: basic_app
-                static:
-                    $ref: static_app
             deploy:
                 $ref: github_deploy
             title: My Site
@@ -253,8 +237,6 @@ Now we should probably make a link in our main nav to the new about page:
                     $ref: blog_app
                 basic:
                     $ref: basic_app
-                static:
-                    $ref: static_app
             deploy:
                 $ref: github_deploy
             title: My Site
@@ -285,12 +267,6 @@ Along with the blog app and our other settings, here is our new, complete site.y
             url_root: '/'
             store: '.'
 
-    static_app:
-        class: Statocles::App::Static
-        args:
-            url_root: '/static'
-            store: 'static'
-
     github_deploy:
         class: Statocles::Deploy::Git
         args:
@@ -304,8 +280,6 @@ Along with the blog app and our other settings, here is our new, complete site.y
                     $ref: blog_app
                 basic:
                     $ref: basic_app
-                static:
-                    $ref: static_app
 
             deploy:
                 $ref: github_deploy
