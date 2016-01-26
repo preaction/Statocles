@@ -324,8 +324,31 @@ C<statocles deploy>.
 
 =head1 DEFAULT THEME FEATURES
 
-There are special features built-in to all default themes that can be enabled
-by adding C<data> sections to the site object or app objects.
+There are special features built-in to all default themes that can be
+enabled by adding the appropriate configuration to the site object or
+app objects.
+
+=head2 Shortcut Icons
+
+To add a shortcut icon to your site, place the image file anywhere that
+will be deployed (if you're using the configuration above, you can put
+it in the root). Then, add an C<icon> property to the C<images> key of
+the C<site> object, like so:
+
+    site:
+        class: Statocles::Site
+        args:
+            images:
+                icon:
+                    src: /favicon.png
+
+For more information, see L<the C<images> attribute
+documentation|Statocles::Site/images>.
+
+=head2 Service Integration
+
+There are third-party services that can be integrated into your site by
+adding keys to the C<data> configuration section.
 
 =over 4
 

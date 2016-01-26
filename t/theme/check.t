@@ -69,6 +69,11 @@ my $site = Statocles::Site->new(
     apps => {
         blog => $blog,
     },
+    images => {
+        icon => {
+           src => '/favicon.ico',
+        },
+    },
 );
 
 my %page = (
@@ -235,6 +240,12 @@ my %content_tests = (
         subtest 'document script links get added in the layout' => sub {
             if ( ok $elem = $dom->at( 'script[src=/theme/js/special.js]', 'document script exists' ) ) {
                 ok !$elem->text, 'no text inside';
+            }
+        };
+
+        subtest 'shortcut icon' => sub {
+            if ( ok $elem = $dom->at( 'link[rel="shortcut icon"]', 'shortcut icon link exists' ) ) {
+                is $elem->attr( 'href' ), '/favicon.ico';
             }
         };
 

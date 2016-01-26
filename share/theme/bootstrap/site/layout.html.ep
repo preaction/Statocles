@@ -11,6 +11,9 @@
         % for my $link ( $self->links( 'feed' ) ) {
         <link rel="alternate" href="<%= $link->href %>" type="<%= $link->type %>" />
         % }
+        % if ( my $img = $site->images->{ 'icon' } ) {
+        <link rel="shortcut icon" href="<%= $img->src %>" />
+        % }
         %= include 'site/head_after.html.ep'
         % for my $link ( $self->links( 'stylesheet' ) ) {
         <link rel="stylesheet" href="<%= $link->href %>" type="<%= $link->type || 'text/css' %>" />
