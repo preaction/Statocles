@@ -61,6 +61,21 @@ has author => (
     isa => Str,
 );
 
+=attr status
+
+The publishing status of this document.  Optional. Statocles apps can
+examine this to determine whether to turn a document into a page.  The
+default value is C<published>; other reasonable values could include
+C<draft> or C<private>.
+
+=cut
+
+has status => (
+    is => 'rw',
+    isa => Str,
+    default => 'published',
+);
+
 =attr content
 
 The raw content of this document, in markdown. This is everything below

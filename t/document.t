@@ -4,6 +4,15 @@ use Statocles::Document;
 
 my %default = ();
 
+subtest 'status' => sub {
+    my $doc = Statocles::Document->new(
+        %default,
+    );
+
+    is $doc->status => 'published';
+
+};
+
 subtest 'images' => sub {
     my $doc = Statocles::Document->new(
         %default,
