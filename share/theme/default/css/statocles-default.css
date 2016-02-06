@@ -43,6 +43,13 @@ ol {
     margin-left: 1.4em;
 }
 
+ul ul, ul ol, ol ul, ol ol {
+    /* Fix each successive layer of lists getting smaller and smaller.
+     * After three layers of lists, it's too small to read well
+     */
+    font-size: 100%;
+}
+
 .button.disabled {
     cursor: not-allowed;
 }
