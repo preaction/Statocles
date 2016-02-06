@@ -15,8 +15,14 @@
         <link rel="shortcut icon" href="<%= $img->src %>" />
         % }
         %= include 'site/head_after.html.ep'
+        % for my $link ( $site->links( 'stylesheet' ) ) {
+        <link rel="stylesheet" href="<%= $link->href %>" type="<%= $link->type || 'text/css' %>" />
+        % }
         % for my $link ( $self->links( 'stylesheet' ) ) {
         <link rel="stylesheet" href="<%= $link->href %>" type="<%= $link->type || 'text/css' %>" />
+        % }
+        % for my $link ( $site->links( 'script' ) ) {
+        <script src="<%= $link->href %>"></script>
         % }
         % for my $link ( $self->links( 'script' ) ) {
         <script src="<%= $link->href %>"></script>

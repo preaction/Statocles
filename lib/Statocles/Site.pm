@@ -8,6 +8,7 @@ use Mojo::URL;
 use Mojo::DOM;
 use Mojo::Log;
 use Statocles::Page::Plain;
+use List::UtilsBy qw( uniq_by );
 
 =attr title
 
@@ -121,6 +122,57 @@ has _nav => (
     coerce => LinkHash->coercion,
     default => sub { {} },
     init_arg => 'nav',
+);
+
+=attr links
+
+    # site.yml
+    links:
+        stylesheet:
+            - href: /theme/css/site.css
+        script:
+            - href: /theme/js/site.js
+
+Related links for this site. Links are used to build relationships
+to other web addresses. Link categories are named based on their
+relationship. Some possible categories are:
+
+=over 4
+
+=item stylesheet
+
+Additional stylesheets for this site.
+
+=item script
+
+Additional scripts for this site.
+
+=back
+
+Each category contains an arrayref of hashrefs of L<link objects|Statocles::Link>.
+See the L<Statocles::Link|Statocles::Link> documentation for a full list of
+supported attributes. The most common attributes are:
+
+=over 4
+
+=item href
+
+The URL for the link.
+
+=item text
+
+The text of the link. Not needed for stylesheet or script links.
+
+=back
+
+=cut
+
+has _links => (
+    is => 'ro',
+    isa => LinkHash,
+    default => sub { +{} },
+    coerce => LinkHash->coercion,
+    init_arg => 'links',
 );
 
 =attr images
@@ -555,6 +607,37 @@ sub deploy {
     $self->_deploy->site( $self );
     $self->_deploy->deploy( $self->build_store, %options );
     $self->_clear_write_deploy;
+}
+
+=method links
+
+    my @links = $site->links( $key );
+    my $link = $site->links( $key );
+    $site->links( $key => $add_link );
+
+Get or append to the links set for the given key. See L<the links
+attribute|/links> for some commonly-used keys.
+
+If only one argument is given, returns a list of L<link
+objects|Statocles::Link>. In scalar context, returns the first link in
+the list.
+
+If two arguments are given, append the new link to the given key.
+C<$add_link> may be a URL string, a hash reference of L<link
+attributes|Statocles::Link/ATTRIBUTES>, or a L<Statocles::Link
+object|Statocles::Link>. When adding links, nothing is returned.
+
+=cut
+
+sub links {
+    my ( $self, $name, $add_link ) = @_;
+    if ( $add_link ) {
+        push @{ $self->_links->{ $name } }, Link->coerce( $add_link );
+        return;
+    }
+    my @links = uniq_by { $_->href }
+        $self->_links->{ $name } ? @{ $self->_links->{ $name } } : ();
+    return wantarray ? @links : $links[0];
 }
 
 =method url

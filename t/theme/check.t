@@ -74,6 +74,18 @@ my $site = Statocles::Site->new(
            src => '/favicon.ico',
         },
     },
+    links => {
+        stylesheet => [
+            {
+                href => '/theme/css/site-style.css',
+            },
+        ],
+        script => [
+            {
+                href => '/theme/js/site-script.js',
+            },
+        ],
+    },
 );
 
 my %page = (
@@ -227,6 +239,16 @@ my %content_tests = (
             if ( ok $elem = $dom->at( 'meta[name=generator]' ), 'meta generator exists' ) {
                 is $elem->attr( 'content' ), "Statocles $Statocles::VERSION",
                     'generator has name and version';
+            }
+        };
+
+        subtest 'site stylesheet and script links get added' => sub {
+            if ( ok $elem = $dom->at( 'link[href=/theme/css/site-style.css]', 'site stylesheet exists' ) ) {
+                is $elem->attr( 'rel' ), 'stylesheet';
+                is $elem->attr( 'type' ), 'text/css';
+            }
+            if ( ok $elem = $dom->at( 'script[src=/theme/js/site-script.js]', 'site script exists' ) ) {
+                ok !$elem->text, 'no text inside';
             }
         };
 

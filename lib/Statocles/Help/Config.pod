@@ -319,6 +319,24 @@ the C<site> object, like so:
 For more information, see L<the C<images> attribute
 documentation|Statocles::Site/images>.
 
+=head2 Additional Stylesheets and Scripts
+
+You can easily add extra scripts and stylesheets by adding them to the
+site's C<links> attribute:
+
+    site:
+        class: Statocles::Site
+        args:
+            links:
+                stylesheet:
+                    - href: /css/site.css
+                script:
+                    - href: /js/site.js
+
+Create the files C</css/site.css> and C</js/site.js> and they will be
+picked up by the C<basic_app> we created, above. If you accidentally
+create a link to a file that doesn't exist, Statocles will warn you.
+
 =head2 Service Integration
 
 There are third-party services that can be integrated into your site by
