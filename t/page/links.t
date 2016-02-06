@@ -16,16 +16,16 @@ subtest 'links' => sub {
         path => '/index.rss',
         links => {
             alternate => [
-                Statocles::Link->new(
+                {
                     text => 'Main',
                     href => '/index.html',
                     type => 'text/html',
-                ),
-                Statocles::Link->new(
+                },
+                {
                     text => 'Atom',
                     href => '/index.atom',
                     type => 'application/atom+xml',
-                ),
+                },
             ],
         },
     );

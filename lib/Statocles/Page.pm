@@ -125,6 +125,8 @@ A hash of arrays of links to pages related to this page. Possible keys:
 
     feed        - Feed pages related to this page
     alternate   - Alternate versions of this page posted to other sites
+    stylesheet  - Additional stylesheets for this page
+    script      - Additional scripts for this page
 
 Each item in the array is a L<link object|Statocles::Link>. The most common
 attributes are:
@@ -140,7 +142,7 @@ has _links => (
     isa => LinkHash,
     lazy => 1,
     default => sub { +{} },
-    coercion => LinkHash->coercion,
+    coerce => LinkHash->coercion,
     init_arg => 'links',
 );
 
