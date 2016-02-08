@@ -4,6 +4,15 @@
         <link rel="stylesheet" href="/theme/css/normalize.css" />
         <link rel="stylesheet" href="//cdn.example.com/css/cdn.css" />
         <title><%= $self->title %> - <%= $site->title %></title>
+        % if ( my $img = $site->images->{ 'icon' } ) {
+        <link rel="shortcut icon" href="<%= $img->src %>" />
+        % }
+        % for my $link ( $site->links( 'stylesheet' ) ) {
+        <link rel="stylesheet" href="<%= $link->href %>" type="<%= $link->type || 'text/css' %>" />
+        % }
+        % for my $link ( $site->links( 'script' ) ) {
+        <script src="<%= $link->href %>"></script>
+        % }
     </head>
     <body>
         <a class="brand" href="/">Home</a>
