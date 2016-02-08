@@ -35,6 +35,14 @@ subtest 'constructor' => sub {
         );
         is $img->role, undef, 'no default if alt set';
     };
+
+    subtest 'data' => sub {
+        my $img = Statocles::Image->new(
+            src => 'images/test.jpg',
+            data => { license => 'GPL v3'} ,
+        );
+        is $img->data->{license}, 'GPL v3', 'data hash';
+    };
 };
 
 done_testing;
