@@ -4,7 +4,7 @@ Statocles - A static site generator
 
 # VERSION
 
-version 0.066
+version 0.067
 
 # STATUS
 
@@ -73,6 +73,7 @@ Doug Bell <preaction@cpan.org>
 - Joel Berger <joel.a.berger@gmail.com>
 - tadegenban <tadegenban@gmail.com>
 - Vladimir Lettiev <thecrux@gmail.com>
+- William Lindley <wlindley@wlindley.com>
 
 # COPYRIGHT AND LICENSE
 

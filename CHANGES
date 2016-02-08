@@ -1,6 +1,27 @@
 Changelog for Statocles
 
-0.066 2016-01-10T02:02:37
+0.067 2016-02-08T04:25:05
+ - sort broken links in link check plugin
+ - add debug message when rendering a page
+ - fix page render error when document title is undef
+ - add test for stylesheet, script, and favicon links
+ - show load error if failed to load Pod::Weaver
+ - fix missing attribute in site object error message
+ - Revert "add failing test"
+ - add style and script links to site object
+ - fix coersion for links in page object
+ - fix nested lists getting smaller and smaller font
+ - fix default font to something more readable
+ - Add status attribute in preparation to its use, and test for the default
+   value when writing a document.
+ - add failing test
+ - remove static app from the config guide
+ - add shortcut icon to default themes
+ - add images attribute to site object
+ - add experiment directory to gitignore
+ - add release v0.066 announcement
+
+0.066 2016-01-10T02:02:37Z
  - fix duplicate links showing up in pages
  - add uniq_by util to filter items based on a sub
  - add child page scripts and styles to the list page
