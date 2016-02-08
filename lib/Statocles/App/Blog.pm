@@ -159,12 +159,15 @@ sub command {
     }
     elsif ( $argv[0] eq 'post' ) {
         my %opt;
+        my @doc_opts = qw(author layout status tags template);
         GetOptionsFromArray( \@argv, \%opt,
             'date:s',
+            map { "$_:s" } @doc_opts,
         );
 
         my %doc = (
             %$default_post,
+            (map { defined $opt{$_} ? ( $_, $opt{$_} ) : () } @doc_opts),
             title => join " ", @argv[1..$#argv],
         );
 
