@@ -104,12 +104,30 @@ subtest 'constructor' => sub {
                 isa_ok $_, 'Statocles::Template';
                 is $_->content, '<%= content %>';
             },
+            title => $doc->title,
+            author => $doc->author,
             date => $doc->date,
             _images => $doc->images,
             _links => $doc->links,
         },
     );
 
+    subtest 'missing document fields default to empty string' => sub {
+        my $required_doc = Statocles::Document->new(
+            path => '/required.markdown',
+        );
+        test_constructor(
+            'Statocles::Page::Document',
+            required => {
+                path => '/path/to/page.html',
+                document => $required_doc,
+            },
+            default => {
+                title => '',
+                author => '',
+            },
+        );
+    };
 };
 
 subtest 'page date overridden by published date' => sub {

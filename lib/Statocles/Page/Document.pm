@@ -26,7 +26,7 @@ The title of the page.
 
 has '+title' => (
     lazy => 1,
-    default => sub { $_[0]->document->title },
+    default => sub { $_[0]->document->title || '' },
 );
 
 =attr author
