@@ -222,13 +222,23 @@ sub _weave_module {
     my ( $self, $path ) = @_;
 
     # Oh... My... GOD...
-    my @missing;
-    eval { require Pod::Weaver; 1; } or push @missing, 'Pod::Weaver';
-    eval { require PPI; 1; } or push @missing, 'PPI';
-    eval { require Pod::Elemental; 1; } or push @missing, 'Pod::Elemental';
-    eval { require Encode; 1; } or push @missing, 'Encode';
-    if ( @missing ) {
-        die "Cannot weave POD: Missing modules " . join( " ", @missing );
+    my %errors;
+    if ( !eval { require Pod::Weaver; 1; } ) {
+        $errors{ 'Pod::Weaver' } = $@;
+    }
+    if ( !eval { require PPI; 1; } ) {
+        $errors{ 'PPI' } = $@;
+    }
+    if ( !eval { require Pod::Elemental; 1; } ) {
+        $errors{ 'Pod::Elemental' } = $@;
+    }
+    if ( !eval { require Encode; 1; } ) {
+        $errors{ 'Encode' } = $@;
+    }
+    if ( keys %errors ) {
+        die "Cannot weave POD: Error loading modules "
+            . join( "\n", map { "$_: $errors{$_}" } keys %errors )
+            ;
     }
 
     my $perl_utf8 = Encode::encode( 'utf-8', Path::Tiny->new( $path )->slurp, Encode::FB_CROAK );
