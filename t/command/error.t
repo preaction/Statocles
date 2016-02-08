@@ -113,7 +113,7 @@ subtest 'site config broken' => sub {
             Statocles::Command->main( '--config', "$config", 'build' )
         };
         ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
-        like $err, qr{\QERROR: Could not create site object "site": \E.*missing_object}
+        like $err, qr{\QERROR: Could not create site object "site" in config file "$config": \E.*missing_object}
             or diag $err;
         isnt $exit, 0;
     };
@@ -160,6 +160,18 @@ subtest 'site config broken' => sub {
                 or diag $err;
             isnt $exit, 0;
         };
+    };
+
+    subtest 'missing required arguments' => sub {
+        my $config = $SHARE_DIR->child( config => 'missing_arg.yml' );
+
+        my ( $out, $err, $exit ) = capture {
+            Statocles::Command->main( '--config', "$config", 'build' )
+        };
+        ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
+        like $err, qr{ERROR: Could not create site object "site" in config file "$config": Missing required arguments:}
+            or diag $err;
+        isnt $exit, 0;
     };
 };
 

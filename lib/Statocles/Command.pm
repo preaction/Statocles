@@ -97,17 +97,14 @@ sub main {
     my $site = eval { $wire->get( $opt{site} ) };
 
     if ( $@ ) {
-        if ( blessed $@ && $@->isa( 'Beam::Wire::Exception::NotFound' ) ) {
-            if ( $@->name eq $opt{site} ) {
-                warn sprintf qq{ERROR: Could not find site named "%s" in config file "%s"\n},
-                    $opt{site}, $opt{config};
-            }
-            else {
-                warn sprintf qq{ERROR: Could not create site object "%s": %s\n}, $opt{site}, $@;
-            }
+        if ( blessed $@ && $@->isa( 'Beam::Wire::Exception::NotFound' ) && $@->name eq $opt{site} ) {
+            warn sprintf qq{ERROR: Could not find site named "%s" in config file "%s"\n},
+                $opt{site}, $opt{config};
             return 1;
         }
-        die $@;
+        warn sprintf qq{ERROR: Could not create site object "%s" in config file "%s": %s\n},
+            $opt{site}, $opt{config}, $@;
+        return 1;
     }
 
     my $cmd = $class->new( site => $site );
