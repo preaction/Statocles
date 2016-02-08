@@ -91,4 +91,17 @@ has role => (
     },
 );
 
+=attr data
+
+A hash of arbitrary data available to theme templates. This is a good place to
+put extra structured data like image credits, copyright, or location.
+
+=cut
+
+has data => (
+    is => 'ro',
+    isa => HashRef,
+    default => sub { {} },
+);
+
 1;
