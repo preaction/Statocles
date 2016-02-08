@@ -296,7 +296,12 @@ The result of this method is cached.
 sub render {
     my ( $self, %args ) = @_;
 
-    return $self->_rendered_html if $self->_has_rendered_html;
+    if ( $self->_has_rendered_html ) {
+        $self->site->log->debug( 'Render page (cached): ' . $self->path );
+        return $self->_rendered_html;
+    }
+
+    $self->site->log->debug( 'Render page: ' . $self->path );
 
     my %vars = (
         %{ $self->data },

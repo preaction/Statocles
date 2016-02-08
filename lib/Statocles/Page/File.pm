@@ -47,6 +47,7 @@ Return the filehandle to the file containing the content for this page.
 
 sub render {
     my ( $self ) = @_;
+    $self->site->log->debug( 'Render page: ' . $self->path );
     return $self->file_path ? $self->file_path : $self->fh;
 }
 
