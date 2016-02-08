@@ -60,15 +60,20 @@ sub check_pages {
         }
     }
 
+    my @missing; # Array of arrayrefs of [ link => page ] pairs
     for my $link_url ( keys %links ) {
         $link_url .= 'index.html' if $link_url =~ m{/$};
         next if $page_paths{ $link_url } || $page_paths{ "$link_url/index.html" };
         next if grep { $link_url =~ /^$_/ } @{ $self->ignore };
-        for my $page_url ( keys %{ $links{ $link_url } } ) {
-            $event->emitter->log->warn( "URL broken on $page_url: '$link_url' not found" );
-        }
+        push @missing, [ $link_url, $_ ] for keys %{ $links{ $link_url } };
     }
 
+    if ( @missing ) {
+        # Sort by page url and then missing link url
+        for my $m ( sort { $a->[1] cmp $b->[1] || $a->[0] cmp $b->[0] } @missing ) {
+            $event->emitter->log->warn( "URL broken on $m->[1]: '$m->[0]' not found" );
+        }
+    }
 }
 
 =method register

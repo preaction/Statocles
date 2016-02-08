@@ -20,41 +20,47 @@ subtest 'check links' => sub {
 
     $site->build;
 
-    my $page = '/blog/2014/06/02/more_tags/index.html';
-    my @all_pages = qw(
-        /aaa.html
-        /blog/2014/04/23/slug/index.html
-        /blog/2014/04/30/plug/index.html
-        /blog/2014/04/30/plug/recipe.html
-        /blog/2014/05/22/(regex)[name].file.html
-        /blog/2014/06/02/more_tags/docs.html
-        /blog/2014/06/02/more_tags/index.html
-        /foo/index.html
-        /foo/other.html
-        /foo/utf8.html
-        /index.html
-    );
-
     cmp_deeply $site->log->history,
-        bag(
-            (
-                map { [ ignore(), 'warn', re(qr{\QURL broken on $_: '/missing/stylesheet.css' not found}) ] }
-                @all_pages
-            ),
-            (
-                map { [ ignore(), 'warn', re(qr{\QURL broken on $_: '/missing/script.js' not found}) ] }
-                @all_pages
-            ),
-            (
-                map { [ ignore(), 'warn', re(qr{\QURL broken on $_: '/missing/favicon.png' not found}) ] }
-                @all_pages
-            ),
-            [ ignore(), 'warn', re(qr{\QURL broken on $page: '/does_not_exist.jpg' not found}) ],
-            [ ignore(), 'warn', re(qr{\QURL broken on $page: '/does_not_exist' not found}) ],
-            [ ignore(), 'warn', re(qr{\QURL broken on $page: '/images/with spaces.png' not found}) ],
-            [ ignore(), 'warn', re(qr{\QURL broken on $page: '/blog/2014/06/02/more_tags/does_not_exist' not found}) ],
-        ),
-        'broken links found'
+        [
+            [ ignore(), warn => re(qr{\QURL broken on /aaa.html: '/missing/favicon.png' not found} ) ],
+            [ ignore(), warn => re(qr{\QURL broken on /aaa.html: '/missing/script.js' not found} ) ],
+            [ ignore(), warn => re(qr{\QURL broken on /aaa.html: '/missing/stylesheet.css' not found} ) ],
+            [ ignore(), warn => re(qr{\QURL broken on /blog/2014/04/23/slug/index.html: '/missing/favicon.png' not found} ) ],
+            [ ignore(), warn => re(qr{\QURL broken on /blog/2014/04/23/slug/index.html: '/missing/script.js' not found} ) ],
+            [ ignore(), warn => re(qr{\QURL broken on /blog/2014/04/23/slug/index.html: '/missing/stylesheet.css' not found} ) ],
+            [ ignore(), warn => re(qr{\QURL broken on /blog/2014/04/30/plug/index.html: '/missing/favicon.png' not found} ) ],
+            [ ignore(), warn => re(qr{\QURL broken on /blog/2014/04/30/plug/index.html: '/missing/script.js' not found} ) ],
+            [ ignore(), warn => re(qr{\QURL broken on /blog/2014/04/30/plug/index.html: '/missing/stylesheet.css' not found} ) ],
+            [ ignore(), warn => re(qr{\QURL broken on /blog/2014/04/30/plug/recipe.html: '/missing/favicon.png' not found} ) ],
+            [ ignore(), warn => re(qr{\QURL broken on /blog/2014/04/30/plug/recipe.html: '/missing/script.js' not found} ) ],
+            [ ignore(), warn => re(qr{\QURL broken on /blog/2014/04/30/plug/recipe.html: '/missing/stylesheet.css' not found} ) ],
+            [ ignore(), warn => re(qr{\QURL broken on /blog/2014/05/22/(regex)[name].file.html: '/missing/favicon.png' not found} ) ],
+            [ ignore(), warn => re(qr{\QURL broken on /blog/2014/05/22/(regex)[name].file.html: '/missing/script.js' not found} ) ],
+            [ ignore(), warn => re(qr{\QURL broken on /blog/2014/05/22/(regex)[name].file.html: '/missing/stylesheet.css' not found} ) ],
+            [ ignore(), warn => re(qr{\QURL broken on /blog/2014/06/02/more_tags/docs.html: '/missing/favicon.png' not found} ) ],
+            [ ignore(), warn => re(qr{\QURL broken on /blog/2014/06/02/more_tags/docs.html: '/missing/script.js' not found} ) ],
+            [ ignore(), warn => re(qr{\QURL broken on /blog/2014/06/02/more_tags/docs.html: '/missing/stylesheet.css' not found} ) ],
+            [ ignore(), warn => re(qr{\QURL broken on /blog/2014/06/02/more_tags/index.html: '/blog/2014/06/02/more_tags/does_not_exist' not found}) ],
+            [ ignore(), warn => re(qr{\QURL broken on /blog/2014/06/02/more_tags/index.html: '/does_not_exist' not found}) ],
+            [ ignore(), warn => re(qr{\QURL broken on /blog/2014/06/02/more_tags/index.html: '/does_not_exist.jpg' not found}) ],
+            [ ignore(), warn => re(qr{\QURL broken on /blog/2014/06/02/more_tags/index.html: '/images/with spaces.png' not found}) ],
+            [ ignore(), warn => re(qr{\QURL broken on /blog/2014/06/02/more_tags/index.html: '/missing/favicon.png' not found} ) ],
+            [ ignore(), warn => re(qr{\QURL broken on /blog/2014/06/02/more_tags/index.html: '/missing/script.js' not found} ) ],
+            [ ignore(), warn => re(qr{\QURL broken on /blog/2014/06/02/more_tags/index.html: '/missing/stylesheet.css' not found} ) ],
+            [ ignore(), warn => re(qr{\QURL broken on /foo/index.html: '/missing/favicon.png' not found} ) ],
+            [ ignore(), warn => re(qr{\QURL broken on /foo/index.html: '/missing/script.js' not found} ) ],
+            [ ignore(), warn => re(qr{\QURL broken on /foo/index.html: '/missing/stylesheet.css' not found} ) ],
+            [ ignore(), warn => re(qr{\QURL broken on /foo/other.html: '/missing/favicon.png' not found} ) ],
+            [ ignore(), warn => re(qr{\QURL broken on /foo/other.html: '/missing/script.js' not found} ) ],
+            [ ignore(), warn => re(qr{\QURL broken on /foo/other.html: '/missing/stylesheet.css' not found} ) ],
+            [ ignore(), warn => re(qr{\QURL broken on /foo/utf8.html: '/missing/favicon.png' not found} ) ],
+            [ ignore(), warn => re(qr{\QURL broken on /foo/utf8.html: '/missing/script.js' not found} ) ],
+            [ ignore(), warn => re(qr{\QURL broken on /foo/utf8.html: '/missing/stylesheet.css' not found} ) ],
+            [ ignore(), warn => re(qr{\QURL broken on /index.html: '/missing/favicon.png' not found} ) ],
+            [ ignore(), warn => re(qr{\QURL broken on /index.html: '/missing/script.js' not found} ) ],
+            [ ignore(), warn => re(qr{\QURL broken on /index.html: '/missing/stylesheet.css' not found} ) ],
+        ],
+        'broken links found and sorted by page -> missing url'
             or diag explain $site->log->history;
 
 };
@@ -80,10 +86,10 @@ subtest 'ignore patterns' => sub {
 
         cmp_deeply $site->log->history,
             bag(
-                [ ignore(), 'warn', re(qr{\QURL broken on $page: '/images/with spaces.png' not found}) ],
                 [ ignore(), 'warn', re(qr{\QURL broken on $page: '/blog/2014/06/02/more_tags/does_not_exist' not found}) ],
+                [ ignore(), 'warn', re(qr{\QURL broken on $page: '/images/with spaces.png' not found}) ],
             ),
-            'broken links found'
+            'broken links found and sorted by page -> missing url'
                 or diag explain $site->log->history;
     };
 
