@@ -7,6 +7,7 @@ use Statocles::Store;
 use Statocles::Page::Document;
 use Statocles::Page::List;
 use Statocles::Util qw( run_editor );
+use List::Util;
 
 with 'Statocles::App::Role::Store';
 
@@ -278,17 +279,23 @@ my %FEEDS = (
 sub index {
     my ( $self, $all_post_pages ) = @_;
 
-    # Filter the index_tags
+    # Filter pages according to their index tags
     my @index_post_pages;
-    PAGE: for my $page ( @$all_post_pages ) {
-        my $add = 1;
-        for my $tag_spec ( @{ $self->index_tags } ) {
-            my $flag = substr $tag_spec, 0, 1;
-            my $tag = substr $tag_spec, 1;
-            if ( grep { $_ eq $tag } @{ $page->document->tags } ) {
-                $add = $flag eq '-' ? 0 : 1;
-            }
+
+    my @tags;
+    my %tag_handler;
+
+    for my $tag ( @{ $self->index_tags } ) {
+        if ($tag =~ /([+-])(.+)/) {
+            push @tags, $2;
+            $tag_handler{$2} = $1;
         }
+    }
+
+    for my $page ( @$all_post_pages ) {
+        my %has_tag = map { ($_, 1) } @{$page->document->tags};
+        my @process_tags = grep { $has_tag{$_} } @tags;
+        my $add = ( List::Util::reduce { ($tag_handler{$b}) // $a } ('+', @process_tags) ) ne '-';
         push @index_post_pages, $page if $add;
     }
 
