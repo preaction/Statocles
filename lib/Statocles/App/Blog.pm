@@ -335,7 +335,7 @@ sub index {
 
     # Add the feeds to all the pages
     for my $page ( @pages ) {
-        $page->_links->{feed} = \@feed_links;
+        $page->links( feed => @feed_links );
     }
 
     return ( @pages, @feed_pages );
@@ -402,7 +402,7 @@ sub tag_pages {
 
         # Add the feeds to all the pages
         for my $page ( @tag_pages ) {
-            $page->_links->{feed} = \@feed_links;
+            $page->links( feed => @feed_links );
         }
 
         push @pages, @tag_pages, @feed_pages;
