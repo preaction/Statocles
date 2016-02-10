@@ -337,17 +337,17 @@ If only one argument is given, returns a list of L<link
 objects|Statocles::Link>. In scalar context, returns the first link in
 the list.
 
-If two arguments are given, append the new link to the given key.
-C<$add_link> may be a URL string, a hash reference of L<link
+If two or more arguments are given, append the new links to the given
+key. C<$add_link> may be a URL string, a hash reference of L<link
 attributes|Statocles::Link/ATTRIBUTES>, or a L<Statocles::Link
 object|Statocles::Link>. When adding links, nothing is returned.
 
 =cut
 
 sub links {
-    my ( $self, $name, $add_link ) = @_;
-    if ( $add_link ) {
-        push @{ $self->_links->{ $name } }, Link->coerce( $add_link );
+    my ( $self, $name, @add_links ) = @_;
+    if ( @add_links ) {
+        push @{ $self->_links->{ $name } }, map { Link->coerce( $_ ) } @add_links;
         return;
     }
     my @links = uniq_by { $_->href }

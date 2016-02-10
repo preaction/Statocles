@@ -72,12 +72,13 @@ subtest 'add links' => sub {
                 path => '/index.rss',
                 links => { alternate => [ $existing_link ] },
             );
-            $page->links( alternate => "http://example.com" );
+            $page->links( alternate => "http://example.com", "http://example.net" );
             cmp_deeply
                 [ $page->links( 'alternate' ) ],
                 [
                     $existing_link,
                     Statocles::Link->new( href => 'http://example.com' ),
+                    Statocles::Link->new( href => 'http://example.net' ),
                 ],
                 'URL is coerced into Link object and appended';
         };
