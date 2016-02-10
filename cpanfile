@@ -4,6 +4,7 @@ requires "Encode" => "0";
 requires "File::Share" => "0";
 requires "Git::Repository" => "0";
 requires "Import::Base" => "0.012";
+requires "List::UtilsBy" => "0.09";
 requires "Mojolicious" => "6.0";
 requires "Moo" => "2.000001";
 requires "Path::Tiny" => "0.072";

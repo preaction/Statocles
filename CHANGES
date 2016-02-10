@@ -1,6 +1,16 @@
 Changelog for Statocles
 
-0.067 2016-02-08T04:25:05
+0.068 2016-02-10T15:15:00
+ - fix travis always having certain prereqs installed
+ - fix use of private object data when adding links
+ - allow adding multiple links to a page at once
+ - add missing List::UtilsBy dependency
+ - Add standard frontmatter overrides (author layout status tags template)
+   to blog command
+ - Add data hash to Image
+ - add release v0.067 announcement
+
+0.067 2016-02-08T04:25:05Z
  - sort broken links in link check plugin
  - add debug message when rendering a page
  - fix page render error when document title is undef

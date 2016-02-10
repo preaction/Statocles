@@ -33,6 +33,7 @@ my %WriteMakefileArgs = (
     "File::Share" => 0,
     "Git::Repository" => 0,
     "Import::Base" => "0.012",
+    "List::UtilsBy" => "0.09",
     "Mojolicious" => "6.0",
     "Moo" => "2.000001",
     "Path::Tiny" => "0.072",
@@ -60,7 +61,7 @@ my %WriteMakefileArgs = (
     "Test::Lib" => 0,
     "Test::More" => "1.001005"
   },
-  "VERSION" => "0.067",
+  "VERSION" => "0.068",
   "test" => {
     "TESTS" => "t/*.t t/app/*.t t/app/basic/*.t t/app/blog/*.t t/app/perldoc/*.t t/app/role/*.t t/bin/*.t t/command/*.t t/deploy/*.t t/page/*.t t/plugin/*.t t/site/*.t t/store/*.t t/template/*.t t/theme/*.t"
   }
@@ -81,6 +82,7 @@ my %FallbackPrereqs = (
   "IO::Handle" => 0,
   "IPC::Open3" => 0,
   "Import::Base" => "0.012",
+  "List::UtilsBy" => "0.09",
   "Mojolicious" => "6.0",
   "Moo" => "2.000001",
   "Path::Tiny" => "0.072",
