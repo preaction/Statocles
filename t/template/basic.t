@@ -40,4 +40,11 @@ subtest 'template with errors' => sub {
     } qr{Error in template};
 };
 
+subtest 'template comments' => sub {
+    my $tmpl = Statocles::Template->new(
+        path => $SHARE_DIR->child( 'tmpl', 'comment.html.ep' ),
+    );
+    is $tmpl->render, "<%= stuff() %>\n%= other_stuff()\n";
+};
+
 done_testing;
