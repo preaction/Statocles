@@ -78,6 +78,9 @@ sub main {
             elsif ( $@ =~ /did not find expected key/ || $@ =~ /YAML_PARSE_ERR_INCONSISTENT_INDENTATION/ ) {
                 $remedy = "Check your indentation. ";
             }
+            elsif ( $@ =~ /Syck parser/ && $@ =~ /syntax error/ ) {
+                $remedy = "Check your indentation. ";
+            }
 
             my $more_info = ( !$opt{verbose} ? qq{run with the "--verbose" option or } : "" )
                           . "check Statocles::Help::Error";
