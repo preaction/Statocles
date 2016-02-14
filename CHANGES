@@ -1,6 +1,15 @@
 Changelog for Statocles
 
-0.068 2016-02-10T15:15:00
+0.069 2016-02-14T03:04:48
+ - remove useless test line
+ - fix store warning when given no content
+ - fix yaml remedy checks for YAML::Syck
+ - fix test failure with missing Text::Diff module
+ - add test for template comments
+ - Specify UTF-8 encoding in site layout
+ - add release v0.068 announcement
+
+0.068 2016-02-10T15:15:00Z
  - fix travis always having certain prereqs installed
  - fix use of private object data when adding links
  - allow adding multiple links to a page at once
