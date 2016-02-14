@@ -68,7 +68,6 @@ subtest 'edit' => sub {
             };
 
             subtest 'check the generated document' => sub {
-                my $path = $doc_path->relative( $tmpdir->child('basic') );
                 eq_or_diff $doc_path->slurp, $SHARE_DIR->child(qw( app basic index.markdown ))->slurp;
             };
         };
