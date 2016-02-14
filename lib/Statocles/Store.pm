@@ -181,10 +181,11 @@ parse for frontmatter.
 
 sub parse_frontmatter {
     my ( $self, $from, $content ) = @_;
+    return unless $content;
     my $doc;
 
     my @lines = split /\n/, $content;
-    if ( $lines[0] =~ /^---/ ) {
+    if ( @lines && $lines[0] =~ /^---/ ) {
         shift @lines;
 
         # The next --- is the end of the YAML frontmatter

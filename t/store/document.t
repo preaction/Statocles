@@ -164,6 +164,36 @@ subtest 'parse frontmatter from content' => sub {
             author => 'preaction',
             content => "No optional things in here, at all!\n",
         };
+
+    subtest 'does not warn without content' => sub {
+        my @warnings;
+        local $SIG{__WARN__} = sub { push @warnings, @_ };
+        cmp_deeply
+            { $store->parse_frontmatter( 'UNDEF' ) },
+            { },
+            'empty hashref';
+        ok !@warnings, 'no warnings' or diag explain \@warnings;
+    };
+
+    subtest 'does not warn without more than one line' => sub {
+        my @warnings;
+        local $SIG{__WARN__} = sub { push @warnings, @_ };
+        cmp_deeply
+            { $store->parse_frontmatter( 'one line', 'only one line' ) },
+            { content => "only one line\n" },
+            'empty hashref';
+        ok !@warnings, 'no warnings' or diag explain \@warnings;
+    };
+
+    subtest 'does not warn with only a newline' => sub {
+        my @warnings;
+        local $SIG{__WARN__} = sub { push @warnings, @_ };
+        cmp_deeply
+            { $store->parse_frontmatter( 'newline', "\n" ) },
+            { content => '' },
+            'empty hashref';
+        ok !@warnings, 'no warnings' or diag explain \@warnings;
+    };
 };
 
 subtest 'read with relative directory' => sub {
