@@ -168,8 +168,8 @@ sub pages {
         }
 
         my %page_args = (
-            layout => $self->site->theme->template( site => 'layout.html' ),
-            template => $self->site->theme->template( perldoc => 'pod.html' ),
+            layout => $self->template( 'layout.html' ),
+            template => $self->template( 'pod.html' ),
             title => $module,
             content => "$dom",
             app => $self,
@@ -190,8 +190,8 @@ sub pages {
         # Add the source as a text file
         push @pages, Statocles::Page::Plain->new(
             path => $source_path,
-            layout => $self->site->theme->template( site => 'layout.html' ),
-            template => $self->site->theme->template( perldoc => 'source.html' ),
+            layout => $self->template( 'layout.html' ),
+            template => $self->template( 'source.html' ),
             title => "$module (source)",
             content => Path::Tiny->new( $path )->slurp,
             app => $self,

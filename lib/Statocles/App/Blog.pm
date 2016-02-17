@@ -299,8 +299,8 @@ sub index {
         # Sorting by path just happens to also sort by date
         pages => [ sort { $b->path cmp $a->path } @index_post_pages ],
         app => $self,
-        template => $self->site->theme->template( blog => 'index.html' ),
-        layout => $self->site->theme->template( site => 'layout.html' ),
+        template => $self->template( 'index.html' ),
+        layout => $self->template( 'layout.html' ),
     );
 
     return unless @pages; # Only build feeds if we have pages
@@ -313,7 +313,7 @@ sub index {
             app => $self,
             pages => $index->pages,
             path => $self->url_root . '/index.' . $feed,
-            template => $self->site->theme->template( blog => $FEEDS{$feed}{template} ),
+            template => $self->template( $FEEDS{$feed}{template} ),
             links => {
                 alternate => [
                     $self->link(
@@ -363,8 +363,8 @@ sub tag_pages {
             # Sorting by path just happens to also sort by date
             pages => [ sort { $b->path cmp $a->path } @{ $tagged_docs->{ $tag } } ],
             app => $self,
-            template => $self->site->theme->template( blog => 'index.html' ),
-            layout => $self->site->theme->template( site => 'layout.html' ),
+            template => $self->template( 'index.html' ),
+            layout => $self->template( 'layout.html' ),
             data => {
                 tag_text => $self->tag_text->{ $tag },
             },
@@ -380,7 +380,7 @@ sub tag_pages {
                 app => $self,
                 pages => $index->pages,
                 path => join( "/", $self->url_root, 'tag', $tag_file ),
-                template => $self->site->theme->template( blog => $FEEDS{$feed}{template} ),
+                template => $self->template( $FEEDS{$feed}{template} ),
                 links => {
                     alternate => [
                         $self->link(
@@ -473,7 +473,7 @@ around pages => sub {
                 }
                 $page->tags( \@tags );
 
-                $page->template( $self->site->theme->template( blog => 'post.html' ) );
+                $page->template( $self->template( 'post.html' ) );
             }
         }
     }
@@ -638,7 +638,7 @@ to generate content for blog posts (for example, to help automate release blog p
 
 =over
 
-=item blog => index
+=item index.html
 
 The index page template. Gets the following template variables:
 
@@ -668,7 +668,7 @@ The post author
 
 =back
 
-=item blog => post
+=item post.html
 
 The main post page template. Gets the following template variables:
 

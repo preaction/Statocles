@@ -50,7 +50,7 @@ The cached template objects for this theme.
 
 =cut
 
-has _templates => (
+has '+_templates' => (
     is => 'ro',
     isa => HashRef[InstanceOf['Statocles::Template']],
     default => sub { {} },

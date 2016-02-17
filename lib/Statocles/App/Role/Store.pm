@@ -80,7 +80,7 @@ sub pages {
             my %args = (
                 path => $page_path,
                 app => $self,
-                layout => $self->site->theme->template( site => 'layout.html' ),
+                layout => $self->template( 'layout.html' ),
                 document => $self->store->read_document( $path ),
             );
 

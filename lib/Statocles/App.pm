@@ -43,6 +43,33 @@ has url_root => (
     required => 1,
 );
 
+=attr templates
+
+The templates to use for this application. A mapping of template names to
+template paths (relative to the theme root directory).
+
+=cut
+
+has _templates => (
+    is => 'ro',
+    isa => HashRef,
+    default => sub { {} },
+    init_arg => 'templates',
+);
+
+# The identifier for the application class. Used to find the default
+# template for a given name.
+has _moniker => (
+    is => 'ro',
+    isa => Str,
+    default => sub {
+        my ( $self ) = @_;
+        my $class = ref $self;
+        my @parts = split /::/, $class;
+        return lc $parts[-1];
+    },
+);
+
 =method pages
 
     my @pages = $app->pages;
@@ -114,6 +141,33 @@ sub link {
         $args{href} = $self->url( $args{href} );
     }
     return Statocles::Link->new( %args );
+}
+
+=method template
+
+    my $template = $app->template( $tmpl_name );
+
+Get a L<template object|Statocles::Template> for the given template
+name. The default template is determined by the app's class name and the
+template name passed in.
+
+Applications should list the templates they have and describe what L<page
+class|Statocles::Page> they use.
+
+=cut
+
+sub template {
+    my ( $self, $name ) = @_;
+
+    my $path    = $self->_templates->{ $name }
+                ? $self->_templates->{ $name }
+                # XXX: Should we check for <moniker>/layout.html before
+                # defaulting to site/layout.html?
+                : $name eq 'layout.html'
+                ? join "/", "site", $name
+                : join "/", $self->_moniker, $name;
+
+    return $self->site->theme->template( $path );
 }
 
 1;
