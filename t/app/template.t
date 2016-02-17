@@ -16,7 +16,7 @@ subtest 'template' => sub {
             site => $site,
             url_root => '/blog/',
             pages => [],
-            _moniker => 'blog',
+            template_dir => 'blog',
         );
 
         subtest 'app template' => sub {
@@ -38,7 +38,7 @@ subtest 'template' => sub {
             site => $site,
             url_root => '/blog/',
             pages => [],
-            _moniker => 'blog',
+            template_dir => 'blog',
             templates => {
                 'index.html' => 'custom/blog/index.html',
                 'layout.html' => 'custom/layout.html',

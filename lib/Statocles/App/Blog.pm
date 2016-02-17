@@ -115,6 +115,17 @@ has index_tags => (
     default => sub { [] },
 );
 
+=attr template_dir
+
+The directory (inside the theme directory) to use for this app's templates.
+Defaults to C<blog>.
+
+=cut
+
+has '+template_dir' => (
+    default => 'blog',
+);
+
 # A cache of the last set of post pages we have
 # XXX: We need to allow apps to have a "clear" the way that Store and Theme do
 has _post_pages => (

@@ -76,6 +76,17 @@ has weave_config => (
     coerce => Path->coercion,
 );
 
+=attr template_dir
+
+The directory (inside the theme directory) to use for this app's templates.
+Defaults to C<blog>.
+
+=cut
+
+has '+template_dir' => (
+    default => 'perldoc',
+);
+
 =method pages
 
     my @pages = $app->pages;

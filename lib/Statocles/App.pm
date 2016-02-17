@@ -48,6 +48,9 @@ has url_root => (
 The templates to use for this application. A mapping of template names to
 template paths (relative to the theme root directory).
 
+Developers should get application templates using L<the C<template>
+method|/template>.
+
 =cut
 
 has _templates => (
@@ -57,17 +60,15 @@ has _templates => (
     init_arg => 'templates',
 );
 
-# The identifier for the application class. Used to find the default
-# template for a given name.
-has _moniker => (
+=attr template_dir
+
+The directory (inside the theme directory) to use for this app's templates.
+
+=cut
+
+has template_dir => (
     is => 'ro',
     isa => Str,
-    default => sub {
-        my ( $self ) = @_;
-        my $class = ref $self;
-        my @parts = split /::/, $class;
-        return lc $parts[-1];
-    },
 );
 
 =method pages
@@ -161,11 +162,11 @@ sub template {
 
     my $path    = $self->_templates->{ $name }
                 ? $self->_templates->{ $name }
-                # XXX: Should we check for <moniker>/layout.html before
+                # XXX: Should we check for <template_dir>/layout.html before
                 # defaulting to site/layout.html?
                 : $name eq 'layout.html'
                 ? join "/", "site", $name
-                : join "/", $self->_moniker, $name;
+                : join "/", $self->template_dir, $name;
 
     return $self->site->theme->template( $path );
 }
