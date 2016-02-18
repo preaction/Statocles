@@ -508,6 +508,13 @@ sub build {
     }
 
     $self->emit(
+        'collect_pages',
+        class => 'Statocles::Event::Pages',
+        pages => \@pages,
+    );
+
+    # @pages should not change after this, because it is used in the render loop below.
+    $self->emit(
         'before_build_write',
         class => 'Statocles::Event::Pages',
         pages => \@pages,
