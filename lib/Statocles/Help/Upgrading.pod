@@ -76,26 +76,25 @@ without bells and whistles, the Basic app can be used.
 
 The Static app will be removed in v2.000.
 
-=back
-
-=head1 BREAKING CHANGES
-
-=head2 v0.070
-
-=over 4
-
-=item Error in template: Can't locate object method "tzoffset" via package "DateTime::Moonpig"
+=item The tzoffset shim method will be removed in Statocles version 2.0.
 
 In order to allow documents dated before 1900, Statocles is now using
 a different date/time library, L<DateTime::Moonpig>. This new library
 is mostly compatible, except for the the C<tzoffset> method, which is
 used by the RSS feed because it uses the RFC822 date format.
 
+Statocles adds a shim method that replicates the functionality, but it
+is a better idea to fix your templates to use the correct method.
+
 To fix this, copy the C<blog/index.rss.ep> template from the default
 theme, or change C<$p-E<gt>date-E<gt>tzoffset / 36> in the C<pubDate>
 tag to C<$p-E<gt>date-E<gt>offset / 3600>.
 
+Deprecated in v0.070. Will be removed in v2.000.
+
 =back
+
+=head1 BREAKING CHANGES
 
 =head2 v0.055
 

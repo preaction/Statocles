@@ -71,6 +71,12 @@ coerce DateTimeObj, from DateTimeStr, via {
     );
 };
 
+sub DateTime::Moonpig::tzoffset {
+    my ( $self ) = @_;
+    warn "The tzoffset shim method will be removed in Statocles version 2.0. See Statocles::Help::Upgrading for instructions to remove this warning.\n";
+    return $self->offset * 100;
+}
+
 # Down here to resolve circular dependencies
 require Statocles::Store;
 require Statocles::Link;

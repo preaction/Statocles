@@ -156,4 +156,21 @@ subtest 'Statocles::App::Static' => sub {
     }
 };
 
+subtest 'tzoffset shim' => sub {
+    use Statocles::Types qw( DateTimeObj );
+    if ( $Statocles::VERSION < 2 ) {
+        my $dt = DateTimeObj->coerce( '2015-01-01' );
+        ok $dt->can( 'tzoffset' ), 'tzoffset method exists';
+
+        my @warnings;
+        local $SIG{__WARN__} = sub { push @warnings, @_ };
+        is $dt->tzoffset, 0, 'tzoffset is correct';
+        like $warnings[0], qr{\QThe tzoffset shim method will be removed in Statocles version 2.0. See Statocles::Help::Upgrading for instructions to remove this warning.}, 'warn on tzoffset method';
+    }
+    else {
+        my $dt = DateTimeObj->coerce( '2015-01-01' );
+        ok !$dt->can( 'tzoffset' ), 'tzoffset method does not exist';
+    }
+};
+
 done_testing;
