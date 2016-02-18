@@ -282,20 +282,21 @@ sub index {
     # Filter pages according to their index tags
     my @index_post_pages;
 
-    my @tags;
+    my @index_tags;
     my %tag_handler;
 
     for my $tag ( @{ $self->index_tags } ) {
         if ($tag =~ /([+-])(.+)/) {
-            push @tags, $2;
+            push @index_tags, $2;
             $tag_handler{$2} = $1;
         }
     }
 
     for my $page ( @$all_post_pages ) {
-        my %has_tag = map { ($_, 1) } @{$page->document->tags};
-        my @process_tags = grep { $has_tag{$_} } @tags;
-        my $add = ( List::Util::reduce { ($tag_handler{$b}) // $a } ('+', @process_tags) ) ne '-';
+        # Each tag on this page gets '+', '-', or undef according to site's index_tags
+        my %page_tag_handler = map { ($_, $tag_handler{$_}) } @{$page->document->tags};
+        # Each document's tags must be considered in the order decreed by the site's index_tags array
+        my $add = ( List::Util::reduce { ($page_tag_handler{$b}) // $a } ('+', @index_tags) ) ne '-';
         push @index_post_pages, $page if $add;
     }
 
