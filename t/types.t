@@ -1,6 +1,6 @@
 
 use Statocles::Base 'Test';
-use Statocles::Types qw( Link LinkArray LinkHash TimePiece );
+use Statocles::Types qw( Link LinkArray LinkHash DateTimeObj );
 
 subtest 'Link types' => sub {
 
@@ -99,18 +99,25 @@ subtest 'Link types' => sub {
     };
 };
 
-subtest 'TimePiece' => sub {
+subtest 'DateTimeObj' => sub {
     subtest 'date string' => sub {
-        my $got = TimePiece->coerce( '2015-01-01' );
-        my $expect = Time::Piece->strptime( '2015-01-01', '%Y-%m-%d' );
-        cmp_deeply $got, $expect, 'parse Time::Piece from "YYYY-MM-DD"'
+        my $got = DateTimeObj->coerce( '2015-01-01' );
+        my $expect = DateTime::Moonpig->new( year => 2015, month => 1, day => 1 );
+        cmp_deeply $got, $expect, 'parse DateTime::Moonpig from "YYYY-MM-DD"'
             or diag explain $got, $expect;
     };
 
     subtest 'datetime string' => sub {
-        my $got = TimePiece->coerce( '2015-01-01 12:00:00' );
-        my $expect = Time::Piece->strptime( '2015-01-01 12:00:00', '%Y-%m-%d %H:%M:%S' );
-        cmp_deeply $got, $expect, 'parse Time::Piece from "YYYY-MM-DD HH:MM:SS"'
+        my $got = DateTimeObj->coerce( '2015-01-01 12:00:00' );
+        my $expect = DateTime::Moonpig->new(
+            year => 2015,
+            month => 1,
+            day => 1,
+            hour => 12,
+            minute => 0,
+            second => 0,
+        );
+        cmp_deeply $got, $expect, 'parse DateTime::Moonpig from "YYYY-MM-DD HH:MM:SS"'
             or diag explain $got, $expect;
     };
 };

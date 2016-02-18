@@ -17,7 +17,7 @@ subtest 'constructor' => sub {
             search_change_frequency => 'weekly',
             search_priority => 0.5,
             date => sub {
-                isa_ok $_, 'Time::Piece';
+                isa_ok $_, 'DateTime::Moonpig';
             },
         },
     );

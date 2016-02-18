@@ -5,11 +5,11 @@ use strict;
 use warnings;
 use feature qw( :5.10 );
 use Type::Library -base, -declare => qw(
-    Store Theme Link LinkArray LinkHash TimePiece DateStr DateTimeStr
+    Store Theme Link LinkArray LinkHash DateTimeObj DateStr DateTimeStr
 );
 use Type::Utils -all;
 use Types::Standard -types;
-use Time::Piece;
+use DateTime::Moonpig;
 
 role_type Store, { role => "Statocles::Store" };
 coerce Store, from Str, via { Statocles::Store->new( path => $_ ) };
@@ -48,14 +48,28 @@ coerce LinkHash, from HashRef[HashRef],
         return $out;
     };
 
-my $DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S';
-my $DATE_FORMAT = '%Y-%m-%d';
-
-class_type TimePiece, { class => 'Time::Piece' };
+class_type DateTimeObj, { class => 'DateTime::Moonpig' };
 declare DateStr, as Str, where { m{^\d{4}-?\d{2}-?\d{2}$} };
-declare DateTimeStr, as Str, where { m{^\d{4}-?\d{2}-?\d{2} \d{2}:\d{2}:\d{2}$} };
-coerce TimePiece, from DateStr, via { Time::Piece->strptime( $_, $DATE_FORMAT ) };
-coerce TimePiece, from DateTimeStr, via { Time::Piece->strptime( $_, $DATETIME_FORMAT ) };
+declare DateTimeStr, as Str, where { m{^\d{4}-?\d{2}-?\d{2}[T ]\d{2}:?\d{2}:?\d{2}} };
+coerce DateTimeObj, from DateStr, via {
+    my ( $y, $m, $d ) = $_ =~ /^(\d{4})[-]?(\d{2})[-]?(\d{2})$/;
+    DateTime::Moonpig->new(
+        year => $y,
+        month => $m,
+        day => $d,
+    );
+};
+coerce DateTimeObj, from DateTimeStr, via {
+    my ( $y, $m, $d, $h, $n, $s ) = $_ =~ /^(\d{4})[-]?(\d{2})[-]?(\d{2})[T ]?(\d{2}):?(\d{2}):?(\d{2})/;
+    DateTime::Moonpig->new(
+        year => $y,
+        month => $m,
+        day => $d,
+        hour => $h,
+        minute => $n,
+        second => $s,
+    );
+};
 
 # Down here to resolve circular dependencies
 require Statocles::Store;
@@ -93,8 +107,8 @@ __END__
     );
 
     has date => (
-        isa => TimePiece,
-        coerce => TimePiece->coercion,
+        isa => DateTimeObj,
+        coerce => DateTimeObj->coercion,
     );
 
 =head1 DESCRIPTION
@@ -139,8 +153,8 @@ L<site navigation|Statocles::Site/nav>.
 
 This can be coerced from any HashRef of ArrayRef of HashRefs.
 
-=head2 TimePiece
+=head2 DateTimeObj
 
-A L<Time::Piece> object representing a date/time. This can be coerced from a
+A L<DateTime::Moonpig> object representing a date/time. This can be coerced from a
 C<YYYY-MM-DD> string or a C<YYYY-MM-DD HH:MM:SS> string.
 

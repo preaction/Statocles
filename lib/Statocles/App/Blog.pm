@@ -443,7 +443,7 @@ Defaults to the current date.
 # sub pages
 around pages => sub {
     my ( $orig, $self, %opt ) = @_;
-    $opt{date} ||= Time::Piece->new->ymd;
+    $opt{date} ||= DateTime::Moonpig->now->ymd;
     my $root = $self->url_root;
     my $is_dated_path = qr{^$root/?(\d{4})/(\d{2})/(\d{2})/};
     my @parent_pages = $self->$orig( %opt );
@@ -467,12 +467,12 @@ around pages => sub {
         if ( $page->isa( 'Statocles::Page::Document' ) ) {
 
             if ( $page->path =~ m{$is_dated_path [^/]+ (?:/index)? [.]html$}x ) {
-                my $date = join "-", $1, $2, $3;
+                my ( $year, $month, $day ) = ( $1, $2, $3 );
 
                 push @post_pages, $page;
 
                 my $doc = $page->document;
-                $page->date( $doc->has_date ? $doc->date : Time::Piece->strptime( $date, '%Y-%m-%d' ) );
+                $page->date( $doc->has_date ? $doc->date : DateTime::Moonpig->new( year => $year, month => $month, day => $day ) );
 
                 my @tags;
                 for my $tag ( @{ $doc->tags } ) {

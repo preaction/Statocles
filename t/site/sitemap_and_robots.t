@@ -1,7 +1,6 @@
 
 use Statocles::Base 'Test';
 use Mojo::DOM;
-use Time::Piece;
 use Statocles::App::Blog;
 use Statocles::App::Basic;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
@@ -22,7 +21,7 @@ my ( $site, $build_dir, $deploy_dir ) = build_test_site_apps(
 );
 
 my @pages = map { $_->pages } values %{ $site->apps };
-my $today = Time::Piece->new->strftime( '%Y-%m-%d' );
+my $today = DateTime::Moonpig->now->strftime( '%Y-%m-%d' );
 my $to_href = sub {
     my $lastmod = $_->at('lastmod');
     return {

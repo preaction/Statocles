@@ -8,9 +8,6 @@ use YAML;
 use File::Spec::Functions qw( splitdir );
 use Module::Runtime qw( use_module );
 
-my $DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S';
-my $DATE_FORMAT = '%Y-%m-%d';
-
 # A hash of PATH => COUNT for all the open store paths. Stores are not allowed to
 # discover the files or documents of other stores (unless the two stores have the same
 # path)
@@ -211,28 +208,13 @@ sub parse_frontmatter {
     $doc->{content} = join "\n", @lines, "";
 
     if ( exists $doc->{date} ) {
-
-        my $dt;
         eval {
-            $dt = Time::Piece->strptime( $doc->{date}, $DATETIME_FORMAT );
+            $doc->{date} = DateTimeObj->assert_coerce( $doc->{date} );
         };
-
         if ( $@ ) {
-            eval {
-                $dt = Time::Piece->strptime( $doc->{date}, $DATE_FORMAT );
-            };
-
-            if ( $@ ) {
-                die sprintf "Could not parse date '%s'. Does not match '%s' or '%s'",
-                    $doc->{date},
-                    $DATETIME_FORMAT,
-                    $DATE_FORMAT,
-                    ;
-            }
-
+            die sprintf "Could not parse date '%s'. Does not match 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'",
+                $doc->{date};
         }
-
-        $doc->{date} = $dt;
     }
 
     return %$doc;
@@ -275,7 +257,7 @@ sub _freeze_document {
     delete $doc->{path}; # Path should not be in the document
     delete $doc->{store};
     if ( exists $doc->{date} ) {
-        $doc->{date} = $doc->{date}->strftime( $DATETIME_FORMAT );
+        $doc->{date} = $doc->{date}->strftime('%Y-%m-%d %H:%M:%S');
     }
     for my $hash_type ( qw( links images ) ) {
         if ( exists $doc->{ $hash_type } && !keys %{ $doc->{ $hash_type } } ) {

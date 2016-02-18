@@ -16,7 +16,7 @@ our @IMPORT_MODULES = (
     warnings => [],
     feature => [qw( :5.10 )],
     'Path::Tiny' => [qw( rootdir cwd )],
-    'Time::Piece',
+    'DateTime::Moonpig',
     'Statocles',
 );
 
@@ -35,6 +35,7 @@ our %IMPORT_BUNDLES = (
             test_constructor test_pages build_test_site build_test_site_apps
             build_temp_site
         )],
+        'Statocles::Types' => [qw( DateTimeObj )],
         sub { $Statocles::VERSION ||= 0.001; return }, # Set version normally done via dzil
     ],
 
@@ -98,7 +99,7 @@ Currently the 5.10 feature bundle
 
 We do a lot of work with the filesystem.
 
-=item L<Time::Piece>
+=item L<DateTime::Moonpig>
 
 =back
 

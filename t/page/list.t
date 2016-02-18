@@ -9,7 +9,7 @@ my $site = Statocles::Site->new( deploy => tempdir, title => 'Test Site' );
 
 my @pages = (
     Statocles::Page::Document->new(
-        date => Time::Piece->strptime( '2014-06-04', '%Y-%m-%d' ),
+        date => DateTimeObj->coerce( '2014-06-04' ),
         path => '/blog/2014/06/04/blug.html',
         document => Statocles::Document->new(
             path => '/2014/06/04/blug.markdown',
@@ -31,7 +31,7 @@ my @pages = (
         ),
     ),
     Statocles::Page::Document->new(
-        date => Time::Piece->strptime( '2014-04-30', '%Y-%m-%d' ),
+        date => DateTimeObj->coerce( '2014-04-30' ),
         path => '/blog/2014/04/30/page.html',
         document => Statocles::Document->new(
             path => '/2014/04/30/page.markdown',
@@ -56,7 +56,7 @@ my @pages = (
         ),
     ),
     Statocles::Page::Document->new(
-        date => Time::Piece->strptime( '2014-08-23', '%Y-%m-%d' ),
+        date => DateTimeObj->coerce( '2014-08-23' ),
         path => '/blog/2014/04/23/slug.html',
         document => Statocles::Document->new(
             path => '/2014/04/23/slug.markdown',
@@ -87,7 +87,7 @@ subtest 'date' => sub {
         path => '/blog/index.html',
         pages => \@pages,
     );
-    isa_ok $list->date, 'Time::Piece';
+    isa_ok $list->date, 'DateTime::Moonpig';
     is $list->date->datetime, $pages[2]->date->datetime;
 };
 

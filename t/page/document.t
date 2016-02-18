@@ -18,7 +18,7 @@ my $doc = Statocles::Document->new(
     title => 'Page Title',
     author => 'preaction',
     tags => [qw( foo bar baz )],
-    date => Time::Piece->new( time - 600 ),
+    date => DateTime::Moonpig->new( time - 600 ),
     images => {
         title => {
             src => '/foo.jpg',
@@ -131,15 +131,15 @@ subtest 'constructor' => sub {
 };
 
 subtest 'page date overridden by published date' => sub {
-    my $tp = Time::Piece->new;
+    my $dt = DateTime::Moonpig->now;
     my $page = Statocles::Page::Document->new(
         document => $doc,
         path => '/path/to/page.html',
-        date => $tp,
+        date => $dt,
     );
 
-    isa_ok $page->date, 'Time::Piece';
-    is $page->date->datetime, $tp->datetime;
+    isa_ok $page->date, 'DateTime::Moonpig';
+    is $page->date->datetime, $dt->datetime;
 };
 
 subtest 'document template/layout override' => sub {
@@ -167,7 +167,7 @@ subtest 'document template/layout override' => sub {
 subtest 'template coercion' => sub {
 
     subtest 'template' => sub {
-        my $tp = Time::Piece->new;
+        my $tp = DateTime::Moonpig->now;
 
         my $page = Statocles::Page::Document->new(
             document => $doc,

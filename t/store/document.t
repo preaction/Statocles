@@ -47,7 +47,7 @@ sub expect_docs {
             path => '/datetime.markdown',
             title => 'Datetime Document',
             author => 'preaction',
-            date => Time::Piece->strptime( '2014-04-30 15:34:32', $DT_FORMAT ),
+            date => DateTimeObj->coerce( '2014-04-30 15:34:32' ),
             content => "Parses date/time for date\n",
             store => $store,
         ),
@@ -56,7 +56,7 @@ sub expect_docs {
             path => '/date.markdown',
             title => 'Date Document',
             author => 'preaction',
-            date => Time::Piece->strptime( '2014-04-30', '%Y-%m-%d' ),
+            date => DateTimeObj->coerce( '2014-04-30' ),
             content => "Parses date only for date\n",
             store => $store,
         ),
@@ -240,7 +240,7 @@ subtest 'bad documents' => sub {
             path => $SHARE_DIR->child( qw( store error bad-dates ) ),
         );
         throws_ok { $store->documents }
-            qr{Could not parse date '11/12/2014'[.] Does not match '\Q$DT_FORMAT\E' or '%Y-%m-%d'};
+            qr{Could not parse date '11/12/2014'[.] Does not match 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'};
     };
 
 };
@@ -252,7 +252,7 @@ subtest 'write document' => sub {
     my $store = Statocles::Store->new(
         path => $tmpdir,
     );
-    my $tp = Time::Piece->strptime( '2014-06-05 00:00:00', $DT_FORMAT );
+    my $tp = DateTimeObj->coerce( '2014-06-05 00:00:00' );
     my $dt = $tp->strftime( '%Y-%m-%d %H:%M:%S' );
     my $doc = {
         foo => 'bar',

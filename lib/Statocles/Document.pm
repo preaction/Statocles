@@ -242,8 +242,8 @@ Should be in C<YYYY-MM-DD> or C<YYYY-MM-DD HH:MM:SS> format.
 
 has date => (
     is => 'rw',
-    isa => TimePiece,
-    coerce => TimePiece->coercion,
+    isa => DateTimeObj,
+    coerce => DateTimeObj->coercion,
     predicate => 'has_date',
 );
 

@@ -375,7 +375,7 @@ ENDMARKDOWN
                     path => $path,
                     title => 'A Draft',
                     author => 'preaction',
-                    date => Time::Piece->strptime( '2014-06-21 00:06:00', '%Y-%m-%d %H:%M:%S' ),
+                    date => DateTimeObj->coerce( '2014-06-21 00:06:00' ),
                     content => <<'ENDMARKDOWN',
 Draft body content
 ENDMARKDOWN

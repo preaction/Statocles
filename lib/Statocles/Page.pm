@@ -101,10 +101,10 @@ The date of this page. Used for last updated date and blog post dates.
 
 has date => (
     is => 'rw',
-    isa => TimePiece,
-    coerce => TimePiece->coercion,
+    isa => DateTimeObj,
+    coerce => DateTimeObj->coercion,
     lazy => 1,
-    default => sub { Time::Piece->new },
+    default => sub { DateTime::Moonpig->now },
 );
 
 =attr data

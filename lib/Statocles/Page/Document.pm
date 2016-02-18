@@ -52,7 +52,7 @@ has '+date' => (
     lazy => 1,
     default => sub {
         my ( $self ) = @_;
-        $self->document->date || Time::Piece->new;
+        $self->document->date || DateTime::Moonpig->now;
     },
 );
 
