@@ -47,7 +47,7 @@ usually C<site.yml> as arguments:
                 name:
                     $class: My::Plugin
                     $args:
-                         - myattr: 'value'
+                         myattr: 'value'
 
 The argument name and value type must match a declaration in the
 plugin itself. For example,
@@ -113,15 +113,9 @@ C<page> The current page, e.g., of class L<Statocles::Page::Document>
 
 =item *
 
-C<self> Depends on template in use; for a document, same as 'doc' above.
-
-=item *
-
 C<site> The current site, e.g., of class L<Statocles::Site>
 
 =back
-
-=head1 METHODS
 
 =method register
 
