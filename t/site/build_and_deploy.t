@@ -41,6 +41,8 @@ sub test_base_url {
 }
 
 subtest 'build' => sub {
+    cmp_deeply $site->pages, [], 'page cache is empty until a build';
+
     $site->build;
 
     my @pages;
@@ -66,6 +68,9 @@ subtest 'build' => sub {
             push @pages, $path;
         }
     };
+
+    # Add 2 pages for robots.txt and sitemap.xml
+    is scalar @{ $site->pages }, scalar @pages + 2, 'cached page count is correct';
 
     subtest 'build deletes files before building' => sub {
         $build_dir->child( 'DELETE_ME' )->spew( "This should be deleted" );

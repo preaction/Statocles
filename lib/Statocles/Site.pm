@@ -339,6 +339,20 @@ has _write_deploy => (
     clearer => '_clear_write_deploy',
 );
 
+=attr pages
+
+A cache of all the pages that the site contains. This is generated
+during the C<build> phase and is available to all the templates
+while they are being rendered.
+
+=cut
+
+has pages => (
+    is => 'rw',
+    isa => ArrayRef[ConsumerOf['Statocles::Page']],
+    default => sub { [] },
+);
+
 =method BUILD
 
 Register this site as the global site.
@@ -513,7 +527,9 @@ sub build {
         pages => \@pages,
     );
 
-    # @pages should not change after this, because it is used in the render loop below.
+    # @pages should not change after this, because it is being cached
+    $self->pages( \@pages );
+
     $self->emit(
         'before_build_write',
         class => 'Statocles::Event::Pages',
