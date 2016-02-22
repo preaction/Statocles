@@ -1,6 +1,17 @@
 Changelog for Statocles
 
-0.069 2016-02-14T03:04:48
+0.070 2016-02-22T04:36:34
+ - add site pages cache
+ - plugin docs including template helper example
+ - add tzoffset shim method
+ - switch to DateTime::Moonpig for date/time functions
+ - rename moniker to template_dir and make explicit
+ - allow templates to be overridden for each app
+ - Add new collect_pages event, your last chance to change the page list.
+   Split from my original commit.
+ - add release v0.069 announcement
+
+0.069 2016-02-14T03:04:48Z
  - remove useless test line
  - fix store warning when given no content
  - fix yaml remedy checks for YAML::Syck

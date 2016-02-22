@@ -1,5 +1,6 @@
 requires "Beam::Emitter" => "0.007";
 requires "Beam::Wire" => "1.014";
+requires "DateTime::Moonpig" => "0";
 requires "Encode" => "0";
 requires "File::Share" => "0";
 requires "Git::Repository" => "0";
@@ -11,7 +12,6 @@ requires "Path::Tiny" => "0.072";
 requires "Pod::Simple" => "3.31";
 requires "Pod::Usage::Return" => "0";
 requires "Text::Markdown" => "0";
-requires "Time::Piece" => "0";
 requires "Type::Tiny" => "0";
 requires "Types::Path::Tiny" => "0";
 requires "YAML" => "0";
