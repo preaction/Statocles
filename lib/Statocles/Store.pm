@@ -190,7 +190,7 @@ sub parse_frontmatter {
 
         # If we did not find the marker between YAML and Markdown
         if ( !defined $i ) {
-            die "Could not find end of front matter (---) in '$from'\n";
+            die qq{Could not find end of front matter (---) in "$from"\n};
         }
 
         # Before the marker is YAML
@@ -198,7 +198,7 @@ sub parse_frontmatter {
             $doc = YAML::Load( join "\n", splice( @lines, 0, $i ), "" );
         };
         if ( $@ ) {
-            die "Error parsing YAML in '$from'\n$@";
+            die qq{Error parsing YAML in "$from"\n$@};
         }
 
         # Remove the last '---' mark

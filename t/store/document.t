@@ -225,23 +225,25 @@ subtest 'bad documents' => sub {
         my $store = Statocles::Store->new(
             path => $SHARE_DIR->child( qw( store error missing-end-mark ) ),
         );
-        throws_ok { $store->documents } qr{\QCould not find end of front matter (---) in};
+        my $from = $store->path->child( 'missing.markdown' )->relative( cwd )->stringify;
+        throws_ok { $store->documents } qr{\QCould not find end of front matter (---) in "$from"};
     };
 
     subtest 'invalid yaml' => sub {
         my $store = Statocles::Store->new(
             path => $SHARE_DIR->child( qw( store error bad-yaml ) ),
         );
-        throws_ok { $store->documents } qr{Error parsing YAML in};
+        my $from = $store->path->child( 'bad.markdown' )->relative( cwd )->stringify;
+        throws_ok { $store->documents } qr{\QError parsing YAML in "$from"};
     };
 
     subtest 'invalid date/time' => sub {
         my $store = Statocles::Store->new(
             path => $SHARE_DIR->child( qw( store error bad-dates ) ),
         );
-        my $from = quotemeta $store->path->child( 'bad-date.markdown' )->relative( cwd )->stringify;
+        my $from = $store->path->child( 'bad-date.markdown' )->relative( cwd )->stringify;
         throws_ok { $store->documents }
-            qr{Could not parse date "11/12/2014" in "$from": Does not match "YYYY-MM-DD" or "YYYY-MM-DD HH:MM:SS"};
+            qr{\QCould not parse date "11/12/2014" in "$from": Does not match "YYYY-MM-DD" or "YYYY-MM-DD HH:MM:SS"};
     };
 
 };
