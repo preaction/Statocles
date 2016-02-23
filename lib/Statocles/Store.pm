@@ -161,7 +161,7 @@ sub read_document {
     my ( $self, $path ) = @_;
     site->log->debug( "Read document: " . $path );
     my $full_path = $self->path->child( $path );
-    my %doc = $self->parse_frontmatter( $full_path, $full_path->slurp_utf8 );
+    my %doc = $self->parse_frontmatter( $full_path->relative( cwd ), $full_path->slurp_utf8 );
     my $class = $doc{class} ? use_module( delete $doc{class} ) : 'Statocles::Document';
     return $class->new( %doc, path => $path, store => $self );
 }
@@ -212,8 +212,9 @@ sub parse_frontmatter {
             $doc->{date} = DateTimeObj->assert_coerce( $doc->{date} );
         };
         if ( $@ ) {
-            die sprintf "Could not parse date '%s'. Does not match 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'",
-                $doc->{date};
+            die sprintf qq{Could not parse date "%s" in "%s": Does not match "YYYY-MM-DD" or "YYYY-MM-DD HH:MM:SS"\n},
+                $doc->{date},
+                $from;
         }
     }
 

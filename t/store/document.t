@@ -239,8 +239,9 @@ subtest 'bad documents' => sub {
         my $store = Statocles::Store->new(
             path => $SHARE_DIR->child( qw( store error bad-dates ) ),
         );
+        my $from = quotemeta $store->path->child( 'bad-date.markdown' )->relative( cwd )->stringify;
         throws_ok { $store->documents }
-            qr{Could not parse date '11/12/2014'[.] Does not match 'YYYY-MM-DD' or 'YYYY-MM-DD HH:MM:SS'};
+            qr{Could not parse date "11/12/2014" in "$from": Does not match "YYYY-MM-DD" or "YYYY-MM-DD HH:MM:SS"};
     };
 
 };
