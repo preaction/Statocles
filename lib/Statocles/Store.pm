@@ -161,9 +161,24 @@ sub read_document {
     my ( $self, $path ) = @_;
     site->log->debug( "Read document: " . $path );
     my $full_path = $self->path->child( $path );
-    my %doc = $self->parse_frontmatter( $full_path->relative( cwd ), $full_path->slurp_utf8 );
+    my $relative_path = $full_path->relative( cwd );
+    my %doc = $self->parse_frontmatter( $relative_path, $full_path->slurp_utf8 );
     my $class = $doc{class} ? use_module( delete $doc{class} ) : 'Statocles::Document';
-    return $class->new( %doc, path => $path, store => $self );
+    my $obj = eval { $class->new( %doc, path => $path, store => $self ) };
+    if ( $@ ) {
+        if ( ref $@ && $@->isa( 'Error::TypeTiny::Assertion' ) ) {
+            die sprintf qq{Error creating document in "%s": Value "%s" is not valid for attribute "%s" (expected "%s")\n},
+                $relative_path,
+                $@->value,
+                $@->attribute_name,
+                $@->type;
+        }
+        else {
+            die sprintf qq{Error creating document in "%s": %s\n},
+                $@;
+        }
+    }
+    return $obj;
 }
 
 =method parse_frontmatter

@@ -246,6 +246,14 @@ subtest 'bad documents' => sub {
             qr{\QCould not parse date "11/12/2014" in "$from": Does not match "YYYY-MM-DD" or "YYYY-MM-DD HH:MM:SS"};
     };
 
+    subtest 'invalid links structure' => sub {
+        my $store = Statocles::Store->new(
+            path => $SHARE_DIR->child( qw( store error bad-links ) ),
+        );
+        my $from = $store->path->child( 'links.markdown' )->relative( cwd )->stringify;
+        throws_ok { $store->documents }
+            qr{\QError creating document in "$from": Value "bad link" is not valid for attribute "links" (expected "LinkHash")};
+    };
 };
 
 subtest 'write document' => sub {
