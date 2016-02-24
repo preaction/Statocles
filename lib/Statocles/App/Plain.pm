@@ -1,4 +1,5 @@
 package Statocles::App::Plain;
+
 # ABSTRACT: (DEPRECATED) Plain documents made into pages with no extras
 
 use Statocles::Base 'Class';

@@ -1,4 +1,5 @@
 package Statocles::Link;
+
 # ABSTRACT: A link object to build <a> and <link> tags
 
 use Statocles::Base 'Class';

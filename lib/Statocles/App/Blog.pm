@@ -1,4 +1,5 @@
 package Statocles::App::Blog;
+
 # ABSTRACT: A blog application
 
 use Statocles::Base 'Class';

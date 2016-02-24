@@ -1,4 +1,5 @@
 package Statocles::Event;
+
 # ABSTRACT: Events objects for Statocles
 
 =head1 EVENTS

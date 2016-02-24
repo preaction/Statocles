@@ -1,4 +1,5 @@
 package Statocles::Plugin::LinkCheck;
+
 # ABSTRACT: Check links and images for validity during build
 
 use Statocles::Base 'Class';

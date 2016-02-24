@@ -1,4 +1,5 @@
 package Statocles::Plugin;
+
 # ABSTRACT: Base role for Statocles plugins
 
 =head1 SYNOPSIS

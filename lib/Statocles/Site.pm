@@ -1,4 +1,5 @@
 package Statocles::Site;
+
 # ABSTRACT: An entire, configured website
 
 use Statocles::Base 'Class', 'Emitter';

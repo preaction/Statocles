@@ -1,4 +1,5 @@
 package Statocles::Command;
+
 # ABSTRACT: The statocles command-line interface
 
 use Statocles::Base 'Class';

@@ -1,4 +1,5 @@
 package Statocles::Page::Document;
+
 # ABSTRACT: Render document objects into HTML
 
 use Statocles::Base 'Class';

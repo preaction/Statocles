@@ -1,4 +1,5 @@
 package Statocles;
+
 # ABSTRACT: A static site generator
 
 # The currently-running site.

@@ -1,4 +1,5 @@
 package Statocles::Plugin::Highlight;
+
 # ABSTRACT: Highlight code and configuration syntax
 
 =head1 SYNOPSIS

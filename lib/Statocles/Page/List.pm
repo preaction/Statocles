@@ -1,4 +1,5 @@
 package Statocles::Page::List;
+
 # ABSTRACT: A page presenting a list of other pages
 
 use Statocles::Base 'Class';

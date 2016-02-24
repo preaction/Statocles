@@ -1,4 +1,5 @@
 package Statocles::Template;
+
 # ABSTRACT: A template object to pass around
 
 use Statocles::Base 'Class';

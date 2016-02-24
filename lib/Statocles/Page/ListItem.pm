@@ -1,4 +1,5 @@
 package Statocles::Page::ListItem;
+
 # ABSTRACT: An item in a List page
 
 use Statocles::Base 'Class';

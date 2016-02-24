@@ -1,4 +1,5 @@
 package Statocles::Image;
+
 # ABSTRACT: A reference to an image
 
 =head1 SYNOPSIS

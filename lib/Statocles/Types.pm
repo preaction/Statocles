@@ -1,4 +1,5 @@
 package Statocles::Types;
+
 # ABSTRACT: Type constraints and coercions for Statocles
 
 use strict;

@@ -1,4 +1,5 @@
 package Statocles::Store;
+
 # ABSTRACT: The source for data documents and files
 
 use Statocles::Base 'Class';

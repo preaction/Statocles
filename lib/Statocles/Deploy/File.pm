@@ -1,4 +1,5 @@
 package Statocles::Deploy::File;
+
 # ABSTRACT: Deploy a site to a folder on the filesystem
 
 use Statocles::Base 'Class';

@@ -1,4 +1,5 @@
 package Statocles::Deploy;
+
 # ABSTRACT: Base role for ways to deploy a site
 
 use Statocles::Base 'Role';

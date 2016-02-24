@@ -1,4 +1,5 @@
 package Statocles::App::Role::Store;
+
 # ABSTRACT: Role for applications using files
 
 =head1 SYNOPSIS

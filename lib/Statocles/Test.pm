@@ -1,4 +1,5 @@
 package Statocles::Test;
+
 # ABSTRACT: Common test routines for Statocles
 
 use Statocles::Base;

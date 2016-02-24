@@ -1,4 +1,5 @@
 package Statocles::Store::File;
+
 # ABSTRACT: (DEPRECATED) A store made up of plain files
 
 use Statocles::Base 'Class';

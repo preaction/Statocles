@@ -1,4 +1,5 @@
 package Statocles::Page::Plain;
+
 # ABSTRACT: A plain page (with templates)
 
 use Statocles::Base 'Class';

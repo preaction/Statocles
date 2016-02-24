@@ -1,4 +1,5 @@
 package Statocles::Deploy::Git;
+
 # ABSTRACT: Deploy a site to a Git repository
 
 use Statocles::Base 'Class';

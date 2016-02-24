@@ -1,4 +1,5 @@
 package Statocles::Base;
+
 # ABSTRACT: Base module for Statocles modules
 
 use strict;

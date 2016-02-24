@@ -1,4 +1,5 @@
 package Statocles::App::Static;
+
 # ABSTRACT: (DEPRECATED) Manage static files like CSS, JS, images, and other untemplated content
 
 use Statocles::Base 'Class';

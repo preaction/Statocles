@@ -1,4 +1,5 @@
 package Statocles::Document;
+
 # ABSTRACT: Base class for all Statocles documents
 
 use Statocles::Base 'Class';

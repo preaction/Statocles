@@ -1,4 +1,5 @@
 package Statocles::Page::File;
+
 # ABSTRACT: A page wrapping a file (handle)
 
 use Statocles::Base 'Class';

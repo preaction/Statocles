@@ -1,4 +1,5 @@
 package Statocles::App;
+
 # ABSTRACT: Base role for Statocles applications
 
 use Statocles::Base 'Role', 'Emitter';

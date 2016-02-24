@@ -1,4 +1,5 @@
 package Statocles::App::Basic;
+
 # ABSTRACT: Build Markdown and collateral files
 
 use Statocles::Base 'Class';

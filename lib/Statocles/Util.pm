@@ -1,4 +1,5 @@
 package Statocles::Util;
+
 # ABSTRACT: Various utility functions to reduce dependencies
 
 use Statocles::Base;

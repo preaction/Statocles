@@ -1,4 +1,5 @@
 package Statocles::Theme;
+
 # ABSTRACT: Templates, headers, footers, and navigation
 
 use Statocles::Base 'Class';

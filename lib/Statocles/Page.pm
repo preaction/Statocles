@@ -1,4 +1,5 @@
 package Statocles::Page;
+
 # ABSTRACT: Base class for rendering objects
 
 use Statocles::Base 'Role';
