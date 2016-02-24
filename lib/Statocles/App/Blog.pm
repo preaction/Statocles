@@ -289,18 +289,25 @@ my %FEEDS = (
 sub index {
     my ( $self, $all_post_pages ) = @_;
 
-    # Filter the index_tags
+    my @index_tags;
+    my %tag_flag;
+    for my $tag_spec ( @{ $self->index_tags } ) {
+        my $tag = substr $tag_spec, 1;
+        push @index_tags, $tag;
+        $tag_flag{$tag} = substr $tag_spec, 0, 1;
+    }
+
     my @index_post_pages;
     PAGE: for my $page ( @$all_post_pages ) {
-        my $add = 1;
-        for my $tag_spec ( @{ $self->index_tags } ) {
-            my $flag = substr $tag_spec, 0, 1;
-            my $tag = substr $tag_spec, 1;
-            if ( grep { $_ eq $tag } @{ $page->document->tags } ) {
-                $add = $flag eq '-' ? 0 : 1;
+        my $page_flag = '+';
+        my %page_tags;
+        @page_tags{ @{ $page->document->tags } } = 1; # we use exists(), so value doesn't matter
+        for my $tag ( @index_tags ) {
+            if ( exists $page_tags{ $tag } ) {
+                $page_flag = $tag_flag{ $tag };
             }
         }
-        push @index_post_pages, $page if $add;
+        push @index_post_pages, $page if $page_flag eq '+';
     }
 
     my @pages = Statocles::Page::List->paginate(
