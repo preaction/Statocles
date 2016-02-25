@@ -97,7 +97,7 @@ around 'deploy' => sub {
     }
 
     if ( $options{ clean } ) {
-        $self->site->log->info( sprintf 'Cleaning old content', $self->branch );
+        $self->site->log->info( sprintf 'Cleaning old content in branch "%s"', $self->branch );
         $self->_run( $git, 'rm', '-r', '-f', '.' );
         delete $options{ clean };
     }
