@@ -29,6 +29,7 @@ my @class_modules = (
 
 our %IMPORT_BUNDLES = (
     Test => [
+        sub { warn 'Bundle Test deprecated and will be removed in v1.000, do not use'; return },
         qw( Test::More Test::Deep Test::Differences Test::Exception ),
         'Dir::Self' => [qw( __DIR__ )],
         'Path::Tiny' => [qw( path tempdir cwd )],
@@ -71,7 +72,6 @@ __END__
 
     use Statocles::Base 'Class';
     use Statocles::Base 'Role';
-    use Statocles::Base 'Test';
 
 =head1 DESCRIPTION
 
@@ -137,34 +137,6 @@ The role bundle makes your package into a role and includes:
 =item L<Types::Path::Tiny> ':all'
 
 =item L<Statocles::Types> ':all'
-
-=back
-
-=head2 Test
-
-The test bundle includes:
-
-=over 4
-
-=item L<Test::More>
-
-=item L<Test::Deep>
-
-=item L<Test::Differences>
-
-=item L<Test::Exception>
-
-=item L<Dir::Self> '__DIR__'
-
-=item L<Path::Tiny> 'path', 'tempdir'
-
-=item L<Statocles::Test>
-
-Some common test routines for Statocles.
-
-=item L<Statocles::Site>
-
-In order to have logging, a site object must be created.
 
 =back
 

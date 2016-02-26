@@ -173,4 +173,26 @@ subtest 'tzoffset shim' => sub {
     }
 };
 
+subtest 'Statocles::Base q[Test]' => sub {
+    require Statocles::Base;
+    if ( $Statocles::VERSION < 1 ) {
+      ok( exists $Statocles::Base::IMPORT_BUNDLES{Test}, 'Test Bundle defined' ) or return;
+      my @warnings;
+      local $SIG{__WARN__} = sub { push @warnings, @_ };
+      local $@;
+      my $ok;
+      eval {
+          package T::My::Mock::Namespace;
+          Statocles::Base->import('Test');
+          $ok = 1;
+      };
+      ok( $ok, 'Importing Test did not fail' ) or  diag($@);
+      like $warnings[0], qr{\QBundle Test deprecated and will be removed in v1.000, do not use},
+        'Bundle test warns about deprecation';
+    }
+    else {
+     ok( !exists $Statocles::Base::IMPORT_BUNDLES{Test}, 'Test Bundle not defined' );
+    }
+};
+
 done_testing;
