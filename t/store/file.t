@@ -1,5 +1,6 @@
 
-use Statocles::Base 'Test';
+use Test::Lib;
+use My::Test;
 use Statocles::Store;
 use Capture::Tiny qw( capture );
 my $SHARE_DIR = path( __DIR__, '..', 'share' );

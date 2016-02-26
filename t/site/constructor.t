@@ -1,5 +1,6 @@
 
-use Statocles::Base 'Test';
+use Test::Lib;
+use My::Test;
 use Statocles::Site;
 use Statocles::Theme;
 use Statocles::Store;

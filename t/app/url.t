@@ -1,8 +1,8 @@
 
-use Statocles::Base 'Test';
+use Test::Lib;
+use My::Test;
 use Statocles::Site;
 use Statocles::App;
-use Test::Lib;
 use TestApp;
 
 my $site = Statocles::Site->new( deploy => tempdir );

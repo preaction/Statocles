@@ -1,9 +1,9 @@
 
-use Statocles::Base 'Test';
+use Test::Lib;
+use My::Test;
 use Capture::Tiny qw( capture );
 use Statocles::Command;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
-use Test::Lib;
 
 sub test_site {
     my ( $root, @args ) = @_;

@@ -1,8 +1,8 @@
 
-use Statocles::Base 'Test';
+use Test::Lib;
+use My::Test;
 use Capture::Tiny qw( capture );
 use Statocles::Command;
-use Test::Lib;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
 
 subtest 'get the app list' => sub {

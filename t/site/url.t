@@ -1,5 +1,6 @@
 
-use Statocles::Base 'Test';
+use Test::Lib;
+use My::Test;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
 
 subtest 'url method' => sub {

@@ -1,9 +1,9 @@
 
-use Statocles::Base 'Test';
+use Test::Lib;
+use My::Test;
 use Statocles::Site;
 use Statocles::App;
 use Statocles::App::Blog;
-use Test::Lib;
 use TestApp;
 my $SHARE_DIR = path( __DIR__ )->parent->child( 'share' );
 

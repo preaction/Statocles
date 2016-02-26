@@ -1,5 +1,5 @@
-
-use Statocles::Base 'Test';
+use Test::Lib;
+use My::Test;
 use Statocles::Store;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
 my $site = build_test_site( theme => $SHARE_DIR->child( 'theme' ) );

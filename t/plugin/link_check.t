@@ -1,5 +1,6 @@
 
-use Statocles::Base 'Test';
+use Test::Lib;
+use My::Test;
 use Mojo::Log;
 use Statocles::Plugin::LinkCheck;
 use Statocles::Image;

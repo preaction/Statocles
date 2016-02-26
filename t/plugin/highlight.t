@@ -1,5 +1,6 @@
 
-use Statocles::Base 'Test';
+use Test::Lib;
+use My::Test;
 
 BEGIN {
     eval { require Syntax::Highlight::Engine::Kate; 1 } or plan skip_all => 'Syntax::Highlight::Engine::Kate needed';
