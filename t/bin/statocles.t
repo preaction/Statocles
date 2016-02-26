@@ -2,8 +2,8 @@
 # This test file duplicates some tests in t/command.t to ensure that
 # the bin/statocles frontend's delegation to Statocles::Command
 # works.
-
-use Statocles::Base 'Test';
+use Test::Lib;
+use My::Test;
 my $BIN = path( __DIR__, '..', '..', 'bin', 'statocles' );
 use Capture::Tiny qw( capture );
 

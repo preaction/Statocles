@@ -1,12 +1,12 @@
 
-use Statocles::Base 'Test';
+use Test::Lib;
+use My::Test;
 use Capture::Tiny qw( capture );
 use Statocles::Site;
 use Statocles::Page::Plain;
 use Statocles::Page::File;
 use Statocles::App::Basic;
 use Mojo::DOM;
-use Test::Lib;
 use TestApp;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
 

@@ -1,9 +1,9 @@
 
-use Statocles::Base 'Test';
+use Test::Lib;
+use My::Test;
 use Statocles::Store;
 use Statocles::Util qw( dircopy );
 use Capture::Tiny qw( capture );
-use Test::Lib;
 use TestDocument;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
 build_test_site( theme => $SHARE_DIR->child( 'theme' ) );

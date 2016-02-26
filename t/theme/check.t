@@ -1,7 +1,7 @@
 
 # Check the syntax of all the built-in theme bundles
-
-use Statocles::Base 'Test';
+use Test::Lib;
+use My::Test;
 $Statocles::VERSION = '0.000001';
 use Statocles::Document;
 use Statocles::Page::List;

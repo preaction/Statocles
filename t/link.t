@@ -1,5 +1,5 @@
-
-use Statocles::Base 'Test';
+use Test::Lib;
+use My::Test;
 use Mojo::DOM;
 use Statocles::Link;
 

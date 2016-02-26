@@ -1,5 +1,6 @@
 
-use Statocles::Base 'Test';
+use Test::Lib;
+use My::Test;
 BEGIN {
     eval { require HTML::Lint::Pluggable; HTML::Lint::Pluggable->VERSION( 0.06 ); 1 } or plan skip_all => 'HTML::Lint::Pluggable v0.06 or higher needed';
 };

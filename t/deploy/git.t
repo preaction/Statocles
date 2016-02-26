@@ -1,5 +1,5 @@
-
-use Statocles::Base 'Test';
+use Test::Lib;
+use My::Test;
 use Statocles::Deploy::Git;
 BEGIN {
     my $git_version = Statocles::Deploy::Git->_git_version;

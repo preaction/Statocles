@@ -1,5 +1,5 @@
-
-use Statocles::Base 'Test';
+use Test::Lib;
+use My::Test;
 use Statocles::Util qw( dircopy run_editor uniq_by );
 use Statocles::Link;
 my $SHARE_DIR = path( __DIR__, 'share' );
