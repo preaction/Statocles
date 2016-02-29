@@ -2,14 +2,14 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id><%= $site->url( $self->links( 'alternate' )->href ) %></id>
     <title><%= $site->title %></title>
-    <updated><%= Time::Piece->new->strftime('%Y-%m-%dT%H:%M:%SZ') %></updated>
+    <updated><%= $self->date->strftime('%Y-%m-%dT%H:%M:%SZ') %></updated>
     <link rel="self" href="<%= $site->url( $self->path ) %>"/>
     <link rel="alternate" href="<%= $site->url( $self->links( 'alternate' )->href ) %>"/>
     <generator version="<%= $Statocles::VERSION %>">Statocles</generator>
     % for my $p ( @$pages ) {
     <entry>
         <id><%= $site->url( $p->path ) %></id>
-        <title><%= $p->title %></title>
+        <title><%== $p->title %></title>
         % if ( $p->author ) {
         <author><name><%= $p->author %></name></author>
         % }

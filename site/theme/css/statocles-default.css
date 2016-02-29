@@ -3,6 +3,11 @@
  * Basic style
  ************************************************/
 
+body {
+    /* Raleway looks terrible, and in some cases is hard to read */
+    font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
 h1 {
     font-size: 3.5em;
 }
@@ -36,6 +41,13 @@ ul {
 ol {
     list-style: decimal outside;
     margin-left: 1.4em;
+}
+
+ul ul, ul ol, ol ul, ol ol {
+    /* Fix each successive layer of lists getting smaller and smaller.
+     * After three layers of lists, it's too small to read well
+     */
+    font-size: 100%;
 }
 
 .button.disabled {

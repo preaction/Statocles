@@ -13,7 +13,7 @@
         <generator>Statocles <%= $Statocles::VERSION %></generator>
         % for my $p ( @$pages ) {
         <item>
-            <title><%= $p->title %></title>
+            <title><%== $p->title %></title>
             <link><%= $site->url( $p->path ) %></link>
             <guid><%= $site->url( $p->path ) %></guid>
             <description><![CDATA[
@@ -41,7 +41,7 @@
                 </p>
             ]]></description>
             <pubDate>
-                <%= $p->date->strftime('%a, %d %b %Y %H:%M:%S ') . sprintf q{%+05d}, $p->date->tzoffset / 36 %>
+                <%= $p->date->strftime('%a, %d %b %Y %H:%M:%S ') . sprintf q{%+05d}, $p->date->offset / 3600 %>
             </pubDate>
         </item>
         % }
