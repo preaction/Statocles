@@ -1,6 +1,17 @@
 Changelog for Statocles
 
-0.070 2016-02-22T04:36:34
+0.071 2016-02-29T03:22:55
+ - upgrade Beam::Wire dependency to fix bug
+ - upgrade Beam::Wire dependency
+ - fix line reporting for code coverage
+ - speed up index tag sorting by 30%
+ - add better error message for document type checks
+ - make document parse errors more uniform
+ - give better error message with invalid date
+ - update Beam::Wire to fix bug in YAML::XS
+ - add release v0.070 announcement
+
+0.070 2016-02-22T04:36:34Z
  - add site pages cache
  - plugin docs including template helper example
  - add tzoffset shim method

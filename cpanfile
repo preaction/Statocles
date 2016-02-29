@@ -1,5 +1,5 @@
 requires "Beam::Emitter" => "0.007";
-requires "Beam::Wire" => "1.014";
+requires "Beam::Wire" => "1.018";
 requires "DateTime::Moonpig" => "0";
 requires "Encode" => "0";
 requires "File::Share" => "0";
