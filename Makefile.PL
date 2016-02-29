@@ -28,7 +28,7 @@ my %WriteMakefileArgs = (
   "NAME" => "Statocles",
   "PREREQ_PM" => {
     "Beam::Emitter" => "0.007",
-    "Beam::Wire" => "1.014",
+    "Beam::Wire" => "1.018",
     "DateTime::Moonpig" => 0,
     "Encode" => 0,
     "File::Share" => 0,
@@ -61,7 +61,7 @@ my %WriteMakefileArgs = (
     "Test::Lib" => 0,
     "Test::More" => "1.001005"
   },
-  "VERSION" => "0.070",
+  "VERSION" => "0.071",
   "test" => {
     "TESTS" => "t/*.t t/app/*.t t/app/basic/*.t t/app/blog/*.t t/app/perldoc/*.t t/app/role/*.t t/bin/*.t t/command/*.t t/deploy/*.t t/page/*.t t/plugin/*.t t/site/*.t t/store/*.t t/template/*.t t/theme/*.t"
   }
@@ -70,7 +70,7 @@ my %WriteMakefileArgs = (
 
 my %FallbackPrereqs = (
   "Beam::Emitter" => "0.007",
-  "Beam::Wire" => "1.014",
+  "Beam::Wire" => "1.018",
   "Capture::Tiny" => 0,
   "DateTime::Moonpig" => 0,
   "Dir::Self" => 0,
