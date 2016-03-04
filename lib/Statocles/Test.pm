@@ -161,32 +161,9 @@ sub test_constructor {
     });
 }
 
-=sub test_pages
-
-    test_pages( $site, $app, %tests )
-
-Test the pages of the given app. C<tests> is a set of pairs of C<path> => C<callback>
-to test the pages returned by the app.
-
-The C<callback> will be given two arguments:
-
-=over
-
-=item C<output>
-
-The output of the rendered page.
-
-=item C<dom>
-
-If the page is HTML, a L<Mojo::DOM> object ready for testing.
-
-=back
-
-=cut
-
 sub test_pages {
     my ( $site, $app ) = ( shift, shift );
-
+    warn 'Statocles::Test::test_pages is deprecated and will be removed in v1.000';
     require Test::Builder;
 
     my %opt;

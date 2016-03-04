@@ -211,4 +211,37 @@ subtest 'Statocles::Test::test_constructor' => sub {
     }
 };
 
+subtest 'Statocles::Test::test_pages' => sub {
+    require Statocles::Test;
+    if ( $Statocles::VERSION < 1 ) {
+        my @warnings;
+        ok( Statocles::Test->can('test_pages'), 'test_pages function exists' )
+          or return;
+        local $@;
+        eval "
+        package Statocles::App::MockTest;
+        use Statocles::Base 'Class';
+        with 'Statocles::App';
+        sub pages { return () }
+        1
+      " or die "Cant construct a Statocles::App: $@";
+
+        my $site = build_test_site();
+
+        my $app = Statocles::App::MockTest->new( url_root => '/' );
+
+        local $SIG{__WARN__} = sub { push @warnings, @_ };
+        Statocles::Test::test_pages( $site, $app, {} );
+        like $warnings[0], qr{\QStatocles::Test::test_pages is deprecated and will be removed in v1.000},
+          'warn on test_constructor function';
+    }
+    else {
+        ok(
+            !Statocles::Test->can('test_pages'),
+            'test_pages function does not exist'
+        );
+    }
+};
+
+
 done_testing;
