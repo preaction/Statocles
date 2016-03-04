@@ -106,32 +106,10 @@ sub build_test_site_apps {
     );
 }
 
-=sub test_constructor
-
-    test_constructor( $class, %args )
-
-Test an object constructor. C<class> is the class to test. C<args> is a list of
-name/value pairs with the following keys:
-
-=over 4
-
-=item required
-
-A set of name/value pairs for required arguments. These will be tested to ensure they
-are required. They will be added to every attempt to construct an object.
-
-=item default
-
-A set of name/value pairs for default arguments. These will be tested to ensure they
-are set to the correct defaults.
-
-=back
-
-=cut
 
 sub test_constructor {
     my ( $class, %args ) = @_;
-
+    warn 'Statocles::Test::test_constructor is deprecated and will be removed in v1.000';
     my %required = $args{required} ? ( %{ $args{required} } ) : ();
     my %defaults = $args{default} ? ( %{ $args{default} } ) : ();
     require Test::Builder;
