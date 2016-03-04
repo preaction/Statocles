@@ -24,11 +24,11 @@ our @IMPORT_MODULES = (
     'Dir::Self' => [qw( __DIR__ )],
     'Path::Tiny' => [qw( path tempdir cwd )],
     'Statocles::Test' => [qw(
-      test_pages build_test_site build_test_site_apps
+      build_test_site build_test_site_apps
       build_temp_site
     )],
     'Statocles::Types' => [qw( DateTimeObj )],
-    'My::Test::_Extras' => [qw( test_constructor )],
+    'My::Test::_Extras' => [qw( test_constructor test_pages )],
     sub { $Statocles::VERSION ||= 0.001; return }, # Set version normally done via dzil
 );
 
@@ -39,7 +39,7 @@ $INC{'My/Test/_Extras.pm'} = 1;
 require Exporter;
 *import = \&Exporter::import;
 
-our @EXPORT_OK = qw( test_constructor );
+our @EXPORT_OK = qw( test_constructor test_pages );
 
 sub test_constructor {
     my ( $class, %args ) = @_;
@@ -108,4 +108,87 @@ sub test_constructor {
         }
     );
 }
+
+sub test_pages {
+    my ( $site, $app ) = ( shift, shift );
+
+    require Test::Builder;
+    require Scalar::Util;
+
+    my %opt;
+    if ( ref $_[0] eq 'HASH' ) {
+        %opt = %{ +shift };
+    }
+
+    my %page_tests = @_;
+
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+
+    my $tb = Test::Builder->new();
+
+    my @warnings;
+    local $SIG{__WARN__} = sub { push @warnings, $_[0] };
+
+    my @pages = $app->pages;
+
+    $tb->is_eq(
+        scalar @pages,
+        scalar keys %page_tests,
+        'correct number of pages'
+    );
+
+    for my $page (@pages) {
+        $tb->ok( $page->DOES('Statocles::Page'), 'must be a Statocles::Page' );
+
+        my $date   = $page->date;
+        my $want   = 'DateTime::Moonpig';
+        my $typeof = do {
+                !defined $date                ? 'undefined'
+              : !ref $date                    ? 'scalar'
+              : !Scalar::Util::blessed($date) ? ref $date
+              : eval { $date->isa($want) } ? $want
+              :                              Scalar::Util::blessed($date);
+        };
+        $tb->is_eq( $typeof, $want, 'must set a date' );
+
+        if ( !$page_tests{ $page->path } ) {
+            $tb->ok( 0, "No tests found for page: " . $page->path );
+            next;
+        }
+
+        my $output = $page->render( site => $site );
+
+        # Handle filehandles from render
+        if ( ref $output eq 'GLOB' ) {
+            $output = do { local $/; <$output> };
+        }
+
+        # Handle Path::Tiny from render
+        elsif ( Scalar::Util::blessed($output) && $output->isa('Path::Tiny') ) {
+            $output = $output->slurp_raw;
+        }
+
+        if ( $page->path =~ /[.](?:html|rss|atom)$/ ) {
+            require Mojo::DOM;
+            my $dom = Mojo::DOM->new($output);
+            $tb->ok( 0, "Could not parse dom" ) unless $dom;
+            $tb->subtest(
+                'html content: ' . $page->path,
+                $page_tests{ $page->path },
+                $output, $dom
+            );
+        }
+        elsif ( $page_tests{ $page->path } ) {
+            $tb->subtest( 'text content: ' . $page->path,
+                $page_tests{ $page->path }, $output );
+        }
+        else {
+            $tb->ok( 0, "Unknown page: " . $page->path );
+        }
+
+    }
+
+    $tb->ok( !@warnings, "no warnings!" ) or $tb->diag( join "\n", @warnings );
+}
+
 1;
