@@ -1,6 +1,32 @@
 Changelog for Statocles
 
-0.071 2016-02-29T03:22:55
+0.072 2016-03-04T16:30:37
+ - update Path::Tiny version
+ - deprecate Statocles::Test::test_pages
+ - copy test_pages from Statocles::Test to t/lib/My/Test.pm
+ - Deprecate Statocles::Test::test_constructor
+ - Copy test_constructor to lib/My/Test.pm
+ - Reimplement test_constructor in TB Calls preparing for deprecation
+ - Rewrite test_pages in Test::Builder calls preparing for deprecation
+ - Inject README.mdkn exclusively in the source tree
+ - Replace ReadmeMarkdownFromPod with ReadmeAnyFromPod
+ - Munge README.mkdn in SRC after copying, instead of in CPAN before
+   copying
+ - Replace ReadmeFromPod With Readme::Brief
+ - Remove instructions to copy CPAN/README to SRC/README
+ - Remove DZP:Readme from basic bundle
+ - Add -SingleEncoding to weaver.ini
+ - update site theme from statocles default
+ - add release v0.071 announcement
+ - release v0.071
+ - upgrade Beam::Wire dependency to fix bug
+ - Add META.json to release
+ - Rewrite tests to use Test::Lib + My::Test
+ - Add a library "My/Test" in t/lib that replaces Statocles::Base 'Test'
+ - Deprecate Statocles::Base 'Test'
+ - Fix Git->deploy(--clean) broken sprintf
+
+0.071 2016-02-29T03:22:55Z
  - upgrade Beam::Wire dependency to fix bug
  - upgrade Beam::Wire dependency
  - fix line reporting for code coverage
