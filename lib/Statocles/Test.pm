@@ -3,9 +3,6 @@ package Statocles::Test;
 # ABSTRACT: Common test routines for Statocles
 
 use Statocles::Base;
-use Test::More;
-use Test::Exception;
-use Test::Deep;
 use Statocles::Util qw( dircopy );
 
 use base qw( Exporter );
@@ -137,41 +134,53 @@ sub test_constructor {
 
     my %required = $args{required} ? ( %{ $args{required} } ) : ();
     my %defaults = $args{default} ? ( %{ $args{default} } ) : ();
-
+    require Test::Builder;
     local $Test::Builder::Level = $Test::Builder::Level + 1;
 
-    subtest $class . ' constructor' => sub {
-        isa_ok $class->new( %required ), $class,
-            'constructor works with all required args';
+    my $tb = Test::Builder->new();
+
+    $tb->subtest( $class . ' constructor' => sub {
+        my $got   = $class->new( %required );
+        my $want   = $class;
+        my $typeof = do {
+                !defined $got                ? 'undefined'
+              : !ref $got                    ? 'scalar'
+              : !Scalar::Util::blessed($got) ? ref $got
+              : eval { $got->isa($want) } ? $want
+              :                             Scalar::Util::blessed($got);
+        };
+        $tb->is_eq($typeof, $class, 'constructor works with all required args');
 
         if ( $args{required} ) {
-            subtest 'required attributes' => sub {
+            $tb->subtest( 'required attributes' => sub {
                 for my $key ( keys %required ) {
-                    dies_ok {
+                    require Test::Exception;
+                    &Test::Exception::dies_ok(sub {
                         $class->new(
                             map {; $_ => $required{ $_ } } grep { $_ ne $key } keys %required,
                         );
-                    } $key . ' is required';
+                    }, $key . ' is required');
                 }
-            };
+            });
         }
 
         if ( $args{default} ) {
-            subtest 'attribute defaults' => sub {
+            $tb->subtest( 'attribute defaults' => sub {
                 my $obj = $class->new( %required );
                 for my $key ( keys %defaults ) {
                     if ( ref $defaults{ $key } eq 'CODE' ) {
                         local $_ = $obj->$key;
-                        subtest "$key default value" => $defaults{ $key };
+                        $tb->subtest( "$key default value" => $defaults{ $key } );
                     }
                     else {
-                        cmp_deeply $obj->$key, $defaults{ $key }, "$key default value";
+                        require Test::Deep;
+                        Test::Deep::cmp_deeply( $obj->$key, $defaults{ $key }, "$key default value" );
                     }
                 }
-            };
+            });
         }
 
-    };
+    });
 }
 
 =sub test_pages
