@@ -195,4 +195,20 @@ subtest 'Statocles::Base q[Test]' => sub {
     }
 };
 
+subtest 'Statocles::Test::test_constructor' => sub {
+    require Statocles::Test;
+    require Statocles::Link;
+    if ( $Statocles::VERSION < 1 ) {
+      my @warnings;
+      ok( Statocles::Test->can('test_constructor'), 'test_constructor function exists' ) or return;
+      local $SIG{__WARN__} = sub { push @warnings, @_ };
+      Statocles::Test::test_constructor('Statocles::Link', required => { href => '/blog' } );
+      like $warnings[0], qr{\QStatocles::Test::test_constructor is deprecated and will be removed in v1.000},
+        'warn on test_constructor function';
+    }
+    else {
+      ok( !Statocles::Test->can('test_constructor'), 'test_constructor function does not exist');
+    }
+};
+
 done_testing;
