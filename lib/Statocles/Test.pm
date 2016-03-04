@@ -200,6 +200,8 @@ If the page is HTML, a L<Mojo::DOM> object ready for testing.
 sub test_pages {
     my ( $site, $app ) = ( shift, shift );
 
+    require Test::Builder;
+
     my %opt;
     if ( ref $_[0] eq 'HASH' ) {
         %opt = %{ +shift };
@@ -209,20 +211,31 @@ sub test_pages {
 
     local $Test::Builder::Level = $Test::Builder::Level + 1;
 
+    my $tb = Test::Builder->new();
+
     my @warnings;
     local $SIG{__WARN__} = sub { push @warnings, $_[0] };
 
     my @pages = $app->pages;
 
-    is scalar @pages, scalar keys %page_tests, 'correct number of pages';
+    $tb->is_eq( scalar @pages, scalar keys %page_tests, 'correct number of pages' );
 
     for my $page ( @pages ) {
-        ok $page->DOES( 'Statocles::Page' ), 'must be a Statocles::Page';
+        $tb->ok( $page->DOES( 'Statocles::Page' ), 'must be a Statocles::Page' );
 
-        isa_ok $page->date, 'DateTime::Moonpig', 'must set a date';
+        my $date   = $page->date;
+        my $want   = 'DateTime::Moonpig';
+        my $typeof = do {
+                !defined $date                ? 'undefined'
+              : !ref $date                    ? 'scalar'
+              : !Scalar::Util::blessed($date) ? ref $date
+              : eval { $date->isa($want) } ? $want
+              :                              Scalar::Util::blessed($date);
+        };
+        $tb->is_eq( $typeof, $want, 'must set a date' );
 
         if ( !$page_tests{ $page->path } ) {
-            fail "No tests found for page: " . $page->path;
+            $tb->ok( 0, "No tests found for page: " . $page->path );
             next;
         }
 
@@ -239,20 +252,21 @@ sub test_pages {
 
         if ( $page->path =~ /[.](?:html|rss|atom)$/ ) {
             my $dom = Mojo::DOM->new( $output );
-            fail "Could not parse dom" unless $dom;
-            subtest 'html content: ' . $page->path, $page_tests{ $page->path }, $output, $dom;
+            $tb->ok( 0, "Could not parse dom" ) unless $dom;
+            $tb->subtest( 'html content: ' . $page->path, $page_tests{ $page->path }, $output, $dom );
         }
         elsif ( $page_tests{ $page->path } ) {
-            subtest 'text content: ' . $page->path, $page_tests{ $page->path }, $output;
+            $tb->subtest( 'text content: ' . $page->path, $page_tests{ $page->path }, $output );
         }
         else {
-            fail "Unknown page: " . $page->path;
+            $tb->ok( 0, "Unknown page: " . $page->path );
         }
 
     }
 
-    ok !@warnings, "no warnings!" or diag join "\n", @warnings;
+    $tb->ok( !@warnings, "no warnings!" ) or $tb->diag( join "\n", @warnings );
 }
+
 
 =sub build_temp_site
 
