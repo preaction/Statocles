@@ -126,16 +126,15 @@ around 'deploy' => sub {
                 @files;
 
     #; say "Committing: " . Dumper \@files;
-    if ( !@files ) {
-        $self->site->log->warn( 'No files changed. Stopping.' );
-        $self->_run( $git, checkout => $current_branch );
-        return;
+    if ( @files ) {
+        $self->site->log->info( sprintf 'Deploying %d changed files', scalar @files );
+        $self->_run( $git, add => @files );
+        $self->_run( $git, commit => -m => $options{message} || "Site update" );
+    }
+    else {
+        $self->site->log->warn( 'No files changed' );
     }
 
-    $self->site->log->info( sprintf 'Deploying %d changed files', scalar @files );
-
-    $self->_run( $git, add => @files );
-    $self->_run( $git, commit => -m => $options{message} || "Site update" );
     if ( _has_remote( $git, $self->remote ) ) {
         $self->_run( $git, push => $self->remote => $self->branch );
     }

@@ -78,6 +78,7 @@ subtest 'deploy' => sub {
             ok $remotedir->child( $file->path )->exists, $file->path . ' deployed';
         }
         ok !$remotedir->child( 'README' )->exists, 'gh-pages branch is orphan and clean';
+        _git_run( $remotegit, checkout => 'master' );
     };
 
     subtest 'nothing to deploy bails out without commit' => sub {
@@ -86,8 +87,34 @@ subtest 'deploy' => sub {
         _git_run( $git, checkout => $deploy->branch );
         my $log = $git->run( log => -u => -n => 1 );
         like $log, qr/commit $commit_id/, 'no new commit created';
-        like $deploy->site->log->history->[-1][2], qr{\QNo files changed. Stopping.},
-            'we warned the user that we did nothing';
+        like $deploy->site->log->history->[-1][2], qr{\QNo files changed},
+            'we warned the user that we updated nothing';
+    };
+
+    subtest 'nothing to deploy still pushes' => sub {
+        _git_run( $git, checkout => $deploy->branch );
+        $workdir->child( 'TEST_PUSH' )->spew( 'Push!' );
+        _git_run( $git, add => 'TEST_PUSH' );
+        _git_run( $git, commit => '-m' => 'Add test' );
+
+        my $log = $git->run( log => -u => -n => 1 );
+        my ( $commit_id ) = $log =~ /commit (\S+)/;
+
+        _git_run( $git, checkout => 'master' );
+        $deploy->deploy( $build_store );
+        is current_branch( $git ), 'master', 'deploy leaves us on the branch we came from';
+        _git_run( $git, checkout => $deploy->branch );
+        $log = $git->run( log => -u => -n => 1 );
+        like $log, qr/commit $commit_id/, 'no new commit created';
+        like $deploy->site->log->history->[-1][2], qr{\QNo files changed},
+            'we warned the user that we updated nothing';
+
+        _git_run( $remotegit, checkout => 'gh-pages' );
+        $log = $git->run( log => -u => -n => 1 );
+        my ( $remote_commit_id ) = $log =~ /commit (\S+)/;
+        ok $remotedir->child( 'TEST_PUSH' )->exists, 'gh-pages branch was pushed';
+        is $remote_commit_id, $commit_id, 'local commit exists on remote branch';
+        _git_run( $remotegit, checkout => 'master' );
     };
 };
 
