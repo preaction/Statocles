@@ -80,7 +80,7 @@ has _template => (
         my $t = Mojo::Template->new(
             name => $self->path,
         );
-        $t->parse( $self->content )->build;
+        $t->parse( $self->content );
         return $t;
     },
 );
@@ -160,11 +160,7 @@ sub render {
             return $args{content};
         };
 
-        my $err = $t->compile;
-        if ( $err ) {
-            die "Error in template: " . $err;
-        }
-        $content = $t->interpret( \%args );
+        $content = $t->process( \%args );
     }
 
     if ( blessed $content && $content->isa( 'Mojo::Exception' ) ) {
