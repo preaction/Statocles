@@ -1,6 +1,11 @@
 Changelog for Statocles
 
-0.072 2016-03-04T16:30:37
+0.073 2016-03-07T22:44:58
+ - fix Mojo::Template deprecations
+ - always push the git deploy
+ - add release v0.072 announcement
+
+0.072 2016-03-04T16:30:37Z
  - update Path::Tiny version
  - deprecate Statocles::Test::test_pages
  - copy test_pages from Statocles::Test to t/lib/My/Test.pm
