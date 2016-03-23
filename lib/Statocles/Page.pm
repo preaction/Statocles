@@ -1,6 +1,6 @@
 package Statocles::Page;
 
-# ABSTRACT: Base class for rendering objects
+# ABSTRACT: Base role for rendering files
 
 use Statocles::Base 'Role';
 use Statocles::Template;
