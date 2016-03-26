@@ -21,7 +21,7 @@ my ( $site, $build_dir, $deploy_dir ) = build_test_site_apps(
 );
 
 my @pages = map { $_->pages } values %{ $site->apps };
-my $today = DateTime::Moonpig->now->strftime( '%Y-%m-%d' );
+my $today = DateTime::Moonpig->now( time_zone => 'local' )->strftime( '%Y-%m-%d' );
 my $to_href = sub {
     my $lastmod = $_->at('lastmod');
     return {

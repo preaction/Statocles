@@ -132,7 +132,7 @@ subtest 'constructor' => sub {
 };
 
 subtest 'page date overridden by published date' => sub {
-    my $dt = DateTime::Moonpig->now;
+    my $dt = DateTime::Moonpig->now( time_zone => 'local' );
     my $page = Statocles::Page::Document->new(
         document => $doc,
         path => '/path/to/page.html',
@@ -168,7 +168,7 @@ subtest 'document template/layout override' => sub {
 subtest 'template coercion' => sub {
 
     subtest 'template' => sub {
-        my $tp = DateTime::Moonpig->now;
+        my $tp = DateTime::Moonpig->now( time_zone => 'local' );
 
         my $page = Statocles::Page::Document->new(
             document => $doc,

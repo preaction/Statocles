@@ -53,7 +53,7 @@ has '+date' => (
     lazy => 1,
     default => sub {
         my ( $self ) = @_;
-        $self->document->date || DateTime::Moonpig->now;
+        $self->document->date || DateTime::Moonpig->now( time_zone => 'local' );
     },
 );
 

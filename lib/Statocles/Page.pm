@@ -105,7 +105,7 @@ has date => (
     isa => DateTimeObj,
     coerce => DateTimeObj->coercion,
     lazy => 1,
-    default => sub { DateTime::Moonpig->now },
+    default => sub { DateTime::Moonpig->now( time_zone => 'local' ) },
 );
 
 =attr data
