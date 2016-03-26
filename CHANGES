@@ -1,6 +1,14 @@
 Changelog for Statocles
 
-0.073 2016-03-07T22:44:58
+0.074 2016-03-26T04:51:19
+ - wrap all errors from Pod::Weaver with more detail
+ - add better error message when weaver.ini is missing
+ - use local time zone everywhere
+ - fix blog posts not appearing in certain time zones
+ - fix page role abstract to declare it a role
+ - add release v0.073 announcement
+
+0.073 2016-03-07T22:44:58Z
  - fix Mojo::Template deprecations
  - always push the git deploy
  - add release v0.072 announcement
