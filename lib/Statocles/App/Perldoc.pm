@@ -253,6 +253,14 @@ sub _weave_module {
             ;
     }
 
+    # Check for a config and give a friendly error message if missing.
+    # The default exception thrown by a missing config is very difficult
+    # to understand out of context
+    if ( !$self->weave_config->parent->child( 'weaver.ini' )->is_file ) {
+        die sprintf q{Cannot find Pod::Weaver config in "%s". Missing "weaver.ini" file?},
+            $self->weave_config->parent;
+    }
+
     my $perl_utf8 = Encode::encode( 'utf-8', Path::Tiny->new( $path )->slurp, Encode::FB_CROAK );
     my $ppi_document = PPI::Document->new( \$perl_utf8 ) or die PPI::Document->errstr;
 

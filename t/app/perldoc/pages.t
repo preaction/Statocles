@@ -316,6 +316,29 @@ subtest 'with Pod::Weaver' => sub {
         },
 
     );
+
+    subtest 'missing weaver.ini dies' => sub {
+
+        my $app = Statocles::App::Perldoc->new(
+            url_root => '/pod',
+            inc => [
+                $SHARE_DIR->child( qw( app perldoc lib-weaver ) ),
+                $SHARE_DIR->child( qw( app perldoc bin-weaver ) ),
+            ],
+            modules => [qw( My My:: command shellcmd )],
+            index_module => 'My::Internal',
+            site => $site,
+            data => {
+                info => 'This is the app info',
+            },
+            weave => 1,
+            weave_config => $SHARE_DIR->child( qw( app NOT_FOUND weaver.ini ) ),
+        );
+        throws_ok { $app->pages }
+            qr{Cannot find Pod::Weaver config in "[^"]+NOT_FOUND"\. Missing "weaver\.ini" file\?},
+            'throw a friendly error if we think the config will explode';
+    };
+
 };
 
 done_testing;
