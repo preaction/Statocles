@@ -310,13 +310,20 @@ sub _weave_module {
 
     ### MUNGE THE POD HERE!
 
-    my $weaver = Pod::Weaver->new_from_config(
-        { root => $self->weave_config->parent->stringify },
-    );
-    my $weaved_doc = $weaver->weave_document({
-        pod_document => $pod_document,
-        ppi_document => $ppi_document,
-    });
+    my $weaved_doc;
+    eval {
+        my $weaver = Pod::Weaver->new_from_config(
+            { root => $self->weave_config->parent->stringify },
+        );
+        $weaved_doc = $weaver->weave_document({
+            pod_document => $pod_document,
+            ppi_document => $ppi_document,
+        });
+    };
+
+    if ( $@ ) {
+        die sprintf q{Error weaving POD for path "%s": %s}, $path, $@;
+    }
 
     ### END MUNGE THE POD
 
