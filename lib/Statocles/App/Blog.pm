@@ -451,7 +451,7 @@ Defaults to the current date.
 # sub pages
 around pages => sub {
     my ( $orig, $self, %opt ) = @_;
-    $opt{date} ||= DateTime::Moonpig->now->ymd;
+    $opt{date} ||= DateTime::Moonpig->now( time_zone => 'local' )->ymd;
     my $root = $self->url_root;
     my $is_dated_path = qr{^$root/?(\d{4})/(\d{2})/(\d{2})/};
     my @parent_pages = $self->$orig( %opt );
