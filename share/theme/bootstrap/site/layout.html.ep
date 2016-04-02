@@ -59,7 +59,20 @@
             %= include 'site/header_after.html.ep'
         </header>
         <div class="main container">
-            <%= $content %>
+            <div class="row">
+                <div class="col-md-9">
+                    <main>
+                        <%= content %>
+                    </main>
+                </div>
+
+                <div class="col-md-3">
+                    %= include 'site/sidebar_before.html.ep';
+                    %= content 'tags';
+                    %= content 'feeds';
+                </div>
+
+            </div>
         </div>
         <footer>
             %= include 'site/footer.html.ep'

@@ -15,6 +15,12 @@ use Mojo::Util qw( xml_escape );
 
 my $THEME_DIR = path( __DIR__, '..', '..', 'share', 'theme' );
 
+my %tmpl_state = (
+    content => {
+        map {; $_ => qq{<i id="$_-content-section"></i>} } qw( tags feeds ),
+    },
+);
+
 my %document_common = (
     links => {
         stylesheet => [
@@ -37,6 +43,7 @@ my %document = (
         author => 'preaction',
         content => 'Content One',
         date => '2015-01-01 00:00:00',
+        tags => [qw( foo bar )],
         %document_common,
     ),
     escaped => Statocles::Document->new(
@@ -109,6 +116,9 @@ my %page = (
     ),
 
 );
+
+# Set this so that the blog can get its tags
+$blog->_post_pages( [ $page{normal} ] );
 
 $page{ list } = Statocles::Page::List->new(
     app => $blog,
@@ -271,6 +281,11 @@ my %content_tests = (
             }
         };
 
+        subtest 'content sections' => sub {
+            ok $dom->at( '#tags-content-section' ), 'tags content section exists';
+            ok $dom->at( '#feeds-content-section' ), 'feeds content section exists';
+        };
+
     },
 
     'site/sitemap.xml.ep' => sub {
@@ -330,13 +345,13 @@ my %content_tests = (
 
     'blog/index.html.ep' => sub {
         my ( $tmpl, $content, %args ) = @_;
-        my $dom = Mojo::DOM->new( $content );
+        my $dom = Mojo::DOM->new( '<body>' . $content . '</body>' );
 
         subtest 'tag text exists and is processed as Markdown' => sub {
-            if ( ok my $h1 = $dom->at( 'main > h1' ), 'tag text h1 exists' ) {
+            if ( ok my $h1 = $dom->at( ':root > h1' ), 'tag text h1 exists' ) {
                 is $h1->text, 'Foo!', 'h1 text is correct';
             }
-            if ( ok my $p = $dom->at( 'main > p' ), 'tag text p exists' ) {
+            if ( ok my $p = $dom->at( ':root > p' ), 'tag text p exists' ) {
                 is $p->text, 'Bar, baz, and fuzz!', 'p text is correct';
             }
         };
@@ -352,6 +367,17 @@ my %content_tests = (
                 like $elem->text, qr{@{[quotemeta $args{pages}[$i]->title]}}, 'title has document title';
             }
         };
+
+        subtest 'tags' => sub {
+            if ( ok my $html = $tmpl->state->{content}{tags}, 'tags content section exists' ) {
+                my $dom = Mojo::DOM->new( $html );
+                my $links = $dom->find( 'a' );
+                cmp_deeply [ $links->map( 'text' )->each ], [ 'bar', 'foo' ],
+                    'tag text is correct and sorted';
+                cmp_deeply [ $links->map( attr => 'href' )->each ], [ '/blog/tag/bar/', '/blog/tag/foo/' ],
+                    'tag hrefs are correct and sorted';
+            }
+        };
     },
 
     'blog/post.html.ep' => sub {
@@ -361,10 +387,22 @@ my %content_tests = (
         subtest 'post title' => sub {
             # Article title should be isolated from the body by using
             # the <header> tag
-            ok my $elem = $dom->at( 'main header h1' ), 'post title found (main header h1)';
+            ok my $elem = $dom->at( 'header h1' ), 'post title found (header h1)';
             return unless $elem;
             like $elem->text, qr{@{[quotemeta $args{self}->title]}}, 'title has document title';
         };
+
+        subtest 'tags' => sub {
+            if ( ok my $html = $tmpl->state->{content}{tags}, 'tags content section exists' ) {
+                my $dom = Mojo::DOM->new( $html );
+                my $links = $dom->find( 'a' );
+                cmp_deeply [ $links->map( 'text' )->each ], [ 'bar', 'foo' ],
+                    'tag text is correct and sorted';
+                cmp_deeply [ $links->map( attr => 'href' )->each ], [ '/blog/tag/bar/', '/blog/tag/foo/' ],
+                    'tag hrefs are correct and sorted';
+            }
+        };
+
     },
 );
 
@@ -385,6 +423,7 @@ for my $theme_dir ( @theme_dirs ) {
             my $tmpl_path = $path->relative( $theme_dir );
             $tmpl_path =~ s/[.]ep$//;
             my $tmpl = $theme->template( $tmpl_path );
+            $tmpl->merge_state( { %tmpl_state } );
 
             my $name = $path->basename;
             my $app = $path->parent->basename;
