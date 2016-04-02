@@ -265,6 +265,15 @@ has _rendered_html => (
     predicate => '_has_rendered_html',
 );
 
+# _template_state
+#
+# The saved template state from any content templates
+has _template_state => (
+    is => 'rw',
+    isa => HashRef,
+    default => sub { {} },
+);
+
 =method vars
 
     my %vars = $page->vars;
@@ -310,12 +319,16 @@ sub render {
         $self->vars,
     );
 
-    my $content = $self->template->render(
+    my %tmpl_vars = (
         # XXX: This is suboptimal. Isn't vars() enough?
         ( $self->can( 'content' ) ? ( content => $self->content( %vars ) ) : () ),
         %vars,
     );
 
+    $self->template->merge_state( $self->_template_state );
+    my $content = $self->template->render( %tmpl_vars );
+
+    $self->layout->merge_state( $self->template->state );
     my $html = $self->layout->render(
         content => $content,
         %vars,
