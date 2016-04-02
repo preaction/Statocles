@@ -84,7 +84,9 @@ This is used by L<Statocles::Page> to implement content sections.
 has state => (
     is => 'ro',
     isa => HashRef,
+    lazy => 1,
     default => sub { {} },
+    clearer => 'clear_state',
 );
 
 has _template => (

@@ -329,10 +329,14 @@ sub render {
     my $content = $self->template->render( %tmpl_vars );
 
     $self->layout->merge_state( $self->template->state );
+    $self->template->clear_state;
+
     my $html = $self->layout->render(
         content => $content,
         %vars,
     );
+
+    $self->layout->clear_state;
 
     $self->_rendered_html( $html );
     return $html;

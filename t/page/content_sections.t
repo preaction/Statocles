@@ -42,6 +42,15 @@ ENDHTML
     );
 
     eq_or_diff $page->render, "From document\nFrom template\nFrom document\n<p>Page content</p>\n\n\n", 'content sections are rendered';
+
+    subtest 'state must be cleared after render because we cache templates' => sub {
+        ok !exists $page->template->state->{content}{from_document},
+            'template from_document state is cleared';
+        ok !exists $page->layout->state->{content}{from_template},
+            'layout from_template state is cleared';
+        ok !exists $page->layout->state->{content}{from_document},
+            'layout from_document state is cleared';
+    };
 };
 
 done_testing;
