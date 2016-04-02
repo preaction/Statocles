@@ -71,6 +71,21 @@ has include_stores => (
     },
 );
 
+=attr state
+
+A hash of state information. This allows a template to pass data up into
+wrapper (layout) templates.
+
+This is used by L<Statocles::Page> to implement content sections.
+
+=cut
+
+has state => (
+    is => 'ro',
+    isa => HashRef,
+    default => sub { {} },
+);
+
 has _template => (
     is => 'ro',
     isa => InstanceOf['Mojo::Template'],
@@ -156,7 +171,17 @@ sub render {
         };
 
         local *{"@{[$t->namespace]}::content"} = sub {
-            my ( $section ) = @_;
+            my ( $section, $content ) = @_;
+            if ( $content ) {
+                if ( ref $content eq 'CODE' ) {
+                    $content = $content->();
+                }
+                $self->state->{content}{ $section } = $content;
+                return;
+            }
+            elsif ( $section ) {
+                return $self->state->{content}{ $section } // '';
+            }
             return $args{content};
         };
 
@@ -271,11 +296,28 @@ The following functions are available to the template by default.
 
 =head2 content
 
+The content helper gets and sets content sections, including the main content.
+
     %= content
     <%= content %>
 
-Add the main content of the template. This will be the HTML from the document
-or page.
+With no arguments, C<content> will get the main content of the template.
+This will be the HTML from the document or page.
+
+    % content section_name => begin
+        Section Content
+    % end
+    <% content section_name => "Section Content" %>
+
+With two arguments, save the content into the named section. This will
+be saved in the template L<state attribute|/state>, which can be copied
+to other templates (like the layout template).
+
+    %= content 'section_name'
+    <%= content 'section_name' %>
+
+With one argument, gets the content previously stored with the given
+section name. This comes from L<the state attribute|/state>.
 
 =head2 include
 
