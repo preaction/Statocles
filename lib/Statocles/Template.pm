@@ -238,6 +238,21 @@ sub include {
     return $include;
 }
 
+=method merge_state
+
+    $tmpl->merge_state( $state );
+
+Merge the given C<$state> hash reference into the existing. Keys
+in C<$state> override those in L<the state attribute|/state>.
+
+=cut
+
+sub merge_state {
+    my ( $self, $new_state ) = @_;
+    $self->state->{ $_ } = $new_state->{ $_ } for keys %$new_state;
+    return;
+}
+
 =method coercion
 
     my $coerce = Statocles::Template->coercion;
