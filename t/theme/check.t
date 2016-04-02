@@ -224,7 +224,7 @@ my %app_vars = (
 # in the default themes
 my %content_tests = (
     'site/layout.html.ep' => sub {
-        my ( $content, %args ) = @_;
+        my ( $tmpl, $content, %args ) = @_;
         my $dom = Mojo::DOM->new( $content );
         my $elem;
 
@@ -274,14 +274,14 @@ my %content_tests = (
     },
 
     'site/sitemap.xml.ep' => sub {
-        my ( $content, %args ) = @_;
+        my ( $tmpl, $content, %args ) = @_;
         my $xml = Mojo::DOM->new( $content );
         my @got_loc = $xml->find( 'loc' )->map( 'text' )->each;
         cmp_deeply \@got_loc, array_each( re( qr{^http://example[.]com/} ) ), 'all pages are full urls';
     },
 
     'blog/index.rss.ep' => sub {
-        my ( $content, %args ) = @_;
+        my ( $tmpl, $content, %args ) = @_;
         my $xml = Mojo::DOM->new( $content );
         my @posts = $xml->find( 'item description' )->map( sub { Mojo::DOM->new( $_[0]->child_nodes->first->content ) } )->each;
 
@@ -307,7 +307,7 @@ my %content_tests = (
     },
 
     'blog/index.atom.ep' => sub {
-        my ( $content, %args ) = @_;
+        my ( $tmpl, $content, %args ) = @_;
         my $xml = Mojo::DOM->new( $content );
 
         subtest 'feed updated' => sub {
@@ -329,7 +329,7 @@ my %content_tests = (
     },
 
     'blog/index.html.ep' => sub {
-        my ( $content, %args ) = @_;
+        my ( $tmpl, $content, %args ) = @_;
         my $dom = Mojo::DOM->new( $content );
 
         subtest 'tag text exists and is processed as Markdown' => sub {
@@ -355,7 +355,7 @@ my %content_tests = (
     },
 
     'blog/post.html.ep' => sub {
-        my ( $content, %args ) = @_;
+        my ( $tmpl, $content, %args ) = @_;
         my $dom = Mojo::DOM->new( $content );
 
         subtest 'post title' => sub {
@@ -405,7 +405,7 @@ for my $theme_dir ( @theme_dirs ) {
                 my $rel_path = $path->relative( $theme_dir );
                 if ( my $test = $content_tests{ $rel_path } ) {
                     subtest "content test for $rel_path ($i)"
-                        => $test, $content, %args;
+                        => $test, $tmpl, $content, %args;
                 }
             }
         }
