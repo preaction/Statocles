@@ -5,6 +5,7 @@ package Statocles::Template;
 use Statocles::Base 'Class';
 use Mojo::Template;
 use Scalar::Util qw( blessed );
+use Storable qw( dclone );
 
 =attr content
 
@@ -249,7 +250,11 @@ in C<$state> override those in L<the state attribute|/state>.
 
 sub merge_state {
     my ( $self, $new_state ) = @_;
-    $self->state->{ $_ } = $new_state->{ $_ } for keys %$new_state;
+    for my $key ( keys %$new_state ) {
+        my $value = $new_state->{ $key };
+        $value = dclone $value if ref $value;
+        $self->state->{ $key } = $value;
+    }
     return;
 }
 

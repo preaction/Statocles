@@ -17,4 +17,17 @@ subtest 'merge state' => sub {
     is $tmpl->state->{ fuzz }, 'buzz', 'fuzz is added by merge';
 };
 
+subtest 'merge clones' => sub {
+    my $tmpl = Statocles::Template->new(
+        content => '<% content foo => "HAHAHA"; %>',
+    );
+
+    my $state = { content => { foo => 'baz', fuzz => 'buzz' } };
+    $tmpl->merge_state( $state );
+    $tmpl->render;
+    is $tmpl->state->{ content }{ foo }, 'HAHAHA', 'foo is overwritten by content helper';
+    is $state->{content}{foo}, 'baz', 'original ref is not changed';
+
+};
+
 done_testing;
