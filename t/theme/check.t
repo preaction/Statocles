@@ -207,6 +207,21 @@ my %app_vars = (
         },
     },
 
+    layout => {
+        'full-width.html.ep' => [
+            {
+                %common_vars,
+                self => $page{ normal },
+                app => $blog,
+            },
+            {
+                %common_vars,
+                self => $page{ escaped },
+                doc => $document{ escaped },
+            },
+        ],
+    },
+
     site => {
         'layout.html.ep' => [
             {
@@ -284,6 +299,56 @@ my %content_tests = (
         subtest 'content sections' => sub {
             ok $dom->at( '#tags-content-section' ), 'tags content section exists';
             ok $dom->at( '#feeds-content-section' ), 'feeds content section exists';
+        };
+
+    },
+
+    'layout/full-width.html.ep' => sub {
+        my ( $tmpl, $content, %args ) = @_;
+        my $dom = Mojo::DOM->new( $content );
+        my $elem;
+
+        subtest 'page title and site title' => sub {
+            if ( ok $elem = $dom->at( 'title' ), 'title element exists' ) {
+                like $elem->text, qr{@{[quotemeta $args{self}->title]}}, 'title has document title';
+                like $elem->text, qr{@{[quotemeta $site->title]}}, 'title has site title';
+            }
+        };
+
+        subtest 'all themes must have meta generator' => sub {
+            if ( ok $elem = $dom->at( 'meta[name=generator]' ), 'meta generator exists' ) {
+                is $elem->attr( 'content' ), "Statocles $Statocles::VERSION",
+                    'generator has name and version';
+            }
+        };
+
+        subtest 'site stylesheet and script links get added' => sub {
+            if ( ok $elem = $dom->at( 'link[href=/theme/css/site-style.css]', 'site stylesheet exists' ) ) {
+                is $elem->attr( 'rel' ), 'stylesheet';
+                is $elem->attr( 'type' ), 'text/css';
+            }
+            if ( ok $elem = $dom->at( 'script[src=/theme/js/site-script.js]', 'site script exists' ) ) {
+                ok !$elem->text, 'no text inside';
+            }
+        };
+
+        subtest 'document stylesheet links get added in the layout' => sub {
+            if ( ok $elem = $dom->at( 'link[href=/theme/css/special.css]', 'document stylesheet exists' ) ) {
+                is $elem->attr( 'rel' ), 'stylesheet';
+                is $elem->attr( 'type' ), 'text/css';
+            }
+        };
+
+        subtest 'document script links get added in the layout' => sub {
+            if ( ok $elem = $dom->at( 'script[src=/theme/js/special.js]', 'document script exists' ) ) {
+                ok !$elem->text, 'no text inside';
+            }
+        };
+
+        subtest 'shortcut icon' => sub {
+            if ( ok $elem = $dom->at( 'link[rel="shortcut icon"]', 'shortcut icon link exists' ) ) {
+                is $elem->attr( 'href' ), '/favicon.ico';
+            }
         };
 
     },

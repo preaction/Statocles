@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="/theme/css/statocles-bootstrap.css" />
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <title><%== $self->title ? $self->title . ' - ' : '' %><%== $site->title %></title>
+        <meta name="generator" content="Statocles <%= $Statocles::VERSION %>" />
+        % for my $link ( $self->links( 'feed' ) ) {
+        <link rel="alternate" href="<%= $link->href %>" type="<%= $link->type %>" />
+        % }
+        % if ( my $img = $site->images->{ 'icon' } ) {
+        <link rel="shortcut icon" href="<%= $img->src %>" />
+        % }
+        %= include 'site/head_after.html.ep'
+        % for my $link ( $site->links( 'stylesheet' ) ) {
+        <link rel="stylesheet" href="<%= $link->href %>" type="<%= $link->type || 'text/css' %>" />
+        % }
+        % for my $link ( $self->links( 'stylesheet' ) ) {
+        <link rel="stylesheet" href="<%= $link->href %>" type="<%= $link->type || 'text/css' %>" />
+        % }
+        % for my $link ( $site->links( 'script' ) ) {
+        <script src="<%= $link->href %>"></script>
+        % }
+        % for my $link ( $self->links( 'script' ) ) {
+        <script src="<%= $link->href %>"></script>
+        % }
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-default navbar-static-top" role="navigation">
+                <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#top-navbar-collapse-1">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="/"><%= $site->title %></a>
+                    </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="top-navbar-collapse-1">
+                        % if ( $site->nav( 'main' ) ) {
+                        <ul class="nav navbar-nav">
+                            % for my $nav ( $site->nav( 'main' ) ) {
+                            <li><a href="<%= $nav->href %>"><%= $nav->text %></a></li>
+                            % }
+                        </ul>
+                        % }
+                        %= include 'site/navbar_extra.html.ep'
+                    </div>
+                </div>
+            </nav>
+            %= include 'site/header_after.html.ep'
+        </header>
+        <div class="main container">
+            <div class="row">
+                <div class="col-md-12">
+                    <main>
+                        <%= content %>
+                    </main>
+                </div>
+            </div>
+        </div>
+        <footer>
+            %= include 'site/footer.html.ep'
+            <div class="container tagline">
+                <a href="http://preaction.me/statocles">Made with Statocles</a><br/>
+                <a href="http://www.perl.org">Powered by Perl</a>
+            </div>
+        </footer>
+    </body>
+</html>
