@@ -1,5 +1,6 @@
 ---
 title: Home
+layout: layout/full-width.html
 ---
 <div id="index-banner">
 <h1>Statocles <small>Static, App-capable Websites</small></h1>

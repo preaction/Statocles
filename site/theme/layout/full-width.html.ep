@@ -49,16 +49,10 @@
         </header>
         <div class="main container">
             <div class="row">
-                <div class="nine columns">
+                <div class="twelve columns">
                     <main>
                         <%= content %>
                     </main>
-                </div>
-
-                <div class="three columns sidebar">
-                    %= include 'site/sidebar_before.html.ep';
-                    %= content 'tags';
-                    %= content 'feeds';
                 </div>
             </div>
         </div>
