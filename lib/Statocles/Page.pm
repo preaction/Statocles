@@ -265,10 +265,11 @@ has _rendered_html => (
     predicate => '_has_rendered_html',
 );
 
-# _template_state
+# _content_sections
 #
-# The saved template state from any content templates
-has _template_state => (
+# The saved content sections from any rendered content templates. This
+# is private for now. We might make this public later
+has _content_sections => (
     is => 'rw',
     isa => HashRef,
     default => sub { {} },
@@ -288,6 +289,7 @@ sub vars {
         app => $self->app,
         site => $self->site,
         self => $self,
+        page => $self,
     );
 }
 
@@ -325,18 +327,12 @@ sub render {
         %vars,
     );
 
-    $self->template->merge_state( $self->_template_state );
     my $content = $self->template->render( %tmpl_vars );
-
-    $self->layout->merge_state( $self->template->state );
-    $self->template->clear_state;
 
     my $html = $self->layout->render(
         content => $content,
         %vars,
     );
-
-    $self->layout->clear_state;
 
     $self->_rendered_html( $html );
     return $html;

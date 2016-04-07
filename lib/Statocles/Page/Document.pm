@@ -93,7 +93,6 @@ sub _render_content_template {
         push @{ $tmpl->include_stores }, Statocles::Store->new( path => $document_path );
     }
     my $rendered = $tmpl->render( %$vars, $self->vars, self => $doc, page => $self );
-    $self->_template_state( $tmpl->state );
     return $rendered;
 }
 

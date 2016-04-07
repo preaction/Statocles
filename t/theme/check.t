@@ -15,12 +15,6 @@ use Mojo::Util qw( xml_escape );
 
 my $THEME_DIR = path( __DIR__, '..', '..', 'share', 'theme' );
 
-my %tmpl_state = (
-    content => {
-        map {; $_ => qq{<i id="$_-content-section"></i>} } qw( tags feeds ),
-    },
-);
-
 my %document_common = (
     links => {
         stylesheet => [
@@ -109,10 +103,16 @@ my %page = (
                 text => 'bar',
             ),
         ],
+        _content_sections => {
+            map {; $_ => qq{<i id="$_-content-section"></i>} } qw( tags feeds ),
+        },
     ),
     escaped => Statocles::Page::Document->new(
         path => '/$escape/@this/(correctly)/index.html',
         document => $document{escaped},
+        _content_sections => {
+            map {; $_ => qq{<i id="$_-content-section"></i>} } qw( tags feeds ),
+        },
     ),
 
 );
@@ -156,27 +156,32 @@ my %app_vars = (
         'index.html.ep' => {
             %common_vars,
             self => $page{ list },
+            page => $page{ list },
             pages => [ $page{ normal }, $page{ escaped } ],
         },
         'index.rss.ep' => {
             %common_vars,
             self => $page{ feed },
+            page => $page{ feed },
             pages => [ $page{ normal }, $page{ escaped } ],
         },
         'index.atom.ep' => {
             %common_vars,
             self => $page{ feed },
+            page => $page{ feed },
             pages => [ $page{ normal }, $page{ escaped } ],
         },
         'post.html.ep' => [
             {
                 %common_vars,
                 self => $page{ normal },
+                page => $page{ normal },
                 doc => $document{ normal },
             },
             {
                 %common_vars,
                 self => $page{ escaped },
+                page => $page{ escaped },
                 doc => $document{ escaped },
             },
         ],
@@ -186,6 +191,13 @@ my %app_vars = (
         'pod.html.ep' => {
             %common_vars,
             self => Statocles::Page::Plain->new(
+                path => '/path',
+                content => 'Fake content',
+                data => {
+                    source_path => '/source.html',
+                },
+            ),
+            page => Statocles::Page::Plain->new(
                 path => '/path',
                 content => 'Fake content',
                 data => {
@@ -203,6 +215,13 @@ my %app_vars = (
                     doc_path => '/source.html',
                 },
             ),
+            page => Statocles::Page::Plain->new(
+                path => '/path',
+                content => 'Fake content',
+                data => {
+                    doc_path => '/source.html',
+                },
+            ),
             content => 'Fake content',
         },
     },
@@ -212,11 +231,13 @@ my %app_vars = (
             {
                 %common_vars,
                 self => $page{ normal },
+                page => $page{ normal },
                 app => $blog,
             },
             {
                 %common_vars,
                 self => $page{ escaped },
+                page => $page{ escaped },
                 doc => $document{ escaped },
             },
         ],
@@ -227,11 +248,13 @@ my %app_vars = (
             {
                 %common_vars,
                 self => $page{ normal },
+                page => $page{ normal },
                 app => $blog,
             },
             {
                 %common_vars,
                 self => $page{ escaped },
+                page => $page{ escaped },
                 doc => $document{ escaped },
             },
         ],
@@ -434,7 +457,7 @@ my %content_tests = (
         };
 
         subtest 'tags' => sub {
-            if ( ok my $html = $tmpl->state->{content}{tags}, 'tags content section exists' ) {
+            if ( ok my $html = $args{page}->_content_sections->{tags}, 'tags content section exists' ) {
                 my $dom = Mojo::DOM->new( $html );
                 my $links = $dom->find( 'a' );
                 cmp_deeply [ $links->map( 'text' )->each ], [ 'bar', 'foo' ],
@@ -458,7 +481,7 @@ my %content_tests = (
         };
 
         subtest 'tags' => sub {
-            if ( ok my $html = $tmpl->state->{content}{tags}, 'tags content section exists' ) {
+            if ( ok my $html = $args{page}->_content_sections->{tags}, 'tags content section exists' ) {
                 my $dom = Mojo::DOM->new( $html );
                 my $links = $dom->find( 'a' );
                 cmp_deeply [ $links->map( 'text' )->each ], [ 'bar', 'foo' ],
@@ -488,7 +511,6 @@ for my $theme_dir ( @theme_dirs ) {
             my $tmpl_path = $path->relative( $theme_dir );
             $tmpl_path =~ s/[.]ep$//;
             my $tmpl = $theme->template( $tmpl_path );
-            $tmpl->merge_state( { %tmpl_state } );
 
             my $name = $path->basename;
             my $app = $path->parent->basename;
@@ -501,6 +523,12 @@ for my $theme_dir ( @theme_dirs ) {
             for my $i ( 0..$#$arg_sets ) {
                 my $arg_set = $arg_sets->[ $i ];
                 my %args = %{ $arg_set };
+
+                my %content_sections;
+                if ( $args{page} ) {
+                    %content_sections = %{ $args{page}->_content_sections };
+                }
+
                 my $content;
                 lives_ok {
                     $content = $tmpl->render( %args );
@@ -510,6 +538,10 @@ for my $theme_dir ( @theme_dirs ) {
                 if ( my $test = $content_tests{ $rel_path } ) {
                     subtest "content test for $rel_path ($i)"
                         => $test, $tmpl, $content, %args;
+                }
+
+                if ( $args{page} ) {
+                    $args{page}->_content_sections( \%content_sections );
                 }
             }
         }

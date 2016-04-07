@@ -72,23 +72,6 @@ has include_stores => (
     },
 );
 
-=attr state
-
-A hash of state information. This allows a template to pass data up into
-wrapper (layout) templates.
-
-This is used by L<Statocles::Page> to implement content sections.
-
-=cut
-
-has state => (
-    is => 'ro',
-    isa => HashRef,
-    lazy => 1,
-    default => sub { {} },
-    clearer => 'clear_state',
-);
-
 has _template => (
     is => 'ro',
     isa => InstanceOf['Mojo::Template'],
@@ -179,11 +162,11 @@ sub render {
                 if ( ref $content eq 'CODE' ) {
                     $content = $content->();
                 }
-                $self->state->{content}{ $section } = $content;
+                $args{page}->_content_sections->{ $section } = $content;
                 return;
             }
             elsif ( $section ) {
-                return $self->state->{content}{ $section } // '';
+                return $args{page}->_content_sections->{ $section } // '';
             }
             return $args{content};
         };
