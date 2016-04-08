@@ -129,7 +129,7 @@ you can use any of the methods from those objects. Some useful methods to note a
 =item C<data()>
 
 All of the objects above, Page, Site, and App, have a C<data()> method that
-allows for arbitrary key/values. Site and App data are configured in the Site's
+allows for an arbitrary hash of key/values. Site and App data are configured in the Site's
 config file, so these can be used as hooks for template authors to add
 additional features, such as social media links or metrics tools. Page objects
 data come from the App, and add information that may not fit anywhere else.

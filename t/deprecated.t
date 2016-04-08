@@ -243,5 +243,22 @@ subtest 'Statocles::Test::test_pages' => sub {
     }
 };
 
+subtest 'data attributes that are not hashes' => sub {
+    require Statocles::Document;
+    if ( $Statocles::VERSION < 2 ) {
+      my @warnings;
+      local $SIG{__WARN__} = sub { push @warnings, @_ };
+      Statocles::Document->new( path => '/foo/bar', data => [] );
+      like $warnings[-1], qr{\QInvalid data attribute in document "/foo/bar".},
+        'arrayref warns';
+      Statocles::Document->new( path => '/foo/bar', data => 0 );
+      like $warnings[-1], qr{\QInvalid data attribute in document "/foo/bar".},
+        'nonref warns';
+    }
+    else {
+        dies_ok { Statocles::Document->new( data => [] ) } 'arrayref not allowed';
+        dies_ok { Statocles::Document->new( data => 0 ) } 'nonref not allowed';
+    }
+};
 
 done_testing;

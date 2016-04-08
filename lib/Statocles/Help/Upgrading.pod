@@ -92,6 +92,44 @@ tag to C<$p-E<gt>date-E<gt>offset / 3600>.
 
 Deprecated in v0.070. Will be removed in v2.000.
 
+=item Invalid data attribute in document
+
+As the first place we added the C<data> attribute,
+L<Statocles::Document> objects always allowed any kind of data to be put
+there. Later, when we added C<data> attributes to the site, theme, app,
+and page objects, we only allowed hashes.
+
+To make things consistent, and since allowing arrays and plain strings
+as the data doesn't really gain anything.
+
+To fix this, make your string or array a key in your data hash:
+
+    # old
+    ---
+    data:
+        - 1
+        - 2
+        - 3
+
+    # new
+    ---
+    data:
+        numbers:
+            - 1
+            - 2
+            - 3
+
+    # old
+    ---
+    data: foo
+
+    # new
+    ---
+    data:
+        variable_name: foo
+
+Deprecated in v0.075. Will be removed in v2.000.
+
 =back
 
 =head1 BREAKING CHANGES

@@ -302,16 +302,16 @@ has layout => (
 
     ---
     data:
-      - Eggs
-      - Milk
-      - Cheese
+      ingredients:
+        - Eggs
+        - Milk
+        - Cheese
     ---
-    % for my $item ( @{ $self->data } ) {
+    % for my $item ( @{ $self->data->{ingredients} } ) {
         <%= $item %>
     % }
 
-Any kind of extra data to attach to this document, either array (like above),
-hash, string, or number, or combinations of all of these. This is available
+A hash of extra data to attach to this document. This is available
 immediately in the document content, and later in the page template.
 
 Every document's content is parsed as a template. The C<data> attribute can be
@@ -323,6 +323,16 @@ to have to mark up time and again.
 has data => (
     is => 'rw',
 );
+
+around BUILDARGS => sub {
+    my ( $orig, $self, @args ) = @_;
+    my $args = $self->$orig( @args );
+    if ( defined $args->{data} && ref $args->{data} ne 'HASH' ) {
+        warn sprintf qq{Invalid data attribute in document "%s". Data attributes that are not hashes are deprecated and will be removed in v2.0. Please use a hash instead. See Statocles::Help::Upgrading for more information.\n},
+            $args->{path};
+    }
+    return $args;
+};
 
 1;
 __END__
