@@ -117,6 +117,30 @@ subtest 'listen on a specific port' => sub {
         'contains http port information';
 };
 
+subtest 'Try to launch 2 daemons' => sub {
+
+    local $ENV{MOJO_LOG_LEVEL} = 'info'; # But sometimes this isn't set?
+    my @args = (
+        '--config' => "$config_fn",
+        'daemon',
+        '-v', # watch lines are now behind -v
+    );
+    if (my $pid = fork) {
+        sleep 1;
+        eval { Statocles::Command->main( @args ) };
+        kill 9, $pid;
+    } else {
+       capture { Statocles::Command->main( @args ) };
+    }
+    my $err = $@;
+    my $port = $1 if $@ =~ qr{http://\*:(\d*)};
+    is $port, 3000, 'correct port';
+    ok $err, "there was anoter proccess listening at $port";
+    like $@, qr{^Can't create listen socket for \(http://\*:$port\):},
+        'contains http port information';
+};
+
+
 subtest '--date' => sub {
     my ( $tmp, $config_fn, $config ) = build_temp_site( $SHARE_DIR );
 
