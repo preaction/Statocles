@@ -188,14 +188,69 @@ Remember to save this in your theme's `blog` directory as
 
 ## Create a Layout Template
 
+Finally, we should make a layout template. The layout template surrounds
+every content template, like the blog post and blog index we just made.
+This allows us to have site-wide navigations, headers, footers, scripts,
+and themes.
+
+Unlike the content templates, the layout template is extremely simple.
+The most important additions the layout contributes is the HTML
+boilerplate, like so:
+
+%= highlight html => begin
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><%= $site->title %></title>
+    </head>
+    <body>
+        %= content
+    </body>
+</html>
+% end
+
+In this basic layout template, we provide the bare minimum HTML
+structure: A `<head>` element that contains a `<title>`, in which we add
+the site's `title` attribute, and a `<body>` element that uses the
+`content` helper to print the content from the page (the blog post or
+blog index).
+
+### Document Scripts and Stylesheets
+
+Unfortunately, this basic layout template does not enable many of the
+features that our content requires. Remember from [the content
+guide](), every document is allowed to add custom scripts and
+stylesheets. This is done by the layout template. Every theme bundles
+with Statocles has this feature, so we should add it to our theme, too.
+
+Like the content templates, the layout template gets the current page,
+the current app, and the current site as variables. The links to the
+scripts and stylesheets that we want are available from the `links()`
+method. This method takes an argument, which is the links key. For
+stylesheets, the key is `stylesheet`, and for scripts, the key is
+`script`.
+
+Documents can have multiple links, so we need a loop. First we'll loop
+over the stylesheets and add `<link/>` tags, then we'll loop over the
+scripts and add `<script>` tags.
+
+%= highlight html => begin
+%# XXX
+% end
+
+### Navigations
+
+The final thing we should add to our layout is a navigation. This is how
+the site's `nav` configuration works.
+
 XXX
 
 ## Copy templates from other themes
 
 There are a lot of templates that make up a Statocles site. Though this
 does make themes a bit more work to create, ultimately it means
-flexibility to make your site look how you want it to, even in the RSS
-feed and sitemap files.
+flexibility to make your site look how you want it to, even in the
+syndicated feed and sitemap files.
 
 But, when we don't need to customize these files, we can just copy them
 from the default theme using Statocles's `bundle theme` command. The
