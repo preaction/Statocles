@@ -5,8 +5,8 @@ title: Building a Statocles Theme
 # Building a Statocles Theme
 
 Statocles, like most content management systems, uses templates to
-render structured data into HTML. In Statocles, a collection of
-templates is called a theme.
+render the structured data of a [Statocles Document](../content) into
+HTML. In Statocles, a collection of templates is called a theme.
 
 A Statocles theme is a directory in your site. Inside this directory,
 the theme is organized into subdirectories based on which application or
@@ -32,10 +32,8 @@ This syntax is similar in concept to Ruby's "Embedded Ruby" (`.erb`):
 * `<%%= ... %>` writes the result of the `...` expression
 * `%` on the beginning of a line means the rest of the line is Perl code
 
-XXX Add some examples
-
 The rest of this guide will walk through creating a theme from scratch
-using Statocles's template syntax.  The result of this guide is the
+using Statocles's template syntax. The result of this guide is the
 `tutorial` theme, bundled with Statocles.
 
 ## Create a Blog Post Template
@@ -45,10 +43,9 @@ This template will show the full text of our blog post, along with the
 list of tags linked to the tag pages.
 
 To start creating our new theme, create a `theme` directory. Inside
-that, create a `blog` directory.
-
-Inside the `blog` directory, create a file called `post.html.ep`. This
-is the default name for the blog post template.
+that, create a `blog` directory. Inside the `blog` directory, create
+a file called `post.html.ep`. This is the default name for the blog post
+template.
 
 Each template has its own set of variables inside. These variables are
 documented in the application class. [Read the Blog app
@@ -59,7 +56,8 @@ object (`$app`), and the current site object (`$site`).
 Templates also have access to "helpers", which are functions that can
 insert content, render Markdown, and include other files into the
 current template. Custom helpers can be added to a Statocles site
-through plugins, but more on that later.
+through plugins ([see the development guide for more information on
+custom helpers](../develop/)).
 
 ## Template Values
 
@@ -201,49 +199,123 @@ boilerplate, like so:
 <!DOCTYPE html>
 <html>
     <head>
-        <title><%= $site->title %></title>
+        <title><%%== $page->title %> - <%%== $site->title %></title>
     </head>
     <body>
-        %= content
+        %%= content
     </body>
 </html>
 % end
 
 In this basic layout template, we provide the bare minimum HTML
-structure: A `<head>` element that contains a `<title>`, in which we add
-the site's `title` attribute, and a `<body>` element that uses the
-`content` helper to print the content from the page (the blog post or
-blog index).
+structure: A `DOCTYPE` and `<html>` element, a `<head>` element that
+contains a `<title>`, in which we add the page's `title` attribute and
+the site's `title` attribute (HTML escaped of course), and a `<body>`
+element that uses the `content` helper to print the main page content
+(the blog post or blog index).
 
 ### Document Scripts and Stylesheets
 
 Unfortunately, this basic layout template does not enable many of the
 features that our content requires. Remember from [the content
-guide](), every document is allowed to add custom scripts and
-stylesheets. This is done by the layout template. Every theme bundles
-with Statocles has this feature, so we should add it to our theme, too.
+guide](../content/), every document is allowed to add custom scripts and
+stylesheets. This feature is implemented by the layout template. Every
+theme bundles with Statocles has this feature, so we should add it to
+our theme, too.
 
 Like the content templates, the layout template gets the current page,
 the current app, and the current site as variables. The links to the
 scripts and stylesheets that we want are available from the `links()`
 method. This method takes an argument, which is the links key. For
 stylesheets, the key is `stylesheet`, and for scripts, the key is
-`script`.
+`script`. The method then returns a list of [link
+objects](/pod/Statocles/Link) which have methods to get the link URL
+(`href`) and link text (`text`).
 
 Documents can have multiple links, so we need a loop. First we'll loop
 over the stylesheets and add `<link/>` tags, then we'll loop over the
 scripts and add `<script>` tags.
 
 %= highlight html => begin
-%# XXX
+    <head>
+        <title><%%== $page->title %> - <%%== $site->title %></title>
+        %% for my $link ( $page->links( 'stylesheet' ) ) {
+            <link href="<%%= $link->href %>" rel="stylesheet" />
+        %% }
+        %% for my $link ( $page->links( 'script' ) ) {
+            <script src="<%%= $link->href %>"></script>
+        %% }
+    </head>
 % end
+
+Now when users add custom scripts and stylesheets to their documents,
+they will be added to the `<head>` element.
 
 ### Navigations
 
 The final thing we should add to our layout is a navigation. This is how
-the site's `nav` configuration works.
+the site's `nav` configuration works. See [the config guide](../config/)
+for information on `nav`.
 
-XXX
+Like the page object's `links()` method, the site object has a `nav()`
+method which gets the named nav and returns a list of [link
+objects](/pod/Statocles/Link) which have methods to get the link URL
+(`href`) and link text (`text`).
+
+Let's allow users to create a nav called `main`, which we will display
+at the very top of the page. To do this, we call the `nav()` method with
+the name of the nav we want to get: `main`. We then loop over the links
+and create our list.
+
+%= highlight html => begin
+<nav>
+    <ul>
+        %% for my $link ( $site->nav( 'main' ) ) {
+            <li>
+                <a href="<%%= $link->href %>">
+                    <%%= $link->text %>
+                </a>
+            </li>
+        %% }
+    </ul>
+</nav>
+% end
+
+If we want to make the main nav optional, we can enclose our `<ul>` in
+a conditional (`if ( $site->nav( 'main' ) ) {`).
+
+Our final layout template looks like this:
+
+%= highlight html => begin
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><%%== $page->title %> - <%%== $site->title %></title>
+        %% for my $link ( $page->links( 'stylesheet' ) ) {
+            <link href="<%%= $link->href %>" rel="stylesheet" />
+        %% }
+        %% for my $link ( $page->links( 'script' ) ) {
+            <script src="<%%= $link->href %>"></script>
+        %% }
+    </head>
+    <body>
+        <nav>
+            <ul>
+                %% for my $link ( $site->nav( 'main' ) ) {
+                    <li>
+                        <a href="<%%= $link->href %>">
+                            <%%= $link->text %>
+                        </a>
+                    </li>
+                %% }
+            </ul>
+        </nav>
+        %%= content
+    </body>
+</html>
+% end
+
+But we have one more thing we need to do before our site is ready.
 
 ## Copy templates from other themes
 
@@ -261,5 +333,198 @@ remaining templates we need for our site are:
 * `site/sitemap.xml.ep` - The [sitemap file](...)
 * `site/robots.txt.ep` - The [robots.txt file](...)
 
+Rather than walk through writing all these templates, let's simply copy
+them from the Statocles default theme. To do this, we run the following
+commands:
+
+    statocles bundle theme default blog/index.atom.ep blog/index.rss.ep
+    statocles bundle theme default site/sitemap.xml.ep site/robots.txt.ep
+
+This will copy the specified files from the `default` theme to our theme
+directory.
+
+Now we have everything we need to build our site. Use the `statocles
+build` command to test your site, which will be written to the
+`.statocles/build` directory. Or use the `statocles daemon` command to
+view your site in your web browser.
+
+# Data Attributes
+
 XXX
+
+# Template Helpers
+
+Template helpers are a pluggable bit of code that add some power to your
+content. Statocles comes with a few built-in helpers, listed below.
+Additional helpers can come from plugins. See [the development
+guide](../develop/) for more information about building custom helpers.
+
+## Includes
+
+The `include` helper allows you to include another template into this
+template. This can be useful when there are sections of template that
+need to be duplicated in multiple places, or when you want to provide
+a way for users of your theme to customize parts of it.
+
+The `include` helper takes the file to include as an argument. In
+templates, include paths are relative to the theme root directory.
+
+For example, let's create an include that contains a standard
+disclaimer. We'll put this include in the `include/disclaimer.html.ep`
+file:
+
+%= highlight html => begin
+<aside><strong>Disclaimer:</strong> This blog is written by a trained
+professional. Viewer discretion is advised.</aside>
+% end
+
+Now we can include this file in any template we wish, or, as mentioned
+in [the content guide](../content/#Includes), any document we wish, like
+so:
+
+%= highlight html => begin
+%%= include 'include/disclaimer.html.ep'
+% end
+
+### Include Parameters
+
+The included template has access to all the template variables and
+helpers of the parent template, like `$page`, `$app`, and `$site`, so we
+could create an include that explains how to cite our page in academic
+papers (like Wikipedia):
+
+%= highlight html => begin
+<p>To cite this article: <code>
+    <%= $site->url( $page->path ) %>;
+    <%= $page->author %>;
+    <%= $page->date %>
+</code></p>
+% end
+
+In addition to the variables from the parent template, we can pass
+extra variables in the `include` helper. These variables override those
+from the parent template.
+
+So, we can create an image template that displays an image along with
+a caption and a custom background color.
+
+First, we create our include. Let's call it `include/image-bg.html.ep`.
+Inside this template, we'll use the `$color` variable to control the
+background color and have a default background color to `lightblue`. We'll
+use the `$image_src` variable for the image's URL, and the `$caption`
+variable for the image caption:
+
+%= highlight html => begin
+<div style="background-color: <%%= $color || 'lightblue' %>">
+    <img src="<%%= $image_src %>" />
+    <p><%%= $caption %></p>
+</div>
+% end
+
+Now we can pass in this data using the `include` helper:
+
+%= highlight html => begin
+<%%= include 'include/image-bg.html.ep',
+        image_src => '/images/logo-1984.jpg',
+        caption => 'Our logo in the year 1984',
+        color => 'grey',
+%>
+% end
+
+The final rendered HTML will look like:
+
+%= highlight html => begin
+<div style="background-color: grey">
+    <img src="/images/logo-1984.jpg" />
+    <p>Our logo in the year 1984</p>
+</div>
+% end
+
+### Default Includes
+
+The default Statocles themes come with the following default includes
+which you can customize:
+
+* `site/head_after.html.ep`
+    * This include comes immediately before the closing `</head>` tag
+      and allows additional scripts and stylesheets.
+* `site/navbar_extra.html.ep`
+    * This include is inside the header navigation bar, and allows for
+      custom icons and links.
+* `site/header_after.html.ep`
+    * This include comes immediately after the page header, which
+      includes the main navigation.
+* `site/sidebar_before.html.ep`
+    * This include is at the top of the sidebar.
+* `site/footer.html.ep`
+    * This include is located in the page footer.
+
+These files are not overwritten when using `statocles bundle theme`, so
+it is safe to edit these files.
+
+## Markdown
+
+The `markdown` helper allows you to render Markdown into HTML from
+inside the template. The `markdown` helper takes a single argument, the
+Markdown to render, and returns the rendered HTML, like so:
+
+%= highlight html => begin
+%%= markdown begin
+* This list will be turned to HTML
+* Because of the `markdown` helper
+%% end
+% end
+
+This is very useful when it comes to data attributes. For example, we
+can add a "byline" to our document that we can then display when
+appropriate.
+
+We add our byline in the document header under the `data` attribute:
+
+%= highlight yaml => begin
+---
+data:
+    byline: |-
+        [Author Writerson](http://example.com)
+        ([email](mailto:writerson@example.com)
+        [twitter](http://twitter.com/authorwriter))
+% end
+
+And then we can render the byline Markdown in our template:
+
+%= highlight html => begin
+%%= markdown $page->data->{byline};
+% end
+
+## Highlight
+
+The `highlight` helper adds syntax highlighting for code and
+configuration blocks. This helper uses the optional
+[Syntax::Highlight module from
+CPAN](http://metacpan.org/pod/Syntax::Highlight). See [the Install guide
+for instructions on installing optional dependencies](../install/).
+
+XXX
+
+# Content Sections
+
+Content sections are an advanced feature of Statocles that allows
+special content to be passed up through the templates that make up
+a single page. For example, the document content can include some
+content that will be then be used by the page template or layout
+template. This makes it easier to do things like adding sections to the
+layout sidebar or footer, but only on specific pages.
+
+XXX
+
+The default Statocles themes include content sections for `tags` and
+`feeds` which allow the Blog app to list all of its tags and feeds,
+respectively.
+
+# See Also
+
+* [The Install guide](../install)
+* [The Config guide](../config)
+* [The Content guide](../content)
+* [The Develop guide](../develop)
 
