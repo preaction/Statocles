@@ -32,6 +32,47 @@ This syntax is similar in concept to Ruby's "Embedded Ruby" (`.erb`):
 * `<%%= ... %>` writes the result of the `...` expression
 * `%` on the beginning of a line means the rest of the line is Perl code
 
+For example, to create a variable, we could use the single-line `%`
+template directive:
+
+    %% my $name = "Hazel Murphy";
+
+Then later, to write the variable, we could use the tag `<%%= ... %>`
+directive:
+
+    Hi, my name is <%%= $name %>!
+
+If we need to have multiple lines of code, we could prefix each line
+with a `%`:
+
+    %% my @crew = (
+    %%   'Quentin Quinn',
+    %%   'Jodene Sparks',
+    %%   'Debbie Dupree',
+    %%   'Hesh Hefflewhite',
+    %% );
+
+Or we can use the tag directive:
+
+    <%%
+        my @crew = (
+            'Quentin Quinn',
+            'Jodene Sparks',
+            'Debbie Dupree',
+            'Hesh Hefflewhite',
+        );
+    %>
+
+Or, if we need to have template content inside our line of code, we
+can use the special `begin`/`end` directives. These are especially
+helpful when using template helpers, below.
+
+    % markdown begin
+    * This is plain text
+    * Which will be given
+    * To the Markdown helper
+    % end
+
 The rest of this guide will walk through creating a theme from scratch
 using Statocles's template syntax. The result of this guide is the
 `tutorial` theme, bundled with Statocles.
@@ -504,7 +545,7 @@ configuration blocks. This helper uses the optional
 CPAN](http://metacpan.org/pod/Syntax::Highlight). See [the Install guide
 for instructions on installing optional dependencies](../install/).
 
-XXX
+The `highlight` helper takes two arguments: The syntax and the content.
 
 # Content Sections
 
