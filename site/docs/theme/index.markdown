@@ -539,11 +539,39 @@ And then we can render the byline Markdown in our template:
 
 The `highlight` helper adds syntax highlighting for code and
 configuration blocks. This helper uses the optional
-[Syntax::Highlight module from
-CPAN](http://metacpan.org/pod/Syntax::Highlight). See [the Install guide
-for instructions on installing optional dependencies](../install/).
+[Syntax::Highlight::Engine::Kate module from
+CPAN](http://metacpan.org/pod/Syntax::Highlight::Engine::Kate). See [the
+Install guide for instructions on installing optional
+dependencies](../install/).
 
-The `highlight` helper takes two arguments: The syntax and the content.
+The `highlight` helper takes two arguments: The syntax name to use and
+the content.  The content will then be given to the syntax highlighter
+and the resulting HTML placed into your page. The syntax name comes from
+Syntax::Highlighter::Kate. Some examples are:
+
+* perl
+* html
+* javascript
+* css
+
+For demonstration, here's an example of Perl code highlighted with the
+`highlight` helper:
+
+    %%= highlight perl => begin
+    use strict;
+    use warnings;
+
+    my $name = "Hazel Murphy";
+    print $name;
+    %% end
+
+%= highlight perl => begin
+use strict;
+use warnings;
+
+my $name = "Hazel Murphy";
+print $name;
+% end
 
 # Content Sections
 
