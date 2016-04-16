@@ -522,14 +522,12 @@ appropriate.
 
 We add our byline in the document header under the `data` attribute:
 
-%= highlight yaml => begin
----
-data:
-    byline: |-
-        [Author Writerson](http://example.com)
-        ([email](mailto:writerson@example.com)
-        [twitter](http://twitter.com/authorwriter))
-% end
+    ---
+    data:
+        byline: |-
+            [Author Writerson](http://example.com)
+            ([email](mailto:writerson@example.com)
+            [twitter](http://twitter.com/authorwriter))
 
 And then we can render the byline Markdown in our template:
 
