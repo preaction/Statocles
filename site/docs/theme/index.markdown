@@ -464,6 +464,9 @@ build` command to test your site, which will be written to the
 `.statocles/build` directory. Or use the `statocles daemon` command to
 launch a local web server to view your site in your web browser.
 
+Be sure to read [the content guide](../content) to see what content
+features you want to add to your theme, especially `links` and `images`.
+
 # Data Attributes
 
 Every page, site, and application is allowed to define additional,
