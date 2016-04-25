@@ -83,6 +83,26 @@ has '+_images' => (
     default => sub { $_[0]->document->images },
 );
 
+=attr data
+
+The C<data> hash for this page. Defaults to the C<data> attribute from the Document.
+
+=cut
+
+has '+data' => (
+    lazy => 1,
+    default => sub {
+        my ( $self ) = @_;
+        # Only allow hashref data attributes to come through.
+        # Non-hashref data attributes are deprecated and will be removed
+        # in v2.0. When that happens, remove this check as well
+        my $data = $self->document->data;
+        if ( $data && ref $data eq 'HASH' ) {
+            return $data;
+        }
+        return {};
+    },
+);
 
 sub _render_content_template {
     my ( $self, $content, $vars ) = @_;

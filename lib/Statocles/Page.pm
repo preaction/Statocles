@@ -114,6 +114,12 @@ A hash of additional template variables for this page.
 
 =cut
 
+# XXX: For now this is the only way to add arbitrary template vars to
+# the page. In the Statocles::Page::Document class, it defaults to the
+# data attribute of the Document object. I suspect this might create
+# a conflict when both the document and the application need to add
+# arbitrary template variables. If that happens, we will require a new,
+# application-only attribute.
 has data => (
     is => 'ro',
     isa => HashRef,

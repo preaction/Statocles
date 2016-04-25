@@ -32,6 +32,9 @@ my $doc = Statocles::Document->new(
             },
         ],
     },
+    data => {
+        foo => 'bar',
+    },
     content => <<'MARKDOWN',
 # Subtitle
 
@@ -110,6 +113,7 @@ subtest 'constructor' => sub {
             date => $doc->date,
             _images => $doc->images,
             _links => $doc->links,
+            data => { foo => 'bar' },
         },
     );
 
