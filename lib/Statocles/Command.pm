@@ -23,6 +23,20 @@ has site => (
     isa => InstanceOf['Statocles::Site'],
 );
 
+=attr log
+
+A L<Mojo::Log> object for logging. Defaults to the current site's C<log> attribute.
+
+=cut
+
+has log => (
+    is => 'rw',
+    lazy => 1,
+    default => sub {
+        $_[0]->site->log;
+    },
+);
+
 =method main
 
     my $exitval = $cmd->main( @argv );
@@ -60,7 +74,11 @@ sub main {
 
     # Create site does not require a config file
     if ( $method eq 'create' ) {
-        return $class->new->create_site( \@argv, \%opt );
+        # Create a custom logger
+        my $log = Mojo::Log->new;
+        $log->handle( \*STDOUT );
+        $log->level( $VERBOSE[ $opt{verbose} ] );
+        return $class->new( log => $log )->create_site( \@argv, \%opt );
     }
 
     if ( !-e $opt{config} ) {
@@ -197,7 +215,7 @@ sub main {
             }
 
             my $dest_dir = Path::Tiny->new( $argv[2] );
-            $cmd->bundle_theme( $theme_name, $dest_dir );
+            $cmd->bundle_theme( $theme_name, $dest_dir, @argv[3..$#argv] );
             say qq{Theme "$theme_name" written to "$dest_dir"};
             if ( !$site->theme->store->path->realpath->subsumes( $dest_dir->realpath ) ) {
                 say qq(Make sure to update "$opt{config}");
@@ -419,20 +437,31 @@ sub create_site {
 }
 
 sub bundle_theme {
-    my ( $self, $name, $dir ) = @_;
+    my ( $self, $name, $dir, @files ) = @_;
     my $theme_dest = Path::Tiny->new( $dir );
     my $theme_root = Path::Tiny->new( dist_dir( 'Statocles' ), 'theme', $name );
 
-    my $iter = $theme_root->iterator({ recurse => 1 });
-    while ( my $path = $iter->() ) {
-        next unless $path->is_file;
-        my $relative = $path->relative( $theme_root );
-        my $dest = $theme_dest->child( $relative );
+    if ( !@files ) {
+        my $iter = $theme_root->iterator({ recurse => 1 });
+        while ( my $path = $iter->() ) {
+            next unless $path->is_file;
+            my $relative = $path->relative( $theme_root );
+            push @files, $relative;
+        }
+    }
+    else {
+        @files = map { Path::Tiny->new( $_ ) } @files;
+    }
+
+    for my $path ( @files ) {
+        my $abs_path = $path->absolute( $theme_root );
+        my $dest = $theme_dest->child( $path );
         # Don't overwrite site-customized hooks
-        next if ( $path->stat->size == 0 && $dest->exists );
+        next if ( $abs_path->stat->size == 0 && $dest->exists );
+        $self->log->debug( sprintf 'Copying theme file "%s" to "%s"', $path, $dest );
         $dest->remove if $dest->exists;
         $dest->parent->mkpath;
-        $path->copy( $dest );
+        $abs_path->copy( $dest );
     }
 }
 

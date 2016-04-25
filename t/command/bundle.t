@@ -45,6 +45,29 @@ subtest 'theme' => sub {
         is $tmp->child( @site_footer )->slurp_utf8, 'SITE FOOTER';
     };
 
+    subtest 'only copy certain files' => sub {
+        my $theme_dir = $tmp->child( 'only_files' );
+        my @args = (
+            '--config' => "$config_fn",
+            bundle => theme => 'default', "$theme_dir",
+            'blog/index.rss.ep', 'blog/index.atom.ep',
+            'site/sitemap.xml.ep', 'site/robots.txt.ep',
+        );
+
+        my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+        #; diag `find $tmp`;
+        is $exit, 0;
+        ok !$err, 'nothing on stderr' or diag "STDERR: $err";
+        like $out, qr(Theme "default" written to "$theme_dir");
+        is $tmp->child( qw( only_files blog index.rss.ep ) )->slurp_utf8,
+            $SHARE_DIR->parent->parent->child( qw( share theme default blog index.rss.ep ) )->slurp_utf8;
+        ok $tmp->child( qw( only_files blog index.atom.ep ) )->is_file;
+        ok $tmp->child( qw( only_files site sitemap.xml.ep ) )->is_file;
+        ok $tmp->child( qw( only_files site robots.txt.ep ) )->is_file;
+        ok !$tmp->child( qw( only_files site layout.html.ep ) )->is_file, 'layout is not bundled';
+        ok !$tmp->child( qw( only_files blog index.html.ep ) )->is_file, 'blog index is not bundled';
+    };
+
     subtest 'do not mention updating config if unnecessary' => sub {
 
         subtest 'absolute theme dir' => sub {
