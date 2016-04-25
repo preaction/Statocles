@@ -204,22 +204,13 @@ sub main {
             my $theme_name = $argv[1];
             if ( !$theme_name ) {
                 say STDERR "ERROR: No theme name!";
-                say STDERR "\nUsage:\n\tstatocles bundle theme <name> <destination>";
+                say STDERR "\nUsage:\n\tstatocles bundle theme <name>";
                 return 1;
             }
 
-            if ( !$argv[2] ) {
-                say STDERR "ERROR: Must give a destination directory!";
-                say STDERR "\nUsage:\n\tstatocles bundle theme <name> <destination>";
-                return 1;
-            }
-
-            my $dest_dir = Path::Tiny->new( $argv[2] );
-            $cmd->bundle_theme( $theme_name, $dest_dir, @argv[3..$#argv] );
+            my $dest_dir = $site->theme->store->path;
+            $cmd->bundle_theme( $theme_name, $dest_dir, @argv[2..$#argv] );
             say qq{Theme "$theme_name" written to "$dest_dir"};
-            if ( !$site->theme->store->path->realpath->subsumes( $dest_dir->realpath ) ) {
-                say qq(Make sure to update "$opt{config}");
-            }
         }
     }
     else {
