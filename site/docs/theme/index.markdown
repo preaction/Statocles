@@ -220,10 +220,85 @@ will become the front page of our blog (and our entire site). This list
 of posts will display the post title and byline, the first section of
 the post's content, and the list of tags.
 
-XXX
+Since the index contains a list of pages, we need a loop. Once again, we
+have a `$page` object, but this time we have a `pages` method which will
+return all the posts we should display on this page.
+
+%= highlight html => begin
+%% for my $page ( $page->pages ) {
+% end
+
+For each post, we should display the title, linked to the main post. To
+ensure we have a complete URL for our page, we use the `url` helper,
+which accepts our page object and returns the absolute URL to the page,
+including the site's base URL. And, like before, to get the title, we
+use the `title` method, making sure to HTML escape the output with
+`<%%==`.
+
+%= highlight html => begin
+%% for my $page ( $page->pages ) {
+<article>
+    <h1>
+        <a href="<%%= url $page %>">
+            <%%== $page->title %>
+        </a>
+    </h1>
+% end
+
+Finally, we should display an excerpt from the post. Each individual
+post can divide their content into sections using `---`. By default, the
+first section will be shown here on the index, along with a link to read
+the entire article. To get the first section, we can use the `sections`
+method. We can pass in all the section numbers we want, starting with
+`0` as the first section.
+
+So, first lets show the first section's content:
+
+%= highlight html => begin
+    <%%= $page->sections( 0 ) %>
+% end
+
+Then we can, if necessary, show the link to read the rest of the post.
+Once again we'll use the `url` helper to get the right link.
+
+%= highlight html => begin
+    %% if ( $page->sections > 1 ) {
+        <p>
+            <a href="<%%= url $page %>">
+                Continue reading <%%== $page->title %>
+            </a>
+        </p>
+    %% }
+% end
 
 Remember to save this in your theme's `blog` directory as
 `index.html.ep`.
+
+### Deep Linking to Sections
+
+If you'd like to link users directly to the second section, you can
+replace the blog post `content` helper with a loop over the post
+sections, adding an ID to each section. This way the user doesn't have
+to skip over parts of the post they've already read.
+
+So, in the `blog/post.html.ep`, replace the `%= content` with:
+
+%= highlight html => begin
+%% for my $i ( 0..$page->sections ) {
+<section id="section-<%%= $i %>">
+    <%%= $page->sections( $i ) %>
+</section>
+%% }
+% end
+
+Then, in the `blog/index.html.ep`, you can add `#section-1` to the
+`Continue reading` link:
+
+%= highlight html => begin
+    <a href="<%%= url $page %>#section-1">
+        Continue reading <%%== $page->title %>
+    </a>
+% end
 
 ## Create a Layout Template
 
@@ -387,11 +462,65 @@ directory.
 Now we have everything we need to build our site. Use the `statocles
 build` command to test your site, which will be written to the
 `.statocles/build` directory. Or use the `statocles daemon` command to
-view your site in your web browser.
+launch a local web server to view your site in your web browser.
 
 # Data Attributes
 
-XXX
+Every page, site, and application is allowed to define additional,
+free-form data in the `data` attribute. Theme authors can use this data
+to make optional configurable sections. For example, a user could add
+their Disqus site name to their site object to enable Disqus comments.
+Or a user could add their personal Twitter account to show a link to
+their Twitter, and a few entries from their Twitter timeline.
+
+To use data attributes, you can use the `data` method of the object you
+want (`$site` for site data, `$app` for application data, `$page` for
+page data). All data attributes are hashes, which are accessed using
+curly braces (`{...}`). As an example, to access the "github" key of the
+site data attribute, we do:
+
+% highlight html => begin
+%%= $site->data->{github}
+% end
+
+The root of the data attribute must be a hash, but it allows arbitrary
+data inside the values. So, to allow a Twitter handle and a configurable
+number of tweets from the timeline, we could add this to our `site.yml`
+config file:
+
+    ---
+    site:
+        data:
+            twitter:
+                username: preaction
+                timeline_size: 5
+
+And then we can access the data like so:
+
+% highlight html => begin
+%% if ( $site->data->{twitter} ) {
+    <script src="twitter.js"></script>
+    <script>
+        /* This JavaScript is completely made up */
+        show_timeline(
+            "<%%= $site->data->{twitter}{username} %>",
+            <%%= $site->data->{twitter}{timeline_size} || 20 %>
+        );
+    </script>
+%% }
+% end
+
+Notice that we made a default for the `timeline_size` value of `20`. It's
+good to make sane defaults as often as possible to make it easier on
+the users of your theme.
+
+Good use of data attributes can make customizing your sites a lot
+easier, at the expense of making your theme more complex. You can use
+data attributes to build grids, configure the size of elements. Show and
+hide navigations
+
+The default themes allow some `data` attributes. These attributes are
+detailed in [the config guide](../config).
 
 # Template Helpers
 
@@ -573,16 +702,32 @@ my $name = "Hazel Murphy";
 print $name;
 % end
 
-# Content Sections
+# Named Content Sections
 
-Content sections are an advanced feature of Statocles that allows
+Named content sections are an advanced feature of Statocles that allows
 special content to be passed up through the templates that make up
 a single page. For example, the document content can include some
 content that will be then be used by the page template or layout
 template. This makes it easier to do things like adding sections to the
 layout sidebar or footer, but only on specific pages.
 
-XXX
+To create a named content section, we use the `content` helper. The
+first argument is the section name, and the second argument is the
+content. Remember you can use `begin`/`end` to use template directives
+in the content section.
+
+% highlight html => begin
+%% content byline => begin
+by <%%== $page->author %>
+%% end
+% end
+
+With this `byline` content created, we can recall it in our layout using
+the `content` helper with only the name of the content we want.
+
+% highlight html => begin
+%%= content 'byline'
+% end
 
 The default Statocles themes include content sections for `tags` and
 `feeds` which allow the Blog app to list all of its tags and feeds,
