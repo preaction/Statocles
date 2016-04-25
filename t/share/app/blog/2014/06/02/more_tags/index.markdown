@@ -13,6 +13,13 @@ links:
 
 [relative](does_not_exist)
 
+[also relative (broken)](./current_does_not_exist)
+[also relative (working)](./docs.html)
+
+[parent](../does_not_exist)
+
+[parent exists](../more_tags)
+
 [Broken link with URL encoding](/images/with%20spaces.png)
 
 [Working link with URL encoding](/blog/2014/05/22/%28regex%29%5Bname%5D.file.html)

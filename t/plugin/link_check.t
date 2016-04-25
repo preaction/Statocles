@@ -41,6 +41,8 @@ subtest 'check links' => sub {
             [ ignore(), warn => re(qr{\QURL broken on /blog/2014/06/02/more_tags/docs.html: '/missing/favicon.png' not found} ) ],
             [ ignore(), warn => re(qr{\QURL broken on /blog/2014/06/02/more_tags/docs.html: '/missing/script.js' not found} ) ],
             [ ignore(), warn => re(qr{\QURL broken on /blog/2014/06/02/more_tags/docs.html: '/missing/stylesheet.css' not found} ) ],
+            [ ignore(), warn => re(qr{\QURL broken on /blog/2014/06/02/more_tags/index.html: '/blog/2014/06/02/does_not_exist' not found}) ],
+            [ ignore(), warn => re(qr{\QURL broken on /blog/2014/06/02/more_tags/index.html: '/blog/2014/06/02/more_tags/current_does_not_exist' not found}) ],
             [ ignore(), warn => re(qr{\QURL broken on /blog/2014/06/02/more_tags/index.html: '/blog/2014/06/02/more_tags/does_not_exist' not found}) ],
             [ ignore(), warn => re(qr{\QURL broken on /blog/2014/06/02/more_tags/index.html: '/does_not_exist' not found}) ],
             [ ignore(), warn => re(qr{\QURL broken on /blog/2014/06/02/more_tags/index.html: '/does_not_exist.jpg' not found}) ],
@@ -87,6 +89,8 @@ subtest 'ignore patterns' => sub {
 
         cmp_deeply $site->log->history,
             bag(
+                [ ignore(), warn => re(qr{\QURL broken on /blog/2014/06/02/more_tags/index.html: '/blog/2014/06/02/does_not_exist' not found}) ],
+                [ ignore(), warn => re(qr{\QURL broken on /blog/2014/06/02/more_tags/index.html: '/blog/2014/06/02/more_tags/current_does_not_exist' not found}) ],
                 [ ignore(), 'warn', re(qr{\QURL broken on $page: '/blog/2014/06/02/more_tags/does_not_exist' not found}) ],
                 [ ignore(), 'warn', re(qr{\QURL broken on $page: '/images/with spaces.png' not found}) ],
             ),
@@ -102,7 +106,7 @@ subtest 'ignore patterns' => sub {
         my ( $site, $build_dir, $deploy_dir ) = build_test_site_apps( $SHARE_DIR, log => $log );
         my $plugin = Statocles::Plugin::LinkCheck->new(
             ignore => [
-                '.*/does_not_exist',
+                '.*/(?:current_)?does_not_exist',
                 '.*/with spaces[.]png',
             ]
         );

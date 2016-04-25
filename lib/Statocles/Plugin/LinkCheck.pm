@@ -54,6 +54,13 @@ sub check_pages {
                     if ( $url !~ m{^/} ) {
                         $url = $page->path->parent->child( $url );
                     }
+
+                    # Fix ".." and ".". Path::Tiny->canonpath can't do
+                    # this for us because these paths do not exist on
+                    # the filesystem
+                    $url =~ s{/[^/]+/[.][.]/}{/}g; # Fix ".." to refer to parent
+                    $url =~ s{/[.]/}{/}g; # Fix "." to refer to self
+
                     $links{ url_unescape $url }{ $page->path }++;
 
                 }

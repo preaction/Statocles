@@ -34,7 +34,7 @@ subtest 'check html' => sub {
             [
               ignore(),
               'warn',
-              '- (54:4) <img src="image.markdown.jpg"> tag has no HEIGHT and WIDTH attributes',
+              '- (61:4) <img src="image.markdown.jpg"> tag has no HEIGHT and WIDTH attributes',
             ],
             [
               ignore(),
