@@ -1,5 +1,6 @@
 ---
 title: Managing Content
+layout: layout/full-width.html
 ---
 
 # Documents

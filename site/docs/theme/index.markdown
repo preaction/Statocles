@@ -1,5 +1,6 @@
 ---
 title: Building a Statocles Theme
+layout: layout/full-width.html
 ---
 
 # Building a Statocles Theme
