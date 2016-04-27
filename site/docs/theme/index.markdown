@@ -516,8 +516,8 @@ the users of your theme.
 
 Good use of data attributes can make customizing your sites a lot
 easier, at the expense of making your theme more complex. You can use
-data attributes to build grids, configure the size of elements. Show and
-hide navigations
+data attributes to build grids, configure the size of elements, show and
+hide navigations, and more.
 
 The default themes allow some `data` attributes. These attributes are
 detailed in [the config guide](../config).
@@ -716,18 +716,14 @@ first argument is the section name, and the second argument is the
 content. Remember you can use `begin`/`end` to use template directives
 in the content section.
 
-% highlight html => begin
-%% content byline => begin
-by <%%== $page->author %>
-%% end
-% end
+    %% content byline => begin
+    by <%%== $page->author %>
+    %% end
 
 With this `byline` content created, we can recall it in our layout using
 the `content` helper with only the name of the content we want.
 
-% highlight html => begin
-%%= content 'byline'
-% end
+    %%= content 'byline'
 
 The default Statocles themes include content sections for `tags` and
 `feeds` which allow the Blog app to list all of its tags and feeds,
