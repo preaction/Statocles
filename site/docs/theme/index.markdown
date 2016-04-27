@@ -6,12 +6,12 @@ layout: layout/full-width.html
 # Building a Statocles Theme
 
 Statocles, like most content management systems, uses templates to
-render the structured data of a [Statocles Document](../content) into
-HTML. In Statocles, a collection of templates is called a theme.
+render structured data into HTML. In Statocles, a collection of
+templates is called a theme.
 
 A Statocles theme is a directory in your site. Inside this directory,
 the theme is organized into subdirectories based on which application or
-which purpose a template serves. A simple Statocles theme could contain
+purpose a template serves. A simple Statocles theme could contain
 these directories:
 
 * `blog`: Templates for the Blog application
@@ -29,17 +29,18 @@ The `.ep` stands for "Embedded Perl", and is the template syntax used by
 [the Mojolicious web application framework](http://mojolicious.org).
 This syntax is similar in concept to Ruby's "Embedded Ruby" (`.erb`):
 
-* `<%%` and `%>` denote sections of Perl code
+* `<%%` and `%>` surround sections of Perl code
 * `<%%= ... %>` writes the result of the `...` expression
 * `%` on the beginning of a line means the rest of the line is Perl code
+* `%=` is a single-line expression that prints the result
 
 For example, to create a variable, we could use the single-line `%`
 template directive:
 
     %% my $name = "Hazel Murphy";
 
-Then later, to write the variable, we could use the tag `<%%= ... %>`
-directive:
+Then later, to write the variable, we could use the tag directive (`<%%=
+... %>`):
 
     Hi, my name is <%%= $name %>!
 
@@ -75,19 +76,18 @@ helpful when using template helpers, below.
     %% end
 
 The rest of this guide will walk through creating a theme from scratch
-using Statocles's template syntax. The result of this guide is the
-`tutorial` theme, bundled with Statocles.
+using Statocles's template syntax.
 
 ## Create a Blog Post Template
 
 The first template we will create is the easiest: Individual blog posts.
 This template will show the full text of our blog post, along with the
-list of tags linked to the tag pages.
+list of tags for our post which will be linked to the tag pages.
 
 To start creating our new theme, create a `theme` directory. Inside
 that, create a `blog` directory. Inside the `blog` directory, create
-a file called `post.html.ep`. This is the default name for the blog post
-template.
+a file called `post.html.ep`. This is the default name
+for the blog post template (`blog/post.html.ep`).
 
 Each template has its own set of variables inside. These variables are
 documented in the application class. [Read the Blog app
@@ -131,11 +131,9 @@ want to add the tag if we know who the post's author is. For that, we
 can use a Perl conditional `if` statement. Let's add our byline in an
 `<aside>` tag, so people know it isn't part of the main post content.
 
-%= highlight html => begin
-%% if ( $page->author ) {
-    <aside>by <%%= $page->author %></aside>
-%% }
-% end
+    %% if ( $page->author ) {
+        <aside>by <%%= $page->author %></aside>
+    %% }
 
 So now if our post has an author, say "Hazel Murphy", our post will be
 properly attributed with `<aside>by Hazel Murphy</aside>`.
@@ -293,7 +291,7 @@ So, in the `blog/post.html.ep`, replace the `%= content` with:
 % end
 
 Then, in the `blog/index.html.ep`, you can add `#section-1` to the
-`Continue reading` link:
+`Continue reading` link to drop the user right where they left off:
 
 %= highlight html => begin
     <a href="<%%= url $page %>#section-1">
@@ -309,8 +307,8 @@ This allows us to have site-wide navigations, headers, footers, scripts,
 and themes.
 
 Unlike the content templates, the layout template is extremely simple.
-The most important additions the layout contributes is the HTML
-boilerplate, like so:
+The most important additions the layout contributes are the HTML
+boilerplate tags, like so:
 
 %= highlight html => begin
 <!DOCTYPE html>
@@ -340,12 +338,12 @@ stylesheets. This feature is implemented by the layout template. Every
 theme bundles with Statocles has this feature, so we should add it to
 our theme, too.
 
-Like the content templates, the layout template gets the current page,
-the current app, and the current site as variables. The links to the
-scripts and stylesheets that we want are available from the `links()`
-method. This method takes an argument, which is the links key. For
-stylesheets, the key is `stylesheet`, and for scripts, the key is
-`script`. The method then returns a list of [link
+Like the content templates we created above, the layout template gets
+the current page, the current app, and the current site as variables.
+The links to the scripts and stylesheets that we want are available from
+the `links()` method. This method takes an argument, which is the links
+key. For stylesheets, the key is `stylesheet`, and for scripts, the key
+is `script`. The method then returns a list of [link
 objects](/pod/Statocles/Link) which have methods to get the link URL
 (`href`) and link text (`text`).
 
@@ -501,18 +499,16 @@ config file:
 
 And then we can access the data like so:
 
-% highlight html => begin
-%% if ( $site->data->{twitter} ) {
-    <script src="twitter.js"></script>
-    <script>
-        /* This JavaScript is completely made up */
-        show_timeline(
-            "<%%= $site->data->{twitter}{username} %>",
-            <%%= $site->data->{twitter}{timeline_size} || 20 %>
-        );
-    </script>
-%% }
-% end
+    %% if ( $site->data->{twitter} ) {
+        <script src="twitter.js"></script>
+        <script>
+            /* This JavaScript is completely made up */
+            show_timeline(
+                "<%%= $site->data->{twitter}{username} %>",
+                <%%= $site->data->{twitter}{timeline_size} || 20 %>
+            );
+        </script>
+    %% }
 
 Notice that we made a default for the `timeline_size` value of `20`. It's
 good to make sane defaults as often as possible to make it easier on
@@ -569,9 +565,9 @@ papers (like Wikipedia):
 
 %= highlight html => begin
 <p>To cite this article: <code>
-    <%= $site->url( $page->path ) %>;
-    <%= $page->author %>;
-    <%= $page->date %>
+    <%%= $site->url( $page->path ) %>;
+    <%%= $page->author %>;
+    <%%= $page->date %>
 </code></p>
 % end
 
