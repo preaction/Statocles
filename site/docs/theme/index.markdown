@@ -69,7 +69,7 @@ Or, if we need to have template content inside our line of code, we
 can use the special `begin`/`end` directives. These are especially
 helpful when using template helpers, below.
 
-    %% markdown begin
+    %%= markdown begin
     * This is plain text
     * Which will be given
     * To the Markdown helper
