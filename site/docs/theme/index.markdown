@@ -114,13 +114,15 @@ page title, we use the `<%%= ... %>` template expression syntax, like so:
 
 Before we go any further, we have a potential problem: What if our title
 contains HTML characters like `<` and `>`? To quickly escape HTML from
-wreaking havoc on our template, we can use `<%%== ... %>` instead:
+accidentally wreaking havoc on our template, we can use `<%%== ... %>`
+instead:
 
 %= highlight html => begin
 <h1><%%== $page->title %></h1>
 % end
 
-Now our page title is safe from dangerous HTML characters.
+Now our page title is safe from minor HTML escaping issues (though
+likely not against actual malice, so be sure you trust your content).
 
 ### Template Conditionals
 
