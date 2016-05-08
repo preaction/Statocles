@@ -207,42 +207,62 @@ The default themes allow for the following link keys:
 ### Images
 
 Like links, the `images` attribute allows us to define related images,
-such as a thumbnail or title image.
+such as a thumbnail or title image. Like links, images have a key which
+describes how the image will be used, and either a URL or set of image
+attributes (such as `src` and `title`).
 
-XXX
+For example, to add a title banner, we can use the `banner` key:
+
+    ---
+    images:
+        banner:
+            src: ./banner.jpg
+            alt: A picture of clouds
 
 The default themes allow for the following image keys:
 
-XXX
+* `icon` - The shortcut icon for this page
 
 ### Data Attribute
 
-XXX
+The `data` attribute is an extra place that allows you to put anything
+you want. This is helpful for theme authors to add additional features,
+or when using [content templates](#Content-Templates) to generate your
+content.
 
-The default Statocles themes allow for the following document data
-attributes:
+The `data` attribute must be a hash, but you can put anything inside
+that hash (arrays and more hashes are fine).
 
-XXX
+Using the data attribute, you could write a recipe's ingredients in your
+data attribute, and have a template generate the right metadata. Or have
+a list of people to display on the page. For examples, see the section
+on [content templates](#Content-Templates), below.
+
+The default Statocles themes do not use the `data` attribute currently,
+allowing you to do as you please.
 
 ### Template / Layout
 
 For greater flexibility, every document can declare its own custom
-template or layout to override the one it would normally use.
+template or layout to override the one it would normally use. This
+allows theme authors to provide multiple content templates and layouts
+that can be used as needed.
 
-XXX
+The `template` key changes the content template, which is the template
+that displays the content in the document. The `layout` key changes the
+layout template, which handles everything surrounding the main content:
+The site's header, footer, design, and other parts.
+
+    ---
+    template: blog/recipe.html
+    layout: layout/full-width.html
 
 The default Statocles themes include these optional templates you can
 use:
 
-* layouts/full.html
+* layout/full-width.html
     * This layout does not contain a sidebar, taking up the full width
       of the page.
-
-XXX
-
-### Custom Documents
-
-XXX
 
 ## Content
 
@@ -260,15 +280,59 @@ lists, links, preformatted sections, quotes, and images. And, when
 Markdown isn't enough, you can go back to using HTML to add `<aside>`,
 `<figure>`, `<dl>`, and other tags.
 
-### Text and Inline Formatting
+### Emphasized Text
 
-XXX
+Markdown allows for easy indication of emphasized text. Text between
+single asterisks `*` or underscores `_` is *emphasized* with a `<em>`
+tag. Double asterisks/underscores is **strong emphasis** with
+a `<strong>` tag.
+
+### Code Text
+
+Inline `code text` is surrounded by backticks `` ` `` and results in a `<code>`
+tag.  Code text is automatically HTML escaped, so you can write raw HTML
+inside backticks and it won't be processed as HTML.
+
+You can also have code blocks which are simply indented by at least
+4 spaces or 1 tab. Code blocks are surrounded by `<pre>` and `<code>`
+tags.
+
+    This is a code block, indented 4 spaces
 
 ### Headers
 
-XXX
+Headers are preceded by a number of hash `#` characters, one for each
+level of heading. So, one `#` is an `<h1>`, two `##` is an `<h2>`,
+three `###` is an `<h3>`, and so on up to 6.
+
+    # Heading 1
+    ## Heading 2
+    ### Heading 3
+    #### Heading 4
+    ##### Heading 5
+    ###### Heading 6
+
+### Blockquotes
+
+Blockquotes are paragraphs preceded by `>` characters and result in
+a `<blockquote>` tag. Blockquotes can be nested, and can contain any
+other Markdown content.
+
+    > This is a blockquote across multiple lines. Each line can be
+    > started with the `>` character, or you can be lazy and only start
+    > the first line with a `>`.
+
+    > > This is a nested quote, but it's short.
+
+    > This second paragraph only has the `>` character on the first
+    line, not any subsequent lines, because I'm lazy and my editor
+    doesn't do it for me.
 
 ### Links
+
+XXX
+
+### Lists
 
 XXX
 
