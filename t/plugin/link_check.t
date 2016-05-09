@@ -41,6 +41,7 @@ subtest 'check links' => sub {
             [ ignore(), warn => re(qr{\QURL broken on /blog/2014/06/02/more_tags/docs.html: '/missing/favicon.png' not found} ) ],
             [ ignore(), warn => re(qr{\QURL broken on /blog/2014/06/02/more_tags/docs.html: '/missing/script.js' not found} ) ],
             [ ignore(), warn => re(qr{\QURL broken on /blog/2014/06/02/more_tags/docs.html: '/missing/stylesheet.css' not found} ) ],
+            [ ignore(), warn => re(qr{\QURL broken on /blog/2014/06/02/more_tags/index.html: Link with text "No link destination" has no destination}) ],
             [ ignore(), warn => re(qr{\QURL broken on /blog/2014/06/02/more_tags/index.html: '/blog/2014/06/02/does_not_exist' not found}) ],
             [ ignore(), warn => re(qr{\QURL broken on /blog/2014/06/02/more_tags/index.html: '/blog/2014/06/02/more_tags/current_does_not_exist' not found}) ],
             [ ignore(), warn => re(qr{\QURL broken on /blog/2014/06/02/more_tags/index.html: '/blog/2014/06/02/more_tags/does_not_exist' not found}) ],
@@ -89,6 +90,7 @@ subtest 'ignore patterns' => sub {
 
         cmp_deeply $site->log->history,
             bag(
+                [ ignore(), warn => re(qr{\QURL broken on /blog/2014/06/02/more_tags/index.html: Link with text "No link destination" has no destination}) ],
                 [ ignore(), warn => re(qr{\QURL broken on /blog/2014/06/02/more_tags/index.html: '/blog/2014/06/02/does_not_exist' not found}) ],
                 [ ignore(), warn => re(qr{\QURL broken on /blog/2014/06/02/more_tags/index.html: '/blog/2014/06/02/more_tags/current_does_not_exist' not found}) ],
                 [ ignore(), 'warn', re(qr{\QURL broken on $page: '/blog/2014/06/02/more_tags/does_not_exist' not found}) ],
@@ -116,7 +118,10 @@ subtest 'ignore patterns' => sub {
 
         my $page = '/blog/2014/06/02/more_tags/index.html';
 
-        cmp_deeply $site->log->history, [],
+        cmp_deeply $site->log->history, 
+            [
+                [ ignore(), warn => re(qr{\QURL broken on /blog/2014/06/02/more_tags/index.html: Link with text "No link destination" has no destination}) ],
+            ],
             'all broken links ignored'
                 or diag explain $site->log->history;
     };

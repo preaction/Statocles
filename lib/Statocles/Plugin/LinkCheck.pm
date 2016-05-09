@@ -39,6 +39,7 @@ sub check_pages {
 
     my %page_paths = ();
     my %links = ();
+    my %empty = (); # Pages with empty links
     for my $page ( @{ $event->pages } ) {
         $page_paths{ $page->path } = 1;
         if ( $page->DOES( 'Statocles::Page::Document' ) ) {
@@ -47,8 +48,13 @@ sub check_pages {
             for my $attr ( qw( src href ) ) {
                 for my $el ( $dom->find( "[$attr]" )->each ) {
                     my $url = $el->attr( $attr );
+
+                    if ( !$url ) {
+                        push @{ $empty{ $page->path } }, $el;
+                    }
+
                     $url =~ s{#.*$}{};
-                    next unless $url;
+                    next unless $url; # Skip checking fragment-internal links for now
                     next if $url =~ m{^(?:[a-z][a-z0-9+.-]*):}i;
                     next if $url =~ m{^//};
                     if ( $url !~ m{^/} ) {
@@ -68,7 +74,7 @@ sub check_pages {
         }
     }
 
-    my @missing; # Array of arrayrefs of [ link => page ] pairs
+    my @missing; # Array of arrayrefs of [ link_url, page_path, link_element ]
     for my $link_url ( keys %links ) {
         $link_url .= 'index.html' if $link_url =~ m{/$};
         next if $page_paths{ $link_url } || $page_paths{ "$link_url/index.html" };
@@ -76,10 +82,17 @@ sub check_pages {
         push @missing, [ $link_url, $_ ] for keys %{ $links{ $link_url } };
     }
 
+    for my $page_url ( keys %empty ) {
+        push @missing, map { [ '', $page_url, $_ ] } @{ $empty{ $page_url } };
+    }
+
     if ( @missing ) {
         # Sort by page url and then missing link url
         for my $m ( sort { $a->[1] cmp $b->[1] || $a->[0] cmp $b->[0] } @missing ) {
-            $event->emitter->log->warn( "URL broken on $m->[1]: '$m->[0]' not found" );
+            my $msg = $m->[0] ? sprintf( q{'%s' not found}, $m->[0] )
+                    : sprintf( q{Link with text "%s" has no destination}, $m->[2]->text )
+                    ;
+            $event->emitter->log->warn( "URL broken on $m->[1]: $msg" );
         }
     }
 }

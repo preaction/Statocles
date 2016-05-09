@@ -23,7 +23,7 @@
         </nav>
         <%= $content %>
         <footer>
-            <a href="<%= $site->data->{profile_url} // '' %>">Profile</a>
+            <a href="<%= $site->data->{profile_url} // '#' %>">Profile</a>
             <div id="app-info"><%= $self->app->data->{info} // '' %></div>
         </footer>
     </body>

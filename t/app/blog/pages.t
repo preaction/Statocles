@@ -66,6 +66,7 @@ my @page_tests = (
                 "Full URLs without schema are not broken" => '//example.com',
                 "Fixed relative URL" => '/blog/2014/06/02/more_tags/docs.html',
                 "Test a mailto: link" => 'mailto:user@example.com',
+                'No link destination' => '/blog/2014/06/02/more_tags/',
             );
             my @links = $dom->find( 'article .content a' )->each;
             is scalar @links, scalar keys %links, 'all links found';
@@ -813,6 +814,7 @@ my @page_tests = (
             "Full URLs without schema are not broken" => '//example.com',
             "Fixed relative URL" => 'docs.html',
             "Test a mailto: link" => 'mailto:user@example.com',
+            'No link destination' => '',
         );
         my @links = $dom->find( 'section a' )->each;
         is scalar @links, scalar keys %links, 'all links found';

@@ -31,3 +31,6 @@ links:
 [Fixed relative URL](docs.html)
 
 [Test a mailto: link](mailto:user@example.com)
+
+[No link destination]()
+
