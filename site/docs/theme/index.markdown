@@ -447,8 +447,8 @@ remaining templates we need for our site are:
 
 * `blog/index.atom.ep` - The blog Atom feed
 * `blog/index.rss.ep` - The blog RSS feed
-* `site/sitemap.xml.ep` - The [sitemap file](...)
-* `site/robots.txt.ep` - The [robots.txt file](...)
+* `site/sitemap.xml.ep` - The [sitemap file](https://en.wikipedia.org/wiki/Sitemaps)
+* `site/robots.txt.ep` - The [robots.txt file](https://en.wikipedia.org/wiki/Robots_exclusion_standard)
 
 Rather than walk through writing all these templates, let's simply copy
 them from the Statocles default theme. To do this, we run the following

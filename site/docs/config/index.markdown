@@ -225,7 +225,7 @@ Like an application, a deploy is an object. So let's create an object named
 `deploy`. Like applications, there are different kinds of deploy objects we can
 create. The File deploy simply copies our site to another directory on the same
 machine, and the Git deploy uses a Git repository to deploy our site (like
-[Github Pages]()).
+[Github Pages](http://pages.github.com)).
 
 For now, let's create a File deploy.
 

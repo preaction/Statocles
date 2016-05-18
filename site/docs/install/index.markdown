@@ -50,29 +50,33 @@ This is Perl v5.12.2
 
 If you have a recent enough Perl, you can proceed on to [Installing
 Statocles](#Installing-Statocles). If your OS doesn't have a recent
-enough Perl, you can build Perl from source using [perlbrew](),
-[plenv](), or [perl-build]().
+enough Perl, you can build Perl from source using
+[perlbrew](http://perlbrew.pl) or
+[plenv](https://github.com/tokuhirom/plenv).
 
 ## Mac OS X
 
 Mac OS X comes with a Perl modern enough to run Statocles. Skip ahead to
 [Installing Statocles](#Installing-Statocles) to install Statocles. If
 you want to install a separate Perl to ensure there are no problems when
-upgrading your Mac OS X, you can try [homebrew]() for installing a wide
-variety of software, or Perl-specific solutions like [perlbrew](),
-[plenv](), or [perl-build]().
+upgrading your Mac OS X, you can try [homebrew](http://brew.sh) for
+installing a wide variety of software, or Perl-specific solutions like
+[perlbrew](http://perlbrew.pl) or
+[plenv](https://github.com/tokuhirom/plenv).
 
 XXX Do we need a compiler / XCode?
 
 ## Windows
 
 Windows rarely comes with a Perl install, so you'll have to do it
-yourself. We recommend using [Strawberry Perl](), but [ActivePerl by
-ActiveState]() is also an option. Install the latest version of one of
-these Windows Perl distributions.
+yourself. We recommend using [Strawberry
+Perl](http://strawberryperl.com), but [ActivePerl by
+ActiveState](http://www.activestate.com/activeperl/downloads) is also an
+option. Install the latest version of one of these Windows Perl
+distributions.
 
 If you choose ActivePerl, installing Statocles will be slightly
-different. See [Installing with ActivePerl]().
+different. See [Installing with ActivePerl](#Installing-with-ActivePerl).
 
 ### Installing with access to Git
 
@@ -117,8 +121,9 @@ everything will work. A wall of text will fly past your screen, and
 Statocles will test itself and install itself if the tests pass.
 
 If the tests fail on your machine, or if Statocles fails to install for
-any reason, please [open a bug report](), and include the full log from
-your terminal so we can help fix the problem.
+any reason, please [open a bug
+report](http://github.com/preaction/Statocles/issues), and include the
+full log from your terminal so we can help fix the problem.
 
 This is the recommended way to install Statocles on Windows using
 Strawberry Perl.
@@ -145,7 +150,7 @@ again.
 ## Git::Repository
 
 This module allows Statocles to use Git as a deployment target, which
-enables [Github Pages]() support, or a nicely-automated, authenticated,
+enables [Github Pages](http://pages.github.com) support, or a nicely-automated, authenticated,
 and auditable way of deploying to your own machines using only a
 standard ssh login.
 
