@@ -235,6 +235,39 @@ has images => (
     },
 );
 
+=attr templates
+
+    # site.yml
+    templates:
+        sitemap.xml: custom/sitemap.xml
+
+The custom templates to use for the site meta-template like
+C<sitemap.xml> and C<robots.txt>. A mapping of template names to
+template paths (relative to the theme root directory).
+
+Developers should get site templates using L<the C<template>
+method|/template>.
+
+=cut
+
+has _templates => (
+    is => 'ro',
+    isa => HashRef,
+    default => sub { {} },
+    init_arg => 'templates',
+);
+
+=attr template_dir
+
+The directory (inside the theme directory) to use for the site meta-templates.
+
+=cut
+
+has template_dir => (
+    is => 'ro',
+    isa => Str,
+    default => sub { 'site' },
+);
 
 =attr build_store
 
@@ -586,7 +619,7 @@ sub build {
                         map { [ $_, $self->url( $_->path ) ] }
                         grep { $_->path =~ /[.]html?$/ }
                         @pages;
-    my $tmpl = $self->theme->template( site => 'sitemap.xml' );
+    my $tmpl = $self->template( 'sitemap.xml' );
     my $sitemap = Statocles::Page::Plain->new(
         path => '/sitemap.xml',
         content => $tmpl->render( site => $self, pages => \@indexed_pages ),
@@ -596,7 +629,7 @@ sub build {
 
     # robots.txt is the best way for crawlers to automatically discover sitemap.xml
     # We should do more with this later...
-    my $robots_tmpl = $self->theme->template( site => 'robots.txt' );
+    my $robots_tmpl = $self->template( 'robots.txt' );
     my $robots = Statocles::Page::Plain->new(
         path => '/robots.txt',
         content => $robots_tmpl->render( site => $self ),
@@ -686,6 +719,33 @@ sub url {
     $path =~ s{^/}{};
 
     return join "/", $base, $path;
+}
+
+=method template
+
+    my $template = $app->template( $tmpl_name );
+
+Get a L<template object|Statocles::Template> for the given template
+name. The default template is determined by the app's class name and the
+template name passed in.
+
+Applications should list the templates they have and describe what L<page
+class|Statocles::Page> they use.
+
+=cut
+
+sub template {
+    my ( $self, @parts ) = @_;
+
+    if ( @parts == 1 ) {
+        @parts      = $self->_templates->{ $parts[0] }
+                    ? $self->_templates->{ $parts[0] }
+                    : $parts[0] eq 'layout.html'
+                    ? ( "site", @parts )
+                    : ( $self->template_dir, @parts );
+    }
+
+    return $self->theme->template( @parts );
 }
 
 1;
