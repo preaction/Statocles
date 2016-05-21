@@ -135,7 +135,7 @@ sub test_pages {
         scalar @pages,
         scalar keys %page_tests,
         'correct number of pages'
-    );
+    ) or $tb->diag( "Got: " . join( ", ", map { $_->path } @pages ) . "\n" . "Expect: " . join( ", ", keys %page_tests ) );
 
     for my $page (@pages) {
         $tb->ok( $page->DOES('Statocles::Page'), 'must be a Statocles::Page' );
