@@ -56,6 +56,7 @@ subtest 'build' => sub {
     subtest 'check theme' => sub {
         my $iter = $site->theme->store->find_files;
         while ( my $theme_file = $iter->() ) {
+            next if $theme_file->basename =~ /^[.]/;
             next if $theme_file =~ /[.]ep$/;
             my $path = path( 'theme' => $theme_file );
             ok $build_dir->child( $path )->exists,
@@ -95,6 +96,7 @@ subtest 'deploy' => sub {
     subtest 'check theme' => sub {
         my $iter = $site->theme->store->find_files;
         while ( my $theme_file = $iter->() ) {
+            next if $theme_file->basename =~ /^[.]/;
             next if $theme_file =~ /[.]ep$/;
             ok $deploy_dir->child( 'theme', $theme_file )->exists,
                 'theme file ' . $theme_file . 'exists in deploy dir';

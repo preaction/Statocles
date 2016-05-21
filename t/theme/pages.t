@@ -17,6 +17,7 @@ my $app = Statocles::Theme->new(
 my %pages;
 my $iter = $SHARE_DIR->child( 'theme' )->iterator( { recurse => 1 } );
 while ( my $path = $iter->() ) {
+    next if $path->basename =~ /^[.]/;
     next unless $path->is_file;
     next if $path =~ /[.]ep$/;
     my $rel_path = $path->relative( $SHARE_DIR->child( 'theme' ) );
