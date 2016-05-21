@@ -245,6 +245,8 @@ More details on deploys are below.
 
 ## Images
 
+## Templates
+
 ## Data Attributes
 
 ### Disqus
@@ -253,11 +255,19 @@ More details on deploys are below.
 
 # Applications
 
+## Common Attributes
+
 ## Basic App
+
+### Templates
 
 ## Blog App
 
+### Templates
+
 ## Perldoc App
+
+### Templates
 
 # Plugins
 
