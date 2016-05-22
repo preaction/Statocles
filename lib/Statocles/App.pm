@@ -161,12 +161,13 @@ class|Statocles::Page> they use.
 sub template {
     my ( $self, $name ) = @_;
 
+    # Allow the site object to set the default layout
+    if ( $name eq 'layout.html' && !$self->_templates->{ $name } ) {
+        return $self->site->template( $name );
+    }
+
     my $path    = $self->_templates->{ $name }
                 ? $self->_templates->{ $name }
-                # XXX: Should we check for <template_dir>/layout.html before
-                # defaulting to site/layout.html?
-                : $name eq 'layout.html'
-                ? join "/", "site", $name
                 : join "/", $self->template_dir, $name;
 
     return $self->site->theme->template( $path );

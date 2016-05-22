@@ -240,10 +240,12 @@ has images => (
     # site.yml
     templates:
         sitemap.xml: custom/sitemap.xml
+        layout.html: custom/layout.html
 
 The custom templates to use for the site meta-template like
-C<sitemap.xml> and C<robots.txt>. A mapping of template names to
-template paths (relative to the theme root directory).
+C<sitemap.xml> and C<robots.txt>, or the site-wide default layout
+template. A mapping of template names to template paths (relative to the
+theme root directory).
 
 Developers should get site templates using L<the C<template>
 method|/template>.

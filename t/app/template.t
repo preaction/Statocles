@@ -57,6 +57,27 @@ subtest 'template' => sub {
             is $tmpl->path, 'custom/layout.html.ep';
         };
     };
+
+    subtest 'site overrides default layout' => sub {
+        my $site = build_test_site(
+            theme => $SHARE_DIR->child( 'theme' ),
+            templates => {
+                'layout.html' => 'custom/layout.html',
+            },
+        );
+
+        my $app = TestApp->new(
+            site => $site,
+            url_root => '/blog/',
+            pages => [],
+            template_dir => 'blog',
+        );
+
+        my $tmpl = $app->template( 'layout.html' );
+        isa_ok $tmpl, 'Statocles::Template';
+        is $tmpl->path, 'custom/layout.html.ep';
+    };
+
 };
 
 done_testing;
