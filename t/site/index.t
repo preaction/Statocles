@@ -17,9 +17,18 @@ sub test_site {
         ok !$build_dir->child( 'blog', 'index.html' )->exists,
             'site index renames app page';
 
-        my $dom = Mojo::DOM->new( $build_dir->child( '/blog/page/2/index.html' )->slurp_utf8 );
-        ok !$dom->at( '[href=/blog]' ), 'no link to /blog';
-        ok !$dom->at( '[href=/blog/index.html]' ), 'no link to /blog/index.html';
+        subtest 'links on index page are correct' => sub {
+            my $dom = Mojo::DOM->new( $build_dir->child( '/index.html' )->slurp_utf8 );
+            ok $dom->at( '[href=/blog/2014/06/02/more_tags/docs.html]' ), 'relative link is fixed'
+                or diag explain [ $dom->find( '[href]' )->map( attr => 'href' )->each ];
+        };
+
+        subtest 'links to index page are correct' => sub {
+            my $dom = Mojo::DOM->new( $build_dir->child( '/blog/page/2/index.html' )->slurp_utf8 );
+            ok !$dom->at( '[href=/blog]' ), 'no link to /blog';
+            ok !$dom->at( '[href=/blog/index.html]' ), 'no link to /blog/index.html';
+        };
+
     };
 
     subtest 'deploy' => sub {
@@ -29,9 +38,18 @@ sub test_site {
         ok !$deploy_dir->child( 'blog', 'index.html' )->exists,
             'site index renames app page';
 
-        my $dom = Mojo::DOM->new( $deploy_dir->child( '/blog/page/2/index.html' )->slurp_utf8 );
-        ok !$dom->at( '[href=/blog]' ), 'no link to /blog';
-        ok !$dom->at( '[href=/blog/index.html]' ), 'no link to /blog/index.html';
+        subtest 'links on index page are correct' => sub {
+            my $dom = Mojo::DOM->new( $build_dir->child( '/index.html' )->slurp_utf8 );
+            ok $dom->at( '[href=/blog/2014/06/02/more_tags/docs.html]' ), 'relative link is fixed'
+                or diag explain [ $dom->find( '[href]' )->map( attr => 'href' )->each ];
+        };
+
+        subtest 'inner pages link to site index' => sub {
+            my $dom = Mojo::DOM->new( $deploy_dir->child( '/blog/page/2/index.html' )->slurp_utf8 );
+            ok !$dom->at( '[href=/blog]' ), 'no link to /blog';
+            ok !$dom->at( '[href=/blog/index.html]' ), 'no link to /blog/index.html';
+        };
+
     };
 }
 
