@@ -28,7 +28,7 @@ subtest 'template' => sub {
         subtest 'layout template' => sub {
             my $tmpl = $app->template( 'layout.html' );
             isa_ok $tmpl, 'Statocles::Template';
-            is $tmpl->path, 'site/layout.html.ep';
+            is $tmpl->path, 'layout/default.html.ep';
         };
 
     };

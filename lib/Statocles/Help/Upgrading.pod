@@ -130,6 +130,25 @@ To fix this, make your string or array a key in your data hash:
 
 Deprecated in v0.075. Will be removed in v2.000.
 
+=item Using default layout "site/layout.html.ep" is deprecated
+
+The old default layout was located in the C<site> directory of the
+theme. This worked when there was only one default layout, but now there
+are multiple. So, the layouts were moved to their own directory:
+C<layout>. The default layout is now C<layout/default.html.ep>.
+
+To fix this, either move your current C<site/layout.html.ep> to
+C<layout/default.html.ep>, or explicitly override the default layout in
+your site config:
+
+    site:
+        args:
+            # ...
+            templates:
+                layout.html: site/layout.html
+
+Deprecated in v0.75. Will be removed in v2.000.
+
 =back
 
 =head1 BREAKING CHANGES

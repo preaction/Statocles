@@ -182,8 +182,8 @@ tag_text attribute|Statocles::App::Blog/tag_text>.
 
 =head1 Layouts
 
-When a page object is built, it is given a template and a layout. The layout is
-a special template called C<layout.html.ep> in the C<site> category that wraps
+When a page object is built, it is given a template and a layout. The default layout is
+a special template called C<default.html.ep> in the C<layout> category that wraps
 the content from the template, allowing a consistent site style in a single
 place.
 

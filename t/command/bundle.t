@@ -14,7 +14,7 @@ subtest 'theme' => sub {
         '--config' => "$config_fn",
         bundle => theme => 'default',
     );
-    my @site_layout = qw( theme site layout.html.ep );
+    my @site_layout = qw( theme layout default.html.ep );
     my @site_footer = qw( theme site footer.html.ep );
 
     subtest 'first time creates directories' => sub {
@@ -24,7 +24,7 @@ subtest 'theme' => sub {
         ok !$err, 'nothing on stderr' or diag "STDERR: $err";
         like $out, qr(Theme "default" written to "$theme_dir");
         is $tmp->child( @site_layout )->slurp_utf8,
-            $SHARE_DIR->parent->parent->child( qw( share theme default site layout.html.ep ) )->slurp_utf8;
+            $SHARE_DIR->parent->parent->child( qw( share theme default layout default.html.ep ) )->slurp_utf8;
         ok $tmp->child( @site_footer )->is_file;
     };
 
@@ -40,7 +40,7 @@ subtest 'theme' => sub {
         like $out, qr(Theme "default" written to "$theme_dir");
 
         is $tmp->child( @site_layout )->slurp_utf8,
-            $SHARE_DIR->parent->parent->child( qw( share theme default site layout.html.ep ) )->slurp_utf8;
+            $SHARE_DIR->parent->parent->child( qw( share theme default layout default.html.ep ) )->slurp_utf8;
         is $tmp->child( @site_footer )->slurp_utf8, 'SITE FOOTER';
     };
 
@@ -63,7 +63,7 @@ subtest 'theme' => sub {
         ok $tmp->child( qw( theme blog index.atom.ep ) )->is_file;
         ok $tmp->child( qw( theme site sitemap.xml.ep ) )->is_file;
         ok $tmp->child( qw( theme site robots.txt.ep ) )->is_file;
-        ok !$tmp->child( qw( theme site layout.html.ep ) )->is_file, 'layout is not bundled';
+        ok !$tmp->child( qw( theme layout default.html.ep ) )->is_file, 'layout is not bundled';
         ok !$tmp->child( qw( theme blog index.html.ep ) )->is_file, 'blog index is not bundled';
     };
 

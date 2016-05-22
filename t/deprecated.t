@@ -261,4 +261,26 @@ subtest 'data attributes that are not hashes' => sub {
     }
 };
 
+subtest 'default layout should be layout/default.html.ep not site/layout.html.ep' => sub {
+    require Statocles::Site;
+    if ( $Statocles::VERSION < 2 ) {
+        my $theme = tempdir();
+        $theme->child( 'site', 'layout.html.ep' )->touchpath;
+        my @warnings;
+        local $SIG{__WARN__} = sub { push @warnings, @_ };
+        my $site = Statocles::Site->new(
+            theme => $theme,
+            deploy => tempdir,
+        );
+        $site->template( 'layout.html' );
+        like $warnings[-1], qr{\QUsing default layout "site/layout.html.ep" is deprecated},
+            'default template warns';
+        $site->template( 'layout.html' );
+        is scalar @warnings, 1, 'only warn about default layout once';
+    }
+    else {
+        dies_ok { } 'layout/default.html.ep does not exist';
+    }
+};
+
 done_testing;

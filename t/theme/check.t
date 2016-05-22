@@ -227,6 +227,20 @@ my %app_vars = (
     },
 
     layout => {
+        'default.html.ep' => [
+            {
+                %common_vars,
+                self => $page{ normal },
+                page => $page{ normal },
+                app => $blog,
+            },
+            {
+                %common_vars,
+                self => $page{ escaped },
+                page => $page{ escaped },
+                doc => $document{ escaped },
+            },
+        ],
         'full-width.html.ep' => [
             {
                 %common_vars,
@@ -244,20 +258,6 @@ my %app_vars = (
     },
 
     site => {
-        'layout.html.ep' => [
-            {
-                %common_vars,
-                self => $page{ normal },
-                page => $page{ normal },
-                app => $blog,
-            },
-            {
-                %common_vars,
-                self => $page{ escaped },
-                page => $page{ escaped },
-                doc => $document{ escaped },
-            },
-        ],
         'sitemap.xml.ep' => {
             site => $site,
             pages => [ $page{ list }, $page{ normal }, $page{ escaped } ],

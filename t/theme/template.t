@@ -50,7 +50,7 @@ sub read_templates {
         theme => $theme,
     );
 
-    my $layout_fn = $dir->child( 'site', 'layout.html.ep' );
+    my $layout_fn = $dir->child( 'layout', 'default.html.ep' );
     my $layout = Statocles::Template->new(
         path => $layout_fn->relative( $dir ),
         content => $layout_fn->slurp_utf8,
@@ -71,7 +71,7 @@ sub read_templates {
         'blog/index.html' => $index,
         'blog/index.rss' => $rss,
         'blog/index.atom' => $atom,
-        'site/layout.html' => $layout,
+        'layout/default.html' => $layout,
         'site/include/extra.html' => $extra,
     );
 }
@@ -82,7 +82,7 @@ subtest 'templates from directory' => sub {
         'blog/index.html',
         'blog/index.rss',
         'blog/index.atom',
-        'site/layout.html',
+        'layout/default.html',
         'site/include/extra.html',
     );
 

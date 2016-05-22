@@ -96,7 +96,7 @@ subtest 'root site' => sub {
             };
 
             subtest 'theme store' => sub {
-                my $path = Path::Tiny->new( qw( site layout.html.ep ) );
+                my $path = Path::Tiny->new( qw( layout default.html.ep ) );
                 my $store = $t->app->site->theme->store;
                 my $tmpl = $store->read_file( $path );
                 $tmpl =~ s{\Q</body>}{<p>Extra footer!</p></body>};

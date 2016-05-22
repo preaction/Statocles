@@ -743,8 +743,22 @@ sub template {
         @parts      = $self->_templates->{ $parts[0] }
                     ? $self->_templates->{ $parts[0] }
                     : $parts[0] eq 'layout.html'
-                    ? ( "site", @parts )
+                    ? ( 'layout', 'default.html' )
                     : ( $self->template_dir, @parts );
+    }
+
+    # If the default layout doesn't exist, use the old default.
+    # Remove this in v2.0
+    if ( $parts[0] eq 'layout' && $parts[1] eq 'default.html'
+        && !$self->theme->store->path->child( @parts )->is_file
+        && $self->theme->store->path->child( site => 'layout.html.ep' )->is_file
+    ) {
+        state $warned;
+        if ( !$warned ) {
+            warn 'Using default layout "site/layout.html.ep" is deprecated and will be removed in v2.0. Move your default layout to "layout/default.html.ep" to fix this warning. See Statocles::Help::Upgrading.';
+        }
+        $warned = 1;
+        return $self->theme->template( qw( site layout.html ) );
     }
 
     return $self->theme->template( @parts );
