@@ -168,6 +168,12 @@ sub read_document {
     my $obj = eval { $class->new( %doc, path => $path, store => $self ) };
     if ( $@ ) {
         if ( ref $@ && $@->isa( 'Error::TypeTiny::Assertion' ) ) {
+            if ( $@->attribute_name eq 'date' ) {
+                die sprintf qq{Could not parse date "%s" in "%s": Does not match "YYYY-MM-DD" or "YYYY-MM-DD HH:MM:SS"\n},
+                    $@->value,
+                    $relative_path;
+            }
+
             die sprintf qq{Error creating document in "%s": Value "%s" is not valid for attribute "%s" (expected "%s")\n},
                 $relative_path,
                 $@->value,
@@ -222,17 +228,6 @@ sub parse_frontmatter {
     }
 
     $doc->{content} = join "\n", @lines, "";
-
-    if ( exists $doc->{date} ) {
-        eval {
-            $doc->{date} = DateTimeObj->assert_coerce( $doc->{date} );
-        };
-        if ( $@ ) {
-            die sprintf qq{Could not parse date "%s" in "%s": Does not match "YYYY-MM-DD" or "YYYY-MM-DD HH:MM:SS"\n},
-                $doc->{date},
-                $from;
-        }
-    }
 
     return %$doc;
 }
