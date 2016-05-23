@@ -1,6 +1,53 @@
 Changelog for Statocles
 
-0.074 2016-03-26T04:51:19
+0.075 2016-05-23T03:13:28
+ - allow indexes to the sections method
+ - move date parsing into document class
+ - fix relative links on index page getting broken
+ - add tests for relative links on index page
+ - move default layout to layout directory
+ - allow overriding the layout for the entire site
+ - add sections for template overrides to config guide
+ - allow template overrides in the site object
+ - ignore hidden files in theme test
+ - show the page list when count is wrong in tests
+ - fill in links in new documentation
+ - add initial config and install guides
+ - warn about links with empty href destination
+ - fill in more of the content guide
+ - clarify the safety of HTML escaping in theme guide
+ - fix more in the new theme docs
+ - fix doc example for begin/end
+ - edit the theme guide to be clearer and such
+ - use the full-width layout for doc pages
+ - start filling in more of the content guide
+ - fix linkcheck plugin marking all ".." as broken
+ - finish the new theme guide
+ - pass-through the document data attr to the page
+ - bundle theme to site theme directory only
+ - allow bundling of specific files from a theme
+ - add demonstration of syntax highlighter to guide
+ - remove highlighting from yaml block
+ - fix template directive example escaping
+ - add better embedded perl examples
+ - more progress on theme guide
+ - start layout section of documentation
+ - add start of managing content docs
+ - add initial draft of theme tutorial
+ - deprecate document data attrs that are not hashes
+ - move content sections to page object
+ - update statocles site templates from default theme
+ - add full-width layout template to remove sidebar
+ - fix old content sections being shown in templates
+ - move sidebar to layout
+ - clone the template state when merging for safety
+ - add template object to default theme tests
+ - pass content sections between templates in pages
+ - add merge_state method to templates
+ - add content sections to template helper
+ - add release v0.074 announcement
+
+0.074 2016-03-26T04:51:19Z
  - wrap all errors from Pod::Weaver with more detail
  - add better error message when weaver.ini is missing
  - use local time zone everywhere
