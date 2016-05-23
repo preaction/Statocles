@@ -3,7 +3,7 @@ title: Foo Other
 ---
 
 * [Index](/index.html)
-* [Foo Index](/foo/index.html)
+* [Foo Index](index.html)
 
 # Foo Other
 

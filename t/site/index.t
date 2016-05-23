@@ -2,6 +2,7 @@
 use Test::Lib;
 use My::Test;
 use Statocles::App::Blog;
+use Statocles::App::Basic;
 use Mojo::DOM;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
 
@@ -74,6 +75,42 @@ subtest 'index.html is optional' => \&test_site, build_test_site_apps(
         blog => $blog,
     },
 );
+
+subtest 'index links in basic app' => sub {
+    my $basic = Statocles::App::Basic->new(
+        url_root => '/page',
+        store => $SHARE_DIR->child( qw( app basic ) ),
+    );
+
+    my ( $site, $build_dir, $deploy_dir ) = build_test_site_apps(
+        $SHARE_DIR,
+        base_url => 'http://example.com/mysite',
+        index => '/page/foo/other.html',
+        apps => {
+            basic => $basic,
+        },
+    );
+
+    $site->build;
+
+    ok $build_dir->child( 'index.html' )->exists,
+        'site index renames app page';
+    ok !$build_dir->child( 'page', 'foo', 'other.html' )->exists,
+        'site index renames app page';
+
+    subtest 'links on index page are correct' => sub {
+        my $dom = Mojo::DOM->new( $build_dir->child( '/index.html' )->slurp_utf8 );
+        ok $dom->at( '[href=/mysite/page/foo/index.html]' ), 'relative link is fixed'
+            or diag explain [ $dom->find( '[href]' )->map( attr => 'href' )->each ];
+    };
+
+    subtest 'links to index page are correct' => sub {
+        my $dom = Mojo::DOM->new( $build_dir->child( '/page/foo/index.html' )->slurp_utf8 );
+        ok !$dom->at( '[href=/mysite/page/foo/other.html]' ), 'no link to /page/foo/other.html';
+        my $link = $dom->find( 'a[href]' )->grep( text => 'Foo Other' )->first;
+        is $link->attr( 'href' ), '/mysite/', 'link to index';
+    };
+};
 
 subtest 'error messages' => sub {
 

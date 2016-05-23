@@ -471,6 +471,7 @@ sub build {
     # Collect all the pages for this site
     # XXX: Should we allow sites without indexes?
     my $index_path = $self->index;
+    my $index_orig_path;
     if ( $index_path && $index_path !~ m{^/} ) {
         $self->log->warn(
             sprintf 'site "index" property should be absolute path to index page (got "%s")',
@@ -506,6 +507,7 @@ sub build {
                     $app_name,
                 );
                 $path = '/index.html';
+                $index_orig_path = $page->path;
                 $page->path( '/index.html' );
             }
 
@@ -587,12 +589,19 @@ sub build {
 
     for my $page ( @pages ) {
         my $content = $page->render( %args );
+        my $is_index = $page->path eq '/index.html';
 
         if ( !ref $content ) {
             my $dom = Mojo::DOM->new( $content );
             for my $attr ( qw( src href ) ) {
                 for my $el ( $dom->find( "[$attr]" )->each ) {
                     my $url = $el->attr( $attr );
+
+                    # Fix relative links on the index page
+                    if ( $is_index && $index_orig_path && $url !~ m{^([A-Za-z]:|/)} ) {
+                        $url = join "/", $index_orig_path->parent, $url;
+                    }
+
                     next unless $url =~ m{^/(?:[^/]|$)};
 
                     # Rewrite links to the index app's index page
