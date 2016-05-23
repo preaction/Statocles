@@ -59,7 +59,7 @@ subtest 'content rewrite' => sub {
         };
 
         subtest 'sections' => sub {
-            my $dom = Mojo::DOM->new( $page->sections(1) );
+            my $dom = Mojo::DOM->new( $page->sections(0) );
             ok $dom->at( 'a[href=/path/to/blog/post/relative.html]' ), 'relative link is fixed';
             ok $dom->at( 'a[href=/absolute.html]' ), 'absolute link is ignored';
             ok $dom->at( 'a[href=http://example.net]' ), 'full link is ignored';
@@ -85,7 +85,7 @@ subtest 'content rewrite' => sub {
         };
 
         subtest 'sections' => sub {
-            my $dom = Mojo::DOM->new( $page->sections(1) );
+            my $dom = Mojo::DOM->new( $page->sections(0) );
             ok $dom->at( 'a[href=http://example.com/base/path/to/blog/post/relative.html]' ), 'relative link is fixed';
             ok $dom->at( 'a[href=http://example.com/base/absolute.html]' ), 'absolute link is fixed';
             ok $dom->at( 'a[href=http://example.net]' ), 'full link is ignored';

@@ -251,6 +251,25 @@ ENDTEMPLATE
     my @sections = split /\n---\n/, $doc->content;
     my $expect = join "\n", $expect_sections[0], "MORE...", "", "";
     eq_or_diff $output, $expect;
+
+    subtest 'scalar context' => sub {
+        is scalar $page->sections, 2, 'scalar context returns 2 sections';
+    };
+
+    subtest 'index arguments' => sub {
+        subtest 'one section' => sub {
+            my @sections = $page->sections( 0 );
+            is scalar @sections, 1, '1 section returned';
+            eq_or_diff $sections[0], $expect_sections[0], 'section is correct';
+        };
+
+        subtest 'multiple sections' => sub {
+            my @sections = $page->sections( 0..1 );
+            is scalar @sections, 2, '2 sections returned';
+            eq_or_diff $sections[0], $expect_sections[0], 'section 0 is correct';
+            eq_or_diff $sections[1], $expect_sections[1], 'section 1 is correct';
+        };
+    };
 };
 
 subtest 'page tags' => sub {

@@ -151,9 +151,18 @@ around vars => sub {
 =method sections
 
     my @sections = $page->sections;
+    my $number_of_sections = $page->sections;
+    my @first_sections = $page->sections( 0, 1 );
 
 Get a list of rendered HTML content divided into sections. The Markdown "---"
-marker divides sections.
+marker divides sections. In scalar context, returns the number of sections.
+You can also pass the indexes of the sections you want as arguments.
+
+For example, to loop over sections in the template:
+
+    % for my $i ( 0..$page->sections ) {
+        <%= $page->sections( $i ) %>
+    % }
 
 =cut
 
@@ -164,20 +173,23 @@ has _rendered_sections => (
 );
 
 sub sections {
-    my ( $self ) = @_;
+    my ( $self, @indexes ) = @_;
 
+    my @sections;
     if ( $self->_has_rendered_sections ) {
-        return @{ $self->_rendered_sections };
+        @sections = @{ $self->_rendered_sections };
+    }
+    else {
+        @sections =
+            map { $self->markdown->markdown( $_ ) }
+            map { $self->_render_content_template( $_, {} ) }
+            split /\n---\n/,
+            $self->document->content;
+
+        $self->_rendered_sections( \@sections );
     }
 
-    my @sections =
-        map { $self->markdown->markdown( $_ ) }
-        map { $self->_render_content_template( $_, {} ) }
-        split /\n---\n/,
-        $self->document->content;
-
-    $self->_rendered_sections( \@sections );
-    return @sections;
+    return @indexes ? @sections[ @indexes ] : @sections;
 }
 
 =method tags
