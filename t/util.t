@@ -1,6 +1,6 @@
 use Test::Lib;
 use My::Test;
-use Statocles::Util qw( dircopy run_editor uniq_by );
+use Statocles::Util qw( dircopy run_editor uniq_by derp );
 use Statocles::Link;
 my $SHARE_DIR = path( __DIR__, 'share' );
 
@@ -74,6 +74,52 @@ subtest 'uniq_by' => sub {
     );
 
     cmp_deeply [ uniq_by { $_->href } @links ], [ @links[0,1,2] ];
+};
+
+subtest 'derp' => sub {
+    my @warnings;
+    local $SIG{__WARN__} = sub { push @warnings, @_ };
+
+    subtest 'one argument' => sub {
+        subtest 'first call warns' => sub {
+            derp 'Foo';
+            is scalar @warnings, 1, '1 warning issued';
+            is $warnings[-1], "Foo. See Statocles::Help::Upgrading\n",
+                'derp message directs to upgrading guide';
+            @warnings = ();
+        };
+
+        subtest 'second call with same args does not warn' => sub {
+            derp 'Foo';
+            is scalar @warnings, 0, "doesn't warn for same text a second time";
+            @warnings = ();
+        };
+    };
+
+    subtest 'many arguments' => sub {
+        subtest 'first call warns' => sub {
+            derp 'Foo %s', 'Bar';
+            is scalar @warnings, 1, '1 warning issued';
+            is $warnings[-1], "Foo Bar. See Statocles::Help::Upgrading\n",
+                'derp message directs to upgrading guide';
+            @warnings = ();
+        };
+
+        subtest 'second call with same args does not warn' => sub {
+            derp 'Foo %s', 'Bar';
+            is scalar @warnings, 0, "doesn't warn for same args a second time";
+            @warnings = ();
+        };
+
+        subtest 'second call with different args warns' => sub {
+            derp 'Foo %s', 'Baz';
+            is scalar @warnings, 1, '1 warning issued';
+            is $warnings[-1], "Foo Baz. See Statocles::Help::Upgrading\n",
+                'derp message directs to upgrading guide';
+            @warnings = ();
+        };
+    };
+
 };
 
 done_testing;

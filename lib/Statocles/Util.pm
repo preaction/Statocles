@@ -4,9 +4,10 @@ package Statocles::Util;
 
 use Statocles::Base;
 use Exporter 'import';
+use Mojo::JSON qw( to_json );
 
 our @EXPORT_OK = qw(
-    dircopy run_editor uniq_by
+    dircopy run_editor uniq_by derp
 );
 
 =sub dircopy
@@ -79,6 +80,27 @@ sub uniq_by(&@) {
         push @out, $i if !$found{ $sub->() }++;
     }
     return @out;
+}
+
+=sub derp
+
+    derp "This feature is deprecated in file '%s'", $file;
+
+Print out a deprecation message as a warning. A message will only be
+printed once for each set of arguments.
+
+=cut
+
+our %DERPED;
+sub derp(@) {
+    my @args = @_;
+    my $key = to_json \@args;
+    return if $DERPED{ $key };
+    if ( $args[0] !~ /\.$/ ) {
+        $args[0] .= '.';
+    }
+    warn sprintf( $args[0], @args[1..$#args] ). " See Statocles::Help::Upgrading\n";
+    $DERPED{ $key } = 1;
 }
 
 1;
