@@ -764,7 +764,7 @@ sub template {
     ) {
         state $warned;
         if ( !$warned ) {
-            warn 'Using default layout "site/layout.html.ep" is deprecated and will be removed in v2.0. Move your default layout to "layout/default.html.ep" to fix this warning. See Statocles::Help::Upgrading.';
+            warn qq{Using default layout "site/layout.html.ep" is deprecated and will be removed in v2.0. Move your default layout to "layout/default.html.ep" to fix this warning. See Statocles::Help::Upgrading.\n};
         }
         $warned = 1;
         return $self->theme->template( qw( site layout.html ) );
