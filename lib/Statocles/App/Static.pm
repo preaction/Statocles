@@ -4,6 +4,7 @@ package Statocles::App::Static;
 
 use Statocles::Base 'Class';
 use Statocles::Page::File;
+use Statocles::Util qw( derp );
 with 'Statocles::App';
 
 =attr store
@@ -30,7 +31,7 @@ Get the L<page objects|Statocles::Page> for this app.
 sub pages {
     my ( $self ) = @_;
 
-    warn qq{Statocles::App::Static has been replaced by Statocles::App::Basic and will be removed in 2.0. Change the app class to "Statocles::App::Basic" to silence this message.\n};
+    derp qq{Statocles::App::Static has been replaced by Statocles::App::Basic and will be removed in 2.0. Change the app class to "Statocles::App::Basic" to silence this message.};
 
     my @pages;
     my $iter = $self->store->find_files( include_documents => 1 );

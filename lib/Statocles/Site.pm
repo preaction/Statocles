@@ -9,6 +9,7 @@ use Mojo::URL;
 use Mojo::DOM;
 use Mojo::Log;
 use Statocles::Page::Plain;
+use Statocles::Util qw( derp );
 use List::UtilsBy qw( uniq_by );
 
 =attr title
@@ -762,11 +763,7 @@ sub template {
         && !$self->theme->store->path->child( @parts )->is_file
         && $self->theme->store->path->child( site => 'layout.html.ep' )->is_file
     ) {
-        state $warned;
-        if ( !$warned ) {
-            warn qq{Using default layout "site/layout.html.ep" is deprecated and will be removed in v2.0. Move your default layout to "layout/default.html.ep" to fix this warning. See Statocles::Help::Upgrading.\n};
-        }
-        $warned = 1;
+        derp qq{Using default layout "site/layout.html.ep" is deprecated and will be removed in v2.0. Move your default layout to "layout/default.html.ep" to fix this warning.};
         return $self->theme->template( qw( site layout.html ) );
     }
 

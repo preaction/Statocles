@@ -4,6 +4,7 @@ package Statocles::App::Plain;
 
 use Statocles::Base 'Class';
 extends 'Statocles::App::Basic';
+use Statocles::Util qw( derp );
 
 =attr store
 
@@ -12,7 +13,7 @@ The L<store|Statocles::Store> containing this app's documents. Required.
 =cut
 
 before pages => sub {
-    warn qq{Statocles::App::Plain has been renamed to Statocles::App::Basic and will be removed in 2.0. Change the app class to "Statocles::App::Basic" to silence this message.\n};
+    derp qq{Statocles::App::Plain has been renamed to Statocles::App::Basic and will be removed in 2.0. Change the app class to "Statocles::App::Basic" to silence this message.};
 };
 
 =method command
@@ -25,7 +26,7 @@ viewing pages.
 =cut
 
 before command => sub {
-    warn qq{Statocles::App::Plain has been renamed to Statocles::App::Basic and will be removed in 2.0. Change the app class to "Statocles::App::Basic" to silence this message.\n};
+    derp qq{Statocles::App::Plain has been renamed to Statocles::App::Basic and will be removed in 2.0. Change the app class to "Statocles::App::Basic" to silence this message.};
 };
 
 1;

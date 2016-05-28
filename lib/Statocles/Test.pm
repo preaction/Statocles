@@ -3,7 +3,7 @@ package Statocles::Test;
 # ABSTRACT: Common test routines for Statocles
 
 use Statocles::Base;
-use Statocles::Util qw( dircopy );
+use Statocles::Util qw( dircopy derp );
 
 use base qw( Exporter );
 our @EXPORT_OK = qw(
@@ -109,7 +109,7 @@ sub build_test_site_apps {
 
 sub test_constructor {
     my ( $class, %args ) = @_;
-    warn 'Statocles::Test::test_constructor is deprecated and will be removed in v1.000';
+    derp 'Statocles::Test::test_constructor is deprecated and will be removed in v1.000';
     my %required = $args{required} ? ( %{ $args{required} } ) : ();
     my %defaults = $args{default} ? ( %{ $args{default} } ) : ();
     require Test::Builder;
@@ -163,7 +163,7 @@ sub test_constructor {
 
 sub test_pages {
     my ( $site, $app ) = ( shift, shift );
-    warn 'Statocles::Test::test_pages is deprecated and will be removed in v1.000';
+    derp 'Statocles::Test::test_pages is deprecated and will be removed in v1.000';
     require Test::Builder;
 
     my %opt;

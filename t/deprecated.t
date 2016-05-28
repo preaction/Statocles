@@ -75,7 +75,7 @@ subtest 'Statocles::Store::File' => sub {
     local $SIG{__WARN__} = sub { push @warnings, @_ };
     eval { require Statocles::Store::File; };
     if ( $Statocles::VERSION < 1 ) {
-        like $warnings[0], qr{\QStatocles::Store::File is deprecated and will be removed in v1.000. Please use Statocles::Store instead. See Statocles::Help::Upgrading for more information.};
+        like $warnings[0], qr{\QStatocles::Store::File is deprecated and will be removed in v1.000. Please use Statocles::Store instead. See Statocles::Help::Upgrading};
     }
     else {
         ok $@, 'Statocles::Store::File failed to load';
@@ -116,6 +116,7 @@ subtest 'Statocles::App::Plain' => sub {
             local $SIG{__WARN__} = sub { push @warnings, @_ };
             $app->pages;
             like $warnings[0], qr{\QStatocles::App::Plain has been renamed to Statocles::App::Basic and will be removed in 2.0. Change the app class to "Statocles::App::Basic" to silence this message.}, 'warn on pages method';
+            %Statocles::Util::DERPED = ();
         };
 
         subtest 'command shows warning' => sub {
@@ -125,6 +126,7 @@ subtest 'Statocles::App::Plain' => sub {
                 $app->command( 'name', 'help' );
             };
             like $warnings[0], qr{\QStatocles::App::Plain has been renamed to Statocles::App::Basic and will be removed in 2.0. Change the app class to "Statocles::App::Basic" to silence this message.}, 'warn on pages method';
+            %Statocles::Util::DERPED = ();
         };
     }
     else {

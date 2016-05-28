@@ -4,6 +4,7 @@ package Statocles::Document;
 
 use Statocles::Base 'Class';
 use Statocles::Image;
+use Statocles::Util qw( derp );
 
 =attr path
 
@@ -328,7 +329,7 @@ around BUILDARGS => sub {
     my ( $orig, $self, @args ) = @_;
     my $args = $self->$orig( @args );
     if ( defined $args->{data} && ref $args->{data} ne 'HASH' ) {
-        warn sprintf qq{Invalid data attribute in document "%s". Data attributes that are not hashes are deprecated and will be removed in v2.0. Please use a hash instead. See Statocles::Help::Upgrading for more information.\n},
+        derp qq{Invalid data attribute in document "%s". Data attributes that are not hashes are deprecated and will be removed in v2.0. Please use a hash instead.},
             $args->{path};
     }
     return $args;

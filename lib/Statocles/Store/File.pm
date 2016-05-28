@@ -3,9 +3,10 @@ package Statocles::Store::File;
 # ABSTRACT: (DEPRECATED) A store made up of plain files
 
 use Statocles::Base 'Class';
+use Statocles::Util qw( derp );
 extends 'Statocles::Store';
 
-warn "Statocles::Store::File is deprecated and will be removed in v1.000. Please use Statocles::Store instead. See Statocles::Help::Upgrading for more information.\n";
+derp "Statocles::Store::File is deprecated and will be removed in v1.000. Please use Statocles::Store instead.";
 
 1;
 __END__

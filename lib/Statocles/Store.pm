@@ -4,6 +4,7 @@ package Statocles::Store;
 
 use Statocles::Base 'Class';
 use Scalar::Util qw( weaken blessed );
+use Statocles::Util qw( derp );
 use Statocles::Document;
 use YAML;
 use File::Spec::Functions qw( splitdir );
@@ -259,7 +260,7 @@ sub write_document {
     $full_path->touchpath->spew_utf8( join "\n", $header, '---', $content );
 
     if ( defined wantarray ) {
-        warn "Statocles::Store->write_document returning a value is deprecated and will be removed in v1.0. Use Statocles::Store->path to find the full path to the document.";
+        derp "Statocles::Store->write_document returning a value is deprecated and will be removed in v1.0. Use Statocles::Store->path to find the full path to the document.";
     }
     return $full_path;
 }
