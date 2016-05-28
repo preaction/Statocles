@@ -281,6 +281,18 @@ subtest '--clean' => sub {
         _git_run( $remotegit, checkout => '-f', 'gh-pages' );
         ok !$remotework->child( 'needs-cleaning.txt' )->is_file, 'pushed to remote';
     };
+
+    subtest 'clean dies when content/deploy are sharing the same branch' => sub {
+        my $tmpdir = tempdir( @temp_args );
+        my ( $deploy, $build_store, $workdir, $remotedir )
+            = make_deploy( $tmpdir, branch => 'master' );
+        throws_ok {
+            $deploy->deploy( $build_store, clean => 1 );
+        } qr{\Q--clean on the same branch as deploy will destroy all content. Stopping.};
+        ok $workdir->child( qw( blog 2014 04 23 slug index.markdown ) )->is_file,
+            'content file /blog/2014/04/23/slug/index.markdown is not destroyed';
+    };
+
 };
 
 subtest '--message' => sub {

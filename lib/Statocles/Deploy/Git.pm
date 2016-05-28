@@ -97,6 +97,9 @@ around 'deploy' => sub {
     }
 
     if ( $options{ clean } ) {
+        if ( $current_branch eq $self->branch ) {
+            die "--clean on the same branch as deploy will destroy all content. Stopping.\n";
+        }
         $self->site->log->info( sprintf 'Cleaning old content in branch "%s"', $self->branch );
         $self->_run( $git, 'rm', '-r', '-f', '.' );
         delete $options{ clean };
