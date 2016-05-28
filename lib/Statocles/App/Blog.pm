@@ -135,6 +135,19 @@ has _post_pages => (
     predicate => '_has_cached_post_pages',
 );
 
+# The default post information hash
+has _default_post => (
+    is => 'rw',
+    isa => HashRef,
+    lazy => 1,
+    default => sub {
+        {
+            tags => undef,
+            content => "Markdown content goes here.\n",
+        }
+    },
+);
+
 =method command
 
     my $exitval = $app->command( $app_name, @args );
@@ -143,13 +156,6 @@ Run a command on this app. The app name is used to build the help, so
 users get exactly what they need to run.
 
 =cut
-
-our $default_post = {
-    tags => undef,
-    content => <<'ENDCONTENT',
-Markdown content goes here.
-ENDCONTENT
-};
 
 my $USAGE_INFO = <<'ENDHELP';
 Usage:
@@ -178,7 +184,7 @@ sub command {
         );
 
         my %doc = (
-            %$default_post,
+            %{ $self->_default_post },
             (map { defined $opt{$_} ? ( $_, $opt{$_} ) : () } @doc_opts),
             title => join " ", @argv[1..$#argv],
         );
