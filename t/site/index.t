@@ -102,6 +102,8 @@ subtest 'index links in basic app' => sub {
         my $dom = Mojo::DOM->new( $build_dir->child( '/index.html' )->slurp_utf8 );
         ok $dom->at( '[href=/mysite/page/foo/index.html]' ), 'relative link is fixed'
             or diag explain [ $dom->find( '[href]' )->map( attr => 'href' )->each ];
+        ok $dom->at( '[href=http://google.com]' ), 'full url is not touched'
+            or diag explain [ $dom->find( '[href]' )->map( attr => 'href' )->each ];
     };
 
     subtest 'links to index page are correct' => sub {
