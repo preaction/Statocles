@@ -1,6 +1,16 @@
 Changelog for Statocles
 
-0.075 2016-05-23T03:13:28
+0.076 2016-05-28T04:13:14
+ - fix index links with full urls being rewritten
+ - move default post info to app attribute
+ - fix --clean destroying all content in git repo
+ - unify existing deprecation messages
+ - add deprecation warning utility
+ - remove code line from deprecation message
+ - add outline for new develop guide
+ - add release v0.075 announcement
+
+0.075 2016-05-23T03:13:28Z
  - allow indexes to the sections method
  - move date parsing into document class
  - fix relative links on index page getting broken
