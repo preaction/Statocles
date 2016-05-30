@@ -31,4 +31,12 @@ subtest 'parse string' => sub {
     };
 };
 
+subtest 'stringify' => sub {
+    my $person = Statocles::Person->new(
+        name => 'Doug Bell',
+        email => 'doug@example.com',
+    );
+    is "$person", 'Doug Bell', 'object stringifies to name only';
+};
+
 done_testing;

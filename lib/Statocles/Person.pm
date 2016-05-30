@@ -42,6 +42,9 @@ backwards-compatibility.
 =cut
 
 use Statocles::Base 'Class';
+use overload
+    q{""} => sub { shift->name },
+    ;
 
 =attr name
 
