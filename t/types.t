@@ -1,6 +1,6 @@
 use Test::Lib;
 use My::Test;
-use Statocles::Types qw( Link LinkArray LinkHash DateTimeObj );
+use Statocles::Types qw( Link LinkArray LinkHash DateTimeObj Person );
 
 subtest 'Link types' => sub {
 
@@ -120,6 +120,29 @@ subtest 'DateTimeObj' => sub {
         cmp_deeply $got, $expect, 'parse DateTime::Moonpig from "YYYY-MM-DD HH:MM:SS"'
             or diag explain $got, $expect;
     };
+};
+
+subtest 'Person' => sub {
+
+    subtest 'from String' => sub {
+        subtest 'name only' => sub {
+            my $person = Person->coerce( "Doug Bell" );
+            cmp_deeply $person, Statocles::Person->new( name => "Doug Bell" );
+        };
+        subtest 'name + email' => sub {
+            my $person = Person->coerce( 'Doug Bell <doug@example.com>' );
+            cmp_deeply $person, Statocles::Person->new( name => "Doug Bell", email => 'doug@example.com' );
+        };
+    };
+
+    subtest 'from Hashref' => sub {
+        my $person = Person->coerce( { name => "Doug Bell", email => 'doug@example.com' } );
+        cmp_deeply $person, Statocles::Person->new(
+            name => "Doug Bell",
+            email => 'doug@example.com',
+        );
+    };
+
 };
 
 done_testing;

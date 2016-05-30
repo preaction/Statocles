@@ -7,6 +7,7 @@ use warnings;
 use feature qw( :5.10 );
 use Type::Library -base, -declare => qw(
     Store Theme Link LinkArray LinkHash DateTimeObj DateStr DateTimeStr
+    Person
 );
 use Type::Utils -all;
 use Types::Standard -types;
@@ -23,6 +24,10 @@ coerce Theme, from InstanceOf['Path::Tiny'], via { require Statocles::Theme; Sta
 class_type Link, { class => "Statocles::Link" };
 coerce Link, from HashRef, via { Statocles::Link->new( $_ ) };
 coerce Link, from Str, via { Statocles::Link->new( href => $_ ) };
+
+class_type Person, { class => 'Statocles::Person' };
+coerce Person, from HashRef, via { Statocles::Person->new( $_ ) };
+coerce Person, from Str, via { Statocles::Person->new( $_ ) };
 
 declare LinkArray, as ArrayRef[Link], coerce => 1;
 coerce LinkArray, from ArrayRef[HashRef],
@@ -81,6 +86,7 @@ sub DateTime::Moonpig::tzoffset {
 # Down here to resolve circular dependencies
 require Statocles::Store;
 require Statocles::Link;
+require Statocles::Person;
 
 1;
 __END__
