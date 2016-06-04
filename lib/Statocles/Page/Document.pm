@@ -6,6 +6,7 @@ use Statocles::Base 'Class';
 with 'Statocles::Page';
 use Statocles::Template;
 use Statocles::Store;
+use Statocles::Person;
 
 =attr document
 
@@ -38,9 +39,10 @@ The author of the page.
 
 has author => (
     is => 'rw',
-    isa => Str,
+    isa => Person,
+    coerce => Person->coercion,
     lazy => 1,
-    default => sub { $_[0]->document->author || '' },
+    default => sub { $_[0]->document->author || Statocles::Person->new( name => '' ) },
 );
 
 =attr date

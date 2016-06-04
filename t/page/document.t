@@ -129,7 +129,7 @@ subtest 'constructor' => sub {
             },
             default => {
                 title => '',
-                author => '',
+                author => Statocles::Person->new( name => '' ),
             },
         );
     };

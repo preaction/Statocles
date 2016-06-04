@@ -54,13 +54,23 @@ has title => (
     author: preaction <doug@example.com>
     ---
 
-The author of this document. Optional.
+The author of this document. Optional. Either a simple string containing
+the author's name and optionally, in E<gt>E<lt>, the author's e-mail address,
+or a hashref of L<Statocles::Person attributes|Statocles::Person/ATTRIBUTES>.
+
+    ---
+    # Using Statocles::Person attributes
+    author:
+        name: Doug Bell
+        email: doug@example.com
+    ---
 
 =cut
 
 has author => (
     is => 'rw',
-    isa => Str,
+    isa => Person,
+    coerce => Person->coercion,
 );
 
 =attr status
