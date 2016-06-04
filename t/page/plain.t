@@ -17,6 +17,7 @@ subtest 'constructor' => sub {
         default => {
             search_change_frequency => 'weekly',
             search_priority => 0.5,
+            author => Statocles::Person->new( name => '' ),
             date => sub {
                 isa_ok $_, 'DateTime::Moonpig';
             },

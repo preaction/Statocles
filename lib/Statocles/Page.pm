@@ -5,6 +5,7 @@ package Statocles::Page;
 use Statocles::Base 'Role';
 use Statocles::Template;
 use Statocles::Util qw( uniq_by );
+use Statocles::Person;
 
 =attr site
 
@@ -55,6 +56,19 @@ has title => (
     is => 'rw',
     isa => Str,
     default => '',
+);
+
+=attr author
+
+The author of the page.
+
+=cut
+
+has author => (
+    is => 'rw',
+    isa => Person,
+    coerce => Person->coercion,
+    default => sub { Statocles::Person->new( name => '' ) },
 );
 
 =attr type

@@ -80,6 +80,10 @@ subtest 'attribute defaults' => sub {
     subtest 'search_priority' => sub {
         is $page->search_priority, 0.3;
     };
+
+    subtest 'author' => sub {
+        cmp_deeply $page->author, Statocles::Person->new( name => '' );
+    };
 };
 
 subtest 'date' => sub {

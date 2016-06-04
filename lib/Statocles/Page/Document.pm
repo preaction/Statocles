@@ -6,7 +6,6 @@ use Statocles::Base 'Class';
 with 'Statocles::Page';
 use Statocles::Template;
 use Statocles::Store;
-use Statocles::Person;
 
 =attr document
 
@@ -37,10 +36,7 @@ The author of the page.
 
 =cut
 
-has author => (
-    is => 'rw',
-    isa => Person,
-    coerce => Person->coercion,
+has '+author' => (
     lazy => 1,
     default => sub { $_[0]->document->author || Statocles::Person->new( name => '' ) },
 );
