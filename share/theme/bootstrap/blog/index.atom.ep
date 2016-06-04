@@ -5,7 +5,13 @@
     <updated><%= $self->date->strftime('%Y-%m-%dT%H:%M:%SZ') %></updated>
     <link rel="self" href="<%= $site->url( $self->path ) %>"/>
     <link rel="alternate" href="<%= $site->url( $self->links( 'alternate' )->href ) %>"/>
+    % if ( $page->author ) {
+    <author>
+        <name><%= $page->author->name %></name>
+    </author>
+    % }
     <generator version="<%= $Statocles::VERSION %>">Statocles</generator>
+
     % for my $p ( @$pages ) {
     <entry>
         <id><%= $site->url( $p->path ) %></id>

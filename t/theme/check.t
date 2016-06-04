@@ -133,6 +133,7 @@ $page{ list } = Statocles::Page::List->new(
 
 $page{ feed } = Statocles::Page::List->new(
     app => $blog,
+    author => 'Doug Bell <doug@example.com>',
     path => 'feed.rss',
     pages => $page{ list }->pages,
     links => {
@@ -413,6 +414,12 @@ my %content_tests = (
         my ( $tmpl, $content, %args ) = @_;
         my $xml = Mojo::DOM->new( $content );
 
+        subtest 'feed metadata' => sub {
+            if ( ok my $elem = $xml->at( 'feed > author' ), 'feed has author element' ) {
+                is $elem->at( 'name' )->text, $args{page}->author->name, 'feed author name correct';
+            }
+        };
+
         subtest 'feed updated' => sub {
             if ( ok my $elem = $xml->at( 'feed > updated' ), 'feed has updated element' ) {
                 like $elem->text, qr{^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$}, 'date in iso8601 format';
@@ -420,14 +427,26 @@ my %content_tests = (
             }
         };
 
-        subtest 'entry title' => sub {
-            my @titles = $xml->find( 'entry title' )->each;
-            is scalar @titles, scalar @{ $args{pages} }, 'right number of entry titles found';
-            for my $i ( 0..$#titles ) {
-                my $elem = $titles[ $i ];
-                like $elem->text, qr{@{[quotemeta $args{pages}[$i]->title]}}, 'title has document title';
-                unlike $elem->text, qr{@{[quotemeta $site->title]}}, 'title must not have site title';
-            }
+        subtest 'entries' => sub {
+            subtest 'author' => sub {
+                my $authors = $xml->find( 'entry author' );
+                is $authors->size, 1, 'right number of entry authors found';
+                my $elem = $authors->[ 0 ];
+                if ( ok $elem->at( 'name' ), 'author has name element' ) {
+                    is $elem->at( 'name' )->text, $document{normal}->author->name,
+                        'author name is correct';
+                }
+            };
+
+            subtest 'title' => sub {
+                my @titles = $xml->find( 'entry title' )->each;
+                is scalar @titles, scalar @{ $args{pages} }, 'right number of entry titles found';
+                for my $i ( 0..$#titles ) {
+                    my $elem = $titles[ $i ];
+                    like $elem->text, qr{@{[quotemeta $args{pages}[$i]->title]}}, 'title has document title';
+                    unlike $elem->text, qr{@{[quotemeta $site->title]}}, 'title must not have site title';
+                }
+            };
         };
     },
 
