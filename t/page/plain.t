@@ -25,10 +25,32 @@ subtest 'constructor' => sub {
     );
 };
 
+subtest author => sub {
+
+    subtest 'default to site author' => sub {
+        my $site = Statocles::Site->new(
+            author => {
+                name => 'Doug Bell',
+                email => 'doug@example.com',
+            },
+            deploy => tempdir,
+        );
+        my $page = Statocles::Page::Plain->new(
+            path => '/',
+            site => $site,
+            content => 'Hello',
+        );
+
+        cmp_deeply $page->author, $site->author, 'page author default to site author';
+    };
+
+};
+
 subtest 'render' => sub {
     $site->log->level( 'debug' );
 
     my $page = Statocles::Page::Plain->new(
+        site => $site,
         path => '/path/to/page.html',
         content => 'some test content',
         layout => "LAYOUT\n<%= \$content %>",

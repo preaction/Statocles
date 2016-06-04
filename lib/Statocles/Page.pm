@@ -68,8 +68,14 @@ has author => (
     is => 'rw',
     isa => Person,
     coerce => Person->coercion,
-    default => sub { Statocles::Person->new( name => '' ) },
+    lazy => 1,
+    builder => '_build_author',
 );
+
+sub _build_author {
+    my ( $self ) = @_;
+    return $self->site->author || Statocles::Person->new( name => '' );
+}
 
 =attr type
 

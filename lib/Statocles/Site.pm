@@ -24,6 +24,29 @@ has title => (
     default => sub { '' },
 );
 
+=attr author
+
+    author: Doug Bell <doug@example.com>
+    author:
+        name: Doug Bell
+        email: doug@example.com
+
+The primary author of the site, which will be used as the default author
+for all content. This can be a string with the author's name, and an
+optional e-mail address wrapped in E<lt>E<gt>, or a hashref of
+L<Statocles::Person attributes|Statocles::Person/ATTRIBUTES>.
+
+Individual documents can have their own authors. See
+L<Statocles::Document/author>.
+
+=cut
+
+has author => (
+    is => 'ro',
+    isa => Person,
+    coerce => Person->coercion,
+);
+
 =attr base_url
 
 The base URL of the site, including protocol and domain. Used mostly for feeds.

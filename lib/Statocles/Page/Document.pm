@@ -36,10 +36,10 @@ The author of the page.
 
 =cut
 
-has '+author' => (
-    lazy => 1,
-    default => sub { $_[0]->document->author || Statocles::Person->new( name => '' ) },
-);
+around _build_author => sub {
+    my ( $orig, $self ) = @_;
+    return $self->document->author || $self->$orig;
+};
 
 =attr date
 
