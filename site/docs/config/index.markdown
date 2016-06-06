@@ -34,7 +34,69 @@ Statocles.
 Statocles configuration files are written in YAML, a human-readable language
 for both simple and complex data structures.
 
-XXX
+The most common construct in the configuration YAML file is a "dictionary" or
+"hash". This is made up of names (keys) that refer to values. The key and the
+value are separated by a colon, like so:
+
+    name: Doug Bell
+    email: doug@example.com
+
+So here we define a dictionary that has two keys. The "name" key is set to
+"Doug Bell" and the "email" key is set to "doug@example.com".
+
+Dictionaries can be nested. That is, the value of a dictionary key can be
+another dictionary. YAML uses indentation to build nested data structures, like
+so.
+
+    author:
+        name: Doug Bell
+        email: doug@example.com
+    status: draft
+
+This dictionary also has two keys, but this time, the "author" key has a value
+that contains another dictionary, and this inner dictionary has our name and
+e-mail address.
+
+Invalid indentation is a common problem in YAML files, so Statocles tries to
+detect the errors coming from the YAML parser to advise you about what could be
+wrong.
+
+In addition to dictionaries, YAML also supports lists (or arrays), which are
+sequences of values. To define a list, we use a dash "-" followed by a space.
+
+    - http://example.com/bootstrap.css
+    - http://example.com/style.css
+
+Here we defined a list with two elements, URLs to some CSS files we're going to
+use.
+
+Like dictionaries, lists can contain other lists. On top of that, lists can
+contain dictionaries and dictionaries can contain lists.
+
+    links:
+        stylesheet:
+            - /bootstrap.css
+            - /style.css
+            - href: print.css
+              media: print
+
+Here we have a dictionary with a single key "links" that contains a dictionary
+with a single key "stylesheet" that contains a list of three items. The first
+two items in the list are simple strings, and the third is a dictionary with
+two keys (href and media) with string values.
+
+There are some other YAML constructs that will be useful when writing Statocles
+config files:
+
+Strings can wrap to the next line as long as the indentation is right.
+Additionally, you can use `-|` or `-<` to explicitly say you're doing a
+multiline string.
+
+You can make single-line lists using `[ ... ]` and single-line dictionaries
+using `{ ... }`.
+
+For more info on YAML, see <http://yaml.org>
+
 
 ## The Config File
 
