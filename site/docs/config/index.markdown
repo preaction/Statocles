@@ -243,6 +243,31 @@ Now our site has a blog. New blog posts can be easily added using the
 `statocles blog post` application command, covered in [the content
 guide](../content).
 
+
+## Index Page
+
+Now that we've got some applications, we need to choose what our index page
+will be. The index page is the main home page of the site. The site `index`
+attribute allows us to set a path. The page located at this path will be used
+as our index page. As Statocles builds the site, the path of the index page
+will be changed to the site root, and every link to our index page will be
+fixed to link to the site root.
+
+For example, if we want to use our blog app as our home page, we could set our
+`index` attribute to the blog app's `base_url`:
+
+	site:
+		$class: Statocles::Site
+		index: /blog
+
+If instead we want to use a regular page whose content lives in
+`home.markdown`, we could set our `index` attribute to `/home.html`, which is
+the page that will be created by our `home.markdown` file.
+
+If our blog has a tag called "robots", we could choose to use that tag as an
+index page by setting the `index` attribute to `/blog/tag/robots`. The final
+`/index.html` is optional.
+
 ## Theme
 
 Now we need a theme. The theme is a collection of templates, CSS, JavaScript,
@@ -297,10 +322,44 @@ More details on deploys are below.
 
 ## Complete Minimal Site
 
+Here's the complete, minimal site configuration file we created above. Feel
+free to copy this and edit it for your own use.
+
+	site:
+		$class: Statocles::Site
+		title: My Blog
+		base_url: http://example.com
+		theme: '::default'
+		index: /blog
+		apps:
+			basic:
+				$ref: basic_app
+			blog:
+				$ref: blog_app
+		deploy: site_deploy
+
+	basic_app:
+		$class: Statocles::App::Basic
+		store: "."
+		base_url: "/"
+
+	blog_app:
+		$class: Statocles::App::Blog
+		store: "blog"
+		base_url: "/blog"
+
 # Site Object
 
+Above, we created a complete, but minimal site object. Let's go back and
+see how to customize our site further.
+
+The site object is the main part of our configuration. As such, the site
+configuration effects the entire site. There are a lot of options
+available, but not all will apply, so don't worry. If you don't
+understand something, feel free to [ask us about it in IRC]().
+
 ## Basic Attributes
- 
+
 ## Navigation
 
 ## Links
