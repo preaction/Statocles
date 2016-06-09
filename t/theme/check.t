@@ -43,8 +43,9 @@ my %document = (
     escaped => Statocles::Document->new(
         path => '/$escape/@this/(correctly)/index.html',
         title => '<ESCAPE>',
-        content => '<b>Must not be escaped</b>',
+        content => qq{<b>Must not be escaped</b>\n\n---\n\nSection 2},
         date => '2015-01-02 00:00:00',
+        # No tags, to test what happens with tag displays
         %document_common,
     ),
 );
@@ -408,6 +409,21 @@ my %content_tests = (
                 unlike $elem->text, qr{@{[quotemeta $site->title]}}, 'title must not have site title';
             }
         };
+
+        subtest 'item description' => sub {
+            my ( $single_section, $multiple_sections )
+                = $xml->find( 'item description' )
+                    ->map( 'text' )
+                    ->map( sub { Mojo::DOM->new( shift ) } )
+                    ->each;
+
+            subtest 'links to continue reading at section 2' => sub {
+                ok !$single_section->at( 'a[href$=#section-2]' ),
+                    'no link to #section-2 with single section';
+                ok $multiple_sections->at( 'a[href$=#section-2]' ),
+                    'link to #section-2 with multiple sections';
+            };
+        };
     },
 
     'blog/index.atom.ep' => sub {
@@ -446,6 +462,21 @@ my %content_tests = (
                     like $elem->text, qr{@{[quotemeta $args{pages}[$i]->title]}}, 'title has document title';
                     unlike $elem->text, qr{@{[quotemeta $site->title]}}, 'title must not have site title';
                 }
+            };
+
+            subtest 'content' => sub {
+                my ( $single_section, $multiple_sections )
+                    = $xml->find( 'content' )
+                        ->map( 'text' )
+                        ->map( sub { Mojo::DOM->new( shift ) } )
+                        ->each;
+
+                subtest 'links to continue reading at section 2' => sub {
+                    ok !$single_section->at( 'a[href$=#section-2]' ),
+                        'no link to #section-2 with single section';
+                    ok $multiple_sections->at( 'a[href$=#section-2]' ),
+                        'link to #section-2 with multiple sections';
+                };
             };
         };
     },

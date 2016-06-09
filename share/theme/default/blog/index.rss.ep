@@ -31,7 +31,7 @@
                         </a></li>
                     </ul>
                 % }
-                % else {
+                % elsif ( $p->sections > 1 ) {
                     <p><a href="<%= $site->url( $p->path ) %>#section-2">Continue reading...</a></p>
                 % }
                 <p>Tags:
