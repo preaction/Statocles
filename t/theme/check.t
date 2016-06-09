@@ -423,6 +423,29 @@ my %content_tests = (
                 ok $multiple_sections->at( 'a[href$=#section-2]' ),
                     'link to #section-2 with multiple sections';
             };
+
+            subtest 'tag links are shown if necessary' => sub {
+                subtest 'with tags' => sub {
+                    my $elem = $single_section->find( 'p' )
+                        ->grep( sub { $_->text =~ /^Tags:/ } )
+                        ->first;
+                    ok $elem, 'tags paragraph appears when needed';
+                    is $elem->find( 'a' )->size, 2, 'two tag links inside';
+                    my $link = $elem->find( 'a' )->first;
+                    is $link->text, 'foo',
+                        'link text is correct';
+                    is $link->attr( 'href' ), 'http://example.com/blog/tag/foo',
+                        'link href is correct and full url';
+                };
+
+                subtest 'without tags' => sub {
+                    ok !$multiple_sections->find( 'p' )
+                        ->grep( sub { $_->text =~ /^Tags:/ } )
+                        ->size,
+                        'tags paragraph disappears when not needed';
+                };
+
+            };
         };
     },
 
@@ -476,6 +499,29 @@ my %content_tests = (
                         'no link to #section-2 with single section';
                     ok $multiple_sections->at( 'a[href$=#section-2]' ),
                         'link to #section-2 with multiple sections';
+                };
+
+                subtest 'tag links are shown if necessary' => sub {
+                    subtest 'with tags' => sub {
+                        my $elem = $single_section->find( 'p' )
+                            ->grep( sub { $_->text =~ /^Tags:/ } )
+                            ->first;
+                        ok $elem, 'tags paragraph appears when needed';
+                        is $elem->find( 'a' )->size, 2, 'two tag links inside';
+                        my $link = $elem->find( 'a' )->first;
+                        is $link->text, 'foo',
+                            'link text is correct';
+                        is $link->attr( 'href' ), 'http://example.com/blog/tag/foo',
+                            'link href is correct and full url';
+                    };
+
+                    subtest 'without tags' => sub {
+                        ok !$multiple_sections->find( 'p' )
+                            ->grep( sub { $_->text =~ /^Tags:/ } )
+                            ->size,
+                            'tags paragraph disappears when not needed';
+                    };
+
                 };
             };
         };

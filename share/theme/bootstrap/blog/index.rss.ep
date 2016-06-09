@@ -34,11 +34,15 @@
                 % elsif ( $p->sections > 1 ) {
                     <p><a href="<%= $site->url( $p->path ) %>#section-2">Continue reading...</a></p>
                 % }
-                <p>Tags:
-                % for my $tag ( $p->tags ) {
-                    <a href="<%= $site->url( $tag->href ) %>"><%= $tag->text %></a>
+
+                % if ( $p->tags ) {
+                    <p>Tags:
+                    % for my $tag ( $p->tags ) {
+                        <a href="<%= $site->url( $tag->href ) %>"><%= $tag->text %></a>
+                    % }
+                    </p>
                 % }
-                </p>
+
             ]]></description>
             <pubDate>
                 <%= $p->date->strftime('%a, %d %b %Y %H:%M:%S ') . sprintf q{%+05d}, $p->date->offset / 3600 %>
