@@ -370,27 +370,117 @@ understand something, feel free to [ask us about it in IRC]().
 
 ## Data Attributes
 
+The site's `data` attribute allows us to add arbitrary configuration
+data to our site object. This data can then be used by our theme to
+provide custom sections and integrate external services. The `data`
+attribute must be a dictionary, but can contain any kind of information
+inside that dictionary.
+
+The Statocles default themes provide the following data keys to
+customize your site. To create your own data keys, see [the theme
+guide](../theme).
+
 ### Disqus
+
+Disqus is an externally-hosted site comment application. By signing up
+(for free), you can add user comments to any site by adding a snippet of
+Javascript code to your pages.
+
+To add [Disqus]() comments to your blog, you can configure the `disqus`
+data key. You will need your Disqus shortname, which you can set from
+[your Disqus dashboard](). Statocles includes the code needed to
+integrate with Disqus, so all you need to do is configure it, like so:
+
+    site:
+        $class: Statocles::Site
+        data:
+            disqus:
+                shortname: statocles
+
+In the example, our shortname is `statocles`. With that set, the blog
+app will now show the number of comments in the post list page, and the
+Disqus comment app below the blog post content.
+
+XXX other disqus settings?
 
 ### Google Analytics
 
+[Google Analytics]() is a hosted solution for collecting site visitor
+metrics like where the visitor came from, how they navigated through
+your site, and whether they purchased anything. Since it uses
+Javascript, it's good for static sites that don't want to run their own
+log analysis.
+
+Statocles comes with the code snippet needed to collect analytics. To
+add Google Analytics to your site, you need to have the site's GA
+identifier. Add this ID to the site data attribute, like so:
+
+    site:
+        $class: Statocles::Site
+        data:
+            google_analytics: GA-123456-1
+
+XXX Check this data attribute
+
+Now every page in your site will have the right script to send analytics
+to Google so you can read  statistics reports.
+
 # Applications
 
-## Common Attributes
+A Statocles application transforms the content you write into the pages
+of your site. Most applications have their own directory in your site
+and pull their content from there. Each application also has a base URL,
+allowing multiple apps to be placed into different directories in your
+site.
+
+Different apps can do different kinds of content. The Basic app handles
+simple Markdown to HTML conversion, but the Blog app will create lists
+of blog posts and feeds for syndicated content readers. The Perldoc app
+will take a Perl project and generate HTML from the project's
+documentation. And if you need a custom app, you can write your own (see
+[the develop guide for details]()).
+
+To add new applications to our site, we need to create the application
+object, give it the configuration it may need (like content directory
+and base URL), and then add it to the site object's `apps` attribute.
+See [Simple Content](), above, for how to add apps to the site object.
 
 ## Basic App
 
-### Templates
+The [Basic app]() handles just the basic Markdown to HTML conversion,
+and copying any image, script, or stylesheet inside its directory. For
+this reason, it is frequently used as the root of the site so that any
+file in the site directory will appear in the deployed site. This basic
+functionality is shared by most other applications, so that files can be
+placed where they are convenient and logical.
+
+XXX
 
 ## Blog App
 
-### Templates
-
 ## Perldoc App
-
-### Templates
 
 # Plugins
 
+Plugins can do two things: They can modify the site's content as it is
+being generated, and they can add template helpers, which are functions
+you can use in your content and templates.
+
+To add a plugin, XXX
+
+## Link Check
+
+## Highlight
+
+## HTML Lint
+
 # Deploy
+
+## File Deploy
+
+## Git Deploy
+
+### Github Pages
+
+### Custom Git Hosting
 
