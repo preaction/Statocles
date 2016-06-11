@@ -750,7 +750,7 @@ my @page_tests = (
         is $dom->at( 'aside time' )->attr( 'datetime' ), '2014-04-30', 'date from document';
 
         cmp_deeply [ $dom->find( '.tags a' )->map( 'text' )->each ],
-            [ 'better' ];
+            [ 'BeTTer' ];
         cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
             [ '/blog/tag/better/' ];
 

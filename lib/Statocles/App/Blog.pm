@@ -298,7 +298,7 @@ sub index {
 
     my @index_tags;
     my %tag_flag;
-    for my $tag_spec ( @{ $self->index_tags } ) {
+    for my $tag_spec ( map lc, @{ $self->index_tags } ) {
         my $tag = substr $tag_spec, 1;
         push @index_tags, $tag;
         $tag_flag{$tag} = substr $tag_spec, 0, 1;
@@ -308,8 +308,8 @@ sub index {
     PAGE: for my $page ( @$all_post_pages ) {
         my $page_flag = '+';
         my %page_tags;
-        @page_tags{ @{ $page->document->tags } } = 1; # we use exists(), so value doesn't matter
-        for my $tag ( @index_tags ) {
+        @page_tags{ map lc, @{ $page->document->tags } } = 1; # we use exists(), so value doesn't matter
+        for my $tag ( map lc, @index_tags ) {
             if ( exists $page_tags{ $tag } ) {
                 $page_flag = $tag_flag{ $tag };
             }
@@ -490,7 +490,7 @@ around pages => sub {
 
                 my @tags;
                 for my $tag ( @{ $doc->tags } ) {
-                    push @{ $tag_pages{ $tag } }, $page;
+                    push @{ $tag_pages{ lc $tag } }, $page;
                     push @tags, $self->link(
                         text => $tag,
                         href => join( "/", 'tag', $self->_tag_url( $tag ), '' ),
@@ -529,17 +529,18 @@ sub tags {
     my @pages = @{ $self->_post_pages || [] };
     for my $page ( @pages ) {
         for my $tag ( @{ $page->document->tags } ) {
-            $tags{ $tag }++;
+            $tags{ lc $tag } ||= $tag;
         }
     }
     return map {; $self->link( text => $_, href => join( "/", 'tag', $self->_tag_url( $_ ), '' ) ) }
+        map { $tags{ $_ } }
         sort keys %tags;
 }
 
 sub _tag_url {
     my ( $self, $tag ) = @_;
     $tag =~ s/\s+/-/g;
-    return $tag;
+    return lc $tag;
 }
 
 =method recent_posts
