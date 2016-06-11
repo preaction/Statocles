@@ -1,6 +1,6 @@
 ---
 title: More Tags
-tags: more, better, even more tags
+tags: more, better, even more & <more> tags
 links:
     alternate:
         # Links can be single hashrefs and will be normalized to arrays

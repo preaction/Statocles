@@ -83,7 +83,7 @@
     <h1>Tags</h1>
     <ul class="list-inline">
     % for my $tag ( $app->tags ) {
-        <li><a href="<%= $tag->href %>"><%= $tag->text %></a></li>
+        <li><a href="<%= $tag->href %>"><%== $tag->text %></a></li>
     % }
     </ul>
 % end

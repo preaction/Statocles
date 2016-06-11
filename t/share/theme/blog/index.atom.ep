@@ -38,13 +38,13 @@
             % }
             <p>Tags:
             % for my $link ( $p->tags ) {
-                <a href="<%= $site->url( $link->href ) %>"><%= $link->text %></a>
+                <a href="<%= $site->url( $link->href ) %>"><%== $link->text %></a>
             % }
             </p>
         ]]></content>
 
         % for my $t ( $p->tags ) {
-            <category term="<%= $t->text %>" />
+            <category term="<%== $t->text %>" />
         % }
     </entry>
     % }

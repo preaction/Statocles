@@ -42,7 +42,7 @@
             % if ( $p->tags ) {
                 <p>Tags:
                 % for my $tag ( $p->tags ) {
-                    <a href="<%= $site->url( $tag->href ) %>"><%= $tag->text %></a>
+                    <a href="<%= $site->url( $tag->href ) %>"><%== $tag->text %></a>
                 % }
                 </p>
             % }

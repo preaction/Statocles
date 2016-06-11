@@ -37,7 +37,7 @@ my %document = (
         author => 'preaction',
         content => 'Content One',
         date => '2015-01-01 00:00:00',
-        tags => [qw( foo bar )],
+        tags => [qw( foo bar <baz> )],
         %document_common,
     ),
     escaped => Statocles::Document->new(
@@ -102,6 +102,10 @@ my %page = (
             Statocles::Link->new(
                 href => '/blog/tag/bar',
                 text => 'bar',
+            ),
+            Statocles::Link->new(
+                href => '/blog/tag/-baz-',
+                text => '<baz>',
             ),
         ],
         _content_sections => {
@@ -430,12 +434,17 @@ my %content_tests = (
                         ->grep( sub { $_->text =~ /^Tags:/ } )
                         ->first;
                     ok $elem, 'tags paragraph appears when needed';
-                    is $elem->find( 'a' )->size, 2, 'two tag links inside';
-                    my $link = $elem->find( 'a' )->first;
-                    is $link->text, 'foo',
-                        'link text is correct';
-                    is $link->attr( 'href' ), 'http://example.com/blog/tag/foo',
-                        'link href is correct and full url';
+                    is $elem->find( 'a' )->size, 3, 'two tag links inside';
+                    cmp_deeply [ $elem->find( 'a' )->map( 'text' )->each ],
+                        [qw( foo bar <baz> )],
+                        'tag link text is correct';
+                    cmp_deeply [ $elem->find( 'a' )->map( attr => 'href' )->each ],
+                        [qw(
+                            http://example.com/blog/tag/foo
+                            http://example.com/blog/tag/bar
+                            http://example.com/blog/tag/-baz-
+                        )],
+                        'tag link href is correct';
                 };
 
                 subtest 'without tags' => sub {
@@ -507,12 +516,17 @@ my %content_tests = (
                             ->grep( sub { $_->text =~ /^Tags:/ } )
                             ->first;
                         ok $elem, 'tags paragraph appears when needed';
-                        is $elem->find( 'a' )->size, 2, 'two tag links inside';
-                        my $link = $elem->find( 'a' )->first;
-                        is $link->text, 'foo',
-                            'link text is correct';
-                        is $link->attr( 'href' ), 'http://example.com/blog/tag/foo',
-                            'link href is correct and full url';
+                        is $elem->find( 'a' )->size, 3, 'two tag links inside';
+                        cmp_deeply [ $elem->find( 'a' )->map( 'text' )->each ],
+                            [qw( foo bar <baz> )],
+                            'tag link text is correct';
+                        cmp_deeply [ $elem->find( 'a' )->map( attr => 'href' )->each ],
+                            [qw(
+                                http://example.com/blog/tag/foo
+                                http://example.com/blog/tag/bar
+                                http://example.com/blog/tag/-baz-
+                            )],
+                            'tag link href is correct';
                     };
 
                     subtest 'without tags' => sub {
@@ -556,9 +570,11 @@ my %content_tests = (
             if ( ok my $html = $args{page}->_content_sections->{tags}, 'tags content section exists' ) {
                 my $dom = Mojo::DOM->new( $html );
                 my $links = $dom->find( 'a' );
-                cmp_deeply [ $links->map( 'text' )->each ], [ 'bar', 'foo' ],
+                cmp_deeply [ $links->map( 'text' )->each ],
+                    [ '<baz>', 'bar', 'foo' ],
                     'tag text is correct and sorted';
-                cmp_deeply [ $links->map( attr => 'href' )->each ], [ '/blog/tag/bar/', '/blog/tag/foo/' ],
+                cmp_deeply [ $links->map( attr => 'href' )->each ],
+                    [ '/blog/tag/-baz-/', '/blog/tag/bar/', '/blog/tag/foo/' ],
                     'tag hrefs are correct and sorted';
             }
         };
@@ -580,9 +596,11 @@ my %content_tests = (
             if ( ok my $html = $args{page}->_content_sections->{tags}, 'tags content section exists' ) {
                 my $dom = Mojo::DOM->new( $html );
                 my $links = $dom->find( 'a' );
-                cmp_deeply [ $links->map( 'text' )->each ], [ 'bar', 'foo' ],
+                cmp_deeply [ $links->map( 'text' )->each ],
+                    [ '<baz>', 'bar', 'foo' ],
                     'tag text is correct and sorted';
-                cmp_deeply [ $links->map( attr => 'href' )->each ], [ '/blog/tag/bar/', '/blog/tag/foo/' ],
+                cmp_deeply [ $links->map( attr => 'href' )->each ],
+                    [ '/blog/tag/-baz-/', '/blog/tag/bar/', '/blog/tag/foo/', ],
                     'tag hrefs are correct and sorted';
             }
         };

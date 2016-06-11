@@ -45,7 +45,7 @@ my %page_mod = (
     '/blog/tag/better/' => '2014-06-02',
     '/blog/tag/better/page/2/' => '2014-06-02',
     '/blog/tag/error-message/' => '2014-05-22',
-    '/blog/tag/even-more-tags/' => '2014-06-02',
+    '/blog/tag/even-more-more-tags/' => '2014-06-02',
 );
 
 my @posts = qw(
@@ -64,7 +64,7 @@ my @lists = qw(
     /blog/tag/better/
     /blog/tag/better/page/2/
     /blog/tag/error-message/
-    /blog/tag/even-more-tags/
+    /blog/tag/even-more-more-tags/
 );
 
 # Must be sorted to prevent spurous deploy commits

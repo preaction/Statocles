@@ -80,7 +80,7 @@ my @page_tests = (
                 /blog/tag/better/
                 /blog/tag/error-message/
                 /blog/tag/more/
-                /blog/tag/even-more-tags/
+                /blog/tag/even-more-more-tags/
             ) ),
             'tag list is available';
 
@@ -124,7 +124,7 @@ my @page_tests = (
                 /blog/tag/better/
                 /blog/tag/error-message/
                 /blog/tag/more/
-                /blog/tag/even-more-tags/
+                /blog/tag/even-more-more-tags/
             ) ),
             'tag list is available';
 
@@ -182,7 +182,7 @@ my @page_tests = (
             'content type is correct';
 
         cmp_deeply [ $dom->find( 'entry category' )->map( attr => 'term' )->each ],
-            [ 'more', 'better', 'even more tags', 'better', 'error message' ],
+            [ 'more', 'better', 'even more & <more> tags', 'better', 'error message' ],
             'categories are correct';
 
         my $content_dom = Mojo::DOM->new( $dom->at( 'entry:first-of-type content' )->text );
@@ -266,7 +266,7 @@ my @page_tests = (
                 /blog/tag/better/
                 /blog/tag/error-message/
                 /blog/tag/more/
-                /blog/tag/even-more-tags/
+                /blog/tag/even-more-more-tags/
             ) ),
             'tag list is available';
 
@@ -318,7 +318,7 @@ my @page_tests = (
                 /blog/tag/better/
                 /blog/tag/error-message/
                 /blog/tag/more/
-                /blog/tag/even-more-tags/
+                /blog/tag/even-more-more-tags/
             ) ),
             'tag list is available';
 
@@ -364,7 +364,7 @@ my @page_tests = (
                 /blog/tag/better/
                 /blog/tag/error-message/
                 /blog/tag/more/
-                /blog/tag/even-more-tags/
+                /blog/tag/even-more-more-tags/
             ) ),
             'tag list is available';
 
@@ -406,7 +406,7 @@ my @page_tests = (
                 /blog/tag/better/
                 /blog/tag/error-message/
                 /blog/tag/more/
-                /blog/tag/even-more-tags/
+                /blog/tag/even-more-more-tags/
             ) ),
             'tag list is available';
 
@@ -430,16 +430,16 @@ my @page_tests = (
         is $next->at( 'a' )->attr( 'href' ), '';
     },
 
-    '/blog/tag/even-more-tags/index.html' => sub {
+    '/blog/tag/even-more-more-tags/index.html' => sub {
         my ( $html, $dom ) = @_;
 
         cmp_deeply [ $dom->find( 'h1 a' )->map( 'text' )->each ],
             [ 'More Tags' ],
-            '"even more tags" page has 1 post title';
+            '"even more & <more> tags" page has 1 post title';
 
         cmp_deeply [ $dom->find( 'h1 a' )->map( attr => 'href' )->each ],
             [ '/blog/2014/06/02/more_tags/', ],
-            '"even more tags" page has 1 post url';
+            '"even more & <more> tags" page has 1 post url';
 
         ok !$dom->at( '.author' ), 'no author for this post';
 
@@ -448,14 +448,14 @@ my @page_tests = (
                 /blog/tag/better/
                 /blog/tag/error-message/
                 /blog/tag/more/
-                /blog/tag/even-more-tags/
+                /blog/tag/even-more-more-tags/
             ) ),
             'tag list is available';
 
         cmp_deeply [ $dom->find( '.feeds a' )->map( attr => 'href' )->each ],
             bag( qw(
-                /blog/tag/even-more-tags.atom
-                /blog/tag/even-more-tags.rss
+                /blog/tag/even-more-more-tags.atom
+                /blog/tag/even-more-more-tags.rss
             ) ),
             'feeds list is available';
 
@@ -660,19 +660,19 @@ my @page_tests = (
             'pubDate is correct';
     },
 
-    '/blog/tag/even-more-tags.atom' => sub {
+    '/blog/tag/even-more-more-tags.atom' => sub {
         my ( $atom, $dom ) = @_;
 
         is $dom->at( 'feed > id' )->text,
-            'http://example.com/blog/tag/even-more-tags/';
+            'http://example.com/blog/tag/even-more-more-tags/';
         is $dom->at( 'feed > title' )->text, 'Example Site';
         like $dom->at( 'feed > updated' )->text,
             qr{^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z};
 
         is $dom->at( 'feed > link[rel=self]' )->attr( 'href' ),
-            'http://example.com/blog/tag/even-more-tags.atom';
+            'http://example.com/blog/tag/even-more-more-tags.atom';
         is $dom->at( 'feed > link[rel=alternate]' )->attr( 'href' ),
-            'http://example.com/blog/tag/even-more-tags/';
+            'http://example.com/blog/tag/even-more-more-tags/';
 
         is $dom->at( 'feed > generator' )->text, 'Statocles';
         is $dom->at( 'feed > generator' )->attr( 'version' ), $Statocles::VERSION;
@@ -694,16 +694,16 @@ my @page_tests = (
             'content type is correct';
     },
 
-    '/blog/tag/even-more-tags.rss' => sub {
+    '/blog/tag/even-more-more-tags.rss' => sub {
         my ( $rss, $dom ) = @_;
 
         is $dom->at( 'channel > title' )->text, 'Example Site';
         is $dom->at( 'channel > link' )->text,
-            'http://example.com/blog/tag/even-more-tags/';
+            'http://example.com/blog/tag/even-more-more-tags/';
         is $dom->at( 'channel > description' )->text, 'Blog feed of Example Site';
 
         is $dom->at( 'channel > link[rel=self]' )->attr( 'href' ),
-            'http://example.com/blog/tag/even-more-tags.rss';
+            'http://example.com/blog/tag/even-more-more-tags.rss';
 
         is $dom->at( 'channel > generator' )->text, 'Statocles ' . $Statocles::VERSION;
 
@@ -792,12 +792,12 @@ my @page_tests = (
         is $dom->at( 'aside time' )->attr( 'datetime' ), '2014-06-02', 'date from path';
 
         cmp_deeply [ $dom->find( '.tags a' )->map( 'text' )->each ],
-            bag( 'more', 'better', 'even more tags' );
+            bag( 'more', 'better', 'even more & <more> tags' );
         cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
             bag( qw(
                 /blog/tag/more/
                 /blog/tag/better/
-                /blog/tag/even-more-tags/
+                /blog/tag/even-more-more-tags/
             ) );
 
         my %links = (

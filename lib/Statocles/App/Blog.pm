@@ -539,8 +539,7 @@ sub tags {
 
 sub _tag_url {
     my ( $self, $tag ) = @_;
-    $tag =~ s/\s+/-/g;
-    return lc $tag;
+    return lc $self->make_slug( $tag );
 }
 
 =method recent_posts

@@ -4,7 +4,7 @@
 
         <p class="tags">Tags:
         % for my $link ( $self->tags ) {
-            <a href="<%= $link->href %>" rel="tag"><%= $link->text %></a>
+            <a href="<%= $link->href %>" rel="tag"><%== $link->text %></a>
         % }
         </p>
 
@@ -46,7 +46,7 @@
     <h1>Tags</h1>
     <ul class="list-inline">
     % for my $link ( $app->tags ) {
-        <li><a href="<%= $link->href %>"><%= $link->text %></a></li>
+        <li><a href="<%= $link->href %>"><%== $link->text %></a></li>
     % }
     </ul>
 </nav>
