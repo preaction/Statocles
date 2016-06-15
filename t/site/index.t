@@ -114,6 +114,33 @@ subtest 'index links in basic app' => sub {
     };
 };
 
+subtest 'allow document path in index' => sub {
+    my $basic = Statocles::App::Basic->new(
+        url_root => '/page',
+        store => $SHARE_DIR->child( qw( app basic ) ),
+    );
+
+    my ( $site, $build_dir, $deploy_dir ) = build_test_site_apps(
+        $SHARE_DIR,
+        index => '/page/foo/other.markdown',
+        apps => {
+            basic => $basic,
+        },
+    );
+
+    $site->build;
+
+    ok $build_dir->child( 'index.html' )->exists,
+        'site index renames app page';
+    ok !$build_dir->child( 'page', 'foo', 'other.html' )->exists,
+        'site index renames app page';
+
+    subtest 'content on index is correct' => sub {
+        my $dom = Mojo::DOM->new( $build_dir->child( '/index.html' )->slurp_utf8 );
+        is $dom->at( 'h1' )->text, 'Foo Other', 'index content is from correct page';
+    };
+};
+
 subtest 'error messages' => sub {
 
     subtest 'index directory does not exist' => sub {

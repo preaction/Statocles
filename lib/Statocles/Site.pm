@@ -505,6 +505,15 @@ sub build {
 
     for my $app_name ( keys %{ $apps } ) {
         my $app = $apps->{$app_name};
+        my $index_path_re = qr{^$index_path(?:/index[.]html)?$};
+        if ( $app->DOES( 'Statocles::App::Role::Store' ) ) {
+            # Allow index to be path to document and not the resulting page
+            # (so, ending in ".markdown" or ".md")
+            my $doc_path = $index_path;
+            my $doc_ext = join '|', @{ $app->store->document_extensions };
+            $doc_path =~ s/$doc_ext/html/;
+            $index_path_re = qr{^$doc_path(?:/index[.]html)?$};
+        }
 
         my @app_pages = $app->pages( %options );
 
@@ -522,7 +531,7 @@ sub build {
         for my $page ( @app_pages ) {
             my $path = $page->path;
 
-            if ( $path =~ m{^$index_path(?:/index[.]html)?$} ) {
+            if ( $path =~ $index_path_re ) {
                 # Rename the app's page so that we don't get two pages with identical
                 # content, which is bad for SEO
                 $self->log->debug(
