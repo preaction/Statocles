@@ -358,15 +358,104 @@ configuration effects the entire site. There are a lot of options
 available, but not all will apply, so don't worry. If you don't
 understand something, feel free to [ask us about it in IRC]().
 
-## Basic Attributes
+## Title and Author
+
+Every site needs a title, which will appear on every page in the title
+bar and bookmarks made from your site. Every site should also have an
+author, which can be simply a name (or nickname), but can also include
+an e-mail address. The author information is used in site metadata and
+feeds.
+
+To add this information, we use the `title` and `author` attributes:
+
+XXX
+
+XXX add meta author to default themes
+
+## Base URL
+
+The `base_url` attribute lets Statocles know how to create links in the
+site. Some links need a full URL (like syndicated feeds and other
+content read outside the site), most others need to be absolute. The
+site base URL is combined is used to rewrite links as needed.
+
+Statocles allows the `base_url` attribute to contain both a host
+(http://www.example.com) and an optional path (/site). If your site
+moves to a different host or path, you only need to change your
+`base_url` attribute and re-deploy your site.
+
+Some examples of possible base URLs are:
+
+    # Statocles is deployed at the web root directory
+    site:
+        $class: Statocles::Site
+        base_url: http://example.com
+
+    # Statocles is being used just for a blog
+    site:
+        $class: Statocles::Site
+        base_url: http://example.com/blog
+        apps:
+            blog:
+                $class: Statocles::App::Blog
+                store: .
+
+When writing links in your content, you do not need to include the site
+base URL. The host and path will be added automatically when
+appropriate.
+
+XXX Named deploy objects
 
 ## Navigation
 
+XXX Make nav objects
+
 ## Links
+
+Links are similar to navigations, they're both lists of URLs, but for
+two differences:
+
+* They're not recursive, so you can't have more levels of links
+* Navigations are shown on the page and used to navigate the site. Links
+  are used to add scripts, stylesheets, and other metadata to the page.
+
+Like the `nav` attribute, the `links` attribute organizes links with
+a key.  Inside this key is a list of URLs or link attributes.
+
+All of the default Statocles templates support the following link keys:
+
+* `scripts` - A list of scripts to add to every page
+* `stylesheets` - A list of stylesheets to add to every page
+
+For example, lets add a custom script to all our pages.
+
+    site: $class: Statocles::Site links: scripts:
+                - /js/custom.js
+
+There is more than one way to add scripts and stylesheets to pages, so
+pick whichever one makes the most sense.
 
 ## Images
 
-## Templates
+You can attach images to your site object using the `images` attribute.
+This allows you to set a shortcut icon, and add a logo and user portrait
+to your site.
+
+Like navigations and links, images have a key. Inside that key is
+a single image URL, or set of image attributes.
+
+For example, to set a shortcut icon, we only need the URL:
+
+    site: $class: Statocles::Site images: icon: /favicon.png
+
+But to set the user portrait, we should include some alt text for
+non-visual user agents:
+
+XXX
+
+XXX Logo, Portrait, Icon
+XXX Allow sizes on Image objects. These aren't sizes to make, they're sizes to use this image for.
+XXX Image method should filter by size
 
 ## Data Attributes
 
