@@ -125,11 +125,20 @@ my %page = (
 # Set this so that the blog can get its tags
 $blog->_post_pages( [ $page{normal} ] );
 
-$page{ list } = Statocles::Page::List->new(
+$page{ list_first } = Statocles::Page::List->new(
     app => $blog,
     path => 'list.html',
     pages => [ $page{ normal }, $page{ escaped } ],
     next => 'page-0.html',
+    data => {
+        tag_text => $blog->tag_text->{ foo },
+    },
+);
+
+$page{ list_last } = Statocles::Page::List->new(
+    app => $blog,
+    path => 'list.html',
+    pages => [ $page{ normal }, $page{ escaped } ],
     prev => 'page-1.html',
     data => {
         tag_text => $blog->tag_text->{ foo },
@@ -140,11 +149,11 @@ $page{ feed } = Statocles::Page::List->new(
     app => $blog,
     author => 'Doug Bell <doug@example.com>',
     path => 'feed.rss',
-    pages => $page{ list }->pages,
+    pages => $page{ list_first }->pages,
     links => {
         alternate => [
             Statocles::Link->new(
-                href => $page{list}->path,
+                href => $page{ list_first }->path,
                 title => 'index',
             ),
         ],
@@ -159,12 +168,21 @@ my %common_vars = (
 
 my %app_vars = (
     blog => {
-        'index.html.ep' => {
-            %common_vars,
-            self => $page{ list },
-            page => $page{ list },
-            pages => [ $page{ normal }, $page{ escaped } ],
-        },
+        'index.html.ep' => [
+            {
+                %common_vars,
+                self => $page{ list_first },
+                page => $page{ list_first },
+                pages => [ $page{ normal }, $page{ escaped } ],
+            },
+            {
+                %common_vars,
+                self => $page{ list_last },
+                page => $page{ list_last },
+                pages => [ $page{ normal }, $page{ escaped } ],
+            },
+        ],
+
         'index.rss.ep' => {
             %common_vars,
             self => $page{ feed },
@@ -266,7 +284,7 @@ my %app_vars = (
     site => {
         'sitemap.xml.ep' => {
             site => $site,
-            pages => [ $page{ list }, $page{ normal }, $page{ escaped } ],
+            pages => [ $page{ list_first }, $page{ normal }, $page{ escaped } ],
         },
         'robots.txt.ep' => {
             site => $site,
@@ -577,6 +595,45 @@ my %content_tests = (
                     [ '/blog/tag/-baz-/', '/blog/tag/bar/', '/blog/tag/foo/' ],
                     'tag hrefs are correct and sorted';
             }
+        };
+
+        subtest 'Older/Newer buttons' => sub {
+            if ( $args{page}->prev ) {
+                subtest 'Older button links to next page' => sub {
+                    my $elem = $dom->at( '.next a' );
+                    if ( ok $elem, 'older button exists' ) {
+                        is $elem->attr( 'href' ), $args{page}->prev,
+                            'older href is correct';
+                    }
+                };
+            }
+            else {
+                subtest 'Older button does not link' => sub {
+                    my $elem = $dom->at( '.next :first-child' );
+                    if ( ok $elem, 'older button exists' ) {
+                        isnt $elem->tag, 'a', 'older button is not a link';
+                    }
+                };
+            }
+
+            if ( $args{page}->next ) {
+                subtest 'Newer button links to prev page' => sub {
+                    my $elem = $dom->at( '.prev a' ) || $dom->at( '.previous a' );
+                    if ( ok $elem, 'newer button exists' ) {
+                        is $elem->attr( 'href' ), $args{page}->next,
+                            'newer href is correct';
+                    }
+                };
+            }
+            else {
+                subtest 'Newer button does not link' => sub {
+                    my $elem = $dom->at( '.prev :first-child' ) || $dom->at( '.previous :first-child' );
+                    if ( ok $elem, 'newer button exists' ) {
+                        isnt $elem->tag, 'a', 'newer button is not a link';
+                    }
+                };
+            }
+
         };
     },
 
