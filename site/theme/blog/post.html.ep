@@ -1,20 +1,22 @@
 <header>
     <h1><%== $self->title %></h1>
+
+    <aside>
+        <time datetime="<%= $self->date->strftime('%Y-%m-%d') %>">
+            Posted on <%= $self->date->strftime('%Y-%m-%d') %>
+        </time>
+        % if ( $self->author ) {
+            <span class="author">
+                by <%= $self->author %>
+            </span>
+        % }
+    </aside>
+
     <p class="tags">Tags:
     % for my $tag ( $self->tags ) {
         <a href="<%= $tag->href %>" rel="tag"><%= $tag->text %></a>
     % }
     </p>
-
-    <aside>
-        <p><time datetime="<%= $self->date->strftime('%Y-%m-%d') %>">
-            Posted on <%= $self->date->strftime('%Y-%m-%d') %>
-        </time>
-        % if ( $self->author ) {
-            by <%= $self->author %>
-        % }
-        </p>
-    </aside>
 
     % if ( $self->links( 'crosspost' ) ) {
     <p>Originally posted as:
