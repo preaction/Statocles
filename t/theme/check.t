@@ -295,7 +295,7 @@ my %app_vars = (
 # These are individual template tests to ensure basic levels of app support
 # in the default themes
 my %content_tests = (
-    'site/layout.html.ep' => sub {
+    'layout/default.html.ep' => sub {
         my ( $tmpl, $content, %args ) = @_;
         my $dom = Mojo::DOM->new( $content );
         my $elem;
