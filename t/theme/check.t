@@ -94,6 +94,14 @@ my %site = (
     default => Statocles::Site->new(
         %default_site,
     ),
+
+    google_analytics => Statocles::Site->new(
+        %default_site,
+        data => {
+            google_analytics_id => 'GA-123456-8',
+        },
+    ),
+
 );
 
 my %page = (
@@ -270,7 +278,15 @@ my %app_vars = (
                 page => $page{ escaped },
                 doc => $document{ escaped },
             },
+            {
+                %common_vars,
+                site => $site{ google_analytics },
+                self => $page{ escaped },
+                page => $page{ escaped },
+                doc => $document{ escaped },
+            },
         ],
+
         'full-width.html.ep' => [
             {
                 %common_vars,
@@ -280,6 +296,13 @@ my %app_vars = (
             },
             {
                 %common_vars,
+                self => $page{ escaped },
+                page => $page{ escaped },
+                doc => $document{ escaped },
+            },
+            {
+                %common_vars,
+                site => $site{ google_analytics },
                 self => $page{ escaped },
                 page => $page{ escaped },
                 doc => $document{ escaped },
@@ -345,6 +368,18 @@ sub test_layout_content {
             is $elem->attr( 'href' ), '/favicon.ico';
         }
     };
+
+    subtest 'google analytics' => sub {
+        my $elem = $dom->find( 'script' )->grep( sub { $_->text =~ /google-analytics/ } );
+        if ( my $ga_id = $args{site}->data->{google_analytics_id} ) {
+            is $elem->size, 1, 'script tag with google analytics exists';
+            like $elem->[0]->text, qr/\Q$ga_id/, 'GA ID is in script tag';
+        }
+        else {
+            is $elem->size, 0, 'no script tag with google analytics exists';
+        }
+    };
+
 }
 
 # These are individual template tests to ensure basic levels of app support
