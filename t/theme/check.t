@@ -62,7 +62,7 @@ ENDMARKDOWN
     },
 );
 
-my $site = Statocles::Site->new(
+my %default_site = (
     base_url => 'http://example.com',
     build_store => '.',
     deploy => '.',
@@ -88,6 +88,12 @@ my $site = Statocles::Site->new(
             },
         ],
     },
+);
+
+my %site = (
+    default => Statocles::Site->new(
+        %default_site,
+    ),
 );
 
 my %page = (
@@ -161,7 +167,7 @@ $page{ feed } = Statocles::Page::List->new(
 );
 
 my %common_vars = (
-    site => $site,
+    site => $site{ default },
     content => 'Fake content',
     app => $blog,
 );
@@ -283,11 +289,11 @@ my %app_vars = (
 
     site => {
         'sitemap.xml.ep' => {
-            site => $site,
+            site => $site{ default },
             pages => [ $page{ list_first }, $page{ normal }, $page{ escaped } ],
         },
         'robots.txt.ep' => {
-            site => $site,
+            site => $site{ default },
         },
     },
 );
@@ -300,7 +306,7 @@ sub test_layout_content {
     subtest 'page title and site title' => sub {
         if ( ok $elem = $dom->at( 'title' ), 'title element exists' ) {
             like $elem->text, qr{@{[quotemeta $args{self}->title]}}, 'title has document title';
-            like $elem->text, qr{@{[quotemeta $site->title]}}, 'title has site title';
+            like $elem->text, qr{@{[quotemeta $args{site}->title]}}, 'title has site title';
         }
     };
 
@@ -394,7 +400,7 @@ my %content_tests = (
             for my $i ( 0..$#titles ) {
                 my $elem = $titles[ $i ];
                 like $elem->text, qr{@{[quotemeta $args{pages}[$i]->title]}}, 'title has document title';
-                unlike $elem->text, qr{@{[quotemeta $site->title]}}, 'title must not have site title';
+                unlike $elem->text, qr{@{[quotemeta $args{site}->title]}}, 'title must not have site title';
             }
         };
 
@@ -476,7 +482,7 @@ my %content_tests = (
                 for my $i ( 0..$#titles ) {
                     my $elem = $titles[ $i ];
                     like $elem->text, qr{@{[quotemeta $args{pages}[$i]->title]}}, 'title has document title';
-                    unlike $elem->text, qr{@{[quotemeta $site->title]}}, 'title must not have site title';
+                    unlike $elem->text, qr{@{[quotemeta $args{site}->title]}}, 'title must not have site title';
                 }
             };
 
