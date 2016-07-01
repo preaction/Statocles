@@ -6,7 +6,8 @@ use strict;
 use warnings;
 use feature qw( :5.10 );
 use Type::Library -base, -declare => qw(
-    Store Theme Link LinkArray LinkHash DateTimeObj DateStr DateTimeStr
+    Store Theme Link LinkArray LinkHash LinkTree LinkTreeArray
+    DateTimeObj DateStr DateTimeStr
     Person
 );
 use Type::Utils -all;
@@ -24,6 +25,10 @@ coerce Theme, from InstanceOf['Path::Tiny'], via { require Statocles::Theme; Sta
 class_type Link, { class => "Statocles::Link" };
 coerce Link, from HashRef, via { Statocles::Link->new( $_ ) };
 coerce Link, from Str, via { Statocles::Link->new( href => $_ ) };
+
+class_type LinkTree, { class => "Statocles::Link::Tree" };
+coerce LinkTree, from HashRef, via { Statocles::Link::Tree->new( $_ ) };
+coerce LinkTree, from Str, via { Statocles::Link::Tree->new( href => $_ ) };
 
 class_type Person, { class => 'Statocles::Person' };
 coerce Person, from HashRef, via { Statocles::Person->new( $_ ) };
@@ -52,6 +57,12 @@ coerce LinkHash, from HashRef[HashRef],
             ( map {; $_ => [ Statocles::Link->new( $hash{$_} ) ] } keys %hash ),
         };
         return $out;
+    };
+
+declare LinkTreeArray, as ArrayRef[LinkTree], coerce => 1;
+coerce LinkTreeArray, from ArrayRef[HashRef|Str],
+    via {
+        [ map { LinkTree->coerce( $_ ) } @$_ ];
     };
 
 class_type DateTimeObj, { class => 'DateTime::Moonpig' };
@@ -86,6 +97,7 @@ sub DateTime::Moonpig::tzoffset {
 # Down here to resolve circular dependencies
 require Statocles::Store;
 require Statocles::Link;
+require Statocles::Link::Tree;
 require Statocles::Person;
 
 1;

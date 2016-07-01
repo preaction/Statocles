@@ -1,6 +1,9 @@
 use Test::Lib;
 use My::Test;
-use Statocles::Types qw( Link LinkArray LinkHash DateTimeObj Person );
+use Statocles::Types qw(
+    Link LinkArray LinkHash DateTimeObj Person
+    LinkTree LinkTreeArray
+);
 
 subtest 'Link types' => sub {
 
@@ -97,6 +100,44 @@ subtest 'Link types' => sub {
             };
         };
     };
+
+    subtest 'LinkTree' => sub {
+
+        subtest 'from String' => sub {
+            my $link = LinkTree->coerce( "http://example.com" );
+            cmp_deeply $link, Statocles::Link::Tree->new( href => "http://example.com" );
+        };
+
+        subtest 'from Hashref' => sub {
+            my $link = LinkTree->coerce( { href => "http://example.com", rel => 'alternate' } );
+            cmp_deeply $link, Statocles::Link::Tree->new( href => "http://example.com", rel => 'alternate' );
+        };
+
+    };
+
+    subtest 'LinkTreeArray' => sub {
+        subtest 'arrayref of hashrefs' => sub {
+            my $link_array = LinkTreeArray->coercion->( [
+                'http://example.com',
+                {
+                    text => 'link two',
+                    href => 'http://example.net',
+                },
+            ] );
+
+            cmp_deeply $link_array, [
+                Statocles::Link::Tree->new(
+                    href => 'http://example.com',
+                ),
+                Statocles::Link::Tree->new(
+                    text => 'link two',
+                    href => 'http://example.net',
+                ),
+            ];
+
+        };
+    };
+
 };
 
 subtest 'DateTimeObj' => sub {
