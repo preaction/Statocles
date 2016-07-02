@@ -35,26 +35,17 @@ coerce Person, from HashRef, via { Statocles::Person->new( $_ ) };
 coerce Person, from Str, via { Statocles::Person->new( $_ ) };
 
 declare LinkArray, as ArrayRef[Link], coerce => 1;
-coerce LinkArray, from ArrayRef[HashRef],
+coerce LinkArray, from ArrayRef[HashRef|Str],
     via {
-        [ map { Statocles::Link->new( $_ ) } @$_ ];
+        [ map { Link->coerce( $_ ) } @$_ ];
     };
 
 declare LinkHash, as HashRef[LinkArray], coerce => 1;
-coerce LinkHash, from HashRef[ArrayRef[HashRef]],
+coerce LinkHash, from HashRef[ArrayRef[HashRef|Str]|HashRef|Str],
     via {
         my %hash = %$_;
         my $out = {
-            ( map {; $_ => [ map { Statocles::Link->new( $_ ) } @{ $hash{$_} } ] } keys %hash ),
-        };
-        return $out;
-    };
-
-coerce LinkHash, from HashRef[HashRef],
-    via {
-        my %hash = %$_;
-        my $out = {
-            ( map {; $_ => [ Statocles::Link->new( $hash{$_} ) ] } keys %hash ),
+            ( map {; $_ => LinkArray->coerce( ref $hash{ $_ } ne 'ARRAY' ? [ $hash{ $_ } ] : $hash{ $_ }  ) } keys %hash ),
         };
         return $out;
     };

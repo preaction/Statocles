@@ -24,10 +24,7 @@ subtest 'Link types' => sub {
     subtest 'LinkArray' => sub {
         subtest 'arrayref of hashrefs' => sub {
             my $link_array = LinkArray->coercion->( [
-                {
-                    text => 'link one',
-                    href => 'http://example.com',
-                },
+                'http://example.com',
                 {
                     text => 'link two',
                     href => 'http://example.net',
@@ -36,7 +33,6 @@ subtest 'Link types' => sub {
 
             cmp_deeply $link_array, [
                 Statocles::Link->new(
-                    text => 'link one',
                     href => 'http://example.com',
                 ),
                 Statocles::Link->new(
@@ -54,10 +50,7 @@ subtest 'Link types' => sub {
             subtest 'hashref of arrayrefs of hashrefs' => sub {
                 my $link_hash = LinkHash->coercion->( {
                     main => [
-                        {
-                            text => 'link one',
-                            href => 'http://example.com',
-                        },
+                        'http://example.com',
                         {
                             text => 'link two',
                             href => 'http://example.net',
@@ -68,7 +61,6 @@ subtest 'Link types' => sub {
                 cmp_deeply $link_hash, {
                     main => [
                         Statocles::Link->new(
-                            text => 'link one',
                             href => 'http://example.com',
                         ),
                         Statocles::Link->new(
@@ -92,6 +84,21 @@ subtest 'Link types' => sub {
                     alternate => [
                         Statocles::Link->new(
                             text => 'link one',
+                            href => 'http://example.com',
+                        ),
+                    ],
+                };
+
+            };
+
+            subtest 'hashref of strings (single link)' => sub {
+                my $link_hash = LinkHash->coercion->( {
+                    alternate => 'http://example.com',
+                } );
+
+                cmp_deeply $link_hash, {
+                    alternate => [
+                        Statocles::Link->new(
                             href => 'http://example.com',
                         ),
                     ],
