@@ -41,7 +41,10 @@ coerce LinkArray, from ArrayRef[HashRef|Str],
     };
 
 declare LinkHash, as HashRef[LinkArray], coerce => 1;
-coerce LinkHash, from HashRef[ArrayRef[HashRef|Str]|HashRef|Str],
+# We need the parens in this "from" type union to fix an issue in Perl
+# < 5.14 and Type::Tiny 1.000005
+# (https://github.com/tobyink/p5-type-tiny/issues/29)
+coerce LinkHash, from HashRef[(ArrayRef[HashRef|Str]|HashRef)|Str],
     via {
         my %hash = %$_;
         my $out = {
