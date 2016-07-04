@@ -840,6 +840,28 @@ can use like this:
         print $foo;
     %% end
 
+### Color Style
+
+The highlight plugin comes with multiple color styles. The style can be
+configured using the plugin's `style` attribute:
+
+    site:
+        $class: Statocles::Site
+        plugins:
+            highlight:
+                $class: Statocles::Plugin::Highlight
+                style: solarized-light
+
+The built-in styles are:
+
+* default - A default style from [HighlightJS](https://highlightjs.org)
+* solarized-light - The light flavor of
+  [Solarized](http://ethanschoonover.com/solarized)
+* solarized-dark - The dark flavor of
+  [Solarized](http://ethanschoonover.com/solarized)
+
+XXX Show examples of styles
+
 For more information on the `highlight` function and content templates,
 see [the content guide](../content).
 
