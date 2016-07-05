@@ -46,6 +46,7 @@ my %document = (
         content => qq{<b>Must not be escaped</b>\n\n---\n\nSection 2},
         date => '2015-01-02 00:00:00',
         # No tags, to test what happens with tag displays
+        # No author, to show the site author instead
         %document_common,
     ),
 );
@@ -63,6 +64,7 @@ ENDMARKDOWN
 );
 
 my %default_site = (
+    author => 'Doug Bell <doug@example.com>',
     base_url => 'http://example.com',
     build_store => '.',
     deploy => '.',
@@ -503,11 +505,22 @@ my %content_tests = (
         subtest 'entries' => sub {
             subtest 'author' => sub {
                 my $authors = $xml->find( 'entry author' );
-                is $authors->size, 1, 'right number of entry authors found';
-                my $elem = $authors->[ 0 ];
-                if ( ok $elem->at( 'name' ), 'author has name element' ) {
-                    is $elem->at( 'name' )->text, $document{normal}->author->name,
-                        'author name is correct';
+                is $authors->size, 2, 'right number of entry authors found';
+
+                subtest 'author on page object' => sub {
+                    my $elem = $authors->[ 0 ];
+                    if ( ok $elem->at( 'name' ), 'author has name element' ) {
+                        is $elem->at( 'name' )->text, $document{normal}->author->name,
+                            'author name is correct';
+                    }
+                };
+
+                subtest 'author on site object' => sub {
+                    my $elem = $authors->[ 1 ];
+                    if ( ok $elem->at( 'name' ), 'author has name element' ) {
+                        is $elem->at( 'name' )->text, $args{site}->author->name,
+                            'author name is correct';
+                    }
                 }
             };
 
