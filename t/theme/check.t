@@ -34,7 +34,7 @@ my %document = (
     normal => Statocles::Document->new(
         path => 'DUMMY',
         title => 'Page Title',
-        author => 'preaction',
+        author => 'Doug "preaction" Bell',
         content => 'Content One',
         date => '2015-01-01 00:00:00',
         tags => [qw( foo bar <baz> )],
@@ -339,6 +339,21 @@ sub test_layout_content {
         if ( ok $elem = $dom->at( 'meta[name=generator]' ), 'meta generator exists' ) {
             is $elem->attr( 'content' ), "Statocles $Statocles::VERSION",
                 'generator has name and version';
+        }
+    };
+
+    subtest 'author information' => sub {
+        if ( my $author = $args{ page }->author ) {
+            subtest 'page has author data' => sub {
+                if ( ok $elem = $dom->at( 'meta[name=author]' ), 'meta author exists' ) {
+                    is $elem->attr( 'content' ), $author->name, 'meta author has author name';
+                }
+            };
+        }
+        else {
+            subtest 'page has no author data' => sub {
+                ok !$dom->at( 'meta[name=author]' ), 'meta author does not exist';
+            };
         }
     };
 
