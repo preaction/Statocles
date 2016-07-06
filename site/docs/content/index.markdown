@@ -3,6 +3,162 @@ title: Managing Content
 layout: layout/full-width.html
 ---
 
+Statocles is a content management system. You give it content, and it manages
+it by assembling a web site. This includes changing your Markdown into HTML,
+adding your configured theme, running your helper functions, executing your
+plugins, collecting your blog posts into lists, collecting your tags, and
+building all your site's search metadata.
+
+The purpose of Statocles and other content management systems is to automate
+all the tedious tasks that can be automated so that you can simply write your
+content. If you find yourself doing something repeatedly that you think should
+be automated, [let us know on Github]() or [talk to us in chat]().
+
+# Quick Start
+
+Here's a quick introduction to managing content with Statocles. If you've used
+other content management systems, start here. These topics will be covered in
+greater depth in the rest of this guide.
+
+Make sure you've [created your site using the config guide](../config) before
+doing this quick start.
+
+## Adding a new page
+
+To add a new page to a Statocles site, we just need to create a new Markdown
+file. Let's create a new page called "about.markdown", and add some information
+about ourselves.
+
+The first part of every document is a header, which is put between `---`
+markers. Here is where we'll put our title and other metadata. See
+[Header](#Header) below for an introduction to what other things can be put
+here. For now, we'll just give our page a title:
+
+    ---
+    title: About Me
+    ---
+
+With our header done, we can add some content. Content is formatted using
+Markdown, which mostly tries to do the right thing with natural text. Like many
+other applications, Markdown lets us bold text using `*text*`. Let's write a
+paragraph about ourselves.
+
+    ---
+    title: About Me
+    ---
+
+    A British tar is a soaring soul. As free as a mountain bird. Who
+    never will fall down to a domineering frown or a dictatorial word.
+
+To add links, Markdown has a special format: The text of the link goes
+in square brackets and the URL goes in parentheses immediately after,
+like `[text](url)`. We can also use `<URL>` to show the URL as
+a clickable link. Let's add our e-mail address and a link to Twitter for
+some contact information:
+
+    ---
+    title: About Me
+    ---
+
+    A British tar is a soaring soul. As free as a mountain bird. Who
+    never will fall down to a domineering frown or a dictatorial word.
+
+    E-mail: <doug@example.com>
+    Twitter: [@preaction](http://twitter.com/preaction)
+
+*Note*: Markdown does not treat single newlines as significant, so the
+above will look like a paragraph. See [Content](#Content), below, for
+more information on Markdown.
+
+Once we save this file, it's part of our site.
+
+## Adding a new blog post
+
+But first, let's add a blog post announcing our new content. In addition
+to simply adding Markdown files to our site, Statocles comes with
+a `statocles` command to make managing content easier. These commands
+will create the right directory structure, copy a document skeleton, and
+open up our text editor so we can just start typing.
+
+To create a blog post, we can run `statocles blog post`. When running
+the command, we can specify the post's title, which Statocles will use
+to create a blog post directory. If we have the `EDITOR` environment
+variable set (a standard Unix-like environment variable), Statocles will
+immediately open our text editor. If not, Statocles will create the post
+and tell us where so we can open it ourselves.
+
+So name our blog post "New About Page" and run `statocles blog post New
+About Page`. Statocles will create a directory for our post using the
+current date and the post title (something like
+`/2016/07/02/new-about-page/index.markdown`). The blog creates entire
+directories for every post so that posts can consist of multiple pages
+and also contain images, scripts, and other files as needed. If we open
+that file, or if Statocles opens it for us, the default blog post
+skeleton will look like this:
+
+    ---
+    title: New About Page
+    ---
+    Markdown content goes here
+
+Lets describe our new About page, and add a link to it.
+
+    ---
+    title: New About Page
+    ---
+    I've written a new [about me](/about.html) page for you to learn
+    about me and get in contact!
+
+Now we can close our editor. If Statocles opened our editor for us, it
+will look at the post title and adjust the post directory if needed.
+
+## Building the site
+
+Now that we have some new content, and a blog post introducing that
+content, let's build the site. The `statocles build` command will grab
+our site content, create our HTML, and write it to the hidden
+`.statocles/build` directory. The `.statocles` directory is important,
+and should be mostly ignored, but you can examine `.statocles/build` to
+take a look at your site.
+
+The `build` process also runs any plugins you've configured. This can
+include a broken link checker and other automated checks for a good,
+valid website. Running the `build` command can be a good sanity check.
+See [the config guide](../config) for how to configure automated check
+plugins.
+
+If you want to know what Statocles is doing during the build, you can
+run `statocles build -v` for informational messages, and `statocles
+build -vv` for debugging messages. This can be helpful if something's
+wrong and you don't know what, or if you need to [ask for help on
+Github]() or [ask for help in chat]().
+
+## Testing the site
+
+Instead of looking at the rendered HTML files, Statocles can run a small
+web server to show your site locally. To view your site locally in your
+web browser, use the `statocles daemon` command:
+
+    $ statocles daemon
+    Listening on http://127.0.0.1:3000
+
+Once the daemon is running, open up your web browser to the URL, and
+your site should appear. If anything looks wrong, you can quickly fix it
+before deploying to production.
+
+If you've installed the optional Mac::FSEvents module on OS X, changes
+to your site will automatically be built while the daemon is running.
+
+Like the `build` command, you can use `-v` and `-vv` to see extra
+information about what the daemon is doing.
+
+## Deploying the site
+
+Once you've tested your site and everything looks good, you can deploy
+it with the `statocles deploy` command. Running `statocles deploy` will
+deploy your site with the configured deployment. See [the config
+guide](../config) for more information about configuring deployment.
+
 # Documents
 
 The most common unit of content in Statocles is the Document. A document
@@ -395,4 +551,3 @@ XXX
 * [The Config guide](../config)
 * [The Theme guide](../theme)
 * [The Develop guide](../develop)
-
