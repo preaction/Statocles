@@ -141,6 +141,11 @@ around 'deploy' => sub {
     if ( _git_has_remote( $git, $self->remote ) ) {
         $self->_run( $git, push => $self->remote => $self->branch );
     }
+    else {
+        $self->site->log->warn(
+            sprintf 'Git remote "%s" does not exist. Not pushing.', $self->remote,
+        );
+    }
 
     # Tidy up
     $self->_run( $git, checkout => $current_branch );

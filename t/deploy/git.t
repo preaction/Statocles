@@ -295,6 +295,43 @@ subtest '--clean' => sub {
 
 };
 
+subtest 'deploy configured with missing remote' => sub {
+
+    subtest 'default remote "origin" does not exist' => sub {
+        my $tmpdir = tempdir( @temp_args );
+        diag "TMP: " . $tmpdir if @temp_args;
+
+        my ( $deploy, $build_store, $workdir, $remotedir ) = make_deploy( $tmpdir );
+        my $workgit = Git::Repository->new( work_tree => "$workdir" );
+        $workgit->run( qw( remote rm origin ) );
+
+        $deploy->deploy( $build_store );
+        cmp_deeply $deploy->site->log->history,
+            [
+                [ ignore(), ignore(), q{Git remote "origin" does not exist. Not pushing.} ],
+            ],
+            'warn user that we did not push';
+    };
+
+    subtest 'configured remote does not exist' => sub {
+        my $tmpdir = tempdir( @temp_args );
+        diag "TMP: " . $tmpdir if @temp_args;
+
+        my ( $deploy, $build_store, $workdir, $remotedir )
+            = make_deploy( $tmpdir, remote => 'nondefault' );
+        my $workgit = Git::Repository->new( work_tree => "$workdir" );
+        $workgit->run( qw( remote rm nondefault ) );
+
+        $deploy->deploy( $build_store );
+        cmp_deeply $deploy->site->log->history,
+            [
+                [ ignore(), ignore(), q{Git remote "nondefault" does not exist. Not pushing.} ],
+            ],
+            'warn user that we did not push';
+    };
+
+};
+
 subtest '--message' => sub {
     my $tmpdir = tempdir( @temp_args );
     diag "TMP: " . $tmpdir if @temp_args;
