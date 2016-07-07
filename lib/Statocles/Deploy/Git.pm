@@ -79,13 +79,13 @@ around 'deploy' => sub {
 
     my $git = Git::Repository->new( work_tree => "$root" );
 
-    my $current_branch = _current_branch( $git );
+    my $current_branch = _git_current_branch( $git );
     if ( !$current_branch ) {
         die qq{Repository has no branches. Please create a commit before deploying\n};
     }
 
     # Switch to the right branch
-    if ( !_has_branch( $git, $self->branch ) ) {
+    if ( !_git_has_branch( $git, $self->branch ) ) {
         # Create a new, orphan branch
         # Orphan branches were introduced in git 1.7.2
         $self->site->log->info( sprintf 'Creating deploy branch "%s"', $self->branch );
@@ -138,7 +138,7 @@ around 'deploy' => sub {
         $self->site->log->warn( 'No files changed' );
     }
 
-    if ( _has_remote( $git, $self->remote ) ) {
+    if ( _git_has_remote( $git, $self->remote ) ) {
         $self->_run( $git, push => $self->remote => $self->branch );
     }
 
@@ -172,18 +172,18 @@ sub _git_run {
     return $cmd->exit;
 }
 
-sub _current_branch {
+sub _git_current_branch {
     my ( $git ) = @_;
     my @branches = map { s/^\*\s+//; $_ } grep { /^\*/ } $git->run( 'branch' );
     return $branches[0];
 }
 
-sub _has_branch {
+sub _git_has_branch {
     my ( $git, $branch ) = @_;
     return !!grep { $_ eq $branch } map { s/^[\*\s]\s+//; $_ } $git->run( 'branch' );
 }
 
-sub _has_remote {
+sub _git_has_remote {
     my ( $git, $remote ) = @_;
     return !!grep { $_ eq $remote } map { s/^[\*\s]\s+//; $_ } $git->run( 'remote' );
 }
