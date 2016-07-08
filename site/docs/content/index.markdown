@@ -3,45 +3,51 @@ title: Managing Content
 layout: layout/full-width.html
 ---
 
-Statocles is a content management system. You give it content, and it manages
-it by assembling a web site. This includes changing your Markdown into HTML,
-adding your configured theme, running your helper functions, executing your
-plugins, collecting your blog posts into lists, collecting your tags, and
-building all your site's search metadata.
+Statocles is a content management system. You give it content, and it
+manages it by assembling a web site. This includes changing your
+Markdown into HTML, adding your configured theme, running your helper
+functions, executing your plugins, collecting your blog posts into
+lists, collecting your tags, and building all your site's search
+metadata.
 
-The purpose of Statocles and other content management systems is to automate
-all the tedious tasks that can be automated so that you can simply write your
-content. If you find yourself doing something repeatedly that you think should
-be automated, [let us know on Github]() or [talk to us in chat]().
+The purpose of Statocles and other content management systems is to
+automate all the tedious tasks that can be automated so that you can
+simply write your content. If you find yourself doing something
+repeatedly that you think should be automated, [let us know on Github]()
+or [talk to us in chat]().
+
+This guide covers how to write and manage content with Statocles. If you
+have not configured your site yet, see [the config guide](../config). If
+you want to change how your site looks, see [the theme guide](../theme).
 
 # Quick Start
 
-Here's a quick introduction to managing content with Statocles. If you've used
-other content management systems, start here. These topics will be covered in
-greater depth in the rest of this guide.
+Here's a quick introduction to managing content with Statocles. If
+you've used other content management systems, start here. These topics
+will be covered in greater depth in the rest of this guide.
 
-Make sure you've [created your site using the config guide](../config) before
-doing this quick start.
+Make sure you've [created your site using the config guide](../config)
+before doing this quick start.
 
 ## Adding a new page
 
-To add a new page to a Statocles site, we just need to create a new Markdown
-file. Let's create a new page called "about.markdown", and add some information
-about ourselves.
+To add a new page to a Statocles site, we just need to create a new
+Markdown file. Let's create a new page called "about.markdown", and add
+some information about ourselves.
 
 The first part of every document is a header, which is put between `---`
 markers. Here is where we'll put our title and other metadata. See
-[Header](#Header) below for an introduction to what other things can be put
-here. For now, we'll just give our page a title:
+[Header](#Header) below for an introduction to what other things can be
+put here. For now, we'll just give our page a title:
 
     ---
     title: About Me
     ---
 
-With our header done, we can add some content. Content is formatted using
-Markdown, which mostly tries to do the right thing with natural text. Like many
-other applications, Markdown lets us bold text using `*text*`. Let's write a
-paragraph about ourselves.
+With our header done, we can add some content. Content is formatted
+using Markdown, which mostly tries to do the right thing with natural
+text. Like many other applications, Markdown lets us bold text using
+`*text*`. Let's write a paragraph about ourselves.
 
     ---
     title: About Me
@@ -63,12 +69,10 @@ some contact information:
     A British tar is a soaring soul. As free as a mountain bird. Who
     never will fall down to a domineering frown or a dictatorial word.
 
-    E-mail: <doug@example.com>
-    Twitter: [@preaction](http://twitter.com/preaction)
+    * E-mail: <doug@example.com>
+    * Twitter: [@preaction](http://twitter.com/preaction)
 
-*Note*: Markdown does not treat single newlines as significant, so the
-above will look like a paragraph. See [Content](#Content), below, for
-more information on Markdown.
+See [Content](#Content), below, for more information on Markdown.
 
 Once we save this file, it's part of our site.
 
@@ -127,12 +131,6 @@ valid website. Running the `build` command can be a good sanity check.
 See [the config guide](../config) for how to configure automated check
 plugins.
 
-If you want to know what Statocles is doing during the build, you can
-run `statocles build -v` for informational messages, and `statocles
-build -vv` for debugging messages. This can be helpful if something's
-wrong and you don't know what, or if you need to [ask for help on
-Github]() or [ask for help in chat]().
-
 ## Testing the site
 
 Instead of looking at the rendered HTML files, Statocles can run a small
@@ -145,12 +143,6 @@ web browser, use the `statocles daemon` command:
 Once the daemon is running, open up your web browser to the URL, and
 your site should appear. If anything looks wrong, you can quickly fix it
 before deploying to production.
-
-If you've installed the optional Mac::FSEvents module on OS X, changes
-to your site will automatically be built while the daemon is running.
-
-Like the `build` command, you can use `-v` and `-vv` to see extra
-information about what the daemon is doing.
 
 ## Deploying the site
 
@@ -486,15 +478,74 @@ other Markdown content.
 
 ### Links
 
-XXX
+Links can be specified in multiple ways, but the easiest and most common
+way is `[link text](link destination)`. The text of the link goes in
+square brackets, and the destination of the link goes in parentheses
+immediately after.
+
+XXX [text][1] links
 
 ### Lists
 
-XXX
+Markdown supports both ordered and unordered lists, and lists can be
+nested using indentation.
+
+To make an unordered list, use `*` and a space before each list item:
+
+    * Item one
+    * Item two
+    * Item three
+
+If a single list item wraps, you are allowed to indent it a little to
+make it look nice.
+
+    * This is the first line of a list item which wraps
+      and this is the second
+    * This is the next list item
+
+To make an ordered list, use `1)`, `2)`, etc...
+
+    1) Item one
+    2) Item two
+    3) Item three
+
+The numbers don't matter when the Markdown is being changed to HTML.
+Starting an ordered list with `42)` will still result in an ordered list
+on the website that starts with 1. XXX Verify this
+
+To create nested lists, indent with a tab or 4 spaces:
+
+    * Ingredients
+        * Eggs
+        * Milk
+        * Butter
+    * Equipment
+        * Stove
+        * Frying pan
+        * Spatula
+
+Nested lists can be ordered or unordered.
+
+    * Instructions
+        1) Preheat oven to 450°
+        2) Grease baking sheet
+        3) Set up electric mixer
 
 ### Images
 
-XXX
+Images are defined in Markdown much like links, except with a `!` in
+front, like `![alt text](image src)`. The text in square brackets will
+be used for the image's `alt` attribute, which is used when the image
+can't be shown. The image source URL goes in parentheses.
+
+    ![All the ingredients to make chocolate chip cookies](ingredients.jpg)
+
+Images can be their own paragraphs, or they can be used inside existing
+paragraphs. You can wrap images in links as well:
+
+    [![Get the recipe for chocolate-chip cookies](cookies.jpg)](/recipe/cookies)
+
+XXX Mention the image helper when we have one
 
 ### HTML
 
@@ -502,7 +553,12 @@ At any time you can use HTML if you need to have a tag that isn't
 supported in Markdown, or if you need to add classes or IDs to your
 content.
 
-XXX
+    To make really great cookies, you need to cream the butter and sugar
+    until it's soft and smooth. To do this, I use my electric stand
+    mixer.
+
+    <aside>For information about purchasing an electric stand mixer, see
+    <a href="/guide/mixer">my guide to mixers</a></aside>
 
 By default, content inside the HTML tag is not parsed as Markdown,
 making it safe to use characters that would otherwise be processed. To
@@ -510,7 +566,7 @@ allow Markdown inside your HTML, use the `markdown=1` attribute:
 
     <p class="special" markdown=1>
     This paragraph is still parsed as Markdown, so *bold formatting*
-    will still work!
+    [and links](link.html) will still work!
     </p>
 
 The Statocles default themes include custom formatting for the following
@@ -519,7 +575,8 @@ HTML5 tags:
 * aside
 * figure / figcaption
 
-XXX
+XXX Demonstrate custom formatting
+XXX Ensure custom formatting exists in default and bootstrap themes
 
 # Simple Content
 
@@ -527,13 +584,94 @@ How to create a new page
 
 XXX
 
+# Site Commands
+
+The `statocles` command-line application is how you tell Statocles to
+build, test, and deploy your site.
+
+All of the Statocles commands support using the `-v` option to enable
+verbose output. Using it twice (`-vv`) enables debugging output.
+
+To get help with Statocles commands, run `statocles --help`. To show
+what version of Statocles you're using, run `statocles --version`.
+
+## build
+
+The `statocles build` command builds our site, rendering all our
+content, and running all our plugins. After the site is built, it is
+saved in the `.statocles/build` directory. You can look inside this
+directory to see what your site looks like (but see the `statocles
+daemon` command for a better way to test your site).
+
+    $ statocles build
+
+Since blog posts can be written in advance, to test how our site looks
+in the future, or how our site used to look in the past, we can use the
+`--date <date>` option. The date option takes a date in C<YYYY-MM-DD>
+format, and will build the site as though it were that date. In the case
+of the blog app, this means that posts after the current date will not
+appear.
+
+    $ statocles build --date 2016-01-30 # January 30, 2016
+
+## daemon
+
+The `statocles daemon` command runs a local web server to allow us to
+look at our site.
+
+    $ statocles daemon
+    Listening on http://*:5000
+
+Once the web server starts, we can go to `http://localhost:5000` in our
+web browser to see our site. This test environment is as close to the
+deploy environment as possible so you can verify that links and images
+are valid, and that scripts and stylesheets work correctly.
+
+Before starting the web server, the `daemon` command will build our site
+(so, no need to run `build` beforehand). If we have some optional
+modules installed, the daemon will also automatically re-build our site
+when our content changes, making quick changes to content easier.
+
+Like the `statocles build` command, the daemon accepts a `--date <date>`
+option to test the site as though it is a certain date. The date should
+be formatted as `YYYY-MM-DD` like `2016-01-30` for January 30, 2016.
+
+XXX Extra watch dirs
+XXX Plugin-defined watch dirs?
+XXX Watch the site.yml
+
+## deploy
+
+XXX
+
 # Application Commands
+
+Each application is allowed to have commands which help manage the
+content inside. For example, the blog app has a command to create a new
+blog post which creates the required directory structure for the current
+date.
+
+XXX
+
+## Basic application
+
+Instead of creating the directory and creating the new content file
+ourselves, Statocles can do that for us.
+
+XXX
+
+## Blog Application
 
 How to create a blog post
 
 XXX
 
 # Images and Files
+
+Images and files can be placed anywhere an application stores its
+content. If you followed [the config guide](../config) and have a Basic
+app as your site root (`/`), then any image or other file you place in
+your site will be deployed to your server.
 
 XXX
 
