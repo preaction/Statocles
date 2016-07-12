@@ -675,9 +675,83 @@ your site will be deployed to your server.
 
 XXX
 
+# Helpers
+
+Every content document in Statocles is run through the Statocles template renderer. This allows you to use helpers to modify or generate content.
+
+## include
+
+## markdown
+
+## highlight
+
 # Content Templates
 
-XXX
+The content in your document is run theoigh the same template parser as
+your theme templates are. This means you can use template helpers,
+above, but it also means you can generate content from your document's
+`data`, `links`, `images`, and other attributes.
+
+For an introduction to Statocles template syntax, see [the theme
+guide](../theme). The rest of this section will expand on how you can
+use that syntax in your content.
+
+Like theme templates, content templates get a set of template variables:
+
+    * $doc - The current document
+    * $site - The current site
+    * $app - The current application
+
+Using my document's `links` attribute, we could build a set of links in
+a document, and then use a loop to generate the HTML for that list. Here
+we can use the link key `bibliography` to build a bibliography of our
+page, which we will then place at the bottom of our page.
+
+    ---
+    title: A Research Article
+    links:
+        bibliography:
+            - text: R. James, "The Modern Chef", retrieved 2016-03-17
+              href: http://example.com/modern-chef
+            - text: R. Dorothy, "Chefs Through Time"
+              href: http://example.com/chefs-through-time
+            - text: M. Brooks, Chefs in Space
+              href: http://example.com/chefs-in-space
+    ---
+
+    This is an exhaustively researched report.
+
+    ## Bibliography
+
+    <ul>
+    % for my $link ( $doc->links( 'bibliography' ) ) {
+        <li><a href="<%= $link->href %>"><%= $link->text %></a></li>
+    % }
+    </ul>
+
+Which will then appear like so:
+
+    This is an exhaustively researched report
+
+    Bibliography
+
+    * R. James, "The Modern Chef"
+    * R. Dorothy, "Chefs Through Time"
+    * M. Brooks, Chefs in Space
+
+If we wanted to have a bibliography section in a bunch of documents, we
+could move our bibliography template into an external template that we
+can include using the `include` helper. The `include` helper runs its
+content through the template parser with the same variables as were
+passed to us.
+
+Of course, we could also create a special post template that includes
+our bibliography and change our document's template using `template`
+attribute. There are lots of ways to do things, each with their own
+strengths and weaknesses.
+
+For more details about the Statocles template syntax, see [the theme
+guide](../theme).
 
 # Content Sections
 
