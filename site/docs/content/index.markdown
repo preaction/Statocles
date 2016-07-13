@@ -13,8 +13,9 @@ metadata.
 The purpose of Statocles and other content management systems is to
 automate all the tedious tasks that can be automated so that you can
 simply write your content. If you find yourself doing something
-repeatedly that you think should be automated, [let us know on Github]()
-or [talk to us in chat]().
+repeatedly that you think should be automated, [let us know on
+Github](http://github.com/preaction/Statocles/issues) or [talk to us in
+chat]().
 
 This guide covers how to write and manage content with Statocles. If you
 have not configured your site yet, see [the config guide](../config). If
@@ -677,24 +678,113 @@ XXX
 
 # Helpers
 
-Every content document in Statocles is run through the Statocles template renderer. This allows you to use helpers to modify or generate content.
+Every content document in Statocles is run through the Statocles
+template renderer. This allows you to use helpers to modify or generate
+content.
+
+XXX Introduce the template directives and link to Theme guide
+
+Besides the default helpers like `include` and `markdown`, new helpers
+can be added by plugins. See [the config guide](../config) for how to
+configure plugins, and [the develop guide](../develop) for how to
+develop your own template helpers.
 
 ## include
 
+The `include` helper allows you to include another file or template into
+this content. This can be used to organize your content better, or to
+create reusable chunks of content (much like a subroutine in a computer
+program).
+
+For one example, let's create a recipe in another file and include it
+into our current file. This will make it easy to have a "printable"
+recipe that lacks the rest of our introductory content. First, let's
+create the recipe in `recipe.html`. XXX Where to put includes?
+
+        <h1>Ice Cream Soup</h1>
+        <h2>Ingredients</h2>
+        <ul>
+            <li>Ice cream</li>
+        </ul>
+        <h2>Instructions</h2>
+        <ul>
+            <li>Bring ice cream to room temperature.</li>
+        </ul>
+
+Next we'll include this file into our blog post about it:
+
+    ---
+    title: Ice Cream Soup
+    ---
+    I finally cracked the secret to making ice cream soup! Details
+    below!
+
+    %%= include 'recipe.html'
+
+Our blog post now includes our recipe.
+
+*Note*: We created this example using HTML. If you want to create the
+same thing using Markdown, see below to the `markdown` helper.
+
+The `include` helper can also have arguments, which will be given to the
+included template as variables. For example, we can create an author
+biography template which will format a set of information about the
+author of a page, such as name and e-mail address. We'll even use their
+e-mail address to fetch their [Gravatar]().
+
+Let's create the biography template first, as "bio.html.ep". XXX Where
+to put templates? This template will take in two parameters, `$name` for
+the author's name, and `$email` for the author's e-mail, and it will
+show their name, Gravatar, and create a link to e-mail the author. In
+order to get a proper Gravatar image, we need to take the e-mail
+address, lower-case it (`lc`), and get the MD5 sum in hex format
+(`md5_hex` from the `Digest::MD5` module):
+
+    <h2>Author</h2>
+    %% use Digest::MD5 'md5_hex';
+    %% my $gravatar = "https://gravatar.com/avatar/" . md5_hex( lc $email );
+    <a href="mailto:<%%= $email %>">
+        <img src="<%%= $gravatar %>">
+        <%%= $name %>
+    </a>
+
+Now that we have our template, we can include it in our post:
+
+    ---
+    title: Guest Post
+    ---
+    This is a post by a guest author.
+
+    %%= include 'bio.html', name => 'Guest Guesterson', email => 'guest@example.com';
+
+With the input variables, our included template will be rendered into this:
+
+    <a href="mailto:guest@example.com">
+        <img src="http://gravatar.com/img/guest@example.com">
+        Guest Guesterson
+    </a>
+
+XXX `yaml` helper to build data structures in content to be given to templates?
+XXX Gravatar data for user portrait in default themes
+
 ## markdown
+
+XXX
 
 ## highlight
 
+XXX
+
 # Content Templates
 
-The content in your document is run theoigh the same template parser as
-your theme templates are. This means you can use template helpers,
-above, but it also means you can generate content from your document's
-`data`, `links`, `images`, and other attributes.
+The content in your document is run through the same template parser as your
+theme templates are. This means you can use template helpers, above, but it
+also means you can generate content from your document's `data`, `links`,
+`images`, and other attributes.
 
 For an introduction to Statocles template syntax, see [the theme
-guide](../theme). The rest of this section will expand on how you can
-use that syntax in your content.
+guide](../theme). The rest of this section will expand on how you can use that
+syntax in your content.
 
 Like theme templates, content templates get a set of template variables:
 
@@ -702,16 +792,16 @@ Like theme templates, content templates get a set of template variables:
     * $site - The current site
     * $app - The current application
 
-Using my document's `links` attribute, we could build a set of links in
-a document, and then use a loop to generate the HTML for that list. Here
-we can use the link key `bibliography` to build a bibliography of our
-page, which we will then place at the bottom of our page.
+Using my document's `links` attribute, we could build a set of links in a
+document, and then use a loop to generate the HTML for that list. Here we can
+use the link key `bibliography` to build a bibliography of our page, which we
+will then place at the bottom of our page.
 
     ---
     title: A Research Article
     links:
         bibliography:
-            - text: R. James, "The Modern Chef", retrieved 2016-03-17
+            - text: R. James, "The Modern Chef"
               href: http://example.com/modern-chef
             - text: R. Dorothy, "Chefs Through Time"
               href: http://example.com/chefs-through-time
@@ -724,9 +814,9 @@ page, which we will then place at the bottom of our page.
     ## Bibliography
 
     <ul>
-    % for my $link ( $doc->links( 'bibliography' ) ) {
-        <li><a href="<%= $link->href %>"><%= $link->text %></a></li>
-    % }
+    %% for my $link ( $doc->links( 'bibliography' ) ) {
+        <li><a href="<%%= $link->href %>"><%%= $link->text %></a></li>
+    %% }
     </ul>
 
 Which will then appear like so:
@@ -739,23 +829,23 @@ Which will then appear like so:
     * R. Dorothy, "Chefs Through Time"
     * M. Brooks, Chefs in Space
 
-If we wanted to have a bibliography section in a bunch of documents, we
-could move our bibliography template into an external template that we
-can include using the `include` helper. The `include` helper runs its
-content through the template parser with the same variables as were
+If we wanted to have a bibliography section in a bunch of documents, we could
+move our bibliography template into an external template (in our theme
+directory) that we can include using the `include` helper. The `include` helper
+runs its content through the template parser with the same variables as were
 passed to us.
 
-Of course, we could also create a special post template that includes
-our bibliography and change our document's template using `template`
-attribute. There are lots of ways to do things, each with their own
-strengths and weaknesses.
+Of course, we could also create a special post template that includes our
+bibliography and change our document's template using `template` attribute.
+There are lots of ways to do things, each with their own strengths and
+weaknesses.
 
 For more details about the Statocles template syntax, see [the theme
 guide](../theme).
 
 # Content Sections
 
-XXX
+XXX Numbered content sections only. Named content sections are for theme authors presently.
 
 # See Also
 
