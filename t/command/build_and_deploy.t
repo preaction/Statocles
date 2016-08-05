@@ -198,6 +198,9 @@ subtest 'special options' => sub {
             my $git = Git::Repository->new( work_tree => "$tmp" );
             $git->run( config => 'user.name' => 'Statocles Test User' );
             $git->run( config => 'user.email' => 'statocles@example.com' );
+            my $remote = tempdir;
+            Git::Repository->run( init => '--bare', $remote );
+            $git->run( remote => 'add', 'origin', "$remote" );
             $git->run( add => $tmp->child( 'site.yml' ) );
             $git->run( commit => -m => 'Add site config' );
 
@@ -255,6 +258,9 @@ subtest 'special options' => sub {
             my $git = Git::Repository->new( work_tree => "$tmp" );
             $git->run( config => 'user.name' => 'Statocles Test User' );
             $git->run( config => 'user.email' => 'statocles@example.com' );
+            my $remote = tempdir;
+            Git::Repository->run( init => '--bare', $remote );
+            $git->run( remote => 'add', 'origin', "$remote" );
             $git->run( add => $tmp->child( 'site.yml' ) );
             $git->run( commit => -m => 'Add site config' );
 
