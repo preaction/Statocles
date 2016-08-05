@@ -3,6 +3,7 @@ use Test::Lib;
 use My::Test;
 use POSIX qw( locale_h );
 use Statocles::App::Blog;
+use Statocles::Util qw( trim );
 my $SHARE_DIR = path( __DIR__ )->parent->parent->child( 'share' );
 
 my $site = build_test_site(
@@ -735,7 +736,7 @@ my @page_tests = (
         is $dom->at( '.alternate a' )->attr( 'href' ),
             'http://blogs.perl.org/preaction/404.html';
         is $dom->at( '.alternate a em' )->text, 'First Post';
-        is $dom->at( '.alternate a' )->text, 'on blogs.perl.org.';
+        is trim $dom->at( '.alternate a' )->text, 'on blogs.perl.org.';
 
         if ( ok my $node = $dom->at( 'footer #app-info' ) ) {
             is $node->text, $app->data->{info}, 'app-info is correct';
@@ -826,7 +827,7 @@ my @page_tests = (
         is $dom->at( '.alternate a' )->attr( 'href' ),
             'http://blogs.perl.org/preaction/404.html';
         is $dom->at( '.alternate a em' )->text, 'More Tags';
-        is $dom->at( '.alternate a' )->text, 'on blogs.perl.org.';
+        is trim $dom->at( '.alternate a' )->text, 'on blogs.perl.org.';
 
         if ( ok my $node = $dom->at( 'footer #app-info' ) ) {
             is $node->text, $app->data->{info}, 'app-info is correct';
