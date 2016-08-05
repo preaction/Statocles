@@ -7,8 +7,23 @@ use Exporter 'import';
 use Mojo::JSON qw( to_json );
 
 our @EXPORT_OK = qw(
-    dircopy run_editor uniq_by derp
+    trim dircopy run_editor uniq_by derp
 );
+
+=sub trim
+
+    my $trimmed = trim $untrimmed;
+
+Trim the leading and trailing whitespace from the given scalar.
+
+=cut
+
+sub trim(_) {
+    return $_[0] if !$_[0];
+    $_[0] =~ s/^\s+//;
+    $_[0] =~ s/\s+$//;
+    return $_[0];
+}
 
 =sub dircopy
 

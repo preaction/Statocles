@@ -1,8 +1,36 @@
 use Test::Lib;
 use My::Test;
-use Statocles::Util qw( dircopy run_editor uniq_by derp );
+use Statocles::Util qw( trim dircopy run_editor uniq_by derp );
 use Statocles::Link;
 my $SHARE_DIR = path( __DIR__, 'share' );
+
+subtest 'trim' => sub {
+    my $foo;
+    my @warnings;
+    local $SIG{__WARN__} = sub { push @warnings, @_ };
+
+    $foo = ' foo',
+    is trim $foo, 'foo', 'leading whitespace is trimmed';
+
+    $foo = "foo\t\n";
+    is trim $foo, 'foo', 'trailing whitespace is trimmed';
+
+    $foo = ' foo ';
+    is trim $foo, 'foo', 'leading and trailing whitespace is trimmed';
+
+    $foo = '';
+    is trim $foo, '', 'empty string is passed through';
+
+    $foo = undef;
+    is trim $foo, undef, 'undef is passed through';
+
+    local $_ = " foo ";
+    trim;
+    is $_, "foo", '$_ is trimmed';
+
+    is scalar @warnings, 0, 'no warnings about anything'
+        or diag "Got warnings: " . join "\n", @warnings;
+};
 
 subtest 'dircopy' => sub {
     my $tmp_dest = tempdir;
