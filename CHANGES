@@ -1,6 +1,52 @@
 Changelog for Statocles
 
-0.076 2016-05-28T04:13:14
+0.077 2016-08-06T01:24:56
+ - fix new warning making test fail
+ - fix tests for Mojolicious 7.0
+ - add trim function
+ - add more info about helpers to content guide
+ - add some about content templates to content guide
+ - add more markdown and commands to content doc
+ - warn user when git deploy can't push
+ - rename private subs that work with git repos
+ - add quick-start to content guide
+ - add meta author to all default themes
+ - test atom feed for site author
+ - fix type coercion on Perl <5.14
+ - add notes about highlight color styles
+ - add more sections to the config guide
+ - allow more variants in link configuration
+ - add link tree object
+ - add google analytics to default themes
+ - allow for multiple sites in default theme check
+ - refactor common layout tests into subroutine
+ - fix theme test checking for incorrect file
+ - update site theme from responsive default
+ - make default blog theme more responsive
+ - remove "Fork it" banner
+ - fix newer/older button being links with no href
+ - add more config docs for site objects
+ - allow .markdown and .md in index path
+ - escape special chars in tags
+ - fix tag case to stop two tags with different case
+ - add data attributes sections to config guide
+ - fix tags label appearing in feed item without tags
+ - fix section 2 link in feed with only one section
+ - add index docs to new config guide
+ - add basic yaml tutorial to config guide
+ - add a global feed author to blog atom feeds
+ - add default author attribute to site
+ - add author attribute to all pages
+ - auto-create person object for document author
+ - add plugin docs to new develop guide
+ - start filling in the develop guide
+ - stringify person objects into the name
+ - add type and coercions for Person object
+ - add person class to hold author information
+ - fix deprecation warnings in statocles site
+ - add release v0.076 announcement
+
+0.076 2016-05-28T04:13:14Z
  - fix index links with full urls being rewritten
  - move default post info to app attribute
  - fix --clean destroying all content in git repo
@@ -1123,4 +1169,3 @@ Changelog for Statocles
  - write pages to disk
  - add simple page rendering
  - add base File and Document classes
-
