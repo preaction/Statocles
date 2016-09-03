@@ -1,5 +1,7 @@
 Changelog for Statocles
 
+{{ $NEXT }}
+
 0.077 2016-08-06T01:24:56
  - fix new warning making test fail
  - fix tests for Mojolicious 7.0
