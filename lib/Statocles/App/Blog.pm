@@ -321,8 +321,7 @@ sub index {
         after => $self->page_size,
         path => $self->url_root . '/page/%i/index.html',
         index => $self->url_root . '/index.html',
-        # Sorting by path just happens to also sort by date
-        pages => [ sort { $b->path cmp $a->path } @index_post_pages ],
+        pages => [ sort { $b->date cmp $a->date } @index_post_pages ],
         app => $self,
         template => $self->template( 'index.html' ),
         layout => $self->template( 'layout.html' ),
@@ -385,8 +384,7 @@ sub tag_pages {
             after => $self->page_size,
             path => join( "/", $self->url_root, 'tag', $self->_tag_url( $tag ), 'page/%i/index.html' ),
             index => join( "/", $self->url_root, 'tag', $self->_tag_url( $tag ), 'index.html' ),
-            # Sorting by path just happens to also sort by date
-            pages => [ sort { $b->path cmp $a->path } @{ $tagged_docs->{ $tag } } ],
+            pages => [ sort { $b->date cmp $a->date } @{ $tagged_docs->{ $tag } } ],
             app => $self,
             template => $self->template( 'index.html' ),
             layout => $self->template( 'layout.html' ),
