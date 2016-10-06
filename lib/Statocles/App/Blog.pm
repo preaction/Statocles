@@ -321,8 +321,7 @@ sub index {
         after => $self->page_size,
         path => $self->url_root . '/page/%i/index.html',
         index => $self->url_root . '/index.html',
-        # Sorting by path just happens to also sort by date
-        pages => [ sort { $b->path cmp $a->path } @index_post_pages ],
+        pages => [ _sort_page_list( @index_post_pages ) ],
         app => $self,
         template => $self->template( 'index.html' ),
         layout => $self->template( 'layout.html' ),
@@ -385,8 +384,7 @@ sub tag_pages {
             after => $self->page_size,
             path => join( "/", $self->url_root, 'tag', $self->_tag_url( $tag ), 'page/%i/index.html' ),
             index => join( "/", $self->url_root, 'tag', $self->_tag_url( $tag ), 'index.html' ),
-            # Sorting by path just happens to also sort by date
-            pages => [ sort { $b->path cmp $a->path } @{ $tagged_docs->{ $tag } } ],
+            pages => [ _sort_page_list( @{ $tagged_docs->{ $tag } } ) ],
             app => $self,
             template => $self->template( 'index.html' ),
             layout => $self->template( 'layout.html' ),
@@ -463,8 +461,6 @@ around pages => sub {
     my @parent_pages = $self->$orig( %opt );
     my @pages =
         map { $_->[0] }
-        # Sort by date
-        sort { $b->[1] cmp $a->[1] }
         # Only pages today or before
         grep { $_->[1] le $opt{date} }
         # Create the page's date
@@ -473,6 +469,8 @@ around pages => sub {
         grep { $_->path =~ $is_dated_path }
         #$self->$orig( %opt );
         @parent_pages;
+    @pages = _sort_page_list( @pages );
+
     my @post_pages;
     my %tag_pages;
 
@@ -603,6 +601,24 @@ sub page_url {
     my $url = "".$page->path;
     $url =~ s{/index[.]html$}{/};
     return $url;
+}
+
+#=sub _sort_list
+#
+#   my @sorted_pages = _sort_page_list( @unsorted_pages );
+#
+# Sort a list of blog post pages into buckets according to the date
+# component of their path, and then sort the buckets according to the
+# date field in the document.
+#
+# This allows a user to order the posts in a single day themselves,
+# predictably and consistently.
+
+sub _sort_page_list {
+    return map { $_->[0] }
+        sort { $b->[1] cmp $a->[1] || $b->[2] cmp $a->[2] }
+        map { [ $_, $_->path =~ m{/(\d{4}/\d{2}/\d{2})}, $_->date ] }
+        @_;
 }
 
 1;

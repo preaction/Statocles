@@ -891,6 +891,32 @@ subtest 'different locale' => sub {
     setlocale( LC_TIME, "" );
 };
 
+subtest 'blog with two posts in the same day' => sub {
+    my $app = Statocles::App::Blog->new(
+        store => $SHARE_DIR->child( qw( app blog-same-day ) ),
+        site => $site,
+        url_root => '/',
+    );
+    my @pages = $app->pages;
+    my ( $index ) = grep { $_->path eq '/index.html' } @pages;
+    cmp_deeply [ map { $_->path->stringify } @{ $index->pages } ],
+        [qw( /2016/06/01/aaa-first/index.html /2016/06/01/zzz-last/index.html )],
+        'index page is ordered correctly'
+            or diag explain [
+                map { +{ page => "".$_->path, date => "".$_->date } }
+                @{ $index->pages }
+            ];
+
+    my ( $tag_page ) = grep { $_->path eq '/tag/mytag/index.html' } @pages;
+    cmp_deeply [ map { $_->path->stringify } @{ $tag_page->pages } ],
+        [qw( /2016/06/01/aaa-first/index.html /2016/06/01/zzz-last/index.html )],
+        'tag page is ordered correctly'
+            or diag explain [
+                map { +{ page => "".$_->path, date => "".$_->date } }
+                @{ $index->pages }
+            ];
+};
+
 subtest 'blog with no pages is still built' => sub {
     my $app = Statocles::App::Blog->new(
         store => tempdir,
