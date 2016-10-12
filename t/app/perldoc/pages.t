@@ -248,6 +248,11 @@ subtest 'with Pod::Weaver' => sub {
         return;
     }
 
+    if ( $Pod::Weaver::VERSION == 4.014 ) {
+        plan skip_all => q{Pod::Weaver version 4.014 has a bug that will cause a fatal error when a LEGAL section isn't available, which causes this test to fail.};
+        return;
+    }
+
     my $app = Statocles::App::Perldoc->new(
         url_root => '/pod',
         inc => [
