@@ -29,7 +29,6 @@ our @IMPORT_MODULES = (
     )],
     'Statocles::Types' => [qw( DateTimeObj )],
     'My::Test::_Extras' => [qw( test_constructor test_pages )],
-    sub { $Statocles::VERSION ||= 0.001; return }, # Set version normally done via dzil
 );
 
 package My::Test::_Extras;
