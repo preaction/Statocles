@@ -1,5 +1,5 @@
 package Statocles;
-
+our $VERSION = '0.078';
 # ABSTRACT: A static site generator
 
 # The currently-running site.

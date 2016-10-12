@@ -1,5 +1,5 @@
 package Statocles::Plugin;
-
+our $VERSION = '0.078';
 # ABSTRACT: Base role for Statocles plugins
 
 =head1 SYNOPSIS
