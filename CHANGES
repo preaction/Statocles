@@ -1,5 +1,12 @@
 Changelog for Statocles
 
+{{ $NEXT }}
+
+    [Other]
+
+    - Now that Pod::Weaver 4.015 has shipped with fixes, recommend
+      upgrading to 4.015 if the user has 4.014.
+
 0.078     2016-10-12 14:30:18-05:00 America/Chicago
 
     [Fixed]
