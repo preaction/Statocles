@@ -21,7 +21,7 @@ requires "warnings" => "0";
 recommends "HTML::Lint::Pluggable" => "0.06";
 recommends "PPI" => "0";
 recommends "Pod::Elemental" => "0";
-recommends "Pod::Weaver" => "0";
+recommends "Pod::Weaver" => "4.015";
 recommends "Syntax::Highlight::Engine::Kate" => "0";
 
 on 'test' => sub {
