@@ -1,5 +1,5 @@
 package Statocles::App::Blog;
-our $VERSION = '0.079';
+our $VERSION = '0.080';
 # ABSTRACT: A blog application
 
 use Statocles::Base 'Class';
