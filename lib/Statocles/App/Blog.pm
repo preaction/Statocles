@@ -271,6 +271,7 @@ Given a post title, remove special characters to create a slug.
 sub make_slug {
     my ( $self, $slug ) = @_;
     $slug = unidecode($slug);
+    $slug =~ s/'//g;
     $slug =~ s/[\W]+/-/g;
     $slug =~ s/^-|-$//g;
     return lc $slug;
