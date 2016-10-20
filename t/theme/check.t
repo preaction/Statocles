@@ -120,7 +120,7 @@ my %page = (
                 text => 'bar',
             ),
             Statocles::Link->new(
-                href => '/blog/tag/-baz-',
+                href => '/blog/tag/baz',
                 text => '<baz>',
             ),
         ],
@@ -484,7 +484,7 @@ my %content_tests = (
                         [qw(
                             http://example.com/blog/tag/foo
                             http://example.com/blog/tag/bar
-                            http://example.com/blog/tag/-baz-
+                            http://example.com/blog/tag/baz
                         )],
                         'tag link href is correct';
                 };
@@ -577,7 +577,7 @@ my %content_tests = (
                             [qw(
                                 http://example.com/blog/tag/foo
                                 http://example.com/blog/tag/bar
-                                http://example.com/blog/tag/-baz-
+                                http://example.com/blog/tag/baz
                             )],
                             'tag link href is correct';
                     };
@@ -627,7 +627,7 @@ my %content_tests = (
                     [ '<baz>', 'bar', 'foo' ],
                     'tag text is correct and sorted';
                 cmp_deeply [ $links->map( attr => 'href' )->each ],
-                    [ '/blog/tag/-baz-/', '/blog/tag/bar/', '/blog/tag/foo/' ],
+                    [ '/blog/tag/baz/', '/blog/tag/bar/', '/blog/tag/foo/' ],
                     'tag hrefs are correct and sorted';
             }
         };
@@ -692,7 +692,7 @@ my %content_tests = (
                     [ '<baz>', 'bar', 'foo' ],
                     'tag text is correct and sorted';
                 cmp_deeply [ $links->map( attr => 'href' )->each ],
-                    [ '/blog/tag/-baz-/', '/blog/tag/bar/', '/blog/tag/foo/', ],
+                    [ '/blog/tag/baz/', '/blog/tag/bar/', '/blog/tag/foo/', ],
                     'tag hrefs are correct and sorted';
             }
         };
