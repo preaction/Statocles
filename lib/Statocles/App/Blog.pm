@@ -2,6 +2,7 @@ package Statocles::App::Blog;
 our $VERSION = '0.080';
 # ABSTRACT: A blog application
 
+use Text::Unidecode;
 use Statocles::Base 'Class';
 use Getopt::Long qw( GetOptionsFromArray );
 use Statocles::Store;
@@ -269,6 +270,7 @@ Given a post title, remove special characters to create a slug.
 
 sub make_slug {
     my ( $self, $slug ) = @_;
+    $slug = unidecode($slug);
     $slug =~ s/[\W]+/-/g;
     return lc $slug;
 }
