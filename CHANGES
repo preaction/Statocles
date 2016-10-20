@@ -2,6 +2,15 @@ Changelog for Statocles
 
 {{ $NEXT }}
 
+    [Fixed]
+
+    - Blog slugs (folder path) are now a bit neater: Apostriphes do not
+      turn into dashes, and leading and trailing dashes are removed. So,
+      where the blog post "It's good!" would have previously looked like
+      "/2016/06/02/it-s-good-/", it will now look like
+      "/2016/06/02/its-good/". Thanks @Ferki! [Github #507] [Github
+      #508]
+
 0.079     2016-10-14 20:49:24-05:00 America/Chicago
 
     [Other]
