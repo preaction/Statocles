@@ -12,6 +12,7 @@ requires "Path::Tiny" => "0.084";
 requires "Pod::Simple" => "3.31";
 requires "Pod::Usage::Return" => "0";
 requires "Text::Markdown" => "0";
+requires "Text::Unidecode" => "0";
 requires "Type::Tiny" => "0";
 requires "Types::Path::Tiny" => "0";
 requires "YAML" => "0";
