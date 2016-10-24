@@ -478,7 +478,10 @@ around pages => sub {
     my @post_pages;
     my %tag_pages;
 
-    for my $page ( @pages ) {
+    for (my $i = 0; $i < @pages; $i++) {
+        my $page = $pages[$i];
+        my $prev_page = $i ? $pages[$i-1] : undef;
+        my $next_page = $pages[$i+1];
 
         if ( $page->isa( 'Statocles::Page::Document' ) ) {
 
@@ -501,6 +504,8 @@ around pages => sub {
                 $page->tags( \@tags );
 
                 $page->template( $self->template( 'post.html' ) );
+                $page->prev( $prev_page->path ) if $prev_page;
+                $page->next( $next_page->path ) if $next_page;
             }
         }
     }
