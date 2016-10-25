@@ -41,14 +41,14 @@
         <a class="button <%= $self->next ? 'button-primary' : 'disabled' %>"
             rel="next" href="<%= $self->next // '' %>"
         >
-            &larr; <%= t('Older') %>
+            &larr; Older
         </a>
     </li>
     <li class="next">
         <a class="button <%= $self->prev ? 'button-primary' : 'disabled' %>"
             rel="prev" href="<%= $self->prev // '' %>"
         >
-            <%= t('Newer') %> &rarr;
+            Newer &rarr;
         </a>
     </li>
 </ul>
