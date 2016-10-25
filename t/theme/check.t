@@ -696,6 +696,46 @@ my %content_tests = (
                     'tag hrefs are correct and sorted';
             }
         };
+        
+        subtest 'Older/Newer buttons' => sub {
+            if ( $args{page}->prev ) {
+                subtest 'Older button links to next page' => sub {
+                    my $elem = $dom->at( '.next a' );
+                    if ( ok $elem, 'older button exists' ) {
+                        is $elem->attr( 'href' ), $args{page}->prev,
+                        'older href is correct';
+                    }
+                };
+            }
+            else {
+                subtest 'Older button does not link' => sub {
+                    my $elem = $dom->at( '.next :first-child' );
+                    if ( ok $elem, 'older button exists' ) {
+                        isnt $elem->tag, 'a', 'older button is not a link';
+                    }
+                };
+            }
+            
+            if ( $args{page}->next ) {
+                subtest 'Newer button links to prev page' => sub {
+                    my $elem = $dom->at( '.prev a' ) || $dom->at( '.previous a' );
+                    if ( ok $elem, 'newer button exists' ) {
+                        is $elem->attr( 'href' ), $args{page}->next,
+                        'newer href is correct';
+                    }
+                };
+            }
+            else {
+                subtest 'Newer button does not link' => sub {
+                    my $elem = $dom->at( '.prev :first-child' ) || $dom->at( '.previous :first-child' );
+                    if ( ok $elem, 'newer button exists' ) {
+                        isnt $elem->tag, 'a', 'newer button is not a link';
+                    }
+                };
+            }
+            
+        };
+        
 
     },
 );
