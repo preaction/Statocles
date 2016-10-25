@@ -51,18 +51,32 @@
 
 <ul class="pager">
     <li class="prev">
-        <a class="button <%= $self->next ? 'button-primary' : 'disabled' %>"
-            rel="next" href="<%= $self->next // '' %>"
-        >
-            &larr; Older
-        </a>
+        % if ( $self->next ) {
+            <a class="button button-primary" rel="next"
+                href="<%= $self->next %>"
+            >
+                &larr; Older
+            </a>
+        % }
+        % else {
+            <button disabled>
+                &larr; Older
+            </button>
+        % }
     </li>
     <li class="next">
-        <a class="button <%= $self->prev ? 'button-primary' : 'disabled' %>"
-            rel="prev" href="<%= $self->prev // '' %>"
-        >
-            Newer &rarr;
-        </a>
+        % if ( $self->prev ) {
+            <a class="button button-primary" rel="prev"
+                href="<%= $self->prev %>"
+            >
+                Newer &rarr;
+            </a>
+        % }
+        % else {
+            <button disabled>
+                Newer &rarr;
+            </button>
+        % }
     </li>
 </ul>
 
