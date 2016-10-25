@@ -40,6 +40,23 @@
     </section>
     % }
 
+<ul class="pager">
+    <li class="prev">
+        <a class="button <%= $self->next ? 'button-primary' : 'disabled' %>"
+            rel="next" href="<%= $self->next // '' %>"
+        >
+            &larr; Older
+        </a>
+    </li>
+    <li class="next">
+        <a class="button <%= $self->prev ? 'button-primary' : 'disabled' %>"
+            rel="prev" href="<%= $self->prev // '' %>"
+        >
+            Newer &rarr;
+        </a>
+    </li>
+</ul>
+
 </main>
 
 <nav id="tags">
