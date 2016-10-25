@@ -741,6 +741,14 @@ my @page_tests = (
         if ( ok my $node = $dom->at( 'footer #app-info' ) ) {
             is $node->text, $app->data->{info}, 'app-info is correct';
         }
+
+        my $prev = $dom->at( '.pager .prev' );
+        is $prev->at( 'a' )->attr( 'class' ), 'button disabled';
+        is $prev->at( 'a' )->attr( 'href' ), '';
+
+        my $next = $dom->at( '.pager .next' );
+        is $next->at( 'a' )->attr( 'class' ), 'button button-primary';
+        is $next->at( 'a' )->attr( 'href' ), '/blog/2014/04/30/plug/index.html';
     },
 
     '/blog/2014/04/30/plug/index.html' => sub {
@@ -760,6 +768,12 @@ my @page_tests = (
         if ( ok my $node = $dom->at( 'footer #app-info' ) ) {
             is $node->text, $app->data->{info}, 'app-info is correct';
         }
+        my $prev = $dom->at( '.pager .prev' );
+        is $prev->at( 'a' )->attr( 'class' ), 'button button-primary';
+        is $prev->at( 'a' )->attr( 'href' ), '/blog/2014/04/23/slug/index.html';
+
+        my $next = $dom->at( '.pager .next' );
+        is $next->at( 'a' )->attr( 'href' ), '/blog/2014/05/22/(regex)[name].file.html';
     },
 
     '/blog/2014/05/22/(regex)[name].file.html' => sub {
@@ -783,6 +797,12 @@ my @page_tests = (
         if ( ok my $node = $dom->at( 'footer #app-info' ) ) {
             is $node->text, $app->data->{info}, 'app-info is correct';
         }
+
+        my $prev = $dom->at( '.pager .prev' );
+        is $prev->at( 'a' )->attr( 'href' ), '/blog/2014/04/30/plug/index.html';
+
+        my $next = $dom->at( '.pager .next' );
+        is $next->at( 'a' )->attr( 'href' ), '/blog/2014/06/02/more_tags/index.html';
     },
 
     '/blog/2014/06/02/more_tags/index.html' => sub {
@@ -832,6 +852,14 @@ my @page_tests = (
         if ( ok my $node = $dom->at( 'footer #app-info' ) ) {
             is $node->text, $app->data->{info}, 'app-info is correct';
         }
+
+        my $prev = $dom->at( '.pager .prev' );
+        is $prev->at( 'a' )->attr( 'href' ), '/blog/2014/05/22/(regex)[name].file.html';
+
+        my $next = $dom->at( '.pager .next' );
+        is $next->at( 'a' )->attr( 'class' ), 'button disabled';
+        is $next->at( 'a' )->attr( 'href' ), '';
+
     },
 
     # Does not show /blog/9999/12/31/forever-is-a-long-time/index.html
