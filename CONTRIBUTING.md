@@ -22,6 +22,21 @@ Remember, all the people who contribute to this project are volunteers.
 
 ## About this Project
 
+### Project Goals
+
+Statocles is a content management system built on plain files, easily
+edited by a text editor, transformed into HTML, and written out to be
+served by an HTTP daemon as static content.
+
+Statocles tries to simplify building a website as much as possible.
+Plugins are provided to automatically ensure that web best practices are
+followed. Statocles should assume defaults of web accessibility and
+interoperability for all devices.
+
+Statocles should provide an easy framework to build rich web content. As
+much as possible, the user should be writing their content, and
+Statocles should handle all the rest.
+
 ### Repository Layout
 
 This project follows CPAN conventions with some additions, explained
