@@ -34,6 +34,25 @@
 </section>
 % }
 
+<ul class="pager">
+    <li class="previous <%= !$self->next ? 'disabled' : '' %>">
+        % if ( $self->next ) {
+        <a rel="prev" href="<%= $self->next %>">&larr; Older</a>
+        % }
+        % else {
+        <span>&larr; Older</span>
+        % }
+    </li>
+    <li class="next <%= !$self->prev ? 'disabled' : '' %>">
+        % if ( $self->prev ) {
+        <a rel="next" href="<%= $self->prev %>">Newer &rarr;</a>
+        % }
+        % else {
+        <span>Newer &rarr;</span>
+        % }
+    </li>
+</ul>
+
 % if ( $site->data->{disqus}{shortname} ) {
 <h1>Comments</h1>
 <div id="disqus_thread"></div>

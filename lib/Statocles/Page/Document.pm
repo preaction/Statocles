@@ -242,6 +242,22 @@ around layout => sub {
     return $self->$orig( @args );
 };
 
+=attr next
+
+The path to the next document if it is part of a list.
+
+=attr prev
+
+The path to the previous document if it is part of a list.
+
+=cut
+
+has [qw( next prev )] => (
+    is => 'rw',
+    isa => Path,
+    coerce => Path->coercion,
+);
+
 1;
 __END__
 

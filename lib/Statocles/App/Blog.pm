@@ -505,6 +505,15 @@ around pages => sub {
         }
     }
 
+    for ( my $i = 0; $i < @post_pages; $i++ ) {
+
+        my $page = $post_pages[$i];
+        my $prev_page = $i ? $post_pages[$i-1] : undef;
+        my $next_page = $post_pages[$i+1];
+        $page->prev( $prev_page->path ) if $prev_page;
+        $page->next( $next_page->path ) if $next_page;
+    }
+
     # Cache the post pages for this build
     # XXX: This needs to be handled more intelligently with proper dependencies
     $self->_post_pages( \@post_pages );
