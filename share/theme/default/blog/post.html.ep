@@ -39,7 +39,7 @@
 <ul class="pager">
     <li class="prev">
         % if ( $self->next ) {
-            <a class="button button-primary" rel="next"
+            <a class="button button-primary" rel="prev"
                 href="<%= $self->next %>"
             >
                 &larr; Older
@@ -53,7 +53,7 @@
     </li>
     <li class="next">
         % if ( $self->prev ) {
-            <a class="button button-primary" rel="prev"
+            <a class="button button-primary" rel="next"
                 href="<%= $self->prev %>"
             >
                 Newer &rarr;
