@@ -1,12 +1,15 @@
 package release_blog;
 
-use Statocles::Base;
-use Git::Repository;
+use strict;
+use warnings;
+use v5.10;
+use CPAN::Changes;
 use Getopt::Long qw( GetOptionsFromArray );
 use Pod::Usage::Return;
-use List::MoreUtils qw( firstidx );
 
 my $GITHUB_ROOT = 'https://github.com/preaction/Statocles';
+my $CHANGES_FILE = 'CHANGES';
+my $NEXT_TOKEN = qr/\{\{\s*\$NEXT\s*\}\}/;
 
 sub main {
     my ( $class, @args ) = @_;
@@ -17,37 +20,44 @@ sub main {
     );
     return pod2usage(0) if $opt{help};
 
-    my $version = shift @args;
+    my $changes = CPAN::Changes->load(
+        $CHANGES_FILE,
+        next_token => $NEXT_TOKEN,
+    );
 
-    my $git = Git::Repository->new( work_tree => '.' );
-    my @tags = $git->run( 'tag' );
-
-    my $tag_idx = $version ? firstidx { $_ eq $version } @tags : $#tags;
-    if ( $tag_idx < 0 ) {
-        say "ERROR: Could not find version tag '$version'.";
-        return 1;
+    my $release;
+    if ( my $version = shift @args ) {
+        $release = $changes->release( $version ) || die "Could not find version $version in $CHANGES_FILE\n";
+    }
+    else {
+        my @releases = $changes->releases;
+        if ( $releases[-1]->version !~ $NEXT_TOKEN ) {
+            $release = $releases[-1];
+        }
+        else {
+            $release = $releases[-2];
+        }
     }
 
-    my $full_log = $git->run( log => '--pretty=%H %s%n%n%b---', "$tags[$tag_idx-1]..$tags[$tag_idx]" );
+    my $version = $release->version;
 
-    for my $log ( split /\n---\n?/, $full_log ) {
-        my ( $first, undef, $body ) = split /\n/, $log, 3;
-        $body //= '';
+    say "---";
+    say "title: Release v$version";
+    say "tags: release";
+    say "---";
+    say "";
+    say "In this release:";
+    say "";
 
-        my ( $sha, $title ) = split ' ', $first, 2;
-        my $commit_url = join '/', $GITHUB_ROOT, 'commit', $sha;
-        my $item = sprintf '[%s](%s)', $title, $commit_url;
-
-        my @tickets;
-        for my $ticket_num ( $body =~ /\#(\d+)/g ) {
-            my $ticket_url = join '/', $GITHUB_ROOT, 'issues', $ticket_num;
-            push @tickets, sprintf '[#%d](%s)', $ticket_num, $ticket_url;
+    for my $group ( $release->groups ) {
+        say "## $group";
+        say "";
+        for my $change ( @{ $release->changes( $group ) } ) {
+            $change =~ s{\[Github \#(\d+)\]}{[\[Github #$1\]]($GITHUB_ROOT/issues/$1)}g;
+            $change =~ s{\@(\w+)}{[\@$1](http://github.com/$1)}g;
+            say "* " . $change;
         }
-        if ( @tickets ) {
-            $item .= ' (' . join( ', ', @tickets ) . ')';
-        }
-
-        say "* $item";
+        say "";
     }
 
     return 0;
@@ -69,15 +79,14 @@ release-blog.pl - Prepare a release blog entry for this project
 
 =head1 DESCRIPTION
 
-This script prepares the list of commits with links to Github for the commits and
-any tickets referenced in the commit.
+This script prepares the list of changes from the CHANGES file and adds
+links to any tickets referenced in the commit.
 
 =head1 ARGUMENTS
 
 =head2 version
 
-Optional. The tag to collect. Commits between this tag and the previous tag
-will be collected. Defaults to the latest release tag.
+Optional. The version to use. Defaults to the latest release.
 
 =head1 OPTIONS
 
