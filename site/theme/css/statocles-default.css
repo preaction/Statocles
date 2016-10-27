@@ -231,6 +231,13 @@ ul.pager {
     float: right;
 }
 
+.pager::after {
+    /* Clear the floated pager items */
+    content: "";
+    clear: both;
+    display: table;
+}
+
 /** Footer */
 footer {
     margin-top: 1em;
