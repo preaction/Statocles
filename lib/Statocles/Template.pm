@@ -1,5 +1,5 @@
 package Statocles::Template;
-our $VERSION = '0.081';
+our $VERSION = '0.082';
 # ABSTRACT: A template object to pass around
 
 use Statocles::Base 'Class';
