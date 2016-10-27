@@ -1,5 +1,18 @@
 Changelog for Statocles
 
+{{ $NEXT }}
+
+    [Added]
+
+    - Blog posts now have "Older" and "Newer" links so a reader can read
+      a blog from start to finish, navigating through blog posts without
+      having to return to the index page. Thanks @kbucheli! [Github
+      #517]
+
+      This is a theme change, so you will need to update your theme to
+      see the older/newer links. See the Statocles default themes for
+      examples.
+
 0.080     2016-10-20 15:11:57-05:00 America/Chicago
 
     [Fixed]
