@@ -9,6 +9,11 @@ Changelog for Statocles
       makes it easier for me to demonstrate the various highlighting
       stylesheets we have available in the documentation.
 
+    - The new documentation is released on
+      http://preaction.me/statocles/docs. They are not yet
+      fully-complete, but they are a lot friendlier than the previous
+      docs (which are at http://preaction.me/statocles/pod).
+
 0.081     2016-10-26 23:17:58-05:00 America/Chicago
 
     [Added]
