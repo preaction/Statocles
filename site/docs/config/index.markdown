@@ -328,7 +328,7 @@ Like an application, a deploy is an object. So let's create an object
 named `deploy`. Like applications, there are different kinds of deploy
 objects we can create. The File deploy simply copies our site to another
 directory on the same machine, and the Git deploy uses a Git repository
-to deploy our site (like [Github Pages]()).
+to deploy our site (like [Github Pages](https://pages.github.com)).
 
 For now, let's create a File deploy and deploy our site into the
 "deploy" directory.
@@ -388,7 +388,8 @@ see how to customize our site further.
 The site object is the main part of our configuration. As such, the site
 configuration effects the entire site. There are a lot of options
 available, but not all will apply, so don't worry. If you don't
-understand something, feel free to [ask us about it in IRC]().
+understand something, feel free to [ask us about it in
+IRC](https://chat.mibbit.com/?channel=%23statocles&server=irc.perl.org).
 
 ## Title and Author
 
@@ -407,8 +408,6 @@ To add this information, we use the `title` and `author` attributes:
 
 Now, every page in our site will show our title and author information
 (although, author information can be overridden for individual pages).
-
-XXX add meta author to default themes
 
 ## Base URL
 
@@ -591,10 +590,12 @@ Disqus is an externally-hosted site comment application. By signing up
 (for free), you can add user comments to any site by adding a snippet of
 Javascript code to your pages.
 
-To add [Disqus]() comments to your blog, you can configure the `disqus`
-data key. You will need your Disqus shortname, which you can set from
-[your Disqus dashboard](). Statocles includes the code needed to
-integrate with Disqus, so all you need to do is configure it, like so:
+To add [Disqus](https://disqus.com) comments to your blog, you can
+configure the `disqus` data key. You will need your Disqus shortname,
+which you can set from [your Disqus
+dashboard](https://disqus.com/admin/). Statocles includes the code
+needed to integrate with Disqus, so all you need to do is configure it,
+like so:
 
     site:
         $class: Statocles::Site
@@ -608,11 +609,11 @@ Disqus comment app below the blog post content.
 
 ### Google Analytics
 
-[Google Analytics]() is a hosted solution for collecting site visitor
-metrics like where the visitor came from, how they navigated through
-your site, and whether they purchased anything. Since it uses
-Javascript, it's good for static sites that don't want to run their own
-log analysis.
+[Google Analytics](https://www.google.com/analytics/) is a hosted
+solution for collecting site visitor metrics like where the visitor came
+from, how they navigated through your site, and whether they purchased
+anything. Since it uses Javascript, it's good for static sites that
+don't want to run their own log analysis.
 
 Statocles comes with the code snippet needed to collect analytics. To
 add Google Analytics to your site, you need to have the site's GA
@@ -639,7 +640,7 @@ simple Markdown to HTML conversion, but the Blog app will create lists
 of blog posts and feeds for syndicated content readers. The Perldoc app
 will take a Perl project and generate HTML from the project's
 documentation. And if you need a custom app, you can write your own (see
-[the develop guide for details]()).
+[the develop guide for details](../develop)).
 
 To add new applications to our site, we need to create the application
 object, give it the configuration it may need (like content directory
@@ -648,12 +649,13 @@ See [Simple Content](), above, for how to add apps to the site object.
 
 ## Basic App
 
-The [Basic app]() handles just the basic Markdown to HTML conversion,
-and copying any image, script, or stylesheet inside its directory. For
-this reason, it is frequently used as the root of the site so that any
-file in the site directory will appear in the deployed site. This basic
-functionality is shared by most other applications, so that files can be
-placed where they are convenient and logical.
+The [Basic app](/pod/Statocles/App/Basic) handles just the basic
+Markdown to HTML conversion, and copying any image, script, or
+stylesheet inside its directory. For this reason, it is frequently used
+as the root of the site so that any file in the site directory will
+appear in the deployed site. This basic functionality is shared by most
+other applications, so that files can be placed where they are
+convenient and logical.
 
 XXX
 
@@ -664,7 +666,8 @@ XXX
 ## Perldoc App
 
 The Perldoc app is meant for Perl projects to generate HTML from the
-Perl POD documentation format. It also has support for [Pod::Weaver](),
+Perl POD documentation format. It also has support for
+[Pod::Weaver](http://metacpan.org/pod/Pod::Weaver),
 which helps make POD easier to write. Most POD formatting is handled
 correctly. Links to internal modules are rewritten to internal links,
 and links to other modules will direct users to
@@ -682,18 +685,18 @@ So let's configure our Perldoc app to look in our "lib" directory to
 find our Perl project, which is called "Local" and has modules in the
 "lib/Local" directory.
 
-    perldoc_app: # XXX: Check attributes
+    perldoc_app:
         $class: Statocles::App::Perldoc
-        dirs:
+        inc:
             - lib
-        namespaces:
+        modules:
             - Local
             - Local::
 
 Note: We need to specify "Local" to get "Local.pm" and "Local::" to get
 every module underneath the "Local::" namespace. Explicitly specifying
-the namespace we want to search in prevents us from catching modules
-that we didn't intend to catch.
+the module namespaces we want to search in prevents us from catching
+modules that we didn't intend to catch.
 
 ### Pod::Weaver
 
@@ -718,27 +721,32 @@ To configure Pod::Weaver, we need a `weaver.ini` file to tell
 Pod::Weaver how to organize our sections. A simple default `weaver.ini`
 may look like:
 
-    XXX
+    [Name]
+    [Version]
+    [Generic / SYNOPSIS]
+    [Generic / DESCRIPTION]
+    [Leftovers]
+    [Authors]
+    [Contributors]
+    [Legal]
 
 For more information about `weaver.ini`, see [the Pod::Weaver
-documentation]().
+documentation](http://metacpan.org/pod/Pod::Weaver).
 
 To enable Pod::Weaver in our Perldoc app, we need to set the
-`weave_module` attribute to `true`:
+`weave` attribute to `true`:
 
     perldoc_app:
         $class: Statocles::App::Perldoc
-        dirs:
+        inc:
             - lib
-        namespaces:
+        modules:
             - Local
             - Local::
-        weave_module: true
+        weave: true
 
 Now our POD will be run through Pod::Weaver before being turned into
 HTML.
-
-XXX Add extra weave information configuration
 
 # Plugins
 
@@ -787,13 +795,15 @@ Now when we build our site (statocles build, statocles deploy, and
 statocles daemon), all our links will be checked for validity. If a link
 is invalid, we'll get a warning:
 
-    XXX Show example warning
+> `[Thu Oct 27 20:13:05 2016] [warn] URL broken on
+> /blog/2016/09/15/cheese-gnocchi/index.html: '/recipe/cheese-gnocchi'
+> not found`
 
 If there are broken links that we want to ignore, we can add them to the
-"ignore_match" (XXX: Check attribute name) attribute. This attribute
-allows us to specify a match string as a regular expression to ignore
-certain broken links. This is useful if we have content that is not
-managed by Statocles but still looks like part of our site.
+"ignore" attribute. This attribute allows us to specify a match string
+as a regular expression to ignore certain broken links. This is useful
+if we have content that is not managed by Statocles but still looks like
+part of our site.
 
 For example, let's ignore the "cgi-bin" directory (which we serve using
 Apache), and let's ignore all images that end in ".thumb.jpg", which we
@@ -804,7 +814,7 @@ generate outside of Statocles:
         plugins:
             link_check:
                 $class: Statocles::Plugin::LinkCheck
-                ignore_match:
+                ignore:
                     - ^/cgi-bin/
                     - [.]thumb[.]jpg$
 
@@ -860,7 +870,23 @@ The built-in styles are:
 * solarized-dark - The dark flavor of
   [Solarized](http://ethanschoonover.com/solarized)
 
-XXX Show examples of styles
+%= highlight -style => 'default', perl => begin
+    # The "default" style
+    my $foo = 2 + 3
+    print $foo;
+% end
+
+%= highlight -style => 'solarized-light', perl => begin
+    # The "solarized-light" style
+    my $foo = 2 + 3
+    print $foo;
+% end
+
+%= highlight -style => 'solarized-dark', perl => begin
+    # The "solarized-dark" style
+    my $foo = 2 + 3
+    print $foo;
+% end
 
 For more information on the `highlight` function and content templates,
 see [the content guide](../content).
@@ -890,7 +916,9 @@ Then we can add the HTML Lint plugin to our site's `plugins` attribute:
 
 Now when our generated HTML has an issue, we'll be warned about it:
 
-    XXX Show example of lint warning
+> [Thu Oct 27 20:56:45 2016] [warn] Lint failures on /blog/2015/04/16/release-v0-045/index.html:
+> [Thu Oct 27 20:56:45 2016] [warn] - (144:109) Unknown element <port>
+> [Thu Oct 27 20:56:45 2016] [warn] - (144:148) <port> at (144:109) is never closed
 
 # Deploy
 
@@ -911,8 +939,9 @@ XXX Write Statocles::Deploy::Command module
 The File deploy (Statocles::Deploy::File) is the simplest deploy option:
 It copies your site to another directory on the same machine. But
 despite its simplicity, the file deploy can be used in some complex
-situations, including using [Git hooks]() or [Jenkins]() to deploy your
-site.
+situations, including using [Git
+hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks) or
+[Jenkins](https://jenkins.io) to deploy your site.
 
 To create a File deploy we need only a path to deploy to:
 
@@ -940,8 +969,9 @@ into the correct directory to be served by our web server.
 To configure a Git deploy, we need our website to be inside a Git
 repository. To do that, we just need to run `git init` in our website's
 root directory, then we can add all our content with `git add`, and
-commit it to the repository with `git commit`. See [this Git tutorial
-from XXX]() for more information on using Git.
+commit it to the repository with `git commit`. See [the official Git
+documentation](https://git-scm.com/doc) for more information on using
+Git.
 
 Once our site is in a Git repository, we can configure our deployment.
 To configure a Git deploy, we need to know what branch to deploy to, and
@@ -970,10 +1000,10 @@ push, see [Custom Git Hosting](), below.
 
 ### Github Pages
 
-If you're a [Github]() user, you can use [Github Pages]() to host your
-site. Github Pages are great for hosting sites for projects already on
-Github, or for hosting small personal websites. You can even use your
-own domain.
+If you're a [Github](http://github.com) user, you can use [Github
+Pages](https://pages.github.com) to host your site. Github Pages are
+great for hosting sites for projects already on Github, or for hosting
+small personal websites. You can even use your own domain.
 
 For a project site, we simply need to deploy our site to the `gh-pages`
 branch. So, we can configure our deploy like so:
@@ -1003,11 +1033,11 @@ repository's Settings tab for information.
 ### Custom Git Hosting
 
 To make a custom server that works similarly to Github Pages, we can use
-[Git hooks]() to automatically copy our site content into our web server
-directory. I recommend using [Gitolite]() to manage a remote Git server,
-but you can also simply use SSH.
-
-XXX Write blog post on hosting a remote git server
+[Git hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks) to
+automatically copy our site content into our web server directory.
+I recommend using [Gitolite](http://gitolite.com) to manage a remote Git
+server, but you can also [simply use SSH to host
+Git](https://git-scm.com/book/en/v2/Git-on-the-Server-Setting-Up-the-Server).
 
 First, lets configure our deploy object to deploy to the `deploy`
 branch:
