@@ -94,6 +94,12 @@ The highlight function adds both C<pre> and C<code> tags.
     <p>This example Perl code prints the string "Hello, World" to the screen:</p>
     %= highlight Perl => 'print "Hello, World\n"'
 
+We can override the style we want by passing in a C<-style> option:
+
+    %= highlight -style => 'solarized-dark', Perl => begin
+    print "Hello, World!\n";
+    % end
+
 =cut
 
 my $hl = Syntax::Highlight::Engine::Kate->new(
@@ -127,7 +133,15 @@ my $hl = Syntax::Highlight::Engine::Kate->new(
 );
 
 sub highlight {
-    my ( $self, $args, $type, $text ) = @_;
+    my ( $self, $args, @args ) = @_;
+
+    # Last two args are always type and text and are required
+    my ( $text, $type ) = ( pop @args, pop @args );
+
+    # Other args are options
+    my %opt = @args;
+
+    my $style = $opt{ -style } || $self->style;
 
     # Handle Mojolicious begin/end
     if ( ref $text eq 'CODE' ) {
@@ -142,7 +156,7 @@ sub highlight {
     my $page = $args->{page} || $args->{self};
     if ( $page ) {
         # Add the appropriate stylesheet to the page
-        my $style_url = $page->site->theme->url( '/plugin/highlight/' . $self->style . '.css' );
+        my $style_url = $page->site->theme->url( '/plugin/highlight/' . $style . '.css' );
         if ( !grep { $_->href eq $style_url } $page->links( 'stylesheet' ) ) {
             $page->links( stylesheet => $style_url );
         }

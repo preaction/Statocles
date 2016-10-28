@@ -60,6 +60,24 @@ subtest 'highlight' => sub {
             'correct stylesheet is added to the page';
     };
 
+    subtest '-style override' => sub {
+        my $plugin = Statocles::Plugin::Highlight->new(
+            style => 'default',
+        );
+
+        my $site = build_test_site();
+        my $page = Statocles::Page::Plain->new(
+            path => 'test.html',
+            site => $site,
+            content => '',
+        );
+        my $style_url = $site->theme->url( '/plugin/highlight/solarized-dark.css' );
+
+        my $got_perl = $plugin->highlight( { page => $page }, '-style' => 'solarized-dark', Perl => $given_perl );
+        eq_or_diff $got_perl, $expect_perl;
+        is scalar grep( { $_->href eq $style_url } $page->links( 'stylesheet' ) ), 1,
+            'correct stylesheet is added to the page';
+    };
 };
 
 subtest 'register' => sub {

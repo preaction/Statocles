@@ -2,6 +2,13 @@ Changelog for Statocles
 
 {{ $NEXT }}
 
+    [Added]
+
+    - The `highlight` plugin now accepts a `-style` option to override
+      what stylesheet is used for the current highlighting block. This
+      makes it easier for me to demonstrate the various highlighting
+      stylesheets we have available in the documentation.
+
 0.081     2016-10-26 23:17:58-05:00 America/Chicago
 
     [Added]
