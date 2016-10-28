@@ -58,14 +58,15 @@ Install the latest version of Statocles:
 
     curl -L https://cpanmin.us | perl - -M https://cpan.metacpan.org -n Statocles
 
+See [the Statocles install guide](/docs/install) for more information.
+
 ## Getting Started
 
 Create a site using the `create` command:
 
     statocles create www.example.com
 
-See [the Statocles Setup guide](/pod/Statocles/Help/Setup) for more
-information.
+See [the Statocles guides](/docs) for more information.
 
 ## Help
 
