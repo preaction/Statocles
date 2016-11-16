@@ -4,7 +4,9 @@ This project is free software for the express purpose of collaboration.
 We welcome all input, bug reports, feature requests, general comments,
 and patches.
 
-If you're not sure about anything, please open an issue and ask!
+If you're not sure about anything, please open an issue and ask, or
+e-mail the project founder <preaction@cpan.org> or [talk to us on IRC on
+irc.perl.org channel #statocles](https://chat.mibbit.com/?channel=%23statocles&server=irc.perl.org)!
 
 ## Standard of Conduct
 
@@ -194,3 +196,26 @@ accepted until documentated.
 * User-executable scripts must be documented with a short synopsis,
   a longer description, and all the arguments and options explained
 
+### New Prerequisites
+
+Though this project has a `cpanfile`, a `Makefile.PL`, and maybe even
+a `Build.PL`, these files are auto-generated and should not be edited.
+To add new prereqs, you must add them to the `dist.ini` file in the
+following sections:
+
+* `[Prereqs]` - Runtime requirements
+* `[Prereqs / TestRequires]` - Test-only requirements
+* `[Prereqs / Recommends]` - Runtime recommendations, for optional
+  modules
+* `[Prereqs / TestRecomments]` - Test-only recommendations, for optional
+  modules
+
+If the section doesn't already exist, you can add it to the bottom of
+the `dist.ini` file.
+
+The `Recommends` and `TestRecommends` will be automatically installed by
+Travis CI to test those parts of the code.
+
+OS-specific prerequisites can be added using the
+[Dist::Zilla::Plugin::OSPrereqs](http://metacpan.org/pod/Dist::Zilla::Plugin::OSPrereqs)
+module.
