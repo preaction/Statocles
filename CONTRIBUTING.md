@@ -115,40 +115,71 @@ feature is working as documented.
 This project uses Dist::Zilla for its releases, but you aren't required
 to use it for contributing.
 
-### Using Build.PL
-
-This is the easiest way that requires the fewest dependencies.
-
-Install the project's dependencies and run the tests by doing:
-
-```
-perl Build.PL
-./Build installdeps
-./Build test
-```
-
-### Using Makefile.PL
-
-This is the older standard way. If you can install CPAN modules, you can
-probably do this. It requires `make` and maybe a C compiler.
-
-Run the tests by doing:
+These instructions do require you have
+[App::cpanminus (cpanm)](https://metacpan.org/pod/App::cpanminus) installed.
+`cpanm` is a CPAN client to install Perl modules and programs. You can
+install `cpanm` by doing:
 
 ```
-perl Makefile.PL
-make test
+curl -L https://cpanmin.us | perl - App::cpanminus
 ```
 
-Install the module's dependencies by doing:
+Or, if you (not incorrectly) do not trust that, by using the existing
+`cpan` client that comes with Perl:
 
 ```
-cpanm .
+cpan App::cpanminus
 ```
 
-### Using Dist::Zilla
+You may need to be root or Administrator to install cpanminus.
 
-Once you have installed Dist::Zilla, you can get this distributions's
-dependencies by doing:
+### Using `cpanm` to install prereqs
+
+The [`cpanm`](https://metacpan.org/pod/App::cpanminus) command is the
+easiest way to install this project's dependencies. In the root of the
+project, just run `cpanm --installdeps .` and the dependencies will be
+installed.
+
+### Using `carton` to install prereqs in an isolated directory
+
+If you with to isolate the prerequisites of this project so they do not
+interfere with other projects, you can use the
+[Carton](http://metacpan.org/pod/Carton) tool. Install Carton normally
+from CPAN using `cpanm Carton`, then use the `carton` command to install
+this module's prereqs in the `local/` directory:
+
+```
+carton install
+```
+
+Once the prereqs are installed, you can use `carton exec prove -lr t`
+to run all the tests with the right prereqs. Putting `carton exec` in
+front of the command makes sure Perl uses the right library
+directories.
+
+### Using `prove` to run tests
+
+Perl comes with a utility called `prove` which runs tests and gives
+a report on failures. To run the test suite with `prove`, do:
+
+```
+prove -lr t
+```
+
+This will run all the tests in the `t` directory, recursively, while
+adding the current `lib/` directory to the library path.
+
+You can run individual test files more quickly by passing them as
+arguments to prove:
+
+```
+prove -l t/my-test.t
+```
+
+### Using Dist::Zilla to install prereqs and run tests
+
+Once you have installed Dist::Zilla via `cpanm Dist::Zilla`, you can get
+this distributions's dependencies by doing:
 
 ```
 dzil listdeps --author --missing | cpanm
@@ -160,7 +191,7 @@ Once all that is done, testing is as easy as:
 dzil test
 ```
 
-## Before you Submit Your Contribute
+## Before you Submit Your Contribution
 
 ### Copyright and License
 
@@ -219,3 +250,4 @@ Travis CI to test those parts of the code.
 OS-specific prerequisites can be added using the
 [Dist::Zilla::Plugin::OSPrereqs](http://metacpan.org/pod/Dist::Zilla::Plugin::OSPrereqs)
 module.
+
