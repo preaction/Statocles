@@ -226,6 +226,8 @@ accepted until documentated.
   description
 * User-executable scripts must be documented with a short synopsis,
   a longer description, and all the arguments and options explained
+* Tests must be documented with the purpose of the test and any useful
+  information for understanding the test.
 
 ### New Prerequisites
 
