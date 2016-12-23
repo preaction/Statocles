@@ -24,27 +24,17 @@ subtest 'check html' => sub {
             [
               ignore(),
               'warn',
-              'Lint failures on /blog/2014/06/02/more_tags/index.html:',
+              '-/blog/2014/06/02/more_tags/index.html (43:4) <img src="/does_not_exist.jpg"> tag has no HEIGHT and WIDTH attributes',
             ],
             [
               ignore(),
               'warn',
-              '- (43:4) <img src="/does_not_exist.jpg"> tag has no HEIGHT and WIDTH attributes',
+              '-/blog/2014/06/02/more_tags/index.html (61:4) <img src="image.markdown.jpg"> tag has no HEIGHT and WIDTH attributes',
             ],
             [
               ignore(),
               'warn',
-              '- (61:4) <img src="image.markdown.jpg"> tag has no HEIGHT and WIDTH attributes',
-            ],
-            [
-              ignore(),
-              'warn',
-              'Lint failures on /blog/2014/04/30/plug/index.html:',
-            ],
-            [
-              ignore(),
-              'warn',
-              '- (34:4) <img src="image.jpg"> tag has no HEIGHT and WIDTH attributes',
+              '-/blog/2014/04/30/plug/index.html (34:4) <img src="image.jpg"> tag has no HEIGHT and WIDTH attributes',
             ]
         ),
         'lint problems found'

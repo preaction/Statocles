@@ -35,22 +35,23 @@ sub check_pages {
     my ( $self, $event ) = @_;
     my @plugins = @{ $self->plugins };
 
+    my $lint = HTML::Lint::Pluggable->new;
+    $lint->load_plugins( @plugins );
+
     for my $page ( @{ $event->pages } ) {
         if ( $page->DOES( 'Statocles::Page::Document' ) ) {
             my $html = $page->render( site => $event->emitter );
             my $page_url = $page->path;
 
-            my $lint = HTML::Lint::Pluggable->new;
-            $lint->load_plugins( @plugins );
+            $lint->newfile( $page_url );
             $lint->parse( $html );
+            $lint->eof;
+        }
+    }
 
-            if ( $lint->errors ) {
-                $event->emitter->log->warn( "Lint failures on $page_url:" );
-                for my $error ( $lint->errors ) {
-                    $event->emitter->log->warn( "-" . $error->as_string );
-                }
-            }
-
+    if ( my @errors = $lint->errors ) {
+        for my $error ( @errors ) {
+            $event->emitter->log->warn( "-" . $error->as_string );
         }
     }
 }
