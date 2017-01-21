@@ -692,6 +692,18 @@ sub build {
     return;
 }
 
+sub _get_status {
+    my ( $self, $status ) = @_;
+    my $path = Path::Tiny->new( "status.yml" );
+    return {} unless $path->exists;
+    YAML::Load( $path->slurp_utf8 );
+}
+
+sub _write_status {
+    my ( $self, $status ) = @_;
+    Path::Tiny->new( "status.yml" )->spew_utf8( YAML::Dump( $status ) );
+}
+
 =method deploy
 
     $site->deploy( %options );
@@ -708,6 +720,10 @@ sub deploy {
     $self->_deploy->site( $self );
     $self->_deploy->deploy( $self->build_store, %options );
     $self->_clear_write_deploy;
+    $self->_write_status( {
+        last_deploy_date => time(),
+        last_deploy_args => \%options,
+    } );
 }
 
 =method links
@@ -847,4 +863,3 @@ C<build_store>.
 The event will be a
 L<Statocles::Event::Pages|Statocles::Event/Statocles::Event::Pages> object
 containing all the pages built by the site.
-

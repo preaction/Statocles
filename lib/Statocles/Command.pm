@@ -165,6 +165,20 @@ sub main {
         }
         return 0;
     }
+    elsif ( $method eq 'status' ) {
+        my $status = $cmd->site->_get_status;
+        if ($status->{last_deploy_date}) {
+            say "Last deployed on " .
+                DateTime::Moonpig->from_epoch(
+                    epoch => $status->{last_deploy_date},
+                )->strftime("%Y-%m-%d at %H:%M");
+            say "Deployed up to date " .
+                ( $status->{last_deploy_args}{date} || '-' );
+        } else {
+            say "Never been deployed";
+        }
+        return 0;
+    }
     elsif ( $method eq 'daemon' ) {
         # Build the site first no matter what.  We may end up watching for
         # future changes, but assume they meant to build first
