@@ -694,14 +694,14 @@ sub build {
 
 sub _get_status {
     my ( $self, $status ) = @_;
-    my $path = Path::Tiny->new( "status.yml" );
+    my $path = Path::Tiny->new( '.statocles', 'status.yml' );
     return {} unless $path->exists;
     YAML::Load( $path->slurp_utf8 );
 }
 
 sub _write_status {
     my ( $self, $status ) = @_;
-    Path::Tiny->new( "status.yml" )->spew_utf8( YAML::Dump( $status ) );
+    Path::Tiny->new( '.statocles', 'status.yml' )->spew_utf8( YAML::Dump( $status ) );
 }
 
 =method deploy
