@@ -171,12 +171,23 @@ L<include_stores|/include_stores> before looking in the L<main store|/store>.
 
 sub include {
     my ( $self, @path ) = @_;
+    my $render = 1;
+    if ( $path[0] eq '-raw' ) {
+        # Allow raw files to not be passed through the template renderer
+        # This override flag will always exist, but in the future we may
+        # add better detection to possible file types to process
+        $render = 0;
+        shift @path;
+    }
     my $path = Path::Tiny->new( @path );
 
     my @stores = ( @{ $self->include_stores }, $self->store );
     for my $store ( @stores ) {
         if ( $store->has_file( $path ) ) {
-            return $self->_includes->{ $path } ||= $self->build_template( $path, $store->read_file( $path ) );
+            if ( $render ) {
+                return $self->_includes->{ $path } ||= $self->build_template( $path, $store->read_file( $path ) );
+            }
+            return $store->read_file( $path );
         }
     }
 

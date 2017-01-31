@@ -144,6 +144,9 @@ sub render {
 
         # Add default helpers
         local *{"@{[$t->namespace]}::include"} = sub {
+            if ( $_[0] eq '-raw' ) {
+                return $self->include( @_ );
+            }
             my ( $name, %extra_args ) = @_;
             my $inner_tmpl = $self->include( $name );
             return $inner_tmpl->render( %args, %extra_args ) || '';
@@ -205,16 +208,29 @@ If nothing is found, looks in the L<theme includes|Statocles::Theme/include>.
 
 sub include {
     my ( $self, @path ) = @_;
+    my $render = 1;
+    if ( $path[0] eq '-raw' ) {
+        # Allow raw files to not be passed through the template renderer
+        # This override flag will always exist, but in the future we may
+        # add better detection to possible file types to process
+        $render = 0;
+        shift @path;
+    }
     my $path = Path::Tiny->new( @path );
 
     my @stores = @{ $self->include_stores };
     for my $store ( @{ $self->include_stores } ) {
         if ( $store->has_file( $path ) ) {
-            return $self->theme->build_template( $path, $store->read_file( $path ) );
+            if ( $render ) {
+                return $self->theme->build_template( $path, $store->read_file( $path ) );
+            }
+            return $store->read_file( $path );
         }
     }
 
-    my $include = eval { $self->theme->include( @path ) };
+    my $include = eval {
+        $self->theme->include( !$render ? ( '-raw', @path ) : @path );
+    };
     if ( $@ && $@ =~ /^Can not find include/ ) {
         die qq{Can not find include "$path" in include directories: }
             . join( ", ", map { sprintf q{"%s"}, $_->path } @stores, @{ $self->theme->include_stores }, $self->theme->store )

@@ -1,6 +1,17 @@
 Changelog for Statocles
 
-{{ $NEXT }}
+0.083     2017-01-31 16:44:17-06:00 America/Chicago
+
+    [Added]
+
+    - The `include` helper now accepts a `-raw` flag to disable the
+      template renderer. This allows you to easily include Perl code and
+      not have it mistaken for a template. Thanks justinQuiring on IRC
+      for the bug report [Github #529]
+
+      This isn't the end of this: We will likely fix the heuristics to
+      ignore file types (extensions) that do not look like templates.
+      This will be a breaking change, sorry.
 
 0.082     2017-01-18 23:17:36-06:00 America/Chicago
 
