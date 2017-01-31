@@ -1,5 +1,5 @@
 package Statocles::Site;
-our $VERSION = '0.083';
+our $VERSION = '0.084';
 # ABSTRACT: An entire, configured website
 
 use Statocles::Base 'Class', 'Emitter';
