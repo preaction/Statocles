@@ -116,7 +116,10 @@ The most-common events are located on the Site and App objects.
 
 The Site object has these events:
 
-* XXX
+* `collect_pages` - Fired after all pages have been collected. Use this to
+  edit page content or add/remove pages from the site
+* `build` - Fired after all the pages have been rendered and written to
+  the site's build directory.
 
 Every App object has these events:
 
