@@ -108,7 +108,7 @@ examples of behavior best implemented by plugins include:
 * Compiling ES6 JavaScript or TypeScript into ES5 JavaScript
 * Creating image source sets (srcset) for responsive images
 * Inlining small JavaScript and CSS files for faster loading
-* Checking for broken links (the [LinkCheck plugin]())
+* Checking for broken links (the [LinkCheck plugin](/pod/Statocles/Plugin/LinkCheck/))
 * Checking spelling and grammar
 * Checking validity of HTML and CSS
 
@@ -128,15 +128,18 @@ Every App object has these events:
 There may be other events available on other objects, so check the
 class's documentation for more information.
 
-Statocles uses the [Beam::Emitter]() class to do event handling. To
-register an event, use the `on( $event_name, $callback )` method.
+Statocles uses the
+[Beam::Emitter](http://metacpan.org/pod/Beam::Emitter) class to do event
+handling. To register an event, use the `on( $event_name, $callback )`
+method.
 
     sub register {
         my ( $self, $site ) = @_;
         $site->on( "build", sub { say "Hello!" } );
     }
 
-The site's event handlers get a [Statocles::Event::Pages]() object
+The site's event handlers get
+a [Statocles::Event::Pages](/pod/Statocles/Event/) object
 containing an arrayref of the pages the site has built so far. Modifying
 this arrayref or the objects inside will modify the site. For example,
 XXX
@@ -146,9 +149,11 @@ XXX Add example of modifying content
 When modifying content, it's usually better to change the variables and
 documents that make up the content than to work with the rendered HTML.
 
-When using event handlers, the [Mojo::DOM]() object is useful to quickly
+When using event handlers, the
+[Mojo::DOM](http://mojolicious.org/perldoc/Mojo/DOM) object is useful to quickly
 parse HTML. Since Statocles depends on it, you can be sure it's
-available for your plugin. See [the LinkCheck plugin]() for an example
+available for your plugin. See [the LinkCheck
+plugin](/pod/Statocles/Plugin/LinkCheck/) for an example
 of using Mojo::DOM.
 
 ### Template Helpers
