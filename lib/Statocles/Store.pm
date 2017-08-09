@@ -164,7 +164,7 @@ sub read_document {
     site->log->debug( "Read document: " . $path );
     my $full_path = $self->path->child( $path );
     my $relative_path = $full_path->relative( cwd );
-    my %doc = $self->parse_frontmatter( $relative_path, $full_path->slurp_utf8 );
+    my %doc = $self->parse_frontmatter( $relative_path, $self->read_file( $path )  );
     my $class = $doc{class} ? use_module( delete $doc{class} ) : 'Statocles::Document';
     my $obj = eval { $class->new( %doc, path => $path, store => $self ) };
     if ( $@ ) {
