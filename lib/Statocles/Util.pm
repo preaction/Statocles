@@ -1,5 +1,5 @@
 package Statocles::Util;
-our $VERSION = '0.084';
+our $VERSION = '0.085';
 # ABSTRACT: Various utility functions to reduce dependencies
 
 use Statocles::Base;

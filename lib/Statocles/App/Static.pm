@@ -1,5 +1,5 @@
 package Statocles::App::Static;
-our $VERSION = '0.084';
+our $VERSION = '0.085';
 # ABSTRACT: (DEPRECATED) Manage static files like CSS, JS, images, and other untemplated content
 
 use Statocles::Base 'Class';

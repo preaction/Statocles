@@ -1,5 +1,5 @@
 package Statocles::App::Blog;
-our $VERSION = '0.084';
+our $VERSION = '0.085';
 # ABSTRACT: A blog application
 
 use Text::Unidecode;
