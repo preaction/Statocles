@@ -335,9 +335,7 @@ object or undef if no files remain.  It is used by L<find_files>.
 =cut
 
 sub files {
-
     my ( $self ) = @_;
-
     return $self->path->iterator({ recurse => 1 });
 }
 
