@@ -1,5 +1,16 @@
 Changelog for Statocles
 
+0.084     2017-08-09 12:00:17-05:00 America/Chicago
+
+    [Added]
+
+    - The Store object now has a "files" method which gets the iterator
+      over all the files in the store. This can then be easily
+      overridden to get the list of files from another place: The
+      configuration file, a manifest file, a database, or what-have-you.
+
+      Thanks @djerius for the patch!
+
 0.083     2017-01-31 16:44:17-06:00 America/Chicago
 
     [Added]
