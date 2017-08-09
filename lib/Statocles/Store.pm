@@ -324,6 +324,22 @@ sub has_file {
     return $self->path->child( $path )->is_file;
 }
 
+=method files
+
+    my $iter = $store->files
+
+Returns an iterator which iterates over I<all> files in the store,
+regardless of type of file.  The iterator returns a L<Path::Tiny>
+object or undef if no files remain.  It is used by L<find_files>.
+
+=cut
+
+sub files {
+    my ( $self ) = @_;
+    return $self->path->iterator({ recurse => 1 });
+}
+
+
 =method find_files
 
     my $iter = $store->find_files( %opt )
@@ -339,12 +355,14 @@ Available options are:
     include_documents      - If true, will include files that look like documents.
                              Defaults to false.
 
+It obtains its list of files from L<files>.
+
 =cut
 
 sub find_files {
     my ( $self, %opt ) = @_;
     $self->_check_exists;
-    my $iter = $self->path->iterator({ recurse => 1 });
+    my $iter = $self->files;
     return sub {
         my $path;
         while ( $path = $iter->() ) {
