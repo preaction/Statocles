@@ -335,7 +335,14 @@ object or undef if no files remain.  It is used by L<find_files>.
 
 sub files {
     my ( $self ) = @_;
-    return $self->path->iterator({ recurse => 1, follow_symlinks => 1 });
+    my $iter = $self->path->iterator({ recurse => 1, follow_symlinks => 1 });
+
+    sub {
+	while( my $path = $iter->() ) {
+	    return $path if $path->is_file;
+	}
+	return;
+    }
 }
 
 
@@ -365,7 +372,6 @@ sub find_files {
     return sub {
         my $path;
         while ( $path = $iter->() ) {
-            next if $path->is_dir;
             next if !$self->_is_owned_path( $path );
             next if !$opt{include_documents} && $self->is_document( $path );
             last;
