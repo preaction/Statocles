@@ -66,16 +66,6 @@ subtest 'find files' => sub {
 
 };
 
-subtest 'open file' => sub {
-    my $store = Statocles::Store->new(
-        path => $SHARE_DIR->child( qw( store files ) ),
-    );
-
-    my $fh = $store->open_file( path( 'text.txt' ) );
-    my $content = do { local $/; <$fh> };
-    eq_or_diff $content, $SHARE_DIR->child( qw( store files text.txt ) )->slurp_raw;
-};
-
 subtest 'write files' => sub {
 
     subtest 'string' => sub {

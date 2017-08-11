@@ -381,21 +381,6 @@ sub find_files {
     };
 }
 
-=method open_file
-
-    my $fh = $store->open_file( $path )
-
-Open the file with the given path. Returns a filehandle.
-
-The filehandle opened is using raw bytes, not UTF-8 characters.
-
-=cut
-
-sub open_file {
-    my ( $self, $path ) = @_;
-    return $self->path->child( $path )->openr_raw;
-}
-
 =method write_file
 
     $store->write_file( $path, $content );
