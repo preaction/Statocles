@@ -121,16 +121,15 @@ objects|Statocles::Document> inside.  Returns an arrayref of document objects.
 
 sub read_documents {
     my ( $self ) = @_;
-    $self->_check_exists;
+
     my $root_path = $self->path;
+
     my @docs;
-    my $iter = $root_path->iterator( { recurse => 1, follow_symlinks => 1 } );
+    my $iter = $self->find_files( include_documents => 1 );
+
     while ( my $path = $iter->() ) {
-        next unless $path->is_file;
-        next unless $self->_is_owned_path( $path );
         next unless $self->is_document( $path );
-        my $rel_path = rootdir->child( $path->relative( $root_path ) );
-        push @docs, $self->read_document( $rel_path );
+        push @docs, $self->read_document( $path );
     }
     return \@docs;
 }
@@ -336,7 +335,7 @@ object or undef if no files remain.  It is used by L<find_files>.
 
 sub files {
     my ( $self ) = @_;
-    return $self->path->iterator({ recurse => 1 });
+    return $self->path->iterator({ recurse => 1, follow_symlinks => 1 });
 }
 
 
