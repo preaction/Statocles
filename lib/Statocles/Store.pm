@@ -398,9 +398,24 @@ sub open_file {
 Write the given C<content> to the given C<path>. This is mostly used to write
 out L<page objects|Statocles::Page>.
 
-C<content> may be a simple string or a filehandle. If given a string, will
-write the string using UTF-8 characters. If given a filehandle, will write out
-the raw bytes read from it with no special encoding.
+C<content> may be a:
+
+=over
+
+=item *
+
+a simple string, which  will be written using UTF-8 characters.
+
+=item *
+
+a L<Path::Tiny> object whose C<copy> method will be used to
+write it;
+
+=item *
+
+a filehandle which will be read from with no special encoding.
+
+=back
 
 =cut
 
