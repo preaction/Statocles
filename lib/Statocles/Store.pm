@@ -73,7 +73,7 @@ has _realpath => (
     is => 'ro',
     isa => Path,
     lazy => 1,
-    default => sub { $_[0]->path->realpath },
+    default => sub { $_[0]->_resolve_path( $_[0]->path ) },
 );
 
 # If true, we've already checked if this store's path exists. We need to
@@ -134,10 +134,15 @@ sub read_documents {
     return \@docs;
 }
 
+sub _resolve_path {
+    my ( $self, $path ) = @_;
+    return $path->realpath;
+}
+
 sub _is_owned_path {
     my ( $self, $path ) = @_;
     my $self_path = $self->_realpath;
-    $path = $path->realpath;
+    $path = $self->_resolve_path( $path );
     my $dir = $path->parent;
     for my $store_path ( keys %FILE_STORES ) {
         # This is us!
