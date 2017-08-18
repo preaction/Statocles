@@ -73,7 +73,7 @@ has _realpath => (
     is => 'ro',
     isa => Path,
     lazy => 1,
-    default => sub { $_[0]->path->realpath },
+    default => sub { $_[0]->_resolve_path( $_[0]->path ) },
 );
 
 # If true, we've already checked if this store's path exists. We need to
@@ -121,24 +121,28 @@ objects|Statocles::Document> inside.  Returns an arrayref of document objects.
 
 sub read_documents {
     my ( $self ) = @_;
-    $self->_check_exists;
+
     my $root_path = $self->path;
+
     my @docs;
-    my $iter = $root_path->iterator( { recurse => 1, follow_symlinks => 1 } );
+    my $iter = $self->find_files( include_documents => 1 );
+
     while ( my $path = $iter->() ) {
-        next unless $path->is_file;
-        next unless $self->_is_owned_path( $path );
         next unless $self->is_document( $path );
-        my $rel_path = rootdir->child( $path->relative( $root_path ) );
-        push @docs, $self->read_document( $rel_path );
+        push @docs, $self->read_document( $path );
     }
     return \@docs;
+}
+
+sub _resolve_path {
+    my ( $self, $path ) = @_;
+    return $path->realpath;
 }
 
 sub _is_owned_path {
     my ( $self, $path ) = @_;
     my $self_path = $self->_realpath;
-    $path = $path->realpath;
+    $path = $self->_resolve_path( $path );
     my $dir = $path->parent;
     for my $store_path ( keys %FILE_STORES ) {
         # This is us!
@@ -164,7 +168,7 @@ sub read_document {
     site->log->debug( "Read document: " . $path );
     my $full_path = $self->path->child( $path );
     my $relative_path = $full_path->relative( cwd );
-    my %doc = $self->parse_frontmatter( $relative_path, $full_path->slurp_utf8 );
+    my %doc = $self->parse_frontmatter( $relative_path, $self->read_file( $path )  );
     my $class = $doc{class} ? use_module( delete $doc{class} ) : 'Statocles::Document';
     my $obj = eval { $class->new( %doc, path => $path, store => $self ) };
     if ( $@ ) {
@@ -257,7 +261,7 @@ sub write_document {
     chomp $header;
 
     my $full_path = $self->path->child( $path );
-    $full_path->touchpath->spew_utf8( join "\n", $header, '---', $content );
+    $self->write_file( $path, join "\n", $header, '---', $content );
 
     if ( defined wantarray ) {
         derp "Statocles::Store->write_document returning a value is deprecated and will be removed in v1.0. Use Statocles::Store->path to find the full path to the document.";
@@ -298,7 +302,7 @@ sub is_document {
 
     my $content = $store->read_file( $path )
 
-Read the file from the given C<path>.
+Read the file from the given C<path> as UTF8 encoded data.
 
 =cut
 
@@ -306,6 +310,20 @@ sub read_file {
     my ( $self, $path ) = @_;
     site->log->debug( "Read file: " . $path );
     return $self->path->child( $path )->slurp_utf8;
+}
+
+=method read_file_raw
+
+    my $content = $store->read_file_raw( $path )
+
+Read the file from the given C<path> as raw data.
+
+=cut
+
+sub read_file_raw {
+    my ( $self, $path ) = @_;
+    site->log->debug( "Read file: " . $path );
+    return $self->path->child( $path )->slurp_raw;
 }
 
 =method has_file
@@ -336,7 +354,14 @@ object or undef if no files remain.  It is used by L<find_files>.
 
 sub files {
     my ( $self ) = @_;
-    return $self->path->iterator({ recurse => 1 });
+    my $iter = $self->path->iterator({ recurse => 1, follow_symlinks => 1 });
+
+    sub {
+	while( my $path = $iter->() ) {
+	    return $path if $path->is_file;
+	}
+	return;
+    }
 }
 
 
@@ -366,7 +391,6 @@ sub find_files {
     return sub {
         my $path;
         while ( $path = $iter->() ) {
-            next if $path->is_dir;
             next if !$self->_is_owned_path( $path );
             next if !$opt{include_documents} && $self->is_document( $path );
             last;
@@ -376,21 +400,6 @@ sub find_files {
     };
 }
 
-=method open_file
-
-    my $fh = $store->open_file( $path )
-
-Open the file with the given path. Returns a filehandle.
-
-The filehandle opened is using raw bytes, not UTF-8 characters.
-
-=cut
-
-sub open_file {
-    my ( $self, $path ) = @_;
-    return $self->path->child( $path )->openr_raw;
-}
-
 =method write_file
 
     $store->write_file( $path, $content );
@@ -398,9 +407,24 @@ sub open_file {
 Write the given C<content> to the given C<path>. This is mostly used to write
 out L<page objects|Statocles::Page>.
 
-C<content> may be a simple string or a filehandle. If given a string, will
-write the string using UTF-8 characters. If given a filehandle, will write out
-the raw bytes read from it with no special encoding.
+C<content> may be a:
+
+=over
+
+=item *
+
+a simple string, which  will be written using UTF-8 characters.
+
+=item *
+
+a L<Path::Tiny> object whose C<copy> method will be used to
+write it;
+
+=item *
+
+a filehandle which will be read from with no special encoding.
+
+=back
 
 =cut
 
