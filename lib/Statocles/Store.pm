@@ -302,7 +302,7 @@ sub is_document {
 
     my $content = $store->read_file( $path )
 
-Read the file from the given C<path>.
+Read the file from the given C<path> as UTF8 encoded data.
 
 =cut
 
@@ -310,6 +310,20 @@ sub read_file {
     my ( $self, $path ) = @_;
     site->log->debug( "Read file: " . $path );
     return $self->path->child( $path )->slurp_utf8;
+}
+
+=method read_file_raw
+
+    my $content = $store->read_file_raw( $path )
+
+Read the file from the given C<path> as raw data.
+
+=cut
+
+sub read_file_raw {
+    my ( $self, $path ) = @_;
+    site->log->debug( "Read file: " . $path );
+    return $self->path->child( $path )->slurp_raw;
 }
 
 =method has_file
