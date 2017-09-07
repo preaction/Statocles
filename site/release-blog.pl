@@ -8,6 +8,7 @@ use Getopt::Long qw( GetOptionsFromArray );
 use Pod::Usage::Return;
 
 my $GITHUB_ROOT = 'https://github.com/preaction/Statocles';
+my $DIST = "Statocles";
 my $CHANGES_FILE = 'CHANGES';
 my $NEXT_TOKEN = qr/\{\{\s*\$NEXT\s*\}\}/;
 
@@ -48,6 +49,7 @@ sub main {
     say "";
     say "In this release:";
     say "";
+    say "[More information about $DIST v$version on MetaCPAN](http://metacpan.org/release/PREACTION/$DIST-$version)";
 
     for my $group ( $release->groups ) {
         say "## $group";
