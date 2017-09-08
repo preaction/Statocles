@@ -23,6 +23,22 @@ sub expect_docs {
         ),
 
         Statocles::Document->new(
+            path => '/json.markdown',
+            title => 'JSON Document',
+            author => 'preaction',
+            content => "No optional things in here, at all!\n",
+            store => $store,
+        ),
+
+        Statocles::Document->new(
+            path => '/json-oneline.markdown',
+            title => 'JSON Document',
+            author => 'preaction',
+            content => "No optional things in here, at all!\n",
+            store => $store,
+        ),
+
+        Statocles::Document->new(
             path => '/ext/short.md',
             title => 'Short Extension',
             content => "This is a short extension\n",
@@ -221,12 +237,12 @@ subtest 'path that has regex-special characters inside' => sub {
 };
 
 subtest 'bad documents' => sub {
-    subtest 'no ending frontmatter mark' => sub {
+    subtest 'no ending YAML frontmatter mark' => sub {
         my $store = Statocles::Store->new(
             path => $SHARE_DIR->child( qw( store error missing-end-mark ) ),
         );
         my $from = $store->path->child( 'missing.markdown' )->relative( cwd )->stringify;
-        throws_ok { $store->documents } qr{\QCould not find end of front matter (---) in "$from"};
+        throws_ok { $store->documents } qr{\QCould not find end of YAML front matter (---) in "$from"};
     };
 
     subtest 'invalid yaml' => sub {
@@ -235,6 +251,22 @@ subtest 'bad documents' => sub {
         );
         my $from = $store->path->child( 'bad.markdown' )->relative( cwd )->stringify;
         throws_ok { $store->documents } qr{\QError parsing YAML in "$from"};
+    };
+
+    subtest 'no ending JSON frontmatter mark' => sub {
+        my $store = Statocles::Store->new(
+            path => $SHARE_DIR->child( qw( store error missing-end-json ) ),
+        );
+        my $from = $store->path->child( 'missing.markdown' )->relative( cwd )->stringify;
+        throws_ok { $store->documents } qr{\QCould not find end of JSON front matter (\E\}\Q) in "$from"};
+    };
+
+    subtest 'invalid JSON' => sub {
+        my $store = Statocles::Store->new(
+            path => $SHARE_DIR->child( qw( store error bad-json ) ),
+        );
+        my $from = $store->path->child( 'bad.markdown' )->relative( cwd )->stringify;
+        throws_ok { $store->documents } qr{\QError parsing JSON in "$from"};
     };
 
     subtest 'invalid date/time' => sub {

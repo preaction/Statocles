@@ -7,6 +7,7 @@ use Scalar::Util qw( weaken blessed );
 use Statocles::Util qw( derp );
 use Statocles::Document;
 use YAML;
+use JSON::PP;
 use File::Spec::Functions qw( splitdir );
 use Module::Runtime qw( use_module );
 
@@ -155,7 +156,7 @@ sub _is_owned_path {
     my $doc = $store->read_document( $path )
 
 Read a single L<document|Statocles::Document> in Markdown with optional YAML
-frontmatter.
+or JSON frontmatter.
 
 =cut
 
@@ -213,7 +214,7 @@ sub parse_frontmatter {
 
         # If we did not find the marker between YAML and Markdown
         if ( !defined $i ) {
-            die qq{Could not find end of front matter (---) in "$from"\n};
+            die qq{Could not find end of YAML front matter (---) in "$from"\n};
         }
 
         # Before the marker is YAML
@@ -226,6 +227,28 @@ sub parse_frontmatter {
 
         # Remove the last '---' mark
         shift @lines;
+    }
+    elsif ( @lines && $lines[0] =~ /^{/ ) {
+        my $json;
+        if ( $lines[0] =~ /\}$/ ) {
+            # The JSON is all on a single line
+            $json = shift @lines;
+        }
+        else {
+            # The } on a line by itself is the last line of JSON
+            my ( $i ) = grep { $lines[ $_ ] =~ /^}$/ } 0..$#lines;
+            # If we did not find the marker between YAML and Markdown
+            if ( !defined $i ) {
+                die qq{Could not find end of JSON front matter (\}) in "$from"\n};
+            }
+            $json = join "\n", splice( @lines, 0, $i+1 );
+        }
+        eval {
+            $doc = decode_json( $json );
+        };
+        if ( $@ ) {
+            die qq{Error parsing JSON in "$from"\n$@};
+        }
     }
 
     $doc->{content} = join "\n", @lines, "";
