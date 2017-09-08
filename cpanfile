@@ -5,6 +5,7 @@ requires "Encode" => "0";
 requires "File::Share" => "0";
 requires "Git::Repository" => "0";
 requires "Import::Base" => "0.012";
+requires "JSON::PP" => "0";
 requires "List::UtilsBy" => "0.09";
 requires "Mojolicious" => "6.54";
 requires "Moo" => "2.000001";
