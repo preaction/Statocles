@@ -1,5 +1,5 @@
 package Statocles::Plugin::Highlight;
-our $VERSION = '0.085';
+our $VERSION = '0.086';
 # ABSTRACT: Highlight code and configuration syntax
 
 =head1 SYNOPSIS

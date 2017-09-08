@@ -1,5 +1,5 @@
 package Statocles::App::Basic;
-our $VERSION = '0.085';
+our $VERSION = '0.086';
 # ABSTRACT: Build Markdown and collateral files
 
 use Statocles::Base 'Class';
