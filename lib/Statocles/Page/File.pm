@@ -38,6 +38,22 @@ Dies. This page has no templates and no template variables.
 # cases.
 sub vars { die "Unimplemented" }
 
+=attr dom
+
+This page has no DOM, so trying to access it throws an exception.
+
+=cut
+
+sub dom { die "Unimplemented" }
+
+=method has_dom
+
+Returns false. This page has no DOM.
+
+=cut
+
+sub has_dom { 0 }
+
 =method render
 
     my $fh = $page->render;

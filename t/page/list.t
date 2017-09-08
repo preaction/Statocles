@@ -95,41 +95,6 @@ subtest 'date' => sub {
     is $list->date->datetime, $pages[2]->date->datetime;
 };
 
-subtest 'extra args' => sub {
-    my $list = Statocles::Page::List->new(
-        path => '/blog/index.html',
-        pages => \@pages,
-        next => '/blog/page-2.html',
-        prev => '/blog/page--1.html',
-        layout => '<%= $foo %> <%= $content %>',
-        template => <<'ENDTEMPLATE',
-<%= $foo %>
-<%= $site->title %>
-% for my $page ( @$pages ) {
-% my $doc = $page->document;
-<%= $page->date %> <%= $page->path %> <%= $doc->title %> <%= $doc->author %> <%= $page->content %>
-% }
-<%= $self->prev %>
-<%= $self->next %>
-ENDTEMPLATE
-    );
-
-    my $html    = "hello hello\n"
-                . $site->title . "\n"
-                . join( "\n",
-                    map {
-                        join( " ",
-                            $_->date, $_->path, $_->document->title,
-                            $_->document->author, $_->content,
-                        )
-                    }
-                    @pages
-                ) . "\n/blog/page--1.html\n/blog/page-2.html\n\n";
-
-    my $output = $list->render( foo => 'hello', title => 'DOES NOT OVERRIDE' );
-    eq_or_diff $output, $html;
-};
-
 subtest 'content sections' => sub {
     my $list = Statocles::Page::List->new(
         path => '/blog/index.html',

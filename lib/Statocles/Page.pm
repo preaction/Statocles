@@ -6,6 +6,7 @@ use Statocles::Base 'Role';
 use Statocles::Template;
 use Statocles::Util qw( uniq_by );
 use Statocles::Person;
+use Mojo::DOM;
 
 =attr site
 
@@ -301,6 +302,31 @@ has _content_sections => (
     default => sub { {} },
 );
 
+=attr dom
+
+A L<Mojo::DOM> object containing the HTML DOM of the rendered content for
+this page. Any edits made to this object will be reflected in the file
+written.
+
+Editing this DOM object is the recommended way to edit pages.
+
+=cut
+
+has dom => (
+    is => 'ro',
+    isa => InstanceOf['Mojo::DOM'],
+    lazy => 1,
+    default => sub { Mojo::DOM->new( shift->render ) },
+);
+
+=method has_dom
+
+Returns true if the page can render a DOM
+
+=cut
+
+sub has_dom { 1 }
+
 =method vars
 
     my %vars = $page->vars;
@@ -332,7 +358,7 @@ The result of this method is cached.
 =cut
 
 sub render {
-    my ( $self, %args ) = @_;
+    my ( $self ) = @_;
 
     if ( $self->_has_rendered_html ) {
         $self->site->log->debug( 'Render page (cached): ' . $self->path );
@@ -343,7 +369,6 @@ sub render {
 
     my %vars = (
         %{ $self->data },
-        %args,
         $self->vars,
     );
 

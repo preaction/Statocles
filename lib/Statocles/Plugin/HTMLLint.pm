@@ -40,7 +40,7 @@ sub check_pages {
 
     for my $page ( @{ $event->pages } ) {
         if ( $page->DOES( 'Statocles::Page::Document' ) ) {
-            my $html = $page->render( site => $event->emitter );
+            my $html = "".$page->dom;
             my $page_url = $page->path;
 
             $lint->newfile( $page_url );

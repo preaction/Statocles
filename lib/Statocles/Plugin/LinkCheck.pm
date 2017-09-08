@@ -4,7 +4,6 @@ our $VERSION = '0.085';
 
 use Statocles::Base 'Class';
 with 'Statocles::Plugin';
-use Mojo::DOM;
 use Mojo::Util qw( url_escape url_unescape );
 
 =attr ignore
@@ -43,7 +42,7 @@ sub check_pages {
     for my $page ( @{ $event->pages } ) {
         $page_paths{ $page->path } = 1;
         if ( $page->DOES( 'Statocles::Page::Document' ) ) {
-            my $dom = Mojo::DOM->new( $page->render( site => $event->emitter ) );
+            my $dom = $page->dom;
 
             for my $attr ( qw( src href ) ) {
                 for my $el ( $dom->find( "[$attr]" )->each ) {

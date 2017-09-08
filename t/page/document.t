@@ -215,25 +215,6 @@ subtest 'template coercion' => sub {
     };
 };
 
-subtest 'extra args' => sub {
-    my $page = Statocles::Page::Document->new(
-        document => $doc,
-        path => '/path/to/page.html',
-        template => join( ' ',
-            '<%= $foo %>',
-            ( map { "<\%= \$self->$_ \%>" } qw( path ) ),
-            ( map { "<\%= \$doc->$_ \%>" } qw( title author ) ),
-            '<%= $content %>',
-        ),
-        layout => '<%= $site->title %> HEAD <%= $content %> FOOT',
-    );
-
-    my $output = $page->render( foo => 'hello', title => 'DOES NOT OVERRIDE', );
-    my $expect = join " ", $site->title, 'HEAD', 'hello', $page->path, $doc->title,
-        $doc->author, $expect_content . "\n", 'FOOT' . "\n";
-    eq_or_diff $output, $expect;
-};
-
 subtest 'content sections' => sub {
     my $page = Statocles::Page::Document->new(
         document => $doc,

@@ -6,7 +6,6 @@ use Statocles::Base 'Class', 'Emitter';
 use Scalar::Util qw( blessed );
 use Text::Markdown;
 use Mojo::URL;
-use Mojo::DOM;
 use Mojo::Log;
 use Statocles::Page::Plain;
 use Statocles::Util qw( derp );
@@ -488,9 +487,6 @@ sub build {
     my $apps = $self->apps;
     my @pages;
     my %seen_paths;
-    my %args = (
-        site => $self,
-    );
 
     # Collect all the pages for this site
     # XXX: Should we allow sites without indexes?
@@ -621,38 +617,39 @@ sub build {
     $index_root =~ s{/index[.]html$}{};
 
     for my $page ( @pages ) {
-        my $content = $page->render( %args );
         my $is_index = $page->path eq '/index.html';
 
-        if ( !ref $content ) {
-            my $dom = Mojo::DOM->new( $content );
-            for my $attr ( qw( src href ) ) {
-                for my $el ( $dom->find( "[$attr]" )->each ) {
-                    my $url = $el->attr( $attr );
-
-                    # Fix relative links on the index page
-                    if ( $is_index && $index_orig_path && $url !~ m{^([A-Za-z]+:|/)} ) {
-                        $url = join "/", $index_orig_path->parent, $url;
-                    }
-
-                    next unless $url =~ m{^/(?:[^/]|$)};
-
-                    # Rewrite links to the index app's index page
-                    if ( $index_root && $url =~ m{^$index_root(?:/index[.]html)?$} ) {
-                        $url = '/';
-                    }
-
-                    if ( $base_path =~ /\S/ ) {
-                        $url = join "", $base_path, $url;
-                    }
-
-                    $el->attr( $attr, $url );
-                }
-            }
-            $content = $dom->to_string;
+        if ( !$page->has_dom ) {
+            $store->write_file( $page->path, $page->render );
+            next;
         }
 
-        $store->write_file( $page->path, $content );
+        my $dom = $page->dom;
+        for my $attr ( qw( src href ) ) {
+            for my $el ( $dom->find( "[$attr]" )->each ) {
+                my $url = $el->attr( $attr );
+
+                # Fix relative links on the index page
+                if ( $is_index && $index_orig_path && $url !~ m{^([A-Za-z]+:|/)} ) {
+                    $url = join "/", $index_orig_path->parent, $url;
+                }
+
+                next unless $url =~ m{^/(?:[^/]|$)};
+
+                # Rewrite links to the index app's index page
+                if ( $index_root && $url =~ m{^$index_root(?:/index[.]html)?$} ) {
+                    $url = '/';
+                }
+
+                if ( $base_path =~ /\S/ ) {
+                    $url = join "", $base_path, $url;
+                }
+
+                $el->attr( $attr, $url );
+            }
+        }
+
+        $store->write_file( $page->path, $dom->to_string );
     }
 
     # Build the sitemap.xml
@@ -684,7 +681,7 @@ sub build {
     # Add the theme
     for my $page ( $self->theme->pages ) {
         push @pages, $page;
-        $store->write_file( $page->path, $page->render( %args ) );
+        $store->write_file( $page->path, $page->render );
     }
 
     $self->emit( build => class => 'Statocles::Event::Pages', pages => \@pages );

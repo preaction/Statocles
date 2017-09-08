@@ -203,7 +203,7 @@ sub test_pages {
             next;
         }
 
-        my $output = $page->render( site => $site );
+        my $output = $page->render;
 
         # Handle filehandles from render
         if ( ref $output eq 'GLOB' ) {
