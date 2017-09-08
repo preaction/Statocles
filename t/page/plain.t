@@ -62,12 +62,6 @@ subtest 'render' => sub {
         [ ignore(), 'debug', 'Render page: /path/to/page.html' ],
         'debug log shows render page message';
 
-    subtest 'cached page shows up in log' => sub {
-        $page->render;
-        cmp_deeply $site->log->history->[-1],
-            [ ignore(), 'debug', 'Render page (cached): /path/to/page.html' ],
-            'debug log shows cached render page message';
-    };
 };
 
 done_testing;

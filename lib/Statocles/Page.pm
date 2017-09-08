@@ -282,16 +282,6 @@ has search_priority => (
     default => sub { 0.5 },
 );
 
-# _rendered_html
-#
-# The HTML rendered from the page. Cached.
-
-has _rendered_html => (
-    is => 'rw',
-    isa => Str,
-    predicate => '_has_rendered_html',
-);
-
 # _content_sections
 #
 # The saved content sections from any rendered content templates. This
@@ -360,11 +350,6 @@ The result of this method is cached.
 sub render {
     my ( $self ) = @_;
 
-    if ( $self->_has_rendered_html ) {
-        $self->site->log->debug( 'Render page (cached): ' . $self->path );
-        return $self->_rendered_html;
-    }
-
     $self->site->log->debug( 'Render page: ' . $self->path );
 
     my %vars = (
@@ -385,7 +370,6 @@ sub render {
         %vars,
     );
 
-    $self->_rendered_html( $html );
     return $html;
 }
 
