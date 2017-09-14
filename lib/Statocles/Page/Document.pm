@@ -102,8 +102,37 @@ has '+data' => (
     },
 );
 
+=attr disable_content_template
+
+If true, disables the processing of the content as a template. This will
+improve performance if you're not using any template directives in your content.
+
+This can be set in the document (L<Statocles::Document/disable_content_template>),
+the application (L<Statocles::App/disable_content_template>), or the site
+(L<Statocles::Site/disable_content_template>).
+
+=cut
+
+has disable_content_template => (
+    is => 'ro',
+    isa => Str,
+    lazy => 1,
+    default => sub {
+        my ( $self ) = @_;
+        return $self->document && $self->document->has_disable_content_template ? $self->document->disable_content_template && "document"
+            : $self->app && $self->app->has_disable_content_template ? $self->app->disable_content_template && "application"
+            : $self->site && $self->site->has_disable_content_template ? $self->site->disable_content_template && "site"
+            : "";
+    },
+);
+
 sub _render_content_template {
     my ( $self, $content, $vars ) = @_;
+    if ( my $by = $self->disable_content_template ) {
+        $self->site->log->debug( $self->path . ' content template processing disabled by ' . $by );
+        return $content;
+    }
+    $self->site->log->debug( $self->path . ' processing content template ' );
     my $tmpl = $self->site->theme->build_template( $self->path, $content );
     my $doc = $self->document;
     if ( $doc->store ) {

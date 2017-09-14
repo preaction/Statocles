@@ -7,6 +7,7 @@ use Statocles::Document;
 use Statocles::Page::Document;
 use Text::Markdown;
 use Statocles::Site;
+use Statocles::App::Basic;
 my $site = Statocles::Site->new(
     deploy => tempdir,
     title => 'Test Site',
@@ -395,6 +396,81 @@ ENDHTML
 
         eq_or_diff $page->render, $expect;
     };
+
+    subtest 'disable content template processing' => sub {
+        my $site_disabled = Statocles::Site->new(
+            theme => $SHARE_DIR->child( 'theme' ),
+            deploy => tempdir,
+            disable_content_template => 1,
+        );
+
+        my $doc = Statocles::Document->new(
+            path => '/required.markdown',
+            title => 'Page Title',
+            data => 'Hello, Darling',
+            store => $SHARE_DIR->child( 'store', 'docs' ),
+            content => '%= "Hello"',
+        );
+
+        my $doc_enabled = Statocles::Document->new(
+            path => '/required.markdown',
+            title => 'Page Title',
+            data => 'Hello, Darling',
+            store => $SHARE_DIR->child( 'store', 'docs' ),
+            content => '%= "Hello"',
+            disable_content_template => 0,
+        );
+
+        my $doc_disabled = Statocles::Document->new(
+            path => '/required.markdown',
+            title => 'Page Title',
+            data => 'Hello, Darling',
+            store => $SHARE_DIR->child( 'store', 'docs' ),
+            content => '%= "Hello"',
+            disable_content_template => 1,
+        );
+
+        my $app = Statocles::App::Basic->new(
+            url_root => '/',
+            store => $SHARE_DIR->child( 'app', 'blog' ),
+        );
+
+        my $app_disabled = Statocles::App::Basic->new(
+            url_root => '/',
+            store => $SHARE_DIR->child( 'app', 'blog' ),
+            disable_content_template => 1,
+        );
+
+        my $app_enabled = Statocles::App::Basic->new(
+            url_root => '/',
+            store => $SHARE_DIR->child( 'app', 'blog' ),
+            disable_content_template => 0,
+        );
+
+        my $test = sub {
+            my ( $site, $app, $doc, $disabled ) = @_;
+            my $page = Statocles::Page::Document->new(
+                site => $site,
+                app => $app,
+                document => $doc,
+                path => '/path/to/page.html',
+            );
+            if ( $disabled ) {
+                is $page->render, qq{<p>%= "Hello"</p>\n\n\n}, 'content template is disabled';
+            }
+            else {
+                is $page->render, qq{<p>Hello</p>\n\n\n}, 'content template is enabled';
+            }
+        };
+
+        subtest '... by site' => $test, $site_disabled, $app, $doc, 1;
+        subtest '... by app' => $test, $site, $app_disabled, $doc, 1;
+        subtest '... by doc' => $test, $site, $app, $doc_disabled, 1;
+        subtest '... by app but overridden by doc' => $test, $site, $app_disabled, $doc_enabled, 0;
+        subtest '... by site but overridden by doc' => $test, $site_disabled, $app, $doc_enabled, 0;
+        subtest '... by site but overridden by app' => $test, $site_disabled, $app_enabled, $doc, 0;
+    };
+
 };
 
 done_testing;

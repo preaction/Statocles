@@ -335,6 +335,29 @@ has data => (
     is => 'rw',
 );
 
+=attr disable_content_template
+
+    ---
+    disable_content_template: true
+    ---
+
+This disables processing the content as a template. This can speed up processing
+when the content is not using template directives. 
+
+This can be also set in the application
+(L<Statocles::App/disable_content_template>), or for the entire site
+(L<Statocles::Site/disable_content_template>).
+
+=cut
+
+has disable_content_template => (
+    is => 'ro',
+    isa => Bool,
+    lazy => 1,
+    default => 0,
+    predicate => 'has_disable_content_template',
+);
+
 around BUILDARGS => sub {
     my ( $orig, $self, @args ) = @_;
     my $args = $self->$orig( @args );

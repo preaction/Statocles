@@ -72,6 +72,26 @@ has template_dir => (
     isa => Str,
 );
 
+=attr disable_content_template
+
+This disables processing the content in this application as a template.
+This can speed up processing when the content is not using template
+directives.
+
+This can be also set in the document
+(L<Statocles::Document/disable_content_template>), or for the entire site
+(L<Statocles::Site/disable_content_template>).
+
+=cut
+
+has disable_content_template => (
+    is => 'ro',
+    isa => Bool,
+    lazy => 1,
+    default => 0,
+    predicate => 'has_disable_content_template',
+);
+
 =method pages
 
     my @pages = $app->pages;

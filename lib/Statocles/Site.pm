@@ -391,6 +391,25 @@ has markdown => (
     default => sub { Text::Markdown->new },
 );
 
+=attr disable_content_template
+
+This disables processing the content as a template. This can speed up processing
+when the content is not using template directives. 
+
+This can be also set in the application
+(L<Statocles::App/disable_content_template>), or for each document
+(L<Statocles::Document/disable_content_template>).
+
+=cut
+
+has disable_content_template => (
+    is => 'ro',
+    isa => Bool,
+    lazy => 1,
+    default => 0,
+    predicate => 'has_disable_content_template',
+);
+
 # The current deploy we're writing to
 has _write_deploy => (
     is => 'rw',
