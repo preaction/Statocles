@@ -1,5 +1,5 @@
 package Statocles::Test;
-our $VERSION = '0.086';
+our $VERSION = '0.087';
 # ABSTRACT: Common test routines for Statocles
 
 use Statocles::Base;
