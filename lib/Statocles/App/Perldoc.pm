@@ -227,6 +227,7 @@ sub _highlight_page {
   return unless my $hl = $page->site->plugins->{highlight};
   # only highlight the page content
   my $dom = Mojo::DOM->new($page->content);
+  # $dom = $page->dom;
   my $codes = $dom->find($sel);
   if ($codes->first) {
     for my $node ($codes->each) {
@@ -236,10 +237,6 @@ sub _highlight_page {
         ->find('code')->first;
       $parent->content("$highlighted");
     }
-  } else {
-    $dom =
-      Mojo::DOM->new($hl->highlight({page => $page}, Perl => $page->content))
-      ->find('code')->first;
   }
   $page->{_content} = "$dom";
 
