@@ -24,7 +24,7 @@ subtest 'syntax highlighting' => sub {
             $SHARE_DIR->child( qw( app perldoc lib ) ),
             $SHARE_DIR->child( qw( app perldoc bin ) ),
         ],
-        modules => [qw( My My:: )],
+        modules => [qw( My My:: Highlight)],
         index_module => 'My::Internal',
         site => $site,
         data => {
@@ -34,11 +34,30 @@ subtest 'syntax highlighting' => sub {
 
     test_pages(
         $site, $app,
+        # Highlight.pm has no code in SYNOPSIS or elsewhere - should have no
+        # reference to highlight classes
+        '/pod/Highlight/index.html' => sub {
+            my ($html, $dom) = @_;
+            is +(grep { $_->attr('href') =~ m/solarized/ } $dom->find('link[rel=stylesheet]')->each),
+              0, 'no stylesheet included';
+            is $dom->find('code[class=hljs]')->size, 0, 'dom query' or diag $dom;
+            is +($html =~ s/DOCTYPE/DOCTYPE/g), 1, 'no duplication';
+        },
+        '/pod/Highlight/source.html' => sub {
+            my ($html, $dom) = @_;
+            is $dom->find('pre')->size, 1, 'dom query';
+            ok +(grep {$_->content =~ m/^package/ } $dom->find('pre')->each),
+              'package...' or diag $dom;
+            ok +(grep {$_->content =~ m/Highlight/ } $dom->find('pre')->each),
+              'Highlight' or diag $dom;
+            is +($html =~ s/DOCTYPE/DOCTYPE/g), 1, 'no duplication';
+        },
         '/pod/index.html' => sub {
             my ($html, $dom) = @_;
             ok +(grep { $_->attr('href') =~ m/solarized/ } $dom->find('link[rel=stylesheet]')->each),
               'stylesheet included';
             is $dom->find('code[class=hljs]')->size, 1, 'dom query';
+            is +($html =~ s/DOCTYPE/DOCTYPE/g), 1, 'no duplication';
         },
         '/pod/My/Internal/source.html' => sub {
             my ($html, $dom) = @_;
@@ -47,7 +66,7 @@ subtest 'syntax highlighting' => sub {
               'package...' or diag $dom;
             ok +(grep {$_->content =~ m/My::Internal/ } $dom->find('pre')->each),
               'My::Internal';
-
+            is +($html =~ s/DOCTYPE/DOCTYPE/g), 1, 'no duplication';
             #ok +(grep { $_->attr('href') =~ m/solarized/ } $dom->find('link[rel=stylesheet]')->each),
             #  'stylesheet included';
             #is $dom->find('code[class=hljs]')->size, 1, 'dom query';
@@ -59,13 +78,14 @@ subtest 'syntax highlighting' => sub {
               'stylesheet included';
             is $dom->find('code[class=hljs]')->size, 1, 'dom query';
             is $dom->find('span[class=hljs-type]')->size, 3, 'dom query';
+            is +($html =~ s/DOCTYPE/DOCTYPE/g), 1, 'no duplication';
         },
         '/pod/My/source.html' => sub {
             my ($html, $dom) = @_;
             is $dom->find('pre')->size, 1, 'dom query';
             ok +(grep {$_->content =~ m/^package/} $dom->find('pre')->each),
               'package...';
-
+            is +($html =~ s/DOCTYPE/DOCTYPE/g), 1, 'no duplication';
             #ok +(grep { $_->attr('href') =~ m/solarized/ } $dom->find('link[rel=stylesheet]')->each),
             #  'stylesheet included';
             #is $dom->find('code[class=hljs]')->size, 1, 'dom query';
