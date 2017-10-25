@@ -194,9 +194,11 @@ sub pages {
 
         if ( $module eq $self->index_module ) {
             unshift @pages, Statocles::Page::Plain->new( %page_args );
+	          $self->_highlight_page( $pages[0], 'pre > code' );
         }
         else {
             push @pages, Statocles::Page::Plain->new( %page_args );
+	          $self->_highlight_page( $pages[-1], 'pre > code' );
         }
 
         # Add the source as a text file
@@ -212,10 +214,36 @@ sub pages {
                 crumbtrail => \@crumbtrail,
             },
         );
-
+        # unable to highlight source as source.html.ep uses <%== %> to escape html.
+        # $self->_highlight_page( $pages[-1], 'pre' );
     }
 
     return @pages;
+}
+
+sub _highlight_page {
+  my ( $self, $page, $sel ) = @_;
+  # highlight only if site-wide highlighting is available
+  return unless my $hl = $page->site->plugins->{highlight};
+  # only highlight the page content
+  my $dom = Mojo::DOM->new($page->content);
+  my $codes = $dom->find($sel);
+  if ($codes->first) {
+    for my $node ($codes->each) {
+      my $parent = $node->tag eq 'code' ? $node->parent : $node;
+      my $highlighted =
+        Mojo::DOM->new($hl->highlight({page => $page}, Perl => $node->text))
+        ->find('code')->first;
+      $parent->content("$highlighted");
+    }
+  } else {
+    $dom =
+      Mojo::DOM->new($hl->highlight({page => $page}, Perl => $page->content))
+      ->find('code')->first;
+  }
+  $page->{_content} = "$dom";
+
+  return $page;
 }
 
 sub _module_href {
