@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="/theme/css/normalize.css" />
+        <link rel="stylesheet" href="/theme/css/skeleton.css" />
+        <link rel="stylesheet" href="/theme/css/statocles-default.css" />
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <title><%== $self->title ? $self->title . ' - ' : '' %><%== $site->title %></title>
+        % if ( my $author = $self->author ) {
+        <meta name="author" content="<%== $author->name %>">
+        % }
+        <meta name="generator" content="Statocles <%= $Statocles::VERSION %>" />
+        % for my $link ( $self->links( 'feed' ) ) {
+        <link rel="alternate" href="<%= $link->href %>" type="<%= $link->type %>" />
+        % }
+        % if ( my $img = $site->images->{ 'icon' } ) {
+        <link rel="shortcut icon" href="<%= $img->src %>" />
+        % }
+        %= include 'site/head_after.html.ep'
+        % for my $link ( $site->links( 'stylesheet' ) ) {
+        <link rel="stylesheet" href="<%= $link->href %>" type="<%= $link->type || 'text/css' %>" />
+        % }
+        % for my $link ( $self->links( 'stylesheet' ) ) {
+        <link rel="stylesheet" href="<%= $link->href %>" type="<%= $link->type || 'text/css' %>" />
+        % }
+        % for my $link ( $site->links( 'script' ) ) {
+        <script src="<%= $link->href %>"></script>
+        % }
+        % for my $link ( $self->links( 'script' ) ) {
+        <script src="<%= $link->href %>"></script>
+        % }
+    </head>
+    <body>
+        <main>
+            <%= content %>
+        </main>
+
+        % if ( $site->data->{google_analytics_id} ) {
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+          ga('create', '<%= $site->data->{google_analytics_id} %>', 'auto');
+          ga('send', 'pageview');
+        </script>
+        % }
+
+    </body>
+</html>
