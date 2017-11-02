@@ -2,6 +2,12 @@ Changelog for Statocles
 
 {{ $NEXT }}
 
+    [Added]
+
+    - Added "blank" layout templates to the default and bootstrap
+      themes. These templates have no adornment whatsoever, and are
+      ideal for things like slide decks and pop-up windows.
+
 0.086     2017-09-13 22:22:32-05:00 America/Chicago
 
     [Added]
