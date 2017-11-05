@@ -232,10 +232,7 @@ sub _highlight_page {
   if ($codes->first) {
     for my $node ($codes->each) {
       my $parent = $node->tag eq 'code' ? $node->parent : $node;
-      my $highlighted =
-        Mojo::DOM->new($hl->highlight({page => $page}, Perl => $node->text))
-        ->find('code')->first;
-      $parent->content("$highlighted");
+      $parent->replace($hl->highlight({page => $page}, Perl => $node->text));
     }
   }
   $page->{_content} = "$dom";
