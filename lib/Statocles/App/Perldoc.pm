@@ -251,7 +251,7 @@ sub _weave_module {
     # Pod::Weaver 4.014 shipped with a bug that causes problems unless
     # we have a LEGAL section, which we do not presently allow users to
     # set. So warn them to upgrade if they have this version
-    if ( $Pod::Weaver::VERSION == 4.014 ) {
+    if ( defined($Pod::Weaver::VERSION) and $Pod::Weaver::VERSION == 4.014 ) {
         $errors{ 'Pod::Weaver' } = q{Pod::Weaver version 4.014 has a bug that will cause a fatal error when a LEGAL section isn't available. Please upgrade to version 4.015 or later.};
     }
 
@@ -349,4 +349,3 @@ __END__
 This application generates HTML from the POD in the requested modules.
 
 =cut
-
