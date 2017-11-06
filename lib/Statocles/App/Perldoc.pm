@@ -225,17 +225,20 @@ sub _highlight_page {
   my ( $self, $page, $sel ) = @_;
   # highlight only if site-wide highlighting is available
   return unless my $hl = $page->site->plugins->{highlight};
-  # only highlight the page content
-  my $dom = Mojo::DOM->new($page->content);
-  # $dom = $page->dom;
-  my $codes = $dom->find($sel);
+  # this add the highlight stylesheet to $page->links (template logic)
+  $hl->highlight({page => $page}, Perl => '');
+  # $page->dom calls $page->render 'set/making fast' links in the dom.
+  my $codes = $page->dom->find($sel);
   if ($codes->first) {
     for my $node ($codes->each) {
       my $parent = $node->tag eq 'code' ? $node->parent : $node;
-      $parent->replace($hl->highlight({page => $page}, Perl => $node->text));
+      $parent->replace($hl->highlight({}, Perl => $node->text));
     }
+  } else {
+    # remove if not used. path from Statocles::Plugin::Highlight#L159
+    $page->dom->find('link[rel=stylesheet][href*=/plugin/highlight/]')
+      ->each(sub { $_->remove });
   }
-  $page->{_content} = "$dom";
 
   return $page;
 }
