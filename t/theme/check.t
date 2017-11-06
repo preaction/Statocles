@@ -310,6 +310,28 @@ my %app_vars = (
                 doc => $document{ escaped },
             },
         ],
+
+        'blank.html.ep' => [
+            {
+                %common_vars,
+                self => $page{ normal },
+                page => $page{ normal },
+                app => $blog,
+            },
+            {
+                %common_vars,
+                self => $page{ escaped },
+                page => $page{ escaped },
+                doc => $document{ escaped },
+            },
+            {
+                %common_vars,
+                site => $site{ google_analytics },
+                self => $page{ escaped },
+                page => $page{ escaped },
+                doc => $document{ escaped },
+            },
+        ],
     },
 
     site => {
@@ -417,6 +439,14 @@ my %content_tests = (
     },
 
     'layout/full-width.html.ep' => sub {
+        my ( $tmpl, $content, %args ) = @_;
+        my $dom = Mojo::DOM->new( $content );
+        my $elem;
+
+        test_layout_content( $tmpl, $content, $dom, %args );
+    },
+
+    'layout/blank.html.ep' => sub {
         my ( $tmpl, $content, %args ) = @_;
         my $dom = Mojo::DOM->new( $content );
         my $elem;
@@ -760,8 +790,13 @@ for my $theme_dir ( @theme_dirs ) {
 
             my $name = $path->basename;
             my $app = $path->parent->basename;
+            note "Testing template $app/$name";
 
-            my $arg_sets = $app_vars{ $app }{ $name };
+            my $arg_sets;
+            unless ( $arg_sets = $app_vars{ $app }{ $name } ) {
+                diag "No test arg sets for template $app/$name";
+                next;
+            }
             if ( ref $arg_sets ne 'ARRAY' ) {
                 $arg_sets = [ $arg_sets ];
             }
