@@ -155,16 +155,21 @@ sub test_pages {
             next;
         }
 
-        my $output = $page->render( site => $site );
+        my $output;
 
-        # Handle filehandles from render
-        if ( ref $output eq 'GLOB' ) {
-            $output = do { local $/; <$output> };
+        if ( $page->has_dom ) {
+            $output = "".$page->dom;
         }
-
-        # Handle Path::Tiny from render
-        elsif ( Scalar::Util::blessed($output) && $output->isa('Path::Tiny') ) {
-            $output = $output->slurp_raw;
+        else {
+            $output = $page->render;
+            # Handle filehandles from render
+            if ( ref $output eq 'GLOB' ) {
+                $output = do { local $/; <$output> };
+            }
+            # Handle Path::Tiny from render
+            elsif ( Scalar::Util::blessed( $output ) && $output->isa( 'Path::Tiny' ) ) {
+                $output = $output->slurp_raw;
+            }
         }
 
         if ( $page->path =~ /[.](?:html|rss|atom)$/ ) {
