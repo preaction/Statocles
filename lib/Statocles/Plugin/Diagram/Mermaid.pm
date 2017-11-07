@@ -23,20 +23,29 @@ has mermaid_url => (
 #   </script>
 sub mermaid {
   my ($self, $args, @args) = @_;
+  my ( $text, $type ) = ( pop @args, pop @args );
+
+  # Handle Mojolicious begin/end
+  if ( ref $text eq 'CODE' ) {
+      $text = $text->();
+      # begin/end starts with a newline, so remove it to prevent too
+      # much top space
+      $text =~ s/\n$//;
+  }
 
   my $page = $args->{page} || $args->{self};
   if ( $page ) {
       # Add the appropriate stylesheet to the page
       my $mermaid_url = $self->mermaid_url->to_string;
       if ( !grep { $_->href eq $mermaid_url } $page->links( 'script' ) ) {
-          $page->links( script => {href =>$mermaid_url} );
+          $page->links( script => {href => $mermaid_url} );
           $page->links( script => {
             href => '',
             text => q|mermaid.initialize({startOnLoad: true, theme: 'forest'});|
           } );
       }
   }
-  return ;
+  return qq{<div class="mermaid">$text</div>};
 }
 
 sub register {
