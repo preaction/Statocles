@@ -4,7 +4,7 @@ Statocles - A static site generator
 
 # VERSION
 
-version 0.086
+version 0.087
 
 # STATUS
 
@@ -76,6 +76,7 @@ Doug Bell <preaction@cpan.org>
 - Kent Fredric <kentnl@cpan.org>
 - Konrad Bucheli <kb@open.ch>
 - perlancar (@netbook-zenbook-ux305) <perlancar@gmail.com>
+- Roy Storey <kiwiroy@users.noreply.github.com>
 - tadegenban <tadegenban@gmail.com>
 - Vladimir Lettiev <thecrux@gmail.com>
 - William Lindley <wlindley@wlindley.com>
