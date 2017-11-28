@@ -28,7 +28,11 @@
         <script src="<%= $link->href %>"></script>
         % }
         % for my $link ( $self->links( 'script' ) ) {
+          % if ( $link->{ 'text' } ) {
+        <script><%= $link->text %></script>
+          % } else {
         <script src="<%= $link->href %>"></script>
+          % }
         % }
     </head>
     <body>

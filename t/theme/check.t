@@ -26,6 +26,10 @@ my %document_common = (
             {
                 href => '/theme/js/special.js',
             },
+            {
+                href => '',
+                text => '// comment',
+            }
         ],
     },
 );
@@ -386,6 +390,11 @@ sub test_layout_content {
         }
         if ( ok $elem = $dom->at( 'script[src=/theme/js/site-script.js]', 'site script exists' ) ) {
             ok !$elem->text, 'no text inside';
+        }
+        if ( ok my $elems = $dom->find( 'head script' )->grep( 'text' ) ) {
+            is $elems->size, 1, '1 script with text found'
+                or diag explain [ map { "$_" } @$elems ];
+            is $elems->first->text, '// comment', 'text is correct';
         }
     };
 
