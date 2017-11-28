@@ -510,8 +510,8 @@ around pages => sub {
         my $page = $post_pages[$i];
         my $prev_page = $i ? $post_pages[$i-1] : undef;
         my $next_page = $post_pages[$i+1];
-        $page->prev( $prev_page->path ) if $prev_page;
-        $page->next( $next_page->path ) if $next_page;
+        $page->prev_page( $prev_page ) if $prev_page;
+        $page->next_page( $next_page ) if $next_page;
     }
 
     # Cache the post pages for this build
