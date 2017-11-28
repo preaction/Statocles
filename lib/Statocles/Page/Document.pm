@@ -274,17 +274,54 @@ around layout => sub {
 =attr next
 
 The path to the next document if it is part of a list.
+Defaults to the L<Statocles::Document/path> from L</next_page> if it exists.
+
+=cut
+
+has next => (
+    is => 'rw',
+    lazy => 1,
+    isa => Path|Undef,
+    coerce => Path->coercion,
+    default => sub { $_[0]->_page_path('next_page') },
+);
 
 =attr prev
 
 The path to the previous document if it is part of a list.
+Defaults to the L<Statocles::Document/path> from L</prev_page> if it exists.
 
 =cut
 
-has [qw( next prev )] => (
+has prev => (
     is => 'rw',
-    isa => Path,
+    lazy => 1,
+    isa => Path|Undef,
     coerce => Path->coercion,
+    default => sub { $_[0]->_page_path('prev_page') },
+);
+
+sub _page_path {
+  my ( $self, $method ) = @_;
+  if ( my $page = $self->$method() ) {
+    return $page->path;
+  }
+  return undef;
+}
+
+=attr next_page
+
+The L<Statocles::Page::Document> instance of the next document if it is part of a list.
+
+=attr prev_page
+
+The L<Statocles::Page::Document> instance of the previous document if it is part of a list.
+
+=cut
+
+has [qw( next_page prev_page )] => (
+    is => 'rw',
+    isa => InstanceOf['Statocles::Page::Document'],
 );
 
 1;
