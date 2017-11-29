@@ -134,6 +134,7 @@ A helper function like C<plugger> above receives first the template
 variables and then all the helper arguments supplied in the template
 itself.  In the example above (section "Event Handlers"), C<$args>
 would be a hash with these keys:
+
 =over
 
 =item *
@@ -153,4 +154,3 @@ C<page> The current page, e.g., of class L<Statocles::Page::Document>
 C<site> The current site, e.g., of class L<Statocles::Site>
 
 =back
-
