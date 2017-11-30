@@ -393,6 +393,7 @@ sub tag_pages {
             template => $self->template( 'index.html' ),
             layout => $self->template( 'layout.html' ),
             data => {
+                tag => $tag,
                 tag_text => $self->tag_text->{ $tag },
             },
         );
