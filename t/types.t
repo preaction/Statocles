@@ -29,6 +29,16 @@ subtest 'Link types' => sub {
                     text => 'link two',
                     href => 'http://example.net',
                 },
+                {
+                    text => 'link three',
+                    href => 'http://example.org',
+                    children => [
+                        {
+                            text => 'link four',
+                            href => 'http://exmaple.co.uk'
+                        },
+                    ]
+                },
             ] );
 
             cmp_deeply $link_array, [
@@ -38,6 +48,16 @@ subtest 'Link types' => sub {
                 Statocles::Link->new(
                     text => 'link two',
                     href => 'http://example.net',
+                ),
+                Statocles::Link::Tree->new(
+                    text => 'link three',
+                    href => 'http://example.org',
+                    children => [
+                        Statocles::Link::Tree->new(
+                            text => 'link four',
+                            href => 'http://exmaple.co.uk'
+                        ),
+                    ],
                 ),
             ];
 

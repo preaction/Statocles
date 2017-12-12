@@ -37,7 +37,7 @@ coerce Person, from Str, via { Statocles::Person->new( $_ ) };
 declare LinkArray, as ArrayRef[Link], coerce => 1;
 coerce LinkArray, from ArrayRef[HashRef|Str],
     via {
-        [ map { Link->coerce( $_ ) } @$_ ];
+        [ map { ref $_ eq 'HASH' && exists $_->{children} ? LinkTree->coerce($_) : Link->coerce( $_ ) } @$_ ];
     };
 
 declare LinkHash, as HashRef[LinkArray], coerce => 1;
