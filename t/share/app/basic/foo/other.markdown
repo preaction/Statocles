@@ -4,6 +4,7 @@ title: Foo Other
 
 * [Index](/index.html)
 * [Foo Index](index.html)
+* [Another Part](#another-part)
 
 # Foo Other
 
@@ -15,7 +16,7 @@ Vestibulum pellentesque risus et libero viverra mollis. Curabitur eu
 consectetur orci. Praesent massa metus, rutrum ac tortor quis, sagittis congue
 ex.
 
-## Another Part
+<h2 id="another-part">Another Part</h2>
 
 Aenean eu accumsan libero, sed sagittis ante. Sed pulvinar, nisi vitae egestas
 feugiat, metus magna congue ligula, vitae sollicitudin libero ante a enim.
