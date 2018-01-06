@@ -648,8 +648,8 @@ sub build {
             for my $el ( $dom->find( "[$attr]" )->each ) {
                 my $url = $el->attr( $attr );
 
-                # Fix relative links on the index page
-                if ( $is_index && $index_orig_path && $url !~ m{^([A-Za-z]+:|/)} ) {
+                # Fix relative non-anchor links on the index page
+                if ( $is_index && $index_orig_path && $url !~ m{^([A-Za-z]+:|/|#)} ) {
                     $url = join "/", $index_orig_path->parent, $url;
                 }
 
