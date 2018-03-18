@@ -4,6 +4,8 @@ use Statocles::Util qw( trim dircopy run_editor uniq_by derp );
 use Statocles::Link;
 my $SHARE_DIR = path( __DIR__, 'share' );
 
+use constant Win32 => $^O =~ /Win32/;
+
 subtest 'trim' => sub {
     my $foo;
     my @warnings;
@@ -77,13 +79,15 @@ subtest 'run_editor' => sub {
         } qr{Editor "HOPEFULLY_DOES_NOT_EXIST" exited with error \(non-zero\) status: .*\n};
     };
 
-    subtest 'editor dies by signal' => sub {
-        local $ENV{EDITOR} = $editor . " --signal TERM";
-        my $tmp = tempdir;
-        throws_ok {
-            run_editor( $tmp->child( 'index.markdown' ) );
-        } qr[Editor "\Q$ENV{EDITOR}\E" died from signal \d+\n];
-    };
+    if (!Win32) {
+        subtest 'editor dies by signal' => sub {
+            local $ENV{EDITOR} = $editor . " --signal TERM";
+            my $tmp = tempdir;
+            throws_ok {
+                run_editor( $tmp->child( 'index.markdown' ) );
+            } qr[Editor "\Q$ENV{EDITOR}\E" died from signal \d+\n];
+        };
+    }
 
     subtest 'editor nonzero exit' => sub {
         local $ENV{EDITOR} = $editor . " --exit 1";
