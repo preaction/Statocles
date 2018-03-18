@@ -1,4 +1,3 @@
-
 use Test::Lib;
 use My::Test;
 use Capture::Tiny qw( capture );
@@ -55,9 +54,8 @@ subtest 'edit' => sub {
     subtest 'create new page' => sub {
 
         subtest 'full path' => sub {
-            local $ENV{EDITOR} = "$^X " . $SHARE_DIR->child( 'bin', 'editor.pl' );
+            local $ENV{EDITOR} = join ' ', map qq{"$_"}, $^X, $SHARE_DIR->child( 'bin', 'editor.pl' );
             local $ENV{STATOCLES_TEST_EDITOR_CONTENT} = "".$SHARE_DIR->child(qw( app basic index.markdown ));
-
             my $doc_path = $tmpdir->child( "basic", "resume.markdown" );
 
             subtest 'run the command' => sub {

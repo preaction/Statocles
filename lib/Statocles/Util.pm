@@ -65,7 +65,9 @@ sub run_editor {
     my ( $path ) = @_;
     return 0 unless $ENV{EDITOR};
     no warnings 'exec'; # We're checking everything ourselves
-    system split( /\s+/, $ENV{EDITOR} ), $path;
+    # use string "system" as env-vars need to quote to protect from spaces
+    # therefore, we quote path, then append it
+    system $ENV{EDITOR} . qq{ "$path"};
     if ($? == -1) {
         die sprintf qq{Failed to invoke editor "%s": %s\n}, $ENV{EDITOR}, $!;
     }

@@ -347,7 +347,7 @@ ENDMARKDOWN
 
 
         subtest 'title change creates different folder' => sub {
-            local $ENV{EDITOR} = "$^X " . $SHARE_DIR->child( 'bin', 'editor.pl' );
+            local $ENV{EDITOR} = join ' ', map qq{"$_"}, $^X, $SHARE_DIR->child( 'bin', 'editor.pl' );
             local $ENV{STATOCLES_TEST_EDITOR_CONTENT} = "".$SHARE_DIR->child(qw( app blog draft a-draft-post.markdown ));
 
             my ( undef, undef, undef, $day, $mon, $year ) = localtime;
