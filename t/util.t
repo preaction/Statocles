@@ -82,7 +82,7 @@ subtest 'run_editor' => sub {
         my $tmp = tempdir;
         throws_ok {
             run_editor( $tmp->child( 'index.markdown' ) );
-        } qr[Editor "$ENV{EDITOR}" died from signal \d+\n];
+        } qr[Editor "\Q$ENV{EDITOR}\E" died from signal \d+\n];
     };
 
     subtest 'editor nonzero exit' => sub {
@@ -90,7 +90,7 @@ subtest 'run_editor' => sub {
         my $tmp = tempdir;
         throws_ok {
             run_editor( $tmp->child( 'index.markdown' ) );
-        } qr[Editor "$ENV{EDITOR}" exited with error \(non-zero\) status: 1\n];
+        } qr[Editor "\Q$ENV{EDITOR}\E" exited with error \(non-zero\) status: 1\n];
     };
 };
 
