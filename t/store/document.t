@@ -284,7 +284,7 @@ subtest 'bad documents' => sub {
         );
         my $from = $store->path->child( 'links.markdown' )->relative( cwd )->stringify;
         throws_ok { $store->documents }
-            qr{\QError creating document in "$from": Value "bad link" is not valid for attribute "links" (expected "LinkHash")};
+            qr{\QError creating document in "$from": Value "bad link" is not valid for attribute "_links" (expected "LinkHash")};
     };
 };
 

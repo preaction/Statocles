@@ -3,6 +3,7 @@ our $VERSION = '0.088';
 # ABSTRACT: Base class for all Statocles documents
 
 use Statocles::Base 'Class';
+with 'Statocles::Role::PageAttrs';
 use Statocles::Image;
 use Statocles::Util qw( derp );
 
@@ -43,11 +44,6 @@ C<&>) will be escaped by the template, so no HTML allowed.
 
 =cut
 
-has title => (
-    is => 'rw',
-    isa => Str,
-);
-
 =attr author
 
     ---
@@ -67,11 +63,7 @@ or a hashref of L<Statocles::Person attributes|Statocles::Person/ATTRIBUTES>.
 
 =cut
 
-has author => (
-    is => 'rw',
-    isa => Person,
-    coerce => Person->coercion,
-);
+sub _build_author { }
 
 =attr status
 
@@ -179,13 +171,6 @@ The text of the link. Not needed for stylesheet or script links.
 
 =cut
 
-has links => (
-    is => 'rw',
-    isa => LinkHash,
-    default => sub { +{} },
-    coerce => LinkHash->coercion,
-);
-
 =attr images
 
     ---
@@ -217,26 +202,6 @@ rendered. Also the text to use for non-visual media.
 =back
 
 =cut
-
-has images => (
-    is => 'ro',
-    isa => HashRef[InstanceOf['Statocles::Image']],
-    default => sub { +{} },
-    coerce => sub {
-        my ( $ref ) = @_;
-        my %img;
-        for my $name ( keys %$ref ) {
-            my $attrs = $ref->{ $name };
-            if ( !ref $attrs ) {
-                $attrs = { src => $attrs };
-            }
-            $img{ $name } = Statocles::Image->new(
-                %{ $attrs },
-            );
-        }
-        return \%img;
-    },
-);
 
 =attr date
 

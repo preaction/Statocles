@@ -93,6 +93,7 @@ require Statocles::Store;
 require Statocles::Link;
 require Statocles::Link::Tree;
 require Statocles::Person;
+require Statocles::Image;
 
 1;
 __END__

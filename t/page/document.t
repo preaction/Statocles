@@ -112,8 +112,6 @@ subtest 'constructor' => sub {
             title => $doc->title,
             author => $doc->author,
             date => $doc->date,
-            _images => $doc->images,
-            _links => $doc->links,
             data => { foo => 'bar' },
         },
     );

@@ -73,13 +73,13 @@ has _tags => (
     init_arg => 'tags',
 );
 
-has '+_links' => (
-    default => sub { $_[0]->document->links },
-);
+sub links {
+    shift->document->links( @_ );
+}
 
-has '+_images' => (
-    default => sub { $_[0]->document->images },
-);
+sub images {
+    shift->document->images( @_ );
+}
 
 =attr data
 

@@ -174,7 +174,7 @@ sub render {
             return $args{content};
         };
 
-        $content = $t->process( \%args );
+        $content = eval { $t->process( \%args ) };
     }
 
     if ( blessed $content && $content->isa( 'Mojo::Exception' ) ) {
