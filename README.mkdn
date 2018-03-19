@@ -4,7 +4,7 @@ Statocles - A static site generator
 
 # VERSION
 
-version 0.087
+version 0.088
 
 # STATUS
 
@@ -71,10 +71,12 @@ Doug Bell <preaction@cpan.org>
 # CONTRIBUTORS
 
 - djerius <djerius@cfa.harvard.edu>
+- Ed J <mohawk2@users.noreply.github.com>
 - Ferenc Erki <erkiferenc@gmail.com>
 - Joel Berger <joel.a.berger@gmail.com>
 - Kent Fredric <kentnl@cpan.org>
 - Konrad Bucheli <kb@open.ch>
+- Mohammad S Anwar <mohammad.anwar@yahoo.com>
 - perlancar (@netbook-zenbook-ux305) <perlancar@gmail.com>
 - Roy Storey <kiwiroy@users.noreply.github.com>
 - tadegenban <tadegenban@gmail.com>

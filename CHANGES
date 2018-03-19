@@ -1,5 +1,32 @@
 Changelog for Statocles
 
+{{ $NEXT }}
+
+    [Added]
+
+    - Added next_page/prev_page attributes to list pages. These provide
+      better access to the page data like title to make better links for
+      users. The existing next/prev attributes only held paths, which
+      made finding this information more difficult. Thanks @jberger!
+      [Github #555]
+    - Allow Link trees in navigations to support multi-level
+      navigations. Thanks @jberger! [Github #553]
+
+    [Fixed]
+
+    - Fixed anchor-only links on the index page being rewritten to point
+      to the wrong page. Thanks @jberger! [Github #554]
+    - Moved some common attributes into a role to fix API differences
+      between Document objects and Page objects. There is a lot more
+      cleanup to be done in this regard, and we'll be doing that before
+      pushing out v1.00.
+    - Fixed problems running the user's editor when there are spaces in
+      the path. Thanks @mohawk2! [Github #557]
+    - Fixed some test failures with running the user's editor on Windows
+      systems. Thanks @mohawk2! [Github #557]
+    - Removed some useless editor error states that were causing
+      spurious test failures for no good reason.
+
 0.087     2017-11-28 14:43:46-06:00 America/Chicago
 
     [Added]
