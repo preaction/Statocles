@@ -76,7 +76,7 @@ subtest 'run_editor' => sub {
         my $tmp = tempdir;
         throws_ok {
             run_editor( $tmp->child( 'index.markdown' ) );
-        } qr{Editor "HOPEFULLY_DOES_NOT_EXIST" exited with error \(non-zero\) status: .*\n};
+        } qr{Editor "HOPEFULLY_DOES_NOT_EXIST" exited with error \(non-zero\) status: \d+\n};
     };
 
     if (!Win32) {
@@ -85,7 +85,7 @@ subtest 'run_editor' => sub {
             my $tmp = tempdir;
             throws_ok {
                 run_editor( $tmp->child( 'index.markdown' ) );
-            } qr[Editor "\Q$ENV{EDITOR}\E" died from signal \d+\n];
+            } qr[Editor "\Q$ENV{EDITOR}\E" exited with error \(non-zero\) status: \d+\n];
         };
     }
 
@@ -94,7 +94,7 @@ subtest 'run_editor' => sub {
         my $tmp = tempdir;
         throws_ok {
             run_editor( $tmp->child( 'index.markdown' ) );
-        } qr[Editor "\Q$ENV{EDITOR}\E" exited with error \(non-zero\) status: 1\n];
+        } qr[Editor "\Q$ENV{EDITOR}\E" exited with error \(non-zero\) status: \d+\n];
     };
 };
 

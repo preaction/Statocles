@@ -54,10 +54,10 @@ sub dircopy($$) {
 
     my $was_run = run_editor( $path );
 
-Invoke the user's text editor (from the C<EDITOR> environment variable) to edit
-the given path. Returns true if an editor was invoked, false otherwise. If the
-editor was not able to be invoked (C<EDITOR> was set but could not be run), an
-exception is thrown.
+Invoke the user's text editor (from the C<EDITOR> environment variable)
+to edit the given path. Returns true if an editor was invoked, false if
+C<EDITOR> was not set. If the editor was not able to be invoked
+(C<EDITOR> was set but could not be run), an exception is thrown.
 
 =cut
 
@@ -68,14 +68,8 @@ sub run_editor {
     # use string "system" as env-vars need to quote to protect from spaces
     # therefore, we quote path, then append it
     system $ENV{EDITOR} . qq{ "$path"};
-    if ($? == -1) {
-        die sprintf qq{Failed to invoke editor "%s": %s\n}, $ENV{EDITOR}, $!;
-    }
-    elsif ($? & 127) {
-        die sprintf qq{Editor "%s" died from signal %d\n}, $ENV{EDITOR}, ( $? & 127 );
-    }
-    elsif ( my $exit = $? >> 8 ) {
-        die sprintf qq{Editor "%s" exited with error (non-zero) status: %d\n}, $ENV{EDITOR}, $exit;
+    if ($? != 0) {
+        die sprintf qq{Editor "%s" exited with error (non-zero) status: %d\n}, $ENV{EDITOR}, $?;
     }
     return 1;
 }
