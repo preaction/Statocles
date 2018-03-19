@@ -279,7 +279,7 @@ subtest 'pagination' => sub {
                     path => '/blog/page-2.html',
                     pages => [ $pages[1] ],
                     next => '/blog/page-3.html',
-                    prev => '/blog',
+                    prev => '/blog/',
                     date => $pages[2]->date,
                 ),
                 Statocles::Page::List->new(
@@ -330,20 +330,20 @@ subtest 'pagination' => sub {
                 Statocles::Page::List->new(
                     path => '/blog/index.html',
                     pages => [ $pages[0] ],
-                    next => '/blog/page/2',
+                    next => '/blog/page/2/',
                     date => $pages[2]->date,
                 ),
                 Statocles::Page::List->new(
                     path => '/blog/page/2/index.html',
                     pages => [ $pages[1] ],
-                    next => '/blog/page/3',
-                    prev => '/blog',
+                    next => '/blog/page/3/',
+                    prev => '/blog/',
                     date => $pages[2]->date,
                 ),
                 Statocles::Page::List->new(
                     path => '/blog/page/3/index.html',
                     pages => [ $pages[2] ],
-                    prev => '/blog/page/2',
+                    prev => '/blog/page/2/',
                     date => $pages[2]->date,
                 ),
             );

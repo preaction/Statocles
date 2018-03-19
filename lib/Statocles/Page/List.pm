@@ -54,8 +54,8 @@ The path to the previous page in the pagination series.
 
 has [qw( next prev )] => (
     is => 'rw',
-    isa => Path,
-    coerce => Path->coercion,
+    isa => PagePath,
+    coerce => PagePath->coercion,
 );
 
 =attr date

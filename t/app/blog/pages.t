@@ -37,7 +37,7 @@ my @page_tests = (
             'first page has 2 latest post titles';
 
         cmp_deeply [ $dom->find( 'h1 a' )->map( attr => 'href' )->each ],
-            [ '/blog/2014/06/02/more_tags/', '/blog/2014/05/22/(regex)[name].file.html' ],
+            [ '/blog/2014/06/02/more_tags/', '/blog/2014/05/22/(regex)%5Bname%5D.file.html' ],
             'first page has 2 latest post paths';
 
         cmp_deeply [ $dom->find( '.author' )->map( 'text' )->each ],
@@ -98,7 +98,7 @@ my @page_tests = (
 
         my $prev = $dom->at( '.pager .prev' );
         is $prev->at( 'a' )->attr( 'class' ), 'button button-primary';
-        is $prev->at( 'a' )->attr( 'href' ), '/blog/page/2';
+        is $prev->at( 'a' )->attr( 'href' ), '/blog/page/2/';
 
         my $next = $dom->at( '.pager .next' );
         ok exists $next->at( 'button' )->attr()->{'disabled'};
@@ -144,7 +144,7 @@ my @page_tests = (
 
         my $next = $dom->at( '.pager .next' );
         is $next->at( 'a' )->attr( 'class' ), 'button button-primary';
-        is $next->at( 'a' )->attr( 'href' ), '/blog';
+        is $next->at( 'a' )->attr( 'href' ), '/blog/';
     },
 
     # Index feeds
@@ -164,7 +164,7 @@ my @page_tests = (
         cmp_deeply [ $dom->find( 'entry id' )->map( 'text' )->each ],
             [
                 'http://example.com/blog/2014/06/02/more_tags/',
-                'http://example.com/blog/2014/05/22/(regex)[name].file.html',
+                'http://example.com/blog/2014/05/22/(regex)%5Bname%5D.file.html',
             ],
             'atom feed has 2 latest post paths';
 
@@ -220,7 +220,7 @@ my @page_tests = (
         cmp_deeply [ $dom->find( 'item link' )->map( 'text' )->each ],
             [
                 'http://example.com/blog/2014/06/02/more_tags/',
-                'http://example.com/blog/2014/05/22/(regex)[name].file.html',
+                'http://example.com/blog/2014/05/22/(regex)%5Bname%5D.file.html',
             ],
             'rss feed has 2 latest post paths';
 
@@ -253,7 +253,7 @@ my @page_tests = (
             'first "better" page has 2 latest post titles';
 
         cmp_deeply [ $dom->find( 'h1 a' )->map( attr => 'href' )->each ],
-            [ '/blog/2014/06/02/more_tags/', '/blog/2014/05/22/(regex)[name].file.html' ],
+            [ '/blog/2014/06/02/more_tags/', '/blog/2014/05/22/(regex)%5Bname%5D.file.html' ],
             'first "better" page has 2 latest post paths';
 
         cmp_deeply [ $dom->find( '.author' )->map( 'text' )->each ],
@@ -282,7 +282,7 @@ my @page_tests = (
 
         my $prev = $dom->at( '.pager .prev' );
         is $prev->at( 'a' )->attr( 'class' ), 'button button-primary';
-        is $prev->at( 'a' )->attr( 'href' ), '/blog/tag/better/page/2';
+        is $prev->at( 'a' )->attr( 'href' ), '/blog/tag/better/page/2/';
 
         my $next = $dom->at( '.pager .next' );
         ok exists $next->at( 'button' )->attr()->{'disabled'};
@@ -336,7 +336,7 @@ my @page_tests = (
 
         my $next = $dom->at( '.pager .next' );
         is $next->at( 'a' )->attr( 'class' ), 'button button-primary';
-        is $next->at( 'a' )->attr( 'href' ), '/blog/tag/better';
+        is $next->at( 'a' )->attr( 'href' ), '/blog/tag/better/';
     },
 
     '/blog/tag/error-message/index.html' => sub {
@@ -349,7 +349,7 @@ my @page_tests = (
             '"error message" page has 1 post title';
 
         cmp_deeply [ $dom->find( 'h1 a' )->map( attr => 'href' )->each ],
-            [ '/blog/2014/05/22/(regex)[name].file.html' ],
+            [ '/blog/2014/05/22/(regex)%5Bname%5D.file.html' ],
             '"error message" page has 1 post url';
 
         cmp_deeply [ $dom->find( '.author' )->map( 'text' )->each ],
@@ -482,7 +482,7 @@ my @page_tests = (
         cmp_deeply [ $dom->find( 'entry id' )->map( 'text' )->each ],
             [
                 'http://example.com/blog/2014/06/02/more_tags/',
-                'http://example.com/blog/2014/05/22/(regex)[name].file.html',
+                'http://example.com/blog/2014/05/22/(regex)%5Bname%5D.file.html',
             ],
             'atom feed has 2 latest post paths';
 
@@ -514,7 +514,7 @@ my @page_tests = (
         cmp_deeply [ $dom->find( 'item link' )->map( 'text' )->each ],
             [
                 'http://example.com/blog/2014/06/02/more_tags/',
-                'http://example.com/blog/2014/05/22/(regex)[name].file.html',
+                'http://example.com/blog/2014/05/22/(regex)%5Bname%5D.file.html',
             ],
             'rss feed has 2 latest post paths';
 
@@ -546,7 +546,7 @@ my @page_tests = (
 
         cmp_deeply [ $dom->find( 'entry id' )->map( 'text' )->each ],
             [
-                'http://example.com/blog/2014/05/22/(regex)[name].file.html',
+                'http://example.com/blog/2014/05/22/(regex)%5Bname%5D.file.html',
             ],
             'atom feed has correct post paths';
 
@@ -577,7 +577,7 @@ my @page_tests = (
 
         cmp_deeply [ $dom->find( 'item link' )->map( 'text' )->each ],
             [
-                'http://example.com/blog/2014/05/22/(regex)[name].file.html',
+                'http://example.com/blog/2014/05/22/(regex)%5Bname%5D.file.html',
             ],
             'rss feed has correct post paths';
 
@@ -762,10 +762,10 @@ my @page_tests = (
         is $prev->at( 'a' )->attr( 'href' ), '/blog/2014/04/23/slug/index.html';
 
         my $next = $dom->at( '.pager .next' );
-        is $next->at( 'a' )->attr( 'href' ), '/blog/2014/05/22/(regex)[name].file.html';
+        is $next->at( 'a' )->attr( 'href' ), '/blog/2014/05/22/(regex)%5Bname%5D.file.html';
     },
 
-    '/blog/2014/05/22/(regex)[name].file.html' => sub {
+    '/blog/2014/05/22/(regex)%5Bname%5D.file.html' => sub {
         my ( $html, $dom ) = @_;
 
         is $dom->at( 'header h1' )->text, 'Regex violating Post';
@@ -843,7 +843,7 @@ my @page_tests = (
         }
 
         my $prev = $dom->at( '.pager .prev' );
-        is $prev->at( 'a' )->attr( 'href' ), '/blog/2014/05/22/(regex)[name].file.html';
+        is $prev->at( 'a' )->attr( 'href' ), '/blog/2014/05/22/(regex)%5Bname%5D.file.html';
 
         my $next = $dom->at( '.pager .next' );
         ok exists $next->at( 'button' )->attr()->{'disabled'};

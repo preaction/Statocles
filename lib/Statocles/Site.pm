@@ -650,7 +650,9 @@ sub build {
 
                 # Fix relative non-anchor links on the index page
                 if ( $is_index && $index_orig_path && $url !~ m{^([A-Za-z]+:|/|#)} ) {
-                    $url = join "/", $index_orig_path->parent, $url;
+                    my $clone = $index_orig_path->clone;
+                    pop @$clone;
+                    $url = join "/", $clone, $url;
                 }
 
                 next unless $url =~ m{^/(?:[^/]|$)};

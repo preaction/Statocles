@@ -36,7 +36,7 @@ my %page_mod = (
     '/blog/2014/04/23/slug/' => '2014-04-30',
     '/blog/2014/04/30/plug/' => '2014-04-30',
     '/blog/2014/04/30/plug/recipe.html' => '2014-04-30',
-    '/blog/2014/05/22/(regex)[name].file.html' => '2014-05-22',
+    '/blog/2014/05/22/(regex)%5Bname%5D.file.html' => '2014-05-22',
     '/blog/2014/06/02/more_tags/' => '2014-06-02',
     '/blog/2014/06/02/more_tags/docs.html' => '2014-06-02',
     '/' => '2014-06-02',
@@ -51,7 +51,7 @@ my %page_mod = (
 my @posts = qw(
     /blog/2014/04/23/slug/
     /blog/2014/04/30/plug/
-    /blog/2014/05/22/(regex)[name].file.html
+    /blog/2014/05/22/(regex)%5Bname%5D.file.html
     /blog/2014/06/02/more_tags/
     /blog/2014/04/30/plug/recipe.html
     /blog/2014/06/02/more_tags/docs.html

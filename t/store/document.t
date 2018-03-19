@@ -330,10 +330,11 @@ subtest 'write document' => sub {
         my @warnings;
         local $SIG{__WARN__} = sub { push @warnings, $_[0] };
 
-        my $path = path(qw( blog 2014 05 28 example.markdown ));
+        my @pathparts = qw( blog 2014 05 28 example.markdown );
+        my $path = Mojo::Path->new->parts(\@pathparts);
         $store->write_document( $path => $doc );
         cmp_deeply $store->read_document( $path ), Statocles::Document->new( path => $path, store => $store, %$doc );
-        my $full_path = $tmpdir->child( $path );
+        my $full_path = $tmpdir->child( @pathparts );
         eq_or_diff path( $full_path )->slurp_utf8,
             $SHARE_DIR->child( qw( store write doc.markdown ) )->slurp_utf8;
 
@@ -401,7 +402,7 @@ subtest 'verbose' => sub {
         my $store = Statocles::Store->new(
             path => $SHARE_DIR->child( qw( store docs ) ),
         );
-        my $path = path( qw( required.markdown ) );
+        my $path = Mojo::Path->new->parts([ qw( required.markdown ) ]);
         my ( $out, $err, $exit ) = capture {
             $store->read_document( $path );
         };
@@ -415,9 +416,9 @@ subtest 'check if a path is a document' => sub {
     my $store = Statocles::Store->new(
         path => $SHARE_DIR->child( qw( store ) ),
     );
-    ok $store->is_document( Path::Tiny->new(qw( docs ext short.md )) );
+    ok $store->is_document( Mojo::Path->new->parts([qw( docs ext short.md )]) );
     ok $store->is_document( join "/", qw( docs ext short.md ) );
-    ok !$store->is_document( Path::Tiny->new( qw( files image.png ) ) );
+    ok !$store->is_document( Mojo::Path->new->parts([qw( files image.png )]) );
     ok !$store->is_document( join "/", qw( files image.png ) );
 };
 

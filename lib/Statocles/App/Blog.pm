@@ -232,19 +232,23 @@ ENDHELP
         );
 
         my $slug = $self->make_slug( $doc{title} || "new post" );
-        my $path = Path::Tiny->new( @date_parts, $slug, "index.markdown" );
+        my @partsdir = (@date_parts, $slug);
+        my @partsfile = (@partsdir, "index.markdown");
+        my $path = Mojo::Path->new->parts(\@partsfile);
         $self->store->write_document( $path => \%doc );
-        my $full_path = $self->store->path->child( $path );
+        my $full_path = $self->store->path->child( @partsfile );
 
         if ( run_editor( $full_path ) ) {
             my $old_title = $doc{title};
             %doc = %{ $self->store->read_document( $path ) };
             if ( $doc{title} ne $old_title ) {
-                $self->store->path->child( $path->parent )->remove_tree;
+                $self->store->path->child( @partsdir )->remove_tree;
                 $slug = $self->make_slug( $doc{title} || "new post" );
-                $path = Path::Tiny->new( @date_parts, $slug, "index.markdown" );
+                @partsdir = (@date_parts, $slug);
+                @partsfile = (@partsdir, "index.markdown");
+                $path = Mojo::Path->new->parts(\@partsfile);
                 $self->store->write_document( $path => \%doc );
-                $full_path = $self->store->path->child( $path );
+                $full_path = $self->store->path->child( @partsfile );
             }
         }
 

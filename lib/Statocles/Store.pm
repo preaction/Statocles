@@ -130,7 +130,7 @@ sub read_documents {
         next unless $path->is_file;
         next unless $self->_is_owned_path( $path );
         next unless $self->is_document( $path );
-        my $rel_path = rootdir->child( $path->relative( $root_path ) );
+        my $rel_path = rootdir->child( $path->relative( $root_path ) )->stringify;
         push @docs, $self->read_document( $rel_path );
     }
     return \@docs;

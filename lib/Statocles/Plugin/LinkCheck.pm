@@ -40,7 +40,7 @@ sub check_pages {
     my %links = ();
     my %empty = (); # Pages with empty links
     for my $page ( @{ $event->pages } ) {
-        $page_paths{ $page->path } = 1;
+        $page_paths{ url_unescape $page->path } = 1;
         if ( $page->DOES( 'Statocles::Page::Document' ) ) {
             my $dom = $page->dom;
 
@@ -57,7 +57,9 @@ sub check_pages {
                     next if $url =~ m{^(?:[a-z][a-z0-9+.-]*):}i;
                     next if $url =~ m{^//};
                     if ( $url !~ m{^/} ) {
-                        $url = $page->path->parent->child( $url );
+                        my $clone = $page->path->clone;
+                        pop @$clone;
+                        $url = join '/', $clone, $url;
                     }
 
                     # Fix ".." and ".". Path::Tiny->canonpath can't do
@@ -66,14 +68,14 @@ sub check_pages {
                     $url =~ s{/[^/]+/[.][.]/}{/}g; # Fix ".." to refer to parent
                     $url =~ s{/[.]/}{/}g; # Fix "." to refer to self
 
-                    $links{ url_unescape $url }{ $page->path }++;
+                    $links{ url_unescape $url }{ url_unescape $page->path }++;
 
                 }
             }
         }
     }
 
-    my @missing; # Array of arrayrefs of [ link_url, page_path, link_element ]
+    my @missing; # Array of arrayrefs of [ link_url, page_path ]
     for my $link_url ( keys %links ) {
         $link_url .= 'index.html' if $link_url =~ m{/$};
         next if $page_paths{ $link_url } || $page_paths{ "$link_url/index.html" };
