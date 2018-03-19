@@ -15,8 +15,8 @@ The path to this document. This is not settable from the frontmatter.
 
 has path => (
     is => 'rw',
-    isa => Path,
-    coerce => Path->coercion,
+    isa => PagePath,
+    coerce => PagePath->coercion,
 );
 
 =attr store

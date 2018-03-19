@@ -75,14 +75,14 @@ sub pages {
         }
 
         if ( $self->store->is_document( $path ) ) {
-            my $page_path = $path;
+            my $page_path = $path->stringify;
             $page_path =~ s{[.]\w+$}{.html};
 
             my %args = (
                 path => $page_path,
                 app => $self,
                 layout => $self->template( 'layout.html' ),
-                document => $self->store->read_document( $path ),
+                document => $self->store->read_document( $path->stringify ),
             );
 
             push @pages, Statocles::Page::Document->new( %args );

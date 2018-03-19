@@ -39,8 +39,8 @@ The absolute URL path to save this page to.
 
 has path => (
     is => 'rw',
-    isa => Path,
-    coerce => Path->coercion,
+    isa => PagePath,
+    coerce => PagePath->coercion,
     required => 1,
 );
 
@@ -308,7 +308,7 @@ Get the base file name of this page. Everything after the last C</>.
 
 sub basename {
     my ( $self ) = @_;
-    return $self->path->basename;
+    return $self->path->[-1];
 }
 
 =method dirname
@@ -323,7 +323,9 @@ There will not be a trailing slash unless it is the root directory.
 
 sub dirname {
     my ( $self ) = @_;
-    return $self->path->parent->stringify;
+    my $clone = $self->path->clone;
+    pop @$clone;
+    return $clone.'';
 }
 
 1;

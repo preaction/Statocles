@@ -83,7 +83,7 @@ subtest 'post' => sub {
             };
 
             subtest 'check the generated document' => sub {
-                my $path = $doc_path->relative( $tmpdir->child('blog') );
+                my $path = $doc_path->relative( $tmpdir->child('blog') )->stringify;
                 my $doc = $app->store->read_document( $path );
                 cmp_deeply $doc, Statocles::Document->new(
                     path => $path,
@@ -126,7 +126,7 @@ ENDCONTENT
             };
 
             subtest 'check the generated document' => sub {
-                my $path = $doc_path->relative( $tmpdir->child('blog') );
+                my $path = $doc_path->relative( $tmpdir->child('blog') )->stringify;
                 my $doc = $app->store->read_document( $path );
                 cmp_deeply $doc, Statocles::Document->new(
                     path => $path,
@@ -164,7 +164,7 @@ ENDCONTENT
             };
 
             subtest 'check the generated document' => sub {
-                my $path = $doc_path->relative( $tmpdir->child( 'blog' ) );
+                my $path = $doc_path->relative( $tmpdir->child( 'blog' ) )->stringify;
                 my $doc = $app->store->read_document( $path );
                 cmp_deeply $doc, Statocles::Document->new(
                     path => $path,
@@ -222,7 +222,7 @@ ENDCONTENT
                 };
 
                 subtest 'check the generated document' => sub {
-                    my $path = $doc_path->relative( $tmpdir->child('blog') );
+                    my $path = $doc_path->relative( $tmpdir->child('blog') )->stringify;
                     my $doc = $app->store->read_document( $path );
                     cmp_deeply $doc, Statocles::Document->new(
                         path => $path,
@@ -272,7 +272,7 @@ ENDMARKDOWN
                 };
 
                 subtest 'check the generated document' => sub {
-                    my $path = $doc_path->relative( $tmpdir->child('blog') );
+                    my $path = $doc_path->relative( $tmpdir->child('blog') )->stringify;
                     my $doc = $app->store->read_document( $path );
                     cmp_deeply $doc, Statocles::Document->new(
                         path => $path,
@@ -329,7 +329,7 @@ ENDSTDIN
                 };
 
                 subtest 'check the generated document' => sub {
-                    my $path = $doc_path->relative( $tmpdir->child('blog') );
+                    my $path = $doc_path->relative( $tmpdir->child('blog') )->stringify;
                     my $doc = $app->store->read_document( $path );
                     cmp_deeply $doc, Statocles::Document->new(
                         path => $path,
@@ -370,7 +370,7 @@ ENDMARKDOWN
             };
 
             subtest 'check the generated document' => sub {
-                my $path = $doc_path->relative( $tmpdir->child('blog') );
+                my $path = $doc_path->relative( $tmpdir->child('blog') )->stringify;
                 my $doc = $app->store->read_document( $path );
                 cmp_deeply $doc, Statocles::Document->new(
                     path => $path,

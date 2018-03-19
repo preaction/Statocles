@@ -19,7 +19,7 @@ subtest 'constructor' => sub {
             my $link;
             lives_ok {
                 $link = Statocles::Link->new(
-                    href => Path::Tiny->new( 'test', 'index.html' ),
+                    href => Mojo::Path->new->parts([ 'test', 'index.html' ]),
                     text => 'Text',
                 );
             } or return;

@@ -19,7 +19,7 @@ subtest 'recent_posts' => sub {
     my @pages = $app->recent_posts( 2 );
     is_deeply [ map $_->path.'', @pages ], [
         '/blog/2014/06/02/more_tags/index.html',
-        '/blog/2014/05/22/(regex)[name].file.html',
+        '/blog/2014/05/22/(regex)%5Bname%5D.file.html',
     ] or diag explain [ map { $_->path } @pages ];
 };
 

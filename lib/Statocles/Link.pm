@@ -17,8 +17,8 @@ has href => (
     required => 1,
     coerce => sub {
         my ( $href ) = @_;
-        if ( blessed $href && $href->isa( 'Path::Tiny' ) ) {
-            return $href->absolute( '/' )->stringify;
+        if ( blessed $href && $href->isa( 'Mojo::Path' ) ) {
+            return $href->to_abs_string;
         }
         return $href;
     },

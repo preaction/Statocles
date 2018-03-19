@@ -281,8 +281,8 @@ Defaults to the L<Statocles::Document/path> from L</next_page> if it exists.
 has next => (
     is => 'rw',
     lazy => 1,
-    isa => Path|Undef,
-    coerce => Path->coercion,
+    isa => PagePath|Undef,
+    coerce => PagePath->coercion,
     default => sub { $_[0]->_page_path('next_page') },
 );
 
@@ -296,8 +296,8 @@ Defaults to the L<Statocles::Document/path> from L</prev_page> if it exists.
 has prev => (
     is => 'rw',
     lazy => 1,
-    isa => Path|Undef,
-    coerce => Path->coercion,
+    isa => PagePath|Undef,
+    coerce => PagePath->coercion,
     default => sub { $_[0]->_page_path('prev_page') },
 );
 
