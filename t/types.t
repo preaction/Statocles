@@ -3,6 +3,7 @@ use My::Test;
 use Statocles::Types qw(
     Link LinkArray LinkHash DateTimeObj Person
     LinkTree LinkTreeArray
+    PagePath
 );
 
 subtest 'Link types' => sub {
@@ -212,5 +213,16 @@ subtest 'Person' => sub {
     };
 
 };
+
+subtest 'Path types' => sub {
+    subtest 'PagePath' => sub {
+        subtest 'from String' => sub {
+            my $pathtext = "/blog/blah.html";
+            my $link = PagePath->coerce($pathtext);
+            cmp_deeply $link, Mojo::Path->new( $pathtext );
+        };
+    };
+};
+
 
 done_testing;

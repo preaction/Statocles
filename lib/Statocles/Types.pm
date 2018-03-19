@@ -9,10 +9,12 @@ use Type::Library -base, -declare => qw(
     Store Theme Link LinkArray LinkHash LinkTree LinkTreeArray
     DateTimeObj DateStr DateTimeStr
     Person
+    PagePath
 );
 use Type::Utils -all;
 use Types::Standard -types;
 use DateTime::Moonpig;
+use Mojo::Path;
 
 role_type Store, { role => "Statocles::Store" };
 coerce Store, from Str, via { Statocles::Store->new( path => $_ ) };
@@ -82,6 +84,9 @@ coerce DateTimeObj, from DateTimeStr, via {
     );
 };
 
+class_type PagePath, { class => "Mojo::Path" };
+coerce PagePath, from Str, via { Mojo::Path->new( $_ ) };
+
 sub DateTime::Moonpig::tzoffset {
     my ( $self ) = @_;
     warn "The tzoffset shim method will be removed in Statocles version 2.0. See Statocles::Help::Upgrading for instructions to remove this warning.\n";
@@ -131,6 +136,11 @@ __END__
         coerce => DateTimeObj->coercion,
     );
 
+    has path => (
+        isa => PagePath,
+        coerce => PagePath->coercion,
+    );
+
 =head1 DESCRIPTION
 
 This is a L<type library|Type::Tiny::Manual::Library> for common Statocles types.
@@ -178,3 +188,7 @@ This can be coerced from any HashRef of ArrayRef of HashRefs.
 A L<DateTime::Moonpig> object representing a date/time. This can be coerced from a
 C<YYYY-MM-DD> string or a C<YYYY-MM-DD HH:MM:SS> string.
 
+=head2 PagePath
+
+A L<Mojo::Path> object representing the path portion of a URL. It can
+be coerced from a suitable string.
