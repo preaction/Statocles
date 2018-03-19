@@ -21,7 +21,7 @@ subtest 'constructor' => sub {
             my $img;
             lives_ok {
                 $img = Statocles::Image->new(
-                    src => Path::Tiny->new( 'images', 'test.jpg' ),
+                    src => Mojo::Path->new->parts([ 'images', 'test.jpg' ]),
                 );
             } or return;
             is $img->src, 'images/test.jpg';
