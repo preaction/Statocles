@@ -160,7 +160,7 @@ attribute|/url_root> is prepended, if necessary.
 sub link {
     my ( $self, %args ) = @_;
     my $url_root = $self->url_root;
-    if ( $args{href} !~ /^$url_root/ ) {
+    if ( index( $args{href}, $url_root ) != 0 ) {
         $args{href} = $self->url( $args{href} );
     }
     return Statocles::Link->new( %args );
