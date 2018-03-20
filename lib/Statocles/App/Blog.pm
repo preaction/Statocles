@@ -356,7 +356,7 @@ sub index {
         push @feed_pages, $page;
         push @feed_links, $self->link(
             text => $FEEDS{ $feed }{ text },
-            href => $page->path->stringify,
+            href => $page->path.'',
             type => $page->type,
         );
     }
@@ -424,7 +424,7 @@ sub tag_pages {
             push @feed_pages, $page;
             push @feed_links, $self->link(
                 text => $FEEDS{ $feed }{ text },
-                href => $page->path->stringify,
+                href => $page->path.'',
                 type => $page->type,
             );
         }
