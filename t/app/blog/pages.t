@@ -914,7 +914,7 @@ subtest 'blog with two posts in the same day' => sub {
     );
     my @pages = $app->pages;
     my ( $index ) = grep { $_->path eq '/index.html' } @pages;
-    cmp_deeply [ map { $_->path->stringify } @{ $index->pages } ],
+    cmp_deeply [ map { $_->path.'' } @{ $index->pages } ],
         [qw( /2016/06/01/aaa-first/index.html /2016/06/01/zzz-last/index.html )],
         'index page is ordered correctly'
             or diag explain [
@@ -923,7 +923,7 @@ subtest 'blog with two posts in the same day' => sub {
             ];
 
     my ( $tag_page ) = grep { $_->path eq '/tag/mytag/index.html' } @pages;
-    cmp_deeply [ map { $_->path->stringify } @{ $tag_page->pages } ],
+    cmp_deeply [ map { $_->path.'' } @{ $tag_page->pages } ],
         [qw( /2016/06/01/aaa-first/index.html /2016/06/01/zzz-last/index.html )],
         'tag page is ordered correctly'
             or diag explain [
