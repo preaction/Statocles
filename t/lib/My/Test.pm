@@ -130,11 +130,24 @@ sub test_pages {
 
     my @pages = $app->pages;
 
-    $tb->is_eq(
-        scalar @pages,
-        scalar keys %page_tests,
-        'correct number of pages'
-    ) or $tb->diag( "Got: " . join( ", ", map { $_->path } @pages ) . "\n" . "Expect: " . join( ", ", keys %page_tests ) );
+    my %pages_app = map { ($_->path => 1) } @pages;
+    my %page_tests_copy = %page_tests;
+    delete @page_tests_copy{ keys %pages_app };
+    delete @pages_app{ keys %page_tests };
+
+    $tb->cmp_ok(
+        scalar(keys %pages_app),
+        '==',
+        0,
+        'No untested pages'
+    ) or $tb->diag( "Extra app pages: " . join( ", ", sort keys %pages_app ) );
+
+    $tb->cmp_ok(
+        scalar(keys %page_tests_copy),
+        '==',
+        0,
+        'No unpaged tests'
+    ) or $tb->diag( "Extra pages tested: " . join( ", ", sort keys %page_tests_copy ) );
 
     for my $page (@pages) {
         $tb->ok( $page->DOES('Statocles::Page'), 'must be a Statocles::Page' );
