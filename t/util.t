@@ -41,7 +41,6 @@ subtest 'dircopy' => sub {
     ok $tmp_dest->child( 'foo' )->is_dir;
     ok $tmp_dest->child( qw( foo index.markdown ) )->is_file;
     ok $tmp_dest->child( qw( foo other.markdown ) )->is_file;
-    ok $tmp_dest->child( qw( foo utf8.markdown ) )->is_file;
 
     subtest 'dir does not exist yet' => sub {
         my $tmp_dest = tempdir;
@@ -51,7 +50,6 @@ subtest 'dircopy' => sub {
         ok $tmp_dest->child( qw( missing foo ) )->is_dir;
         ok $tmp_dest->child( qw( missing foo index.markdown ) )->is_file;
         ok $tmp_dest->child( qw( missing foo other.markdown ) )->is_file;
-        ok $tmp_dest->child( qw( missing foo utf8.markdown ) )->is_file;
 
     };
 };

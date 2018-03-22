@@ -28,7 +28,7 @@ our @IMPORT_MODULES = (
       build_temp_site
     )],
     'Statocles::Types' => [qw( DateTimeObj )],
-    'My::Test::_Extras' => [qw( test_constructor test_pages )],
+    'My::Test::_Extras' => [qw( test_constructor test_pages test_page_objects )],
 );
 
 package My::Test::_Extras;
@@ -38,7 +38,7 @@ $INC{'My/Test/_Extras.pm'} = 1;
 require Exporter;
 *import = \&Exporter::import;
 
-our @EXPORT_OK = qw( test_constructor test_pages );
+our @EXPORT_OK = qw( test_constructor test_pages test_page_objects );
 
 sub test_constructor {
     my ( $class, %args ) = @_;
@@ -208,4 +208,70 @@ sub test_pages {
     $tb->ok( !@warnings, "no warnings!" ) or $tb->diag( join "\n", @warnings );
 }
 
+=head2 test_page_objects
+
+Run the given subtests for each page object in the list of pages
+
+=cut
+
+sub test_page_objects {
+    my ( $pages, %tests ) = @_;
+
+    require Test::Builder;
+    require Scalar::Util;
+
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+    my $tb = Test::Builder->new();
+
+    my @warnings;
+    local $SIG{__WARN__} = sub { push @warnings, $_[0] };
+
+    ### Check if we're testing all the pages
+    my %pages = map { ($_->path => 1) } @$pages;
+    my %page_tests_copy = %tests;
+    delete @page_tests_copy{ keys %pages };
+    delete @pages{ keys %tests };
+
+    $tb->cmp_ok(
+        scalar(keys %pages),
+        '==',
+        0,
+        'No untested pages'
+    ) or $tb->diag( "Found untested pages: " . join( ", ", sort keys %pages ) );
+
+    $tb->cmp_ok(
+        scalar(keys %page_tests_copy),
+        '==',
+        0,
+        'No unpaged tests'
+    ) or $tb->diag( "Test defined but no page found: " . join( ", ", sort keys %page_tests_copy ) );
+
+    for my $page (@$pages) {
+        $tb->ok( $page->DOES('Statocles::Page'), 'must be a Statocles::Page' );
+
+        my $date   = $page->date;
+        my $want   = 'DateTime::Moonpig';
+        my $typeof = do {
+                !defined $date                ? 'undefined'
+              : !ref $date                    ? 'scalar'
+              : !Scalar::Util::blessed($date) ? ref $date
+              : eval { $date->isa($want) } ? $want
+              :                              Scalar::Util::blessed($date);
+        };
+        $tb->is_eq( $typeof, $want, 'must set a date' );
+
+        if ( !$tests{ $page->path } ) {
+            $tb->ok( 0, "No tests found for page: " . $page->path );
+            next;
+        }
+
+        $tb->subtest(
+            'page object test: ' . $page->path,
+            $tests{ $page->path }, $page,
+        );
+
+    }
+
+    $tb->ok( !@warnings, "no warnings!" ) or $tb->diag( join "\n", @warnings );
+}
 1;

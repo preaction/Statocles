@@ -98,6 +98,7 @@ sub pages {
 
             push @pages, Statocles::Page::File->new(
                 path => $path->stringify,
+                app => $self,
                 file_path => $self->store->path->child( $path ),
             );
         }

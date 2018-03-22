@@ -109,24 +109,6 @@ test_pages(
         }
     },
 
-    '/my/foo/utf8.html' => sub {
-        my ( $html, $dom ) = @_;
-        # XXX: Find the layout and template
-        my $node;
-
-        if ( ok $node = $dom->at( 'h1' ) ) {
-            is $node->text, "\x{2665} Snowman!";
-        }
-
-        if ( ok $node = $dom->at( 'h1 + p' ) ) {
-            is $node->text, "\x{2603}"
-        }
-
-        if ( ok $node = $dom->at( 'footer #app-info' ) ) {
-            is $node->text, $app->data->{info}, 'app-info is correct';
-        }
-    },
-
     '/my/static.txt' => sub {
         my ( $text ) = @_;
         eq_or_diff $text, $SHARE_DIR->child( qw( app basic static.txt ) )->slurp_utf8;
