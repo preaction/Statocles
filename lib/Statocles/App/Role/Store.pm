@@ -56,33 +56,18 @@ L<Statocles::Page::File> objects.
 sub pages {
     my ( $self, %options ) = @_;
     my @pages;
+    my $iter = $self->store->iterator;
+    while ( my $obj = $iter->() ) {
 
-    my @paths;
-    my $iter = $self->store->find_files( include_documents => 1 );
-    while ( my $path = $iter->() ) {
-        push @paths, $path;
-    }
-
-    PATH:
-    for my $path ( @paths ) {
-
-        # Check for hidden files and folders
-        next if $path->basename =~ /^[.]/;
-        my $parent = $path->parent;
-        while ( !$parent->is_rootdir ) {
-            next PATH if $parent->basename =~ /^[.]/;
-            $parent = $parent->parent;
-        }
-
-        if ( $self->store->is_document( $path ) ) {
-            my $page_path = $path->stringify;
+        if ( $obj->isa( 'Statocles::Document' ) ) {
+            my $page_path = $obj->path.'';
             $page_path =~ s{[.]\w+$}{.html};
 
             my %args = (
                 path => $page_path,
                 app => $self,
                 layout => $self->template( 'layout.html' ),
-                document => $self->store->read_document( $path->stringify ),
+                document => $obj,
             );
 
             push @pages, Statocles::Page::Document->new( %args );
@@ -90,16 +75,16 @@ sub pages {
         else {
             # If there's a markdown file, don't keep the html file, since
             # we'll be building it from the markdown
-            if ( $path =~ /[.]html$/ ) {
-                my $doc_path = "$path";
+            if ( $obj->path =~ /[.]html$/ ) {
+                my $doc_path = $obj->path."";
                 $doc_path =~ s/[.]html$/.markdown/;
-                next if grep { $_ eq $doc_path } @paths;
+                next if $self->store->has_file( $doc_path );
             }
 
             push @pages, Statocles::Page::File->new(
                 app => $self,
-                path => $path->stringify,
-                file_path => $self->store->path->child( $path ),
+                path => $obj->path->stringify,
+                file_path => $self->store->path->child( $obj->path ),
             );
         }
     }

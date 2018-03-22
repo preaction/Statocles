@@ -6,6 +6,7 @@ use Statocles::Base 'Class';
 use Scalar::Util qw( weaken blessed );
 use Statocles::Util qw( derp );
 use Statocles::Document;
+use Statocles::File;
 use YAML;
 use JSON::PP;
 use File::Spec::Functions qw( splitdir );
@@ -462,6 +463,53 @@ sub remove {
     my ( $self, $path ) = @_;
     $self->path->child( $path )->remove_tree;
     return;
+}
+
+=method iterator
+
+    my $iter = $store->iterator;
+
+Iterate over all the objects in this store. Returns an iterator that
+will yield a L<Statocles::Document> object or a L<Statocles::File>
+object.
+
+Hidden files and folders are automatically ignored by this method.
+
+    my $iter = $store->iterator;
+    while ( my $obj = $iter->() ) {
+        if ( $obj->isa( 'Statocles::Document' ) ) {
+            ...;
+        }
+        else {
+            ...;
+        }
+    }
+
+=cut
+
+sub iterator {
+    my ( $self ) = @_;
+    my $iter = $self->find_files( include_documents => 1 );
+    return sub {
+        PATH:
+        while ( my $path = $iter->() ) {
+            # Check for hidden files and folders
+            next PATH if $path->basename =~ /^[.]/;
+            my $parent = $path->parent;
+            while ( !$parent->is_rootdir ) {
+                next PATH if $parent->basename =~ /^[.]/;
+                $parent = $parent->parent;
+            }
+            if ( $self->is_document( $path ) ) {
+                return $self->read_document( $path );
+            }
+            return Statocles::File->new(
+                store => $self,
+                path => $path,
+            );
+        }
+        return undef;
+    };
 }
 
 1;
