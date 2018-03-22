@@ -131,7 +131,7 @@ subtest 'site config broken' => sub {
             Statocles::Command->main( '--config', "$config", 'build' )
         };
         ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
-        like $err, qr{ERROR: Could not load config file "$config"[.] Check that you are not using tabs for indentation[.] For more information, run with the "--verbose" option or check Statocles::Help::Error.}
+        like $err, qr{ERROR: Could not load config file "\Q$config\E"[.] Check that you are not using tabs for indentation[.] For more information, run with the "--verbose" option or check Statocles::Help::Error.}
             or diag $err;
         isnt $exit, 0;
 
@@ -140,7 +140,7 @@ subtest 'site config broken' => sub {
                 Statocles::Command->main( '-v', '--config', "$config", 'build' )
             };
             ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
-            like $err, qr{ERROR: Could not load config file "$config"[.] Check that you are not using tabs for indentation[.] For more information, check Statocles::Help::Error[.].+Raw error: Could not load container file}s
+            like $err, qr{ERROR: Could not load config file "\Q$config\E"[.] Check that you are not using tabs for indentation[.] For more information, check Statocles::Help::Error[.].+Raw error: Could not load container file}s
                 or diag $err;
             isnt $exit, 0;
         };
@@ -153,7 +153,7 @@ subtest 'site config broken' => sub {
             Statocles::Command->main( '--config', "$config", 'build' )
         };
         ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
-        like $err, qr{ERROR: Could not load config file "$config"[.] Check your indentation[.] For more information, run with the "--verbose" option or check Statocles::Help::Error[.]}
+        like $err, qr{ERROR: Could not load config file "\Q$config\E"[.] Check your indentation[.] For more information, run with the "--verbose" option or check Statocles::Help::Error[.]}
             or diag $err;
         isnt $exit, 0;
 
@@ -162,7 +162,7 @@ subtest 'site config broken' => sub {
                 Statocles::Command->main( '-v', '--config', "$config", 'build' )
             };
             ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
-        like $err, qr{ERROR: Could not load config file "$config"[.] Check your indentation[.] For more information, check Statocles::Help::Error[.].+Raw error: Could not load container file}s
+        like $err, qr{ERROR: Could not load config file "\Q$config\E"[.] Check your indentation[.] For more information, check Statocles::Help::Error[.].+Raw error: Could not load container file}s
                 or diag $err;
             isnt $exit, 0;
         };
@@ -175,7 +175,7 @@ subtest 'site config broken' => sub {
             Statocles::Command->main( '--config', "$config", 'build' )
         };
         ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
-        like $err, qr{ERROR: Could not create site object "site" in config file "$config": Missing required arguments:}
+        like $err, qr{ERROR: Could not create site object "site" in config file "\Q$config\E": Missing required arguments:}
             or diag $err;
         isnt $exit, 0;
     };
