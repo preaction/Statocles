@@ -17,30 +17,18 @@ my $app = Statocles::App::Blog->new(
 
 subtest 'recent_posts' => sub {
     my @pages = $app->recent_posts( 2 );
-    cmp_deeply [ @pages ], [
-        methods(
-            path => Path::Tiny->new(
-                qw{ blog 2014 06 02 more_tags index.html }
-            )->absolute( '/' ),
-        ),
-        methods(
-            path => Path::Tiny->new(
-                qw{ blog 2014 05 22 (regex)[name].file.html }
-            )->absolute( '/' ),
-        ),
-    ];
+    is_deeply [ map $_->path.'', @pages ], [
+        '/blog/2014/06/02/more_tags/index.html',
+        '/blog/2014/05/22/(regex)[name].file.html',
+    ] or diag explain [ map { $_->path } @pages ];
 };
 
 subtest 'posts with given tag' => sub {
 
     subtest 'single tag (not enough posts)' => sub {
         my @pages = $app->recent_posts( 2, tags => 'more' );
-        cmp_deeply \@pages, [
-            methods(
-                path => Path::Tiny->new(
-                    qw{ blog 2014 06 02 more_tags index.html }
-                )->absolute( '/' ),
-            ),
+        is_deeply [ map $_->path.'', @pages ], [
+            '/blog/2014/06/02/more_tags/index.html',
         ] or diag explain [ map { $_->path } @pages ];
     };
 
