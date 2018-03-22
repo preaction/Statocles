@@ -127,17 +127,18 @@ around pages => sub {
 
 =method url
 
-    my $app_url = $app->url( $path );
+    my $app_url = $app->url( $path[, $keep_index] );
 
 Get a URL to a page in this application. Prepends the app's L<url_root
-attribute|/url_root>. Strips "index.html" if possible.
+attribute|/url_root>. Strips "index.html" if C<$keep_index> is not given,
+or false. Avoids double-C</> in the result.
 
 =cut
 
 sub url {
-    my ( $self, $url ) = @_;
+    my ( $self, $url, $keep_index ) = @_;
     my $base = $self->url_root;
-    $url =~ s{/index[.]html$}{/};
+    $url =~ s{/index[.]html$}{/} unless $keep_index;
 
     # Remove the / from both sides of the join so we don't double up
     $base =~ s{/$}{};
