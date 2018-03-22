@@ -241,50 +241,44 @@ subtest 'bad documents' => sub {
         my $store = Statocles::Store->new(
             path => $SHARE_DIR->child( qw( store error missing-end-mark ) ),
         );
-        my $from = $store->path->child( 'missing.markdown' )->relative( cwd )->stringify;
-        throws_ok { $store->documents } qr{\QCould not find end of YAML front matter (---) in "$from"};
+        throws_ok { $store->documents } qr{\QCould not find end of YAML front matter (---) in "/missing.markdown"};
     };
 
     subtest 'invalid yaml' => sub {
         my $store = Statocles::Store->new(
             path => $SHARE_DIR->child( qw( store error bad-yaml ) ),
         );
-        my $from = $store->path->child( 'bad.markdown' )->relative( cwd )->stringify;
-        throws_ok { $store->documents } qr{\QError parsing YAML in "$from"};
+        throws_ok { $store->documents } qr{\QError parsing YAML in "/bad.markdown"};
     };
 
     subtest 'no ending JSON frontmatter mark' => sub {
         my $store = Statocles::Store->new(
             path => $SHARE_DIR->child( qw( store error missing-end-json ) ),
         );
-        my $from = $store->path->child( 'missing.markdown' )->relative( cwd )->stringify;
-        throws_ok { $store->documents } qr{\QCould not find end of JSON front matter (\E\}\Q) in "$from"};
+        throws_ok { $store->documents } qr{\QCould not find end of JSON front matter (\E\}\Q) in "/missing.markdown"};
     };
 
     subtest 'invalid JSON' => sub {
         my $store = Statocles::Store->new(
             path => $SHARE_DIR->child( qw( store error bad-json ) ),
         );
-        my $from = $store->path->child( 'bad.markdown' )->relative( cwd )->stringify;
-        throws_ok { $store->documents } qr{\QError parsing JSON in "$from"};
+        throws_ok { $store->documents } qr{\QError parsing JSON in "/bad.markdown"};
     };
 
     subtest 'invalid date/time' => sub {
         my $store = Statocles::Store->new(
             path => $SHARE_DIR->child( qw( store error bad-dates ) ),
         );
-        my $from = $store->path->child( 'bad-date.markdown' )->relative( cwd )->stringify;
         throws_ok { $store->documents }
-            qr{\QCould not parse date "11/12/2014" in "$from": Does not match "YYYY-MM-DD" or "YYYY-MM-DD HH:MM:SS"};
+            qr{\QCould not parse date "11/12/2014" in "/bad-date.markdown": Does not match "YYYY-MM-DD" or "YYYY-MM-DD HH:MM:SS"};
     };
 
     subtest 'invalid links structure' => sub {
         my $store = Statocles::Store->new(
             path => $SHARE_DIR->child( qw( store error bad-links ) ),
         );
-        my $from = $store->path->child( 'links.markdown' )->relative( cwd )->stringify;
         throws_ok { $store->documents }
-            qr{\QError creating document in "$from": Value "bad link" is not valid for attribute "_links" (expected "LinkHash")};
+            qr{\QError creating document in "/links.markdown": Value "bad link" is not valid for attribute "_links" (expected "LinkHash")};
     };
 };
 
