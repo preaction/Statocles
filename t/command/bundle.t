@@ -4,6 +4,20 @@ use My::Test;
 use Capture::Tiny qw( capture );
 use Statocles::Command;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
+use constant WIN32 => $^O =~ /Win32/;
+require Win32::File if WIN32;
+
+sub make_writable {
+    return if !WIN32;
+    for (@_) {
+        if (-d) {
+            make_writable($_->children);
+        } else {
+            Win32::File::GetAttributes($_, my $attr);
+            Win32::File::SetAttributes($_, $attr & ~Win32::File::READONLY());
+        }
+    }
+}
 
 my ( $tmp, $config_fn, $config ) = build_temp_site( $SHARE_DIR );
 $tmp->child( 'theme' )->remove_tree; # Delete the old theme
@@ -30,9 +44,13 @@ subtest 'theme' => sub {
 
     subtest 'second time does not overwrite hooks' => sub {
         # Write new hooks
-        $tmp->child( @site_footer )->spew( 'SITE FOOTER' );
+        my $footer = $tmp->child( @site_footer );
+        make_writable($footer); # needed on Windows else rename fails
+        $footer->spew( 'SITE FOOTER' );
         # Templates will get overwritten no matter what
-        $tmp->child( @site_layout )->spew( 'TEMPLATE DAMAGED' );
+        my $layout = $tmp->child( @site_layout );
+        make_writable($layout); # needed on Windows else rename fails
+        $layout->spew( 'TEMPLATE DAMAGED' );
 
         my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
         is $exit, 0;
@@ -45,6 +63,7 @@ subtest 'theme' => sub {
     };
 
     subtest 'only copy certain files' => sub {
+        make_writable( $tmp->child( 'theme' ) );
         $tmp->child( 'theme' )->remove_tree; # Delete the old theme
         my @args = (
             '--config' => "$config_fn",
