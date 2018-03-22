@@ -156,7 +156,8 @@ sub _is_owned_path {
     my $doc = $store->read_document( $path )
 
 Read a single L<document|Statocles::Document> in Markdown with optional YAML
-or JSON frontmatter.
+or JSON frontmatter. The C<$path> should be a string identifying the
+document relative to the root.
 
 =cut
 
@@ -164,8 +165,8 @@ sub read_document {
     my ( $self, $path ) = @_;
     site->log->debug( "Read document: " . $path );
     my $full_path = $self->path->child( $path );
-    my $relative_path = $full_path->relative( cwd );
-    my %doc = $self->parse_frontmatter( $relative_path, $full_path->slurp_utf8 );
+    my $path_id = $path.'';
+    my %doc = $self->parse_frontmatter( $path_id, $full_path->slurp_utf8 );
     my $class = $doc{class} ? use_module( delete $doc{class} ) : 'Statocles::Document';
     my $obj = eval { $class->new( %doc, path => $path, store => $self ) };
     if ( $@ ) {
@@ -173,11 +174,11 @@ sub read_document {
             if ( $@->attribute_name eq 'date' ) {
                 die sprintf qq{Could not parse date "%s" in "%s": Does not match "YYYY-MM-DD" or "YYYY-MM-DD HH:MM:SS"\n},
                     $@->value,
-                    $relative_path;
+                    $path_id;
             }
 
             die sprintf qq{Error creating document in "%s": Value "%s" is not valid for attribute "%s" (expected "%s")\n},
-                $relative_path,
+                $path_id,
                 $@->value,
                 $@->attribute_name,
                 $@->type;
