@@ -130,7 +130,7 @@ around pages => sub {
     my $app_url = $app->url( $path );
 
 Get a URL to a page in this application. Prepends the app's L<url_root
-attribute|/url_root> if necessary. Strips "index.html" if possible.
+attribute|/url_root>. Strips "index.html" if possible.
 
 =cut
 
