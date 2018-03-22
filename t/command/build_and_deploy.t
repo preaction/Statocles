@@ -62,17 +62,11 @@ subtest 'deploy site' => sub {
         $tmp->child( 'deploy_site' ),
         @args,
     );
-    subtest 'custom site' => test_site(
-        $tmp->child( 'deploy_foo' ),
-        '--site' => 'site_foo',
-        @args,
-    );
     subtest 'verbose' => test_site(
         $tmp->child( 'deploy_site' ),
         @args,
         '-vv',
     );
-
     subtest '--clean' => sub {
         $tmp->child( 'deploy_site', 'needs-cleaning.txt' )->spew_utf8( 'Ha Ha!' );
         subtest 'deploy with --clean' => test_site(
@@ -81,6 +75,11 @@ subtest 'deploy site' => sub {
         );
         ok !$tmp->child( 'deploy_site', 'needs-cleaning.txt' )->exists, 'file was cleaned';
     };
+    subtest 'custom site' => test_site(
+        $tmp->child( 'deploy_foo' ),
+        '--site' => 'site_foo',
+        @args,
+    );
 };
 
 subtest 'special options' => sub {
