@@ -114,9 +114,9 @@ around pages => sub {
         }
 
         for my $attr ( @url_attrs ) {
-            if ( $page->$attr && $page->$attr !~ /^$url_root/ ) {
-                $page->$attr( join "/", $url_root, $page->$attr );
-            }
+            next unless my $value = $page->$attr;
+            next if index( $value, $url_root ) == 0;
+            $page->$attr( $self->url( $value, 1 ) );
         }
     }
 

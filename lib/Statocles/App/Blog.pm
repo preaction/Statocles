@@ -323,8 +323,8 @@ sub index {
 
     my @pages = Statocles::Page::List->paginate(
         after => $self->page_size,
-        path => $self->url_root . '/page/%i/index.html',
-        index => $self->url_root . '/index.html',
+        path => $self->url( 'page/%i/index.html', 1 ),
+        index => $self->url( 'index.html' ),
         pages => [ _sort_page_list( @index_post_pages ) ],
         app => $self,
         template => $self->template( 'index.html' ),
@@ -340,7 +340,7 @@ sub index {
         my $page = Statocles::Page::List->new(
             app => $self,
             pages => $index->pages,
-            path => $self->url_root . '/index.' . $feed,
+            path => $self->url( 'index.' . $feed ),
             template => $self->template( $FEEDS{$feed}{template} ),
             links => {
                 alternate => [
@@ -384,10 +384,11 @@ sub tag_pages {
 
     my @pages;
     for my $tag ( keys %$tagged_docs ) {
+        my $tagroot = $self->url( join "/", 'tag', $self->_tag_url( $tag ) );
         my @tag_pages = Statocles::Page::List->paginate(
             after => $self->page_size,
-            path => join( "/", $self->url_root, 'tag', $self->_tag_url( $tag ), 'page/%i/index.html' ),
-            index => join( "/", $self->url_root, 'tag', $self->_tag_url( $tag ), 'index.html' ),
+            path => join( "/", $tagroot, 'page/%i/index.html' ),
+            index => join( "/", $tagroot, 'index.html' ),
             pages => [ _sort_page_list( @{ $tagged_docs->{ $tag } } ) ],
             app => $self,
             template => $self->template( 'index.html' ),
@@ -407,7 +408,7 @@ sub tag_pages {
             my $page = Statocles::Page::List->new(
                 app => $self,
                 pages => $index->pages,
-                path => join( "/", $self->url_root, 'tag', $tag_file ),
+                path => $self->url( join( "/", 'tag', $tag_file ) ),
                 template => $self->template( $FEEDS{$feed}{template} ),
                 links => {
                     alternate => [
