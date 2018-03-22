@@ -4,6 +4,7 @@ use My::Test;
 use Capture::Tiny qw( capture );
 use Statocles::App::Blog;
 my $SHARE_DIR = path( __DIR__ )->parent->parent->child( 'share' );
+use constant WIN32 => $^O =~ /Win32/;
 
 my $site = build_test_site(
     theme => $SHARE_DIR->child( 'theme' ),
@@ -372,14 +373,13 @@ ENDMARKDOWN
             subtest 'check the generated document' => sub {
                 my $path = $doc_path->relative( $tmpdir->child('blog') )->stringify;
                 my $doc = $app->store->read_document( $path );
+                my $content = 'Draft body content' . (WIN32 ? "\r\n" : "\n");
                 cmp_deeply $doc, Statocles::Document->new(
                     path => $path,
                     title => 'A Draft',
                     author => 'preaction',
                     date => DateTimeObj->coerce( '2014-06-21 00:06:00' ),
-                    content => <<'ENDMARKDOWN',
-Draft body content
-ENDMARKDOWN
+                    content => $content,
                     store => $app->store,
                 );
 
