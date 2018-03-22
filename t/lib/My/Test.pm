@@ -185,7 +185,7 @@ sub test_pages {
             }
         }
 
-        if ( $page->path =~ /[.](?:html|rss|atom)$/ ) {
+        if ( $page->path =~ m#(?:/|[.](?:html|rss|atom))$# ) {
             require Mojo::DOM;
             my $dom = Mojo::DOM->new($output);
             $tb->ok( 0, "Could not parse dom" ) unless $dom;
