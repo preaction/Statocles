@@ -76,7 +76,9 @@ has type => (
     lazy => 1,
     default => sub {
         my ( $self ) = @_;
-        my ( $ext ) = $self->path =~ /[.]([^.]+)$/;
+        my $filename = (split '/', $self->path.'', -1)[-1];
+        return $TYPES{html} if $filename eq '';
+        my ( $ext ) = $filename =~ /[.]([^.]+)$/;
         return $TYPES{ $ext };
     },
 );
