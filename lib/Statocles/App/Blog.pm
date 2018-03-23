@@ -6,6 +6,7 @@ use Text::Unidecode;
 use Statocles::Base 'Class';
 use Getopt::Long qw( GetOptionsFromArray );
 use Statocles::Store;
+use Statocles::Document;
 use Statocles::Page::Document;
 use Statocles::Page::List;
 use Statocles::Util qw( run_editor );
@@ -184,18 +185,15 @@ sub command {
             map { "$_:s" } @doc_opts,
         );
 
-        my %doc = (
-            %{ $self->_default_post },
-            (map { defined $opt{$_} ? ( $_, $opt{$_} ) : () } @doc_opts),
-            title => join " ", @argv[1..$#argv],
-        );
+        my $doc;
 
         # Read post content on STDIN
         if ( !-t *STDIN ) {
             my $content = do { local $/; <STDIN> };
-            %doc = (
-                %doc,
-                $self->store->parse_frontmatter( "<STDIN>", $content ),
+            $doc = Statocles::Document->parse_content(
+                (map { defined $opt{$_} ? ( $_, $opt{$_} ) : () } @doc_opts),
+                ( @argv > 1 ? ( title => join( " ", @argv[1..$#argv] ) ) : () ),
+                content => $content,
             );
 
             # Re-open STDIN as the TTY so that the editor (vim) can use it
@@ -205,8 +203,15 @@ sub command {
                 open STDIN, '/dev/tty';
             }
         }
+        else {
+            $doc = Statocles::Document->new(
+                %{ $self->_default_post },
+                (map { defined $opt{$_} ? ( $_, $opt{$_} ) : () } @doc_opts),
+                ( @argv > 1 ? ( title => join( " ", @argv[1..$#argv] ) ) : () ),
+            );
+        }
 
-        if ( !$ENV{EDITOR} && !$doc{title} ) {
+        if ( !$ENV{EDITOR} && !$doc->title ) {
             say STDERR <<"ENDHELP";
 Title is required when \$EDITOR is not set.
 
@@ -231,23 +236,30 @@ ENDHELP
             sprintf( '%02i', $day ),
         );
 
-        my $slug = $self->make_slug( $doc{title} || "new post" );
+        my $slug = $self->make_slug( $doc->title || "new post" );
         my @partsdir = (@date_parts, $slug);
         my @partsfile = (@partsdir, "index.markdown");
         my $path = Mojo::Path->new->parts(\@partsfile);
-        $self->store->write_document( $path => \%doc );
+        $self->store->write_file( $path => $doc );
         my $full_path = $self->store->path->child( @partsfile );
 
         if ( run_editor( $full_path ) ) {
-            my $old_title = $doc{title};
-            %doc = %{ $self->store->read_document( $path ) };
-            if ( $doc{title} ne $old_title ) {
+            my $old_title = $doc->title;
+            ; say "Old title: " . $doc->title;
+            my $content = $full_path->slurp_utf8;
+            my $doc = Statocles::Document->parse_content(
+                path => $path.'',
+                store => $self->store,
+                content => $content,
+            );
+            ; say "New title: " . $doc->title;
+            if ( $doc->title ne $old_title ) {
                 $self->store->path->child( @partsdir )->remove_tree;
-                $slug = $self->make_slug( $doc{title} || "new post" );
+                $slug = $self->make_slug( $doc->title || "new post" );
                 @partsdir = (@date_parts, $slug);
                 @partsfile = (@partsdir, "index.markdown");
                 $path = Mojo::Path->new->parts(\@partsfile);
-                $self->store->write_document( $path => \%doc );
+                $self->store->write_file( $path => $doc );
                 $full_path = $self->store->path->child( @partsfile );
             }
         }

@@ -15,7 +15,12 @@ has _pages => (
 
 sub pages {
     my ( $self ) = @_;
-    return map { blessed $_ ? $_ : ( $_->{class} || "Statocles::Page::Plain" )->new( %$_ ) } @{ $self->_pages };
+    my @pages =
+        map { blessed $_ ? $_ : ( $_->{class} || "Statocles::Page::Plain" )->new( %$_ ) }
+        @{ $self->_pages }
+        ;
+    #; say "Returning pages: " . join "; ", map { $_->path } @pages;
+    return @pages;
 }
 
 1;

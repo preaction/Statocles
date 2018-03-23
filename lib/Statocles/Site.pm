@@ -670,6 +670,7 @@ sub build {
             }
         }
 
+        #; say "Writing file: " . $page->path;
         $store->write_file( $page->path, $dom->to_string );
     }
 

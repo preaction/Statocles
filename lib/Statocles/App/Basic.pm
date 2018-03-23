@@ -3,6 +3,7 @@ our $VERSION = '0.089';
 # ABSTRACT: Build Markdown and collateral files
 
 use Statocles::Base 'Class';
+use Statocles::Document;
 use Statocles::Util qw( run_editor );
 with 'Statocles::App::Role::Store';
 
@@ -48,14 +49,15 @@ sub command {
             $argv[1] =~ /[.](?:markdown|md)$/ ? $argv[1] : "$argv[1]/index.markdown",
         );
 
-        my %doc;
         # Read post content on STDIN
         if ( !-t *STDIN ) {
             my $content = do { local $/; <STDIN> };
-            %doc = (
-                %doc,
-                $self->store->parse_frontmatter( "<STDIN>", $content ),
+            my $doc = Statocles::Document->parse_content(
+                path => $path.'',
+                store => $self->store,
+                content => $content,
             );
+            $self->store->write_file( $path => $doc );
 
             # Re-open STDIN as the TTY so that the editor (vim) can use it
             # XXX Is this also a problem on Windows?
@@ -64,14 +66,14 @@ sub command {
                 open STDIN, '/dev/tty';
             }
         }
-
-        if ( !$self->store->has_file( $path ) || keys %doc ) {
-            $doc{title} ||= '';
-            $doc{content} ||= "Markdown content goes here.\n";
-            $self->store->write_document( $path => \%doc );
+        elsif ( !$self->store->has_file( $path ) ) {
+            my $doc = Statocles::Document->new(
+                content => "Markdown content goes here.\n",
+            );
+            $self->store->write_file( $path => $doc );
         }
-        my $full_path = $self->store->path->child( $path );
 
+        my $full_path = $self->store->path->child( $path );
         if ( !run_editor( $full_path ) ) {
             say "New page at: $full_path";
         }

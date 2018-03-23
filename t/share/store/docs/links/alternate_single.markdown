@@ -1,6 +1,5 @@
 ---
 title: Linked Document
-author: preaction
 links:
     alternate:
         title: blogs.perl.org

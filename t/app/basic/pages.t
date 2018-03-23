@@ -14,7 +14,7 @@ my %tests = (
     '/index.html', sub {
         my ( $page ) = @_;
         isa_ok $page, 'Statocles::Page::Document';
-        is $page->document->path, '/index.markdown',
+        is $page->document->path, 'index.markdown',
             'document path correct';
         is $page->layout->path.'', 'layout/default.html.ep', 'layout is correct';
         is $page->app, $app, 'app is correct';
@@ -22,7 +22,7 @@ my %tests = (
     '/aaa.html' => sub {
         my ( $page ) = @_;
         isa_ok $page, 'Statocles::Page::Document';
-        is $page->document->path, '/aaa.markdown',
+        is $page->document->path, 'aaa.markdown',
             'document path correct';
         is $page->layout->path.'', 'layout/default.html.ep', 'layout is correct';
         is $page->app, $app, 'app is correct';
@@ -30,7 +30,7 @@ my %tests = (
     '/foo/index.html' => sub {
         my ( $page ) = @_;
         isa_ok $page, 'Statocles::Page::Document';
-        is $page->document->path, '/foo/index.markdown',
+        is $page->document->path, 'foo/index.markdown',
             'document path correct';
         is $page->layout->path.'', 'layout/default.html.ep', 'layout is correct';
         is $page->app, $app, 'app is correct';
@@ -38,7 +38,7 @@ my %tests = (
     '/foo/other.html' => sub {
         my ( $page ) = @_;
         isa_ok $page, 'Statocles::Page::Document';
-        is $page->document->path, '/foo/other.markdown',
+        is $page->document->path, 'foo/other.markdown',
             'document path correct';
         is $page->layout->path.'', 'layout/default.html.ep', 'layout is correct';
         is $page->app, $app, 'app is correct';

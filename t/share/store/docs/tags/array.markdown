@@ -1,6 +1,5 @@
 ---
 title: Tagged (Array) Document
-author: preaction
 tags:
     - multiple
     - tags

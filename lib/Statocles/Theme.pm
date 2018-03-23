@@ -110,7 +110,7 @@ sub read {
     my ( $self, $path ) = @_;
     $path .= '.ep';
 
-    my $content = eval { $self->store->read_file( $path ); };
+    my $content = eval { $self->store->path->child( $path )->slurp_utf8; };
     if ( $@ ) {
         if ( blessed $@ && $@->isa( 'Path::Tiny::Error' ) && $@->{op} =~ /^open/ ) {
             die sprintf 'ERROR: Template "%s" does not exist in theme directory "%s"' . "\n",
@@ -185,9 +185,11 @@ sub include {
     for my $store ( @stores ) {
         if ( $store->has_file( $path ) ) {
             if ( $render ) {
-                return $self->_includes->{ $path } ||= $self->build_template( $path, $store->read_file( $path ) );
+                return $self->_includes->{ $path } ||= $self->build_template(
+                    $path, $store->path->child( $path )->slurp_utf8,
+                );
             }
-            return $store->read_file( $path );
+            return $store->path->child( $path )->slurp_utf8;
         }
     }
 

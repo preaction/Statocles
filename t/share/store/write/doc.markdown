@@ -1,10 +1,11 @@
 ---
 date: 2014-06-05 00:00:00
-foo: bar
+status: published
 tags:
     - one
     - two and three
     - four
+title: ''
 ---
 # ☃ This is some content
 

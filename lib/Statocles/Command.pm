@@ -573,7 +573,7 @@ sub bundle_theme {
                         }
 
                         $self->log->info( "Path '" . $event->path . "' changed... Rebuilding" );
-                        $_->clear for @{ $watches{ $path } };
+                        $_->can('clear') && $_->clear for @{ $watches{ $path } };
                         $rebuild = 1;
                     }
 

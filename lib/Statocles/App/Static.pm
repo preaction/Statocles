@@ -34,19 +34,11 @@ sub pages {
     derp qq{Statocles::App::Static has been replaced by Statocles::App::Basic and will be removed in 2.0. Change the app class to "Statocles::App::Basic" to silence this message.};
 
     my @pages;
-    my $iter = $self->store->find_files( include_documents => 1 );
-    FILE: while ( my $path = $iter->() ) {
-        # Check for hidden files and folders
-        next if $path->basename =~ /^[.]/;
-        my $parent = $path->parent;
-        while ( !$parent->is_rootdir ) {
-            next FILE if $parent->basename =~ /^[.]/;
-            $parent = $parent->parent;
-        }
-
+    my $iter = $self->store->iterator;
+    FILE: while ( my $obj = $iter->() ) {
         push @pages, Statocles::Page::File->new(
-            path => $path.'',
-            file_path => $self->store->path->child( $path ),
+            path => $obj->path.'',
+            file_path => $self->store->path->child( $obj->path ),
         );
     }
 

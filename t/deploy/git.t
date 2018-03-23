@@ -44,9 +44,9 @@ subtest 'deploy' => sub {
 
     is current_branch( $git ), 'master', 'deploy leaves us on the branch we came from';
 
-    my $file_iter = $build_store->find_files;
-    while ( my $file = $file_iter->() ) {
-        ok !$workdir->child( $file->path )->exists, $file->path . ' is not in master branch';
+    my $iter = $build_store->iterator;
+    while ( my $obj = $iter->() ) {
+        ok !$workdir->child( $obj->path )->exists, $obj->path . ' is not in master branch';
     }
 
     my $master_commit_id = $git->run( 'rev-parse' => 'HEAD' );
@@ -62,10 +62,10 @@ subtest 'deploy' => sub {
     unlike $prev_log, qr{$master_commit_id}, 'does not contain master commit';
 
     subtest 'files are correct' => sub {
-        my $file_iter = $build_store->find_files;
-        while ( my $file = $file_iter->() ) {
-            ok $workdir->child( $file->path )->exists,
-                'page ' . $file->path . ' is in deploy branch';
+        my $iter = $build_store->iterator;
+        while ( my $obj = $iter->() ) {
+            ok $workdir->child( $obj->path )->exists,
+                'page ' . $obj->path . ' is in deploy branch';
         }
     };
 
@@ -73,9 +73,9 @@ subtest 'deploy' => sub {
 
     subtest 'deploy performs git push' => sub {
         _git_run( $remotegit, checkout => 'gh-pages' );
-        my $file_iter = $build_store->find_files;
-        while ( my $file = $file_iter->() ) {
-            ok $remotedir->child( $file->path )->exists, $file->path . ' deployed';
+        my $iter = $build_store->iterator;
+        while ( my $obj = $iter->() ) {
+            ok $remotedir->child( $obj->path )->exists, $obj->path . ' deployed';
         }
         ok !$remotedir->child( 'README' )->exists, 'gh-pages branch is orphan and clean';
         _git_run( $remotegit, checkout => 'master' );
@@ -136,9 +136,9 @@ subtest 'deploy to specific remote' => sub {
     my $master_commit_id = $git->run( 'rev-parse' => 'HEAD' );
 
     _git_run( $remotegit, checkout => '-f', 'master' );
-    my $file_iter = $build_store->find_files;
-    while ( my $file = $file_iter->() ) {
-        ok $remotework->child( $file->path )->exists, $file->path . ' deployed';
+    my $iter = $build_store->iterator;
+    while ( my $obj = $iter->() ) {
+        ok $remotework->child( $obj->path )->exists, $obj->path . ' deployed';
     }
 };
 
@@ -197,17 +197,17 @@ subtest 'deploy with submodules and ignored files' => sub {
     my $remotegit = Git::Repository->new( git_dir => "$remotedir", work_tree => "$remotework" );
 
     _git_run( $remotegit, checkout => '-f' );
-    my $file_iter = $build_store->find_files;
-    while ( my $file = $file_iter->() ) {
+    my $iter = $build_store->iterator;
+    while ( my $obj = $iter->() ) {
         # Ignored files do not get deployed
-        if ( $file eq '/.DS_Store' || $file eq '/test.swp' ) {
-            ok !$remotework->child( $file->path )->exists, $file->path . ' not deployed';
+        if ( $obj->path eq '.DS_Store' || $obj->path eq 'test.swp' ) {
+            ok !$remotework->child( $obj->path )->exists, $obj->path . ' not deployed';
         }
-        elsif ( $file =~ m{/submodule} ) {
-            ok !$remotework->child( $file->path )->exists, $file->path . ' not deployed';
+        elsif ( $obj->path =~ m{^submodule} ) {
+            ok !$remotework->child( $obj->path )->exists, $obj->path . ' not deployed';
         }
         else {
-            ok $remotework->child( $file->path )->exists, $file->path . ' deployed';
+            ok $remotework->child( $obj->path )->exists, $obj->path . ' deployed';
         }
     }
 };
@@ -237,9 +237,9 @@ subtest 'deploy to subdirectory in git repo' => sub {
     my $master_commit_id = $git->run( 'rev-parse' => 'HEAD' );
 
     _git_run( $remotegit, checkout => '-f', 'master' );
-    my $file_iter = $build_store->find_files;
-    while ( my $file = $file_iter->() ) {
-        ok $remotework->child( 'subdir' )->child( $file->path )->exists, 'subdir ' . $file->path . ' deployed';
+    my $iter = $build_store->iterator;
+    while ( my $obj = $iter->() ) {
+        ok $remotework->child( 'subdir' )->child( $obj->path )->exists, 'subdir ' . $obj->path . ' deployed';
     }
 
 };

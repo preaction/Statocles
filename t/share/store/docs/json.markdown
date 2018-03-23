@@ -1,5 +1,4 @@
 {
-    "title": "JSON Document",
-    "author": "preaction"
+    "title": "JSON Document"
 }
 No optional things in here, at all!

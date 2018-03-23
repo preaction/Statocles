@@ -222,9 +222,11 @@ sub include {
     for my $store ( @{ $self->include_stores } ) {
         if ( $store->has_file( $path ) ) {
             if ( $render ) {
-                return $self->theme->build_template( $path, $store->read_file( $path ) );
+                return $self->theme->build_template(
+                    $path, $store->path->child( $path )->slurp_utf8,
+                );
             }
-            return $store->read_file( $path );
+            return $store->path->child( $path )->slurp_utf8;
         }
     }
 

@@ -51,13 +51,20 @@ sub deploy {
 
     $self->site->log->info( "Copying files from build dir to deploy dir" );
     my @files;
-    my $iter = $from_store->find_files( include_documents => 1 );
+    my $iter = $from_store->path->iterator({ recurse => 1 });
+    #; say "Store path: " . $from_store->path;
     while ( my $path = $iter->() ) {
+        next if $path->is_dir;
         # Git versions before 1.7.4.1 require a relative path to 'git add'
-        push @files, $path->relative( "/" )->stringify;
-        $from_store->path->child( $path )->copy( $self->path->child( $path )->touchpath );
+        #; say "Path: " . $path;
+        my $rel_path = $path->relative( $from_store->path );
+        push @files, $rel_path;
+        #; say "From: " . $from_store->path->child( $path );
+        #; say "To: " . $self->path->child( $path );
+        $path->copy( $self->path->child( $rel_path )->touchpath );
     }
 
+    #; say "Deploying files: " . join "; ", @files;
     return @files;
 }
 

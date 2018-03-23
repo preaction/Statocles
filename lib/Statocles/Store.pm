@@ -7,10 +7,6 @@ use Scalar::Util qw( weaken blessed );
 use Statocles::Util qw( derp );
 use Statocles::Document;
 use Statocles::File;
-use YAML;
-use JSON::PP;
-use File::Spec::Functions qw( splitdir );
-use Module::Runtime qw( use_module );
 
 # A hash of PATH => COUNT for all the open store paths. Stores are not allowed to
 # discover the files or documents of other stores (unless the two stores have the same
@@ -48,26 +44,6 @@ has document_extensions => (
         }
         return $ext;
     },
-);
-
-=attr documents
-
-All the L<documents|Statocles::Document> currently read by this store.
-
-=method clear
-
-    $store->clear;
-
-Clear the cached documents in this Store.
-
-=cut
-
-has documents => (
-    is => 'rw',
-    isa => ArrayRef[InstanceOf['Statocles::Document']],
-    lazy => 1,
-    builder => 'read_documents',
-    clearer => 'clear',
 );
 
 # Cache our realpath in case it disappears before we get demolished
@@ -112,31 +88,6 @@ sub DEMOLISH {
     }
 }
 
-=method read_documents
-
-    my $docs = $store->read_documents;
-
-Read the directory C<path> and create the L<document
-objects|Statocles::Document> inside.  Returns an arrayref of document objects.
-
-=cut
-
-sub read_documents {
-    my ( $self ) = @_;
-    $self->_check_exists;
-    my $root_path = $self->path;
-    my @docs;
-    my $iter = $root_path->iterator( { recurse => 1, follow_symlinks => 1 } );
-    while ( my $path = $iter->() ) {
-        next unless $path->is_file;
-        next unless $self->_is_owned_path( $path );
-        next unless $self->is_document( $path );
-        my $rel_path = rootdir->child( $path->relative( $root_path ) )->stringify;
-        push @docs, $self->read_document( $rel_path );
-    }
-    return \@docs;
-}
-
 sub _is_owned_path {
     my ( $self, $path ) = @_;
     my $self_path = $self->_realpath;
@@ -150,159 +101,6 @@ sub _is_owned_path {
         return 0 if $path =~ /^\Q$store_path/;
     }
     return 1;
-}
-
-=method read_document
-
-    my $doc = $store->read_document( $path )
-
-Read a single L<document|Statocles::Document> in Markdown with optional YAML
-or JSON frontmatter. The C<$path> should be a string identifying the
-document relative to the root.
-
-=cut
-
-sub read_document {
-    my ( $self, $path ) = @_;
-    site->log->debug( "Read document: " . $path );
-    my $full_path = $self->path->child( $path );
-    my $path_id = $path.'';
-    my %doc = $self->parse_frontmatter( $path_id, $full_path->slurp_utf8 );
-    my $class = $doc{class} ? use_module( delete $doc{class} ) : 'Statocles::Document';
-    my $obj = eval { $class->new( %doc, path => $path, store => $self ) };
-    if ( $@ ) {
-        if ( ref $@ && $@->isa( 'Error::TypeTiny::Assertion' ) ) {
-            if ( $@->attribute_name eq 'date' ) {
-                die sprintf qq{Could not parse date "%s" in "%s": Does not match "YYYY-MM-DD" or "YYYY-MM-DD HH:MM:SS"\n},
-                    $@->value,
-                    $path_id;
-            }
-
-            die sprintf qq{Error creating document in "%s": Value "%s" is not valid for attribute "%s" (expected "%s")\n},
-                $path_id,
-                $@->value,
-                $@->attribute_name,
-                $@->type;
-        }
-        else {
-            die sprintf qq{Error creating document in "%s": %s\n},
-                $@;
-        }
-    }
-    return $obj;
-}
-
-=method parse_frontmatter
-
-    my %doc_attrs = $store->parse_frontmatter( $from, $content )
-
-Parse a document with YAML frontmatter. $from is a string identifying where the
-content comes from (a path or other identifier). $content is the content to
-parse for frontmatter.
-
-=cut
-
-sub parse_frontmatter {
-    my ( $self, $from, $content ) = @_;
-    return unless $content;
-    my $doc;
-
-    my @lines = split /\n/, $content;
-    if ( @lines && $lines[0] =~ /^---/ ) {
-        shift @lines;
-
-        # The next --- is the end of the YAML frontmatter
-        my ( $i ) = grep { $lines[ $_ ] =~ /^---/ } 0..$#lines;
-
-        # If we did not find the marker between YAML and Markdown
-        if ( !defined $i ) {
-            die qq{Could not find end of YAML front matter (---) in "$from"\n};
-        }
-
-        # Before the marker is YAML
-        eval {
-            $doc = YAML::Load( join "\n", splice( @lines, 0, $i ), "" );
-        };
-        if ( $@ ) {
-            die qq{Error parsing YAML in "$from"\n$@};
-        }
-
-        # Remove the last '---' mark
-        shift @lines;
-    }
-    elsif ( @lines && $lines[0] =~ /^{/ ) {
-        my $json;
-        if ( $lines[0] =~ /\}$/ ) {
-            # The JSON is all on a single line
-            $json = shift @lines;
-        }
-        else {
-            # The } on a line by itself is the last line of JSON
-            my ( $i ) = grep { $lines[ $_ ] =~ /^}$/ } 0..$#lines;
-            # If we did not find the marker between YAML and Markdown
-            if ( !defined $i ) {
-                die qq{Could not find end of JSON front matter (\}) in "$from"\n};
-            }
-            $json = join "\n", splice( @lines, 0, $i+1 );
-        }
-        eval {
-            $doc = decode_json( $json );
-        };
-        if ( $@ ) {
-            die qq{Error parsing JSON in "$from"\n$@};
-        }
-    }
-
-    $doc->{content} = join "\n", @lines, "";
-
-    return %$doc;
-}
-
-=method write_document
-
-    $store->write_document( $path, $doc );
-
-Write a L<document|Statocles::Document> to the store at the given store path.
-
-The document is written in Frontmatter format.
-
-=cut
-
-sub write_document {
-    my ( $self, $path, $doc ) = @_;
-    $path = Path->coercion->( $path ); # Allow stringified paths, $path => $doc
-    if ( $path->is_absolute ) {
-        die "Cannot write document '$path': Path must not be absolute";
-    }
-    site->log->debug( "Write document: " . $path );
-
-    $doc = { %{ $doc } }; # Shallow copy for safety
-    my $content = delete( $doc->{content} ) // '';
-    my $header = YAML::Dump( $self->_freeze_document( $doc ) );
-    chomp $header;
-
-    my $full_path = $self->path->child( $path );
-    $full_path->touchpath->spew_utf8( join "\n", $header, '---', $content );
-
-    if ( defined wantarray ) {
-        derp "Statocles::Store->write_document returning a value is deprecated and will be removed in v1.0. Use Statocles::Store->path to find the full path to the document.";
-    }
-    return $full_path;
-}
-
-sub _freeze_document {
-    my ( $self, $doc ) = @_;
-    delete $doc->{path}; # Path should not be in the document
-    delete $doc->{store};
-    if ( exists $doc->{date} ) {
-        $doc->{date} = $doc->{date}->strftime('%Y-%m-%d %H:%M:%S');
-    }
-    for my $hash_type ( qw( links images ) ) {
-        if ( exists $doc->{ $hash_type } && !keys %{ $doc->{ $hash_type } } ) {
-            delete $doc->{ $hash_type };
-        }
-    }
-    return $doc;
 }
 
 =method is_document
@@ -319,101 +117,17 @@ sub is_document {
     return $path =~ /[.](?:$match)$/;
 }
 
-=method read_file
-
-    my $content = $store->read_file( $path )
-
-Read the file from the given C<path>.
-
-=cut
-
-sub read_file {
-    my ( $self, $path ) = @_;
-    site->log->debug( "Read file: " . $path );
-    return $self->path->child( $path )->slurp_utf8;
-}
-
 =method has_file
 
     my $bool = $store->has_file( $path )
 
 Returns true if a file exists with the given C<path>.
 
-NOTE: This should not be used to check for directories, as not all stores have
-directories.
-
 =cut
 
 sub has_file {
     my ( $self, $path ) = @_;
     return $self->path->child( $path )->is_file;
-}
-
-=method files
-
-    my $iter = $store->files
-
-Returns an iterator which iterates over I<all> files in the store,
-regardless of type of file.  The iterator returns a L<Path::Tiny>
-object or undef if no files remain.  It is used by L<find_files>.
-
-=cut
-
-sub files {
-    my ( $self ) = @_;
-    return $self->path->iterator({ recurse => 1 });
-}
-
-
-=method find_files
-
-    my $iter = $store->find_files( %opt )
-    while ( my $path = $iter->() ) {
-        # ...
-    }
-
-Returns an iterator that, when called, produces a single path suitable to be passed
-to L<read_file>.
-
-Available options are:
-
-    include_documents      - If true, will include files that look like documents.
-                             Defaults to false.
-
-It obtains its list of files from L<files>.
-
-=cut
-
-sub find_files {
-    my ( $self, %opt ) = @_;
-    $self->_check_exists;
-    my $iter = $self->files;
-    return sub {
-        my $path;
-        while ( $path = $iter->() ) {
-            next if $path->is_dir;
-            next if !$self->_is_owned_path( $path );
-            next if !$opt{include_documents} && $self->is_document( $path );
-            last;
-        }
-        return unless $path; # iterator exhausted
-        return $path->relative( $self->path )->absolute( '/' );
-    };
-}
-
-=method open_file
-
-    my $fh = $store->open_file( $path )
-
-Open the file with the given path. Returns a filehandle.
-
-The filehandle opened is using raw bytes, not UTF-8 characters.
-
-=cut
-
-sub open_file {
-    my ( $self, $path ) = @_;
-    return $self->path->child( $path )->openr_raw;
 }
 
 =method write_file
@@ -434,6 +148,8 @@ sub write_file {
     site->log->debug( "Write file: " . $path );
     my $full_path = $self->path->child( $path );
 
+    #; say "Writing full path: " . $full_path;
+
     if ( ref $content eq 'GLOB' ) {
         my $fh = $full_path->touchpath->openw_raw;
         while ( my $line = <$content> ) {
@@ -442,6 +158,12 @@ sub write_file {
     }
     elsif ( blessed $content && $content->isa( 'Path::Tiny' ) ) {
         $content->copy( $full_path->touchpath );
+    }
+    elsif ( blessed $content && $content->isa( 'Statocles::Document' ) ) {
+        $full_path->touchpath->spew_utf8( $content->deparse_content );
+    }
+    elsif ( blessed $content && $content->isa( 'Statocles::File' ) ) {
+        $content->path->copy( $full_path->touchpath );
     }
     else {
         $full_path->touchpath->spew_utf8( $content );
@@ -489,23 +211,59 @@ Hidden files and folders are automatically ignored by this method.
 
 sub iterator {
     my ( $self ) = @_;
-    my $iter = $self->find_files( include_documents => 1 );
+    $self->_check_exists;
+    my $iter = $self->path->iterator({ recurse => 1 });
     return sub {
         PATH:
         while ( my $path = $iter->() ) {
+            next if $path->is_dir;
+            next unless $self->_is_owned_path( $path );
+
             # Check for hidden files and folders
-            next PATH if $path->basename =~ /^[.]/;
-            my $parent = $path->parent;
+            next if $path->basename =~ /^[.]/;
+            my $parent = $path->realpath->parent;
             while ( !$parent->is_rootdir ) {
+                last if !$parent->basename;
                 next PATH if $parent->basename =~ /^[.]/;
                 $parent = $parent->parent;
             }
+
+            my $from = $path->relative( $self->path );
             if ( $self->is_document( $path ) ) {
-                return $self->read_document( $path );
+                my $content = $path->slurp_utf8;
+                my $obj = eval {
+                    Statocles::Document->parse_content(
+                        content => $content,
+                        path => $from.'',
+                        store => $self,
+                    )
+                };
+                if ( $@ ) {
+                    if ( ref $@ && $@->isa( 'Error::TypeTiny::Assertion' ) ) {
+                        if ( $@->attribute_name eq 'date' ) {
+                            die sprintf qq{Could not parse date "%s" in "%s": Does not match "YYYY-MM-DD" or "YYYY-MM-DD HH:MM:SS"\n},
+                                $@->value,
+                                $from;
+                        }
+
+                        die sprintf qq{Error creating document in "%s": Value "%s" is not valid for attribute "%s" (expected "%s")\n},
+                            $from,
+                            $@->value,
+                            $@->attribute_name,
+                            $@->type;
+                    }
+                    else {
+                        die sprintf qq{Error creating document in "%s": %s\n},
+                            $from,
+                            $@;
+                    }
+                }
+                return $obj;
             }
+
             return Statocles::File->new(
                 store => $self,
-                path => $path,
+                path => $from.'',
             );
         }
         return undef;

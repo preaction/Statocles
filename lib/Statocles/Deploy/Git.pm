@@ -86,6 +86,7 @@ around 'deploy' => sub {
 
     # Switch to the right branch
     if ( !_git_has_branch( $git, $self->branch ) ) {
+        #; say "Creating new branch: " . $self->branch;
         # Create a new, orphan branch
         # Orphan branches were introduced in git 1.7.2
         $self->site->log->info( sprintf 'Creating deploy branch "%s"', $self->branch );
@@ -124,9 +125,11 @@ around 'deploy' => sub {
     #; say Dumper \%in_status;
 
     # Commit the files
+    #; say "Copied files: " . join "; ", @files;
     @files    = grep { $in_status{ $_ } }
                 map { Path::Tiny->new( $rel_path, $_ ) }
                 @files;
+    #; say "Files in git status: " . join "; ", @files;
 
     #; say "Committing: " . Dumper \@files;
     if ( @files ) {

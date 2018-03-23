@@ -54,19 +54,18 @@ subtest 'build' => sub {
     }
 
     subtest 'check theme' => sub {
-        my $iter = $site->theme->store->find_files;
-        while ( my $theme_file = $iter->() ) {
-            next if $theme_file->basename =~ /^[.]/;
-            next if $theme_file =~ /[.]ep$/;
-            my $path = path( 'theme' => $theme_file );
+        my $iter = $site->theme->store->iterator;
+        while ( my $obj = $iter->() ) {
+            next if $obj->path =~ /[.]ep$/;
+            my $path = path( 'theme' => $obj->path );
             ok $build_dir->child( $path )->exists,
-                'theme file ' . $theme_file . ' exists in build dir';
+                'theme file ' . $path . ' exists in build dir';
             eq_or_diff
                 $build_dir->child( $path )->slurp_utf8,
-                $site->theme->store->path->child( $theme_file )->slurp_utf8,
-                'theme file ' . $theme_file . ' content is correct';
+                $site->theme->store->path->child( $obj->path )->slurp_utf8,
+                'theme file ' . $obj->path . ' content is correct';
             ok !$deploy_dir->child( $path )->exists,
-                'theme file ' . $theme_file . 'not in deploy dir';
+                'theme file ' . $obj->path . 'not in deploy dir';
             push @pages, $path;
         }
     };
@@ -94,16 +93,15 @@ subtest 'deploy' => sub {
     }
 
     subtest 'check theme' => sub {
-        my $iter = $site->theme->store->find_files;
-        while ( my $theme_file = $iter->() ) {
-            next if $theme_file->basename =~ /^[.]/;
-            next if $theme_file =~ /[.]ep$/;
-            ok $deploy_dir->child( 'theme', $theme_file )->exists,
-                'theme file ' . $theme_file . 'exists in deploy dir';
+        my $iter = $site->theme->store->iterator;
+        while ( my $obj = $iter->() ) {
+            next if $obj->path =~ /[.]ep$/;
+            ok $deploy_dir->child( 'theme', $obj->path )->exists,
+                'theme file ' . $obj->path . 'exists in deploy dir';
             eq_or_diff
-                $build_dir->child( theme => $theme_file )->slurp_utf8,
-                $site->theme->store->path->child( $theme_file )->slurp_utf8,
-                'theme file ' . $theme_file . ' content is correct';
+                $build_dir->child( theme => $obj->path )->slurp_utf8,
+                $site->theme->store->path->child( $obj->path )->slurp_utf8,
+                'theme file ' . $obj->path . ' content is correct';
         }
     };
 

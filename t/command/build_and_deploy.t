@@ -212,6 +212,7 @@ subtest 'special options' => sub {
 
             my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
             is $exit, 0, 'exit code';
+            #; say $out;
             ok !$err, "no errors/warnings on stderr" or diag $err;
 
             my $log = $git->run( 'log' );

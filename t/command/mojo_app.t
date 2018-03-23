@@ -78,9 +78,13 @@ subtest 'root site' => sub {
             subtest 'content store' => sub {
                 my $path = Path::Tiny->new( qw( 2014 04 23 slug index.markdown ) );
                 my $store = $t->app->site->app( 'blog' )->store;
-                my $doc = $store->read_document( $path );
-                $doc->{content} = "This is some new content for our blog!";
-                $store->write_document( $path, $doc );
+                my $doc = Statocles::Document->parse_content(
+                    path => $path.'',
+                    store => $store,
+                    content => $store->path->child( $path )->slurp_utf8,
+                );
+                $doc->content( "This is some new content for our blog!" );
+                $store->write_file( $path, $doc );
 
                 # Non-blocking start loop and wait 2
                 Mojo::IOLoop->timer( 2, sub { Mojo::IOLoop->stop } );
@@ -98,8 +102,8 @@ subtest 'root site' => sub {
             subtest 'theme store' => sub {
                 my $path = Path::Tiny->new( qw( layout default.html.ep ) );
                 my $store = $t->app->site->theme->store;
-                my $tmpl = $store->read_file( $path );
-                $tmpl =~ s{\Q</body>}{<p>Extra footer!</p></body>};
+                my $tmpl = $store->path->child( $path )->slurp_utf8;
+                $tmpl =~ s{\Q</body>}{<p>Extra footer!</p></body>}sm;
                 $store->write_file( $path, $tmpl );
 
                 # Non-blocking start loop and wait 2
@@ -222,9 +226,13 @@ subtest '--date option' => sub {
 
             my $path = Path::Tiny->new( qw( 9999 12 31 forever-is-a-long-time index.markdown ) );
             my $store = $t->app->site->app( 'blog' )->store;
-            my $doc = $store->read_document( $path );
+            my $doc = Statocles::Document->parse_content(
+                path => $path.'',
+                store => $store,
+                content => $store->path->child( $path )->slurp_utf8,
+            );
             $doc->{content} = "This is some new content for our blog!";
-            $store->write_document( $path, $doc );
+            $store->write_file( $path, $doc );
 
             # Non-blocking start loop and wait 2
             Mojo::IOLoop->timer( 2, sub { Mojo::IOLoop->stop } );
