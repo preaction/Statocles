@@ -2,6 +2,7 @@
 use Test::Lib;
 use My::Test;
 use Statocles::App::Basic;
+use TestStore;
 
 my $SHARE_DIR = path( __DIR__ )->parent->parent->child( 'share' );
 my $site = build_test_site(
@@ -50,10 +51,31 @@ my %tests = (
     },
 );
 
+my $store = TestStore->new(
+    path => $SHARE_DIR,
+    objects => [
+        Statocles::Document->new(
+            path => 'index.markdown',
+        ),
+        Statocles::Document->new(
+            path => 'aaa.markdown',
+        ),
+        Statocles::Document->new(
+            path => 'foo/index.markdown',
+        ),
+        Statocles::Document->new(
+            path => 'foo/other.markdown',
+        ),
+        Statocles::File->new(
+            path => 'static.txt',
+        ),
+    ],
+);
+
 $app = Statocles::App::Basic->new(
     url_root => '/',
     site => $site,
-    store => $SHARE_DIR->child( qw( app basic ) ),
+    store => $store,
     data => {
         info => "This is some info",
     },
@@ -65,7 +87,7 @@ subtest 'non-root app' => sub {
     $app = Statocles::App::Basic->new(
         url_root => '/nonroot',
         site => $site,
-        store => $SHARE_DIR->child( qw( app basic ) ),
+        store => $store,
         data => {
             info => "This is some info",
         },
