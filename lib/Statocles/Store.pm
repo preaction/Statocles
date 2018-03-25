@@ -222,7 +222,7 @@ sub iterator {
             # Check for hidden files and folders
             next if $path->basename =~ /^[.]/;
             my $parent = $path->realpath->parent;
-            while ( !$parent->is_rootdir ) {
+            while ( $self->path->subsumes( $parent ) && !$parent->is_rootdir ) {
                 last if !$parent->basename;
                 next PATH if $parent->basename =~ /^[.]/;
                 $parent = $parent->parent;
