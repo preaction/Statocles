@@ -1,6 +1,7 @@
 
 use Test::Lib;
 use My::Test;
+use TestSTore;
 my $SHARE_DIR = path( __DIR__ )->parent->parent->child( 'share' );
 
 {
@@ -24,96 +25,59 @@ my $site = build_test_site(
     theme => $SHARE_DIR->child( 'theme' ),
 );
 
+my $store = TestStore->new(
+    path => $SHARE_DIR,
+    objects => [
+        Statocles::Document->new(
+            path => 'index.markdown',
+        ),
+        Statocles::Document->new(
+            path => 'foo/index.markdown',
+        ),
+        Statocles::File->new(
+            path => 'static.txt',
+        ),
+    ],
+);
+
 my $app = MyApp->new(
     url_root => '/my',
     site => $site,
-    store => $SHARE_DIR->child( qw( app basic ) ),
+    store => $store,
     data => {
         info => "This is some info",
     },
 );
 
-test_pages(
-    $site, $app,
-
-    '/added.html' => sub {
-        my ( $html, $dom ) = @_;
-        # XXX: Find the layout and template
-        my $node;
-
-        if ( ok $node = $dom->at( 'p' ) ) {
-            is $node->text, 'Hello';
-        }
+my %tests = (
+    '/added.html', sub {
+        my ( $page ) = @_;
+        isa_ok $page, 'Statocles::Page::Plain';
     },
 
-    '/my/index.html' => sub {
-        my ( $html, $dom ) = @_;
-        # XXX: Find the layout and template
-        my $node;
-
-        if ( ok $node = $dom->at( 'h1' ) ) {
-            is $node->text, 'Index Page';
-        }
-
-        if ( ok $node = $dom->at( 'body ul li:first-child a' ) ) {
-            is $node->text, 'Foo Index';
-            is $node->attr( 'href' ), '/foo/index.html';
-        }
-
-        if ( ok $node = $dom->at( 'footer #app-info' ) ) {
-            is $node->text, $app->data->{info}, 'app-info is correct';
-        }
-
+    '/my/index.html', sub {
+        my ( $page ) = @_;
+        isa_ok $page, 'Statocles::Page::Document';
+        is $page->document->path, 'index.markdown',
+            'document path correct';
+        is $page->layout->path.'', 'layout/default.html.ep', 'layout is correct';
+        is $page->app, $app, 'app is correct';
     },
-
-    '/my/aaa.html' => sub {
-        my ( $html, $dom ) = @_;
-        like $dom->at( 'p' )->text, qr{^\QThis page's purpose is to come first in the list};
-    },
-
     '/my/foo/index.html' => sub {
-        my ( $html, $dom ) = @_;
-        # XXX: Find the layout and template
-        my $node;
-
-        if ( ok $node = $dom->at( 'h1' ) ) {
-            is $node->text, 'Foo Index';
-        }
-
-        if ( ok $node = $dom->at( 'body ul li:first-child a' ) ) {
-            is $node->text, 'Index';
-            is $node->attr( 'href' ), '/index.html';
-        }
-
-        if ( ok $node = $dom->at( 'footer #app-info' ) ) {
-            is $node->text, $app->data->{info}, 'app-info is correct';
-        }
+        my ( $page ) = @_;
+        isa_ok $page, 'Statocles::Page::Document';
+        is $page->document->path, 'foo/index.markdown',
+            'document path correct';
+        is $page->layout->path.'', 'layout/default.html.ep', 'layout is correct';
+        is $page->app, $app, 'app is correct';
     },
-
-    '/my/foo/other.html' => sub {
-        my ( $html, $dom ) = @_;
-        # XXX: Find the layout and template
-        my $node;
-
-        if ( ok $node = $dom->at( 'h1' ) ) {
-            is $node->text, 'Foo Other';
-        }
-
-        if ( ok $node = $dom->at( 'body ul li:first-child a' ) ) {
-            is $node->text, 'Index';
-            is $node->attr( 'href' ), '/index.html';
-        }
-
-        if ( ok $node = $dom->at( 'footer #app-info' ) ) {
-            is $node->text, $app->data->{info}, 'app-info is correct';
-        }
-    },
-
     '/my/static.txt' => sub {
-        my ( $text ) = @_;
-        eq_or_diff $text, $SHARE_DIR->child( qw( app basic static.txt ) )->slurp_utf8;
+        my ( $page ) = @_;
+        isa_ok $page, 'Statocles::Page::File';
+        is $page->app, $app, 'app is correct';
     },
 );
 
+test_page_objects( [ $app->pages ], %tests );
 
 done_testing;
