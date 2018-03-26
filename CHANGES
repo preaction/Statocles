@@ -2,6 +2,8 @@ Changelog for Statocles
 
 {{ $NEXT }}
 
+0.090     2018-03-26 12:06:38-05:00 America/Chicago
+
     [Fixed]
 
     - Fixed test failure with misspelled module name. Thanks @mohawk2!
