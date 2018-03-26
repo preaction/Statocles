@@ -59,7 +59,7 @@ my %WriteMakefileArgs = (
     "Storable" => 0,
     "Test::Deep" => 0,
     "Test::Differences" => "0.64",
-    "Test::Exception" => 0,
+    "Test::Exception" => "0.42",
     "Test::Lib" => 0,
     "Test::More" => "1.001005"
   },
@@ -94,7 +94,7 @@ my %FallbackPrereqs = (
   "Storable" => 0,
   "Test::Deep" => 0,
   "Test::Differences" => "0.64",
-  "Test::Exception" => 0,
+  "Test::Exception" => "0.42",
   "Test::Lib" => 0,
   "Test::More" => "1.001005",
   "Text::Markdown" => 0,

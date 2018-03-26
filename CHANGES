@@ -2,6 +2,13 @@ Changelog for Statocles
 
 {{ $NEXT }}
 
+    [Fixed]
+
+    - Fixed test failure with misspelled module name. Thanks @mohawk2!
+      [Github #560]
+    - Increased requirement on Test::Exception to hopefully stop some
+      test failures.
+
 0.089     2018-03-25 18:56:42-05:00 America/Chicago
 
     [BREAKING CHANGES]
