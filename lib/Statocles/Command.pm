@@ -202,7 +202,15 @@ sub main {
         }
 
         # Using start() instead of run() so we can stop() inside the tests
-        $daemon->start;
+        # and eval to do a partial rewrite of some error messages
+        eval {$daemon->start};
+        if ($@ ) {
+            if ( $@ =~ /^Can't create listen socket:/) {
+                my $port = join ' or ',@{$daemon->listen()};
+                $@ =~ s/:/ for ($port):/;
+            }
+            die $@
+        }
 
         # Find the port we're listening on
         my $id = $daemon->acceptors->[0];
