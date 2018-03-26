@@ -1,5 +1,5 @@
 package Statocles::Deploy::Git;
-our $VERSION = '0.089';
+our $VERSION = '0.090';
 # ABSTRACT: Deploy a site to a Git repository
 
 use Statocles::Base 'Class';

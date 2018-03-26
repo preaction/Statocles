@@ -1,5 +1,5 @@
 package Statocles::Command;
-our $VERSION = '0.089';
+our $VERSION = '0.090';
 # ABSTRACT: The statocles command-line interface
 
 use Statocles::Base 'Class';
