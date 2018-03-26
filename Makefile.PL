@@ -65,7 +65,7 @@ my %WriteMakefileArgs = (
   },
   "VERSION" => "0.089",
   "test" => {
-    "TESTS" => "t/*.t t/app/*.t t/app/basic/*.t t/app/blog/*.t t/app/perldoc/*.t t/app/role/*.t t/bin/*.t t/command/*.t t/deploy/*.t t/link/*.t t/page/*.t t/plugin/*.t t/site/*.t t/store/*.t t/template/*.t t/theme/*.t"
+    "TESTS" => "t/*.t t/app/*.t t/app/basic/*.t t/app/blog/*.t t/app/perldoc/*.t t/app/role/*.t t/bin/*.t t/command/*.t t/deploy/*.t t/link/*.t t/page/*.t t/plugin/*.t t/site/*.t t/template/*.t t/theme/*.t"
   }
 );
 
