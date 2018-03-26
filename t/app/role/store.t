@@ -1,7 +1,7 @@
 
 use Test::Lib;
 use My::Test;
-use TestSTore;
+use TestStore;
 my $SHARE_DIR = path( __DIR__ )->parent->parent->child( 'share' );
 
 {
