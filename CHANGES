@@ -2,6 +2,13 @@ Changelog for Statocles
 
 {{ $NEXT }}
 
+    [Fixed]
+
+    - Fixed test failures when STDIN was attached to /dev/null during
+      testing. Thanks @mohawk2!
+    - Fixed test failures writing to site status file before
+      `.statocles` directory is created
+
 0.090     2018-03-26 12:06:38-05:00 America/Chicago
 
     [Fixed]
