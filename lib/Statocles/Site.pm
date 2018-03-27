@@ -720,7 +720,7 @@ sub _get_status {
 
 sub _write_status {
     my ( $self, $status ) = @_;
-    Path::Tiny->new( '.statocles', 'status.yml' )->spew_utf8( YAML::Dump( $status ) );
+    Path::Tiny->new( '.statocles', 'status.yml' )->touchpath->spew_utf8( YAML::Dump( $status ) );
 }
 
 =method deploy
