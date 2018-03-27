@@ -1,5 +1,5 @@
 package Statocles::Document;
-our $VERSION = '0.091';
+our $VERSION = '0.092';
 # ABSTRACT: Base class for all Statocles documents
 
 use Statocles::Base 'Class';

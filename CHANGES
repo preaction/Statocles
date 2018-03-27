@@ -2,6 +2,8 @@ Changelog for Statocles
 
 {{ $NEXT }}
 
+0.091     2018-03-27 16:51:32-05:00 America/Chicago
+
     [Fixed]
 
     - Fixed test failures when STDIN was attached to /dev/null during

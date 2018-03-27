@@ -1,5 +1,5 @@
 package Statocles::App::Perldoc;
-our $VERSION = '0.091';
+our $VERSION = '0.092';
 # ABSTRACT: Render documentation for Perl modules
 
 use Statocles::Base 'Class';

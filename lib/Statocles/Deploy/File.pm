@@ -1,5 +1,5 @@
 package Statocles::Deploy::File;
-our $VERSION = '0.091';
+our $VERSION = '0.092';
 # ABSTRACT: Deploy a site to a folder on the filesystem
 
 use Statocles::Base 'Class';
