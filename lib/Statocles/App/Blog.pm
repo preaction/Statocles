@@ -188,20 +188,12 @@ sub command {
         my $doc;
 
         # Read post content on STDIN
-        if ( !-t *STDIN ) {
-            my $content = read_stdin();
+        if ( my $content = read_stdin() ) {
             $doc = Statocles::Document->parse_content(
                 (map { defined $opt{$_} ? ( $_, $opt{$_} ) : () } @doc_opts),
                 ( @argv > 1 ? ( title => join( " ", @argv[1..$#argv] ) ) : () ),
                 content => $content,
             );
-
-            # Re-open STDIN as the TTY so that the editor (vim) can use it
-            # XXX Is this also a problem on Windows?
-            if ( -e '/dev/tty' ) {
-                close STDIN;
-                open STDIN, '/dev/tty';
-            }
         }
         else {
             $doc = Statocles::Document->new(

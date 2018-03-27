@@ -50,21 +50,13 @@ sub command {
         );
 
         # Read post content on STDIN
-        if ( !-t *STDIN ) {
-            my $content = read_stdin();
+        if ( my $content = read_stdin() ) {
             my $doc = Statocles::Document->parse_content(
                 path => $path.'',
                 store => $self->store,
                 content => $content,
             );
             $self->store->write_file( $path => $doc );
-
-            # Re-open STDIN as the TTY so that the editor (vim) can use it
-            # XXX Is this also a problem on Windows?
-            if ( -e '/dev/tty' ) {
-                close STDIN;
-                open STDIN, '/dev/tty';
-            }
         }
         elsif ( !$self->store->has_file( $path ) ) {
             my $doc = Statocles::Document->new(

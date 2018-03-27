@@ -124,8 +124,18 @@ for tests.
 =cut
 
 sub read_stdin {
-    local $/;
-    <STDIN>;
+    if ( !-t *STDIN && !-z _ ) {
+        my $content = do { local $/; <STDIN> };
+
+        # Re-open STDIN as the TTY so that the editor (vim) can use it
+        # XXX Is this also a problem on Windows?
+        if ( -e '/dev/tty' ) {
+            close STDIN;
+            open STDIN, '/dev/tty';
+        }
+
+        return $content;
+    }
 }
 
 1;

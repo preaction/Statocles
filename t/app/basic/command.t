@@ -109,12 +109,10 @@ subtest 'edit' => sub {
                 my $doc_path = $tmpdir->child( "basic", "home.markdown" );
 
                 subtest 'run the command' => sub {
-                    diag -t *STDIN
-                        ? "Before test: STDIN is interactive"
-                        : "Before test: STDIN is not interactive";
-
-                    open my $stdin, '<', \"This is content from STDIN\n";
-                    local *STDIN = $stdin;
+                    no warnings 'redefine';
+                    local *Statocles::App::Basic::read_stdin = sub {
+                        return "This is content from STDIN\n";
+                    };
 
                     my @args = qw( page edit home.markdown );
                     my ( $out, $err, $exit ) = capture { $app->command( @args ) };
@@ -122,12 +120,6 @@ subtest 'edit' => sub {
                     is $exit, 0;
                     like $out, qr{New page at: \Q$doc_path},
                         'contains new document path';
-
-                    if ( -e '/dev/tty' ) {
-                        diag -t *STDIN
-                            ? "After test: STDIN is interactive"
-                            : "After Test: STDIN is not interactive";
-                    }
                 };
 
                 subtest 'check the generated document' => sub {
@@ -153,18 +145,16 @@ ENDMARKDOWN
                 my $doc_path = $tmpdir->child( "basic", "frontmatter", "index.markdown" );
 
                 subtest 'run the command' => sub {
-                    diag -t *STDIN
-                        ? "Before test: STDIN is interactive"
-                        : "Before test: STDIN is not interactive";
-
-                    open my $stdin, '<', \<<ENDSTDIN;
+                    no warnings 'redefine';
+                    local *Statocles::App::Basic::read_stdin = sub {
+                        return <<ENDSTDIN;
 ---
 title: This is Frontmatter
 tags: one, two
 ---
 This is content from STDIN
 ENDSTDIN
-                    local *STDIN = $stdin;
+                    };
 
                     my @args = qw( page edit frontmatter );
                     my ( $out, $err, $exit ) = capture { $app->command( @args ) };
@@ -172,12 +162,6 @@ ENDSTDIN
                     is $exit, 0;
                     like $out, qr{New page at: \Q$doc_path},
                         'contains new document path';
-
-                    if ( -e '/dev/tty' ) {
-                        diag -t *STDIN
-                            ? "After test: STDIN is interactive"
-                            : "After Test: STDIN is not interactive";
-                    }
                 };
 
                 subtest 'check the generated document' => sub {
