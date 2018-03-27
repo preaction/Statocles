@@ -7,7 +7,7 @@ use Exporter 'import';
 use Mojo::JSON qw( to_json );
 
 our @EXPORT_OK = qw(
-    trim dircopy run_editor uniq_by derp
+    trim dircopy run_editor uniq_by derp read_stdin
 );
 
 =sub trim
@@ -112,6 +112,20 @@ sub derp(@) {
     }
     warn sprintf( $args[0], @args[1..$#args] ). " See Statocles::Help::Upgrading\n";
     $DERPED{ $key } = 1;
+}
+
+=sub read_stdin
+
+    my $test = read_stdin();
+
+Reads the standard input. Intended to provide a point to monkey-patch
+for tests.
+
+=cut
+
+sub read_stdin {
+    local $/;
+    <STDIN>;
 }
 
 1;
