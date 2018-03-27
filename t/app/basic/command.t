@@ -59,6 +59,9 @@ subtest 'edit' => sub {
             my $doc_path = $tmpdir->child( "basic", "resume.markdown" );
 
             subtest 'run the command' => sub {
+                no warnings 'redefine';
+                # must redefine the imported version
+                local *Statocles::App::Basic::read_stdin = sub { "hello" };
                 my @args = qw( page edit /resume.markdown );
                 my ( $out, $err, $exit ) = capture { $app->command( @args ) };
                 ok !$err, 'nothing on stderr' or diag $err;
