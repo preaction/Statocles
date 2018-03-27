@@ -9,7 +9,7 @@ use Statocles::Store;
 use Statocles::Document;
 use Statocles::Page::Document;
 use Statocles::Page::List;
-use Statocles::Util qw( run_editor );
+use Statocles::Util qw( run_editor read_stdin );
 
 with 'Statocles::App::Role::Store';
 
@@ -189,7 +189,7 @@ sub command {
 
         # Read post content on STDIN
         if ( !-t *STDIN ) {
-            my $content = do { local $/; <STDIN> };
+            my $content = read_stdin();
             $doc = Statocles::Document->parse_content(
                 (map { defined $opt{$_} ? ( $_, $opt{$_} ) : () } @doc_opts),
                 ( @argv > 1 ? ( title => join( " ", @argv[1..$#argv] ) ) : () ),

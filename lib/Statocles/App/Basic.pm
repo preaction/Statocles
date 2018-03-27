@@ -4,7 +4,7 @@ our $VERSION = '0.091';
 
 use Statocles::Base 'Class';
 use Statocles::Document;
-use Statocles::Util qw( run_editor );
+use Statocles::Util qw( run_editor read_stdin );
 with 'Statocles::App::Role::Store';
 
 =attr store
@@ -51,7 +51,7 @@ sub command {
 
         # Read post content on STDIN
         if ( !-t *STDIN ) {
-            my $content = do { local $/; <STDIN> };
+            my $content = read_stdin();
             my $doc = Statocles::Document->parse_content(
                 path => $path.'',
                 store => $self->store,
