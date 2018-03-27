@@ -24,6 +24,9 @@ subtest 'delegate to app command' => sub {
 
     local $ENV{MOJO_LOG_LEVEL} = '';
     local $ENV{EDITOR} = '';
+    no warnings qw( redefine once );
+    # must redefine the imported version
+    local *Statocles::App::Blog::read_stdin = sub { "hello" };
     my @args = (
         '--config' => "$config_fn",
         'blog' => 'post',

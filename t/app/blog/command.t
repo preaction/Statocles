@@ -54,6 +54,9 @@ subtest 'help' => sub {
 subtest 'post' => sub {
     subtest 'create new post' => sub {
         subtest 'without $EDITOR, title is required' => sub {
+            no warnings 'redefine';
+            # must redefine the imported version
+            local *Statocles::App::Blog::read_stdin = sub { "hello" };
             local $ENV{EDITOR};
             my @args = qw( blog post );
             my ( $out, $err, $exit ) = capture { $app->command( @args ) };
