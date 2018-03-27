@@ -738,11 +738,11 @@ sub deploy {
     $self->build( %options );
     $self->_deploy->site( $self );
     $self->_deploy->deploy( $self->build_store, %options );
-    $self->_clear_write_deploy;
     $self->_write_status( {
         last_deploy_date => time(),
         last_deploy_args => \%options,
     } );
+    $self->_clear_write_deploy;
 }
 
 =method links
