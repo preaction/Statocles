@@ -237,14 +237,12 @@ ENDHELP
 
         if ( run_editor( $full_path ) ) {
             my $old_title = $doc->title;
-            ; say "Old title: " . $doc->title;
             my $content = $full_path->slurp_utf8;
             my $doc = Statocles::Document->parse_content(
                 path => $path.'',
                 store => $self->store,
                 content => $content,
             );
-            ; say "New title: " . $doc->title;
             if ( $doc->title ne $old_title ) {
                 $self->store->path->child( @partsdir )->remove_tree;
                 $slug = $self->make_slug( $doc->title || "new post" );
