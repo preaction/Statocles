@@ -1,6 +1,6 @@
 use Test::Lib;
 use My::Test;
-use Statocles::Util qw( trim dircopy run_editor uniq_by derp );
+use Statocles::Util qw( trim dircopy run_editor uniq_by derp read_stdin );
 use Statocles::Link;
 my $SHARE_DIR = path( __DIR__, 'share' );
 
@@ -94,6 +94,12 @@ subtest 'run_editor' => sub {
             run_editor( $tmp->child( 'index.markdown' ) );
         } qr[Editor "\Q$ENV{EDITOR}\E" exited with error \(non-zero\) status: \d+\n];
     };
+};
+
+subtest 'read_stdin' => sub {
+    open my $stdin, '<', \'Content on STDIN';
+    local *STDIN = $stdin;
+    is read_stdin(), 'Content on STDIN', 'STDIN content is correct';
 };
 
 subtest 'uniq_by' => sub {
