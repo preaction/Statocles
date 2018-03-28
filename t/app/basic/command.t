@@ -54,14 +54,16 @@ subtest 'edit' => sub {
     subtest 'create new page' => sub {
 
         subtest 'full path' => sub {
-            local $ENV{EDITOR} = join ' ', map qq{"$_"}, $^X, $SHARE_DIR->child( 'bin', 'editor.pl' );
-            local $ENV{STATOCLES_TEST_EDITOR_CONTENT} = "".$SHARE_DIR->child(qw( app basic index.markdown ));
+            no warnings 'redefine';
+            local *Statocles::App::Basic::run_editor = sub {
+                $SHARE_DIR->child(qw( app basic index.markdown ))->slurp_utf8;
+            };
             my $doc_path = $tmpdir->child( "basic", "resume.markdown" );
 
             subtest 'run the command' => sub {
                 no warnings 'redefine';
                 # must redefine the imported version
-                local *Statocles::App::Basic::read_stdin = sub { "hello" };
+                local *Statocles::App::Basic::read_stdin = sub { };
                 my @args = qw( page edit /resume.markdown );
                 my ( $out, $err, $exit ) = capture { $app->command( @args ) };
                 ok !$err, 'nothing on stderr' or diag $err;
@@ -75,7 +77,8 @@ subtest 'edit' => sub {
         };
 
         subtest 'path without extension' => sub {
-            local $ENV{EDITOR}; # Test without EDITOR
+            no warnings 'redefine';
+            local *Statocles::App::Basic::run_editor = sub { undef };
             my $doc_path = $tmpdir->child( "basic", "resume", "index.markdown" );
 
             subtest 'run the command' => sub {
@@ -105,7 +108,8 @@ subtest 'edit' => sub {
 
         subtest 'content from STDIN' => sub {
             subtest 'without frontmatter' => sub {
-                local $ENV{EDITOR}; # We can't very well open vim...
+                no warnings 'redefine';
+                local *Statocles::App::Basic::run_editor = sub { undef };
                 my $doc_path = $tmpdir->child( "basic", "home.markdown" );
 
                 subtest 'run the command' => sub {
@@ -141,7 +145,8 @@ ENDMARKDOWN
             };
 
             subtest 'with frontmatter' => sub {
-                local $ENV{EDITOR}; # We can't very well open vim...
+                no warnings 'redefine';
+                local *Statocles::App::Basic::run_editor = sub { undef };
                 my $doc_path = $tmpdir->child( "basic", "frontmatter", "index.markdown" );
 
                 subtest 'run the command' => sub {

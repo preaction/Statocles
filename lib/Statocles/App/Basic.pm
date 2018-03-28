@@ -66,7 +66,10 @@ sub command {
         }
 
         my $full_path = $self->store->path->child( $path );
-        if ( !run_editor( $full_path ) ) {
+        if ( my $content = run_editor( $full_path ) ) {
+            $full_path->spew_utf8( $content );
+        }
+        else {
             say "New page at: $full_path";
         }
 

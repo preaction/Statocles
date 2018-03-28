@@ -57,6 +57,7 @@ subtest 'post' => sub {
             no warnings 'redefine';
             # must redefine the imported version
             local *Statocles::App::Blog::read_stdin = sub { "hello" };
+            local *Statocles::App::Blog::run_editor = sub { undef };
             local $ENV{EDITOR};
             my @args = qw( blog post );
             my ( $out, $err, $exit ) = capture { $app->command( @args ) };
@@ -66,7 +67,8 @@ subtest 'post' => sub {
         };
 
         subtest 'default document' => sub {
-            local $ENV{EDITOR}; # We can't very well open vim...
+            no warnings 'redefine';
+            local *Statocles::App::Blog::run_editor = sub { undef };
             my ( undef, undef, undef, $day, $mon, $year ) = localtime;
             my $doc_path = $tmpdir->child(
                 'blog',
@@ -113,7 +115,8 @@ ENDCONTENT
         };
 
         subtest 'special characters in title' => sub {
-            local $ENV{EDITOR}; # We can't very well open vim...
+            no warnings 'redefine';
+            local *Statocles::App::Blog::run_editor = sub { undef };
             my ( undef, undef, undef, $day, $mon, $year ) = localtime;
             my $doc_path = $tmpdir->child(
                 'blog',
@@ -160,7 +163,8 @@ ENDCONTENT
         };
 
         subtest 'custom date' => sub {
-            local $ENV{EDITOR}; # We can't very well open vim...
+            no warnings 'redefine';
+            local *Statocles::App::Blog::run_editor = sub { undef };
 
             my $doc_path = $tmpdir->child(
                 'blog', '2014', '04', '01', 'this-is-a-title', 'index.markdown',
@@ -203,7 +207,8 @@ ENDCONTENT
 
         subtest 'content from STDIN' => sub {
             subtest 'without frontmatter' => sub {
-                local $ENV{EDITOR}; # We can't very well open vim...
+                no warnings 'redefine';
+                local *Statocles::App::Blog::run_editor = sub { };
 
                 my ( undef, undef, undef, $day, $mon, $year ) = localtime;
                 my $doc_path = $tmpdir->child(
@@ -249,7 +254,8 @@ ENDMARKDOWN
             };
 
             subtest 'author option' => sub {
-                local $ENV{EDITOR}; # We can't very well open vim...
+                no warnings 'redefine';
+                local *Statocles::App::Blog::run_editor = sub { };
 
                 my ( undef, undef, undef, $day, $mon, $year ) = localtime;
                 my $doc_path = $tmpdir->child(
@@ -296,7 +302,8 @@ ENDMARKDOWN
             };
 
             subtest 'with frontmatter' => sub {
-                local $ENV{EDITOR}; # We can't very well open vim...
+                no warnings 'redefine';
+                local *Statocles::App::Blog::run_editor = sub { };
 
                 my ( undef, undef, undef, $day, $mon, $year ) = localtime;
                 my $doc_path = $tmpdir->child(
@@ -352,8 +359,10 @@ ENDMARKDOWN
 
 
         subtest 'title change creates different folder' => sub {
-            local $ENV{EDITOR} = join ' ', map qq{"$_"}, $^X, $SHARE_DIR->child( 'bin', 'editor.pl' );
-            local $ENV{STATOCLES_TEST_EDITOR_CONTENT} = "".$SHARE_DIR->child(qw( app blog draft a-draft-post.markdown ));
+            no warnings 'redefine';
+            local *Statocles::App::Blog::run_editor = sub {
+                $SHARE_DIR->child(qw( app blog draft a-draft-post.markdown ))->slurp_utf8;
+            };
 
             my ( undef, undef, undef, $day, $mon, $year ) = localtime;
             my $doc_path = $tmpdir->child(

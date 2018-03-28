@@ -235,9 +235,8 @@ ENDHELP
         $self->store->write_file( $path => $doc );
         my $full_path = $self->store->path->child( @partsfile );
 
-        if ( run_editor( $full_path ) ) {
+        if ( my $content = run_editor( $full_path ) ) {
             my $old_title = $doc->title;
-            my $content = $full_path->slurp_utf8;
             my $doc = Statocles::Document->parse_content(
                 path => $path.'',
                 store => $self->store,
