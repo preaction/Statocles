@@ -1,22 +1,22 @@
 use Test::Lib;
 use My::Test;
 use Statocles::Types qw(
-    Link LinkArray LinkHash DateTimeObj Person
+    LinkType LinkArray LinkHash DateTimeObj PersonType
     LinkTree LinkTreeArray
     PagePath
 );
 
 subtest 'Link types' => sub {
 
-    subtest 'Link' => sub {
+    subtest 'LinkType' => sub {
 
         subtest 'from String' => sub {
-            my $link = Link->coerce( "http://example.com" );
+            my $link = LinkType->coerce( "http://example.com" );
             cmp_deeply $link, Statocles::Link->new( href => "http://example.com" );
         };
 
         subtest 'from Hashref' => sub {
-            my $link = Link->coerce( { href => "http://example.com", rel => 'alternate' } );
+            my $link = LinkType->coerce( { href => "http://example.com", rel => 'alternate' } );
             cmp_deeply $link, Statocles::Link->new( href => "http://example.com", rel => 'alternate' );
         };
 
@@ -195,17 +195,17 @@ subtest 'Person' => sub {
 
     subtest 'from String' => sub {
         subtest 'name only' => sub {
-            my $person = Person->coerce( "Doug Bell" );
+            my $person = PersonType->coerce( "Doug Bell" );
             cmp_deeply $person, Statocles::Person->new( name => "Doug Bell" );
         };
         subtest 'name + email' => sub {
-            my $person = Person->coerce( 'Doug Bell <doug@example.com>' );
+            my $person = PersonType->coerce( 'Doug Bell <doug@example.com>' );
             cmp_deeply $person, Statocles::Person->new( name => "Doug Bell", email => 'doug@example.com' );
         };
     };
 
     subtest 'from Hashref' => sub {
-        my $person = Person->coerce( { name => "Doug Bell", email => 'doug@example.com' } );
+        my $person = PersonType->coerce( { name => "Doug Bell", email => 'doug@example.com' } );
         cmp_deeply $person, Statocles::Person->new(
             name => "Doug Bell",
             email => 'doug@example.com',

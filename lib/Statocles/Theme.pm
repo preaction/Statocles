@@ -34,14 +34,14 @@ added at the end of this list.
 
 has include_stores => (
     is => 'ro',
-    isa => ArrayRef[Store],
+    isa => ArrayRef[StoreType],
     default => sub { [] },
     coerce => sub {
         my ( $thing ) = @_;
         if ( ref $thing eq 'ARRAY' ) {
-            return [ map { Store->coercion->( $_ ) } @$thing ];
+            return [ map { StoreType->coercion->( $_ ) } @$thing ];
         }
-        return [ Store->coercion->( $thing ) ];
+        return [ StoreType->coercion->( $thing ) ];
     },
 );
 

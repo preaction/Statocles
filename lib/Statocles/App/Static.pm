@@ -15,9 +15,9 @@ The L<store|Statocles::Store> containing this app's files. Required.
 
 has store => (
     is => 'ro',
-    isa => Store,
+    isa => StoreType,
     required => 1,
-    coerce => Store->coercion,
+    coerce => StoreType->coercion,
 );
 
 =method pages

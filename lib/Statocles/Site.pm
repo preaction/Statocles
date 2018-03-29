@@ -42,8 +42,8 @@ L<Statocles::Document/author>.
 
 has author => (
     is => 'ro',
-    isa => Person,
-    coerce => Person->coercion,
+    isa => PersonType,
+    coerce => PersonType->coercion,
 );
 
 =attr base_url
@@ -68,8 +68,8 @@ The L<theme|Statocles::Theme> for this site. All apps share the same theme.
 
 has theme => (
     is => 'ro',
-    isa => Theme,
-    coerce => Theme->coercion,
+    isa => ThemeType,
+    coerce => ThemeType->coercion,
     default => sub {
         require Statocles::Theme;
         Statocles::Theme->new( store => '::default' );
@@ -304,14 +304,14 @@ also the store the C<daemon> command reads to serve the site.
 
 has build_store => (
     is => 'ro',
-    isa => Store,
+    isa => StoreType,
     default => sub {
         my $path = Path::Tiny->new( '.statocles', 'build' );
         if ( !$path->is_dir ) {
             # Automatically make the build directory
             $path->mkpath;
         }
-        return Store->coercion->( $path );
+        return StoreType->coercion->( $path );
     },
     coerce => sub {
         my ( $arg ) = @_;
@@ -319,7 +319,7 @@ has build_store => (
             # Automatically make the build directory
             Path::Tiny->new( $arg )->mkpath;
         }
-        return Store->coercion->( $arg );
+        return StoreType->coercion->( $arg );
     },
 );
 
@@ -768,7 +768,7 @@ object|Statocles::Link>. When adding links, nothing is returned.
 sub links {
     my ( $self, $name, $add_link ) = @_;
     if ( $add_link ) {
-        push @{ $self->_links->{ $name } }, Link->coerce( $add_link );
+        push @{ $self->_links->{ $name } }, LinkType->coerce( $add_link );
         return;
     }
     my @links = uniq_by { $_->href }

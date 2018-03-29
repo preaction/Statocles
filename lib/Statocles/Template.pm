@@ -47,8 +47,8 @@ information.
 
 has theme => (
     is => 'ro',
-    isa => Theme,
-    coerce => Theme->coercion,
+    isa => ThemeType,
+    coerce => ThemeType->coercion,
 );
 
 =attr include_stores
@@ -61,14 +61,14 @@ Theme|Statocles::Theme/include_stores>.
 
 has include_stores => (
     is => 'ro',
-    isa => ArrayRef[Store],
+    isa => ArrayRef[StoreType],
     default => sub { [] },
     coerce => sub {
         my ( $thing ) = @_;
         if ( ref $thing eq 'ARRAY' ) {
-            return [ map { Store->coercion->( $_ ) } @$thing ];
+            return [ map { StoreType->coercion->( $_ ) } @$thing ];
         }
-        return [ Store->coercion->( $thing ) ];
+        return [ StoreType->coercion->( $thing ) ];
     },
 );
 

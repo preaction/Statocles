@@ -6,9 +6,9 @@ use strict;
 use warnings;
 use feature qw( :5.10 );
 use Type::Library -base, -declare => qw(
-    Store Theme Link LinkArray LinkHash LinkTree LinkTreeArray
+    StoreType ThemeType LinkType LinkArray LinkHash LinkTree LinkTreeArray
     DateTimeObj DateStr DateTimeStr
-    Person
+    PersonType
     PagePath
 );
 use Type::Utils -all;
@@ -16,30 +16,30 @@ use Types::Standard -types;
 use DateTime::Moonpig;
 use Mojo::Path;
 
-role_type Store, { role => "Statocles::Store" };
-coerce Store, from Str, via { Statocles::Store->new( path => $_ ) };
-coerce Store, from InstanceOf['Path::Tiny'], via { Statocles::Store->new( path => $_ ) };
+class_type StoreType, { class => "Statocles::Store" };
+coerce StoreType, from Str, via { Statocles::Store->new( path => $_ ) };
+coerce StoreType, from InstanceOf['Path::Tiny'], via { Statocles::Store->new( path => $_ ) };
 
-class_type Theme, { class => "Statocles::Theme" };
-coerce Theme, from Str, via { require Statocles::Theme; Statocles::Theme->new( store => $_ ) };
-coerce Theme, from InstanceOf['Path::Tiny'], via { require Statocles::Theme; Statocles::Theme->new( store => $_ ) };
+class_type ThemeType, { class => "Statocles::Theme" };
+coerce ThemeType, from Str, via { require Statocles::Theme; Statocles::Theme->new( store => $_ ) };
+coerce ThemeType, from InstanceOf['Path::Tiny'], via { require Statocles::Theme; Statocles::Theme->new( store => $_ ) };
 
-class_type Link, { class => "Statocles::Link" };
-coerce Link, from HashRef, via { Statocles::Link->new( $_ ) };
-coerce Link, from Str, via { Statocles::Link->new( href => $_ ) };
+class_type LinkType, { class => "Statocles::Link" };
+coerce LinkType, from HashRef, via { Statocles::Link->new( $_ ) };
+coerce LinkType, from Str, via { Statocles::Link->new( href => $_ ) };
 
 class_type LinkTree, { class => "Statocles::Link::Tree" };
 coerce LinkTree, from HashRef, via { Statocles::Link::Tree->new( $_ ) };
 coerce LinkTree, from Str, via { Statocles::Link::Tree->new( href => $_ ) };
 
-class_type Person, { class => 'Statocles::Person' };
-coerce Person, from HashRef, via { Statocles::Person->new( $_ ) };
-coerce Person, from Str, via { Statocles::Person->new( $_ ) };
+class_type PersonType, { class => 'Statocles::Person' };
+coerce PersonType, from HashRef, via { Statocles::Person->new( $_ ) };
+coerce PersonType, from Str, via { Statocles::Person->new( $_ ) };
 
-declare LinkArray, as ArrayRef[Link], coerce => 1;
+declare LinkArray, as ArrayRef[LinkType], coerce => 1;
 coerce LinkArray, from ArrayRef[HashRef|Str],
     via {
-        [ map { ref $_ eq 'HASH' && exists $_->{children} ? LinkTree->coerce($_) : Link->coerce( $_ ) } @$_ ];
+        [ map { ref $_ eq 'HASH' && exists $_->{children} ? LinkTree->coerce($_) : LinkType->coerce( $_ ) } @$_ ];
     };
 
 declare LinkHash, as HashRef[LinkArray], coerce => 1;
@@ -119,8 +119,8 @@ __END__
     );
 
     has link => (
-        isa => Link,
-        coerce => Link->coercion,
+        isa => LinkType,
+        coerce => LinkType->coercion,
     );
     has links => (
         isa => LinkArray,
@@ -164,7 +164,7 @@ This can be coerced from any L<Path::Tiny> object or any String, which will be
 used as the L<store attribute|Statocles::Theme/store> (which will then be given
 to the Store's path attribute).
 
-=head2 Link
+=head2 LinkType
 
 A L<Statocles::Link> object.
 

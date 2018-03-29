@@ -7,7 +7,6 @@ use Scalar::Util qw( blessed );
 use Getopt::Long qw( GetOptionsFromArray :config pass_through bundling no_auto_abbrev );
 use Pod::Usage::Return qw( pod2usage );
 use Beam::Wire;
-use Statocles::Template;
 use Mojo::Loader qw( load_class );
 
 my @VERBOSE = ( "warn", "info", "debug", "trace" );

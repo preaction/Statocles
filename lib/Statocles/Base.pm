@@ -18,7 +18,6 @@ our @IMPORT_MODULES = (
     feature => [qw( :5.10 )],
     'Path::Tiny' => [qw( rootdir cwd )],
     'DateTime::Moonpig',
-    'Statocles',
 );
 
 my @class_modules = (

@@ -4,6 +4,7 @@ our $VERSION = '0.092';
 
 use Statocles::Base 'Command';
 use Statocles::Command::bundle;
+use Statocles::Template;
 use File::Share qw( dist_dir );
 
 sub run {

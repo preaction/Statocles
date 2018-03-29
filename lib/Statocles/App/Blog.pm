@@ -5,7 +5,6 @@ our $VERSION = '0.092';
 use Text::Unidecode;
 use Statocles::Base 'Class';
 use Getopt::Long qw( GetOptionsFromArray );
-use Statocles::Store;
 use Statocles::Document;
 use Statocles::Page::Document;
 use Statocles::Page::List;

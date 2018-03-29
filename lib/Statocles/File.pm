@@ -31,8 +31,8 @@ The store that contains this file
 
 has store => (
     is => 'ro',
-    isa => Store,
-    coerce => Store->coercion,
+    isa => StoreType,
+    coerce => StoreType->coercion,
 );
 
 =attr path

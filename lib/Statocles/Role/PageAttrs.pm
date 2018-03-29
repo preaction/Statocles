@@ -28,8 +28,8 @@ The author of the page.
 
 has author => (
     is => 'rw',
-    isa => Maybe[Person],
-    coerce => Person->coercion,
+    isa => Maybe[PersonType],
+    coerce => PersonType->coercion,
     lazy => 1,
     builder => '_build_author',
 );
@@ -119,7 +119,7 @@ object|Statocles::Link>. When adding links, nothing is returned.
 sub links {
     my ( $self, $name, @add_links ) = @_;
     if ( @add_links ) {
-        push @{ $self->_links->{ $name } }, map { Link->coerce( $_ ) } @add_links;
+        push @{ $self->_links->{ $name } }, map { LinkType->coerce( $_ ) } @add_links;
         return;
     }
     return $self->_links if !$name;
