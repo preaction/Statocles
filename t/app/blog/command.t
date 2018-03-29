@@ -51,6 +51,8 @@ subtest 'help' => sub {
         'contains blog help information';
 };
 
+local $ENV{EDITOR} = 'echo';
+
 subtest 'post' => sub {
     subtest 'create new post' => sub {
         subtest 'without $EDITOR, title is required' => sub {
