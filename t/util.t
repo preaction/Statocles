@@ -99,9 +99,10 @@ subtest 'run_editor' => sub {
 };
 
 subtest 'read_stdin' => sub {
-    open my $stdin, '<', \'Content on STDIN';
+    my $content = "Content on STDIN\n";
+    open my $stdin, '<', \$content or die "Could not create scalar filehandle: $!";
     local *STDIN = $stdin;
-    is read_stdin(), 'Content on STDIN', 'STDIN content is correct';
+    is read_stdin(), $content, 'STDIN content is correct';
 };
 
 subtest 'uniq_by' => sub {
