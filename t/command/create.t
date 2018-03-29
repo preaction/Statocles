@@ -2,7 +2,7 @@
 use Test::Lib;
 use My::Test;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
-use Statocles::Command;
+use Statocles;
 use Capture::Tiny qw( capture );
 use YAML;
 use File::Share qw( dist_dir );
@@ -30,7 +30,7 @@ subtest 'create a site' => sub {
         local *STDIN = $in;
 
         my @args = ( 'create', 'example.com' );
-        my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+        my ( $out, $err, $exit ) = capture { Statocles->run( @args ) };
 
         is $exit, 0;
         ok !$err, 'nothing on stderr' or diag "STDERR: $err";
@@ -76,7 +76,7 @@ subtest 'create a site' => sub {
         local *STDIN = $in;
 
         my @args = ( 'create', 'http://example.com' );
-        my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+        my ( $out, $err, $exit ) = capture { Statocles->run( @args ) };
 
         is $exit, 0;
         ok !$err, 'nothing on stderr' or diag "STDERR: $err";
@@ -120,7 +120,7 @@ subtest 'create a site' => sub {
         local *STDIN = $in;
 
         my @args = ( 'create' );
-        my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+        my ( $out, $err, $exit ) = capture { Statocles->run( @args ) };
 
         is $exit, 0;
         ok !$err, 'nothing on stderr' or diag "STDERR: $err";
@@ -167,7 +167,7 @@ subtest 'create a site' => sub {
         local *STDIN = $in;
 
         my @args = ( 'create' );
-        my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+        my ( $out, $err, $exit ) = capture { Statocles->run( @args ) };
 
         is $exit, 0;
         ok !$err, 'nothing on stderr' or diag "STDERR: $err";
@@ -213,7 +213,7 @@ subtest 'create a site' => sub {
         local *STDIN = $in;
 
         my @args = ( 'create', 'http://site.example.com', 'example.com' );
-        my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+        my ( $out, $err, $exit ) = capture { Statocles->run( @args ) };
 
         is $exit, 0;
         ok !$err, 'nothing on stderr' or diag "STDERR: $err";
@@ -276,7 +276,7 @@ subtest 'git deploy' => sub {
         local *STDIN = $in;
 
         my @args = ( 'create', 'www.example.com' );
-        my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+        my ( $out, $err, $exit ) = capture { Statocles->run( @args ) };
 
         is $exit, 0;
         ok !$err, 'nothing on stderr' or diag "STDERR: $err";
@@ -331,7 +331,7 @@ subtest 'git deploy' => sub {
         local *STDIN = $in;
 
         my @args = ( 'create', 'http://example.com', '.' );
-        my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+        my ( $out, $err, $exit ) = capture { Statocles->run( @args ) };
 
         is $exit, 0;
         ok !$err, 'nothing on stderr' or diag "STDERR: $err";
@@ -385,7 +385,7 @@ sub test_site_build {
     chdir $tmp;
     my ( $out, $err, $exit );
     eval {
-        ( $out, $err, $exit ) = capture { Statocles::Command->main( 'build' ) };
+        ( $out, $err, $exit ) = capture { Statocles->run( 'build' ) };
     };
     ok !$@, 'completed successfully' or diag $@;
     is $exit, 0;

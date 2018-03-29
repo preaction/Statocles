@@ -3,7 +3,7 @@ use Test::Lib;
 use My::Test;
 use Capture::Tiny qw( capture );
 use FindBin ();
-use Statocles::Command;
+use Statocles;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
 
 my ( $tmp, $config_fn, $config ) = build_temp_site( $SHARE_DIR );
@@ -14,11 +14,11 @@ subtest 'no command specified' => sub {
     my $cwd = cwd;
     chdir $tmp;
 
-    my ( $out, $err, $exit ) = capture { Statocles::Command->main };
+    my ( $out, $err, $exit ) = capture { Statocles->run };
     ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
     like $err, qr{ERROR: Missing command};
     like $err, qr{statocles -h},
-        'reports pod from bin/statocles, not Statocles::Command';
+        'reports pod from bin/statocles, not Statocles';
     isnt $exit, 0;
 
     chdir $cwd;
@@ -28,11 +28,11 @@ subtest 'unknown command specified' => sub {
     my $cwd = cwd;
     chdir $tmp;
 
-    my ( $out, $err, $exit ) = capture { Statocles::Command->main( 'daemin' ) };
+    my ( $out, $err, $exit ) = capture { Statocles->run( 'daemin' ) };
     ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
     like $err, qr{ERROR: Unknown command or app 'daemin'};
     like $err, qr{statocles -h},
-        'reports pod from bin/statocles, not Statocles::Command';
+        'reports pod from bin/statocles, not Statocles';
     isnt $exit, 0;
 
     chdir $cwd;
@@ -45,7 +45,7 @@ subtest 'config file missing' => sub {
         my $cwd = cwd;
         chdir $tempdir;
 
-        my ( $out, $err, $exit ) = capture { Statocles::Command->main( 'build' ) };
+        my ( $out, $err, $exit ) = capture { Statocles->run( 'build' ) };
         ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
         like $err, qr{\QERROR: Could not find config file "site.yml"}
             or diag $err;
@@ -59,7 +59,7 @@ subtest 'config file missing' => sub {
         chdir $tmp;
 
         my ( $out, $err, $exit ) = capture {
-            Statocles::Command->main( '--config', 'DOES_NOT_EXIST.yml', 'build' )
+            Statocles->run( '--config', 'DOES_NOT_EXIST.yml', 'build' )
         };
         ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
         like $err, qr{\QERROR: Could not find config file "DOES_NOT_EXIST.yml"}
@@ -79,7 +79,7 @@ subtest 'site object missing' => sub {
         chdir $tempdir;
 
         my ( $out, $err, $exit ) = capture {
-            Statocles::Command->main( '--config', 'config.yml', 'build' )
+            Statocles->run( '--config', 'config.yml', 'build' )
         };
         ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
         like $err, qr{\QERROR: Could not find site named "site" in config file "config.yml"}
@@ -94,7 +94,7 @@ subtest 'site object missing' => sub {
         chdir $tmp;
 
         my ( $out, $err, $exit ) = capture {
-            Statocles::Command->main( '--site', 'DOES_NOT_EXIST', 'build' )
+            Statocles->run( '--site', 'DOES_NOT_EXIST', 'build' )
         };
         ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
         like $err, qr{\QERROR: Could not find site named "DOES_NOT_EXIST" in config file "site.yml"}
@@ -111,7 +111,7 @@ subtest 'site config broken' => sub {
         my $config = $SHARE_DIR->child( config => 'bad_ref.yml' );
 
         my ( $out, $err, $exit ) = capture {
-            Statocles::Command->main( '--config', "$config", 'build' )
+            Statocles->run( '--config', "$config", 'build' )
         };
         ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
         like $err, qr{\QERROR: Could not create site object "site" in config file "$config": \E.*missing_object}
@@ -128,7 +128,7 @@ subtest 'site config broken' => sub {
         my $config = $SHARE_DIR->child( config => 'bad_char.yml' );
 
         my ( $out, $err, $exit ) = capture {
-            Statocles::Command->main( '--config', "$config", 'build' )
+            Statocles->run( '--config', "$config", 'build' )
         };
         ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
         like $err, qr{ERROR: Could not load config file "\Q$config\E"[.] Check that you are not using tabs for indentation[.] For more information, run with the "--verbose" option or check Statocles::Help::Error.}
@@ -137,7 +137,7 @@ subtest 'site config broken' => sub {
 
         subtest '--verbose shows raw error message' => sub {
             my ( $out, $err, $exit ) = capture {
-                Statocles::Command->main( '-v', '--config', "$config", 'build' )
+                Statocles->run( '-v', '--config', "$config", 'build' )
             };
             ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
             like $err, qr{ERROR: Could not load config file "\Q$config\E"[.] Check that you are not using tabs for indentation[.] For more information, check Statocles::Help::Error[.].+Raw error: Could not load container file}s
@@ -150,7 +150,7 @@ subtest 'site config broken' => sub {
         my $config = $SHARE_DIR->child( config => 'bad_indent.yml' );
 
         my ( $out, $err, $exit ) = capture {
-            Statocles::Command->main( '--config', "$config", 'build' )
+            Statocles->run( '--config', "$config", 'build' )
         };
         ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
         like $err, qr{ERROR: Could not load config file "\Q$config\E"[.] Check your indentation[.] For more information, run with the "--verbose" option or check Statocles::Help::Error[.]}
@@ -159,7 +159,7 @@ subtest 'site config broken' => sub {
 
         subtest '--verbose shows raw error message' => sub {
             my ( $out, $err, $exit ) = capture {
-                Statocles::Command->main( '-v', '--config', "$config", 'build' )
+                Statocles->run( '-v', '--config', "$config", 'build' )
             };
             ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
         like $err, qr{ERROR: Could not load config file "\Q$config\E"[.] Check your indentation[.] For more information, check Statocles::Help::Error[.].+Raw error: Could not load container file}s
@@ -172,7 +172,7 @@ subtest 'site config broken' => sub {
         my $config = $SHARE_DIR->child( config => 'missing_arg.yml' );
 
         my ( $out, $err, $exit ) = capture {
-            Statocles::Command->main( '--config', "$config", 'build' )
+            Statocles->run( '--config', "$config", 'build' )
         };
         ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
         like $err, qr{ERROR: Could not create site object "site" in config file "\Q$config\E": Missing required arguments:}

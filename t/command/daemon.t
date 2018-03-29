@@ -3,7 +3,7 @@ use Test::Lib;
 use My::Test;
 use Capture::Tiny qw( capture );
 use Mojo::IOLoop;
-use Statocles::Command;
+use Statocles;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
 
 my ( $tmp, $config_fn, $config ) = build_temp_site( $SHARE_DIR );
@@ -12,7 +12,7 @@ subtest 'listen on a random port' => sub {
     # We need to stop the daemon after it starts
     my ( $port, $app );
     my $timeout = Mojo::IOLoop->singleton->timer( 0, sub {
-        my $daemon = $Statocles::Command::daemon;
+        my $daemon = $Statocles::Command::daemon::daemon;
         my $id = $daemon->acceptors->[0];
         $port = $daemon->ioloop->acceptor( $id )->handle->sockport;
         $app = $daemon->app;
@@ -30,7 +30,7 @@ subtest 'listen on a random port' => sub {
         '-v', # watch lines are now behind -v
     );
 
-    my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+    my ( $out, $err, $exit ) = capture { Statocles->run( @args ) };
     undef $timeout;
 
     my $store_path = $app->site->app( 'blog' )->store->path;
@@ -46,7 +46,7 @@ subtest 'listen on a random port' => sub {
     like $out, qr{\QListening on http://127.0.0.1:$port\E\n},
         'contains http port information';
 
-    isa_ok $app, 'Statocles::Command::_MOJOAPP';
+    isa_ok $app, 'Statocles::Command::daemon::_MOJOAPP';
 
     ok $tmp->child( 'build_site', 'index.html' )->exists, 'site was built';
     ok !$tmp->child( 'deploy_site', 'index.html' )->exists, 'site was not deployed';
@@ -56,7 +56,7 @@ subtest 'listen on a random port' => sub {
 
             my ( $port, $app );
             my $timeout = Mojo::IOLoop->singleton->timer( 0, sub {
-                my $daemon = $Statocles::Command::daemon;
+                my $daemon = $Statocles::Command::daemon::daemon;
                 my $id = $daemon->acceptors->[0];
                 $port = $daemon->ioloop->acceptor( $id )->handle->sockport;
                 $app = $daemon->app;
@@ -71,7 +71,7 @@ subtest 'listen on a random port' => sub {
                 '-v',
             );
 
-            my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+            my ( $out, $err, $exit ) = capture { Statocles->run( @args ) };
             undef $timeout;
 
             my $store_path = $app->site->app( 'blog' )->store->path;
@@ -89,7 +89,7 @@ subtest 'listen on a specific port' => sub {
     # We need to stop the daemon after it starts
     my ( $port, $app );
     my $timeout = Mojo::IOLoop->singleton->timer( 0, sub {
-        my $daemon = $Statocles::Command::daemon;
+        my $daemon = $Statocles::Command::daemon::daemon;
         my $id = $daemon->acceptors->[0];
         $port = $daemon->ioloop->acceptor( $id )->handle->sockport;
         $app = $daemon->app;
@@ -106,7 +106,7 @@ subtest 'listen on a specific port' => sub {
         '-v', # watch lines are now behind -v
     );
 
-    my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+    my ( $out, $err, $exit ) = capture { Statocles->run( @args ) };
     undef $timeout;
 
     is $port, 12126, 'correct port';
@@ -122,7 +122,7 @@ subtest '--date' => sub {
 
     # We need to stop the daemon after it starts
     my $timeout = Mojo::IOLoop->timer( 0, sub {
-        my $daemon = $Statocles::Command::daemon;
+        my $daemon = $Statocles::Command::daemon::daemon;
         $daemon->stop;
         Mojo::IOLoop->stop;
     } );
@@ -136,7 +136,7 @@ subtest '--date' => sub {
         '--date', '9999-12-31',
     );
 
-    my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+    my ( $out, $err, $exit ) = capture { Statocles->run( @args ) };
     undef $timeout;
 
     ok !$err, 'nothing on stderr' or diag "STDERR: $err";

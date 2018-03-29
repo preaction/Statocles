@@ -13,8 +13,8 @@ our $VERSION = '0.092';
 my @argv;
 BEGIN { @argv = @ARGV };
 
-use Statocles::Command;
-exit Statocles::Command->main( @argv );
+use Statocles;
+exit Statocles->run( @argv );
 
 __END__
 

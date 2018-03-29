@@ -6,7 +6,8 @@ use Mojo::IOLoop;
 use Test::Mojo;
 use Beam::Wire;
 use YAML;
-use Statocles::Command;
+use Statocles;
+use Statocles::Command::daemon;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
 
 local $ENV{MOJO_LOG_LEVEL} = 'warn';
@@ -18,7 +19,7 @@ subtest 'root site' => sub {
     my $site = Beam::Wire->new( file => "$config_fn" )->get( 'site' );
 
     my $t = Test::Mojo->new(
-        Statocles::Command::_MOJOAPP->new(
+        Statocles::Command::daemon::_MOJOAPP->new(
             site => $site,
         ),
     );
@@ -144,7 +145,7 @@ subtest 'nonroot site' => sub {
     YAML::DumpFile( $config_fn, $config );
 
     my $t = Test::Mojo->new(
-        Statocles::Command::_MOJOAPP->new(
+        Statocles::Command::daemon::_MOJOAPP->new(
             site => Beam::Wire->new( file => "$config_fn" )->get( 'site' ),
         ),
     );
@@ -211,7 +212,7 @@ subtest '--date option' => sub {
     my $site = Beam::Wire->new( file => "$config_fn" )->get( 'site' );
 
     my $t = Test::Mojo->new(
-        Statocles::Command::_MOJOAPP->new(
+        Statocles::Command::daemon::_MOJOAPP->new(
             site => $site,
             options => {
                 date => '9999-12-31',

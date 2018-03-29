@@ -2,14 +2,14 @@
 use Test::Lib;
 use My::Test;
 use Capture::Tiny qw( capture );
-use Statocles::Command;
+use Statocles;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
 
 sub test_site {
     my ( $root, @args ) = @_;
     my $debug = grep { /^-vv$/ } @args;
     return sub {
-        my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+        my ( $out, $err, $exit ) = capture { Statocles->run( @args ) };
         is $exit, 0, 'exit code';
         ok !$err, "no errors/warnings on stderr (debug: $debug)" or diag $err;
         ok $root->child( 'index.html' )->exists, 'index file exists';
@@ -118,7 +118,7 @@ subtest 'special options' => sub {
                     '--date', '9999-12-31',
                 );
 
-                my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+                my ( $out, $err, $exit ) = capture { Statocles->run( @args ) };
                 is $exit, 0, 'exit code';
                 ok !$err, "no errors/warnings on stderr" or diag $err;
 
@@ -133,7 +133,7 @@ subtest 'special options' => sub {
                     '--date', '9999-12-31',
                 );
 
-                my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+                my ( $out, $err, $exit ) = capture { Statocles->run( @args ) };
                 is $exit, 0, 'exit code';
                 ok !$err, "no errors/warnings on stderr" or diag $err;
 
@@ -210,7 +210,7 @@ subtest 'special options' => sub {
                 'My custom commit message',
             );
 
-            my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+            my ( $out, $err, $exit ) = capture { Statocles->run( @args ) };
             is $exit, 0, 'exit code';
             #; say $out;
             ok !$err, "no errors/warnings on stderr" or diag $err;
@@ -271,7 +271,7 @@ subtest 'special options' => sub {
                 'My custom commit message',
             );
 
-            my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+            my ( $out, $err, $exit ) = capture { Statocles->run( @args ) };
             is $exit, 0, 'exit code';
             ok !$err, "no errors/warnings on stderr" or diag $err;
 

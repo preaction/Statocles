@@ -2,7 +2,7 @@
 use Test::Lib;
 use My::Test;
 use Capture::Tiny qw( capture );
-use Statocles::Command;
+use Statocles;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
 
 subtest 'get the app list' => sub {
@@ -12,7 +12,7 @@ subtest 'get the app list' => sub {
         '--config' => "$config_fn",
         'apps',
     );
-    my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+    my ( $out, $err, $exit ) = capture { eval { Statocles->run( @args ) } };
     ok !$err, 'nothing on stderr' or diag "STDERR: $err";
     is $exit, 0;
     like $out, qr{blog \(/blog -- Statocles::App::Blog\)\n},
@@ -33,7 +33,7 @@ subtest 'delegate to app command' => sub {
         '--date' => '2014-01-01',
         'New post',
     );
-    my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+    my ( $out, $err, $exit ) = capture { Statocles->run( @args ) };
     ok !$err, 'nothing on stderr' or diag "STDERR: $err";
     is $exit, 0;
     like $out, qr{\QNew post at:}, 'contains new post';
@@ -60,7 +60,7 @@ subtest 'errors' => sub {
             '--config' => "$config_fn",
             'test' => 'help',
         );
-        my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+        my ( $out, $err, $exit ) = capture { Statocles->run( @args ) };
         like $err, qr{^ERROR: Application "test" has no commands}, 'good error message'
             or diag "STDERR: $err";
         ok !$out, 'nothing on stdout' or diag "STDOUT: $out";

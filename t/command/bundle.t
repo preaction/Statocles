@@ -2,7 +2,7 @@
 use Test::Lib;
 use My::Test;
 use Capture::Tiny qw( capture );
-use Statocles::Command;
+use Statocles;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
 use constant WIN32 => $^O =~ /Win32/;
 require Win32::File if WIN32;
@@ -32,7 +32,7 @@ subtest 'theme' => sub {
     my @site_footer = qw( theme site footer.html.ep );
 
     subtest 'first time creates directories' => sub {
-        my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+        my ( $out, $err, $exit ) = capture { Statocles->run( @args ) };
         #; diag `find $tmp`;
         is $exit, 0;
         ok !$err, 'nothing on stderr' or diag "STDERR: $err";
@@ -52,7 +52,7 @@ subtest 'theme' => sub {
         make_writable($layout); # needed on Windows else rename fails
         $layout->spew( 'TEMPLATE DAMAGED' );
 
-        my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+        my ( $out, $err, $exit ) = capture { Statocles->run( @args ) };
         is $exit, 0;
         ok !$err, 'nothing on stderr' or diag "STDERR: $err";
         like $out, qr(Theme "default" written to "$theme_dir");
@@ -72,7 +72,7 @@ subtest 'theme' => sub {
             'site/sitemap.xml.ep', 'site/robots.txt.ep',
         );
 
-        my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+        my ( $out, $err, $exit ) = capture { Statocles->run( @args ) };
         #; diag `find $tmp`;
         is $exit, 0;
         ok !$err, 'nothing on stderr' or diag "STDERR: $err";
@@ -92,7 +92,7 @@ subtest 'theme' => sub {
                 '--config' => "$config_fn",
                 bundle => 'theme',
             );
-            my ( $out, $err, $exit ) = capture { Statocles::Command->main( @args ) };
+            my ( $out, $err, $exit ) = capture { Statocles->run( @args ) };
             isnt $exit, 0;
             ok !$out, 'nothing on stdout' or diag "STDOUT: $out";
             like $err, qr{ERROR: No theme name!}, 'error message';

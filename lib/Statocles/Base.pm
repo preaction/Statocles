@@ -51,6 +51,17 @@ our %IMPORT_BUNDLES = (
         @class_modules,
     ],
 
+    Command => [
+        '<Moo',
+        @class_modules,
+        'Getopt::Long' => [qw( GetOptionsFromArray )],
+        sub {
+            my ( $bundles, $args ) = @_;
+            $args->{package}->can( 'extends' )->( 'Statocles::Command' );
+            return;
+        },
+    ],
+
     Emitter => [
         'Beam::Emitter',
         'Statocles::Event',
