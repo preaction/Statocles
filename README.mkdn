@@ -4,7 +4,7 @@ Statocles - A static site generator
 
 # VERSION
 
-version 0.091
+version 0.092
 
 # STATUS
 
@@ -54,6 +54,25 @@ language](https://metacpan.org/pod/Mojo::Template#SYNTAX).
 - [Syntax highlighting](https://metacpan.org/pod/Statocles::Plugin::Highlight) for code and configuration blocks.
 - Hooks to add [your own plugins](https://metacpan.org/pod/Statocles::Plugin) and [your own custom
 applications](https://metacpan.org/pod/Statocles::App).
+
+# ATTRIBUTES
+
+## site
+
+The [site](https://metacpan.org/pod/Statocles::Site) we're working with.
+
+## log
+
+A [Mojo::Log](https://metacpan.org/pod/Mojo::Log) object for logging. Defaults to the current site's `log` attribute.
+
+# METHODS
+
+## run
+
+    my $exitval = $cmd->run( @argv );
+
+Run the command given in @argv. See [statocles](https://metacpan.org/pod/statocles) for a list of commands and
+options.
 
 # GETTING STARTED
 
