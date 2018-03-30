@@ -3,6 +3,14 @@ our $VERSION = '0.093';
 # ABSTRACT: Deploy the site
 
 use Statocles::Base 'Command';
+use Statocles::Command::build;
+
+has build_dir => (
+    is => 'ro',
+    isa => Path,
+    coerce => Path->coercion,
+    default => sub { Path->coercion->( '.statocles/build' ) },
+);
 
 sub run {
     my ( $self, @argv ) = @_;
@@ -15,11 +23,18 @@ sub run {
 
     my $deploy = $self->site->deploy;
     $deploy->site( $self->site );
-    my @pages = $self->site->pages( %deploy_opt, base_url => $deploy->base_url );
 
-    #; say "Deploying pages: " . join "\n", map { $_->path } @pages;
-    $_->render for @pages;
-    $deploy->deploy( \@pages, %deploy_opt );
+    my $build_cmd = Statocles::Command::build->new( site => $self->site );
+    my %build_opt;
+    if ( $deploy_opt{date} ) {
+        $build_opt{ '--date' } = $deploy_opt{ date };
+    }
+    if ( $deploy->base_url ) {
+        $build_opt{ '--base_url' } = $deploy->base_url;
+    }
+    $build_cmd->run( $self->build_dir, %build_opt );
+
+    $deploy->deploy( $self->build_dir, %deploy_opt );
 
     $self->_write_status( {
         last_deploy_date => time(),

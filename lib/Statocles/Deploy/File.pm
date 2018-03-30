@@ -4,7 +4,7 @@ our $VERSION = '0.093';
 
 use Statocles::Base 'Class';
 with 'Statocles::Deploy';
-use Statocles::Store;
+use Statocles::Util qw( dircopy );
 
 =attr path
 
@@ -21,9 +21,9 @@ has path => (
 
 =method deploy
 
-    my @paths = $deploy->deploy( $pages, %options );
+    my @paths = $deploy->deploy( $source_path, %options );
 
-Deploy the site, rendering the given pages.
+Deploy the site, copying from the given source path.
 
 Possible options are:
 
@@ -39,7 +39,7 @@ new content.
 =cut
 
 sub deploy {
-    my ( $self, $pages, %options ) = @_;
+    my ( $self, $source_path, %options ) = @_;
 
     die sprintf 'Deploy directory "%s" does not exist (did you forget to make it?)',
         $self->path
@@ -49,14 +49,8 @@ sub deploy {
         $_->remove_tree for $self->path->children;
     }
 
-    my $store = Statocles::Store->new( path => $self->path );
-    $self->site->log->info( "Writing pages to deploy dir" );
-    for my $page ( @$pages ) {
-        my $path = $page->path;
-        #; say "Path: " . $path;
-        #; say "To: " . $self->path->child( $path );
-        $store->write_file( $page->path, $page->has_dom ? $page->dom : $page->render );
-    }
+    my $src = Path->coercion->( $source_path );
+    dircopy $src, $self->path;
 }
 
 1;

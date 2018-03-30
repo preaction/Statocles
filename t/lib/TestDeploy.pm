@@ -6,8 +6,8 @@ with 'Statocles::Deploy';
 has last_deploy_args => ( is => 'rw' );
 
 sub deploy {
-    my ( $self, $pages, %options ) = @_;
-    $self->last_deploy_args( [ $pages, \%options ] );
+    my ( $self, $source_path, %options ) = @_;
+    $self->last_deploy_args( [ $source_path, \%options ] );
 }
 
 1;

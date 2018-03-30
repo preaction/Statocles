@@ -25,19 +25,6 @@ my $site = Statocles::Site->new(
     deploy => TestDeploy->new,
 );
 
-my @pages = (
-    Statocles::Page::Plain->new(
-        site => $site,
-        path => '/index.html',
-        content => 'Index',
-    ),
-    Statocles::Page::File->new(
-        site => $site,
-        path => '/static.txt',
-        file_path => $SHARE_DIR->child( qw( app basic static.txt ) ),
-    ),
-);
-
 subtest 'constructor' => sub {
     test_constructor(
         'Statocles::Deploy::Git',
@@ -46,6 +33,8 @@ subtest 'constructor' => sub {
         },
     );
 };
+
+my @pages = qw( index.html doc.markdown foo/index.html );
 
 subtest 'deploy' => sub {
     my $tmpdir = tempdir( @temp_args );
@@ -58,12 +47,12 @@ subtest 'deploy' => sub {
     # Changed/added files not in the build directory do not get added
     $workdir->child( 'NEWFILE' )->spew( 'test' );
 
-    $deploy->deploy( \@pages );
+    $deploy->deploy( $SHARE_DIR->child( 'deploy' ) );
 
     is current_branch( $git ), 'master', 'deploy leaves us on the branch we came from';
 
     for my $page ( @pages ) {
-        ok !$workdir->child( $page->path )->exists, $page->path . ' is not in master branch';
+        ok !$workdir->child( $page )->exists, $page . ' is not in master branch';
     }
 
     my $master_commit_id = $git->run( 'rev-parse' => 'HEAD' );
@@ -80,8 +69,8 @@ subtest 'deploy' => sub {
 
     subtest 'files are correct' => sub {
         for my $page ( @pages ) {
-            ok $workdir->child( $page->path )->exists,
-                'page ' . $page->path . ' is in deploy branch';
+            ok $workdir->child( $page )->exists,
+                'page ' . $page . ' is in deploy branch';
         }
     };
 
@@ -90,14 +79,14 @@ subtest 'deploy' => sub {
     subtest 'deploy performs git push' => sub {
         _git_run( $remotegit, checkout => 'gh-pages' );
         for my $page ( @pages ) {
-            ok $remotedir->child( $page->path )->exists, $page->path . ' deployed';
+            ok $remotedir->child( $page )->exists, $page . ' deployed';
         }
         ok !$remotedir->child( 'README' )->exists, 'gh-pages branch is orphan and clean';
         _git_run( $remotegit, checkout => 'master' );
     };
 
     subtest 'nothing to deploy bails out without commit' => sub {
-        $deploy->deploy( \@pages );
+        $deploy->deploy( $SHARE_DIR->child( 'deploy' ) );
         is current_branch( $git ), 'master', 'deploy leaves us on the branch we came from';
         _git_run( $git, checkout => $deploy->branch );
         my $log = $git->run( log => -u => -n => 1 );
@@ -116,7 +105,7 @@ subtest 'deploy' => sub {
         my ( $commit_id ) = $log =~ /commit (\S+)/;
 
         _git_run( $git, checkout => 'master' );
-        $deploy->deploy( \@pages );
+        $deploy->deploy( $SHARE_DIR->child( 'deploy' ) );
         is current_branch( $git ), 'master', 'deploy leaves us on the branch we came from';
         _git_run( $git, checkout => $deploy->branch );
         $log = $git->run( log => -u => -n => 1 );
@@ -146,13 +135,13 @@ subtest 'deploy to specific remote' => sub {
     my $git = Git::Repository->new( work_tree => "$workdir" );
     my $remotegit = Git::Repository->new( git_dir => "$remotedir", work_tree => "$remotework" );
 
-    $deploy->deploy( \@pages );
+    $deploy->deploy( $SHARE_DIR->child( 'deploy' ) );
 
     my $master_commit_id = $git->run( 'rev-parse' => 'HEAD' );
 
     _git_run( $remotegit, checkout => '-f', 'master' );
     for my $page ( @pages ) {
-        ok $remotework->child( $page->path )->exists, $page->path . ' deployed';
+        ok $remotework->child( $page )->exists, $page . ' deployed';
     }
 };
 
@@ -192,26 +181,17 @@ subtest 'deploy with submodules and ignored files' => sub {
 
     # Add the same files to the build store, so that when they're deployed,
     # they would cause an error if added to the repository
+    my $build_dir = $tmpdir->child( 'build' );
+    $build_dir->mkpath;
+    dircopy( $SHARE_DIR->child( qw( deploy ) ), $build_dir );
+    $build_dir->child( 'test.swp' )->spew( 'ERROR!' );
+    $build_dir->child( '.DS_Store' )->spew( 'ERROR!' );
+    $build_dir->child( 'submodule' => 'README' )->touchpath->spew( 'ERROR!' );
     my @build_pages = (
-        @pages,
-        Statocles::Page::Plain->new(
-            site => $site,
-            path => '/test.swp',
-            content => 'ERROR!',
-        ),
-        Statocles::Page::Plain->new(
-            site => $site,
-            path => '/.DS_Store',
-            content => 'ERROR!',
-        ),
-        Statocles::Page::Plain->new(
-            site => $site,
-            path => '/submodule/path.html',
-            content => 'ERROR!',
-        ),
+        @pages, 'test.swp', '.DS_Store', 'submodule/path.html',
     );
 
-    lives_ok { $deploy->deploy( \@build_pages ) } 'deploy succeeds';
+    lives_ok { $deploy->deploy( $build_dir ) } 'deploy succeeds';
 
     my $master_commit_id = $git->run( 'rev-parse' => 'HEAD' );
 
@@ -220,16 +200,16 @@ subtest 'deploy with submodules and ignored files' => sub {
     my $remotegit = Git::Repository->new( git_dir => "$remotedir", work_tree => "$remotework" );
 
     _git_run( $remotegit, checkout => '-f' );
-    for my $page ( @pages ) {
+    for my $page ( @build_pages ) {
         # Ignored files do not get deployed
-        if ( $page->path eq '.DS_Store' || $page->path eq 'test.swp' ) {
-            ok !$remotework->child( $page->path )->exists, $page->path . ' not deployed';
+        if ( $page eq '.DS_Store' || $page eq 'test.swp' ) {
+            ok !$remotework->child( $page )->exists, $page . ' not deployed';
         }
-        elsif ( $page->path =~ m{^submodule} ) {
-            ok !$remotework->child( $page->path )->exists, $page->path . ' not deployed';
+        elsif ( $page =~ m{^submodule} ) {
+            ok !$remotework->child( $page )->exists, $page . ' not deployed';
         }
         else {
-            ok $remotework->child( $page->path )->exists, $page->path . ' deployed';
+            ok $remotework->child( $page )->exists, $page . ' deployed';
         }
     }
 };
@@ -254,14 +234,14 @@ subtest 'deploy to subdirectory in git repo' => sub {
     my $git = Git::Repository->new( work_tree => "$workdir" );
     my $remotegit = Git::Repository->new( git_dir => "$remotedir", work_tree => "$remotework" );
 
-    $deploy->deploy( \@pages );
+    $deploy->deploy( $SHARE_DIR->child( 'deploy' ) );
 
     my $master_commit_id = $git->run( 'rev-parse' => 'HEAD' );
 
     _git_run( $remotegit, checkout => '-f', 'master' );
     for my $page ( @pages ) {
-        ok $remotework->child( 'subdir' )->child( $page->path )->exists,
-            'subdir ' . $page->path . ' deployed';
+        ok $remotework->child( 'subdir' )->child( $page )->exists,
+            'subdir ' . $page . ' deployed';
     }
 
 };
@@ -287,7 +267,7 @@ subtest '--clean' => sub {
     _git_run( $workgit, checkout => 'master' );
 
     subtest 'deploy without clean does not remove files' => sub {
-        $deploy->deploy( \@pages );
+        $deploy->deploy( $SHARE_DIR->child( 'deploy' ) );
         _git_run( $workgit, checkout => 'gh-pages' );
         ok $workdir->child( 'needs-cleaning.txt' )->is_file, 'default deploy did not remove file';
         _git_run( $workgit, checkout => 'master' );
@@ -296,7 +276,7 @@ subtest '--clean' => sub {
     };
 
     subtest 'deploy with clean removes files first' => sub {
-        $deploy->deploy( \@pages, clean => 1 );
+        $deploy->deploy( $SHARE_DIR->child( 'deploy' ), clean => 1 );
         _git_run( $workgit, checkout => 'gh-pages' );
         ok !$workdir->child( 'needs-cleaning.txt' )->is_file, 'default deploy remove files';
         _git_run( $workgit, checkout => 'master' );
@@ -310,7 +290,7 @@ subtest '--clean' => sub {
             = make_deploy( $tmpdir, branch => 'master' );
         $workdir->child( qw( static.txt ) )->spew_utf8( 'Foo' );
         throws_ok {
-            $deploy->deploy( \@pages, clean => 1 );
+            $deploy->deploy( $SHARE_DIR->child( 'deploy' ), clean => 1 );
         } qr{\Q--clean on the same branch as deploy will destroy all content. Stopping.};
         ok $workdir->child( qw( static.txt ) )->is_file,
             'content file /static.txt is not destroyed';
@@ -328,7 +308,7 @@ subtest 'deploy configured with missing remote' => sub {
         my $workgit = Git::Repository->new( work_tree => "$workdir" );
         $workgit->run( qw( remote rm origin ) );
 
-        $deploy->deploy( \@pages );
+        $deploy->deploy( $SHARE_DIR->child( 'deploy' ) );
         my $log = $deploy->site->log->history;
         ok scalar( grep { $_->[2] =~ qr{\QGit remote "origin" does not exist. Not pushing.} } @$log ),
             'warn user that we did not push'
@@ -344,7 +324,7 @@ subtest 'deploy configured with missing remote' => sub {
         my $workgit = Git::Repository->new( work_tree => "$workdir" );
         $workgit->run( qw( remote rm nondefault ) );
 
-        $deploy->deploy( \@pages );
+        $deploy->deploy( $SHARE_DIR->child( 'deploy' ) );
         my $log = $deploy->site->log->history;
         ok scalar( grep { $_->[2] =~ qr{\QGit remote "nondefault" does not exist. Not pushing.} } @$log ),
             'warn user that we did not push'
@@ -361,7 +341,7 @@ subtest '--message' => sub {
     my $remotegit = Git::Repository->new( git_dir => "$remotedir" );
     my $workgit = Git::Repository->new( work_tree => "$workdir" );
 
-    $deploy->deploy( \@pages, message => 'My commit message' );
+    $deploy->deploy( $SHARE_DIR->child( 'deploy' ), message => 'My commit message' );
 
     my $worklog = $workgit->run( log => 'gh-pages' );
     like $worklog, qr{My commit message}, 'commit message committed';
@@ -383,7 +363,7 @@ subtest 'errors' => sub {
             path => $not_git_path,
         );
 
-        throws_ok { $deploy->deploy( \@pages ) }
+        throws_ok { $deploy->deploy( $SHARE_DIR->child( 'deploy' ) ) }
             qr{Deploy path "$not_git_path" is not in a git repository\n};
 
     };
@@ -399,7 +379,7 @@ subtest 'errors' => sub {
             branch => 'gh-pages',
         );
 
-        throws_ok { $deploy->deploy( \@pages ) }
+        throws_ok { $deploy->deploy( $SHARE_DIR->child( 'deploy' ) ) }
             qr{Repository has no branches\. Please create a commit before deploying\n};
     };
 

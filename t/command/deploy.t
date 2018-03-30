@@ -31,18 +31,14 @@ subtest 'deploy site' => sub {
         deploy => TestDeploy->new,
     );
 
-    my $cmd = Statocles::Command::deploy->new( site => $site );
+    my $cmd = Statocles::Command::deploy->new( build_dir => tempdir(), site => $site );
     $cmd->run( '--date', '2018-01-01', '--message', 'New site', '--clean' );
 
     is_deeply { @{ $site->app( 'base' )->last_pages_args } },
-        { date => '2018-01-01', message => 'New site', clean => 1, base_url => undef },
+        { date => '2018-01-01' },
         'app pages() method options correct';
-    my ( $pages, $options ) = @{ $site->deploy->last_deploy_args };
-    is_deeply [ sort grep { !m{^/theme/} } map { $_->path } @$pages ],
-        [qw(
-            /index.html /robots.txt /sitemap.xml /static.txt
-        )],
-        'deploy deploy() method page paths correct';
+    my ( $path, $options ) = @{ $site->deploy->last_deploy_args };
+    is $path."", $cmd->build_dir, 'deploy deploy() method path is correct';
     is_deeply $options,
         { date => '2018-01-01', message => 'New site', clean => 1 },
         'deploy deploy() method options correct';
@@ -57,23 +53,19 @@ subtest 'deploy site with deploy base_url' => sub {
         deploy => TestDeploy->new( base_url => '/deploy_base' ),
     );
 
-    my $cmd = Statocles::Command::deploy->new( site => $site );
+    my $cmd = Statocles::Command::deploy->new( build_dir => tempdir(), site => $site );
     $cmd->run;
 
     is_deeply { @{ $site->app( 'base' )->last_pages_args } },
         { base_url => '/deploy_base' },
         'app pages() method options correct';
-    my ( $pages, $options ) = @{ $site->deploy->last_deploy_args };
-    is_deeply [ sort grep { !m{^/theme/} } map { $_->path } @$pages ],
-        [qw(
-            /index.html /robots.txt /sitemap.xml /static.txt
-        )],
-        'deploy deploy() method page paths correct';
+    my ( $path, $options ) = @{ $site->deploy->last_deploy_args };
+    is $path."", $cmd->build_dir, 'deploy deploy() method path is correct';
     is_deeply $options, { },
         'deploy deploy() method options correct';
 
-    my ( $base_page ) = grep { $_->path eq '/index.html' } @$pages;
-    is $base_page->dom, qq{<a href="/deploy_base/static.txt">Foo</a>\n\n}, 'HTML link is rewritten';
+    my $page_content = $cmd->build_dir->child( 'index.html' )->slurp_utf8;
+    is $page_content, qq{<a href="/deploy_base/static.txt">Foo</a>\n\n}, 'HTML link is rewritten';
 };
 
 done_testing;

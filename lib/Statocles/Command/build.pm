@@ -9,6 +9,7 @@ sub run {
     my %build_opt;
     GetOptionsFromArray( \@argv, \%build_opt,
         'date|d=s',
+        'base_url|base=s',
     );
 
     my $path = Path::Tiny->new( $argv[0] // '.statocles/build' );
