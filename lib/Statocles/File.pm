@@ -1,5 +1,5 @@
 package Statocles::File;
-our $VERSION = '0.093';
+our $VERSION = '0.094';
 # ABSTRACT: A wrapper for a file on the filesystem
 
 =head1 SYNOPSIS

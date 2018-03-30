@@ -1,5 +1,5 @@
 package Statocles::Command::bundle;
-our $VERSION = '0.093';
+our $VERSION = '0.094';
 # ABSTRACT: Copy a default theme to this site to make changes
 
 use Statocles::Base 'Command';
