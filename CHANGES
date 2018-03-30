@@ -2,7 +2,21 @@ Changelog for Statocles
 
 {{ $NEXT }}
 
+    [BREAKING CHANGES]
+
+    - Fixed deploy objects failing to find necessary content during
+      deploy. When deploying a site, we need to copy the entire site to
+      a temporary directory first, because the deploy might lose access
+      to the templates and other source files (if, for example, the site
+      is deployed to a different git branch).
+
+      This means the deploy API has changed again to take a path, not
+      a list of pages. The deploy copies all the files from the path and
+      then does what it needs.
+
 0.092     2018-03-29 22:51:16-05:00 America/Chicago
+
+    *** This version is broken, do not use ***
 
     [BREAKING CHANGES]
 
