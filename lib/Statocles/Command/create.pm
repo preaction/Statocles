@@ -1,5 +1,5 @@
 package Statocles::Command::create;
-our $VERSION = '0.092';
+our $VERSION = '0.093';
 # ABSTRACT: The command to create new Statocles site
 
 use Statocles::Base 'Command';

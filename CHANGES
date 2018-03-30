@@ -2,6 +2,8 @@ Changelog for Statocles
 
 {{ $NEXT }}
 
+0.092     2018-03-29 22:51:16-05:00 America/Chicago
+
     [BREAKING CHANGES]
 
     - The API for deploy objects has changed. They now accept an

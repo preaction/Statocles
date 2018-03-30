@@ -1,5 +1,5 @@
 package Statocles::Page::List;
-our $VERSION = '0.092';
+our $VERSION = '0.093';
 # ABSTRACT: A page presenting a list of other pages
 
 use Statocles::Base 'Class';
