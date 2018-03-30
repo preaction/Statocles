@@ -55,7 +55,7 @@ sub deploy {
         my $path = $page->path;
         #; say "Path: " . $path;
         #; say "To: " . $self->path->child( $path );
-        $store->write_file( $page->path, $page->render );
+        $store->write_file( $page->path, $page->has_dom ? $page->dom : $page->render );
     }
 }
 

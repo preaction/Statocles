@@ -93,6 +93,7 @@ around 'deploy' => sub {
         $self->_run( $git, 'rm', '-r', '-f', '.' );
     }
     else {
+        ; say "Switching branches to " . $self->branch;
         $self->_run( $git, checkout => $self->branch );
     }
 

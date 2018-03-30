@@ -22,7 +22,7 @@ sub run {
 
     my @pages = $self->site->pages( %build_opt );
     for my $page ( @pages ) {
-        $store->write_file( $page->path, $page->render );
+        $store->write_file( $page->path, $page->has_dom ? $page->dom : $page->render );
     }
 
     return 0;

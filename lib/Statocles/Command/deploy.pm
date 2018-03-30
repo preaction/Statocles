@@ -18,6 +18,7 @@ sub run {
     my @pages = $self->site->pages( %deploy_opt, base_url => $deploy->base_url );
 
     #; say "Deploying pages: " . join "\n", map { $_->path } @pages;
+    $_->render for @pages;
     $deploy->deploy( \@pages, %deploy_opt );
 
     $self->_write_status( {
