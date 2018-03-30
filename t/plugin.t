@@ -1,6 +1,9 @@
 
 use Test::Lib;
 use My::Test;
+use Statocles::Site;
+use TestDeploy;
+use TestApp;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
 
 {
@@ -25,14 +28,25 @@ my $SHARE_DIR = path( __DIR__, '..', 'share' );
     }
 }
 
-my $site;
-
-subtest 'register plugin' => sub {
-    $site = build_test_site( plugins => {
+my $site = Statocles::Site->new(
+    deploy => TestDeploy->new,
+    apps => {
+        basic => TestApp->new(
+            url_root => '/',
+            pages => [
+                {
+                    path => '/index.html',
+                    content => 'Index',
+                },
+            ],
+        ),
+    },
+    plugins => {
         foo => My::Plugin->new,
-    } );
-    ok $site->plugins->{ foo }->_register_called, 'plugin register method was called';
-};
+    },
+);
+
+ok $site->plugins->{ foo }->_register_called, 'plugin register method was called';
 
 subtest 'call helper' => sub {
     subtest 'no args' => sub {
