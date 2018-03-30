@@ -9,48 +9,24 @@ my $SHARE_DIR = path( __DIR__, '..', 'share' );
 sub test_site {
     my ( $site, $build_dir, $deploy_dir ) = @_;
 
-    subtest 'build' => sub {
-        $site->build;
+    my @pages = $site->pages;
 
-        ok $build_dir->child( 'index.html' )->exists,
-            'site index renames app page';
-        ok !$deploy_dir->child( 'index.html' )->exists, 'not deployed yet';
-        ok !$build_dir->child( 'blog', 'index.html' )->exists,
-            'site index renames app page';
+    my ( $index_page ) = grep { $_->path eq '/index.html' } @pages;
+    ok $index_page, 'site index renames app page';
+    ok !scalar( grep { $_->path eq '/blog/index.html' } @pages ),
+        'site index renames app page';
 
-        subtest 'links on index page are correct' => sub {
-            my $dom = Mojo::DOM->new( $build_dir->child( '/index.html' )->slurp_utf8 );
-            ok $dom->at( '[href=/blog/2014/06/02/more_tags/docs.html]' ), 'relative link is fixed'
-                or diag explain [ $dom->find( '[href]' )->map( attr => 'href' )->each ];
-        };
-
-        subtest 'links to index page are correct' => sub {
-            my $dom = Mojo::DOM->new( $build_dir->child( '/blog/page/2/index.html' )->slurp_utf8 );
-            ok !$dom->at( '[href=/blog]' ), 'no link to /blog';
-            ok !$dom->at( '[href=/blog/index.html]' ), 'no link to /blog/index.html';
-        };
-
+    subtest 'links on index page are correct' => sub {
+        my $dom = $index_page->dom;
+        ok $dom->at( '[href=/blog/2014/06/02/more_tags/docs.html]' ), 'relative link is fixed'
+            or diag explain [ $dom->find( '[href]' )->map( attr => 'href' )->each ];
     };
 
-    subtest 'deploy' => sub {
-        $site->deploy;
-        ok $deploy_dir->child( 'index.html' )->exists,
-            'site index renames app page';
-        ok !$deploy_dir->child( 'blog', 'index.html' )->exists,
-            'site index renames app page';
-
-        subtest 'links on index page are correct' => sub {
-            my $dom = Mojo::DOM->new( $build_dir->child( '/index.html' )->slurp_utf8 );
-            ok $dom->at( '[href=/blog/2014/06/02/more_tags/docs.html]' ), 'relative link is fixed'
-                or diag explain [ $dom->find( '[href]' )->map( attr => 'href' )->each ];
-        };
-
-        subtest 'inner pages link to site index' => sub {
-            my $dom = Mojo::DOM->new( $deploy_dir->child( '/blog/page/2/index.html' )->slurp_utf8 );
-            ok !$dom->at( '[href=/blog]' ), 'no link to /blog';
-            ok !$dom->at( '[href=/blog/index.html]' ), 'no link to /blog/index.html';
-        };
-
+    subtest 'links to index page are correct' => sub {
+        my ( $nonindex_page ) = grep { $_->path eq '/blog/page/2/index.html' } @pages;
+        my $dom = $nonindex_page->dom;
+        ok !$dom->at( '[href=/blog]' ), 'no link to /blog';
+        ok !$dom->at( '[href=/blog/index.html]' ), 'no link to /blog/index.html';
     };
 }
 
@@ -91,15 +67,15 @@ subtest 'index links in basic app' => sub {
         },
     );
 
-    $site->build;
+    my @pages = $site->pages;
 
-    ok $build_dir->child( 'index.html' )->exists,
-        'site index renames app page';
-    ok !$build_dir->child( 'page', 'foo', 'other.html' )->exists,
+    my ( $index_page ) = grep { $_->path eq '/index.html' } @pages;
+    ok $index_page, 'site index renames app page';
+    ok !scalar( grep { $_->path eq '/page/foo/other.html' } @pages ),
         'site index renames app page';
 
     subtest 'links on index page are correct' => sub {
-        my $dom = Mojo::DOM->new( $build_dir->child( '/index.html' )->slurp_utf8 );
+        my $dom = $index_page->dom;
         ok $dom->at( '[href=/mysite/page/foo/index.html]' ), 'relative link is fixed'
             or diag explain [ $dom->find( '[href]' )->map( attr => 'href' )->each ];
         ok $dom->at( '[href=http://google.com]' ), 'full url is not touched'
@@ -109,7 +85,8 @@ subtest 'index links in basic app' => sub {
     };
 
     subtest 'links to index page are correct' => sub {
-        my $dom = Mojo::DOM->new( $build_dir->child( '/page/foo/index.html' )->slurp_utf8 );
+        my ( $nonindex_page ) = grep { $_->path eq '/page/foo/index.html' } @pages;
+        my $dom = $nonindex_page->dom;
         ok !$dom->at( '[href=/mysite/page/foo/other.html]' ), 'no link to /page/foo/other.html';
         my $link = $dom->find( 'a[href]' )->grep( text => 'Foo Other' )->first;
         is $link->attr( 'href' ), '/mysite/', 'link to index';
@@ -130,15 +107,15 @@ subtest 'allow document path in index' => sub {
         },
     );
 
-    $site->build;
+    my @pages = $site->pages;
 
-    ok $build_dir->child( 'index.html' )->exists,
-        'site index renames app page';
-    ok !$build_dir->child( 'page', 'foo', 'other.html' )->exists,
+    my ( $index_page ) = grep { $_->path eq '/index.html' } @pages;
+    ok $index_page, 'site index renames app page';
+    ok !scalar( grep { $_->path eq '/page/foo/other.html' } @pages ),
         'site index renames app page';
 
     subtest 'content on index is correct' => sub {
-        my $dom = Mojo::DOM->new( $build_dir->child( '/index.html' )->slurp_utf8 );
+        my $dom = $index_page->dom;
         is $dom->at( 'h1' )->text, 'Foo Other', 'index content is from correct page';
     };
 };
@@ -152,7 +129,7 @@ subtest 'error messages' => sub {
                 build_store => tempdir,
                 deploy => tempdir,
                 index => '/DOES_NOT_EXIST',
-            )->build;
+            )->pages;
         } qr{\QERROR: Index path "/DOES_NOT_EXIST" does not exist. Do you need to create "/DOES_NOT_EXIST/index.markdown"?},
         'error message is correct';
     };
@@ -164,7 +141,7 @@ subtest 'error messages' => sub {
                 build_store => tempdir,
                 deploy => tempdir,
                 index => '/DOES_NOT_EXIST.html',
-            )->build;
+            )->pages;
         } qr{\QERROR: Index path "/DOES_NOT_EXIST.html" does not exist. Do you need to create "/DOES_NOT_EXIST.markdown"?},
         'error message is correct';
     };

@@ -3,6 +3,7 @@ our $VERSION = '0.092';
 # ABSTRACT: Run a daemon to navigate the site
 
 use Statocles::Base 'Command';
+use Statocles::Store;
 
 sub run {
     my ( $self, @argv ) = @_;
@@ -71,7 +72,10 @@ sub run {
         $self->log( $self->site->log );
 
         # First build the site
-        $self->site->build( %{ $self->options } );
+        my $path = Path::Tiny->new( '.statocles/build' );
+        $path->mkpath;
+        my $store = Statocles::Store->new( path => $path );
+        $store->write_file( $_->path, $_->render ) for $self->site->pages( %{ $self->options } );
 
         my $base;
         if ( $self->site->base_url ) {
@@ -86,7 +90,7 @@ sub run {
 
         # Add the build dir to the list of static paths for mojolicious to
         # search
-        unshift @{ $self->static->paths }, $self->site->build_store->path;
+        unshift @{ $self->static->paths }, $store->path;
 
         # Watch for filesystem events and rebuild the site Right now this only
         # works on OSX. We should spin this off into Mojo::IOLoop::FSEvents and
@@ -115,7 +119,7 @@ sub run {
 
             require Mojo::IOLoop::Stream;
             my $ioloop = Mojo::IOLoop->singleton;
-            my $build_dir = $self->site->build_store->path->realpath;
+            my $build_dir = $store->path->realpath;
 
             weaken $self;
 
@@ -150,7 +154,8 @@ sub run {
                     }
 
                     if ( $rebuild ) {
-                        $self->site->build( %{ $self->options } );
+                        $self->site->clear_pages;
+                        $store->write_file( $_->path, $_->render ) for $self->site->pages( %{ $self->options } );
                     }
                 } );
                 $ioloop->reactor->watch( $handle, 1, 0 );
@@ -175,7 +180,7 @@ sub run {
                     $path = Mojo::Path->new( $c->stash->{path} . "/index.html" );
                     $asset = $c->app->static->file( $path );
                 }
-                elsif ( $c->app->site->build_store->path->child( $path )->is_dir ) {
+                elsif ( $store->path->child( $path )->is_dir ) {
                     return $c->redirect_to( "/$path/" );
                 }
             }

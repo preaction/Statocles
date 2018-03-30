@@ -4,9 +4,32 @@ use My::Test;
 use Capture::Tiny qw( capture );
 use Mojo::IOLoop;
 use Statocles;
+use TestApp;
+use TestDeploy;
+use Statocles::Site;
+use Statocles::Command::daemon;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
 
-my ( $tmp, $config_fn, $config ) = build_temp_site( $SHARE_DIR );
+my $site = Statocles::Site->new(
+    apps => {
+        base => TestApp->new(
+            url_root => '/',
+            pages => [
+                {
+                    class => 'Statocles::Page::Plain',
+                    path => '/index.html',
+                    content => 'Index',
+                },
+                {
+                    class => 'Statocles::Page::File',
+                    path => '/static.txt',
+                    file_path => $SHARE_DIR->child( qw( app basic static.txt ) ),
+                },
+            ],
+        ),
+    },
+    deploy => TestDeploy->new,
+);
 
 subtest 'listen on a random port' => sub {
     # We need to stop the daemon after it starts
@@ -24,23 +47,14 @@ subtest 'listen on a random port' => sub {
     local $ENV{MOJO_LISTEN} = 'http://127.0.0.1';
     local $ENV{MOJO_LOG_LEVEL} = 'info'; # But sometimes this isn't set?
 
-    my @args = (
-        '--config' => "$config_fn",
-        'daemon',
-        '-v', # watch lines are now behind -v
-    );
-
-    my ( $out, $err, $exit ) = capture { Statocles->run( @args ) };
+    my $cwd = cwd;
+    my $tmp = tempdir;
+    chdir $tmp;
+    my $cmd = Statocles::Command::daemon->new( site => $site );
+    my ( $out, $err, $exit ) = capture { $cmd->run };
+    chdir $cwd;
     undef $timeout;
-
-    my $store_path = $app->site->app( 'blog' )->store->path;
-    my $theme_path = $app->site->theme->store->path;
-
-    if ( eval { require Mac::FSEvents; 1; } ) {
-        like $out, qr{Watching for changes in '$store_path'}, 'watch is reported';
-        like $out, qr{Watching for changes in '$theme_path'}, 'watch is reported';
-    }
-    ok !$err, 'nothing on stderr' or diag "STDERR: $err";
+    $site->clear_pages;
 
     is $exit, 0;
     like $out, qr{\QListening on http://127.0.0.1:$port\E\n},
@@ -48,41 +62,7 @@ subtest 'listen on a random port' => sub {
 
     isa_ok $app, 'Statocles::Command::daemon::_MOJOAPP';
 
-    ok $tmp->child( 'build_site', 'index.html' )->exists, 'site was built';
-    ok !$tmp->child( 'deploy_site', 'index.html' )->exists, 'site was not deployed';
-
-    subtest 'do not watch the built-in themes' => sub {
-        if ( eval { require Mac::FSEvents; 1; } ) {
-
-            my ( $port, $app );
-            my $timeout = Mojo::IOLoop->singleton->timer( 0, sub {
-                my $daemon = $Statocles::Command::daemon::daemon;
-                my $id = $daemon->acceptors->[0];
-                $port = $daemon->ioloop->acceptor( $id )->handle->sockport;
-                $app = $daemon->app;
-                $daemon->stop;
-                Mojo::IOLoop->stop;
-            } );
-
-            my @args = (
-                '--config' => "$config_fn",
-                '--site' => 'site_foo',
-                'daemon',
-                '-v',
-            );
-
-            my ( $out, $err, $exit ) = capture { Statocles->run( @args ) };
-            undef $timeout;
-
-            my $store_path = $app->site->app( 'blog' )->store->path;
-            my $theme_path = $app->site->theme->store->path;
-            like $out, qr{Watching for changes in '$store_path'}, 'watch is reported';
-            unlike $out, qr{Watching for changes in '$theme_path'}, 'watch is not reported';
-        }
-        else {
-            pass "No test - Mac::FSEvents not installed";
-        }
-    };
+    ok $tmp->child( '.statocles', 'build', 'index.html' )->exists, 'site was built';
 };
 
 subtest 'listen on a specific port' => sub {
@@ -100,17 +80,20 @@ subtest 'listen on a specific port' => sub {
     local $ENV{MOJO_LOG_LEVEL} = 'info'; # But sometimes this isn't set?
 
     my @args = (
-        '--config' => "$config_fn",
-        'daemon',
         '-p', 12126,
         '-v', # watch lines are now behind -v
     );
 
-    my ( $out, $err, $exit ) = capture { Statocles->run( @args ) };
+    my $cwd = cwd;
+    my $tmp = tempdir;
+    chdir $tmp;
+    my $cmd = Statocles::Command::daemon->new( site => $site );
+    my ( $out, $err, $exit ) = capture { $cmd->run( @args ) };
+    chdir $cwd;
     undef $timeout;
+    $site->clear_pages;
 
     is $port, 12126, 'correct port';
-    ok !$err, 'nothing on stderr' or diag "STDERR: $err";
 
     is $exit, 0;
     like $out, qr{\QListening on http://0.0.0.0:$port\E\n},
@@ -118,8 +101,6 @@ subtest 'listen on a specific port' => sub {
 };
 
 subtest '--date' => sub {
-    my ( $tmp, $config_fn, $config ) = build_temp_site( $SHARE_DIR );
-
     # We need to stop the daemon after it starts
     my $timeout = Mojo::IOLoop->timer( 0, sub {
         my $daemon = $Statocles::Command::daemon::daemon;
@@ -131,20 +112,21 @@ subtest '--date' => sub {
     local $ENV{MOJO_LISTEN} = 'http://127.0.0.1';
 
     my @args = (
-        '--config' => "$config_fn",
-        'daemon',
         '--date', '9999-12-31',
     );
 
-    my ( $out, $err, $exit ) = capture { Statocles->run( @args ) };
+    my $cwd = cwd;
+    my $tmp = tempdir;
+    chdir $tmp;
+    my $cmd = Statocles::Command::daemon->new( site => $site );
+    my ( $out, $err, $exit ) = capture { $cmd->run( @args ) };
+    chdir $cwd;
     undef $timeout;
+    $site->clear_pages;
 
-    ok !$err, 'nothing on stderr' or diag "STDERR: $err";
-    is $exit, 0;
-
-    my $post = $tmp->child( 'build_site', 'blog', '9999', '12', '31', 'forever-is-a-long-time', 'index.html' );
-    ok $post->exists, 'future post was built';
-    ok !$tmp->child( 'deploy_site', 'index.html' )->exists, 'site was not deployed';
+    is_deeply { @{ $site->app( 'base' )->last_pages_args } },
+        { date => '9999-12-31' },
+        'app pages() method args is correct';
 };
 
 done_testing;

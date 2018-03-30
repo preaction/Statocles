@@ -27,6 +27,8 @@ The documentation for the command-line application.
 =cut
 
 use Statocles::Base 'Class';
+use YAML;
+use Path::Tiny;
 
 =attr site
 
@@ -38,5 +40,17 @@ has site => (
     is => 'ro',
     isa => InstanceOf['Statocles::Site'],
 );
+
+sub _get_status {
+    my ( $self, $status ) = @_;
+    my $path = Path::Tiny->new( '.statocles', 'status.yml' );
+    return {} unless $path->exists;
+    YAML::Load( $path->slurp_utf8 );
+}
+
+sub _write_status {
+    my ( $self, $status ) = @_;
+    Path::Tiny->new( '.statocles', 'status.yml' )->touchpath->spew_utf8( YAML::Dump( $status ) );
+}
 
 1;

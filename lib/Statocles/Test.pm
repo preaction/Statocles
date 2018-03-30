@@ -250,7 +250,7 @@ temporary directories
 sub build_temp_site {
     my ( $share_dir ) = @_;
 
-    my $tmp = Path::Tiny->tempdir;
+    my $tmp = Path::Tiny->tempdir( CLEANUP => $ENV{STATOCLES_TEST_CLEANUP} // 1 );
     dircopy $share_dir->child( qw( app blog ) ), $tmp->child( 'blog' );
     dircopy $share_dir->child( 'theme' ), $tmp->child( 'theme' );
     $tmp->child( 'build_site' )->mkpath;

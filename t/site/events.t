@@ -60,11 +60,13 @@ subtest 'build events' => sub {
         }, @_;
     } );
 
-    $site->build;
+    my @pages = $site->pages;
 
-    ok $build_dir->child( qw( foo bar baz.html ) )->exists,
+    ok scalar( grep { $_->path eq '/foo/bar/baz.html' } @pages ),
         'page added in before_build_write exists';
-    my $sitemap_dom = Mojo::DOM->new( $build_dir->child( 'sitemap.xml' )->slurp_utf8 );
+
+    my ( $sitemap ) = grep { $_->path eq '/sitemap.xml' } @pages;
+    my $sitemap_dom = Mojo::DOM->new( $sitemap->content );
     is $sitemap_dom->find( 'loc' )->grep( sub { $_->text eq '/foo/bar/baz.html' } )->size, 1,
         'page added in before_build_write added to sitemap.xml';
 };

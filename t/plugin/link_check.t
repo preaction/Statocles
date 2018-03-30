@@ -19,7 +19,7 @@ subtest 'check links' => sub {
     my $plugin = Statocles::Plugin::LinkCheck->new;
     $plugin->register( $site );
 
-    $site->build;
+    $site->pages;
 
     cmp_deeply $site->log->history,
         [
@@ -81,7 +81,7 @@ subtest 'ignore patterns' => sub {
         );
         $plugin->register( $site );
 
-        $site->build;
+        $site->pages;
 
         my $page = '/blog/2014/06/02/more_tags/index.html';
 
@@ -111,7 +111,7 @@ subtest 'ignore patterns' => sub {
         );
         $plugin->register( $site );
 
-        $site->build;
+        $site->pages;
 
         my $page = '/blog/2014/06/02/more_tags/index.html';
 

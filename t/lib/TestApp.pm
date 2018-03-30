@@ -13,8 +13,11 @@ has _pages => (
     default => sub { [] },
 );
 
+has last_pages_args => ( is => 'rw' );
+
 sub pages {
-    my ( $self ) = @_;
+    my ( $self, @args ) = @_;
+    $self->last_pages_args( \@args );
     my @pages =
         map { blessed $_ ? $_ : ( $_->{class} || "Statocles::Page::Plain" )->new( %$_ ) }
         @{ $self->_pages }

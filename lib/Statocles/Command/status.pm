@@ -6,7 +6,7 @@ use Statocles::Base 'Command';
 
 sub run {
     my ( $self, @argv ) = @_;
-    my $status = $self->site->_get_status;
+    my $status = $self->_get_status;
     if ($status->{last_deploy_date}) {
         say "Last deployed on " .
             DateTime::Moonpig->from_epoch(

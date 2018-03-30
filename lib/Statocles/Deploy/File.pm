@@ -4,6 +4,7 @@ our $VERSION = '0.092';
 
 use Statocles::Base 'Class';
 with 'Statocles::Deploy';
+use Statocles::Store;
 
 =attr path
 
@@ -20,10 +21,9 @@ has path => (
 
 =method deploy
 
-    my @paths = $deploy->deploy( $from_store, %options );
+    my @paths = $deploy->deploy( $pages, %options );
 
-Deploy the site, copying from the given L<from_store|Statocles::Store>.
-Returns the paths that were deployed.
+Deploy the site, rendering the given pages.
 
 Possible options are:
 
@@ -39,7 +39,7 @@ new content.
 =cut
 
 sub deploy {
-    my ( $self, $from_store, %options ) = @_;
+    my ( $self, $pages, %options ) = @_;
 
     die sprintf 'Deploy directory "%s" does not exist (did you forget to make it?)',
         $self->path
@@ -49,23 +49,14 @@ sub deploy {
         $_->remove_tree for $self->path->children;
     }
 
-    $self->site->log->info( "Copying files from build dir to deploy dir" );
-    my @files;
-    my $iter = $from_store->path->iterator({ recurse => 1 });
-    #; say "Store path: " . $from_store->path;
-    while ( my $path = $iter->() ) {
-        next if $path->is_dir;
-        # Git versions before 1.7.4.1 require a relative path to 'git add'
+    my $store = Statocles::Store->new( path => $self->path );
+    $self->site->log->info( "Writing pages to deploy dir" );
+    for my $page ( @$pages ) {
+        my $path = $page->path;
         #; say "Path: " . $path;
-        my $rel_path = $path->relative( $from_store->path );
-        push @files, $rel_path;
-        #; say "From: " . $from_store->path->child( $path );
         #; say "To: " . $self->path->child( $path );
-        $path->copy( $self->path->child( $rel_path )->touchpath );
+        $store->write_file( $page->path, $page->render );
     }
-
-    #; say "Deploying files: " . join "; ", @files;
-    return @files;
 }
 
 1;

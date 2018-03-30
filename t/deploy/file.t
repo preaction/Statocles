@@ -1,6 +1,11 @@
+
 use Test::Lib;
 use My::Test;
+use Statocles::Site;
 use Statocles::Deploy::File;
+use Statocles::Page::Plain;
+use Statocles::Page::File;
+use TestDeploy;
 
 my $SHARE_DIR = path( __DIR__ )->parent->child( 'share' );
 
@@ -9,8 +14,21 @@ if ( $ENV{ NO_CLEANUP } ) {
     @temp_args = ( CLEANUP => 0 );
 }
 
-my $build_store = Statocles::Store->new(
-    path => $SHARE_DIR->child( qw( deploy ) ),
+my $site = Statocles::Site->new(
+    deploy => TestDeploy->new,
+);
+
+my @pages = (
+    Statocles::Page::Plain->new(
+        site => $site,
+        path => '/index.html',
+        content => 'Index',
+    ),
+    Statocles::Page::File->new(
+        site => $site,
+        path => '/static.txt',
+        file_path => $SHARE_DIR->child( qw( app basic static.txt ) ),
+    ),
 );
 
 subtest 'constructor' => sub {
@@ -30,11 +48,10 @@ subtest 'deploy' => sub {
         path => $tmpdir,
         site => build_test_site,
     );
-    $deploy->deploy( $build_store );
+    $deploy->deploy( \@pages );
 
     my %paths = (
-        'doc.markdown' => 1,
-        'foo/index.html' => 1,
+        'static.txt' => 1,
         'index.html' => 1,
     );
 
@@ -64,12 +81,12 @@ subtest '--clean' => sub {
     );
 
     subtest 'deploy without clean does not remove files' => sub {
-        $deploy->deploy( $build_store );
+        $deploy->deploy( \@pages );
         ok $tmpdir->child( 'needs-cleaning.txt' )->is_file, 'default deploy did not remove file';
     };
 
     subtest 'deploy with clean removes files first' => sub {
-        $deploy->deploy( $build_store, clean => 1 );
+        $deploy->deploy( \@pages, clean => 1 );
         ok !$tmpdir->child( 'needs-cleaning.txt' )->is_file, 'default deploy remove files';
     };
 };
@@ -77,7 +94,7 @@ subtest '--clean' => sub {
 subtest 'missing directory' => sub {
     my $store;
     lives_ok { $store = Statocles::Deploy::File->new( path => 'DOES_NOT_EXIST' ) };
-    throws_ok { $store->deploy( $build_store ) }
+    throws_ok { $store->deploy( \@pages ) }
         qr{\QDeploy directory "DOES_NOT_EXIST" does not exist (did you forget to make it?)};
 };
 

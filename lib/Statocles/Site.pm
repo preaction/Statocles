@@ -55,7 +55,7 @@ This can be overridden by L<base_url in Deploy|Statocles::Deploy/base_url>.
 =cut
 
 has base_url => (
-    is => 'ro',
+    is => 'rw',
     isa => Str,
     default => sub { '/' },
 );
@@ -294,35 +294,6 @@ has template_dir => (
     default => sub { 'site' },
 );
 
-=attr build_store
-
-The L<store|Statocles::Store> object to use for C<build()>. This is a workspace
-and will be rebuilt often, using the C<build> and C<daemon> commands. This is
-also the store the C<daemon> command reads to serve the site.
-
-=cut
-
-has build_store => (
-    is => 'ro',
-    isa => StoreType,
-    default => sub {
-        my $path = Path::Tiny->new( '.statocles', 'build' );
-        if ( !$path->is_dir ) {
-            # Automatically make the build directory
-            $path->mkpath;
-        }
-        return StoreType->coercion->( $path );
-    },
-    coerce => sub {
-        my ( $arg ) = @_;
-        if ( !ref $arg && !-d $arg ) {
-            # Automatically make the build directory
-            Path::Tiny->new( $arg )->mkpath;
-        }
-        return StoreType->coercion->( $arg );
-    },
-);
-
 =attr deploy
 
 The L<deploy object|Statocles::Deploy> to use for C<deploy()>. This is
@@ -331,11 +302,10 @@ production by using the C<deploy> command.
 
 =cut
 
-has _deploy => (
+has deploy => (
     is => 'ro',
     isa => ConsumerOf['Statocles::Deploy'],
     required => 1,
-    init_arg => 'deploy',
     coerce => sub {
         if ( ( blessed $_[0] && $_[0]->isa( 'Path::Tiny' ) ) || !ref $_[0] ) {
             require Statocles::Deploy::File;
@@ -410,14 +380,7 @@ has disable_content_template => (
     predicate => 'has_disable_content_template',
 );
 
-# The current deploy we're writing to
-has _write_deploy => (
-    is => 'rw',
-    isa => ConsumerOf['Statocles::Deploy'],
-    clearer => '_clear_write_deploy',
-);
-
-=attr pages
+=attr _pages
 
 A cache of all the pages that the site contains. This is generated
 during the C<build> phase and is available to all the templates
@@ -425,10 +388,13 @@ while they are being rendered.
 
 =cut
 
-has pages => (
+has _pages => (
     is => 'rw',
     isa => ArrayRef[ConsumerOf['Statocles::Page']],
     default => sub { [] },
+    lazy => 1,
+    predicate => 'has_pages',
+    clearer => 'clear_pages',
 );
 
 =method BUILD
@@ -495,13 +461,19 @@ our %PAGE_PRIORITY = (
     'Statocles::Page::File' => -100,
 );
 
-sub build {
+sub pages {
     my ( $self, %options ) = @_;
 
-    my $store = $self->build_store;
+    if ( $self->has_pages ) {
+        #; say "Returning cached pages";
+        return @{ $self->_pages };
+    }
 
-    # Remove all pages from the build directory first
-    $_->remove_tree for $store->path->children;
+    # Rewrite page content to add base URL
+    my $base_url = $options{ base_url } || $self->base_url;
+    $self->base_url( $base_url );
+    my $base_path = Mojo::URL->new( $base_url )->path;
+    $base_path =~ s{/$}{};
 
     my $apps = $self->apps;
     my @pages;
@@ -614,21 +586,13 @@ sub build {
     );
 
     # @pages should not change after this, because it is being cached
-    $self->pages( \@pages );
+    $self->_pages( \@pages );
 
     $self->emit(
         'before_build_write',
         class => 'Statocles::Event::Pages',
         pages => \@pages,
     );
-
-    # Rewrite page content to add base URL
-    my $base_url = $self->base_url;
-    if ( $self->_write_deploy ) {
-        $base_url = $self->_write_deploy->base_url || $base_url;
-    }
-    my $base_path = Mojo::URL->new( $base_url )->path;
-    $base_path =~ s{/$}{};
 
     # DEPRECATED: Index without leading / is an index app
     my $index_root  = $self->index =~ m{^/} ? $self->index
@@ -639,7 +603,6 @@ sub build {
         my $is_index = $page->path eq '/index.html';
 
         if ( !$page->has_dom ) {
-            $store->write_file( $page->path, $page->render );
             next;
         }
 
@@ -669,9 +632,6 @@ sub build {
                 $el->attr( $attr, $url );
             }
         }
-
-        #; say "Writing file: " . $page->path;
-        $store->write_file( $page->path, $dom->to_string );
     }
 
     # Build the sitemap.xml
@@ -688,7 +648,6 @@ sub build {
         content => $tmpl->render( site => $self, pages => \@indexed_pages ),
     );
     push @pages, $sitemap;
-    $store->write_file( 'sitemap.xml', $sitemap->render );
 
     # robots.txt is the best way for crawlers to automatically discover sitemap.xml
     # We should do more with this later...
@@ -698,51 +657,15 @@ sub build {
         content => $robots_tmpl->render( site => $self ),
     );
     push @pages, $robots;
-    $store->write_file( 'robots.txt', $robots->render );
 
     # Add the theme
     for my $page ( $self->theme->pages ) {
         push @pages, $page;
-        $store->write_file( $page->path, $page->render );
     }
 
     $self->emit( build => class => 'Statocles::Event::Pages', pages => \@pages );
 
-    return;
-}
-
-sub _get_status {
-    my ( $self, $status ) = @_;
-    my $path = Path::Tiny->new( '.statocles', 'status.yml' );
-    return {} unless $path->exists;
-    YAML::Load( $path->slurp_utf8 );
-}
-
-sub _write_status {
-    my ( $self, $status ) = @_;
-    Path::Tiny->new( '.statocles', 'status.yml' )->touchpath->spew_utf8( YAML::Dump( $status ) );
-}
-
-=method deploy
-
-    $site->deploy( %options );
-
-Deploy the site to its destination. The C<%options> are passed to the appropriate
-L<deploy object|Statocles::Deploy>.
-
-=cut
-
-sub deploy {
-    my ( $self, %options ) = @_;
-    $self->_write_deploy( $self->_deploy );
-    $self->build( %options );
-    $self->_deploy->site( $self );
-    $self->_deploy->deploy( $self->build_store, %options );
-    $self->_write_status( {
-        last_deploy_date => time(),
-        last_deploy_args => \%options,
-    } );
-    $self->_clear_write_deploy;
+    return @pages;
 }
 
 =method links
@@ -786,9 +709,7 @@ Get the full URL to the given path by prepending the C<base_url>.
 
 sub url {
     my ( $self, $path ) = @_;
-    my $base    = $self->_write_deploy && $self->_write_deploy->base_url
-                ? $self->_write_deploy->base_url
-                : $self->base_url;
+    my $base    = $self->base_url;
 
     # Remove index.html from the end of the path, since it's redundant
     $path =~ s{/index[.]html$}{/};

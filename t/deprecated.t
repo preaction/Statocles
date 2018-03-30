@@ -24,15 +24,15 @@ subtest 'Statocles::Site index app' => sub {
         );
 
         subtest 'build' => sub {
-            $site->build;
+            my @pages = $site->pages;
 
-            ok $build_dir->child( 'index.html' )->exists,
+            ok scalar( grep { $_->path eq '/index.html' } @pages ),
                 'site index renames app page';
-            ok !$deploy_dir->child( 'index.html' )->exists, 'not deployed yet';
-            ok !$build_dir->child( 'blog', 'index.html' )->exists,
+            ok !scalar( grep { $_->path eq '/blog/index.html' } @pages ),
                 'site index renames app page';
 
-            my $dom = Mojo::DOM->new( $build_dir->child( '/blog/page/2/index.html' )->slurp_utf8 );
+            my ( $page ) = grep { $_->path eq '/blog/page/2/index.html' } @pages;
+            my $dom = $page->dom;
             ok !$dom->at( '[href=/blog]' ), 'no link to /blog';
             ok !$dom->at( '[href=/blog/index.html]' ), 'no link to /blog/index.html';
         };
@@ -63,7 +63,7 @@ subtest 'Statocles::Site index app' => sub {
                 log => $log,
             );
 
-            throws_ok { $site->build } qr{ERROR: Index app "basic" did not generate any pages};
+            throws_ok { $site->pages } qr{ERROR: Index app "basic" did not generate any pages};
         };
 
     };

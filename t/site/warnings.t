@@ -37,16 +37,13 @@ subtest 'build two pages with same path' => sub {
         },
     );
 
-    my ( $out, $err, $exit ) = capture {
-        $site->build;
-    };
+    my ( $out, $err, @pages ) = capture { $site->pages };
     like $err, qr{\Q[warn] Duplicate page "/index.html" from apps: basic, static. Using basic};
     ok !$out or diag $out;
 
-    my $dom = Mojo::DOM->new( $build_dir->child( 'index.html' )->slurp_utf8 );
-
     # This test will only fail randomly if it fails, because of hash ordering
-    is $dom->at('h1')->text, 'Index Page', q{basic app always wins because it's generated};
+    my ( $index_page ) = grep { $_->path eq '/index.html' } @pages;
+    is $index_page->dom->at('h1')->text, 'Index Page', q{basic app always wins because it's generated};
 };
 
 subtest 'app generates two pages with the same path' => sub {
@@ -75,9 +72,7 @@ subtest 'app generates two pages with the same path' => sub {
         },
     );
 
-    my ( $out, $err, $exit ) = capture {
-        $site->build;
-    };
+    my ( $out, $err, @pages ) = capture { $site->pages };
     like $err, qr{\Q[warn] Duplicate page with path "/foo.html" from app "test"};
     ok !$out or diag $out;
 };
