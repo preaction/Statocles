@@ -22,6 +22,17 @@ subtest 'markdown helper' => sub {
     eq_or_diff $out, "Title Content\n<h1>Markdown</h1>\n\n<p>Hello</p>\n\n";
 };
 
+subtest 'markdown subroutine' => sub {
+    my $tmpl = Statocles::Template->new(
+        content => q{<%= markdown begin %><%= $extra %><% end %>},
+        theme => $SHARE_DIR->child( 'tmpl' ),
+    );
+
+    my $out;
+    lives_ok { $out = $tmpl->render( %args, site => $site ) };
+    eq_or_diff $out, "<h1>Markdown</h1>\n\n<p>Hello</p>\n\n";
+};
+
 throws_ok { $tmpl->render( %args ) }
     qr/Cannot use markdown helper: No site object given to template/,
     'dies if no site object';

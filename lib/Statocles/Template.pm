@@ -156,7 +156,7 @@ sub render {
             my ( $text, %extra_args ) = @_;
             die "Cannot use markdown helper: No site object given to template"
                 unless exists $args{site};
-            return $args{site}->markdown->markdown( $text );
+            return $args{site}->markdown->markdown( ref $text eq 'CODE' ? $text->() : $text );
         };
 
         local *{"@{[$t->namespace]}::content"} = sub {
