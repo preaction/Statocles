@@ -4,7 +4,6 @@ use My::Test;
 use Capture::Tiny qw( capture );
 use Statocles::App::Blog;
 my $SHARE_DIR = path( __DIR__ )->parent->parent->child( 'share' );
-use constant WIN32 => $^O =~ /Win32/;
 
 my $site = build_test_site(
     theme => $SHARE_DIR->child( 'theme' ),
@@ -392,7 +391,7 @@ ENDMARKDOWN
                     content => $doc_path->slurp_utf8,
                     store => $app->store,
                 );
-                my $content = 'Draft body content' . (WIN32 ? "\r\n" : "\n");
+                my $content = "Draft body content\n";
                 cmp_deeply $doc, Statocles::Document->new(
                     path => $path.'',
                     title => 'A Draft',
