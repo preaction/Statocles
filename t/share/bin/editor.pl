@@ -25,6 +25,7 @@ if ( $file eq '--signal' ) {
 
 if ( $ENV{$ENV_OUT} ) {
     open my $out_fh, '>', $ENV{$ENV_OUT} or die "Could not open $ENV{$ENV_OUT} for writing: $!";
+    binmode $out_fh;
     print { $out_fh } $file, "\n";
     open my $in_fh, '<', $file or die "Could not open $file for reading: $!";
     print { $out_fh } do { local $/ = undef; <$in_fh> };
@@ -32,7 +33,8 @@ if ( $ENV{$ENV_OUT} ) {
 
 if ( $ENV{$ENV_IN} ) {
     open my $in_fh, '<', $ENV{$ENV_IN} or die "Could not open $ENV{$ENV_IN} for reading: $!";
+    binmode $in_fh;
     open my $out_fh, '>', $file or die "Could not open $file for writing: $!";
+    binmode $out_fh;
     print { $out_fh } do { local $/ = undef; <$in_fh> };
 }
-
