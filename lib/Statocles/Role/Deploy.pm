@@ -1,4 +1,4 @@
-package Statocles::Deploy;
+package Statocles::Role::Deploy;
 our $VERSION = '0.094';
 # ABSTRACT: Base role for ways to deploy a site
 
@@ -49,7 +49,7 @@ __END__
 
 =head1 DESCRIPTION
 
-A Statocles::Deploy deploys a site to a destination, like Git, SFTP, or
+A Statocles::Role::Deploy deploys a site to a destination, like Git, SFTP, or
 otherwise.
 
 =head1 SEE ALSO

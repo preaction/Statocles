@@ -193,5 +193,5 @@ placed.
 =head1 Custom Deploy Module
 
 If none of these work for you, you can build your own deploy module. See
-L<Statocles::Deploy> for details.
+L<Statocles::Role::Deploy> for details.
 

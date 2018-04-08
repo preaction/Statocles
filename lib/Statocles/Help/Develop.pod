@@ -36,7 +36,7 @@ L<Templates|Statocles::Template> that are given to Pages.
 
 =item *
 
-Finally, the Site writes the Page to a L<Deploy|Statocles::Deploy>.
+Finally, the Site writes the Page to a L<Deploy|Statocles::Role::Deploy>.
 
 =back
 

@@ -50,7 +50,7 @@ has author => (
 
 The base URL of the site, including protocol and domain. Used mostly for feeds.
 
-This can be overridden by L<base_url in Deploy|Statocles::Deploy/base_url>.
+This can be overridden by L<base_url in Deploy|Statocles::Role::Deploy/base_url>.
 
 =cut
 
@@ -296,7 +296,7 @@ has template_dir => (
 
 =attr deploy
 
-The L<deploy object|Statocles::Deploy> to use for C<deploy()>. This is
+The L<deploy object|Statocles::Role::Deploy> to use for C<deploy()>. This is
 intended to be the production deployment of the site. A build gets promoted to
 production by using the C<deploy> command.
 
@@ -304,7 +304,7 @@ production by using the C<deploy> command.
 
 has deploy => (
     is => 'ro',
-    isa => ConsumerOf['Statocles::Deploy'],
+    isa => ConsumerOf['Statocles::Role::Deploy'],
     required => 1,
     coerce => sub {
         if ( ( blessed $_[0] && $_[0]->isa( 'Path::Tiny' ) ) || !ref $_[0] ) {

@@ -61,7 +61,7 @@ C</>, later).
 =head2 A Deploy
 
 To deploy our site to Github, we need to build a L<deploy
-object|Statocles::Deploy> for Git repositories using
+object|Statocles::Role::Deploy> for Git repositories using
 L<Statocles::Deploy::Git|Statocles::Deploy::Git>. Our deploy object will copy
 our built pages into the Git repository and commit them. Our deploy will happen
 in the root directory of our site on the C<gh-pages> branch.

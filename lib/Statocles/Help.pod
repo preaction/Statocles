@@ -76,7 +76,7 @@ L<Statocles::Command> - Command module
 
 =item *
 
-L<Statocles::Deploy> - Base deploy role
+L<Statocles::Role::Deploy> - Base deploy role
 
 =over 4
 
