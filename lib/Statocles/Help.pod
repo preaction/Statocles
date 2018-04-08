@@ -172,7 +172,7 @@ L<Statocles::Page::Plain> - Page with pre-generated HTML
 
 =item *
 
-L<Statocles::Plugin> - Base class for Statocles plugins
+L<Statocles::Role::Plugin> - Base role for Statocles plugins
 
 =over 4
 

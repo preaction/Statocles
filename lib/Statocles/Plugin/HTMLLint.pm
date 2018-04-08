@@ -3,7 +3,7 @@ our $VERSION = '0.094';
 # ABSTRACT: Check HTML for common errors and issues
 
 use Statocles::Base 'Class';
-with 'Statocles::Plugin';
+with 'Statocles::Role::Plugin';
 BEGIN {
     eval { require HTML::Lint::Pluggable; HTML::Lint::Pluggable->VERSION( 0.06 ); 1 }
         or die "Error loading Statocles::Plugin::HTMLLint. To use this plugin, install HTML::Lint::Pluggable";

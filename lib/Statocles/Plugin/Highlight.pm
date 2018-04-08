@@ -30,7 +30,7 @@ configuration blocks.
 =cut
 
 use Statocles::Base 'Class';
-with 'Statocles::Plugin';
+with 'Statocles::Role::Plugin';
 BEGIN {
     eval { require Syntax::Highlight::Engine::Kate; 1 }
         or die "Error loading Statocles::Plugin::Highlight. To use this plugin, install Syntax::Highlight::Engine::Kate";

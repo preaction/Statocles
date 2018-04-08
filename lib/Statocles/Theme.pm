@@ -204,7 +204,7 @@ sub include {
 
 Register a helper on this theme. Helpers are functions that are added to
 the template to allow for additional features. Helpers are usually added
-by L<Statocles plugins|Statocles::Plugin>.
+by L<Statocles plugins|Statocles::Role::Plugin>.
 
 There are a L<default set of helpers available to all
 templates|Statocles::Template/DEFAULT HELPERS> which cannot be

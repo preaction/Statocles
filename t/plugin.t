@@ -10,7 +10,7 @@ my $SHARE_DIR = path( __DIR__, '..', 'share' );
     package My::Plugin;
 
     use Statocles::Base 'Class';
-    with 'Statocles::Plugin';
+    with 'Statocles::Role::Plugin';
 
     has _register_called => (
         is => 'rw',

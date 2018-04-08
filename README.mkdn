@@ -52,7 +52,7 @@ language](https://metacpan.org/pod/Mojo::Template#SYNTAX).
 - SEO-friendly features such as [sitemaps (sitemap.xml)](http://www.sitemaps.org).
 - [Automatic checking for broken links](https://metacpan.org/pod/Statocles::Plugin::LinkCheck).
 - [Syntax highlighting](https://metacpan.org/pod/Statocles::Plugin::Highlight) for code and configuration blocks.
-- Hooks to add [your own plugins](https://metacpan.org/pod/Statocles::Plugin) and [your own custom
+- Hooks to add [your own plugins](https://metacpan.org/pod/Statocles::Role::Plugin) and [your own custom
 applications](https://metacpan.org/pod/Statocles::Role::App).
 
 # ATTRIBUTES

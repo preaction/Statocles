@@ -97,7 +97,7 @@ The plugins in this site. Each plugin has a name that can be used later.
 
 has plugins => (
     is => 'ro',
-    isa => HashRef[ConsumerOf['Statocles::Plugin']],
+    isa => HashRef[ConsumerOf['Statocles::Role::Plugin']],
     default => sub { {} },
 );
 
