@@ -146,27 +146,27 @@ the raw bytes read from it with no special encoding.
 sub write_file {
     my ( $self, $path, $content ) = @_;
     site->log->debug( "Write file: " . $path );
-    my $full_path = $self->path->child( $path );
+    my $full_path = $self->path->child( $path )->touchpath;
 
     #; say "Writing full path: " . $full_path;
 
     if ( ref $content eq 'GLOB' ) {
-        my $fh = $full_path->touchpath->openw_raw;
+        my $fh = $full_path->openw_raw;
         while ( my $line = <$content> ) {
             $fh->print( $line );
         }
     }
     elsif ( blessed $content && $content->isa( 'Path::Tiny' ) ) {
-        $content->copy( $full_path->touchpath );
+        $content->copy( $full_path );
     }
     elsif ( blessed $content && $content->isa( 'Statocles::Document' ) ) {
-        $full_path->touchpath->spew_utf8( $content->deparse_content );
+        $full_path->spew_utf8( $content->deparse_content );
     }
     elsif ( blessed $content && $content->isa( 'Statocles::File' ) ) {
-        $content->path->copy( $full_path->touchpath );
+        $content->path->copy( $full_path );
     }
     else {
-        $full_path->touchpath->spew_utf8( $content );
+        $full_path->spew_utf8( $content );
     }
 
     return;
