@@ -48,7 +48,7 @@ L<Statocles>
 
 =item *
 
-L<Statocles::App> - Base app role
+L<Statocles::Role::App> - Base app role
 
 =over 4
 

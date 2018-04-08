@@ -205,10 +205,10 @@ subtest 'Statocles::Test::test_pages' => sub {
         eval "
         package Statocles::App::MockTest;
         use Statocles::Base 'Class';
-        with 'Statocles::App';
+        with 'Statocles::Role::App';
         sub pages { return () }
         1
-      " or die "Cant construct a Statocles::App: $@";
+      " or die "Cant construct a Statocles::Role::App: $@";
 
         my $site = build_test_site();
 

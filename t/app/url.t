@@ -2,7 +2,7 @@
 use Test::Lib;
 use My::Test;
 use Statocles::Site;
-use Statocles::App;
+use Statocles::Role::App;
 use TestApp;
 
 my $site = Statocles::Site->new( deploy => tempdir );

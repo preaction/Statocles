@@ -272,7 +272,7 @@ __END__
 =head1 DESCRIPTION
 
 A Theme contains all the L<templates|Statocles::Template> that
-L<applications|Statocles::App> need. This class handles finding and parsing
+L<applications|Statocles::Role::App> need. This class handles finding and parsing
 files into L<template objects|Statocles::Template>.
 
 When the L</store> is read, the templates inside are organized based on

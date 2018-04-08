@@ -27,7 +27,7 @@ to use L<store objects|Statocles::Store> to manage content with Markdown files.
 use Statocles::Base 'Role';
 use Statocles::Page::Document;
 use Statocles::Page::File;
-with 'Statocles::App';
+with 'Statocles::Role::App';
 
 =attr store
 

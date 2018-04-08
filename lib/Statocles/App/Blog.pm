@@ -760,7 +760,7 @@ The post author
 
 =over 4
 
-=item L<Statocles::App>
+=item L<Statocles::Role::App>
 
 =back
 

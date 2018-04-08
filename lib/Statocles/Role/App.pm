@@ -1,4 +1,4 @@
-package Statocles::App;
+package Statocles::Role::App;
 our $VERSION = '0.094';
 # ABSTRACT: Base role for Statocles applications
 
@@ -201,7 +201,7 @@ __END__
 
     package MyApp;
     use Statocles::Base 'Class';
-    with 'Statocles::App';
+    with 'Statocles::Role::App';
 
     sub pages {
         return Statocles::Page::Content->new(

@@ -108,7 +108,7 @@ If true, disables the processing of the content as a template. This will
 improve performance if you're not using any template directives in your content.
 
 This can be set in the document (L<Statocles::Document/disable_content_template>),
-the application (L<Statocles::App/disable_content_template>), or the site
+the application (L<Statocles::Role::App/disable_content_template>), or the site
 (L<Statocles::Site/disable_content_template>).
 
 =cut

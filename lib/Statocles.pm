@@ -264,7 +264,7 @@ L<Syntax highlighting|Statocles::Plugin::Highlight> for code and configuration b
 =item *
 
 Hooks to add L<your own plugins|Statocles::Plugin> and L<your own custom
-applications|Statocles::App>.
+applications|Statocles::Role::App>.
 
 =back
 

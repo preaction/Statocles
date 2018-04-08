@@ -85,7 +85,7 @@ that can be used later.
 
 has apps => (
     is => 'ro',
-    isa => HashRef[ConsumerOf['Statocles::App']],
+    isa => HashRef[ConsumerOf['Statocles::Role::App']],
     default => sub { {} },
 );
 
@@ -367,7 +367,7 @@ This disables processing the content as a template. This can speed up processing
 when the content is not using template directives. 
 
 This can be also set in the application
-(L<Statocles::App/disable_content_template>), or for each document
+(L<Statocles::Role::App/disable_content_template>), or for each document
 (L<Statocles::Document/disable_content_template>).
 
 =cut
@@ -778,7 +778,7 @@ __END__
 
 =head1 DESCRIPTION
 
-A Statocles::Site is a collection of L<applications|Statocles::App>.
+A Statocles::Site is a collection of L<applications|Statocles::Role::App>.
 
 =head1 EVENTS
 

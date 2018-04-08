@@ -117,7 +117,7 @@ every template are:
 
 =item C<$site> - The current L<Statocles::Site|Statocles::Site> object
 
-=item C<$app> - The current L<Statocles::App|Statocles::App> object
+=item C<$app> - The current L<Statocles::Role::App|Statocles::Role::App> object
 
 =back
 

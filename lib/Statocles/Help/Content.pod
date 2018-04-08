@@ -16,7 +16,7 @@ file|Statocles::Help::Config>. We can use that name to access the app's
 command-line commands.
 
 Not all applications have or need commands. See L<the application
-documentation|Statocles::App/"SEE ALSO"> for more information.
+documentation|Statocles::Role::App/"SEE ALSO"> for more information.
 
 =head3 Create a Blog Post
 
@@ -211,7 +211,7 @@ When the content is being generated, you have access to the following variables:
 
 =item C<$site> - The current L<site object|Statocles::Site>
 
-=item C<$app> - The current L<app object|Statocles::App>
+=item C<$app> - The current L<app object|Statocles::Role::App>
 
 =back
 

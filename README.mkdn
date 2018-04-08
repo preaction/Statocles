@@ -53,7 +53,7 @@ language](https://metacpan.org/pod/Mojo::Template#SYNTAX).
 - [Automatic checking for broken links](https://metacpan.org/pod/Statocles::Plugin::LinkCheck).
 - [Syntax highlighting](https://metacpan.org/pod/Statocles::Plugin::Highlight) for code and configuration blocks.
 - Hooks to add [your own plugins](https://metacpan.org/pod/Statocles::Plugin) and [your own custom
-applications](https://metacpan.org/pod/Statocles::App).
+applications](https://metacpan.org/pod/Statocles::Role::App).
 
 # ATTRIBUTES
 

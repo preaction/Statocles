@@ -28,7 +28,7 @@ The application this page came from, so we can give it to the templates.
 
 has app => (
     is => 'ro',
-    isa => ConsumerOf['Statocles::App'],
+    isa => ConsumerOf['Statocles::Role::App'],
 );
 
 =attr path

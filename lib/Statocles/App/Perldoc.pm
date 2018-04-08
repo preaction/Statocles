@@ -7,7 +7,7 @@ use Statocles::Page::Plain;
 use Scalar::Util qw( blessed );
 use Pod::Simple::Search;
 use Pod::Simple::XHTML;
-with 'Statocles::App';
+with 'Statocles::Role::App';
 
 =attr inc
 

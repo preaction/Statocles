@@ -312,7 +312,7 @@ This disables processing the content as a template. This can speed up processing
 when the content is not using template directives. 
 
 This can be also set in the application
-(L<Statocles::App/disable_content_template>), or for the entire site
+(L<Statocles::Role::App/disable_content_template>), or for the entire site
 (L<Statocles::Site/disable_content_template>).
 
 =cut
@@ -461,7 +461,7 @@ __END__
 =head1 DESCRIPTION
 
 A Statocles::Document is the base unit of content in Statocles.
-L<Applications|Statocles::App> take documents to build
+L<Applications|Statocles::Role::App> take documents to build
 L<pages|Statocles::Page>.
 
 Documents are usually written as files, with the L<content|/content> in Markdown,

@@ -22,7 +22,7 @@ L<Stores|Statocles::Store> read and write documents.
 
 =item *
 
-L<Applications|Statocles::App> use Stores to read documents and create
+L<Applications|Statocles::Role::App> use Stores to read documents and create
 L<Pages|Statocles::Page>.
 
 =item *

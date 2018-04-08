@@ -5,7 +5,7 @@ our $VERSION = '0.094';
 use Statocles::Base 'Class';
 use Statocles::Page::File;
 use Statocles::Util qw( derp );
-with 'Statocles::App';
+with 'Statocles::Role::App';
 
 =attr store
 
@@ -54,5 +54,5 @@ B<NOTE:> This application's functionality has been added to
 L<Statocles::App::Basic>. You can use the Basic app to replace this app. This
 class will be removed with v2.0. See L<Statocles::Help::Upgrading>.
 
-This L<Statocles::App|Statocles::App> manages static content with no processing,
+This L<Statocles::Role::App|Statocles::Role::App> manages static content with no processing,
 perfect for images, stylesheets, scripts, or already-built HTML.

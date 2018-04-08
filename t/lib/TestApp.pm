@@ -4,7 +4,7 @@ package
 use Statocles::Base 'Class';
 use Scalar::Util qw( blessed );
 use Statocles::Page::Plain;
-with 'Statocles::App';
+with 'Statocles::Role::App';
 
 has _pages => (
     is => 'ro',
