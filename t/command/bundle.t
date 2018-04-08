@@ -4,20 +4,6 @@ use My::Test;
 use Capture::Tiny qw( capture );
 use Statocles;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
-use constant WIN32 => $^O =~ /Win32/;
-require Win32::File if WIN32;
-
-sub make_writable {
-    return if !WIN32;
-    for (@_) {
-        if (-d) {
-            make_writable($_->children);
-        } else {
-            Win32::File::GetAttributes($_, my $attr);
-            Win32::File::SetAttributes($_, $attr & ~Win32::File::READONLY());
-        }
-    }
-}
 
 my ( $tmp, $config_fn, $config ) = build_temp_site( $SHARE_DIR );
 $tmp->child( 'theme' )->remove_tree; # Delete the old theme

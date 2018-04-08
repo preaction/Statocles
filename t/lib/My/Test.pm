@@ -28,17 +28,37 @@ our @IMPORT_MODULES = (
       build_temp_site
     )],
     'Statocles::Types' => [qw( DateTimeObj )],
-    'My::Test::_Extras' => [qw( test_constructor test_pages test_page_objects )],
+    'My::Test::_Extras' => [qw(
+      test_constructor test_pages test_page_objects
+      make_writable
+    )],
 );
 
 package My::Test::_Extras;
 
 $INC{'My/Test/_Extras.pm'} = 1;
 
+use constant WIN32 => $^O =~ /Win32/;
+require Win32::File if WIN32;
 require Exporter;
 *import = \&Exporter::import;
 
-our @EXPORT_OK = qw( test_constructor test_pages test_page_objects );
+our @EXPORT_OK = qw(
+  test_constructor test_pages test_page_objects
+  make_writable
+);
+
+sub make_writable {
+    return if !WIN32;
+    for (@_) {
+        if (-d) {
+            make_writable($_->children);
+        } else {
+            Win32::File::GetAttributes($_, my $attr);
+            Win32::File::SetAttributes($_, $attr & ~Win32::File::READONLY());
+        }
+    }
+}
 
 sub test_constructor {
     my ( $class, %args ) = @_;
