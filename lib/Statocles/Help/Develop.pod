@@ -23,7 +23,7 @@ L<Stores|Statocles::Store> read and write documents.
 =item *
 
 L<Applications|Statocles::Role::App> use Stores to read documents and create
-L<Pages|Statocles::Page>.
+L<Pages|Statocles::Role::Page>.
 
 =item *
 
@@ -100,7 +100,7 @@ with no processing whatsoever.
 
 =head1 PAGES
 
-A L<Statocles::Page> is collected information ready to be rendered into HTML
+A L<Statocles::Role::Page> is collected information ready to be rendered into HTML
 (or whatever). Statocles Applications generate pages from the documents that
 the user provides. One document may generate multiple pages, and pages may have
 multiple formats like HTML or RSS.

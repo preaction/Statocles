@@ -462,7 +462,7 @@ __END__
 
 A Statocles::Document is the base unit of content in Statocles.
 L<Applications|Statocles::Role::App> take documents to build
-L<pages|Statocles::Page>.
+L<pages|Statocles::Role::Page>.
 
 Documents are usually written as files, with the L<content|/content> in Markdown,
 and the other attributes as frontmatter, a block of YAML at the top of the file.

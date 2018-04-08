@@ -17,13 +17,13 @@ extends 'Beam::Event';
 
 =attr pages
 
-An array of L<Statocles::Page> objects
+An array of L<Statocles::Role::Page> objects
 
 =cut
 
 has pages => (
     is => 'ro',
-    isa => ArrayRef[ConsumerOf['Statocles::Page']],
+    isa => ArrayRef[ConsumerOf['Statocles::Role::Page']],
     required => 1,
 );
 

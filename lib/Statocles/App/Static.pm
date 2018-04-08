@@ -24,7 +24,7 @@ has store => (
 
     my @pages = $app->pages;
 
-Get the L<page objects|Statocles::Page> for this app.
+Get the L<page objects|Statocles::Role::Page> for this app.
 
 =cut
 

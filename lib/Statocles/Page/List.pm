@@ -3,7 +3,7 @@ our $VERSION = '0.094';
 # ABSTRACT: A page presenting a list of other pages
 
 use Statocles::Base 'Class';
-with 'Statocles::Page';
+with 'Statocles::Role::Page';
 use List::Util qw( reduce );
 use Statocles::Template;
 use Statocles::Page::ListItem;
@@ -17,7 +17,7 @@ The pages that should be shown in this list.
 
 has _pages => (
     is => 'ro',
-    isa => ArrayRef[ConsumerOf['Statocles::Page']],
+    isa => ArrayRef[ConsumerOf['Statocles::Role::Page']],
     init_arg => 'pages',
 );
 
@@ -78,7 +78,7 @@ has '+date' => (
 
 =attr search_change_frequency
 
-Override the default L<search_change_frequency|Statocles::Page/search_change_frequency>
+Override the default L<search_change_frequency|Statocles::Role::Page/search_change_frequency>
 to C<daily>, because these pages aggregate other pages.
 
 =cut
@@ -89,7 +89,7 @@ has '+search_change_frequency' => (
 
 =attr search_priority
 
-Override the default L<search_priority|Statocles::Page/search_priority> to reduce
+Override the default L<search_priority|Statocles::Role::Page/search_priority> to reduce
 the rank of list pages to C<0.3>.
 
 It is more important for users to get to the full page than
@@ -184,7 +184,7 @@ around vars => sub {
     my @links = $page->links( $key );
 
 Get the given set of links for this page. See L<the links
-attribute|Statocles::Page/links> for some commonly-used keys.
+attribute|Statocles::Role::Page/links> for some commonly-used keys.
 
 For List pages, C<stylesheet> and C<script> links are also collected
 from the L<inner pages|/pages>, to ensure that content in those pages

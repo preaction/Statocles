@@ -144,7 +144,7 @@ L<Statocles::Link> - A link to another place
 
 =item *
 
-L<Statocles::Page> - Base page role
+L<Statocles::Role::Page> - Base page role
 
 =over 4
 

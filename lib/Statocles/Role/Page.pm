@@ -1,4 +1,4 @@
-package Statocles::Page;
+package Statocles::Role::Page;
 our $VERSION = '0.094';
 # ABSTRACT: Base role for rendering files
 
@@ -264,8 +264,8 @@ sub vars {
 
     my $html = $page->render( %vars );
 
-Render the page, using the L<template|Statocles::Page/template> and wrapping
-with the L<layout|Statocles::Page/layout>. Give any extra C<%vars> to the
+Render the page, using the L<template|Statocles::Role::Page/template> and wrapping
+with the L<layout|Statocles::Role::Page/layout>. Give any extra C<%vars> to the
 template, layout, and page C<content> method (if applicable).
 
 The result of this method is cached.
@@ -333,7 +333,7 @@ __END__
 
 =head1 DESCRIPTION
 
-A Statocles::Page takes one or more L<documents|Statocles::Document> and
+A Statocles::Role::Page takes one or more L<documents|Statocles::Document> and
 renders them into one or more HTML pages using a main L<template|/template>
 and a L<layout template|/layout>.
 

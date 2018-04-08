@@ -185,7 +185,7 @@ sub test_pages {
     $tb->is_eq( scalar @pages, scalar keys %page_tests, 'correct number of pages' );
 
     for my $page ( @pages ) {
-        $tb->ok( $page->DOES( 'Statocles::Page' ), 'must be a Statocles::Page' );
+        $tb->ok( $page->DOES( 'Statocles::Role::Page' ), 'must be a Statocles::Role::Page' );
 
         my $date   = $page->date;
         my $want   = 'DateTime::Moonpig';

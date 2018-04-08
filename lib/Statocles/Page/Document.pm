@@ -3,7 +3,7 @@ our $VERSION = '0.094';
 # ABSTRACT: Render document objects into HTML
 
 use Statocles::Base 'Class';
-with 'Statocles::Page';
+with 'Statocles::Role::Page';
 use Statocles::Template;
 use Statocles::Store;
 
@@ -240,7 +240,7 @@ sub tags {
     my $tmpl = $page->template;
 
 The L<template object|Statocles::Template> for this page. If the document has a template,
-it will be used. Otherwise, the L<template attribute|Statocles::Page/template> will
+it will be used. Otherwise, the L<template attribute|Statocles::Role::Page/template> will
 be used.
 
 =cut
@@ -258,7 +258,7 @@ around template => sub {
     my $tmpl = $page->layout;
 
 The L<layout template object|Statocles::Template> for this page. If the document has a layout,
-it will be used. Otherwise, the L<layout attribute|Statocles::Page/layout> will
+it will be used. Otherwise, the L<layout attribute|Statocles::Role::Page/layout> will
 be used.
 
 =cut

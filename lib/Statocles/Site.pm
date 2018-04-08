@@ -390,7 +390,7 @@ while they are being rendered.
 
 has _pages => (
     is => 'rw',
-    isa => ArrayRef[ConsumerOf['Statocles::Page']],
+    isa => ArrayRef[ConsumerOf['Statocles::Role::Page']],
     default => sub { [] },
     lazy => 1,
     predicate => 'has_pages',
@@ -730,7 +730,7 @@ name. The default template is determined by the app's class name and the
 template name passed in.
 
 Applications should list the templates they have and describe what L<page
-class|Statocles::Page> they use.
+class|Statocles::Role::Page> they use.
 
 =cut
 

@@ -135,7 +135,7 @@ sub has_file {
     $store->write_file( $path, $content );
 
 Write the given C<content> to the given C<path>. This is mostly used to write
-out L<page objects|Statocles::Page>.
+out L<page objects|Statocles::Role::Page>.
 
 C<content> may be a simple string or a filehandle. If given a string, will
 write the string using UTF-8 characters. If given a filehandle, will write out
@@ -276,7 +276,7 @@ __END__
 =head1 DESCRIPTION
 
 A Statocles::Store reads and writes L<documents|Statocles::Document> and
-files (mostly L<pages|Statocles::Page>).
+files (mostly L<pages|Statocles::Role::Page>).
 
 This class also handles the parsing and inflating of
 L<"document objects"|Statocles::Document>.

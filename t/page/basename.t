@@ -8,7 +8,7 @@ my $site = Statocles::Site->new( deploy => tempdir );
 {
     package TestPage;
     use Statocles::Base 'Class';
-    with 'Statocles::Page';
+    with 'Statocles::Role::Page';
 }
 
 subtest 'basename' => sub {

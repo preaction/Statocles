@@ -8,7 +8,7 @@ with 'Statocles::Role::App';
 
 has _pages => (
     is => 'ro',
-    isa => ArrayRef[ConsumerOf['Statocles::Page']|HashRef],
+    isa => ArrayRef[ConsumerOf['Statocles::Role::Page']|HashRef],
     init_arg => 'pages',
     default => sub { [] },
 );

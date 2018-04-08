@@ -107,13 +107,13 @@ allow you to evaluate Perl code, which is why the templates are also called
 
 =head2 Template Variables
 
-When an application assembles a L<page object|Statocles::Page>, it sets values
+When an application assembles a L<page object|Statocles::Role::Page>, it sets values
 inside. The page then gives those values to the template. The common values in
 every template are:
 
 =over 4
 
-=item C<$self> - The current L<Statocles::Page|Statocles::Page> object
+=item C<$self> - The current L<Statocles::Role::Page|Statocles::Role::Page> object
 
 =item C<$site> - The current L<Statocles::Site|Statocles::Site> object
 

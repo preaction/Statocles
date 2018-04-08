@@ -92,7 +92,7 @@ has '+template_dir' => (
 
     my @pages = $app->pages;
 
-Render the requested modules as HTML. Returns an array of L<Statocles::Page> objects.
+Render the requested modules as HTML. Returns an array of L<Statocles::Role::Page> objects.
 
 =cut
 

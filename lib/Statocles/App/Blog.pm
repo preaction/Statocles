@@ -377,7 +377,7 @@ sub index {
 
     my @pages = $app->tag_pages( \%tag_pages );
 
-Get L<pages|Statocles::Page> for the tags in the given blog post documents
+Get L<pages|Statocles::Role::Page> for the tags in the given blog post documents
 (build from L<the post_pages method|/post_pages>, including relevant feed
 pages.
 
@@ -448,7 +448,7 @@ sub tag_pages {
 
     my @pages = $app->pages( %options );
 
-Get all the L<pages|Statocles::Page> for this application. Available options
+Get all the L<pages|Statocles::Role::Page> for this application. Available options
 are:
 
 =over 4
@@ -606,7 +606,7 @@ sub recent_posts {
 
     my $url = $app->page_url( $page )
 
-Return the absolute URL to this L<page object|Statocles::Page>, removing the
+Return the absolute URL to this L<page object|Statocles::Role::Page>, removing the
 "/index.html" if necessary.
 
 =cut

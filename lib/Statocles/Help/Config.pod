@@ -40,7 +40,7 @@ More on that later.
 =head2 An App
 
 A L<Statocles app|Statocles::Role::App> is the driver that turns documents into
-L<pages|Statocles::Page>. To build pages, we need a store full of documents. We
+L<pages|Statocles::Role::Page>. To build pages, we need a store full of documents. We
 define our store with the string C<blog>, which will get magically coerced into
 a L<store object|Statocles::Store>.
 
