@@ -44,7 +44,8 @@ my $site = Statocles::Site->new(
 );
 
 subtest 'root site' => sub {
-
+    my $buildpath = Path::Tiny->new( '.statocles/build' ); # as done by ::Command::daemon, need to ensure is writable because distros are read-only and is within that
+    make_writable( $buildpath );
     my $t = Test::Mojo->new(
         Statocles::Command::daemon::_MOJOAPP->new(
             site => $site,
@@ -96,7 +97,8 @@ subtest 'root site' => sub {
 };
 
 subtest 'nonroot site' => sub {
-
+    my $buildpath = Path::Tiny->new( '.statocles/build' ); # as done by ::Command::daemon, need to ensure is writable because distros are read-only and is within that
+    make_writable( $buildpath );
     my $site = Statocles::Site->new(
         base_url => '/nonroot',
         apps => {
@@ -134,6 +136,8 @@ subtest 'nonroot site' => sub {
 };
 
 subtest '--date option' => sub {
+    my $buildpath = Path::Tiny->new( '.statocles/build' ); # as done by ::Command::daemon, need to ensure is writable because distros are read-only and is within that
+    make_writable( $buildpath );
     $site->clear_pages;
     my $t = Test::Mojo->new(
         Statocles::Command::daemon::_MOJOAPP->new(
