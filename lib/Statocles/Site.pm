@@ -493,7 +493,7 @@ sub pages {
     for my $app_name ( keys %{ $apps } ) {
         my $app = $apps->{$app_name};
         my $index_path_re = qr{^$index_path(?:/index[.]html)?$};
-        if ( $app->DOES( 'Statocles::App::Role::Store' ) ) {
+        if ( $app->DOES( 'Statocles::Role::App::Store' ) ) {
             # Allow index to be path to document and not the resulting page
             # (so, ending in ".markdown" or ".md")
             my $doc_path = $index_path;

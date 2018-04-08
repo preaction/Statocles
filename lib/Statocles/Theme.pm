@@ -6,7 +6,7 @@ use Statocles::Base 'Class';
 use File::Share qw( dist_dir );
 use Scalar::Util qw( blessed );
 use Statocles::Template;
-with 'Statocles::App::Role::Store';
+with 'Statocles::Role::App::Store';
 
 =attr url_root
 

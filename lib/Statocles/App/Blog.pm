@@ -10,7 +10,7 @@ use Statocles::Page::Document;
 use Statocles::Page::List;
 use Statocles::Util qw( run_editor read_stdin );
 
-with 'Statocles::App::Role::Store';
+with 'Statocles::Role::App::Store';
 
 =attr store
 
