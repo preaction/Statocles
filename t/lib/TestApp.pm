@@ -4,11 +4,11 @@ package
 use Statocles::Base 'Class';
 use Scalar::Util qw( blessed );
 use Statocles::Page::Plain;
-with 'Statocles::App';
+with 'Statocles::Role::App';
 
 has _pages => (
     is => 'ro',
-    isa => ArrayRef[ConsumerOf['Statocles::Page']|HashRef],
+    isa => ArrayRef[ConsumerOf['Statocles::Role::Page']|HashRef],
     init_arg => 'pages',
     default => sub { [] },
 );

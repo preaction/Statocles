@@ -48,7 +48,7 @@ L<Statocles>
 
 =item *
 
-L<Statocles::App> - Base app role
+L<Statocles::Role::App> - Base app role
 
 =over 4
 
@@ -76,7 +76,7 @@ L<Statocles::Command> - Command module
 
 =item *
 
-L<Statocles::Deploy> - Base deploy role
+L<Statocles::Role::Deploy> - Base deploy role
 
 =over 4
 
@@ -144,7 +144,7 @@ L<Statocles::Link> - A link to another place
 
 =item *
 
-L<Statocles::Page> - Base page role
+L<Statocles::Role::Page> - Base page role
 
 =over 4
 
@@ -172,7 +172,7 @@ L<Statocles::Page::Plain> - Page with pre-generated HTML
 
 =item *
 
-L<Statocles::Plugin> - Base class for Statocles plugins
+L<Statocles::Role::Plugin> - Base role for Statocles plugins
 
 =over 4
 

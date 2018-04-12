@@ -50,7 +50,7 @@ has author => (
 
 The base URL of the site, including protocol and domain. Used mostly for feeds.
 
-This can be overridden by L<base_url in Deploy|Statocles::Deploy/base_url>.
+This can be overridden by L<base_url in Deploy|Statocles::Role::Deploy/base_url>.
 
 =cut
 
@@ -85,7 +85,7 @@ that can be used later.
 
 has apps => (
     is => 'ro',
-    isa => HashRef[ConsumerOf['Statocles::App']],
+    isa => HashRef[ConsumerOf['Statocles::Role::App']],
     default => sub { {} },
 );
 
@@ -97,7 +97,7 @@ The plugins in this site. Each plugin has a name that can be used later.
 
 has plugins => (
     is => 'ro',
-    isa => HashRef[ConsumerOf['Statocles::Plugin']],
+    isa => HashRef[ConsumerOf['Statocles::Role::Plugin']],
     default => sub { {} },
 );
 
@@ -296,7 +296,7 @@ has template_dir => (
 
 =attr deploy
 
-The L<deploy object|Statocles::Deploy> to use for C<deploy()>. This is
+The L<deploy object|Statocles::Role::Deploy> to use for C<deploy()>. This is
 intended to be the production deployment of the site. A build gets promoted to
 production by using the C<deploy> command.
 
@@ -304,7 +304,7 @@ production by using the C<deploy> command.
 
 has deploy => (
     is => 'ro',
-    isa => ConsumerOf['Statocles::Deploy'],
+    isa => ConsumerOf['Statocles::Role::Deploy'],
     required => 1,
     coerce => sub {
         if ( ( blessed $_[0] && $_[0]->isa( 'Path::Tiny' ) ) || !ref $_[0] ) {
@@ -367,7 +367,7 @@ This disables processing the content as a template. This can speed up processing
 when the content is not using template directives. 
 
 This can be also set in the application
-(L<Statocles::App/disable_content_template>), or for each document
+(L<Statocles::Role::App/disable_content_template>), or for each document
 (L<Statocles::Document/disable_content_template>).
 
 =cut
@@ -390,7 +390,7 @@ while they are being rendered.
 
 has _pages => (
     is => 'rw',
-    isa => ArrayRef[ConsumerOf['Statocles::Page']],
+    isa => ArrayRef[ConsumerOf['Statocles::Role::Page']],
     default => sub { [] },
     lazy => 1,
     predicate => 'has_pages',
@@ -493,7 +493,7 @@ sub pages {
     for my $app_name ( keys %{ $apps } ) {
         my $app = $apps->{$app_name};
         my $index_path_re = qr{^$index_path(?:/index[.]html)?$};
-        if ( $app->DOES( 'Statocles::App::Role::Store' ) ) {
+        if ( $app->DOES( 'Statocles::Role::App::Store' ) ) {
             # Allow index to be path to document and not the resulting page
             # (so, ending in ".markdown" or ".md")
             my $doc_path = $index_path;
@@ -730,7 +730,7 @@ name. The default template is determined by the app's class name and the
 template name passed in.
 
 Applications should list the templates they have and describe what L<page
-class|Statocles::Page> they use.
+class|Statocles::Role::Page> they use.
 
 =cut
 
@@ -778,7 +778,7 @@ __END__
 
 =head1 DESCRIPTION
 
-A Statocles::Site is a collection of L<applications|Statocles::App>.
+A Statocles::Site is a collection of L<applications|Statocles::Role::App>.
 
 =head1 EVENTS
 

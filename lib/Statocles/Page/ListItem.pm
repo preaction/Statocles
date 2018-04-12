@@ -7,13 +7,13 @@ use Mojo::DOM;
 
 =attr page
 
-The L<page object|Statocles::Page> for this item in the list.
+The L<page object|Statocles::Role::Page> for this item in the list.
 
 =cut
 
 has page => (
     is => 'ro',
-    isa => ConsumerOf[ 'Statocles::Page' ],
+    isa => ConsumerOf[ 'Statocles::Role::Page' ],
 );
 
 =attr rewrite_mode
@@ -36,7 +36,7 @@ has rewrite_mode => (
 =method DOES
 
 This page proxies everything necessary to be a page object, without consuming
-the L<page role|Statocles::Page>.
+the L<page role|Statocles::Role::Page>.
 
 =cut
 

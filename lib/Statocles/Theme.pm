@@ -6,7 +6,7 @@ use Statocles::Base 'Class';
 use File::Share qw( dist_dir );
 use Scalar::Util qw( blessed );
 use Statocles::Template;
-with 'Statocles::App::Role::Store';
+with 'Statocles::Role::App::Store';
 
 =attr url_root
 
@@ -204,7 +204,7 @@ sub include {
 
 Register a helper on this theme. Helpers are functions that are added to
 the template to allow for additional features. Helpers are usually added
-by L<Statocles plugins|Statocles::Plugin>.
+by L<Statocles plugins|Statocles::Role::Plugin>.
 
 There are a L<default set of helpers available to all
 templates|Statocles::Template/DEFAULT HELPERS> which cannot be
@@ -272,7 +272,7 @@ __END__
 =head1 DESCRIPTION
 
 A Theme contains all the L<templates|Statocles::Template> that
-L<applications|Statocles::App> need. This class handles finding and parsing
+L<applications|Statocles::Role::App> need. This class handles finding and parsing
 files into L<template objects|Statocles::Template>.
 
 When the L</store> is read, the templates inside are organized based on

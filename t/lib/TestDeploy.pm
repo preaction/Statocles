@@ -1,7 +1,7 @@
 package TestDeploy;
 
 use Statocles::Base 'Class';
-with 'Statocles::Deploy';
+with 'Statocles::Role::Deploy';
 
 has last_deploy_args => ( is => 'rw' );
 

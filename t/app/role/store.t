@@ -7,7 +7,7 @@ my $SHARE_DIR = path( __DIR__ )->parent->parent->child( 'share' );
 {
     package MyApp;
     use Statocles::Base 'Class';
-    with 'Statocles::App::Role::Store';
+    with 'Statocles::Role::App::Store';
     around pages => sub {
         my ( $orig, $self, %options ) = @_;
         my @pages = $self->$orig( %options );

@@ -5,7 +5,7 @@ our $VERSION = '0.094';
 use Statocles::Base 'Class';
 use Statocles::Document;
 use Statocles::Util qw( run_editor read_stdin );
-with 'Statocles::App::Role::Store';
+with 'Statocles::Role::App::Store';
 
 =attr store
 

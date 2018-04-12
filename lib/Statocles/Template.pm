@@ -369,7 +369,7 @@ L<markdown helper|/markdown> to render the markdown into HTML.
     %= markdown include 'path/include.markdown'
 
 Render the given markdown text into HTML. This is useful for allowing users to
-write markdown in L<site data|Statocles::Site/data>, and L<app data|Statocles::App/data> in
+write markdown in L<site data|Statocles::Site/data>, and L<app data|Statocles::Role::App/data> in
 the L<configuration file|Statocles::Help::Config/data>,
 or L<document data|Statocles::Document/data> attributes in the document frontmatter.
 

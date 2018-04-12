@@ -170,7 +170,7 @@ sub test_pages {
     ) or $tb->diag( "Extra pages tested: " . join( ", ", sort keys %page_tests_copy ) );
 
     for my $page (@pages) {
-        $tb->ok( $page->DOES('Statocles::Page'), 'must be a Statocles::Page' );
+        $tb->ok( $page->DOES('Statocles::Role::Page'), 'must be a Statocles::Role::Page' );
 
         my $date   = $page->date;
         my $want   = 'DateTime::Moonpig';
@@ -267,7 +267,7 @@ sub test_page_objects {
     ) or $tb->diag( "Test defined but no page found: " . join( ", ", sort keys %page_tests_copy ) );
 
     for my $page (@$pages) {
-        $tb->ok( $page->DOES('Statocles::Page'), 'must be a Statocles::Page' );
+        $tb->ok( $page->DOES('Statocles::Role::Page'), 'must be a Statocles::Role::Page' );
 
         my $date   = $page->date;
         my $want   = 'DateTime::Moonpig';

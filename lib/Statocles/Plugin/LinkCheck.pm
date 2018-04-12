@@ -3,7 +3,7 @@ our $VERSION = '0.094';
 # ABSTRACT: Check links and images for validity during build
 
 use Statocles::Base 'Class';
-with 'Statocles::Plugin';
+with 'Statocles::Role::Plugin';
 use Mojo::Util qw( url_escape url_unescape );
 
 =attr ignore

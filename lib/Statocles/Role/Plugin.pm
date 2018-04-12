@@ -1,4 +1,4 @@
-package Statocles::Plugin;
+package Statocles::Role::Plugin;
 our $VERSION = '0.094';
 # ABSTRACT: Base role for Statocles plugins
 
@@ -7,7 +7,7 @@ our $VERSION = '0.094';
     # lib/My/Plugin.pm
     package My::Plugin;
     use Moo; # or Moose
-    with 'Statocles::Plugin';
+    with 'Statocles::Role::Plugin';
 
     sub register {
         my ( $self, $site ) = @_;
@@ -91,7 +91,7 @@ plugin itself. For example,
 
     package My::Plugin {
         use Statocles::Base 'Class';
-        with 'Statocles::Plugin';
+        with 'Statocles::Role::Plugin';
 
         has myattr => (
             is => 'ro',

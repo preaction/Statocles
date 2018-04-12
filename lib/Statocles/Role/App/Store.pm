@@ -1,4 +1,4 @@
-package Statocles::App::Role::Store;
+package Statocles::Role::App::Store;
 our $VERSION = '0.094';
 # ABSTRACT: Role for applications using files
 
@@ -6,7 +6,7 @@ our $VERSION = '0.094';
 
     package MyApp;
     use Statocles::Base 'Class';
-    with 'Statocles::App::Role::Store';
+    with 'Statocles::Role::App::Store';
 
     around pages => sub {
         my ( $orig, $self, %options ) = @_;
@@ -21,13 +21,15 @@ our $VERSION = '0.094';
 
 This role provides some basic functionality for those applications that want
 to use L<store objects|Statocles::Store> to manage content with Markdown files.
+It can be considered an extension (though it is actually a consumer)
+of the role L<Statocles::Role::App>.
 
 =cut
 
 use Statocles::Base 'Role';
 use Statocles::Page::Document;
 use Statocles::Page::File;
-with 'Statocles::App';
+with 'Statocles::Role::App';
 
 =attr store
 

@@ -3,7 +3,7 @@ our $VERSION = '0.094';
 # ABSTRACT: A plain page (with templates)
 
 use Statocles::Base 'Class';
-with 'Statocles::Page';
+with 'Statocles::Role::Page';
 
 =attr content
 
@@ -47,6 +47,6 @@ __END__
 
 =head1 DESCRIPTION
 
-This L<Statocles::Page> contains any content you want to put in it, while still
+This L<Statocles::Role::Page> contains any content you want to put in it, while still
 allowing for templates and layout. This is useful when you generate HTML (or
 anything else) outside of Statocles.

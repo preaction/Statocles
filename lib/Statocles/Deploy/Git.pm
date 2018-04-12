@@ -208,13 +208,13 @@ __END__
 
 This class allows a site to be deployed to a Git repository.
 
-This class consumes L<Statocles::Deploy|Statocles::Deploy>.
+This class consumes L<Statocles::Role::Deploy|Statocles::Role::Deploy>.
 
 =head1 SEE ALSO
 
 =over 4
 
-=item L<Statocles::Deploy>
+=item L<Statocles::Role::Deploy>
 
 =back
 

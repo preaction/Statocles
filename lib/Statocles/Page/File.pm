@@ -3,7 +3,7 @@ our $VERSION = '0.094';
 # ABSTRACT: A page wrapping a file (handle)
 
 use Statocles::Base 'Class';
-with 'Statocles::Page';
+with 'Statocles::Role::Page';
 
 =attr file_path
 
@@ -88,5 +88,5 @@ __END__
 
 =head1 DESCRIPTION
 
-This L<Statocles::Page> wraps a file handle in order to move files from one
+This L<Statocles::Role::Page> wraps a file handle in order to move files from one
 L<store|Statocles::Store> to another.

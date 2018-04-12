@@ -33,7 +33,7 @@ diagrams.
 
 use Mojo::URL;
 use Statocles::Base 'Class';
-with 'Statocles::Plugin';
+with 'Statocles::Role::Plugin';
 
 
 =attr mermaid_url

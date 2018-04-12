@@ -3,7 +3,7 @@ our $VERSION = '0.094';
 # ABSTRACT: Render document objects into HTML
 
 use Statocles::Base 'Class';
-with 'Statocles::Page';
+with 'Statocles::Role::Page';
 use Statocles::Template;
 use Statocles::Store;
 
@@ -108,7 +108,7 @@ If true, disables the processing of the content as a template. This will
 improve performance if you're not using any template directives in your content.
 
 This can be set in the document (L<Statocles::Document/disable_content_template>),
-the application (L<Statocles::App/disable_content_template>), or the site
+the application (L<Statocles::Role::App/disable_content_template>), or the site
 (L<Statocles::Site/disable_content_template>).
 
 =cut
@@ -240,7 +240,7 @@ sub tags {
     my $tmpl = $page->template;
 
 The L<template object|Statocles::Template> for this page. If the document has a template,
-it will be used. Otherwise, the L<template attribute|Statocles::Page/template> will
+it will be used. Otherwise, the L<template attribute|Statocles::Role::Page/template> will
 be used.
 
 =cut
@@ -258,7 +258,7 @@ around template => sub {
     my $tmpl = $page->layout;
 
 The L<layout template object|Statocles::Template> for this page. If the document has a layout,
-it will be used. Otherwise, the L<layout attribute|Statocles::Page/layout> will
+it will be used. Otherwise, the L<layout attribute|Statocles::Role::Page/layout> will
 be used.
 
 =cut

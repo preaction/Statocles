@@ -22,8 +22,8 @@ L<Stores|Statocles::Store> read and write documents.
 
 =item *
 
-L<Applications|Statocles::App> use Stores to read documents and create
-L<Pages|Statocles::Page>.
+L<Applications|Statocles::Role::App> use Stores to read documents and create
+L<Pages|Statocles::Role::Page>.
 
 =item *
 
@@ -36,7 +36,7 @@ L<Templates|Statocles::Template> that are given to Pages.
 
 =item *
 
-Finally, the Site writes the Page to a L<Deploy|Statocles::Deploy>.
+Finally, the Site writes the Page to a L<Deploy|Statocles::Role::Deploy>.
 
 =back
 
@@ -100,7 +100,7 @@ with no processing whatsoever.
 
 =head1 PAGES
 
-A L<Statocles::Page> is collected information ready to be rendered into HTML
+A L<Statocles::Role::Page> is collected information ready to be rendered into HTML
 (or whatever). Statocles Applications generate pages from the documents that
 the user provides. One document may generate multiple pages, and pages may have
 multiple formats like HTML or RSS.
@@ -171,7 +171,7 @@ L<Statocles::Plugin::LinkCheck> plugin can search all the pages for
 broken links. For another example, the L<Statocles::Plugin::Highlight>
 plugin adds the C<highlight> function to all the templates in the site.
 
-Plugins consume the L<Statocles::Plugin role|Statocles::Plugin> and must
+Plugins consume the L<Statocles::Plugin role|Statocles::Role::Plugin> and must
 implement the C<register> method to add themselves where they need to be
 added.
 
@@ -198,7 +198,7 @@ Plugins are added to the Site object's C<plugins> attribute:
 
 =head2 Event Handlers
 
-Instead of making an entire Statocles::Plugin, we can respond only to
+Instead of making an entire Statocles::Role::Plugin, we can respond only to
 certain events using Beam::Wire's event handling API.
 
 In this example, we're going to enable the same LinkCheck plugin as

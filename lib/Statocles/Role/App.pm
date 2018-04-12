@@ -1,4 +1,4 @@
-package Statocles::App;
+package Statocles::Role::App;
 our $VERSION = '0.094';
 # ABSTRACT: Base role for Statocles applications
 
@@ -96,7 +96,7 @@ has disable_content_template => (
 
     my @pages = $app->pages;
 
-Get the pages for this app. Must return a list of L<Statocles::Page> objects.
+Get the pages for this app. Must return a list of L<Statocles::Role::Page> objects.
 
 =cut
 
@@ -175,7 +175,7 @@ name. The default template is determined by the app's class name and the
 template name passed in.
 
 Applications should list the templates they have and describe what L<page
-class|Statocles::Page> they use.
+class|Statocles::Role::Page> they use.
 
 =cut
 
@@ -201,7 +201,7 @@ __END__
 
     package MyApp;
     use Statocles::Base 'Class';
-    with 'Statocles::App';
+    with 'Statocles::Role::App';
 
     sub pages {
         return Statocles::Page::Content->new(
@@ -212,7 +212,7 @@ __END__
 
 =head1 DESCRIPTION
 
-A Statocles App creates a set of L<pages|Statocles::Pages> that can then be
+A Statocles App creates a set of L<page|Statocles::Role::Page>s that can then be
 written to the filesystem (or served directly, if desired).
 
 Pages can be created from L<documents|Statocles::Documents> stored in a
@@ -256,7 +256,7 @@ These applications are included with the core Statocles distribution.
 
 =item L<Statocles::Store>
 
-=item L<Statocles::Page>
+=item L<Statocles::Role::Page>
 
 =back
 
