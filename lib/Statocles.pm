@@ -64,6 +64,8 @@ sub run {
 
     if ( $opt{version} || ( $opt{verbose} && !@argv ) ) {
         say "Statocles version $Statocles::VERSION (Perl $^V)";
+        require POSIX;
+        say "Locale: " . POSIX::setlocale( POSIX::LC_CTYPE );
         return 0;
     }
 

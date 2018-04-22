@@ -29,13 +29,17 @@ subtest 'get version' => sub {
     my ( $output, $stderr, $exit ) = capture { Statocles->run( '--version' ) };
     is $exit, 0;
     ok !$stderr, 'stderr is empty' or diag "STDERR: $stderr";
-    is $output, "Statocles version 1.00 (Perl $^V)\n";
+    my $expected = <<EOF;
+Statocles version 1.00 (Perl $^V)
+Locale: en_US.UTF-8
+EOF
+    is $output, $expected;
 
     subtest '-v (verbose) and no args shows version' => sub {
         my ( $output, $stderr, $exit ) = capture { Statocles->run( '-v' ) };
         is $exit, 0;
         ok !$stderr, 'stderr is empty' or diag "STDERR: $stderr";
-        is $output, "Statocles version 1.00 (Perl $^V)\n";
+        is $output, $expected;
     };
 };
 
