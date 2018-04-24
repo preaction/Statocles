@@ -210,7 +210,7 @@ sub sections {
         @sections =
             map { $self->markdown->markdown( $_ ) }
             map { $self->_render_content_template( $_, {} ) }
-            split /\n---\n/,
+            split /\R---\R/,
             $self->document->content;
 
         $self->_rendered_sections( \@sections );
