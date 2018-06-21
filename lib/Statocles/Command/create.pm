@@ -128,10 +128,10 @@ sub create_site {
         chdir $root;
         Statocles::Command::bundle->bundle_theme( 'default', 'theme' );
         chdir $cwd;
-        $vars{theme}{args}{store} = 'theme';
+        $vars{theme}{store} = 'theme';
     }
     else {
-        $vars{theme}{args}{store} = '::default';
+        $vars{theme}{store} = '::default';
     }
 
     if ( $answer{base_url} ) {
@@ -139,8 +139,8 @@ sub create_site {
     }
 
     if ( $answer{deploy_class} == 1 ) {
-        $vars{deploy}{class} = 'Statocles::Deploy::Git';
-        $vars{deploy}{args}{branch} = $answer{git_branch};
+        $vars{deploy}{'$class'} = 'Statocles::Deploy::Git';
+        $vars{deploy}{branch} = $answer{git_branch};
 
         # Create the git repo
         require Git::Repository;
@@ -152,29 +152,29 @@ sub create_site {
         $root->child( '.gitignore' )->append( "\n.statocles\n" );
     }
     elsif ( $answer{deploy_class} == 2 ) {
-        $vars{deploy}{class} = 'Statocles::Deploy::File';
-        $vars{deploy}{args}{path} = $answer{deploy_path};
+        $vars{deploy}{'$class'} = 'Statocles::Deploy::File';
+        $vars{deploy}{path} = $answer{deploy_path};
     }
     else {
         # We need a deploy in order to create a Site object
-        $vars{deploy}{class} = 'Statocles::Deploy::File';
-        $vars{deploy}{args}{path} = '.';
+        $vars{deploy}{'$class'} = 'Statocles::Deploy::File';
+        $vars{deploy}{path} = '.';
     }
 
     $root->child( 'site.yml' )->spew_utf8( $config_tmpl->render( %vars ) );
     my ( $site ) = YAML::Load( $root->child( 'site.yml' )->slurp_utf8 );
 
     # Make required store directories
-    for my $app ( map { $_->{'$ref'} } values %{ $site->{site}{args}{apps} } ) {
-        my $path = $site->{$app}{args}{store};
+    for my $app ( map { $_->{'$ref'} } values %{ $site->{site}{apps} } ) {
+        my $path = $site->{$app}{store};
         next unless $path;
         $root->child( $path )->mkpath;
     }
 
     ### Copy initial site content
     # Blog
-    if ( my $ref = $site->{site}{args}{apps}{blog} ) {
-        my $path = $site->{ $ref->{ '$ref' } }{args}{store};
+    if ( my $ref = $site->{site}{apps}{blog} ) {
+        my $path = $site->{ $ref->{ '$ref' } }{store};
         if ( $path ) {
             my ( undef, undef, undef, $day, $mon, $year ) = localtime;
             $year += 1900;
@@ -193,8 +193,8 @@ sub create_site {
     }
 
     # Page
-    if ( my $ref = $site->{site}{args}{apps}{page} ) {
-        my $path = $site->{ $ref->{ '$ref' } }{args}{store};
+    if ( my $ref = $site->{site}{apps}{page} ) {
+        my $path = $site->{ $ref->{ '$ref' } }{store};
         if ( $path ) {
             my $page_path = $root->child( $path, 'index.markdown' );
             $page_path->parent->mkpath;

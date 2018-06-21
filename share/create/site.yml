@@ -27,95 +27,87 @@
 # deploying, and store global site data like themes and navigation. See
 # Statocles::Site for a full list of attributes and what they do.
 site:
-    class: 'Statocles::Site'
+    $class: 'Statocles::Site'
 
-    args:
+    # title: This is the title of the site, shown in the <title> tag
+    title: 'My Statocles Site'
 
-        # title: This is the title of the site, shown in the <title> tag
-        title: 'My Statocles Site'
+    # base_url: This is the base URL the site will be deployed to. It
+    # should be a full URL, and may contain a path, like:
+    #
+    #   http://example.com/username
+    #
+    # If the base_url contains a path, all internal links will be
+    # rewritten appropriately.
+    base_url: '<%= $site->{base_url} %>'
 
-        # base_url: This is the base URL the site will be deployed to. It
-        # should be a full URL, and may contain a path, like:
-        #
-        #   http://example.com/username
-        #
-        # If the base_url contains a path, all internal links will be
-        # rewritten appropriately.
-        base_url: '<%= $site->{base_url} %>'
+    # apps: These are the applications in this site. The name of the app,
+    # "blog", "page", or "static", is used to refer to it in commands.
+    apps:
 
-        # apps: These are the applications in this site. The name of the app,
-        # "blog", "page", or "static", is used to refer to it in commands.
-        apps:
+        # blog: This is the blog app
+        blog:
+            $ref: 'blog_app'
 
-            # blog: This is the blog app
-            blog:
-                $ref: 'blog_app'
+        # page: This app turns any Markdown page into HTML
+        page:
+            $ref: 'page_app'
 
-            # page: This app turns any Markdown page into HTML
-            page:
-                $ref: 'page_app'
+    # plugins: These are plugins that can add features and alter the
+    # content of the site.
+    plugins:
+        link_check:
+            $class: 'Statocles::Plugin::LinkCheck'
 
-            # static: This app does no processing at all. Good for images
-            static:
-                $ref: 'static_app'
+    # theme: The theme builds and manages the templates. Use themes to
+    # change how your site looks.
+    theme:
+        $ref: 'theme'
 
-        # plugins: These are plugins that can add features and alter the
-        # content of the site.
-        plugins:
-            link_check:
-                $class: 'Statocles::Plugin::LinkCheck'
+    # index: The path to the page that should be used for the site index.
+    index: '<%= $site->{index} %>'
 
-        # theme: The theme builds and manages the templates. Use themes to
-        # change how your site looks.
-        theme:
-            $ref: 'theme'
+    # nav: These are lists of navigation links used by the theme.
+    # Navigations are used to move between applications, or to go to
+    # specific, important pages.
+    #
+    # The "main" nav is the primary navigation for the site. Every theme
+    # should have this one.
+    #
+    # Each nav consists of an array of links. See the Statocles::Link class
+    # for a list of attributes and what they mean. The most important are
+    # "text", the text of the link, and "href", the URL to link to.
+    nav:
+        main:
+            % for my $link ( @{ $site->{nav}{main} // [] } ) {
+            - text: '<%= $link->{text} %>'
+              href: '<%= $link->{href} %>'
+            % }
 
-        # index: The path to the page that should be used for the site index.
-        index: '<%= $site->{index} %>'
-
-        # nav: These are lists of navigation links used by the theme.
-        # Navigations are used to move between applications, or to go to
-        # specific, important pages.
-        #
-        # The "main" nav is the primary navigation for the site. Every theme
-        # should have this one.
-        #
-        # Each nav consists of an array of links. See the Statocles::Link class
-        # for a list of attributes and what they mean. The most important are
-        # "text", the text of the link, and "href", the URL to link to.
-        nav:
-            main:
-                % for my $link ( @{ $site->{nav}{main} // [] } ) {
-                - text: '<%= $link->{text} %>'
-                  href: '<%= $link->{href} %>'
-                % }
-
-        # deploy: This is the deploy object, used to deploy this site.
-        deploy:
-            $ref: 'deploy'
+    # deploy: This is the deploy object, used to deploy this site.
+    deploy:
+        $ref: 'deploy'
 
 # theme: These are the settings for the theme.  See Statocles::Help::Theme for
 # more information, and Statocles::Theme for a full list of attributes and what
 # they do
 theme:
-    class: 'Statocles::Theme'
-    args:
-        # store: The store points to the directory where the theme's
-        # templates are kept. Under-the-hood, this is a Statocles::Store
-        # object.
-        #
-        # Themes have a special syntax to refer to themes that come bundled with
-        # Statocles. See Statocles::Help::Theme for more information
-        store: '<%= $theme->{args}{store} %>'
+    $class: 'Statocles::Theme'
+    # store: The store points to the directory where the theme's
+    # templates are kept. Under-the-hood, this is a Statocles::Store
+    # object.
+    #
+    # Themes have a special syntax to refer to themes that come bundled with
+    # Statocles. See Statocles::Help::Theme for more information
+    store: '<%= $theme->{store} %>'
 
 # deploy: These are the settings for the site's deploy. See Statocles::Deploy::File
 # for a full list of attributes and what they do.
 deploy:
-    class: '<%= $deploy->{class} %>'
-    args:
-        % for my $k ( keys %{ $deploy->{args} } ) {
-        <%= $k %>: '<%= $deploy->{args}{$k} %>'
-        % }
+    $class: '<%= $deploy->{'$class'} %>'
+    % for my $k ( keys %{ $deploy } ) {
+    <%= $k %>: '<%= $deploy->{$k} %>'
+    % }
 
 #----------------------------------------------------------------------------
 # Applications
@@ -130,21 +122,12 @@ deploy:
 
 # blog_app: These are the settings for the blog application.
 blog_app:
-    class: 'Statocles::App::Blog'
-    args:
-        url_root: '/blog'
-        store: 'blog'
+    $class: 'Statocles::App::Blog'
+    url_root: '/blog'
+    store: 'blog'
 
 # page_app: These are the settings for the page application.
 page_app:
-    class: 'Statocles::App::Basic'
-    args:
-        store: 'page'
-        url_root: '/page'
-
-# static_app: These are the settings for the static application.
-static_app:
-    class: 'Statocles::App::Basic'
-    args:
-        store: 'static'
-        url_root: '/static'
+    $class: 'Statocles::App::Basic'
+    store: 'page'
+    url_root: '/page'

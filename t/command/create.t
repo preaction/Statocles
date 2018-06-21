@@ -37,11 +37,11 @@ subtest 'create a site' => sub {
         eq_or_diff $out, $SHARE_DIR->child( qw( create project_file_out.txt ) )->slurp_utf8;
 
         my $expect_config = site_config();
-        $expect_config->{site}{args}{nav}{main}[0]{href} = "/blog";
-        $expect_config->{site}{args}{index} = "/page";
-        $expect_config->{site}{args}{base_url} = "http://example.com";
-        $expect_config->{deploy}{class} = "Statocles::Deploy::File";
-        $expect_config->{deploy}{args}{path} = ".";
+        $expect_config->{site}{nav}{main}[0]{href} = "/blog";
+        $expect_config->{site}{index} = "/page";
+        $expect_config->{site}{base_url} = "http://example.com";
+        $expect_config->{deploy}{'$class'} = "Statocles::Deploy::File";
+        $expect_config->{deploy}{path} = ".";
 
         ok $tmp->child( 'example.com', 'site.yml' )->is_file, 'site.yml file exists';
         my $config = $tmp->child( 'example.com', 'site.yml' )->slurp_utf8;
@@ -56,7 +56,6 @@ subtest 'create a site' => sub {
         eq_or_diff $tmp->child( 'example.com', 'blog', @date_parts, 'first-post', 'index.markdown' )->slurp,
                    $create_dir->child( 'blog', 'post.markdown' )->slurp,
                    'first post exists';
-        ok $tmp->child( 'example.com', 'static' )->is_dir, 'static dir exists';
         ok $tmp->child( 'example.com', 'page' )->is_dir, 'page dir exists';
         eq_or_diff $tmp->child( 'example.com', 'page', 'index.markdown' )->slurp,
                    $create_dir->child( 'page', 'index.markdown' )->slurp,
@@ -83,9 +82,9 @@ subtest 'create a site' => sub {
         eq_or_diff $out, $SHARE_DIR->child( qw( create none_out.txt ) )->slurp_utf8;
 
         my $expect_config = site_config();
-        $expect_config->{site}{args}{base_url} = "http://example.com";
-        $expect_config->{deploy}{class} = 'Statocles::Deploy::File';
-        $expect_config->{deploy}{args}{path} = '.';
+        $expect_config->{site}{base_url} = "http://example.com";
+        $expect_config->{deploy}{'$class'} = 'Statocles::Deploy::File';
+        $expect_config->{deploy}{path} = '.';
 
         ok $tmp->child( 'example.com', 'site.yml' )->is_file, 'site.yml file exists';
         my $config = $tmp->child( 'example.com', 'site.yml' )->slurp_utf8;
@@ -100,7 +99,6 @@ subtest 'create a site' => sub {
         eq_or_diff $tmp->child( 'example.com', 'blog', @date_parts, 'first-post', 'index.markdown' )->slurp,
                    $create_dir->child( 'blog', 'post.markdown' )->slurp,
                    'first post exists';
-        ok $tmp->child( 'example.com', 'static' )->is_dir, 'static dir exists';
         ok $tmp->child( 'example.com', 'page' )->is_dir, 'page dir exists';
         eq_or_diff $tmp->child( 'example.com', 'page', 'index.markdown' )->slurp,
                    $create_dir->child( 'page', 'index.markdown' )->slurp,
@@ -128,11 +126,11 @@ subtest 'create a site' => sub {
 
         my $expect_config = site_config();
         # Missing http:// gets added
-        $expect_config->{site}{args}{base_url} = "http://example.com";
-        $expect_config->{site}{args}{nav}{main}[0]{href} = "/blog";
-        $expect_config->{site}{args}{index} = "/page";
-        $expect_config->{deploy}{class} = "Statocles::Deploy::File";
-        $expect_config->{deploy}{args}{path} = ".";
+        $expect_config->{site}{base_url} = "http://example.com";
+        $expect_config->{site}{nav}{main}[0]{href} = "/blog";
+        $expect_config->{site}{index} = "/page";
+        $expect_config->{deploy}{'$class'} = "Statocles::Deploy::File";
+        $expect_config->{deploy}{path} = ".";
 
         ok $tmp->child( 'site.yml' )->is_file, 'site.yml file exists';
         my $config = $tmp->child( 'site.yml' )->slurp_utf8;
@@ -147,7 +145,6 @@ subtest 'create a site' => sub {
         eq_or_diff $tmp->child( 'blog', @date_parts, 'first-post', 'index.markdown' )->slurp,
                    $create_dir->child( 'blog', 'post.markdown' )->slurp,
                    'first post exists';
-        ok $tmp->child( 'static' )->is_dir, 'static dir exists';
         ok $tmp->child( 'page' )->is_dir, 'page dir exists';
         eq_or_diff $tmp->child( 'page', 'index.markdown' )->slurp,
                    $create_dir->child( 'page', 'index.markdown' )->slurp,
@@ -174,11 +171,11 @@ subtest 'create a site' => sub {
         eq_or_diff $out, $SHARE_DIR->child( qw( create project_file_with_https_base_out.txt ) )->slurp_utf8;
 
         my $expect_config = site_config();
-        $expect_config->{site}{args}{base_url} = "https://example.com";
-        $expect_config->{site}{args}{nav}{main}[0]{href} = "/blog";
-        $expect_config->{site}{args}{index} = "/page";
-        $expect_config->{deploy}{class} = "Statocles::Deploy::File";
-        $expect_config->{deploy}{args}{path} = ".";
+        $expect_config->{site}{base_url} = "https://example.com";
+        $expect_config->{site}{nav}{main}[0]{href} = "/blog";
+        $expect_config->{site}{index} = "/page";
+        $expect_config->{deploy}{'$class'} = "Statocles::Deploy::File";
+        $expect_config->{deploy}{path} = ".";
 
         ok $tmp->child( 'site.yml' )->is_file, 'site.yml file exists';
         my $config = $tmp->child( 'site.yml' )->slurp_utf8;
@@ -193,7 +190,6 @@ subtest 'create a site' => sub {
         eq_or_diff $tmp->child( 'blog', @date_parts, 'first-post', 'index.markdown' )->slurp,
                    $create_dir->child( 'blog', 'post.markdown' )->slurp,
                    'first post exists';
-        ok $tmp->child( 'static' )->is_dir, 'static dir exists';
         ok $tmp->child( 'page' )->is_dir, 'page dir exists';
         eq_or_diff $tmp->child( 'page', 'index.markdown' )->slurp,
                    $create_dir->child( 'page', 'index.markdown' )->slurp,
@@ -220,9 +216,9 @@ subtest 'create a site' => sub {
         eq_or_diff $out, $SHARE_DIR->child( qw( create none_out.txt ) )->slurp_utf8;
 
         my $expect_config = site_config();
-        $expect_config->{site}{args}{base_url} = "http://site.example.com";
-        $expect_config->{deploy}{class} = 'Statocles::Deploy::File';
-        $expect_config->{deploy}{args}{path} = '.';
+        $expect_config->{site}{base_url} = "http://site.example.com";
+        $expect_config->{deploy}{'$class'} = 'Statocles::Deploy::File';
+        $expect_config->{deploy}{path} = '.';
 
         ok $tmp->child( 'example.com', 'site.yml' )->is_file, 'site.yml file exists';
         my $config = $tmp->child( 'example.com', 'site.yml' )->slurp_utf8;
@@ -237,7 +233,6 @@ subtest 'create a site' => sub {
         eq_or_diff $tmp->child( 'example.com', 'blog', @date_parts, 'first-post', 'index.markdown' )->slurp,
                    $create_dir->child( 'blog', 'post.markdown' )->slurp,
                    'first post exists';
-        ok $tmp->child( 'example.com', 'static' )->is_dir, 'static dir exists';
         ok $tmp->child( 'example.com', 'page' )->is_dir, 'page dir exists';
         eq_or_diff $tmp->child( 'example.com', 'page', 'index.markdown' )->slurp,
                    $create_dir->child( 'page', 'index.markdown' )->slurp,
@@ -285,10 +280,10 @@ subtest 'git deploy' => sub {
         ok $tmp->child( 'www.example.com', 'site.yml' )->is_file, 'site.yml file exists';
         my $expect_config = site_config();
 
-        $expect_config->{site}{args}{base_url} = "http://www.example.com";
-        $expect_config->{deploy}{class} = 'Statocles::Deploy::Git';
-        $expect_config->{deploy}{args}{branch} = 'master';
-        $expect_config->{theme}{args}{store} = 'theme';
+        $expect_config->{site}{base_url} = "http://www.example.com";
+        $expect_config->{deploy}{'$class'} = 'Statocles::Deploy::Git';
+        $expect_config->{deploy}{branch} = 'master';
+        $expect_config->{theme}{store} = 'theme';
 
         my $config = $tmp->child( 'www.example.com', 'site.yml' )->slurp_utf8;
         cmp_deeply
@@ -302,7 +297,6 @@ subtest 'git deploy' => sub {
         eq_or_diff $tmp->child( 'www.example.com', 'blog', @date_parts, 'first-post', 'index.markdown' )->slurp,
                    $create_dir->child( 'blog', 'post.markdown' )->slurp,
                    'first post exists';
-        ok $tmp->child( 'www.example.com', 'static' )->is_dir, 'static dir exists';
         ok $tmp->child( 'www.example.com', 'page' )->is_dir, 'page dir exists';
         eq_or_diff $tmp->child( 'www.example.com', 'page', 'index.markdown' )->slurp,
                    $create_dir->child( 'page', 'index.markdown' )->slurp,
@@ -340,10 +334,10 @@ subtest 'git deploy' => sub {
         ok $tmp->child( 'site.yml' )->is_file, 'site.yml file exists';
         my $expect_config = site_config();
 
-        $expect_config->{site}{args}{base_url} = "http://example.com";
-        $expect_config->{deploy}{class} = 'Statocles::Deploy::Git';
-        $expect_config->{deploy}{args}{branch} = 'master';
-        $expect_config->{theme}{args}{store} = 'theme';
+        $expect_config->{site}{base_url} = "http://example.com";
+        $expect_config->{deploy}{'$class'} = 'Statocles::Deploy::Git';
+        $expect_config->{deploy}{branch} = 'master';
+        $expect_config->{theme}{store} = 'theme';
 
         my $config = $tmp->child( 'site.yml' )->slurp_utf8;
         cmp_deeply
@@ -357,7 +351,6 @@ subtest 'git deploy' => sub {
         eq_or_diff $tmp->child( 'blog', @date_parts, 'first-post', 'index.markdown' )->slurp,
                    $create_dir->child( 'blog', 'post.markdown' )->slurp,
                    'first post exists';
-        ok $tmp->child( 'static' )->is_dir, 'static dir exists';
         ok $tmp->child( 'page' )->is_dir, 'page dir exists';
         eq_or_diff $tmp->child( 'page', 'index.markdown' )->slurp,
                    $create_dir->child( 'page', 'index.markdown' )->slurp,
@@ -397,62 +390,45 @@ sub test_site_build {
 sub site_config {
     return {
         site => {
-            class => 'Statocles::Site',
-            args => {
-                title => 'My Statocles Site',
-                nav => {
-                    main => [
-                        {
-                            text => 'Blog',
-                            href => '/',
-                        },
-                    ],
-                },
-                theme => { '$ref' => 'theme' },
-                apps => {
-                    blog => { '$ref' => 'blog_app' },
-                    page => { '$ref' => 'page_app' },
-                    static => { '$ref' => 'static_app' },
-                },
-                index => '/blog',
-                deploy => { '$ref' => 'deploy' },
-                plugins => {
-                    link_check => {
-                        '$class' => 'Statocles::Plugin::LinkCheck',
+            '$class' => 'Statocles::Site',
+            title => 'My Statocles Site',
+            nav => {
+                main => [
+                    {
+                        text => 'Blog',
+                        href => '/',
                     },
+                ],
+            },
+            theme => { '$ref' => 'theme' },
+            apps => {
+                blog => { '$ref' => 'blog_app' },
+                page => { '$ref' => 'page_app' },
+            },
+            index => '/blog',
+            deploy => { '$ref' => 'deploy' },
+            plugins => {
+                link_check => {
+                    '$class' => 'Statocles::Plugin::LinkCheck',
                 },
             },
         },
 
         blog_app => {
-            class => 'Statocles::App::Blog',
-            args => {
-                store => 'blog',
-                url_root => '/blog',
-            },
+            '$class' => 'Statocles::App::Blog',
+            store => 'blog',
+            url_root => '/blog',
         },
 
         page_app => {
-            class => 'Statocles::App::Basic',
-            args => {
-                store => 'page',
-                url_root => '/page',
-            },
-        },
-
-        static_app => {
-            class => 'Statocles::App::Basic',
-            args => {
-                store => 'static',
-                url_root => '/static',
-            },
+            '$class' => 'Statocles::App::Basic',
+            store => 'page',
+            url_root => '/page',
         },
 
         theme => {
-            class => 'Statocles::Theme',
-            args => {
-                store => '::default',
-            },
+            '$class' => 'Statocles::Theme',
+            store => '::default',
         },
 
     };
