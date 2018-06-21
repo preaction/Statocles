@@ -7,7 +7,7 @@ with 'Statocles::Role::PageAttrs';
 use Statocles::Image;
 use Statocles::Util qw( derp );
 use YAML ();
-use JSON::PP qw( decode_json );
+use JSON::PP;
 
 =attr path
 
@@ -402,7 +402,7 @@ sub parse_content {
             $json = join "\n", splice( @lines, 0, $i+1 );
         }
         eval {
-            %doc = %{ decode_json( $json ) };
+            %doc = %{ JSON::PP->new()->utf8(0)->decode( $json ) };
         };
         if ( $@ ) {
             die qq{Error parsing JSON: $@\n};
