@@ -205,6 +205,26 @@ ENDHTML
     };
 };
 
+subtest 'template directive config' => sub {
+    my $theme = Statocles::Theme->new(
+        store => '::default',
+        tag_start => '[%',
+        tag_end => '%]',
+        line_start => "\036", # Something nobody will use
+    );
+    my $content = <<ENDTMPL;
+[%= "hello" %]
+% not you
+ENDTMPL
+    my $expect = <<'ENDHTML';
+hello
+% not you
+ENDHTML
+    my $tmpl = $theme->build_template( 'derp', $content );
+    my $got = $tmpl->render;
+    eq_or_diff $got, $expect;
+};
+
 subtest 'error messages' => sub {
 
     subtest 'template not found' => sub {

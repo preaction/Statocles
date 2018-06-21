@@ -45,6 +45,59 @@ has include_stores => (
     },
 );
 
+=attr tag_start
+
+String that indicates the start of a template tag. Defaults to
+C<< <% >>.
+
+=attr tag_end
+
+String that indicates the end of a template tag. Defaults to C<< %> >>.
+
+=attr line_start
+
+String that indicates the start of a line of template code.
+Defaults to C<%>.
+
+=attr expression_mark
+
+String that indicates an expression to be evaluated and inserted into
+the template. Defaults to C<=>.
+
+=attr escape_mark
+
+String that escapes the template directives. Defaults to C<%>.
+
+=attr comment_mark
+
+String that indicates a comment. Defaults to C<#>.
+
+=attr capture_start
+
+Keyword that starts capturing string. Defaults to C<begin>.
+
+=attr capture_end
+
+Keyword that ends capturing string. Defaults to C<end>.
+
+=attr trim_mark
+
+String that indicates that whitespace should be trimmed. Defaults to
+C<=>.
+
+=cut
+
+has [qw(
+    tag_start tag_end
+    line_start trim_mark
+    replace_mark expression_mark
+    escape_mark comment_mark
+    capture_start capture_end
+)] => (
+    is => 'ro',
+    isa => Maybe[Str],
+);
+
 =attr _templates
 
 The cached template objects for this theme.

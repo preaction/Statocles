@@ -78,8 +78,21 @@ has _template => (
     lazy => 1,
     default => sub {
         my ( $self ) = @_;
+        my %config;
+        if ( $self->theme ) {
+            %config = map { $_ => $self->theme->$_ }
+                grep { $self->theme->$_ }
+                qw(
+                    tag_start tag_end
+                    line_start trim_mark
+                    replace_mark expression_mark
+                    escape_mark comment_mark
+                    capture_start capture_end
+                );
+        }
         my $t = Mojo::Template->new(
             name => $self->path,
+            %config,
         );
         $t->parse( $self->content );
         return $t;
