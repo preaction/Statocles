@@ -106,6 +106,14 @@ my %tests = (
     },
     'image.png' => { },
     'text.txt' => { },
+    'utf8-yml.md' => {
+        title => "Zero \x{00BB} One Hundred",
+        content => "\nThis is a test post for UTF-8 with YAML front matter.\n",
+    },
+    'utf8-json.md' => {
+        title => "Zero \x{00BB} One Hundred",
+        content => "\nThis is a test post for UTF-8 titles with a JSON front matter.\n",
+    },
 );
 
 sub test_store {
