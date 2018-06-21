@@ -1,5 +1,7 @@
+use utf8;
 use Test::Lib;
 use My::Test;
+use Path::Tiny  'path';
 use Statocles::Document;
 my $SHARE_DIR = path( __DIR__, 'share' );
 
@@ -86,6 +88,14 @@ subtest 'parse_content' => sub {
                 content => "",
             );
         ok !@warnings, 'no warnings' or diag explain \@warnings;
+    };
+    subtest 'UTF-8 front matter ' => sub {
+        is +Statocles::Document->parse_content(
+          content => path('t/share/store/docs/utf8-json.md')->slurp_utf8(),
+        )->title, 'Zero » One Hundred', 'json front matter parsed ok';
+        is +Statocles::Document->parse_content(
+          content => path('t/share/store/docs/utf8-yml.md')->slurp_utf8(),
+        )->title, 'Zero » One Hundred', 'yaml front matter parsed ok';
     };
 };
 
