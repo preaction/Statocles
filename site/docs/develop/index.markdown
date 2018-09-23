@@ -19,6 +19,25 @@ more pages, attaching templates from the theme. Finally, the site
 collects all the pages, writes out the rendered HTML, and deploys the
 site.
 
+### Workflow
+
+Fundamentally, the types of entity are:
+- web page: can be represented in POD, Markdown, raw HTML
+- asset: (CSS, JS, image) can be part of a theme, or part of individual web page
+- high-level theme: way of showing information to the world, probably a web site i.e. collection of individual web pages
+- static web site: an end product, being a set of web pages viewable in a browser, typically hyperlinked to each other, and styled to taste
+- template: a convenient way to process input data (e.g. as might be in a Markdown file) into output (e.g. HTML)
+- processing plugin: a way to encapsulate a stage of information processing
+
+To categorise these entities, the first four can be considered "values", and the last two as "functions" that turn values into other values.
+
+Statocles's "workflow" of information, using only the above types of entity, is as follows:
+- user creates/inserts a new web page, optionally with additional assets - currently a Markdown disk file maybe made with `statocles` command
+- a high-level theme applies a high-level theme, consisting of templates, possibly with processing plugins to create a static web site
+- the static web site is deployed to something end-users can see
+
+The current implementation described below is a concrete way of dealing with these entities, and implementing this workflow.
+
 ### Documents
 
 Documents are the content the user writes, which consists of Markdown
@@ -236,9 +255,3 @@ And we use our new `ul` helper by passing in the items we want to list, like so:
 Which produces the HTML:
 
     <ul><li>Item one</li><li>Item two</li><li>Item three</li></ul>
-
-## Apps
-
-## Deploy
-
-## Documents
