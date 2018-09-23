@@ -35,7 +35,7 @@ can provide a custom look to your Bootstrap site.
 =head2 Include Stores
 
 Before going to editing the entire theme, you can change the theme includes
-by adding L<include_stores|Statocles::Theme/include_stores>.
+by adding L<include_paths|Statocles::Theme/include_paths>.
 
 Some examples of files you can edit are:
 

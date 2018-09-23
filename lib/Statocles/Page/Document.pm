@@ -137,7 +137,7 @@ sub _render_content_template {
     my $doc = $self->document;
     if ( $doc->store ) {
         my $document_path = $doc->store->path->child( $doc->path )->parent;
-        push @{ $tmpl->include_stores }, Statocles::Store->new( path => $document_path );
+        push @{ $tmpl->include_paths }, $document_path;
     }
     my $rendered = $tmpl->render( %$vars, $self->vars, self => $doc, page => $self );
     return $rendered;

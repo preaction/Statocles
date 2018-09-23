@@ -7,122 +7,50 @@ use Scalar::Util qw( refaddr );
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
 build_test_site( theme => $SHARE_DIR->child( 'theme' ) );
 
-subtest 'attributes' => sub {
-    subtest 'store is required' => sub {
-        throws_ok { Statocles::Theme->new( ) } qr/store/ or diag $@;
-    };
-};
-
-sub read_templates {
-    my ( $store, $theme ) = @_;
-
-    my $dir = $store->path;
-
-    my $tmpl_fn = $dir->child( 'blog', 'post.html.ep' );
-    my $tmpl = Statocles::Template->new(
-        path => $tmpl_fn->relative( $dir ),
-        content => $tmpl_fn->slurp_utf8,
-        store => $store,
-        theme => $theme,
-    );
-
-    my $index_fn = $dir->child( 'blog', 'index.html.ep' );
-    my $index = Statocles::Template->new(
-        path => $index_fn->relative( $dir ),
-        content => $index_fn->slurp_utf8,
-        store => $store,
-        theme => $theme,
-    );
-
-    my $rss_fn = $dir->child( 'blog', 'index.rss.ep' );
-    my $rss = Statocles::Template->new(
-        path => $rss_fn->relative( $dir ),
-        content => $rss_fn->slurp_utf8,
-        store => $store,
-        theme => $theme,
-    );
-
-    my $atom_fn = $dir->child( 'blog', 'index.atom.ep' );
-    my $atom = Statocles::Template->new(
-        path => $atom_fn->relative( $dir ),
-        content => $atom_fn->slurp_utf8,
-        store => $store,
-        theme => $theme,
-    );
-
-    my $layout_fn = $dir->child( 'layout', 'default.html.ep' );
-    my $layout = Statocles::Template->new(
-        path => $layout_fn->relative( $dir ),
-        content => $layout_fn->slurp_utf8,
-        store => $store,
-        theme => $theme,
-    );
-
-    my $extra_fn = $dir->child( 'site', 'include', 'extra.html.ep' );
-    my $extra = Statocles::Template->new(
-        path => $extra_fn->relative( $dir ),
-        content => $extra_fn->slurp_utf8,
-        store => $store,
-        theme => $theme,
-    );
-
-    return (
-        'blog/post.html' => $tmpl,
-        'blog/index.html' => $index,
-        'blog/index.rss' => $rss,
-        'blog/index.atom' => $atom,
-        'layout/default.html' => $layout,
-        'site/include/extra.html' => $extra,
-    );
-}
-
 subtest 'templates from directory' => sub {
-    my @templates = (
-        'blog/post.html',
-        'blog/index.html',
-        'blog/index.rss',
-        'blog/index.atom',
-        'layout/default.html',
-        'site/include/extra.html',
-    );
-
     subtest 'absolute directory' => sub {
-        my $store = Statocles::Store->new(
+        my $theme = Statocles::Theme->new(
             path => $SHARE_DIR->child( 'theme' ),
         );
-        my $theme = Statocles::Theme->new(
-            store => $SHARE_DIR->child( 'theme' ),
-        );
-        my %exp_templates = read_templates( $store, $theme );
-        for my $tmpl ( @templates ) {
-            subtest $tmpl => sub {
-                cmp_deeply $theme->template( split m{/}, $tmpl ), $exp_templates{ $tmpl }, 'array of path parts';
-                cmp_deeply $theme->template( $tmpl ), $exp_templates{ $tmpl }, 'path with slashes';
-                cmp_deeply $theme->template( Path::Tiny->new( split m{/}, $tmpl ) ), $exp_templates{ $tmpl }, 'Path::Tiny object';
-            };
-        }
+
+        my $tmpl = $theme->template( 'blog', 'post.html' );
+        isa_ok $tmpl, 'Statocles::Template';
+        is $tmpl->path, 'blog/post.html.ep', 'path is correct';
+        is $tmpl->theme, $theme, 'theme is correct';
+
+        $tmpl = $theme->template( 'blog/post.html' );
+        isa_ok $tmpl, 'Statocles::Template';
+        is $tmpl->path, 'blog/post.html.ep', 'path is correct';
+        is $tmpl->theme, $theme, 'theme is correct';
+
+        $tmpl = $theme->template( Path::Tiny->new( 'blog', 'post.html' ) );
+        isa_ok $tmpl, 'Statocles::Template';
+        is $tmpl->path, 'blog/post.html.ep', 'path is correct';
+        is $tmpl->theme, $theme, 'theme is correct';
     };
 
     subtest 'relative directory' => sub {
         my $cwd = getcwd();
         chdir $SHARE_DIR;
 
-        my $store = Statocles::Store->new(
-            path => 'theme',
-        );
-
         my $theme = Statocles::Theme->new(
             store => 'theme',
         );
-        my %exp_templates = read_templates( $store, $theme );
 
-        for my $tmpl ( @templates ) {
-            subtest $tmpl => sub {
-                cmp_deeply $theme->template( split m{/}, $tmpl ), $exp_templates{ $tmpl }, 'array of path parts';
-                cmp_deeply $theme->template( $tmpl ), $exp_templates{ $tmpl }, 'path with slashes';
-                cmp_deeply $theme->template( Path::Tiny->new( split m{/}, $tmpl ) ), $exp_templates{ $tmpl }, 'Path::Tiny object';
-            };
-        }
+        my $tmpl = $theme->template( 'blog', 'post.html' );
+        isa_ok $tmpl, 'Statocles::Template';
+        is $tmpl->path, 'blog/post.html.ep', 'path is correct';
+        is $tmpl->theme, $theme, 'theme is correct';
+
+        $tmpl = $theme->template( 'blog/post.html' );
+        isa_ok $tmpl, 'Statocles::Template';
+        is $tmpl->path, 'blog/post.html.ep', 'path is correct';
+        is $tmpl->theme, $theme, 'theme is correct';
+
+        $tmpl = $theme->template( Path::Tiny->new( 'blog', 'post.html' ) );
+        isa_ok $tmpl, 'Statocles::Template';
+        is $tmpl->path, 'blog/post.html.ep', 'path is correct';
+        is $tmpl->theme, $theme, 'theme is correct';
 
         chdir $cwd;
     };
@@ -132,7 +60,7 @@ subtest 'templates from directory' => sub {
             store => '::default',
         );
         my $theme_path = path(qw( theme default ));
-        like $theme->store->path, qr{\Q$theme_path\E$}
+        like $theme->path, qr{\Q$theme_path\E$}
     };
 };
 
@@ -170,10 +98,10 @@ subtest 'theme caching' => sub {
     isnt refaddr $theme->template( site => 'sitemap.xml' ), refaddr $tmpl, 'new object created';
 };
 
-subtest 'include_stores' => sub {
+subtest 'include_paths' => sub {
     my $theme = Statocles::Theme->new(
-        store => '::default',
-        include_stores => [
+        path => '::default',
+        include_paths => [
             $SHARE_DIR->child( 'theme_include' ),
         ],
     );
@@ -207,7 +135,7 @@ ENDHTML
 
 subtest 'template directive config' => sub {
     my $theme = Statocles::Theme->new(
-        store => '::default',
+        path => '::default',
         tag_start => '[%',
         tag_end => '%]',
         line_start => "\036", # Something nobody will use
@@ -229,9 +157,9 @@ subtest 'error messages' => sub {
 
     subtest 'template not found' => sub {
         my $theme = Statocles::Theme->new(
-            store => '::default',
+            path => '::default',
         );
-        my $theme_path = $theme->store->path->stringify;
+        my $theme_path = $theme->path->stringify;
         throws_ok { $theme->template( DOES_NOT_EXIST => 'does_not_exist.html' ) }
             qr{ERROR: Template "DOES_NOT_EXIST/does_not_exist\.html\.ep" does not exist in theme directory "\Q$theme_path\E"};
     };

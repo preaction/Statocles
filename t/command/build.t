@@ -10,6 +10,7 @@ my $SHARE_DIR = path( __DIR__, '..', 'share' );
 
 my $site = Statocles::Site->new(
     store => tempdir,
+    theme => $SHARE_DIR->child( 'theme' ),
     apps => {
         base => TestApp->new(
             url_root => '/',
@@ -33,6 +34,7 @@ my $site = Statocles::Site->new(
 subtest 'build site' => sub {
     my $tempdir = tempdir;
 
+    #; say "Site dir is $tempdir";
     my $cmd = Statocles::Command::build->new( site => $site );
     $cmd->run( $tempdir, '--date', '2018-01-01' );
 

@@ -112,7 +112,7 @@ sub run {
             }
 
             # Watch the theme, but not built-in themes
-            my $theme_path = $self->site->theme->store->path;
+            my $theme_path = $self->site->theme->path;
             if ( !Path::Tiny->new( dist_dir( 'Statocles' ) )->subsumes( $theme_path ) ) {
                 push @{ $watches{ $theme_path } }, $self->site->theme;
             }

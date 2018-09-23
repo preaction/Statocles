@@ -50,7 +50,7 @@ subtest 'missing include dies' => sub {
     my $tmpl = Statocles::Template->new(
         path => $SHARE_DIR->child( 'tmpl', 'include_with_template.html.ep' ),
         theme => $SHARE_DIR,
-        include_stores => [
+        include_paths => [
             $SHARE_DIR->child( 'store', 'docs' ),
         ],
     );
@@ -65,7 +65,7 @@ subtest 'add template include store' => sub {
         my $tmpl = Statocles::Template->new(
             path => $SHARE_DIR->child( 'tmpl', 'include_with_template.html.ep' ),
             theme => $SHARE_DIR->child( 'theme' ),
-            include_stores => [
+            include_paths => [
                 $SHARE_DIR->child( 'tmpl' ),
             ],
         );
@@ -76,7 +76,7 @@ subtest 'add template include store' => sub {
         my $tmpl = Statocles::Template->new(
             path => $SHARE_DIR->child( 'tmpl', 'include_theme_file.html.ep' ),
             theme => $SHARE_DIR->child( 'theme' ),
-            include_stores => [
+            include_paths => [
                 $SHARE_DIR->child( 'tmpl' ),
             ],
         );

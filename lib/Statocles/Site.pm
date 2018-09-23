@@ -8,6 +8,8 @@ use Text::Markdown;
 use Mojo::URL;
 use Mojo::Log;
 use Statocles::Page::Plain;
+use Statocles::Page::File;
+use Statocles::Page::Document;
 use Statocles::Util qw( derp );
 use Statocles::Store;
 use List::UtilsBy qw( uniq_by );
@@ -87,8 +89,9 @@ has theme => (
     isa => ThemeType,
     coerce => ThemeType->coercion,
     default => sub {
+        my ( $self ) = @_;
         require Statocles::Theme;
-        Statocles::Theme->new( store => '::default' );
+        Statocles::Theme->new( path => '::default' );
     },
 );
 
@@ -490,6 +493,7 @@ sub pages {
         my $iter = shift;
         my @f;
         while ( my $obj = $iter->() ) {
+            next if $obj->path =~ /[.]ep$/;
             push @f, $obj;
         }
         return @f;
@@ -548,13 +552,17 @@ sub pages {
         $self->_build_robots,
         ;
 
-    # @pages should not change after this, because it is being cached
-    $self->_pages( \@pages );
-
     # Add the theme
+    my $theme_root = $self->theme->url_root;
+    $theme_root =~ s{^/}{}g;
+    my $pages_for_theme = [ grep { $_->path =~ m{^/?$theme_root} } @pages ];
+    $self->theme->site( $self );
     for my $page ( $self->theme->pages ) {
         push @pages, $page;
     }
+
+    # @pages should not change after this, because it is being cached
+    $self->_pages( \@pages );
 
     $self->emit(
         'build',
@@ -789,8 +797,8 @@ sub template {
     # If the default layout doesn't exist, use the old default.
     # Remove this in v2.0
     if ( $parts[0] eq 'layout' && $parts[1] eq 'default.html'
-        && !$self->theme->store->path->child( @parts )->is_file
-        && $self->theme->store->path->child( site => 'layout.html.ep' )->is_file
+        && !$self->theme->path->child( @parts )->is_file
+        && $self->theme->path->child( site => 'layout.html.ep' )->is_file
     ) {
         derp qq{Using default layout "site/layout.html.ep" is deprecated and will be removed in v2.0. Move your default layout to "layout/default.html.ep" to fix this warning.};
         return $self->theme->template( qw( site layout.html ) );

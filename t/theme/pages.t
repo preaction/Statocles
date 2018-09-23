@@ -14,7 +14,8 @@ my $site = build_test_site(
 my $app = Statocles::Theme->new(
     #url_root => '/theme',      # Default to /theme
     site => $site,
-    store => $SHARE_DIR->child( qw( theme ) ),
+    path => $SHARE_DIR->child( qw( theme ) ),
+    site => $site,
 );
 
 my %pages;

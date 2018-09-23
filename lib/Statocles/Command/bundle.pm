@@ -16,7 +16,7 @@ sub run {
             return 1;
         }
 
-        my $dest_dir = $self->site->theme->store->path;
+        my $dest_dir = $self->site->theme->path;
         $self->bundle_theme( $theme_name, $dest_dir, @argv[2..$#argv] );
         say qq{Theme "$theme_name" written to "$dest_dir"};
     }
