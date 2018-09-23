@@ -4,6 +4,7 @@ use My::Test;
 use Capture::Tiny qw( capture );
 use Mojo::IOLoop;
 use Statocles;
+use TestStore;
 use TestApp;
 use TestDeploy;
 use Statocles::Site;
@@ -11,21 +12,22 @@ use Statocles::Command::daemon;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
 
 my $site = Statocles::Site->new(
+    store => TestStore->new(
+        path => $SHARE_DIR->child( qw( store docs ) ),
+        objects => [
+            Statocles::Document->new(
+                path => '/index.html',
+                content => 'Index',
+            ),
+            Statocles::File->new(
+                path => '/image.png',
+            ),
+        ],
+    ),
     apps => {
         base => TestApp->new(
             url_root => '/',
-            pages => [
-                {
-                    class => 'Statocles::Page::Plain',
-                    path => '/index.html',
-                    content => 'Index',
-                },
-                {
-                    class => 'Statocles::Page::File',
-                    path => '/static.txt',
-                    file_path => $SHARE_DIR->child( qw( app basic static.txt ) ),
-                },
-            ],
+            pages => [ ],
         ),
     },
     deploy => TestDeploy->new,

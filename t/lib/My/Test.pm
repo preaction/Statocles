@@ -128,106 +128,6 @@ sub test_constructor {
     );
 }
 
-sub test_pages {
-    my ( $site, $app ) = ( shift, shift );
-
-    require Test::Builder;
-    require Scalar::Util;
-
-    my %opt;
-    if ( ref $_[0] eq 'HASH' ) {
-        %opt = %{ +shift };
-    }
-
-    my %page_tests = @_;
-
-    local $Test::Builder::Level = $Test::Builder::Level + 1;
-
-    my $tb = Test::Builder->new();
-
-    my @warnings;
-    local $SIG{__WARN__} = sub { push @warnings, $_[0] };
-
-    my @pages = $app->pages;
-
-    my %pages_app = map { ($_->path => 1) } @pages;
-    my %page_tests_copy = %page_tests;
-    delete @page_tests_copy{ keys %pages_app };
-    delete @pages_app{ keys %page_tests };
-
-    $tb->cmp_ok(
-        scalar(keys %pages_app),
-        '==',
-        0,
-        'No untested pages'
-    ) or $tb->diag( "Extra app pages: " . join( ", ", sort keys %pages_app ) );
-
-    $tb->cmp_ok(
-        scalar(keys %page_tests_copy),
-        '==',
-        0,
-        'No unpaged tests'
-    ) or $tb->diag( "Extra pages tested: " . join( ", ", sort keys %page_tests_copy ) );
-
-    for my $page (@pages) {
-        $tb->ok( $page->DOES('Statocles::Page'), 'must be a Statocles::Page' );
-
-        my $date   = $page->date;
-        my $want   = 'DateTime::Moonpig';
-        my $typeof = do {
-                !defined $date                ? 'undefined'
-              : !ref $date                    ? 'scalar'
-              : !Scalar::Util::blessed($date) ? ref $date
-              : eval { $date->isa($want) } ? $want
-              :                              Scalar::Util::blessed($date);
-        };
-        $tb->is_eq( $typeof, $want, 'must set a date' );
-
-        if ( !$page_tests{ $page->path } ) {
-            $tb->ok( 0, "No tests found for page: " . $page->path );
-            next;
-        }
-
-        my $output;
-
-        if ( $page->has_dom ) {
-            $output = "".$page->dom;
-        }
-        else {
-            $output = $page->render;
-            # Handle filehandles from render
-            if ( ref $output eq 'GLOB' ) {
-                $output = do { local $/; <$output> };
-            }
-            # Handle Path::Tiny from render
-            elsif ( Scalar::Util::blessed( $output ) && $output->isa( 'Path::Tiny' ) ) {
-                $output = $output->slurp_raw;
-            }
-        }
-
-        if ( $page->path =~ m#(?:/|[.](?:html|rss|atom))$# ) {
-            require Mojo::DOM;
-            my $dom = Mojo::DOM->new($output);
-            $tb->ok( 0, "Could not parse dom" ) unless $dom;
-            $tb->subtest(
-                'html content: ' . $page->path,
-                $page_tests{ $page->path },
-                $output, $dom
-            );
-        }
-        elsif ( $page_tests{ $page->path } ) {
-            $tb->subtest( 'text content: ' . $page->path,
-                $page_tests{ $page->path }, $output );
-        }
-        else {
-            $tb->ok( 0, "Unknown page: " . $page->path );
-        }
-
-    }
-
-    $tb->ok( !@warnings, "no warnings!" ) or $tb->diag( join "\n", @warnings );
-}
-
 =head2 test_page_objects
 
 Run the given subtests for each page object in the list of pages
@@ -252,6 +152,9 @@ sub test_page_objects {
     delete @page_tests_copy{ keys %pages };
     delete @pages{ keys %tests };
 
+    # Also do not test site pages
+    delete @pages{ grep { m{robots.txt|sitemap.xml|^/theme} } keys %pages };
+
     $tb->cmp_ok(
         scalar(keys %pages),
         '==',
@@ -267,6 +170,9 @@ sub test_page_objects {
     ) or $tb->diag( "Test defined but no page found: " . join( ", ", sort keys %page_tests_copy ) );
 
     for my $page (@$pages) {
+        # Do not test site pages
+        next if $page->path =~ m{/robots.txt|/sitemap.xml|^/theme};
+
         $tb->ok( $page->DOES('Statocles::Page'), 'must be a Statocles::Page' );
 
         my $date   = $page->date;

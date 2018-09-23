@@ -110,7 +110,7 @@ sub create_site {
         };
     }
     elsif ( $answer{flavor} == 2 ) {
-        $vars{site}{index} = "/page";
+        $vars{site}{index} = "/";
         $vars{site}{nav}{main}[0] = {
             href => "/blog",
             text => "Blog",
@@ -174,33 +174,24 @@ sub create_site {
     ### Copy initial site content
     # Blog
     if ( my $ref = $site->{site}{apps}{blog} ) {
-        my $path = $site->{ $ref->{ '$ref' } }{store};
-        if ( $path ) {
-            my ( undef, undef, undef, $day, $mon, $year ) = localtime;
-            $year += 1900;
-            $mon += 1;
+        my $path = $site->{blog_app}{url_root};
+        my ( undef, undef, undef, $day, $mon, $year ) = localtime;
+        $year += 1900;
+        $mon += 1;
 
-            my @date_parts = (
-                sprintf( '%04i', $year ),
-                sprintf( '%02i', $mon ),
-                sprintf( '%02i', $day ),
-            );
+        my @date_parts = (
+            sprintf( '%04i', $year ),
+            sprintf( '%02i', $mon ),
+            sprintf( '%02i', $day ),
+        );
 
-            my $post_path = $root->child( $path, @date_parts, 'first-post', 'index.markdown' );
-            $post_path->parent->mkpath;
-            $create_dir->child( 'blog', 'post.markdown' )->copy( $post_path );
-        }
+        my $post_path = $root->child( $path, @date_parts, 'first-post', 'index.markdown' );
+        $post_path->parent->mkpath;
+        $create_dir->child( 'blog', 'post.markdown' )->copy( $post_path );
     }
-
-    # Page
-    if ( my $ref = $site->{site}{apps}{page} ) {
-        my $path = $site->{ $ref->{ '$ref' } }{store};
-        if ( $path ) {
-            my $page_path = $root->child( $path, 'index.markdown' );
-            $page_path->parent->mkpath;
-            $create_dir->child( 'page', 'index.markdown' )->copy( $page_path );
-        };
-    }
+    my $page_path = $root->child( 'index.markdown' );
+    $page_path->parent->mkpath;
+    $create_dir->child( 'page', 'index.markdown' )->copy( $page_path );
 
     ### DONE!
     print "\n", "\n", $question->{finish}, "\n", "\n";

@@ -46,14 +46,6 @@ has document_extensions => (
     },
 );
 
-# Cache our realpath in case it disappears before we get demolished
-has _realpath => (
-    is => 'ro',
-    isa => Path,
-    lazy => 1,
-    default => sub { $_[0]->path->realpath },
-);
-
 # If true, we've already checked if this store's path exists. We need to
 # check this lazily to ensure the site is created and the logger is
 # ready to go.
@@ -74,34 +66,6 @@ has _check_exists => (
         return 1;
     },
 );
-
-sub BUILD {
-    my ( $self ) = @_;
-    $FILE_STORES{ $self->_realpath }++;
-}
-
-sub DEMOLISH {
-    my ( $self, $in_global_destruction ) = @_;
-    return if $in_global_destruction; # We're ending, we don't need to care anymore
-    if ( --$FILE_STORES{ $self->_realpath } <= 0 ) {
-        delete $FILE_STORES{ $self->_realpath };
-    }
-}
-
-sub _is_owned_path {
-    my ( $self, $path ) = @_;
-    my $self_path = $self->_realpath;
-    $path = $path->realpath;
-    my $dir = $path->parent;
-    for my $store_path ( keys %FILE_STORES ) {
-        # This is us!
-        next if $store_path eq $self_path;
-        # If our store is contained inside this store's path, we win
-        next if $self_path =~ /^\Q$store_path/;
-        return 0 if $path =~ /^\Q$store_path/;
-    }
-    return 1;
-}
 
 =method is_document
 
@@ -217,7 +181,6 @@ sub iterator {
         PATH:
         while ( my $path = $iter->() ) {
             next if $path->is_dir;
-            next unless $self->_is_owned_path( $path );
 
             # Check for hidden files and folders
             next if $path->basename =~ /^[.]/;

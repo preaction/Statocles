@@ -7,6 +7,8 @@ BEGIN {
 
 use Mojo::Log;
 use Statocles::Plugin::HTMLLint;
+use Statocles::Site;
+use TestStore;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
 
 subtest 'check html' => sub {
@@ -14,7 +16,19 @@ subtest 'check html' => sub {
     open my $log_fh, '>', \$log_str;
     my $log = Mojo::Log->new( level => 'warn', handle => $log_fh, max_history_size => 500 );
 
-    my ( $site, $build_dir, $deploy_dir ) = build_test_site_apps( $SHARE_DIR, log => $log );
+    my $site = Statocles::Site->new(
+        store => TestStore->new(
+            path => '.',
+            objects => [
+                Statocles::Document->new(
+                    path => '/index.markdown',
+                    content => '<img src="foo.jpg">',
+                ),
+            ],
+        ),
+        deploy => '.',
+    );
+
     my $plugin = Statocles::Plugin::HTMLLint->new;
     $plugin->register( $site );
     $site->pages;
@@ -24,18 +38,13 @@ subtest 'check html' => sub {
             [
               ignore(),
               'warn',
-              '-/blog/2014/06/02/more_tags/index.html (43:4) <img src="/does_not_exist.jpg"> tag has no HEIGHT and WIDTH attributes',
+              '-/index.html (28:28) <img src="foo.jpg"> tag has no HEIGHT and WIDTH attributes',
             ],
             [
               ignore(),
               'warn',
-              '-/blog/2014/06/02/more_tags/index.html (61:4) <img src="image.markdown.jpg"> tag has no HEIGHT and WIDTH attributes',
-            ],
-            [
-              ignore(),
-              'warn',
-              '-/blog/2014/04/30/plug/index.html (34:4) <img src="image.jpg"> tag has no HEIGHT and WIDTH attributes',
-            ]
+              '-/index.html (28:28) <img src="foo.jpg"> does not have ALT text defined',
+            ],,
         ),
         'lint problems found'
             or diag explain $site->log->history;

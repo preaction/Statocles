@@ -13,7 +13,7 @@
         % }
         <div class="content">
             % my @sections = $page->sections;
-            <%= $sections[0] %>
+            <%= $sections[0] // '' %>
             % if ( @sections > 1 ) {
             <p><a href="<%= $app->page_url( $page ) %>#section-2">Continue reading <%= $page->title %>...</a></p>
             % }

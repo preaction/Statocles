@@ -10,7 +10,8 @@ my $site = build_test_site(
 
 my @page_tests = (
     '/pod/index.html' => sub {
-        my ( $html, $dom ) = @_;
+        my ( $page ) = @_;
+        my $dom = $page->dom;
         my $node;
 
         if ( ok $node = $dom->at( 'title' ), 'title tag exists' ) {
@@ -39,14 +40,11 @@ my @page_tests = (
         is $crumbtrail[0]->at( 'a' )->attr( 'href' ), '/pod/My/';
         is $crumbtrail[1]->at( 'a' )->text, 'Internal';
         is $crumbtrail[1]->at( 'a' )->attr( 'href' ), '/pod/';
-
-        if ( ok $node = $dom->at( 'footer #app-info' ) ) {
-            is $node->text, 'This is the app info', 'app-info is correct';
-        }
     },
 
     '/pod/My/index.html' => sub {
-        my ( $html, $dom ) = @_;
+        my ( $page ) = @_;
+        my $dom = $page->dom;
         my $node;
 
         if ( ok $node = $dom->at( 'title' ), 'title tag exists' ) {
@@ -80,14 +78,11 @@ my @page_tests = (
         is scalar @crumbtrail, 1;
         is $crumbtrail[0]->at( 'a' )->text, 'My';
         is $crumbtrail[0]->at( 'a' )->attr( 'href' ), '/pod/My/';
-
-        if ( ok $node = $dom->at( 'footer #app-info' ) ) {
-            is $node->text, 'This is the app info', 'app-info is correct';
-        }
     },
 
     '/pod/command/index.html' => sub {
-        my ( $html, $dom ) = @_;
+        my ( $page ) = @_;
+        my $dom = $page->dom;
         my $node;
 
         if ( ok $node = $dom->at( 'title' ), 'title tag exists' ) {
@@ -114,14 +109,11 @@ my @page_tests = (
         is scalar @crumbtrail, 1;
         is $crumbtrail[0]->at( 'a' )->text, 'command';
         is $crumbtrail[0]->at( 'a' )->attr( 'href' ), '/pod/command/';
-
-        if ( ok $node = $dom->at( 'footer #app-info' ) ) {
-            is $node->text, 'This is the app info', 'app-info is correct';
-        }
     },
 
     '/pod/shellcmd/index.html' => sub {
-        my ( $html, $dom ) = @_;
+        my ( $page ) = @_;
+        my $dom = $page->dom;
         my $node;
 
         if ( ok $node = $dom->at( 'title' ), 'title tag exists' ) {
@@ -148,10 +140,6 @@ my @page_tests = (
         is scalar @crumbtrail, 1;
         is $crumbtrail[0]->at( 'a' )->text, 'shellcmd';
         is $crumbtrail[0]->at( 'a' )->attr( 'href' ), '/pod/shellcmd/';
-
-        if ( ok $node = $dom->at( 'footer #app-info' ) ) {
-            is $node->text, 'This is the app info', 'app-info is correct';
-        }
     },
 
 );
@@ -170,12 +158,15 @@ subtest 'without Pod::Weaver' => sub {
             info => 'This is the app info',
         },
     );
+    $site->apps->{perldoc} = $app;
+    $site->clear_pages;
 
-    test_pages(
-        $site, $app, @page_tests,
+    test_page_objects(
+        [ $site->pages ], @page_tests,
 
         '/pod/My/source.html' => sub {
-            my ( $html, $dom ) = @_;
+            my ( $page ) = @_;
+            my $dom = $page->dom;
             my $node;
 
             if ( ok $node = $dom->at( 'title' ), 'title tag exists' ) {
@@ -187,7 +178,8 @@ subtest 'without Pod::Weaver' => sub {
         },
 
         '/pod/My/Internal/source.html' => sub {
-            my ( $html, $dom ) = @_;
+            my ( $page ) = @_;
+            my $dom = $page->dom;
             my $node;
 
             if ( ok $node = $dom->at( 'title' ), 'title tag exists' ) {
@@ -199,7 +191,8 @@ subtest 'without Pod::Weaver' => sub {
         },
 
         '/pod/command/source.html' => sub {
-            my ( $html, $dom ) = @_;
+            my ( $page ) = @_;
+            my $dom = $page->dom;
             my $node;
 
             if ( ok $node = $dom->at( 'title' ), 'title tag exists' ) {
@@ -211,7 +204,8 @@ subtest 'without Pod::Weaver' => sub {
         },
 
         '/pod/shellcmd/source.html' => sub {
-            my ( $html, $dom ) = @_;
+            my ( $page ) = @_;
+            my $dom = $page->dom;
             my $node;
 
             if ( ok $node = $dom->at( 'title' ), 'title tag exists' ) {
@@ -243,7 +237,9 @@ subtest 'with Pod::Weaver' => sub {
                 weave => 1,
                 weave_config => $SHARE_DIR->child( qw( app perldoc weaver.ini ) ),
             );
-            dies_ok { $app->pages };
+            $site->apps->{perldoc} = $app;
+            $site->clear_pages;
+            dies_ok { $site->pages };
         };
         return;
     }
@@ -268,12 +264,15 @@ subtest 'with Pod::Weaver' => sub {
         weave => 1,
         weave_config => $SHARE_DIR->child( qw( app perldoc weaver.ini ) ),
     );
+    $site->apps->{perldoc} = $app;
+    $site->clear_pages;
 
-    test_pages(
-        $site, $app, @page_tests,
+    test_page_objects(
+        [ $site->pages ], @page_tests,
 
         '/pod/My/source.html' => sub {
-            my ( $html, $dom ) = @_;
+            my ( $page ) = @_;
+            my $dom = $page->dom;
             my $node;
 
             if ( ok $node = $dom->at( 'title' ), 'title tag exists' ) {
@@ -285,7 +284,8 @@ subtest 'with Pod::Weaver' => sub {
         },
 
         '/pod/My/Internal/source.html' => sub {
-            my ( $html, $dom ) = @_;
+            my ( $page ) = @_;
+            my $dom = $page->dom;
             my $node;
 
             if ( ok $node = $dom->at( 'title' ), 'title tag exists' ) {
@@ -297,7 +297,8 @@ subtest 'with Pod::Weaver' => sub {
         },
 
         '/pod/command/source.html' => sub {
-            my ( $html, $dom ) = @_;
+            my ( $page ) = @_;
+            my $dom = $page->dom;
             my $node;
 
             if ( ok $node = $dom->at( 'title' ), 'title tag exists' ) {
@@ -309,7 +310,8 @@ subtest 'with Pod::Weaver' => sub {
         },
 
         '/pod/shellcmd/source.html' => sub {
-            my ( $html, $dom ) = @_;
+            my ( $page ) = @_;
+            my $dom = $page->dom;
             my $node;
 
             if ( ok $node = $dom->at( 'title' ), 'title tag exists' ) {
@@ -339,7 +341,9 @@ subtest 'with Pod::Weaver' => sub {
             weave => 1,
             weave_config => $SHARE_DIR->child( qw( app NOT_FOUND weaver.ini ) ),
         );
-        throws_ok { $app->pages }
+        $site->apps->{perldoc} = $app;
+        $site->clear_pages;
+        throws_ok { $site->pages }
             qr{Cannot find Pod::Weaver config in "[^"]+NOT_FOUND"\. Missing "weaver\.ini" file\?},
             'throw a friendly error if we think the config will explode';
     };

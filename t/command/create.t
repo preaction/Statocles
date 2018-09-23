@@ -38,7 +38,7 @@ subtest 'create a site' => sub {
 
         my $expect_config = site_config();
         $expect_config->{site}{nav}{main}[0]{href} = "/blog";
-        $expect_config->{site}{index} = "/page";
+        $expect_config->{site}{index} = "/";
         $expect_config->{site}{base_url} = "http://example.com";
         $expect_config->{deploy}{'$class'} = "Statocles::Deploy::File";
         $expect_config->{deploy}{path} = ".";
@@ -56,8 +56,7 @@ subtest 'create a site' => sub {
         eq_or_diff $tmp->child( 'example.com', 'blog', @date_parts, 'first-post', 'index.markdown' )->slurp,
                    $create_dir->child( 'blog', 'post.markdown' )->slurp,
                    'first post exists';
-        ok $tmp->child( 'example.com', 'page' )->is_dir, 'page dir exists';
-        eq_or_diff $tmp->child( 'example.com', 'page', 'index.markdown' )->slurp,
+        eq_or_diff $tmp->child( 'example.com', 'index.markdown' )->slurp,
                    $create_dir->child( 'page', 'index.markdown' )->slurp,
                    'first page exists';
         ok !$tmp->child( 'example.com', 'theme' )->exists, 'theme dir does not exists';
@@ -99,8 +98,7 @@ subtest 'create a site' => sub {
         eq_or_diff $tmp->child( 'example.com', 'blog', @date_parts, 'first-post', 'index.markdown' )->slurp,
                    $create_dir->child( 'blog', 'post.markdown' )->slurp,
                    'first post exists';
-        ok $tmp->child( 'example.com', 'page' )->is_dir, 'page dir exists';
-        eq_or_diff $tmp->child( 'example.com', 'page', 'index.markdown' )->slurp,
+        eq_or_diff $tmp->child( 'example.com', 'index.markdown' )->slurp,
                    $create_dir->child( 'page', 'index.markdown' )->slurp,
                    'first page exists';
         ok !$tmp->child( 'example.com', 'theme' )->exists, 'theme dir does not exists';
@@ -128,7 +126,7 @@ subtest 'create a site' => sub {
         # Missing http:// gets added
         $expect_config->{site}{base_url} = "http://example.com";
         $expect_config->{site}{nav}{main}[0]{href} = "/blog";
-        $expect_config->{site}{index} = "/page";
+        $expect_config->{site}{index} = "/";
         $expect_config->{deploy}{'$class'} = "Statocles::Deploy::File";
         $expect_config->{deploy}{path} = ".";
 
@@ -145,8 +143,7 @@ subtest 'create a site' => sub {
         eq_or_diff $tmp->child( 'blog', @date_parts, 'first-post', 'index.markdown' )->slurp,
                    $create_dir->child( 'blog', 'post.markdown' )->slurp,
                    'first post exists';
-        ok $tmp->child( 'page' )->is_dir, 'page dir exists';
-        eq_or_diff $tmp->child( 'page', 'index.markdown' )->slurp,
+        eq_or_diff $tmp->child( 'index.markdown' )->slurp,
                    $create_dir->child( 'page', 'index.markdown' )->slurp,
                    'first page exists';
         ok !$tmp->child( 'theme' )->exists, 'theme dir does not exists';
@@ -173,7 +170,7 @@ subtest 'create a site' => sub {
         my $expect_config = site_config();
         $expect_config->{site}{base_url} = "https://example.com";
         $expect_config->{site}{nav}{main}[0]{href} = "/blog";
-        $expect_config->{site}{index} = "/page";
+        $expect_config->{site}{index} = "/";
         $expect_config->{deploy}{'$class'} = "Statocles::Deploy::File";
         $expect_config->{deploy}{path} = ".";
 
@@ -190,8 +187,7 @@ subtest 'create a site' => sub {
         eq_or_diff $tmp->child( 'blog', @date_parts, 'first-post', 'index.markdown' )->slurp,
                    $create_dir->child( 'blog', 'post.markdown' )->slurp,
                    'first post exists';
-        ok $tmp->child( 'page' )->is_dir, 'page dir exists';
-        eq_or_diff $tmp->child( 'page', 'index.markdown' )->slurp,
+        eq_or_diff $tmp->child( 'index.markdown' )->slurp,
                    $create_dir->child( 'page', 'index.markdown' )->slurp,
                    'first page exists';
         ok !$tmp->child( 'theme' )->exists, 'theme dir does not exists';
@@ -233,8 +229,8 @@ subtest 'create a site' => sub {
         eq_or_diff $tmp->child( 'example.com', 'blog', @date_parts, 'first-post', 'index.markdown' )->slurp,
                    $create_dir->child( 'blog', 'post.markdown' )->slurp,
                    'first post exists';
-        ok $tmp->child( 'example.com', 'page' )->is_dir, 'page dir exists';
-        eq_or_diff $tmp->child( 'example.com', 'page', 'index.markdown' )->slurp,
+        ok $tmp->child( 'example.com' )->is_dir, 'page dir exists';
+        eq_or_diff $tmp->child( 'example.com', 'index.markdown' )->slurp,
                    $create_dir->child( 'page', 'index.markdown' )->slurp,
                    'first page exists';
         ok !$tmp->child( 'example.com', 'theme' )->exists, 'theme dir does not exists';
@@ -297,8 +293,8 @@ subtest 'git deploy' => sub {
         eq_or_diff $tmp->child( 'www.example.com', 'blog', @date_parts, 'first-post', 'index.markdown' )->slurp,
                    $create_dir->child( 'blog', 'post.markdown' )->slurp,
                    'first post exists';
-        ok $tmp->child( 'www.example.com', 'page' )->is_dir, 'page dir exists';
-        eq_or_diff $tmp->child( 'www.example.com', 'page', 'index.markdown' )->slurp,
+        ok $tmp->child( 'www.example.com' )->is_dir, 'page dir exists';
+        eq_or_diff $tmp->child( 'www.example.com', 'index.markdown' )->slurp,
                    $create_dir->child( 'page', 'index.markdown' )->slurp,
                    'first page exists';
         ok $tmp->child( 'www.example.com', 'theme' )->is_dir, 'theme dir exists';
@@ -351,8 +347,7 @@ subtest 'git deploy' => sub {
         eq_or_diff $tmp->child( 'blog', @date_parts, 'first-post', 'index.markdown' )->slurp,
                    $create_dir->child( 'blog', 'post.markdown' )->slurp,
                    'first post exists';
-        ok $tmp->child( 'page' )->is_dir, 'page dir exists';
-        eq_or_diff $tmp->child( 'page', 'index.markdown' )->slurp,
+        eq_or_diff $tmp->child( 'index.markdown' )->slurp,
                    $create_dir->child( 'page', 'index.markdown' )->slurp,
                    'first page exists';
         ok $tmp->child( 'theme' )->is_dir, 'theme dir exists';
@@ -403,7 +398,6 @@ sub site_config {
             theme => { '$ref' => 'theme' },
             apps => {
                 blog => { '$ref' => 'blog_app' },
-                page => { '$ref' => 'page_app' },
             },
             index => '/blog',
             deploy => { '$ref' => 'deploy' },
@@ -416,14 +410,7 @@ sub site_config {
 
         blog_app => {
             '$class' => 'Statocles::App::Blog',
-            store => 'blog',
             url_root => '/blog',
-        },
-
-        page_app => {
-            '$class' => 'Statocles::App::Basic',
-            store => 'page',
-            url_root => '/page',
         },
 
         theme => {

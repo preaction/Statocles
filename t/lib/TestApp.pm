@@ -16,7 +16,7 @@ has _pages => (
 has last_pages_args => ( is => 'rw' );
 
 sub pages {
-    my ( $self, @args ) = @_;
+    my ( $self, $pages, @args ) = @_;
     $self->last_pages_args( \@args );
     my @pages =
         map { blessed $_ ? $_ : ( $_->{class} || "Statocles::Page::Plain" )->new( %$_ ) }

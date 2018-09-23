@@ -20,7 +20,7 @@
 
         <content type="html"><![CDATA[
             % my @sections = $p->sections;
-            <%= $sections[0] %>
+            <%= $sections[0] // '' %>
             % if ( $p->links( 'alternate' ) ) {
                 <ul>
                 % for my $link ( $p->links( 'alternate' ) ) {

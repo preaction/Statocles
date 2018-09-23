@@ -42,16 +42,12 @@ site:
     base_url: '<%= $site->{base_url} %>'
 
     # apps: These are the applications in this site. The name of the app,
-    # "blog", "page", or "static", is used to refer to it in commands.
+    # "blog" is used to refer to it in commands.
     apps:
 
         # blog: This is the blog app
         blog:
             $ref: 'blog_app'
-
-        # page: This app turns any Markdown page into HTML
-        page:
-            $ref: 'page_app'
 
     # plugins: These are plugins that can add features and alter the
     # content of the site.
@@ -114,20 +110,9 @@ deploy:
 #----------------------------------------------------------------------------
 #
 # All applications have a "url_root" attribute, which is the root URL of the
-# app. All the app's pages will be under this URL.
-#
-# Most applications have a "store" attribute. The store points to the directory
-# where the application's data is kept. Under-the-hood, this is a
-# Statocles::Store object, but you only need to specify the directory path.
+# app. All the app's pages will be found in this path in your site.
 
 # blog_app: These are the settings for the blog application.
 blog_app:
     $class: 'Statocles::App::Blog'
     url_root: '/blog'
-    store: 'blog'
-
-# page_app: These are the settings for the page application.
-page_app:
-    $class: 'Statocles::App::Basic'
-    store: 'page'
-    url_root: '/page'

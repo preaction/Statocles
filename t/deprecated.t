@@ -4,71 +4,10 @@ use Statocles::Site;
 use Capture::Tiny qw( capture );
 my $SHARE_DIR = path( __DIR__ )->child( 'share' );
 my $site = Statocles::Site->new(
+    store => tempdir,
     deploy => tempdir,
     theme => $SHARE_DIR->child( 'theme' ),
 );
-
-subtest 'Statocles::Site index app' => sub {
-    require Mojo::DOM;
-    my $SHARE_DIR = path( __DIR__, 'share' );
-
-    subtest 'deprecation message' => sub {
-        my $log_str;
-        open my $log_fh, '>', \$log_str;
-        my $log = Mojo::Log->new( level => 'warn', handle => $log_fh );
-
-        my ( $site, $build_dir, $deploy_dir ) = build_test_site_apps(
-            $SHARE_DIR,
-            index => 'blog',
-            log => $log,
-        );
-
-        subtest 'build' => sub {
-            my @pages = $site->pages;
-
-            ok scalar( grep { $_->path eq '/index.html' } @pages ),
-                'site index renames app page';
-            ok !scalar( grep { $_->path eq '/blog/index.html' } @pages ),
-                'site index renames app page';
-
-            my ( $page ) = grep { $_->path eq '/blog/page/2/index.html' } @pages;
-            my $dom = $page->dom;
-            ok !$dom->at( '[href=/blog]' ), 'no link to /blog';
-            ok !$dom->at( '[href=/blog/index.html]' ), 'no link to /blog/index.html';
-        };
-
-        like $log_str, qr{\Q[warn] site "index" property should be absolute path to index page (got "blog")};
-    };
-
-    subtest 'error messages' => sub {
-
-        subtest 'index_app does not give any pages' => sub {
-            my $log_str;
-            open my $log_fh, '>', \$log_str;
-            my $log = Mojo::Log->new( level => 'warn', handle => $log_fh );
-
-            # Empty Static app
-            my $tmpdir = tempdir;
-            my $static = Statocles::App::Basic->new(
-                store => $tmpdir,
-                url_root => '/static',
-            );
-
-            my ( $site ) = build_test_site_apps(
-                $SHARE_DIR,
-                apps => {
-                    basic => $static,
-                },
-                index => 'basic',
-                log => $log,
-            );
-
-            throws_ok { $site->pages } qr{ERROR: Index app "basic" did not generate any pages};
-        };
-
-    };
-
-};
 
 subtest 'Statocles::Store::File' => sub {
     my @warnings;

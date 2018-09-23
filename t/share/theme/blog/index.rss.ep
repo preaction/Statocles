@@ -18,7 +18,7 @@
             <guid><%= $site->url( $p->path ) %></guid>
             <description><![CDATA[
                 % my @sections = $p->sections;
-                <%= $sections[0] %>
+                <%= $sections[0] // '' %>
                 % if ( $p->links( 'alternate' ) ) {
                     <ul>
                     % for my $link ( $p->links( 'alternate' ) ) {

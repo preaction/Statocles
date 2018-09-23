@@ -14,7 +14,7 @@ The site this page is part of.
 =cut
 
 has site => (
-    is => 'ro',
+    is => 'rw',
     isa => InstanceOf['Statocles::Site'],
     lazy => 1,
     default => sub { $Statocles::SITE },
@@ -27,7 +27,7 @@ The application this page came from, so we can give it to the templates.
 =cut
 
 has app => (
-    is => 'ro',
+    is => 'rw',
     isa => ConsumerOf['Statocles::App'],
 );
 

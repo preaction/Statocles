@@ -5,16 +5,16 @@ use Capture::Tiny qw( capture );
 use Statocles::App::Blog;
 my $SHARE_DIR = path( __DIR__ )->parent->parent->child( 'share' );
 
-my $site = build_test_site(
-    theme => $SHARE_DIR->child( 'theme' ),
-);
-
 # We need an app we can edit
 my $tmpdir = tempdir;
 $tmpdir->child( 'blog' )->mkpath;
 
+my $site = build_test_site(
+    store => $tmpdir,
+    theme => $SHARE_DIR->child( 'theme' ),
+);
+
 my $app = Statocles::App::Blog->new(
-    store => $tmpdir->child( 'blog' ),
     url_root => '/blog',
     site => $site,
 );
@@ -94,7 +94,7 @@ subtest 'post' => sub {
                 my $doc = Statocles::Document->parse_content(
                     path => $path,
                     content => $doc_path->slurp_utf8,
-                    store => $app->store,
+                    store => $site->store,
                 );
                 cmp_deeply $doc, Statocles::Document->new(
                     path => $path,
@@ -103,7 +103,7 @@ subtest 'post' => sub {
                     content => <<'ENDMARKDOWN',
 Markdown content goes here.
 ENDMARKDOWN
-                    store => $app->store,
+                    store => $site->store,
                 );
                 eq_or_diff $doc_path->slurp, <<ENDCONTENT;
 ---
@@ -142,7 +142,7 @@ ENDCONTENT
                 my $doc = Statocles::Document->parse_content(
                     path => $path,
                     content => $doc_path->slurp_utf8,
-                    store => $app->store,
+                    store => $site->store,
                 );
                 cmp_deeply $doc, Statocles::Document->new(
                     path => $path,
@@ -151,7 +151,7 @@ ENDCONTENT
                     content => <<'ENDMARKDOWN',
 Markdown content goes here.
 ENDMARKDOWN
-                    store => $app->store,
+                    store => $site->store,
                 );
                 eq_or_diff $doc_path->slurp, <<ENDCONTENT;
 ---
@@ -185,7 +185,7 @@ ENDCONTENT
                 my $doc = Statocles::Document->parse_content(
                     path => $path,
                     content => $doc_path->slurp_utf8,
-                    store => $app->store,
+                    store => $site->store,
                 );
                 cmp_deeply $doc, Statocles::Document->new(
                     path => $path,
@@ -194,7 +194,7 @@ ENDCONTENT
                     content => <<'ENDMARKDOWN',
 Markdown content goes here.
 ENDMARKDOWN
-                    store => $app->store,
+                    store => $site->store,
                 );
                 eq_or_diff $doc_path->slurp, <<ENDCONTENT;
 ---
@@ -240,7 +240,7 @@ ENDCONTENT
                     my $doc = Statocles::Document->parse_content(
                         path => $path,
                         content => $doc_path->slurp_utf8,
-                        store => $app->store,
+                        store => $site->store,
                     );
                     cmp_deeply $doc, Statocles::Document->new(
                         path => $path,
@@ -249,7 +249,7 @@ ENDCONTENT
                         content => <<'ENDMARKDOWN',
 This is content from STDIN
 ENDMARKDOWN
-                        store => $app->store,
+                        store => $site->store,
                     );
                 };
             };
@@ -287,7 +287,7 @@ ENDMARKDOWN
                     my $doc = Statocles::Document->parse_content(
                         path => $path,
                         content => $doc_path->slurp_utf8,
-                        store => $app->store,
+                        store => $site->store,
                     );
                     cmp_deeply $doc, Statocles::Document->new(
                         path => $path,
@@ -297,7 +297,7 @@ ENDMARKDOWN
                         content => <<'ENDMARKDOWN',
 This is content from STDIN
 ENDMARKDOWN
-                        store => $app->store,
+                        store => $site->store,
                     );
                 };
             };
@@ -342,7 +342,7 @@ ENDSTDIN
                     my $doc = Statocles::Document->parse_content(
                         path => $path,
                         content => $doc_path->slurp_utf8,
-                        store => $app->store,
+                        store => $site->store,
                     );
                     cmp_deeply $doc, Statocles::Document->new(
                         path => $path,
@@ -351,7 +351,7 @@ ENDSTDIN
                         content => <<'ENDMARKDOWN',
 This is content from STDIN
 ENDMARKDOWN
-                        store => $app->store,
+                        store => $site->store,
                     );
                 };
             };
@@ -362,7 +362,7 @@ ENDMARKDOWN
         subtest 'title change creates different folder' => sub {
             no warnings 'redefine';
             local *Statocles::App::Blog::run_editor = sub {
-                $SHARE_DIR->child(qw( app blog draft a-draft-post.markdown ))->slurp_utf8;
+                return "---\ntitle: A Draft\n---\nDraft body content\n";
             };
 
             my ( undef, undef, undef, $day, $mon, $year ) = localtime;
@@ -389,16 +389,14 @@ ENDMARKDOWN
                 my $doc = Statocles::Document->parse_content(
                     path => $path.'',
                     content => $doc_path->slurp_utf8,
-                    store => $app->store,
+                    store => $site->store,
                 );
                 my $content = "Draft body content\n";
                 cmp_deeply $doc, Statocles::Document->new(
                     path => $path.'',
                     title => 'A Draft',
-                    author => 'preaction',
-                    date => DateTimeObj->coerce( '2014-06-21 00:06:00' ),
                     content => $content,
-                    store => $app->store,
+                    store => $site->store,
                 );
 
                 ok !$doc_path->parent->parent->child( 'new-post' )->exists, 'new-post dir is cleaned up';

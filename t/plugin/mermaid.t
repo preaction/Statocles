@@ -3,7 +3,8 @@ use Test::Lib;
 use My::Test;
 use Mojo::Log;
 use Statocles::Plugin::Diagram::Mermaid;
-use Statocles::App::Basic;
+use Statocles::Site;
+use TestDeploy;
 use Data::Dumper;
 
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
@@ -11,7 +12,9 @@ my $SHARE_DIR = path( __DIR__, '..', 'share' );
 subtest 'mermaid basics' => sub {
   my $plugin = new_ok('Statocles::Plugin::Diagram::Mermaid', []);
 
-  my $site = build_test_site();
+  my $site = Statocles::Site->new(
+      deploy => TestDeploy->new,
+  );
   my $page = Statocles::Page::Plain->new(
       path => 'test.html',
       site => $site,
@@ -30,8 +33,9 @@ subtest 'mermaid basics' => sub {
 
 subtest 'mermaid helper' => sub {
   my $plugin = new_ok('Statocles::Plugin::Diagram::Mermaid', []);
-  my $site = build_test_site(
-    plugins => { diagram => $plugin }
+  my $site = Statocles::Site->new(
+    plugins => { diagram => $plugin },
+    deploy => TestDeploy->new,
   );
   my $graph = <<'END_OF_GRAPH';
 graph TD
@@ -51,39 +55,6 @@ EOF
 
   my $output = Mojo::DOM->new($tmpl->render);
   is $output->at('div[class=mermaid]')->text, "\n$graph", 'output has mermaids';
-};
-
-subtest 'mermaid site' => sub {
-  my $plugin = new_ok 'Statocles::Plugin::Diagram::Mermaid', [];
-  my $app = new_ok 'Statocles::App::Basic', [
-    store => $SHARE_DIR->child( qw( app basic-diagrams ) ),
-    url_root => '/',
-    ];
-  my $site = build_test_site(
-      theme => $SHARE_DIR->child( 'theme' ),
-      apps => {
-        basic => $app,
-        },
-      plugins => {
-          diagram => $plugin,
-      }
-  );
-
-  test_pages( $site, $app,
-    '/gantt.html' => sub {
-      my ($html, $dom) = @_;
-      ok +(grep { $_->attr('src') && $_->attr('src') =~ m/mermaid\.min\.js/ } $dom->find('script')->each),
-        'script included';
-      is $dom->find('div[class=mermaid]')->size, 1, 'dom query for diagram';
-    },
-    '/index.html' => sub {
-      my ($html, $dom) = @_;
-      is $dom->find('div[class=mermaid]')->size, 1, 'dom query for diagram';
-      like $dom->at('div[class=mermaid]')->text, qr/end$/m, 'div content';
-    },
-
-  );
-
 };
 
 done_testing;

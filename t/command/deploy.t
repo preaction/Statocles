@@ -3,31 +3,35 @@ use Test::Lib;
 use My::Test;
 use TestApp;
 use TestDeploy;
+use TestStore;
 use Statocles::Site;
 use Statocles::Command::deploy;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
 
-my $app = TestApp->new(
-    url_root => '/',
-    pages => [
-        {
-            class => 'Statocles::Page::Plain',
-            path => '/index.html',
-            content => '<a href="/static.txt">Foo</a>',
-        },
-        {
-            class => 'Statocles::Page::File',
-            path => '/static.txt',
-            file_path => $SHARE_DIR->child( qw( app basic static.txt ) ),
-        },
-    ],
+my @site_args = (
+    store => TestStore->new(
+        path => $SHARE_DIR->child( qw( store docs ) ),
+        objects => [
+            Statocles::Document->new(
+                path => '/index.html',
+                content => '<a href="/image.png">Image</a>',
+            ),
+            Statocles::File->new(
+                path => '/image.png',
+            ),
+        ],
+    ),
+    apps => {
+        base => TestApp->new(
+            url_root => '/',
+            pages => [ ],
+        ),
+    },
 );
 
 subtest 'deploy site' => sub {
     my $site = Statocles::Site->new(
-        apps => {
-            base => $app
-        },
+        @site_args,
         deploy => TestDeploy->new,
     );
 
@@ -47,9 +51,7 @@ subtest 'deploy site' => sub {
 subtest 'deploy site with deploy base_url' => sub {
     my $site = Statocles::Site->new(
         base_url => '/site_base',
-        apps => {
-            base => $app
-        },
+        @site_args,
         deploy => TestDeploy->new( base_url => '/deploy_base' ),
     );
 
@@ -65,7 +67,7 @@ subtest 'deploy site with deploy base_url' => sub {
         'deploy deploy() method options correct';
 
     my $page_content = $cmd->build_dir->child( 'index.html' )->slurp_utf8;
-    is $page_content, qq{<a href="/deploy_base/static.txt">Foo</a>\n\n}, 'HTML link is rewritten';
+    like $page_content, qr{<a href="/deploy_base/image.png">Image</a>}, 'HTML link is rewritten';
 };
 
 done_testing;

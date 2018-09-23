@@ -15,6 +15,10 @@ data:
           description: Cooking / recipe blog
           images:
             - indiepalate.jpg
+    authors:
+        - Tor-Coolguy.json
+        - The-Cheat.json
+disable_content_template: 1
 ---
 
 # Gallery

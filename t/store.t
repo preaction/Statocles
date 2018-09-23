@@ -129,10 +129,6 @@ sub test_store {
     }
 }
 
-my $ignored_store = Statocles::Store->new(
-    path => $SHARE_DIR->child( qw( store docs ignore ) ),
-);
-
 subtest 'read iterator' => sub {
     my $store = Statocles::Store->new(
         path => $SHARE_DIR->child( qw( store docs ) ),
@@ -154,9 +150,6 @@ subtest 'path that has regex-special characters inside' => sub {
     my $tmpdir = tempdir;
     my $baddir = $tmpdir->child( '[regex](name).dir' );
     dircopy $SHARE_DIR->child( qw( store docs ) ), $baddir;
-    my $ignored_store = Statocles::Store->new(
-        path => $baddir->child( qw( ignore ) ),
-    );
     my $store = Statocles::Store->new(
         path => $baddir,
     );
@@ -213,20 +206,6 @@ subtest 'bad documents' => sub {
         throws_ok { $iter->() }
             qr{\QError creating document in "links.markdown": Value "bad link" is not valid for attribute "_links" (expected "LinkHash")};
     };
-};
-
-subtest 'removing a store reveals formerly-ignored files' => sub {
-    $ignored_store = undef;
-    my $store = Statocles::Store->new(
-        path => $SHARE_DIR->child( qw( store docs ) ),
-    );
-    test_store( $store, %tests,
-        'ignore/ignored.markdown' => {
-            title => 'This document is ignored',
-            content => "This document is ignored because it's being used by another Store\n",
-        },
-        'ignore/ignored.txt' => { },
-    );
 };
 
 subtest 'has_file / is_document' => sub {

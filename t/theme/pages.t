@@ -3,6 +3,9 @@ use Test::Lib;
 use My::Test;
 use Statocles::Theme;
 
+# XXX: We should add this to t/theme/check.t instead to make sure that
+# the theme's files get added as part of the site
+
 my $SHARE_DIR = path( __DIR__ )->parent->child( 'share' );
 my $site = build_test_site(
     theme => $SHARE_DIR->child( 'theme' ),
@@ -22,12 +25,12 @@ while ( my $path = $iter->() ) {
     next if $path =~ /[.]ep$/;
     my $rel_path = $path->relative( $SHARE_DIR->child( 'theme' ) );
     $pages{ "/theme/" . $rel_path } = sub {
-        my ( $output ) = @_;
-        eq_or_diff $output, $path->slurp_utf8, 'Theme file is correct: ' . $rel_path;
+        my ( $page ) = @_;
+        is $page->path, '/theme/' . $rel_path, 'theme file path is correct';
     };
 }
-
-test_pages( $site, $app, %pages );
+ok keys %pages, 'there are tests to perform';
+test_page_objects( [ $site->pages ], %pages );
 
 done_testing;
 

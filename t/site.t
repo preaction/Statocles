@@ -7,6 +7,7 @@ use Statocles::Theme;
 use Statocles::Store;
 use TestDeploy;
 use TestApp;
+use TestStore;
 my $SHARE_DIR = path( __DIR__, 'share' );
 
 my %required = (
@@ -24,6 +25,18 @@ test_constructor(
 
 subtest 'build events' => sub {
     my $site = Statocles::Site->new(
+        store => TestStore->new(
+            path => '.',
+            objects => [
+                Statocles::Document->new(
+                    path => '/extra.markdown',
+                    content => 'Extra',
+                ),
+                Statocles::File->new(
+                    path => '/image.jpg',
+                ),
+            ],
+        ),
         deploy => TestDeploy->new,
         apps => {
             base => TestApp->new(
@@ -57,6 +70,8 @@ subtest 'build events' => sub {
 
             cmp_deeply $event->pages,
                 superbagof(
+                    methods( path => re( qr{^\Q/image.jpg} ) ),
+                    methods( path => re( qr{^\Q/extra.html} ) ),
                     methods( path => re( qr{^\Q/index.html} ) ),
                     methods( path => re( qr{^\Q/static.txt} ) ),
                 ),
@@ -87,6 +102,10 @@ subtest 'build events' => sub {
 
             cmp_deeply $event->pages,
                 superbagof(
+                    methods( path => re( qr{^\Q/image.jpg} ) ),
+                    methods( path => re( qr{^\Q/extra.html} ) ),
+                    methods( path => re( qr{^\Q/index.html} ) ),
+                    methods( path => re( qr{^\Q/static.txt} ) ),
                     methods( path => re( qr{^\Q/robots.txt} ) ),
                     methods( path => re( qr{^\Q/sitemap.xml} ) ),
                     # Page we added before_build_write exists
@@ -113,6 +132,19 @@ subtest 'pages' => sub {
         deploy => TestDeploy->new,
         index => '/foo/other.html',
         base_url => 'http://example.com',
+        store => TestStore->new(
+            path => '.',
+            objects => [
+                Statocles::Document->new(
+                    path => '/extra.markdown',
+                    date => '2018-01-01',
+                    content => 'Extra',
+                ),
+                Statocles::File->new(
+                    path => '/image.jpg',
+                ),
+            ],
+        ),
         apps => {
             base => TestApp->new(
                 url_root => '/',
@@ -182,6 +214,12 @@ subtest 'pages' => sub {
             (
                 {
                     loc => 'http://example.com/',
+                    changefreq => 'weekly',
+                    priority => '0.5',
+                    lastmod => '2018-01-01',
+                },
+                {
+                    loc => 'http://example.com/extra.html',
                     changefreq => 'weekly',
                     priority => '0.5',
                     lastmod => '2018-01-01',
@@ -346,101 +384,6 @@ subtest 'template' => sub {
         };
     };
 };
-
-subtest 'error messages' => sub {
-
-    subtest 'index directory does not exist' => sub {
-        throws_ok {
-            Statocles::Site->new(
-                title => 'Example Site',
-                build_store => tempdir,
-                deploy => tempdir,
-                index => '/DOES_NOT_EXIST',
-            )->pages;
-        } qr{\QERROR: Index path "/DOES_NOT_EXIST" does not exist. Do you need to create "/DOES_NOT_EXIST/index.markdown"?},
-        'error message is correct';
-    };
-
-    subtest 'index file does not exist' => sub {
-        throws_ok {
-            Statocles::Site->new(
-                title => 'Example Site',
-                build_store => tempdir,
-                deploy => tempdir,
-                index => '/DOES_NOT_EXIST.html',
-            )->pages;
-        } qr{\QERROR: Index path "/DOES_NOT_EXIST.html" does not exist. Do you need to create "/DOES_NOT_EXIST.markdown"?},
-        'error message is correct';
-    };
-
-    subtest 'two apps build pages with same path' => sub {
-        local $ENV{MOJO_LOG_LEVEL} = "warn";
-
-        my $basic_app = TestApp->new(
-            url_root => '/',
-            pages => [
-                {
-                    path => '/index.html',
-                    content => '<h1>Index Page</h1>',
-                },
-            ],
-        );
-        my $static_app = TestApp->new(
-            url_root => '/',
-            pages => [
-                {
-                    class => 'Statocles::Page::File',
-                    path => '/index.html',
-                    file_path => $SHARE_DIR->child( 'store/docs/required.markdown' ),
-                },
-            ],
-        );
-
-        my $site = Statocles::Site->new(
-            deploy => TestDeploy->new,
-            apps => { basic => $basic_app, static => $static_app },
-        );
-
-        my ( $out, $err, @pages ) = capture { $site->pages };
-        like $err, qr{\Q[warn] Duplicate page "/index.html" from apps: basic, static. Using basic};
-        ok !$out or diag $out;
-
-        # This test will only fail randomly if it fails, because of hash ordering
-        my ( $index_page ) = grep { $_->path eq '/index.html' } @pages;
-        is $index_page->dom->at('h1')->text, 'Index Page', q{basic app always wins because it's generated};
-    };
-
-    subtest 'single app generates two pages with the same path' => sub {
-        my $app = TestApp->new(
-            url_root => '/',
-            pages => [
-                {
-                    path => '/index.html',
-                    content => 'Index',
-                },
-                {
-                    path => '/foo.html',
-                    content => 'Foo',
-                },
-                {
-                    path => '/foo.html',
-                    content => 'Bar',
-                },
-            ],
-        );
-
-        my $site = Statocles::Site->new(
-            apps => { test => $app },
-            deploy => TestDeploy->new,
-        );
-
-        my ( $out, $err, @pages ) = capture { $site->pages };
-        like $err, qr{\Q[warn] Duplicate page with path "/foo.html" from app "test"};
-        ok !$out or diag $out;
-    };
-
-};
-
 
 
 done_testing;

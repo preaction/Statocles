@@ -10,40 +10,47 @@ my $SHARE_DIR = path( __DIR__ )->parent->parent->child( 'share' );
 my $site = build_test_site(
     theme => $SHARE_DIR->child( 'theme' ),
     base_url => 'http://example.com/',
-);
-
-my $app = Statocles::App::Blog->new(
     store => TestStore->new(
-        path => $SHARE_DIR->child( qw( app blog ) ),
+        path => $SHARE_DIR->child( qw( app ) ),
         objects => [
             Statocles::Document->new(
-                path => '2018/01/01/post-one/index.markdown',
+                path => '/blog/2018/01/01/post-one/index.markdown',
                 tags => [qw( foo not-bar )],
+                content => '',
             ),
             Statocles::Document->new(
-                path => '2018/01/02/post-two/index.markdown',
+                path => '/blog/2018/01/02/post-two/index.markdown',
                 tags => [qw( foo )],
+                content => '',
             ),
             Statocles::Document->new(
-                path => '2018/01/03/post-three/index.markdown',
+                path => '/blog/2018/01/03/post-three/index.markdown',
                 tags => [qw( not-bar )],
+                content => '',
             ),
             Statocles::Document->new(
-                path => '2018/01/04/post-four/index.markdown',
+                path => '/blog/2018/01/04/post-four/index.markdown',
                 tags => [],
+                content => '',
             ),
             Statocles::File->new(
-                path => '2018/01/04/post-four/picture.jpg',
+                path => '/blog/2018/01/04/post-four/picture.jpg',
+                content => '',
             ),
             Statocles::Document->new(
-                path => '2018/01/04/post-four/page-2.markdown',
+                path => '/blog/2018/01/04/post-four/page-2.markdown',
+                content => '',
             ),
             Statocles::Document->new(
-                path => '9999/12/31/last-post/index.markdown',
+                path => '/blog/9999/12/31/last-post/index.markdown',
                 tags => [],
+                content => '',
             ),
         ],
     ),
+);
+
+my $app = Statocles::App::Blog->new(
     site => $site,
     url_root => '/blog',
     page_size => 2,
@@ -52,6 +59,8 @@ my $app = Statocles::App::Blog->new(
         'foo' => 'Foo',
     },
 );
+
+$site->apps->{blog} = $app;
 
 my @page_tests = (
 
@@ -271,7 +280,7 @@ my @page_tests = (
         my ( $page ) = @_;
         isa_ok $page, 'Statocles::Page::Document';
         is $page->document->path,
-            '2018/01/01/post-one/index.markdown',
+            '/blog/2018/01/01/post-one/index.markdown',
             'doc path correct';
         cmp_deeply [ map { $_->href } $page->tags ],
             bag( qw( /blog/tag/foo/ /blog/tag/not-bar/ ) ),
@@ -282,7 +291,7 @@ my @page_tests = (
         my ( $page ) = @_;
         isa_ok $page, 'Statocles::Page::Document';
         is $page->document->path,
-            '2018/01/02/post-two/index.markdown',
+            '/blog/2018/01/02/post-two/index.markdown',
             'doc path correct';
         cmp_deeply [ map { $_->href } $page->tags ],
             bag( qw( /blog/tag/foo/ ) ),
@@ -293,7 +302,7 @@ my @page_tests = (
         my ( $page ) = @_;
         isa_ok $page, 'Statocles::Page::Document';
         is $page->document->path,
-            '2018/01/03/post-three/index.markdown',
+            '/blog/2018/01/03/post-three/index.markdown',
             'doc path correct';
         cmp_deeply [ map { $_->href } $page->tags ],
             bag( qw( /blog/tag/not-bar/ ) ),
@@ -304,7 +313,7 @@ my @page_tests = (
         my ( $page ) = @_;
         isa_ok $page, 'Statocles::Page::Document';
         is $page->document->path,
-            '2018/01/04/post-four/index.markdown',
+            '/blog/2018/01/04/post-four/index.markdown',
             'doc path correct';
         cmp_deeply [ map { $_->href } $page->tags ], [ ],
             'tag list is correct';
@@ -322,16 +331,20 @@ my @page_tests = (
         my ( $page ) = @_;
         isa_ok $page, 'Statocles::Page::Document';
         is $page->document->path,
-            '2018/01/04/post-four/page-2.markdown',
+            '/blog/2018/01/04/post-four/page-2.markdown',
             'doc path correct';
         cmp_deeply [ map { $_->href } $page->tags ], [ ],
             'tag list is correct';
     },
 
+    '/blog/9999/12/31/last-post/index.html' => sub {
+        pass q{it's okay this is here};
+    },
+
 );
 
 
-test_page_objects( [ $app->pages ], @page_tests );
+test_page_objects( [ $site->pages ], @page_tests );
 
 cmp_deeply [ map { $_->href } $app->tags ],
     bag( qw( /blog/tag/foo/ /blog/tag/not-bar/ ) ),
@@ -356,30 +369,39 @@ subtest 'different locale' => sub {
         return;
     }
 
-    test_page_objects( [ $app->pages ], @page_tests );
+    test_page_objects( [ $site->pages ], @page_tests );
     is setlocale( LC_TIME ), 'ru_RU', 'locale is preserved';
     setlocale( LC_TIME, "" );
 };
 
 subtest 'blog with two posts in the same day' => sub {
-    my $app = Statocles::App::Blog->new(
+    my $site = build_test_site(
+        theme => $SHARE_DIR->child( 'theme' ),
+        base_url => 'http://example.com/',
         store => TestStore->new(
             path => $SHARE_DIR,
             objects => [
                 Statocles::Document->new(
-                    path => '2016/06/01/aaa-first/index.markdown',
+                    path => '/2016/06/01/aaa-first/index.markdown',
                     tags => [qw( mytag )],
+                    content => '',
                 ),
                 Statocles::Document->new(
-                    path => '2016/06/01/zzz-last/index.markdown',
+                    path => '/2016/06/01/zzz-last/index.markdown',
                     tags => [qw( mytag )],
+                    content => '',
                 ),
             ],
         ),
+    );
+
+    my $app = Statocles::App::Blog->new(
         site => $site,
         url_root => '/',
     );
-    my @pages = $app->pages;
+    $site->apps->{blog} = $app;
+
+    my @pages = $site->pages;
     my ( $index ) = grep { $_->path eq '/index.html' } @pages;
     cmp_deeply [ map { $_->path.'' } @{ $index->pages } ],
         [qw( /2016/06/01/aaa-first/index.html /2016/06/01/zzz-last/index.html )],
@@ -401,19 +423,12 @@ subtest 'blog with two posts in the same day' => sub {
 
 subtest 'blog with no pages is still built' => sub {
     my $app = Statocles::App::Blog->new(
-        store => TestStore->new( path => $SHARE_DIR ),
         site => $site,
         url_root => '/blog',
     );
     my @pages;
-    lives_ok { @pages = $app->pages };
+    lives_ok { @pages = $app->pages([]) };
     cmp_deeply \@pages, [];
-};
-
-subtest 'date option' => sub {
-    my @pages = $app->pages( date => '9999-12-31' );
-    my ( $found ) = grep { $_->path =~ m{^/blog/9999/12/31} } @pages;
-    ok $found, 'date option allows generating a post from the future';
 };
 
 done_testing;

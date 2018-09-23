@@ -10,35 +10,32 @@ use Statocles;
 use Statocles::Site;
 use TestDeploy;
 use TestApp;
+use TestStore;
 use Statocles::Command::daemon;
 my $SHARE_DIR = path( __DIR__, '..', 'share' );
 
 local $ENV{MOJO_LOG_LEVEL} = 'warn';
 
-my $app = TestApp->new(
-    url_root => '/',
-    pages => [
-        {
-            class => 'Statocles::Page::Plain',
+my $store = TestStore->new(
+    path => $SHARE_DIR->child( qw( store docs ) ),
+    objects => [
+        Statocles::Document->new(
             path => '/index.html',
             content => 'Index',
-        },
-        {
-            class => 'Statocles::Page::File',
-            path => '/static.txt',
-            file_path => $SHARE_DIR->child( qw( app basic static.txt ) ),
-        },
-        {
-            class => 'Statocles::Page::Plain',
-            path => '/foo/index.html',
-            content => 'Foo Index',
-        },
+        ),
+        Statocles::File->new(
+            path => '/image.png',
+        ),
     ],
 );
 
 my $site = Statocles::Site->new(
+    store => $store,
     apps => {
-        base => $app,
+        base => TestApp->new(
+            url_root => '/',
+            pages => [ ],
+        ),
     },
     deploy => TestDeploy->new,
 );
@@ -55,14 +52,14 @@ subtest 'root site' => sub {
     # Check that / gets index.html
     $t->get_ok( "/" )
         ->status_is( 200 )
-        ->content_is( "Index\n\n" )
+        ->text_is( p => "Index" )
         ->content_type_is( 'text/html;charset=UTF-8' )
         ;
 
     # Check that /index.html gets the right content
     $t->get_ok( "/index.html" )
         ->status_is( 200 )
-        ->content_is( "Index\n\n" )
+        ->text_is( p => "Index" )
         ->content_type_is( 'text/html;charset=UTF-8' )
         ;
 
@@ -74,6 +71,7 @@ subtest 'root site' => sub {
     $t->get_ok( "/foo/" )
         ->status_is( 200 )
         ->content_is( "Foo Index\n\n" )
+        ->or( sub { diag shift->tx->res->body } )
         ->content_type_is( 'text/html;charset=UTF-8' )
         ;
 
@@ -101,9 +99,7 @@ subtest 'nonroot site' => sub {
     make_writable( $buildpath );
     my $site = Statocles::Site->new(
         base_url => '/nonroot',
-        apps => {
-            base => $app,
-        },
+        store => $store,
         deploy => TestDeploy->new,
     );
 
@@ -123,14 +119,14 @@ subtest 'nonroot site' => sub {
     # Check that /nonroot gets index.html
     $t->get_ok( "/nonroot" )
         ->status_is( 200 )
-        ->content_is( "Index\n\n" )
+        ->text_is( p => "Index" )
         ->content_type_is( 'text/html;charset=UTF-8' )
         ;
 
     # Check that /nonroot/index.html gets the right content
     $t->get_ok( "/nonroot/index.html" )
         ->status_is( 200 )
-        ->content_is( "Index\n\n" )
+        ->text_is( p => "Index" )
         ->content_type_is( 'text/html;charset=UTF-8' )
         ;
 };
