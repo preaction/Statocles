@@ -193,7 +193,13 @@ sub iterator {
 
             my $from = $path->relative( $self->path );
             if ( $self->is_document( $path ) ) {
-                my $content = $path->slurp_utf8;
+                my $content = eval { $path->slurp_utf8 };
+                if ( $@ ) {
+                    chomp $@;
+                    die sprintf qq{Error reading file "%s": %s\n},
+                        $from, $@;
+                }
+
                 my $obj = eval {
                     Statocles::Document->parse_content(
                         content => $content,
