@@ -72,7 +72,7 @@ sub run {
         $self->log( $self->site->log );
 
         # First build the site
-        my $path = Path::Tiny->new( '.statocles/build' );
+        my $path = $self->site->store->path->child( '.statocles', 'build' );
         $path->mkpath;
         my $store = Statocles::Store->new( path => $path );
         $store->write_file( $_->path, $_->render ) for $self->site->pages( %{ $self->options } );

@@ -47,10 +47,7 @@ subtest 'build site' => sub {
 };
 
 subtest 'Build site with default path' => sub {
-    my $cwd = cwd;
-    my $tempdir = tempdir;
-    chdir $tempdir;
-
+    my $tempdir = $site->store->path;
     my $cmd = Statocles::Command::build->new( site => $site );
     $cmd->run();
 
@@ -59,8 +56,6 @@ subtest 'Build site with default path' => sub {
     ok $tempdir->child( '.statocles', 'build', 'index.html' )->exists, 'Statocles::Page::Plain exists';
     is $tempdir->child( '.statocles', 'build', 'index.html' )->slurp_utf8, "Index\n\n",
         'Statocles::Page::Plain content is correct';
-
-    chdir $cwd;
 };
 
 done_testing;

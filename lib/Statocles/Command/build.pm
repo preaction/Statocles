@@ -12,7 +12,7 @@ sub run {
         'base_url|base=s',
     );
 
-    my $path = Path::Tiny->new( $argv[0] // '.statocles/build' );
+    my $path = Path::Tiny->new( $argv[0] // $self->site->store->path->child( '.statocles', 'build' ) );
     $path->mkpath;
 
     my $store = StoreType->coercion->( $path );

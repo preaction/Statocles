@@ -8,8 +8,12 @@ use Statocles::Command::build;
 has build_dir => (
     is => 'ro',
     isa => Path,
+    lazy => 1,
     coerce => Path->coercion,
-    default => sub { Path->coercion->( '.statocles/build' ) },
+    default => sub {
+        my ( $self ) = @_;
+        $self->site->store->path->child( '.statocles', 'build' );
+    },
 );
 
 sub run {

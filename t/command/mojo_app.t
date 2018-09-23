@@ -17,17 +17,27 @@ my $SHARE_DIR = path( __DIR__, '..', 'share' );
 local $ENV{MOJO_LOG_LEVEL} = 'warn';
 
 my $store = TestStore->new(
-    path => $SHARE_DIR->child( qw( store docs ) ),
+    path => tempdir,
     objects => [
         Statocles::Document->new(
             path => '/index.html',
             content => 'Index',
+        ),
+        Statocles::Document->new(
+            path => '/foo/index.markdown',
+            content => "Foo Index\n\n",
         ),
         Statocles::File->new(
             path => '/image.png',
         ),
     ],
 );
+$store->path->child( 'image.png' )->touchpath;
+
+# as done by ::Command::daemon, need to ensure is writable because
+# distros are read-only and is within that
+my $buildpath = $store->path->child( '.statocles', 'build' );
+make_writable( $buildpath );
 
 my $site = Statocles::Site->new(
     store => $store,
@@ -41,8 +51,6 @@ my $site = Statocles::Site->new(
 );
 
 subtest 'root site' => sub {
-    my $buildpath = Path::Tiny->new( '.statocles/build' ); # as done by ::Command::daemon, need to ensure is writable because distros are read-only and is within that
-    make_writable( $buildpath );
     my $t = Test::Mojo->new(
         Statocles::Command::daemon::_MOJOAPP->new(
             site => $site,
@@ -70,7 +78,7 @@ subtest 'root site' => sub {
         ;
     $t->get_ok( "/foo/" )
         ->status_is( 200 )
-        ->content_is( "Foo Index\n\n" )
+        ->content_like( qr{Foo Index} )
         ->or( sub { diag shift->tx->res->body } )
         ->content_type_is( 'text/html;charset=UTF-8' )
         ;
@@ -95,8 +103,6 @@ subtest 'root site' => sub {
 };
 
 subtest 'nonroot site' => sub {
-    my $buildpath = Path::Tiny->new( '.statocles/build' ); # as done by ::Command::daemon, need to ensure is writable because distros are read-only and is within that
-    make_writable( $buildpath );
     my $site = Statocles::Site->new(
         base_url => '/nonroot',
         store => $store,
@@ -132,8 +138,6 @@ subtest 'nonroot site' => sub {
 };
 
 subtest '--date option' => sub {
-    my $buildpath = Path::Tiny->new( '.statocles/build' ); # as done by ::Command::daemon, need to ensure is writable because distros are read-only and is within that
-    make_writable( $buildpath );
     $site->clear_pages;
     my $t = Test::Mojo->new(
         Statocles::Command::daemon::_MOJOAPP->new(

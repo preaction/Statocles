@@ -120,6 +120,7 @@ sub test_store {
     my ( $store, %tests ) = @_;
     my $iter = $store->iterator;
     while ( my $obj = $iter->() ) {
+        next if $obj->path =~ /^[.]statocles/;
         my $test = delete $tests{ $obj->path } or fail "Missing test for path " . $obj->path;
         cmp_deeply $obj, noclass( superhashof( $test ) ), $obj->path . ' is correctly parsed'
             or diag explain $obj;

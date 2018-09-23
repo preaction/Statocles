@@ -13,7 +13,7 @@ my $SHARE_DIR = path( __DIR__, '..', 'share' );
 
 my $site = Statocles::Site->new(
     store => TestStore->new(
-        path => $SHARE_DIR->child( qw( store docs ) ),
+        path => tempdir,
         objects => [
             Statocles::Document->new(
                 path => '/index.html',
@@ -32,6 +32,7 @@ my $site = Statocles::Site->new(
     },
     deploy => TestDeploy->new,
 );
+$site->store->path->child( 'image.png' )->touchpath;
 
 subtest 'listen on a random port' => sub {
     # We need to stop the daemon after it starts
@@ -49,12 +50,9 @@ subtest 'listen on a random port' => sub {
     local $ENV{MOJO_LISTEN} = 'http://127.0.0.1';
     local $ENV{MOJO_LOG_LEVEL} = 'info'; # But sometimes this isn't set?
 
-    my $cwd = cwd;
-    my $tmp = tempdir;
-    chdir $tmp;
+    my $tmp = $site->store->path;
     my $cmd = Statocles::Command::daemon->new( site => $site );
     my ( $out, $err, $exit ) = capture { $cmd->run };
-    chdir $cwd;
     undef $timeout;
     $site->clear_pages;
 
@@ -86,12 +84,9 @@ subtest 'listen on a specific port' => sub {
         '-v', # watch lines are now behind -v
     );
 
-    my $cwd = cwd;
-    my $tmp = tempdir;
-    chdir $tmp;
+    my $tmp = $site->store->path;
     my $cmd = Statocles::Command::daemon->new( site => $site );
     my ( $out, $err, $exit ) = capture { $cmd->run( @args ) };
-    chdir $cwd;
     undef $timeout;
     $site->clear_pages;
 
@@ -117,12 +112,9 @@ subtest '--date' => sub {
         '--date', '9999-12-31',
     );
 
-    my $cwd = cwd;
-    my $tmp = tempdir;
-    chdir $tmp;
+    my $tmp = $site->store->path;
     my $cmd = Statocles::Command::daemon->new( site => $site );
     my ( $out, $err, $exit ) = capture { $cmd->run( @args ) };
-    chdir $cwd;
     undef $timeout;
     $site->clear_pages;
 
