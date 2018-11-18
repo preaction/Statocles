@@ -12,6 +12,10 @@ sub run {
         'base_url|base=s',
     );
 
+    if ($build_opt{date}) {
+      $self->site->build_date($build_opt{date});
+    }
+
     my $path = Path::Tiny->new( $argv[0] // '.statocles/build' );
     $path->mkpath;
 

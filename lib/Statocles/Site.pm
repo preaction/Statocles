@@ -10,6 +10,7 @@ use Mojo::Log;
 use Statocles::Page::Plain;
 use Statocles::Util qw( derp );
 use List::UtilsBy qw( uniq_by );
+use DateTime::Moonpig;
 
 =attr title
 
@@ -395,6 +396,27 @@ has _pages => (
     lazy => 1,
     predicate => 'has_pages',
     clearer => 'clear_pages',
+);
+
+=attr build_date
+
+    ---
+    build_date: 2015-03-27
+    build_date: 2015-03-27 12:04:00
+    ---
+
+The date/time of the current build of the site. This is usually set by a build
+(or related) command. Defaults to the current date.
+
+Should be in C<YYYY-MM-DD> or C<YYYY-MM-DD HH:MM:SS> format.
+
+=cut
+
+has build_date => (
+    is => 'rw',
+    isa => DateTimeObj,
+    coerce => DateTimeObj->coercion,
+    default => sub { DateTime::Moonpig->now( time_zone => 'local' )->ymd },
 );
 
 =method BUILD

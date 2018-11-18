@@ -15,6 +15,10 @@ sub run {
         'date|d=s',
     );
 
+    if ($build_opt{date}) {
+      $self->site->build_date($build_opt{date});
+    }
+
     require Mojo::Server::Daemon;
     my $app = Statocles::Command::daemon::_MOJOAPP->new(
         site => $self->site,
