@@ -1,3 +1,0 @@
-Recipe template
-%= $self->title
-%= $content

@@ -1,4 +1,0 @@
-<a class="button" href="<%= $self->data->{ doc_path } %>">
-    Back to documentation
-</a>
-<pre><%== $content %></pre>

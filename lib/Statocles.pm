@@ -1,192 +1,8 @@
 package Statocles;
-our $VERSION = '0.094';
+our $VERSION = '2.000';
 # ABSTRACT: A static site generator
 
-use Statocles::Base 'Class';
-use Scalar::Util qw( blessed );
-use Getopt::Long qw( GetOptionsFromArray :config pass_through bundling no_auto_abbrev );
-use Pod::Usage::Return qw( pod2usage );
-use Beam::Wire;
-use Mojo::Loader qw( load_class );
-
-my @VERBOSE = ( "warn", "info", "debug", "trace" );
-
-=attr site
-
-The L<site|Statocles::Site> we're working with.
-
-=cut
-
-has site => (
-    is => 'ro',
-    isa => InstanceOf['Statocles::Site'],
-);
-
-=attr log
-
-A L<Mojo::Log> object for logging. Defaults to the current site's C<log> attribute.
-
-=cut
-
-has log => (
-    is => 'rw',
-    lazy => 1,
-    default => sub {
-        $_[0]->site->log;
-    },
-);
-
-=method run
-
-    my $exitval = $cmd->run( @argv );
-
-Run the command given in @argv. See L<statocles> for a list of commands and
-options.
-
-=cut
-
-sub run {
-    my ( $class, @argv ) = @_;
-
-    my %opt = (
-        config => 'site.yml',
-        site => 'site',
-        verbose => 0,
-    );
-    GetOptionsFromArray( \@argv, \%opt,
-        'config:s',
-        'site:s',
-        'help|h',
-        'version',
-        'verbose|v+',
-    );
-    return pod2usage(0) if $opt{help};
-
-    if ( $opt{version} || ( $opt{verbose} && !@argv ) ) {
-        say "Statocles version $Statocles::VERSION (Perl $^V)";
-        require POSIX;
-        say "Locale: " . POSIX::setlocale( POSIX::LC_CTYPE );
-        return 0;
-    }
-
-    my $method = shift @argv;
-    return pod2usage("ERROR: Missing command") unless $method;
-
-    # Create site does not require a config file
-    if ( $method eq 'create' ) {
-        require Statocles::Command::create;
-        return Statocles::Command::create->new->run( @argv );
-    }
-
-    my ( $exit, $site ) = _load_site( %opt );
-    if ( $exit ) {
-        return $exit;
-    }
-
-    if ( $opt{verbose} ) {
-        $site->log->handle( \*STDOUT );
-        $site->log->level( $VERBOSE[ $opt{verbose} ] );
-    }
-
-    my $cmd_class = 'Statocles::Command::' . $method;
-
-    my $error = load_class( $cmd_class );
-    if ( $error ) {
-        if ( my $app = $site->apps->{ $method } ) {
-            if ( !$app->can( 'command' ) ) {
-                say STDERR sprintf 'ERROR: Application "%s" has no commands', $method;
-                return 1;
-            }
-            return $app->command( $method, @argv );
-        }
-        else {
-            return pod2usage("ERROR: Unknown command or app '$method'");
-        }
-    }
-
-    my $cmd = $cmd_class->new( site => $site );
-    return $cmd->run( @argv );
-}
-
-sub _load_site {
-    my ( %opt ) = @_;
-    if ( !-e $opt{config} ) {
-        warn sprintf qq{ERROR: Could not find config file "\%s"\n}, $opt{config};
-        return 1;
-    }
-
-    my $wire = eval { Beam::Wire->new( file => $opt{config} ) };
-
-    if ( $@ ) {
-        if ( blessed $@ && $@->isa( 'Beam::Wire::Exception::Config' ) ) {
-            my $remedy;
-            if ( $@ =~ /found character that cannot start any token/ || $@ =~ /YAML_PARSE_ERR_NONSPACE_INDENTATION/ ) {
-                $remedy = "Check that you are not using tabs for indentation. ";
-            }
-            elsif ( $@ =~ /did not find expected key/ || $@ =~ /YAML_PARSE_ERR_INCONSISTENT_INDENTATION/ ) {
-                $remedy = "Check your indentation. ";
-            }
-            elsif ( $@ =~ /Syck parser/ && $@ =~ /syntax error/ ) {
-                $remedy = "Check your indentation. ";
-            }
-
-            my $more_info = ( !$opt{verbose} ? qq{run with the "--verbose" option or } : "" )
-                          . "check Statocles::Help::Error";
-
-            warn sprintf qq{ERROR: Could not load config file "%s". %sFor more information, %s.%s},
-                $opt{config},
-                $remedy,
-                $more_info,
-                ( $opt{verbose} ? "\n\nRaw error: $@" : "" )
-                ;
-
-            return 1;
-        }
-        die $@;
-    }
-
-    my $site = eval { $wire->get( $opt{site} ) };
-
-    if ( $@ ) {
-        if ( blessed $@ && $@->isa( 'Beam::Wire::Exception::NotFound' ) && $@->name eq $opt{site} ) {
-            warn sprintf qq{ERROR: Could not find site named "%s" in config file "%s"\n},
-                $opt{site}, $opt{config};
-            return 1;
-        }
-        warn sprintf qq{ERROR: Could not create site object "%s" in config file "%s": %s\n},
-            $opt{site}, $opt{config}, $@;
-        return 1;
-    }
-
-    return ( 0, $site );
-}
-
-# The currently-running site.
-# I hate this, but I know of no better way to ensure that we always have access
-# to a Mojo::Log object, while still being relatively useful, without having to
-# wire up every single object with a log object.
-our $SITE;
-
-BEGIN {
-    package # Hide from PAUSE
-        site;
-    sub log { return $SITE->log }
-}
-
-1;
-__END__
-
 =head1 SYNOPSIS
-
-    # Create a new site
-    statocles create www.example.com
-
-    # Create a new blog post
-    export EDITOR=vim
-    statocles blog post
-
-    # Build the site
-    statocles build
 
     # Test the site in a local web browser
     statocles daemon
@@ -196,9 +12,9 @@ __END__
 
 =head1 DESCRIPTION
 
-Statocles is an application for building static web pages from a set of plain
-YAML and Markdown files. It is designed to make it as simple as possible to
-develop rich web content using basic text-based tools.
+Statocles is an application for building static web pages from a set of
+plain YAML and Markdown files. It is designed to make it as simple as
+possible to develop rich web content using basic text-based tools.
 
 =head2 FEATURES
 
@@ -230,14 +46,6 @@ RSS and Atom syndication feeds.
 
 =item *
 
-Tags to organize blog posts. Tags have their own custom feeds.
-
-=item *
-
-Crosspost links to direct users to a syndicated blog.
-
-=item *
-
 Post-dated blog posts to appear automatically when the date is passed.
 
 =back
@@ -263,11 +71,6 @@ L<Automatic checking for broken links|Statocles::Plugin::LinkCheck>.
 
 L<Syntax highlighting|Statocles::Plugin::Highlight> for code and configuration blocks.
 
-=item *
-
-Hooks to add L<your own plugins|Statocles::Plugin> and L<your own custom
-applications|Statocles::App>.
-
 =back
 
 =head1 GETTING STARTED
@@ -278,3 +81,221 @@ To get started with Statocles, L<consult the Statocles::Help guides|Statocles::H
 
 For news and documentation, L<visit the Statocles website at
 http://preaction.me/statocles|http://preaction.me/statocles>.
+
+=cut
+
+use Mojo::Base 'Yancy';
+use List::Util qw( first );
+use Mojo::File qw( path );
+use Mojo::JSON qw( decode_json encode_json );
+use YAML qw( );
+use Text::Markdown;
+use Time::Piece;
+use Mojo::Loader qw(load_class);
+
+has moniker => 'statocles';
+
+sub startup {
+    my ( $app ) = @_;
+
+    $app->defaults({ layout => 'default' });
+
+    $app->plugin( Config => {
+        default => {
+            title => 'My Statocles Site',
+            export => {
+                pages => [qw( / )],
+            },
+            deploy => {
+                base_url => '',
+                branch => 'deploy',
+                remote => '',
+            },
+            apps => {
+                blog => {
+                    route => '/',
+                },
+            },
+            theme => '+Statocles/theme/default',
+            plugins => [
+                'LinkCheck',
+            ],
+            data => {
+                main_nav => [
+                ],
+            },
+        },
+    } );
+
+    $app->plugin( Export => );
+    push @{$app->export->pages}, '/sitemap.xml', '/robots.txt';
+    #$app->plugin( AutoReload => );
+
+    # This is for absolute last-resort fallback templates
+    push @{$app->renderer->classes}, __PACKAGE__;
+
+    if ( my $theme_dir = $app->config->{theme} ) {
+        # Theme may be a module and path instead
+        if ( $theme_dir =~ m{\+([^/]+)/(.*)} ) {
+            my ( $module, $path ) = ( $1, $2 );
+            # Find the directory in the module name's "resources"
+            $theme_dir =
+                first { -e path( $_, split( /::|'/, $module ), 'resources', $path ) }
+                @INC;
+            die qq{Could not find path "resources/$path" under module $module\n\@INC contains @INC}
+                unless $theme_dir;
+        }
+        push @{$app->renderer->paths}, $theme_dir;
+        push @{$app->static->paths}, $theme_dir;
+    }
+
+    # Always fall back to the home dir for templates and static files to
+    # allow for extra content
+    push @{$app->renderer->paths}, $app->home;
+    push @{$app->static->paths}, $app->home;
+
+    $app->plugin( 'Yancy', {
+        backend => 'static:' . $app->home,
+        read_schema => 1,
+        schema => {
+            pages => {
+                properties => {
+                    path => {
+                        type => 'string',
+                        'x-order' => 2,
+                    },
+                    title => {
+                        type => 'string',
+                        'x-order' => 1,
+                    },
+                    markdown => {
+                        type => 'string',
+                        format => 'markdown',
+                        'x-html-field' => 'html',
+                        'x-order' => 3,
+                    },
+                    html => {
+                        type => 'string',
+                    },
+                    template => {
+                        type => [ 'string', 'null' ],
+                        default => 'default',
+                    },
+                    layout => {
+                        type => [ 'string', 'null' ],
+                        default => 'default',
+                    },
+                    status => {
+                        type => 'string',
+                        enum => [qw( published draft )],
+                        default => 'published',
+                    },
+                    date => {
+                        type => [ 'string', 'null' ],
+                        format => 'datetime',
+                    },
+                    data => {
+                    },
+                    # XXX Add other fields
+                    # tags
+                    # search_change_frequency
+                    # always hourly daily weekly monthly yearly never
+                    # search_priority
+                    # Number between 0.0 and 1.0
+                    # last_modified
+                },
+            },
+        },
+    } );
+
+    $app->helper( strftime => sub {
+        my ( $c, $format, $date ) = @_;
+        my $dt;
+        if ( $date ) {
+            $dt = Time::Piece->strptime( $date, '%Y-%m-%d %H:%M:%S' );
+        }
+        else {
+            $dt = Time::Piece->new;
+        }
+        return $dt->strftime( $format );
+    } );
+
+    $app->helper( section => sub {
+        my ( $c, $no, $html ) = @_;
+        my $dom = Mojo::DOM->new( $html );
+        if ( my $end = $dom->at( ":root > hr:nth-of-type( $no )" ) ) {
+            $end->following->each( 'delete' );
+        }
+        return "$dom";
+    } );
+
+    # Add configured plugins
+    push @{$app->plugins->namespaces}, 'Statocles::Plugin';
+    for my $plugin ( @{ $app->config->{plugins} || [] } ) {
+        $app->plugin( ref $plugin ? @$plugin : $plugin );
+    }
+
+    # Add routes to see content
+    my $r = $app->routes;
+
+    # Add default robots.txt and sitemap.xml
+    $r->get( '/sitemap' )->to( 'yancy#list', schema => 'pages', template => 'sitemap' );
+
+    # Add configured app routes
+    for my $moniker ( sort keys %{ $app->config->{apps} } ) {
+        my $conf = $app->config->{apps}{ $moniker };
+        my $class = 'Statocles::App::' . ucfirst( $conf->{app} || $moniker );
+        if ( my $e = load_class( $class ) ) {
+            die "Could not load class $class for app $moniker: $e";
+        }
+        my $site_app = $class->new( %$conf );
+        $site_app->register( $app, $conf );
+    }
+
+    # Fallback route to read pages
+    $r->get( '/*id', { id => 'index' }, sub {
+        my ( $c ) = @_;
+        my $id = $c->stash( 'id' );
+        if ( my $page = $c->yancy->get( pages => $id ) ) {
+            return $c->render(
+                content => $page->{html},
+                template => $page->{template} || 'default',
+                layout => $page->{layout} || 'default',
+                title => $page->{title},
+                page => $page,
+            );
+        }
+        if ( my ( $format ) = $id =~ m{/[^/]+[.]([^./]+)$} ) {
+            $c->stash( format => $format );
+            $id =~ s{[.]$format$}{};
+        }
+        return if $c->render_maybe( $id );
+        $id =~ s{(^|/)[^/]+$}{${1}index};
+        $c->render( $id );
+    } );
+}
+
+1;
+__DATA__
+@@ layouts/default.html.ep
+<!DOCTYPE html>
+<head>
+    <title><%= title %></title>
+</head>
+<body>
+    %= content
+</body>
+@@ default.html.ep
+%== stash 'content'
+@@ sitemap.xml.ep
+<?xml version="1.0" encoding="UTF-8" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+% for my $item ( @$items ) {
+    <url>
+        <loc><%= url_for( $item->{path} )->to_abs %></loc>
+        <changefreq><%= $item->{search_change_frequency} // 'weekly' %></changefreq>
+        <priority><%= $item->{search_priority} // 0.5 %></priority>
+        <lastmod><%= strftime( '%Y-%m-%d', $item->{last_modified} // $item->{date} ) %></lastmod>
+    </url>
+% }
+</urlset>

@@ -1,5 +1,0 @@
-<a class="button button-default" href="<%= $self->data->{ doc_path } %>">
-    Back to documentation
-</a>
-<pre><%== $content %></pre>
-

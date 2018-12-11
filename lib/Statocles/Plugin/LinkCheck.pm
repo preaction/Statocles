@@ -2,9 +2,39 @@ package Statocles::Plugin::LinkCheck;
 our $VERSION = '0.094';
 # ABSTRACT: Check links and images for validity during build
 
-use Statocles::Base 'Class';
-with 'Statocles::Plugin';
+=head1 SYNOPSIS
+
+    # site.yml
+    site:
+        class: Statocles::Site
+        args:
+            plugins:
+                link_check:
+                    $class: Statocles::Plugin::LinkCheck
+
+=head1 DESCRIPTION
+
+This plugin checks all of the links and images to ensure they exist. If something
+is missing, this plugin will write a warning to the screen.
+
+=head1 SEE ALSO
+
+L<Statocles>
+
+=cut
+
+use Mojo::Base 'Mojolicious::Plugin';
 use Mojo::Util qw( url_escape url_unescape );
+use Yancy::Util qw( currym );
+use Mojo::File qw( path );
+
+has _log =>;
+
+sub register {
+    my ( $self, $app, $conf ) = @_;
+    $self->_log( $app->log );
+    $app->export->on( before_write => currym( $self, 'check_pages' ) );
+}
 
 =attr ignore
 
@@ -18,59 +48,51 @@ For example:
 
 =cut
 
-has ignore => (
-    is => 'ro',
-    isa => ArrayRef[Str],
-    default => sub { [] },
-);
+has ignore => sub { [] };
 
 =method check_pages
 
-    $plugin->check_pages( $event );
-
-Check the pages inside the given
-L<Statocles::Event::Pages|Statocles::Event::Pages> event.
+Check the pages for broken links.
 
 =cut
 
 sub check_pages {
-    my ( $self, $event ) = @_;
+    my ( $self, $export, $pages ) = @_;
 
     my %page_paths = ();
     my %links = ();
     my %empty = (); # Pages with empty links
-    for my $page ( @{ $event->pages } ) {
-        $page_paths{ url_unescape $page->path } = 1;
-        if ( $page->DOES( 'Statocles::Page::Document' ) ) {
-            my $dom = $page->dom;
+    for my $path ( keys %$pages ) {
+        my $content = $pages->{ $path };
+        $page_paths{ $path } = 1;
 
-            for my $attr ( qw( src href ) ) {
-                for my $el ( $dom->find( "[$attr]" )->each ) {
-                    my $url = $el->attr( $attr );
+        next unless ref $content eq 'Mojo::DOM';
 
-                    if ( !$url ) {
-                        push @{ $empty{ $page->path } }, $el;
-                    }
+        for my $attr ( qw( src href ) ) {
+            for my $el ( $content->find( "[$attr]" )->each ) {
+                my $url = $el->attr( $attr );
 
-                    $url =~ s{#.*$}{};
-                    next unless $url; # Skip checking fragment-internal links for now
-                    next if $url =~ m{^(?:[a-z][a-z0-9+.-]*):}i;
-                    next if $url =~ m{^//};
-                    if ( $url !~ m{^/} ) {
-                        my $clone = $page->path->clone;
-                        pop @$clone;
-                        $url = join '/', $clone, $url;
-                    }
-
-                    # Fix ".." and ".". Path::Tiny->canonpath can't do
-                    # this for us because these paths do not exist on
-                    # the filesystem
-                    $url =~ s{/[^/]+/[.][.]/}{/}g; # Fix ".." to refer to parent
-                    $url =~ s{/[.]/}{/}g; # Fix "." to refer to self
-
-                    $links{ url_unescape $url }{ url_unescape $page->path }++;
-
+                if ( !$url ) {
+                    push @{ $empty{ $path } }, $el;
                 }
+
+                $url =~ s{#.*$}{};
+                next unless $url; # Skip checking fragment-internal links for now
+                next if $url =~ m{^(?:[a-z][a-z0-9+.-]*):}i;
+                next if $url =~ m{^//};
+                if ( $url !~ m{^/} ) {
+                    # Fix relative paths
+                    $url = path( $path )->dirname->child( $url )->to_string;
+                }
+
+                # Fix ".." and ".". Path::Tiny->canonpath can't do
+                # this for us because these paths do not exist on
+                # the filesystem
+                $url =~ s{/[^/]+/[.][.]/}{/}g; # Fix ".." to refer to parent
+                $url =~ s{/[.]/}{/}g; # Fix "." to refer to self
+
+                $links{ $url }{ $path }++;
+
             }
         }
     }
@@ -93,36 +115,9 @@ sub check_pages {
             my $msg = $m->[0] ? sprintf( q{'%s' not found}, $m->[0] )
                     : sprintf( q{Link with text "%s" has no destination}, $m->[2]->text )
                     ;
-            $event->emitter->log->warn( "URL broken on $m->[1]: $msg" );
+            $self->_log->warn( "URL broken on $m->[1]: $msg" );
         }
     }
 }
 
-=method register
-
-Register this plugin to install its event handlers. Called automatically.
-
-=cut
-
-sub register {
-    my ( $self, $site ) = @_;
-    $site->on( build => sub { $self->check_pages( @_ ) } );
-}
-
 1;
-
-=head1 SYNOPSIS
-
-    # site.yml
-    site:
-        class: Statocles::Site
-        args:
-            plugins:
-                link_check:
-                    $class: Statocles::Plugin::LinkCheck
-
-=head1 DESCRIPTION
-
-This plugin checks all of the links and images to ensure they exist. If something
-is missing, this plugin will write a warning to the screen.
-

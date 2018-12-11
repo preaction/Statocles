@@ -1,0 +1,5 @@
+% title 'Advent';
+% use File::Basename qw( basename );
+% my $year = basename url_for->path->[-1], '.' . stash 'format';
+% say $year;
+<h1><%= $year %></h1>

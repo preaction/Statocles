@@ -1,1 +1,0 @@
-INCLUDE <%= include "include/test.html.ep" %> ENDINCLUDE <%= $title %> <%= $content %>

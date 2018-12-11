@@ -1,91 +1,11 @@
 #!/usr/bin/env perl
 # ABSTRACT: Run Statocles commands
-package statocles;
-our $VERSION = '0.094';
-
-use Statocles::Base;
-use Encode qw( decode );
-use Encode::Locale;
-use open qw( :std :locale );
-use POSIX qw( setlocale LC_ALL );
-
-# Mojolicious::Commands currently calls GetOptions and clobbers a few of
-# our command-line options. Since I don't want to rely on the envvars
-# that get set in that process, we'll do this little dance here.
-#
-# This happens because we build a Mojolicious app inside the Statocles::Command
-# module, which loads Mojolicious, which loads Mojolicious::Commands, which
-# calls GetOptions on @ARGV
-my @argv;
-BEGIN { @argv = map { decode( locale => $_ ) } @ARGV };
-
-binmode STDIN, ":encoding(locale)";
-binmode STDOUT, ":encoding(locale)";
-binmode STDERR, ":encoding(locale)";
-
-use Statocles;
-exit Statocles->run( @argv );
-
-__END__
+# PODNAME: statocles
+our $VERSION = '2.000';
 
 =head1 SYNOPSIS
 
-    statocles [-v] [--config <file>] [--site <site>] <command>
-    statocles -h|--help
-    statocles -v|--version
-
-=head1 DESCRIPTION
-
-The Statocles command-line interface. This command manages Statocles
-sites: building, testing, and deploying.
-
-This command also helps to manage content in Statocles apps.
-
-=head1 ARGUMENTS
-
-=head2 <command>
-
-The command to run. Available commands:
-
-    create <url>                    - Create a new site
-    build [--date YYYY-MM-DD]       - Build the site
-    daemon [-p <port>] [--date]     - Run an HTTP daemon to test the site
-    deploy [--clean] [--date]       - Deploy the site
-    bundle theme <name> [<file>...] - Bundle a theme
-    apps                            - List the applications in this site
-    <app> help                      - Get help for a specific application
-
 =head1 OPTIONS
-
-=head2 config <file>
-
-The configuration file to read for Sites. Defaults to C<site.yml>.
-
-The configuration file is a L<Beam::Wire> container file.
-
-=head2 site <name>
-
-The site to use, which is the name of an object in the config file. Defaults to
-C<site>.
-
-=head2 -p <port>
-
-When running the daemon, choose which port to listen on. Defaults to C<3000>.
-
-=head2 --date <date>
-
-When running C<build>, C<deploy>, and C<daemon>, set the current date for
-applications. This forces, for example, the L<blog app|Statocles::App::Blog>
-to show entries in the future.
-
-Date should be in C<YYYY-MM-DD> format.
-
-=head2 --clean
-
-When running C<deploy>, delete the current site content before deploying. By
-default, old build files may be kept around after their source file is deleted.
-The C<--clean> option removes all the files, so the site only contains what
-was built.
 
 =head2 -v | --verbose
 
@@ -99,3 +19,9 @@ Display this help file
 
 Display version information
 
+=cut
+
+use strict;
+use warnings;
+use Mojolicious::Commands;
+Mojolicious::Commands->start_app('Statocles');

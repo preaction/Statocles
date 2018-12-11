@@ -4,23 +4,13 @@ Statocles - A static site generator
 
 # VERSION
 
-version 0.093
+version 2.000
 
 # STATUS
 
 <a href="https://travis-ci.org/preaction/Statocles"><img src="https://travis-ci.org/preaction/Statocles.svg?branch=master"></a><a href="https://coveralls.io/r/preaction/Statocles"><img src="https://coveralls.io/repos/preaction/Statocles/badge.png" alt="Coverage Status" /></a>
 
 # SYNOPSIS
-
-    # Create a new site
-    statocles create www.example.com
-
-    # Create a new blog post
-    export EDITOR=vim
-    statocles blog post
-
-    # Build the site
-    statocles build
 
     # Test the site in a local web browser
     statocles daemon
@@ -30,9 +20,9 @@ version 0.093
 
 # DESCRIPTION
 
-Statocles is an application for building static web pages from a set of plain
-YAML and Markdown files. It is designed to make it as simple as possible to
-develop rich web content using basic text-based tools.
+Statocles is an application for building static web pages from a set of
+plain YAML and Markdown files. It is designed to make it as simple as
+possible to develop rich web content using basic text-based tools.
 
 ## FEATURES
 
@@ -43,8 +33,6 @@ content.
 - A simple daemon to display a test site before it goes live.
 - A [blogging application](https://metacpan.org/pod/Statocles::App::Blog#FEATURES) with
     - RSS and Atom syndication feeds.
-    - Tags to organize blog posts. Tags have their own custom feeds.
-    - Crosspost links to direct users to a syndicated blog.
     - Post-dated blog posts to appear automatically when the date is passed.
 - Customizable [themes](https://metacpan.org/pod/Statocles::Theme) using [the Mojolicious template
 language](https://metacpan.org/pod/Mojo::Template#SYNTAX).
@@ -52,27 +40,6 @@ language](https://metacpan.org/pod/Mojo::Template#SYNTAX).
 - SEO-friendly features such as [sitemaps (sitemap.xml)](http://www.sitemaps.org).
 - [Automatic checking for broken links](https://metacpan.org/pod/Statocles::Plugin::LinkCheck).
 - [Syntax highlighting](https://metacpan.org/pod/Statocles::Plugin::Highlight) for code and configuration blocks.
-- Hooks to add [your own plugins](https://metacpan.org/pod/Statocles::Plugin) and [your own custom
-applications](https://metacpan.org/pod/Statocles::App).
-
-# ATTRIBUTES
-
-## site
-
-The [site](https://metacpan.org/pod/Statocles::Site) we're working with.
-
-## log
-
-A [Mojo::Log](https://metacpan.org/pod/Mojo::Log) object for logging. Defaults to the current site's `log` attribute.
-
-# METHODS
-
-## run
-
-    my $exitval = $cmd->run( @argv );
-
-Run the command given in @argv. See [statocles](https://metacpan.org/pod/statocles) for a list of commands and
-options.
 
 # GETTING STARTED
 
@@ -89,6 +56,7 @@ Doug Bell <preaction@cpan.org>
 
 # CONTRIBUTORS
 
+- David Farrell <davidnmfarrell@gmail.com>
 - djerius <djerius@cfa.harvard.edu>
 - Ed J <mohawk2@users.noreply.github.com>
 - Ferenc Erki <erkiferenc@gmail.com>
@@ -101,10 +69,11 @@ Doug Bell <preaction@cpan.org>
 - tadegenban <tadegenban@gmail.com>
 - Vladimir Lettiev <thecrux@gmail.com>
 - William Lindley <wlindley@wlindley.com>
+- Wojtek Bażant <wojtek.bazant@sanger.ac.uk>
 
 # COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2016 by Doug Bell.
+This software is copyright (c) 2016-2018 by Doug Bell.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

@@ -1,6 +1,0 @@
-site:
-    class: Statocles::Site
-    args:
-        title: Missing Required Argument "deploy"
-        theme: '::default'
-        index: page

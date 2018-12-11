@@ -1,7 +1,0 @@
-site:
-	class: Statocles::Site
-	args:
-		title: Bad Character in YAML
-		deploy: '.'
-		theme: '::default'
-		index: page

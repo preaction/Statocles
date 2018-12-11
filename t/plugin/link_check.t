@@ -1,82 +1,37 @@
 
-use Test::Lib;
-use My::Test;
-use Mojo::Log;
-use Statocles::Plugin::LinkCheck;
-use Statocles::Image;
-use Statocles::Site;
-use TestStore;
-my $SHARE_DIR = path( __DIR__, '..', 'share' );
+=head1 DESCRIPTION
 
-subtest 'check links' => sub {
+=cut
+
+use Mojo::Base -strict;
+use Test::Mojo;
+use Test::More;
+use FindBin qw( $Bin );
+use Mojo::File qw( path tempdir );
+
+$ENV{MOJO_HOME} = path( $Bin, '..', 'share', 'link_check' );
+my $t = Test::Mojo->new( Statocles => {
+    export => {
+        pages => [qw( / )],
+    },
+    plugins => [ 'LinkCheck' ],
+} );
+if ( !$ENV{HARNESS_IS_VERBOSE} ) {
     my $log_str;
     open my $log_fh, '>', \$log_str;
-    my $log = Mojo::Log->new( level => 'warn', handle => $log_fh, max_history_size => 500 );
+    $t->app->log->level( 'warn' );
+    $t->app->log->handle( $log_fh );
+}
+$t->app->log->max_history_size( 5000 );
 
-    my $site = Statocles::Site->new(
-        store => TestStore->new(
-            path => '.',
-            objects => [
-                Statocles::Document->new(
-                    path => '/index.markdown',
-                    content => '<a href="/missing.html"><img src="/foo.jpg"></a>',
-                ),
-                Statocles::Document->new(
-                    path => '/foo.markdown',
-                    content => '<a href="/">Index</a>',
-                ),
-            ],
-        ),
-        deploy => '.',
-    );
+my $to = tempdir;
+$t->app->export->export({ to => $to });
 
-    my $plugin = Statocles::Plugin::LinkCheck->new;
-    $plugin->register( $site );
-
-    $site->pages;
-
-    cmp_deeply $site->log->history,
-        [
-            [
-              ignore(),
-              'warn',
-              "URL broken on /index.html: \'/foo.jpg\' not found",
-            ],
-            [
-              ignore(),
-              'warn',
-              "URL broken on /index.html: \'/missing.html\' not found",
-            ],
-        ],
-        'broken links found and sorted by page -> missing url'
-            or diag explain $site->log->history;
-
-};
-
-subtest 'ignore patterns' => sub {
-
-    subtest 'prefix matching' => sub {
-        my $log_str;
-        open my $log_fh, '>', \$log_str;
-        my $log = Mojo::Log->new( level => 'warn', handle => $log_fh );
-
-        my ( $site, $build_dir, $deploy_dir ) = build_test_site_apps( $SHARE_DIR, log => $log );
-        my $plugin = Statocles::Plugin::LinkCheck->new(
-            ignore => [
-                '/missing.html',
-                '.*[.]jpg',
-            ]
-        );
-        $plugin->register( $site );
-
-        $site->pages;
-
-        cmp_deeply $site->log->history,
-            [],
-            'all broken links ignored'
-                or diag explain $site->log->history;
-    };
-};
-
+my @broken_urls = map { $_->[2] } grep { $_->[2] =~ /URL broken/ } @{ $t->app->log->history };
+is_deeply \@broken_urls,
+    [
+        q{URL broken on /: '/NOT_FOUND' not found},
+    ]
+    or diag explain $t->app->log->history;
 
 done_testing;

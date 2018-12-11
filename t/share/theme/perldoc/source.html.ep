@@ -1,2 +1,0 @@
-<a href="<%= $self->data->{ doc_path } %>">Back to Documentation</a>
-<pre><%== $content %></pre>

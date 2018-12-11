@@ -1,1 +1,0 @@
-INCLUDE <%= include "included_template.html.ep", title => 'New Title' %> ENDINCLUDE <%= $title %> <%= $content %>

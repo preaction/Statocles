@@ -1,2 +1,0 @@
-<%%= stuff() %>
-%%= other_stuff()

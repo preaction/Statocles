@@ -2,7 +2,18 @@ package Statocles::Deploy;
 our $VERSION = '0.094';
 # ABSTRACT: Base role for ways to deploy a site
 
-use Statocles::Base 'Role';
+=head1 DESCRIPTION
+
+A Statocles::Deploy deploys a site to a destination, like Git, SFTP, or
+otherwise.
+
+=head1 SEE ALSO
+
+L<Statocles::Deploy::Git>
+
+=cut
+
+use Mojo::Base 'Mojo::EventEmitter';
 
 =attr base_url
 
@@ -14,50 +25,29 @@ URLs.
 
 =cut
 
-has base_url => (
-    is => 'ro',
-    isa => Str,
-);
+has base_url => '/';
 
-=attr site
+=attr app
 
-The site this deploy is deploying for. This will be set before the site calls
+The app this deploy is deploying for. This will be set before the app calls
 L<the deploy method|/deploy>.
 
 =cut
 
-has site => (
-    is => 'rw',
-    isa => InstanceOf['Statocles::Site'],
-);
+has app => sub { die q{"app" is required} };
 
 =method deploy
 
-    my @paths = $deploy->deploy( $from_store, $message );
+    my @paths = $deploy->deploy( $from_path, $message );
 
-Deploy the site, copying from the given L<store object|Statocles::Store>, optionally
+Deploy the site, copying from the given L<path object|Mojo::File>, optionally
 committing with the given message. Returns a list of file paths deployed.
 
 This must be implemented by the composing class.
 
 =cut
 
-requires qw( deploy );
+sub deploy { ... }
 
 1;
-__END__
 
-=head1 DESCRIPTION
-
-A Statocles::Deploy deploys a site to a destination, like Git, SFTP, or
-otherwise.
-
-=head1 SEE ALSO
-
-=over 4
-
-=item L<Statocles::Deploy::File>
-
-=item L<Statocles::Deploy::Git>
-
-=back

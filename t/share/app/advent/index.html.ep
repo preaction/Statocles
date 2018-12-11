@@ -1,0 +1,3 @@
+% title 'Advent';
+% my $year = url_for->path->[-1];
+<h1><%= $year %></h1>

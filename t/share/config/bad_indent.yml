@@ -1,7 +1,0 @@
-site:
-    class: Statocles::Site
-    args:
-        title: Bad Indent in YAML
-        deploy: '.'
-         theme: '::default'
-        index: page

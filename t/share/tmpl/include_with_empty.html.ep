@@ -1,1 +1,0 @@
-INCLUDE <%= include "include_empty.html.ep" %> ENDINCLUDE <%= $title %> <%= $content %>
