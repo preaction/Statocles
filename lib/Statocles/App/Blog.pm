@@ -62,9 +62,9 @@ __DATA__
 
 <ul class="pager">
     <li class="prev">
-        % if ( $page > 1 ) {
+        % if ( $page < $total_pages ) {
             <a class="button button-primary" rel="prev"
-                href="<%= url_for( page => $page - 1 ) %>"
+                href="<%= url_for( page => $page + 1 ) %>"
             >
                 &larr; Older
             </a>
@@ -76,9 +76,9 @@ __DATA__
         % }
     </li>
     <li class="next">
-        % if ( $page < $total_pages ) {
+        % if ( $page > 1 ) {
             <a class="button button-primary" rel="next"
-                href="<%= url_for( page => $page +1 ) %>"
+                href="<%= url_for( page => $page - 1 ) %>"
             >
                 Newer &rarr;
             </a>
