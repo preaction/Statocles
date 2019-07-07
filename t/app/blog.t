@@ -16,15 +16,28 @@ my $t = Test::Mojo->new( Statocles => {
     apps => {
         blog => {
             route => '/',
+            limit => 3,
         },
     },
 } );
 
 $t->get_ok( '/' )->status_is( 200 )
-  ->text_is( 'article:nth-of-type(1) h1 a', 'Second Post', 'most recent post is first in list' )
+  ->text_is( 'article:nth-of-type(1) h1 a', 'Fourth Post', 'most recent post is first in list' )
   ->or( sub { diag shift->tx->res->body } )
-  ->text_is( 'article:nth-of-type(2) h1 a', 'First Post' )
+  ->text_is( 'article:nth-of-type(2) h1 a', 'Third Post' )
   ->or( sub { diag shift->tx->res->body } )
+  ->text_is( 'article:nth-of-type(3) h1 a', 'Second Post' )
+  ->or( sub { diag shift->tx->res->body } )
+  ->element_exists_not( 'article:nth-of-type(4)', 'page has limit => 3 articles' )
+  ->or( sub { diag shift->tx->res->body } )
+  ->element_exists( '.pager .prev [href=/2]', 'previous button is enabled' )
+  ->element_exists( '.pager .next button[disabled]', 'next button is disabled' )
+
+  ->get_ok( '/2' )->status_is( 200 )
+  ->text_is( 'article:nth-of-type(1) h1 a', 'First Post', 'final post on last page' )
+  ->or( sub { diag shift->tx->res->body } )
+  ->element_exists( '.pager .prev button[disabled]', 'previous button is disabled' )
+  ->element_exists( '.pager .next a[href=/]', 'next button is enabled' )
 
   ->get_ok( '/first-post' )->status_is( 200 )
   ->text_is( 'h1', 'First Post' )
@@ -33,15 +46,23 @@ $t->get_ok( '/' )->status_is( 200 )
   ->text_is( 'h1', 'Second Post' )
 
   ->get_ok( '/.rss', { Accept => 'application/rss+xml' } )->status_is( 200 )
-  ->text_is( 'item:nth-of-type(1) title', 'Second Post', 'most recent post is first in list' )
+  ->text_is( 'item:nth-of-type(1) title', 'Fourth Post', 'most recent post is first in list' )
   ->or( sub { diag shift->tx->res->body } )
-  ->text_is( 'item:nth-of-type(2) title', 'First Post' )
+  ->text_is( 'item:nth-of-type(2) title', 'Third Post' )
+  ->or( sub { diag shift->tx->res->body } )
+  ->text_is( 'item:nth-of-type(3) title', 'Second Post' )
+  ->or( sub { diag shift->tx->res->body } )
+  ->element_exists_not( 'item:nth-of-type(4) title', 'only 3 items per page' )
   ->or( sub { diag shift->tx->res->body } )
 
   ->get_ok( '/.atom', { Accept => 'application/atom+xml' } )->status_is( 200 )
-  ->text_is( 'entry:nth-of-type(1) title', 'Second Post', 'most recent post is first in list' )
+  ->text_is( 'entry:nth-of-type(1) title', 'Fourth Post', 'most recent post is first in list' )
   ->or( sub { diag shift->tx->res->body } )
-  ->text_is( 'entry:nth-of-type(2) title', 'First Post' )
+  ->text_is( 'entry:nth-of-type(2) title', 'Third Post' )
+  ->or( sub { diag shift->tx->res->body } )
+  ->text_is( 'entry:nth-of-type(3) title', 'Second Post' )
+  ->or( sub { diag shift->tx->res->body } )
+  ->element_exists_not( 'entry:nth-of-type(4) title', 'only 3 items per page' )
   ->or( sub { diag shift->tx->res->body } )
 
   ;
