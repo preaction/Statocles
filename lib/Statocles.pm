@@ -121,7 +121,9 @@ sub startup {
                 'LinkCheck',
             ],
             data => {
-                main_nav => [
+                nav => [
+                    main => [
+                    ],
                 ],
             },
         },
@@ -129,6 +131,8 @@ sub startup {
 
     $app->plugin( Export => );
     push @{$app->export->pages}, '/sitemap.xml', '/robots.txt';
+    # XXX AutoReload doesn't work, possibly because the fallback
+    # templates provide no place to put the <script> code...
     #$app->plugin( AutoReload => );
 
     # This is for absolute last-resort fallback templates
@@ -198,11 +202,13 @@ sub startup {
                     },
                     # XXX Add other fields
                     # tags
+                    # - Array of strings or comma-separated strings
                     # search_change_frequency
-                    # always hourly daily weekly monthly yearly never
+                    # - always hourly daily weekly monthly yearly never
                     # search_priority
-                    # Number between 0.0 and 1.0
+                    # - Number between 0.0 and 1.0
                     # last_modified
+                    # - Datetime
                 },
             },
         },
