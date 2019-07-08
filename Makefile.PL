@@ -6,11 +6,18 @@ use 5.014;
 
 use ExtUtils::MakeMaker;
 
+use File::ShareDir::Install;
+$File::ShareDir::Install::INCLUDE_DOTFILES = 1;
+$File::ShareDir::Install::INCLUDE_DOTDIRS = 1;
+install_share dist => "share";
+
+
 my %WriteMakefileArgs = (
   "ABSTRACT" => "A static site generator",
   "AUTHOR" => "Doug Bell <preaction\@cpan.org>",
   "CONFIGURE_REQUIRES" => {
-    "ExtUtils::MakeMaker" => 0
+    "ExtUtils::MakeMaker" => 0,
+    "File::ShareDir::Install" => "0.06"
   },
   "DISTNAME" => "Statocles",
   "EXE_FILES" => [
@@ -23,6 +30,7 @@ my %WriteMakefileArgs = (
     "Encode" => 0,
     "Git::Repository" => 0,
     "Mojolicious::Command::export" => "0.005",
+    "Mojolicious::Plugin::AutoReload" => 0,
     "Mojolicious::Plugin::PODViewer" => 0,
     "Yancy" => "1.035",
     "Yancy::Backend::Static" => "0.004",
@@ -52,6 +60,7 @@ my %FallbackPrereqs = (
   "IO::Handle" => 0,
   "IPC::Open3" => 0,
   "Mojolicious::Command::export" => "0.005",
+  "Mojolicious::Plugin::AutoReload" => 0,
   "Mojolicious::Plugin::PODViewer" => 0,
   "Storable" => 0,
   "Test::More" => "1.001005",
@@ -72,3 +81,9 @@ delete $WriteMakefileArgs{CONFIGURE_REQUIRES}
   unless eval { ExtUtils::MakeMaker->VERSION(6.52) };
 
 WriteMakefile(%WriteMakefileArgs);
+
+{
+package
+MY;
+use File::ShareDir::Install qw(postamble);
+}

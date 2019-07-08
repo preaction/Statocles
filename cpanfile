@@ -1,6 +1,7 @@
 requires "Encode" => "0";
 requires "Git::Repository" => "0";
 requires "Mojolicious::Command::export" => "0.005";
+requires "Mojolicious::Plugin::AutoReload" => "0";
 requires "Mojolicious::Plugin::PODViewer" => "0";
 requires "Yancy" => "1.035";
 requires "Yancy::Backend::Static" => "0.004";
@@ -24,6 +25,7 @@ on 'test' => sub {
 
 on 'configure' => sub {
   requires "ExtUtils::MakeMaker" => "0";
+  requires "File::ShareDir::Install" => "0.06";
 };
 
 on 'configure' => sub {
