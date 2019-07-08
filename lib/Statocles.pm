@@ -94,6 +94,7 @@ use Time::Piece;
 use Mojo::Loader qw(load_class);
 
 has moniker => 'statocles';
+has deploy => sub { die q{"deploy" is required} };
 
 sub startup {
     my ( $app ) = @_;
@@ -105,9 +106,11 @@ sub startup {
                 pages => [qw( / )],
             },
             deploy => {
-                base_url => '',
-                branch => 'deploy',
-                remote => '',
+                git => {
+                    base_url => '',
+                    branch => 'master',
+                    remote => 'origin',
+                },
             },
             apps => {
                 blog => {
@@ -131,6 +134,17 @@ sub startup {
         layout => $app->config->{layout} // 'default',
         template => $app->config->{template} // 'default',
     });
+
+    # Configure deploy object
+    push @{ $app->commands->namespaces }, 'Statocles::Command';
+    if ( my ( $deploy_name, $deploy_conf ) = %{ $app->config->{deploy} // {} } ) {
+        my $class = 'Statocles::Deploy::' . ucfirst( $deploy_name );
+        if ( my $e = load_class( $class ) ) {
+            die qq{Could not load class $class for deploy "$deploy_name": $e};
+        }
+        my $deploy = $class->new( %$deploy_conf, app => $app );
+        $app->deploy( $deploy );
+    }
 
     $app->plugin( Export => );
     push @{$app->export->pages}, '/sitemap.xml', '/robots.txt';
