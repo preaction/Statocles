@@ -50,12 +50,19 @@ __DATA__
                 </span>
             % }
             % if ( config->{data}{disqus}{shortname} ) {
-            <a data-disqus-identifier="<%= $item->{path} %>" href="<%= $item->{path} %>#disqus_thread">0 comments</a>
+            <a data-disqus-identifier="<%= url_for( $item->{path} ) %>" href="<%= url_for( $item->{path} ) %>#disqus_thread">0 comments</a>
             % }
         </aside>
     </header>
 
-    %== section( 1, $item->{html} )
+    % my $sections = sectionize( $item->{html} );
+    <section>
+        %== $sections->[ 0 ]
+    </section>
+
+    % if ( @$sections > 1 ) {
+    <p><a href="<%= url_for( $item->{path} ) %>#section-2">Continue reading...</a></p>
+    % }
 
 </article>
 % }
@@ -123,8 +130,11 @@ __DATA__
             <link><%= url_for( $item->{path} )->to_abs %></link>
             <guid><%= url_for( $item->{path} )->to_abs %></guid>
             <description><![CDATA[
-                %= section( 1, $item->{html} )
-                <p><a href="<%= url_for( $item->{path} )->to_abs %>">Continue reading...</a></p>
+                % my $sections = sectionize( $item->{html} );
+                %== $sections->[0]
+                % if ( @$sections > 1 ) {
+                <p><a href="<%= url_for( $item->{path} )->to_abs %>#section-2">Continue reading...</a></p>
+                % }
             ]]></description>
             <pubDate>
                 <%= strftime('%a, %d %b %Y %H:%M:%S +0000', $item->{date}) %>
@@ -165,8 +175,11 @@ __DATA__
         % }
         <link rel="alternate" href="<%= url_for( $item->{path} )->to_abs %>" />
         <content type="html"><![CDATA[
-            %= section( 1, $item->{html} )
-            <p><a href="<%= url_for( $item->{path} )->to_abs %>">Continue reading...</a></p>
+            % my $sections = sectionize( $item->{html} );
+            %== $sections->[0]
+            % if ( @$sections > 1 ) {
+            <p><a href="<%= url_for( $item->{path} )->to_abs %>#section-2">Continue reading...</a></p>
+            % }
         ]]></content>
         <updated><%= strftime('%Y-%m-%dT%H:%M:%SZ', $item->{date}) %></updated>
     </entry>

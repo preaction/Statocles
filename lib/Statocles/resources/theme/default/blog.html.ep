@@ -1,49 +1,31 @@
 
-% if ( my $tag_text = $self->data->{ tag_text } ) {
-<%= markdown $tag_text %>
-% }
-
-% for my $page ( @$pages ) {
+% for my $item ( @$items ) {
 <article>
     <header>
-        <h1><a href="<%= $app->page_url( $page ) %>"><%== $page->title %></a></h1>
+        <h1><a href="<%= url_for( $item->{path} ) %>"><%== $item->{title} %></a></h1>
 
         <aside>
-            <time datetime="<%= $page->date->strftime('%Y-%m-%d') %>">
-                Posted on <%= $page->date->strftime('%Y-%m-%d') %>
+            <time datetime="<%= strftime('%Y-%m-%d', $item->{date}) %>">
+                Posted on <%= strftime('%Y-%m-%d', $item->{date}) %>
             </time>
-            % if ( $page->author ) {
+            % if ( $item->{author} ) {
                 <span class="author">
-                    by <%= $page->author %>
+                    by <%= $item->{author} %>
                 </span>
             % }
-            % if ( $site->data->{disqus}{shortname} ) {
-            <a data-disqus-identifier="<%= $page->document->path %>" href="<%= $app->page_url( $page ) %>#disqus_thread">0 comments</a>
+            % if ( config->{data}{disqus}{shortname} ) {
+            <a data-disqus-identifier="<%= url_for( $item->{path} ) %>" href="<%= url_for( $item->{path} ) %>#disqus_thread">0 comments</a>
             % }
         </aside>
-
-        <p class="tags">Tags:
-        % for my $tag ( $page->tags ) {
-            <a href="<%= $tag->href %>" rel="tag"><%== $tag->text %></a>
-        % }
-        </p>
-
-        % if ( $page->links( 'crosspost' ) ) {
-        <p>Originally posted as:
-            % for my $link ( $page->links( 'crosspost' ) ) {
-                <a href="<%= $link->href %>">
-                    <em><%= $page->title %></em> on <%= $link->title %>.
-                </a>
-            % }
-        </p>
-        % }
     </header>
 
-    % my @sections = $page->sections;
-    <%= $sections[0] %>
+    % my $sections = sectionize( $item->{html} );
+    <section>
+        %== $sections->[ 0 ]
+    </section>
 
-    % if ( @sections > 1 ) {
-        <p><a href="<%= $app->page_url( $page ) %>#section-2">Continue reading <%= $page->title %>...</a></p>
+    % if ( @$sections > 1 ) {
+    <p><a href="<%= url_for( $item->{path} ) %>#section-2">Continue reading...</a></p>
     % }
 
 </article>
@@ -51,9 +33,9 @@
 
 <ul class="pager">
     <li class="prev">
-        % if ( $self->next ) {
+        % if ( $page < $total_pages ) {
             <a class="button button-primary" rel="prev"
-                href="<%= $self->next %>"
+                href="<%= url_for( page => $page + 1 ) %>"
             >
                 &larr; Older
             </a>
@@ -65,9 +47,9 @@
         % }
     </li>
     <li class="next">
-        % if ( $self->prev ) {
+        % if ( $page > 1 ) {
             <a class="button button-primary" rel="next"
-                href="<%= $self->prev %>"
+                href="<%= url_for( page => $page - 1 ) %>"
             >
                 Newer &rarr;
             </a>
@@ -80,9 +62,9 @@
     </li>
 </ul>
 
-% if ( $site->data->{disqus}{shortname} ) {
+% if ( config->{data}{disqus}{shortname} ) {
 <script type="text/javascript">
-    var disqus_shortname = '<%= $site->data->{disqus}{shortname} %>';
+    var disqus_shortname = '<%= config->{data}{disqus}{shortname} %>';
     (function () {
         var s = document.createElement('script'); s.async = true;
         s.type = 'text/javascript';
@@ -90,31 +72,5 @@
         (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
     }());
 </script>
-% }
-
-% content tags => begin
-    <nav id="tags">
-        <h1>Tags</h1>
-        <ul class="list-inline">
-        % for my $tag ( $app->tags ) {
-            <li><a href="<%= $tag->href %>"><%== $tag->text %></a></li>
-        % }
-        </ul>
-    </nav>
-% end
-
-% if ( my @links = $self->links( 'feed' ) ) {
-    % content feeds => begin
-        <h1>Feeds</h1>
-        <ul class="list-inline">
-            % for my $link ( @links ) {
-            <li>
-                <a href="<%= $link->href %>" rel="alternate" type="<%= $link->type %>">
-                    <%= $link->text %>
-                </a>
-            </li>
-            % }
-        </ul>
-    % end
 % }
 

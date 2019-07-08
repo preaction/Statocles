@@ -34,7 +34,6 @@ $t->get_ok( '/' )->status_is( 200 )
       'url:first-child loc', qr{http://\d+27\.\d+\.\d+\.\d+:\d+/blog/first-post},
       'sitemap.xml <loc> is a full url',
   )
-
   ;
 
 done_testing;

@@ -98,8 +98,6 @@ has moniker => 'statocles';
 sub startup {
     my ( $app ) = @_;
 
-    $app->defaults({ layout => 'default' });
-
     $app->plugin( Config => {
         default => {
             title => 'My Statocles Site',
@@ -129,34 +127,44 @@ sub startup {
         },
     } );
 
+    $app->defaults({
+        layout => $app->config->{layout} // 'default',
+        template => $app->config->{template} // 'default',
+    });
+
     $app->plugin( Export => );
     push @{$app->export->pages}, '/sitemap.xml', '/robots.txt';
     # XXX AutoReload doesn't work, possibly because the fallback
     # templates provide no place to put the <script> code...
     #$app->plugin( AutoReload => );
 
-    # This is for absolute last-resort fallback templates
-    push @{$app->renderer->classes}, __PACKAGE__;
-
-    if ( my $theme_dir = $app->config->{theme} ) {
-        # Theme may be a module and path instead
-        if ( $theme_dir =~ m{\+([^/]+)/(.*)} ) {
-            my ( $module, $path ) = ( $1, $2 );
-            # Find the directory in the module name's "resources"
-            $theme_dir =
-                first { -e path( $_, split( /::|'/, $module ), 'resources', $path ) }
-                @INC;
-            die qq{Could not find path "resources/$path" under module $module\n\@INC contains @INC}
-                unless $theme_dir;
+    if ( my $theme = $app->config->{theme} ) {
+        my @theme_dirs = ref $theme eq 'ARRAY' ? @{ $theme } : $theme;
+        for my $theme_dir ( @theme_dirs ) {
+            # Theme may be a module and path instead
+            if ( $theme_dir =~ m{^\+([^/]+)/(.*)} ) {
+                my ( $module, $path ) = ( $1, $2 );
+                # Find the directory in the module name's "resources"
+                $theme_dir =
+                    first { -e }
+                    map { path( $_, split( /::|'/, $module ), 'resources', $path ) }
+                    @INC;
+                die qq{Could not find path "resources/$path" under module $module\n\@INC contains @INC}
+                    unless $theme_dir;
+            }
+            $app->log->debug( 'Adding theme dir: ' . $theme_dir );
+            push @{$app->renderer->paths}, $theme_dir;
+            push @{$app->static->paths}, $theme_dir;
         }
-        push @{$app->renderer->paths}, $theme_dir;
-        push @{$app->static->paths}, $theme_dir;
     }
 
     # Always fall back to the home dir for templates and static files to
     # allow for extra content
     push @{$app->renderer->paths}, $app->home;
     push @{$app->static->paths}, $app->home;
+
+    # This is for absolute last-resort fallback templates
+    push @{$app->renderer->classes}, __PACKAGE__;
 
     $app->plugin( 'Yancy', {
         backend => 'static:' . $app->home,
@@ -214,25 +222,10 @@ sub startup {
         },
     } );
 
-    $app->helper( strftime => sub {
-        my ( $c, $format, $date ) = @_;
-        my $dt;
-        if ( $date ) {
-            $dt = Time::Piece->strptime( $date, '%Y-%m-%d %H:%M:%S' );
-        }
-        else {
-            $dt = Time::Piece->new;
-        }
-        return $dt->strftime( $format );
-    } );
-
-    $app->helper( section => sub {
-        my ( $c, $no, $html ) = @_;
-        my $dom = Mojo::DOM->new( $html );
-        if ( my $end = $dom->at( ":root > hr:nth-of-type( $no )" ) ) {
-            $end->following->each( 'delete' );
-        }
-        return "$dom";
+    $app->helper( strftime => \&_helper_strftime );
+    $app->helper( sectionize => sub {
+        my ( $c, $html ) = @_;
+        return [ split m{\n*<hr\s*/?>\n*}, $html ];
     } );
 
     # Add configured plugins
@@ -264,11 +257,10 @@ sub startup {
         my $id = $c->stash( 'id' );
         if ( my $page = $c->yancy->get( pages => $id ) ) {
             return $c->render(
-                content => $page->{html},
-                template => $page->{template} || 'default',
-                layout => $page->{layout} || 'default',
+                item => $page,
+                ( template => $page->{template} )x!!$page->{template},
+                ( layout => $page->{layout} )x!!$page->{layout},
                 title => $page->{title},
-                page => $page,
             );
         }
         if ( my ( $format ) = $id =~ m{/[^/]+[.]([^./]+)$} ) {
@@ -281,18 +273,79 @@ sub startup {
     } );
 }
 
+sub _helper_strftime {
+    my ( $c, $format, $date ) = @_;
+    my $dt;
+    if ( $date ) {
+        $dt = Time::Piece->strptime( $date, '%Y-%m-%d %H:%M:%S' );
+    }
+    else {
+        $dt = Time::Piece->new;
+    }
+    return $dt->strftime( $format );
+}
+
 1;
 __DATA__
 @@ layouts/default.html.ep
 <!DOCTYPE html>
 <head>
     <title><%= title %></title>
+    %= content 'head'
 </head>
 <body>
-    %= content
+    <header>
+        %= content header => begin
+        <nav>
+            %= content 'navbar'
+        </nav>
+        %= content 'hero'
+        % end
+    </header>
+    %= content container => begin
+    <div style="display: flex">
+        <div style="flex: 1 1 80%">
+            <main>
+                %= content main => begin
+                    %= content
+                % end
+            </main>
+        </div>
+        <div style="flex: 1 1 20%">
+            %= content 'sidebar'
+        </div>
+    </div>
+    % end
+    <footer>
+        %= content 'footer'
+    </footer>
 </body>
+
 @@ default.html.ep
-%== stash 'content'
+%= content 'content_before'
+<header>
+    <h1><%= $item->{title} %></h1>
+    % if ( $item->{date} ) {
+    <aside>
+        <time datetime="<%= strftime('%Y-%m-%d', $item->{date} ) %>">
+            Posted on <%= strftime('%Y-%m-%d', $item->{date} ) %>
+        </time>
+    </aside>
+    % }
+    % if ( $item->{author} ) {
+    <aside>
+        %= content author => begin
+        <span class="author">by <%= $item->{author} %></span>
+        % end
+    </aside>
+    % }
+</header>
+% my $sections = sectionize( $item->{html} );
+% for my $i ( 0 .. $#$sections ) {
+    <section id="section-<%= $i + 1 %>"><%== $sections->[ $i ] %></section>
+% }
+%= content 'content_after'
+
 @@ sitemap.xml.ep
 <?xml version="1.0" encoding="UTF-8" ?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
