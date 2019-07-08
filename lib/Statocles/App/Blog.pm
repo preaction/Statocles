@@ -11,14 +11,20 @@ our $VERSION = '0.094';
 =cut
 
 use Mojo::Base 'Mojolicious::Plugin';
+use Scalar::Util qw( blessed );
 
 has moniker => 'blog';
 
+sub _routify {
+    my ( $app, $route ) = @_;
+    return unless $route;
+    return blessed $route ? $route : $app->routes->any( $route );
+}
+
 sub register {
     my ( $self, $app, $conf ) = @_;
-    my $route = delete $conf->{route};
+    my $route = _routify( $app, delete $conf->{route} // $conf->{base_url} );
     my $filter = delete $conf->{filter};
-    $route = ref $route ? $route : $app->routes->any( $route // delete $conf->{base_url} );
     push @{$app->renderer->classes}, __PACKAGE__;
     $route->get( '<page:num>' )->to(
         'yancy#list',
@@ -29,6 +35,9 @@ sub register {
         order_by => { -desc => 'date' },
         %$conf,
     );
+    # Add the index page to the list of pages to export. The index page
+    # has links to all the blog posts and all the other pages, so that
+    # should export the entire blog.
     push @{ $app->export->pages }, $route; # First page has links to other pages
 }
 
