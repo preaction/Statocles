@@ -28,6 +28,7 @@ $t->get_ok( '/' )->status_is( 200 )
   ->get_ok( '/advent/2018' )->status_is( 200 )->text_is( h1 => 2018 )
   ->get_ok( '/advent/2019.rss', { Accept => 'application/rss+xml' } )->status_is( 200 )->text_is( h1 => 2019 )
   ->get_ok( '/advent/2018.rss', { Accept => 'application/rss+xml' } )->status_is( 200 )->text_is( h1 => 2018 )
+  ->get_ok( '/advent' )->status_is( 302 )->header_is( location => '/advent/' )
 
   ->get_ok( '/sitemap.xml' )->status_is( 200 )
   ->text_like(

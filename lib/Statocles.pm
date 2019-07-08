@@ -227,6 +227,14 @@ sub startup {
         my ( $c, $html ) = @_;
         return [ split m{\n*<hr\s*/?>\n*}, $html ];
     } );
+    $app->helper( url_for => sub {
+        # Replace the Mojolicious url_for helper to remove the trailing
+        # `index` that will automatically be added by the fallback route
+        # when looking up the page
+        my $url = Mojolicious::Controller::url_for( @_ );
+        $url =~ s{/index(\#|\Z)}{/$1};
+        return $url;
+    } );
 
     # Add configured plugins
     push @{$app->plugins->namespaces}, 'Statocles::Plugin';
@@ -255,6 +263,9 @@ sub startup {
     $r->get( '/*id', { id => 'index' }, sub {
         my ( $c ) = @_;
         my $id = $c->stash( 'id' );
+        if ( $id !~ m{/$} && -d $c->app->home->child( $id ) ) {
+            return $c->redirect_to( "/$id/" );
+        }
         if ( my $page = $c->yancy->get( pages => $id ) ) {
             return $c->render(
                 item => $page,
@@ -268,6 +279,8 @@ sub startup {
             $id =~ s{[.]$format$}{};
         }
         return if $c->render_maybe( $id );
+        # Allow an 'index' template in the same directory as the
+        # requested resource to handle this request
         $id =~ s{(^|/)[^/]+$}{${1}index};
         $c->render( $id );
     } );
