@@ -37,4 +37,10 @@ $t->get_ok( '/' )->status_is( 200 )
   )
   ;
 
+my $url = $t->app->url_for( '/blog/first-post' );
+isa_ok $url, 'Mojo::URL', 'url_for override returns Mojo::URL object';
+is $url->path, '/blog/first-post', 'url path is correct';
+is $t->app->url_for( '/index' ), '/', 'url_for removes index path is correct';
+is $t->app->url_for( '/advent/index' ), '/advent/', 'url_for removes index but leaves trailing slash';
+
 done_testing;

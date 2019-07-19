@@ -246,7 +246,7 @@ sub startup {
         # `index` that will automatically be added by the fallback route
         # when looking up the page
         my $url = Mojolicious::Controller::url_for( @_ );
-        $url =~ s{/index(\#|\Z)}{/$1};
+        $url->path( $url->path =~ s{/index(\#|\Z)}{/$1}r );
         return $url;
     } );
 
