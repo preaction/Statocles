@@ -30,8 +30,8 @@ $t->get_ok( '/' )->status_is( 200 )
   ->or( sub { diag shift->tx->res->body } )
   ->element_exists_not( 'article:nth-of-type(4)', 'page has limit => 3 articles' )
   ->or( sub { diag shift->tx->res->body } )
-  ->element_exists( '.pager .prev [href=/2]', 'previous button is enabled' )
-  ->element_exists( '.pager .next button[disabled]', 'next button is disabled' )
+  ->element_exists( '.pager .next [rel=next][href=/2]', 'older button is enabled' )
+  ->element_exists( '.pager .prev button[disabled]', 'newer button is disabled' )
   ->element_exists(
       'link[rel=alternate][type=application/rss+xml][href=/1.rss]',
       'rss feed <link> exists'
@@ -46,8 +46,8 @@ $t->get_ok( '/' )->status_is( 200 )
   ->get_ok( '/2' )->status_is( 200 )
   ->text_is( 'article:nth-of-type(1) h1 a', 'First Post', 'final post on last page' )
   ->or( sub { diag shift->tx->res->body } )
-  ->element_exists( '.pager .prev button[disabled]', 'previous button is disabled' )
-  ->element_exists( '.pager .next a[href=/]', 'next button is enabled' )
+  ->element_exists( '.pager .next button[disabled]', 'older button is disabled' )
+  ->element_exists( '.pager .prev [rel=prev][href=/]', 'newer button is enabled' )
   ->element_exists(
       'link[rel=alternate][type=application/rss+xml][href=/1.rss]',
       'rss feed <link> exists'

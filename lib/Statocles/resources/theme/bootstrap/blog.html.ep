@@ -32,17 +32,17 @@
 % }
 
 <ul class="pager">
-    <li class="previous <%= $page < $total_pages ? 'disabled' : '' %>">
+    <li class="next <%= $page < $total_pages ? 'disabled' : '' %>">
         % if ( $page < $total_pages ) {
-        <a rel="prev" href="<%= url_for( page => $page + 1 ) %>">&larr; Older</a>
+        <a rel="next" href="<%= url_for( page => $page + 1 ) %>">&larr; Older</a>
         % }
         % else {
         <span>&larr; Older</span>
         % }
     </li>
-    <li class="next <%= $page > 1 ? 'disabled' : '' %>">
+    <li class="previous <%= $page > 1 ? 'disabled' : '' %>">
         % if ( $page > 1 ) {
-        <a rel="next" href="<%= url_for( page => $page - 1 ) %>">Newer &rarr;</a>
+        <a rel="prev" href="<%= url_for( page => $page - 1 ) %>">Newer &rarr;</a>
         % }
         % else {
         <span>Newer &rarr;</span>
