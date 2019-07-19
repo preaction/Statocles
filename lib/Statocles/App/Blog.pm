@@ -26,7 +26,7 @@ sub register {
     my $route = _routify( $app, delete $conf->{route} // $conf->{base_url} );
     my $filter = delete $conf->{filter};
     push @{$app->renderer->classes}, __PACKAGE__;
-    $route->get( '<page:num>' )->to(
+    my $index_route = $route->get( '<page:num>' )->to(
         'yancy#list',
         page => 1,
         template => 'blog',
@@ -38,7 +38,7 @@ sub register {
     # Add the index page to the list of pages to export. The index page
     # has links to all the blog posts and all the other pages, so that
     # should export the entire blog.
-    push @{ $app->export->pages }, $route; # First page has links to other pages
+    push @{ $app->export->pages }, $index_route->render({ page => 1 });
 }
 
 1;
@@ -51,7 +51,7 @@ __DATA__
 % for my $item ( @$items ) {
 <article>
     <header>
-        <h1><a href="<%= url_for( $item->{path} ) %>"><%== $item->{title} %></a></h1>
+        <h1><a href="<%= url_for( "/$item->{path}" ) %>"><%== $item->{title} %></a></h1>
 
         <aside>
             <time datetime="<%= strftime('%Y-%m-%d', $item->{date}) %>">
@@ -63,7 +63,7 @@ __DATA__
                 </span>
             % }
             % if ( config->{data}{disqus}{shortname} ) {
-            <a data-disqus-identifier="<%= url_for( $item->{path} ) %>" href="<%= url_for( $item->{path} ) %>#disqus_thread">0 comments</a>
+            <a data-disqus-identifier="<%= url_for( $item->{path} ) %>" href="<%= url_for( "/$item->{path}" ) %>#disqus_thread">0 comments</a>
             % }
         </aside>
     </header>
@@ -74,7 +74,7 @@ __DATA__
     </section>
 
     % if ( @$sections > 1 ) {
-    <p><a href="<%= url_for( $item->{path} ) %>#section-2">Continue reading...</a></p>
+    <p><a href="<%= url_for( "/$item->{path}" ) %>#section-2">Continue reading...</a></p>
     % }
 
 </article>
@@ -140,13 +140,13 @@ __DATA__
         % for my $item ( @$items ) {
         <item>
             <title><%== $item->{title} %></title>
-            <link><%= url_for( $item->{path} )->to_abs %></link>
-            <guid><%= url_for( $item->{path} )->to_abs %></guid>
+            <link><%= url_for( "/$item->{path}" )->to_abs %></link>
+            <guid><%= url_for( "/$item->{path}" )->to_abs %></guid>
             <description><![CDATA[
                 % my $sections = sectionize( $item->{html} );
                 %== $sections->[0]
                 % if ( @$sections > 1 ) {
-                <p><a href="<%= url_for( $item->{path} )->to_abs %>#section-2">Continue reading...</a></p>
+                <p><a href="<%= url_for( "/$item->{path}" )->to_abs %>#section-2">Continue reading...</a></p>
                 % }
             ]]></description>
             <pubDate>
@@ -186,12 +186,12 @@ __DATA__
             % }
         </author>
         % }
-        <link rel="alternate" href="<%= url_for( $item->{path} )->to_abs %>" />
+        <link rel="alternate" href="<%= url_for( "/$item->{path}" )->to_abs %>" />
         <content type="html"><![CDATA[
             % my $sections = sectionize( $item->{html} );
             %== $sections->[0]
             % if ( @$sections > 1 ) {
-            <p><a href="<%= url_for( $item->{path} )->to_abs %>#section-2">Continue reading...</a></p>
+            <p><a href="<%= url_for( "/$item->{path}" )->to_abs %>#section-2">Continue reading...</a></p>
             % }
         ]]></content>
         <updated><%= strftime('%Y-%m-%dT%H:%M:%SZ', $item->{date}) %></updated>

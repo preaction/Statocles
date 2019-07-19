@@ -87,4 +87,6 @@ $t->get_ok( '/' )->status_is( 200 )
 
   ;
 
+is_deeply $t->app->export->pages, [ '/sitemap.xml', '/robots.txt', '/' ];
+
 done_testing;

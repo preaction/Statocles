@@ -5,7 +5,7 @@
 % for my $item ( @$items ) {
 <article>
     <header>
-        <h1><a href="<%= url_for( $item->{path} ) %>"><%== $item->{title} %></a></h1>
+        <h1><a href="<%= url_for( "/$item->{path}" ) %>"><%== $item->{title} %></a></h1>
 
         <aside>
             <time datetime="<%= strftime('%Y-%m-%d', $item->{date}) %>">
@@ -17,7 +17,7 @@
                 </span>
             % }
             % if ( config->{data}{disqus}{shortname} ) {
-            <a data-disqus-identifier="<%= url_for( $item->{path} ) %>" href="<%= url_for( $item->{path} ) %>#disqus_thread">0 comments</a>
+            <a data-disqus-identifier="<%= url_for( "/$item->{path}" ) %>" href="<%= url_for( "/$item->{path}" ) %>#disqus_thread">0 comments</a>
             % }
         </aside>
     </header>
@@ -28,7 +28,7 @@
     </section>
 
     % if ( @$sections > 1 ) {
-    <p><a href="<%= url_for( $item->{path} ) %>#section-2">Continue reading...</a></p>
+    <p><a href="<%= url_for( "/$item->{path}" ) %>#section-2">Continue reading...</a></p>
     % }
 
 </article>
