@@ -44,6 +44,10 @@ sub register {
 1;
 __DATA__
 @@ blog.html.ep
+% content_for head => begin
+    <link rel="alternate" type="application/rss+xml" href="<%= url_for( page => 1, format => 'rss' ) %>"/>
+    <link rel="alternate" type="application/atom+xml" href="<%= url_for( page => 1, format => 'atom' ) %>"/>
+% end
 % for my $item ( @$items ) {
 <article>
     <header>

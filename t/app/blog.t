@@ -32,12 +32,32 @@ $t->get_ok( '/' )->status_is( 200 )
   ->or( sub { diag shift->tx->res->body } )
   ->element_exists( '.pager .prev [href=/2]', 'previous button is enabled' )
   ->element_exists( '.pager .next button[disabled]', 'next button is disabled' )
+  ->element_exists(
+      'link[rel=alternate][type=application/rss+xml][href=/1.rss]',
+      'rss feed <link> exists'
+  )
+  ->or( sub { diag shift->tx->res->dom->at( 'head' ) } )
+  ->element_exists(
+      'link[rel=alternate][type=application/atom+xml][href=/1.atom]',
+      'atom feed <link> exists'
+  )
+  ->or( sub { diag shift->tx->res->dom->at( 'head' ) } )
 
   ->get_ok( '/2' )->status_is( 200 )
   ->text_is( 'article:nth-of-type(1) h1 a', 'First Post', 'final post on last page' )
   ->or( sub { diag shift->tx->res->body } )
   ->element_exists( '.pager .prev button[disabled]', 'previous button is disabled' )
   ->element_exists( '.pager .next a[href=/]', 'next button is enabled' )
+  ->element_exists(
+      'link[rel=alternate][type=application/rss+xml][href=/1.rss]',
+      'rss feed <link> exists'
+  )
+  ->or( sub { diag shift->tx->res->dom->at( 'head' ) } )
+  ->element_exists(
+      'link[rel=alternate][type=application/atom+xml][href=/1.atom]',
+      'atom feed <link> exists'
+  )
+  ->or( sub { diag shift->tx->res->dom->at( 'head' ) } )
 
   ->get_ok( '/first-post' )->status_is( 200 )
   ->text_is( 'h1', 'First Post' )
@@ -45,7 +65,7 @@ $t->get_ok( '/' )->status_is( 200 )
   ->get_ok( '/second-post' )->status_is( 200 )
   ->text_is( 'h1', 'Second Post' )
 
-  ->get_ok( '/.rss', { Accept => 'application/rss+xml' } )->status_is( 200 )
+  ->get_ok( '/1.rss', { Accept => 'application/rss+xml' } )->status_is( 200 )
   ->text_is( 'item:nth-of-type(1) title', 'Fourth Post', 'most recent post is first in list' )
   ->or( sub { diag shift->tx->res->body } )
   ->text_is( 'item:nth-of-type(2) title', 'Third Post' )
@@ -55,7 +75,7 @@ $t->get_ok( '/' )->status_is( 200 )
   ->element_exists_not( 'item:nth-of-type(4) title', 'only 3 items per page' )
   ->or( sub { diag shift->tx->res->body } )
 
-  ->get_ok( '/.atom', { Accept => 'application/atom+xml' } )->status_is( 200 )
+  ->get_ok( '/1.atom', { Accept => 'application/atom+xml' } )->status_is( 200 )
   ->text_is( 'entry:nth-of-type(1) title', 'Fourth Post', 'most recent post is first in list' )
   ->or( sub { diag shift->tx->res->body } )
   ->text_is( 'entry:nth-of-type(2) title', 'Third Post' )
