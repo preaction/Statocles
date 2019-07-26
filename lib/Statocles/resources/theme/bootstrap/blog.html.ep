@@ -34,24 +34,7 @@
 </article>
 % }
 
-<ul class="pager">
-    <li class="next <%= $page < $total_pages ? 'disabled' : '' %>">
-        % if ( $page < $total_pages ) {
-        <a rel="next" href="<%= url_for( page => $page + 1 ) %>">&larr; Older</a>
-        % }
-        % else {
-        <span>&larr; Older</span>
-        % }
-    </li>
-    <li class="previous <%= $page > 1 ? 'disabled' : '' %>">
-        % if ( $page > 1 ) {
-        <a rel="prev" href="<%= url_for( page => $page - 1 ) %>">Newer &rarr;</a>
-        % }
-        % else {
-        <span>Newer &rarr;</span>
-        % }
-    </li>
-</ul>
+%= include 'pager', label_next => 'Older', label_prev => 'Newer'
 
 % if ( config->{data}{disqus}{shortname} ) {
 <script type="text/javascript">

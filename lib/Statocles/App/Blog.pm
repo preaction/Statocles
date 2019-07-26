@@ -12,6 +12,7 @@ our $VERSION = '0.094';
 
 use Mojo::Base 'Mojolicious::Plugin';
 use Scalar::Util qw( blessed );
+use Statocles::App::List; # Contains default pager template
 
 has moniker => 'blog';
 
@@ -25,7 +26,7 @@ sub register {
     my ( $self, $app, $conf ) = @_;
     my $route = _routify( $app, delete $conf->{route} // $conf->{base_url} );
     my $filter = delete $conf->{filter};
-    push @{$app->renderer->classes}, __PACKAGE__;
+    push @{$app->renderer->classes}, __PACKAGE__, 'Statocles::App::List';
     my $index_route = $route->get( '<page:num>' )->to(
         'yancy#list',
         page => 1,
@@ -80,36 +81,7 @@ __DATA__
 </article>
 % }
 
-<ul class="pager">
-    <li class="next">
-        % if ( $page < $total_pages ) {
-            <a class="button button-primary" rel="next"
-                href="<%= url_for( page => $page + 1 ) %>"
-            >
-                &larr; Older
-            </a>
-        % }
-        % else {
-            <button disabled>
-                &larr; Older
-            </button>
-        % }
-    </li>
-    <li class="prev">
-        % if ( $page > 1 ) {
-            <a class="button button-primary" rel="prev"
-                href="<%= url_for( page => $page - 1 ) %>"
-            >
-                Newer &rarr;
-            </a>
-        % }
-        % else {
-            <button disabled>
-                Newer &rarr;
-            </button>
-        % }
-    </li>
-</ul>
+%= include 'pager', label_prev => 'Newer', label_next => 'Older'
 
 % if ( config->{data}{disqus}{shortname} ) {
 <script type="text/javascript">

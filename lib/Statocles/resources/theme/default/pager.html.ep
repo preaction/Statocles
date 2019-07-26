@@ -1,0 +1,31 @@
+<ul class="pager">
+    <li class="next">
+        % if ( $page < $total_pages ) {
+            <a class="button button-primary" rel="next"
+                href="<%= url_for( page => $page + 1 ) %>"
+            >
+                &larr; <%= stash( 'label_next' ) // 'Next' %>
+            </a>
+        % }
+        % else {
+            <button disabled>
+                &larr; <%= stash( 'label_next' ) // 'Next' %>
+            </button>
+        % }
+    </li>
+    <li class="prev">
+        % if ( $page > 1 ) {
+            <a class="button button-primary" rel="prev"
+                href="<%= url_for( page => $page - 1 ) %>"
+            >
+                <%= stash( 'label_prev' ) // 'Prev' %> &rarr;
+            </a>
+        % }
+        % else {
+            <button disabled>
+                <%= stash( 'label_prev' ) // 'Prev' %> &rarr;
+            </button>
+        % }
+    </li>
+</ul>
+

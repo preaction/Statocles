@@ -34,36 +34,7 @@
 </article>
 % }
 
-<ul class="pager">
-    <li class="next">
-        % if ( $page < $total_pages ) {
-            <a class="button button-primary" rel="next"
-                href="<%= url_for( page => $page + 1 ) %>"
-            >
-                &larr; Older
-            </a>
-        % }
-        % else {
-            <button disabled>
-                &larr; Older
-            </button>
-        % }
-    </li>
-    <li class="prev">
-        % if ( $page > 1 ) {
-            <a class="button button-primary" rel="prev"
-                href="<%= url_for( page => $page - 1 ) %>"
-            >
-                Newer &rarr;
-            </a>
-        % }
-        % else {
-            <button disabled>
-                Newer &rarr;
-            </button>
-        % }
-    </li>
-</ul>
+%= include 'pager', label_next => 'Older', label_prev => 'Newer'
 
 % if ( config->{data}{disqus}{shortname} ) {
 <script type="text/javascript">
