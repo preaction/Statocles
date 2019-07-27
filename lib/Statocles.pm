@@ -114,7 +114,7 @@ sub startup {
             },
             apps => {
                 blog => {
-                    route => '/',
+                    route => '/blog',
                 },
             },
             theme => '+Statocles/theme/default',
@@ -123,8 +123,14 @@ sub startup {
             ],
             data => {
                 nav => [
-                    main => [
-                    ],
+                    {
+                        href => '/',
+                        text => 'Home',
+                    },
+                    {
+                        href => '/blog',
+                        text => 'Blog',
+                    },
                 ],
             },
         },
