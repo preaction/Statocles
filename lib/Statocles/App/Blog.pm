@@ -15,6 +15,7 @@ use Scalar::Util qw( blessed );
 use Statocles::App::List; # Contains default pager template
 
 has moniker => 'blog';
+has categories => sub { [] };
 
 sub _routify {
     my ( $app, $route ) = @_;
@@ -25,14 +26,14 @@ sub _routify {
 sub register {
     my ( $self, $app, $conf ) = @_;
     my $route = _routify( $app, delete $conf->{route} // $conf->{base_url} );
-    my $filter = delete $conf->{filter};
+    my $filter = { %{ delete $conf->{filter} // {} }, date => { '!=' => undef } };
     push @{$app->renderer->classes}, __PACKAGE__, 'Statocles::App::List';
     my $index_route = $route->get( '<page:num>' )->to(
         'yancy#list',
         page => 1,
         template => 'blog',
         schema => 'pages',
-        filter => { %{ $filter // {} }, date => { '!=' => undef } },
+        filter => $filter,
         order_by => { -desc => 'date' },
         %$conf,
     );
@@ -40,6 +41,47 @@ sub register {
     # has links to all the blog posts and all the other pages, so that
     # should export the entire blog.
     push @{ $app->export->pages }, $index_route->render({ page => 1 });
+
+    if ( !exists $conf->{categories} ) {
+        # The default categories are one for each tag
+        # XXX: This is not updated when content is edited, but neither
+        # are templates so maybe Morbo is the solution here...
+        my %tags;
+        for my $item ( $app->yancy->list( pages => $filter ) ) {
+            for my $tag ( @{ $item->{tags} // [] } ) {
+                $tags{ $tag }++;
+            }
+        }
+        for my $tag ( sort keys %tags ) {
+            push @{ $conf->{categories} }, {
+                title => $tag,
+                filter => {
+                    tags => {
+                        -has => $tag,
+                    },
+                },
+            };
+        }
+    }
+    for my $category ( @{ $conf->{categories} // [] } ) {
+        my $category_route = $route->get( $category->{title} . '/<page:num>' )->to(
+            'yancy#list',
+            page => 1,
+            template => 'blog',
+            schema => 'pages',
+            filter => {
+                %$filter,
+                %{ $category->{filter} },
+            },
+            order_by => { -desc => 'date' },
+            %$conf,
+        );
+        push @{ $app->export->pages }, $category_route->render({ page => 1 });
+        push @{ $self->categories }, {
+            %$category,
+            route => $category_route,
+        };
+    }
 }
 
 1;
