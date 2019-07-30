@@ -36,10 +36,23 @@ sub test_theme {
     );
 
     my $t = Test::Mojo->new( Statocles => {
+        apps => {
+            blog => {
+                route => '/',
+            },
+        },
         theme => [ @theme_dirs ],
     } );
 
-    $t->get_ok( '/layout-extends-default' )->status_is( 200 )
+    $t->get_ok( '/' )->status_is( 200 )
+      ->content_like( qr{<h1>Categories</h1>}, 'category header exists' )
+      ->element_exists( 'a[href=/foo]', 'foo category link exists' )
+      ->text_is( 'a[href=/foo]', 'foo', 'foo category link text is correct' )
+      ->or( sub { diag shift->tx->res->dom->at( 'header + *' ) } )
+      ->element_exists( 'a[href=/bar]', 'bar category link exists' )
+      ->text_is( 'a[href=/bar]', 'bar', 'bar category link text is correct' )
+
+      ->get_ok( '/layout-extends-default' )->status_is( 200 )
       ->content_like( qr{<!-- head -->}, 'head content section exists' )
       ->content_like( qr{<!-- navbar -->}, 'navbar content section exists' )
       ->content_like( qr{<!-- hero -->}, 'hero content section exists' )

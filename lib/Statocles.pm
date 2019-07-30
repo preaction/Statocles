@@ -269,15 +269,21 @@ sub startup {
     $r->get( '/sitemap' )->to( 'yancy#list', schema => 'pages', template => 'sitemap' );
 
     # Add configured app routes
+    my %apps;
     for my $moniker ( sort keys %{ $app->config->{apps} } ) {
         my $conf = $app->config->{apps}{ $moniker };
         my $class = 'Statocles::App::' . ucfirst( $conf->{app} || $moniker );
         if ( my $e = load_class( $class ) ) {
             die "Could not load class $class for app $moniker: $e";
         }
-        my $site_app = $class->new( %$conf );
+        my $site_app = $class->new( moniker => $moniker, %$conf );
         $site_app->register( $app, $conf );
+        $apps{ $moniker } = $site_app;
     }
+    $app->helper( 'statocles.app' => sub {
+        my ( $c, $moniker ) = @_;
+        return $apps{ $moniker };
+    } );
 
     # Fallback route to read pages
     $r->get( '/*id', { id => 'index' }, sub {
@@ -345,7 +351,15 @@ __DATA__
             </main>
         </div>
         <div style="flex: 1 1 20%">
-            %= content 'sidebar'
+            %= content sidebar => begin
+                % my $app = app->statocles->app( 'blog' );
+                % if ( $app && ( my @links = $app->category_links ) ) {
+                    <h1>Categories</h1>
+                    % for my $link ( @links ) {
+                        %= link_to $link->{title}, $link->{href}
+                    % }
+                % }
+            % end
         </div>
     </div>
     % end

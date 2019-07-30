@@ -84,6 +84,11 @@ sub register {
     }
 }
 
+sub category_links {
+    my ( $self ) = @_;
+    return map +{ %$_, href => $_->{route}->render({ page => 1 }) }, @{ $self->categories };
+}
+
 1;
 __DATA__
 @@ blog.html.ep

@@ -43,7 +43,15 @@
                 </div>
 
                 <div class="three columns sidebar">
-                    %= content 'sidebar'
+                    %= content sidebar => begin
+                        % my $app = app->statocles->app( 'blog' );
+                        % if ( $app && ( my @links = $app->category_links ) ) {
+                            <h1>Categories</h1>
+                            % for my $link ( @links ) {
+                                %= link_to $link->{title}, $link->{href}
+                            % }
+                        % }
+                    % end
                 </div>
             </div>
         </div>
