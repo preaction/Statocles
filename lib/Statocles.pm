@@ -289,9 +289,6 @@ sub startup {
     $r->get( '/*id', { id => 'index' }, sub {
         my ( $c ) = @_;
         my $id = $c->stash( 'id' );
-        if ( $id !~ m{/$} && -d $c->app->home->child( $id ) ) {
-            return $c->redirect_to( "/$id/" );
-        }
         if ( my $page = $c->yancy->get( pages => $id ) ) {
             return $c->render(
                 item => $page,
@@ -299,6 +296,9 @@ sub startup {
                 ( layout => $page->{layout} )x!!$page->{layout},
                 title => $page->{title},
             );
+        }
+        if ( $id !~ m{/$} && -d $c->app->home->child( $id ) ) {
+            return $c->redirect_to( "/$id/" );
         }
         if ( my ( $format ) = $id =~ m{/[^/]+[.]([^./]+)$} ) {
             $c->stash( format => $format );
