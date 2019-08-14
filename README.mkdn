@@ -4,7 +4,7 @@ Statocles - A static site generator
 
 # VERSION
 
-version 0.093
+version 0.094
 
 # STATUS
 
@@ -61,10 +61,6 @@ applications](https://metacpan.org/pod/Statocles::App).
 
 The [site](https://metacpan.org/pod/Statocles::Site) we're working with.
 
-## log
-
-A [Mojo::Log](https://metacpan.org/pod/Mojo::Log) object for logging. Defaults to the current site's `log` attribute.
-
 # METHODS
 
 ## run
@@ -89,6 +85,7 @@ Doug Bell <preaction@cpan.org>
 
 # CONTRIBUTORS
 
+- David Farrell <davidnmfarrell@gmail.com>
 - djerius <djerius@cfa.harvard.edu>
 - Ed J <mohawk2@users.noreply.github.com>
 - Ferenc Erki <erkiferenc@gmail.com>
@@ -101,6 +98,7 @@ Doug Bell <preaction@cpan.org>
 - tadegenban <tadegenban@gmail.com>
 - Vladimir Lettiev <thecrux@gmail.com>
 - William Lindley <wlindley@wlindley.com>
+- Wojtek Bażant <wojtek.bazant@sanger.ac.uk>
 
 # COPYRIGHT AND LICENSE
 

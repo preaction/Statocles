@@ -2,6 +2,13 @@ Changelog for Statocles
 
 {{ $NEXT }}
 
+    [Fixes]
+
+    - Fixed 'log' method exception. Thanks @dnmfarrell and @wbazant!
+      (Github #563)
+    - Fixed Role::Tiny 2.000007 bug (by upgrading to 2.000008). Thanks
+      @andk! (Github #579)
+
 0.093     2018-03-30 17:29:15-05:00 America/Chicago
 
     [BREAKING CHANGES]
