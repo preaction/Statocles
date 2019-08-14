@@ -304,6 +304,9 @@ sub startup {
             $c->stash( format => $format );
             $id =~ s{[.]$format$}{};
         }
+        if ( $id =~ m{/$} ) {
+            $id .= 'index';
+        }
         return if $c->render_maybe( $id );
         # Allow an 'index' template in the same directory as the
         # requested resource to handle this request
