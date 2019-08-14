@@ -69,7 +69,7 @@ has _check_exists => (
     default => sub {
         my ( $self ) = @_;
         if ( !$self->path->exists ) {
-            site->log->warn( sprintf qq{Store path "%s" does not exist}, $self->path );
+            Statocles->log( warn => sprintf qq{Store path "%s" does not exist}, $self->path );
         }
         return 1;
     },
@@ -145,7 +145,7 @@ the raw bytes read from it with no special encoding.
 
 sub write_file {
     my ( $self, $path, $content ) = @_;
-    site->log->debug( "Write file: " . $path );
+    Statocles->log( debug => "Write file: " . $path );
     my $full_path = $self->path->child( $path )->touchpath;
 
     #; say "Writing full path: " . $full_path;

@@ -22,20 +22,6 @@ has site => (
     isa => InstanceOf['Statocles::Site'],
 );
 
-=attr log
-
-A L<Mojo::Log> object for logging. Defaults to the current site's C<log> attribute.
-
-=cut
-
-has log => (
-    is => 'rw',
-    lazy => 1,
-    default => sub {
-        $_[0]->site->log;
-    },
-);
-
 =method run
 
     my $exitval = $cmd->run( @argv );
@@ -161,16 +147,14 @@ sub _load_site {
     return ( 0, $site );
 }
 
-# The currently-running site.
-# I hate this, but I know of no better way to ensure that we always have access
-# to a Mojo::Log object, while still being relatively useful, without having to
-# wire up every single object with a log object.
-our $SITE;
-
-BEGIN {
-    package # Hide from PAUSE
-        site;
-    sub log { return $SITE->log }
+sub log {
+    my ( $invocant, $level, @args ) = @_;
+    use Mojo::Log;
+    state $log = Mojo::Log->new( level => $ENV{MOJO_LOG_LEVEL} // 'info' );
+    if ( $level && @args ) {
+        return $log->$level( @args );
+    }
+    return $log;
 }
 
 1;
