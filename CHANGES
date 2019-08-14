@@ -2,6 +2,8 @@ Changelog for Statocles
 
 {{ $NEXT }}
 
+0.094     2019-08-13 22:28:29-05:00 America/Chicago
+
     [Fixes]
 
     - Fixed 'log' method exception. Thanks @dnmfarrell and @wbazant!

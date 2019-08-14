@@ -1,5 +1,5 @@
 package Statocles::Command::status;
-our $VERSION = '0.094';
+our $VERSION = '0.095';
 # ABSTRACT: Show status information for the site
 
 use Statocles::Base 'Command';
