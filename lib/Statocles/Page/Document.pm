@@ -283,7 +283,7 @@ has next => (
     lazy => 1,
     isa => PagePath|Undef,
     coerce => PagePath->coercion,
-    default => sub { $_[0]->_page_path('next_page') },
+    default => sub { my $p = $_[0]->_page_path('next_page'); $p && $p !~ /^\// ? "/$p" : $p },
 );
 
 =attr prev
@@ -298,7 +298,7 @@ has prev => (
     lazy => 1,
     isa => PagePath|Undef,
     coerce => PagePath->coercion,
-    default => sub { $_[0]->_page_path('prev_page') },
+    default => sub { my $p = $_[0]->_page_path('prev_page'); $p && $p !~ /^\// ? "/$p" : $p },
 );
 
 sub _page_path {
