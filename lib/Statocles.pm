@@ -142,7 +142,7 @@ sub startup {
     });
 
     # Configure deploy object
-    push @{ $app->commands->namespaces }, 'Statocles::Command';
+    unshift @{ $app->commands->namespaces }, 'Statocles::Command';
     if ( my ( $deploy_name, $deploy_conf ) = %{ $app->config->{deploy} // {} } ) {
         my $class = 'Statocles::Deploy::' . ucfirst( $deploy_name );
         if ( my $e = load_class( $class ) ) {
@@ -154,9 +154,7 @@ sub startup {
 
     $app->plugin( Export => );
     push @{$app->export->pages}, '/sitemap.xml', '/robots.txt';
-    # XXX AutoReload doesn't work, possibly because the fallback
-    # templates provide no place to put the <script> code...
-    #$app->plugin( AutoReload => );
+    $app->plugin( AutoReload => );
 
     if ( my $theme = $app->config->{theme} ) {
         my @theme_dirs = ref $theme eq 'ARRAY' ? @{ $theme } : $theme;
@@ -172,7 +170,6 @@ sub startup {
                 die qq{Could not find path "resources/$path" under module $module\n\@INC contains @INC}
                     unless $theme_dir;
             }
-            $app->log->debug( 'Adding theme dir: ' . $theme_dir );
             push @{$app->renderer->paths}, $theme_dir;
             push @{$app->static->paths}, $theme_dir;
         }
