@@ -46,11 +46,11 @@ sub test_theme {
 
     $t->get_ok( '/' )->status_is( 200 )
       ->content_like( qr{<h1>Categories</h1>}, 'category header exists' )
-      ->element_exists( 'a[href=/foo]', 'foo category link exists' )
-      ->text_is( 'a[href=/foo]', 'foo', 'foo category link text is correct' )
+      ->element_exists( 'a[href=/tag/foo]', 'foo category link exists' )
+      ->text_is( 'a[href=/tag/foo]', 'foo', 'foo category link text is correct' )
       ->or( sub { diag shift->tx->res->dom->at( 'header + *' ) } )
-      ->element_exists( 'a[href=/bar]', 'bar category link exists' )
-      ->text_is( 'a[href=/bar]', 'bar', 'bar category link text is correct' )
+      ->element_exists( 'a[href=/tag/bar]', 'bar category link exists' )
+      ->text_is( 'a[href=/tag/bar]', 'bar', 'bar category link text is correct' )
 
       ->get_ok( '/layout-extends-default' )->status_is( 200 )
       ->content_like( qr{<!-- head -->}, 'head content section exists' )

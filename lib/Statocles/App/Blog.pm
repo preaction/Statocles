@@ -55,6 +55,7 @@ sub register {
         for my $tag ( sort keys %tags ) {
             push @{ $conf->{categories} }, {
                 title => $tag,
+                route => join( '/', 'tag', $tag ),
                 filter => {
                     tags => {
                         -has => $tag,
@@ -64,18 +65,19 @@ sub register {
         }
     }
     for my $category ( @{ $conf->{categories} // [] } ) {
-        my $category_route = $route->get( $category->{title} . '/<page:num>' )->to(
-            'yancy#list',
-            page => 1,
-            template => 'blog',
-            schema => 'pages',
-            filter => {
-                %$filter,
-                %{ $category->{filter} },
-            },
-            order_by => { -desc => 'date' },
-            %$conf,
-        );
+        my $category_route = ref $category->{route} ? $category->{route}
+            : $route->get( ( $category->{route} // $category->{title} ) . '/<page:num>' )->to(
+                'yancy#list',
+                page => 1,
+                template => 'blog',
+                schema => 'pages',
+                filter => {
+                    %$filter,
+                    %{ $category->{filter} },
+                },
+                order_by => { -desc => 'date' },
+                %$conf,
+            );
         push @{ $app->export->pages }, $category_route->render({ page => 1 });
         push @{ $self->categories }, {
             %$category,

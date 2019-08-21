@@ -103,7 +103,7 @@ $t->get_ok( '/' )->status_is( 200 )
   ->or( sub { diag shift->tx->res->body } )
 
   # Tag pages
-  ->get_ok( '/bar' )->status_is( 200 )
+  ->get_ok( '/tag/bar' )->status_is( 200 )
   ->element_exists( 'article:nth-of-type(1) h1 a[/fourth-post]', 'most recent post href correct' )
   ->text_is( 'article:nth-of-type(1) h1 a', 'Fourth Post', 'most recent post is first in list' )
   ->or( sub { diag shift->tx->res->body } )
@@ -117,12 +117,12 @@ $t->get_ok( '/' )->status_is( 200 )
   ->element_exists( '.pager .prev button[disabled]', 'newer button is disabled' )
   ->or( sub { diag shift->tx->res->dom->at( '.pager' ) } )
   ->element_exists(
-      'link[rel=alternate][type=application/rss+xml][href=/bar/1.rss]',
+      'link[rel=alternate][type=application/rss+xml][href=/tag/bar/1.rss]',
       'rss feed <link> exists'
   )
   ->or( sub { diag shift->tx->res->dom->at( 'head' ) } )
   ->element_exists(
-      'link[rel=alternate][type=application/atom+xml][href=/bar/1.atom]',
+      'link[rel=alternate][type=application/atom+xml][href=/tag/bar/1.atom]',
       'atom feed <link> exists'
   )
   ->or( sub { diag shift->tx->res->dom->at( 'head' ) } )
@@ -135,7 +135,7 @@ is_deeply $t->app->export->pages, [
     # App pages
     '/',
     # Tag pages
-    '/bar', '/baz', '/foo',
+    '/tag/bar', '/tag/baz', '/tag/foo',
 ], 'export pages are added correctly';
 
 done_testing;
