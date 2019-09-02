@@ -12,11 +12,11 @@ use FindBin qw( $Bin );
 use Mojo::File qw( path );
 
 $ENV{MOJO_HOME} = path( $Bin, 'share', 'app' );
-my $t = Test::Mojo->new( Statocles => {} );
+my $t = Test::Mojo->new('Statocles');
 
-$t->get_ok( '/' )->status_is( 200 )
-
+$t->get_ok( '/' )->status_is( 200 )->text_is(".brand" => "Statocles test site")
   ->get_ok( '/blog/first-post' )->status_is( 200 )
+  ->get_ok( '/blog/tag/tag-in-first-post' )->status_is( 200 )
 
   ->get_ok( '/blog/second-post' )->status_is( 200 )
 
@@ -42,5 +42,4 @@ isa_ok $url, 'Mojo::URL', 'url_for override returns Mojo::URL object';
 is $url->path, '/blog/first-post', 'url path is correct';
 is $t->app->url_for( '/index' ), '/', 'url_for removes index path is correct';
 is $t->app->url_for( '/advent/index' ), '/advent/', 'url_for removes index but leaves trailing slash';
-
 done_testing;
