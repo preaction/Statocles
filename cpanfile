@@ -1,5 +1,6 @@
 requires "Encode" => "0";
 requires "Git::Repository" => "0";
+requires "Path::Tiny" => "0";
 requires "Mojolicious::Command::export" => "0.005";
 requires "Mojolicious::Plugin::AutoReload" => "0";
 requires "Mojolicious::Plugin::PODViewer" => "0";
@@ -17,6 +18,7 @@ on 'test' => sub {
   requires "IPC::Open3" => "0";
   requires "Storable" => "0";
   requires "Test::More" => "1.001005";
+  requires "Capture::Tiny" => "0";
 };
 
 on 'test' => sub {

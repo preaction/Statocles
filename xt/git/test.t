@@ -1,5 +1,4 @@
-
-use Statocles::Base 'Test';
+use Test::More;
 use Capture::Tiny qw( capture_merged );
 use Path::Tiny qw( path );
 use FindBin qw( $Bin );
