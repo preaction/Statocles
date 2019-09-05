@@ -20,6 +20,13 @@
             <a data-disqus-identifier="<%= url_for( "/$item->{path}" ) %>" href="<%= url_for( "/$item->{path}" ) %>#disqus_thread">0 comments</a>
             % }
         </aside>
+        % if ( $item->{tags} ) {
+        <p class="tags">Tags:
+            % for my $tag ( @{$item->{tags}} ) {
+                <a href="<%= url_for( "/tag/$tag") %>" rel="tag"><%== $tag %></a>
+            % }
+        </p>
+        % }
     </header>
 
     % my $sections = sectionize( $item->{html} );

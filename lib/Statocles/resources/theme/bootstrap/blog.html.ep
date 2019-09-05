@@ -7,6 +7,13 @@
     <header>
         <h1><a href="<%= url_for( "/$item->{path}" ) %>"><%== $item->{title} %></a></h1>
 
+        % if ( $item->{tags} ) {
+        <p class="tags">Tags:
+            % for my $tag ( @{$item->{tags}} ) {
+                <a href="<%= url_for( "/tag/$tag") %>" rel="tag"><%== $tag %></a>
+            % }
+        </p>
+        % }
         <aside>
             <p><time datetime="<%= strftime('%Y-%m-%d', $item->{date}) %>">
                 Posted on <%= strftime('%Y-%m-%d', $item->{date}) %>
