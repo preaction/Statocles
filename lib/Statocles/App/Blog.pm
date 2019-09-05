@@ -26,7 +26,7 @@ sub _routify {
 sub register {
     my ( $self, $app, $conf ) = @_;
     my $route = _routify( $app, delete $conf->{route} // $conf->{base_url} );
-    my $filter = { %{ delete $conf->{filter} // {} }, date => { '!=' => undef } };
+    my $filter = { %{ delete $conf->{filter} // {} }, date => { '!=' => undef }, status => { '!=' => 'draft'}};
     push @{$app->renderer->classes}, __PACKAGE__, 'Statocles::App::List';
     my $index_route = $route->get( '<page:num>' )->to(
         'yancy#list',
