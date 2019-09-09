@@ -23,7 +23,7 @@ sub _routify {
 
 sub register {
     my ( $self, $app, $conf ) = @_;
-    my $route = _routify( $app, delete $conf->{route} // $conf->{base_url} );
+    my $route = _routify( $app, $conf->{route} );
     push @{$app->renderer->classes}, __PACKAGE__;
     my $index_route = $route->get( '<page:num>' )->to(
         'yancy#list',

@@ -23,7 +23,7 @@
         % if ( $item->{tags} ) {
         <p class="tags">Tags:
             % for my $tag ( @{$item->{tags}} ) {
-                <a href="<%= url_for( "/tag/$tag") %>" rel="tag"><%== $tag %></a>
+                <a href="<%= url_for( join ("/", $config->{apps}{blog}{route}, "tag/$tag") =~ s{//}{/}r) %>" rel="tag"><%== $tag %></a>
             % }
         </p>
         % }
