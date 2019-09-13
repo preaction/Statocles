@@ -22,14 +22,14 @@ my $t = Test::Mojo->new( Statocles => {
 } );
 
 $t->get_ok( '/' )->status_is( 200 )
-  ->text_is( 'li:nth-child( 1 ) a', 'Alpha' )
+  ->text_is( 'article:nth-child( 1 ) header h1 a', 'Alpha' )
   ->or( sub { diag shift->tx->res->dom->at( 'ul' ) } )
-  ->text_is( 'li:nth-child( 2 ) a', 'Bravo' )
+  ->text_is( 'article:nth-child( 2 ) header h1 a', 'Bravo' )
   ->or( sub { diag shift->tx->res->dom->at( 'ul' ) } )
   ->element_exists( '.pager .next [rel=next][href=/2]', 'next button is enabled' )
   ->element_exists( '.pager .prev button[disabled]', 'previous button is disabled' )
   ->get_ok( '/2' )->status_is( 200 )
-  ->text_is( 'li:nth-child( 1 ) a', 'Charlie' )
+  ->text_is( 'article:nth-child( 1 ) header h1 a', 'Charlie' )
   ->or( sub { diag shift->tx->res->dom->at( 'ul' ) } )
   ->element_exists( '.pager .next button[disabled]', 'next button is disabled' )
   ->element_exists( '.pager .prev [rel=prev][href=/]', 'previous button is enabled' )
