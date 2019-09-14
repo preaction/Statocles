@@ -14,6 +14,12 @@
         % for my $link ( $self->links( 'feed' ) ) {
         <link rel="alternate" href="<%= $link->href %>" type="<%= $link->type %>" />
         % }
+        % if ( $self->prev ) {
+        <link rel="prev" href="<%= $self->prev %>" />
+        % }
+        % if ( $self->next ) {
+        <link rel="next" href="<%= $self->next %>" />
+        % }
         % if ( my $img = $site->images->{ 'icon' } ) {
         <link rel="shortcut icon" href="<%= $img->src %>" />
         % }
