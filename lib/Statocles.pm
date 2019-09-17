@@ -221,13 +221,15 @@ sub startup {
                     },
                     date => {
                         type => [ 'string', 'null' ],
-                        format => 'datetime',
+                        format => 'date',
                     },
-                    data => {
+                    tags => {
+                        type => 'array',
+                        items => {
+                            type => 'string'
+                        },
                     },
                     # XXX Add other fields
-                    # tags
-                    # - Array of strings or comma-separated strings
                     # search_change_frequency
                     # - always hourly daily weekly monthly yearly never
                     # search_priority
