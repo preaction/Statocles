@@ -2,6 +2,13 @@ Changelog for Statocles
 
 {{ $NEXT }}
 
+    [Added]
+
+    - Added prev/next <link> tags to blog posts. Thanks
+      @dertuxmalwieder! [Github #588]
+    - Added option for the Lint plugin to stop the build upon error.
+      Thanks @ferki! [Github #591]
+
 0.094     2019-08-13 22:28:29-05:00 America/Chicago
 
     [Fixes]
