@@ -1,5 +1,5 @@
 package Statocles::Link::Tree;
-our $VERSION = '0.095';
+our $VERSION = '0.096';
 # ABSTRACT: A link object with child links, making a tree
 
 =head1 SYNOPSIS

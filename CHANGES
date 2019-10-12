@@ -2,6 +2,8 @@ Changelog for Statocles
 
 {{ $NEXT }}
 
+0.095     2019-10-11 22:15:19-05:00 America/Chicago
+
     [Added]
 
     - Added prev/next <link> tags to blog posts. Thanks

@@ -1,5 +1,5 @@
 package Statocles::Page::Document;
-our $VERSION = '0.095';
+our $VERSION = '0.096';
 # ABSTRACT: Render document objects into HTML
 
 use Statocles::Base 'Class';
