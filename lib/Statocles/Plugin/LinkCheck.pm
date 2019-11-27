@@ -6,6 +6,19 @@ use Statocles::Base 'Class';
 with 'Statocles::Plugin';
 use Mojo::Util qw( url_escape url_unescape );
 
+=attr fatal
+
+If set to true, and there are any broken links, the plugin will also call
+C<die()> after printing the problems. Defaults to false.
+
+=cut
+
+has fatal => (
+    is => 'ro',
+    isa => Bool,
+    default => 0,
+);
+
 =attr ignore
 
 An array of URL patterns to ignore. These are interpreted as regular expressions,
@@ -95,6 +108,8 @@ sub check_pages {
                     ;
             $event->emitter->log->warn( "URL broken on $m->[1]: $msg" );
         }
+
+        die 'Link check failed!' if $self->fatal;
     }
 }
 
@@ -124,5 +139,6 @@ sub register {
 =head1 DESCRIPTION
 
 This plugin checks all of the links and images to ensure they exist. If something
-is missing, this plugin will write a warning to the screen.
+is missing, this plugin will write a warning to the screen. If fatal is set to true,
+it will also call C<die()> afterwards.
 
