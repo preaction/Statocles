@@ -1,5 +1,5 @@
 package Statocles::Store;
-our $VERSION = '0.096';
+our $VERSION = '0.097';
 # ABSTRACT: The source for data documents and files
 
 use Statocles::Base 'Class';

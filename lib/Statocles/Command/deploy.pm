@@ -1,5 +1,5 @@
 package Statocles::Command::deploy;
-our $VERSION = '0.096';
+our $VERSION = '0.097';
 # ABSTRACT: Deploy the site
 
 use Statocles::Base 'Command';
