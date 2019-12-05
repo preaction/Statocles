@@ -2,6 +2,11 @@ Changelog for Statocles
 
 {{ $NEXT }}
 
+    [Added]
+
+    - Added option to stop deployment if the link check fails. Thanks
+      @ferki! [Github #594]
+
 0.095     2019-10-11 22:15:19-05:00 America/Chicago
 
     [Added]
