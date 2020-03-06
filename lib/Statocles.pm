@@ -46,6 +46,7 @@ sub run {
         'version',
         'verbose|v+',
         'include|I:s@',
+        'lib|l',
     );
     return pod2usage(0) if $opt{help};
 
@@ -54,6 +55,10 @@ sub run {
         require POSIX;
         say "Locale: " . POSIX::setlocale( POSIX::LC_CTYPE );
         return 0;
+    }
+
+    if ( $opt{lib} ) {
+        unshift @{ $opt{include} }, 'lib';
     }
 
     if ( $opt{include} ) {
