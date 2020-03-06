@@ -45,6 +45,7 @@ sub run {
         'help|h',
         'version',
         'verbose|v+',
+        'include|I:s@',
     );
     return pod2usage(0) if $opt{help};
 
@@ -53,6 +54,10 @@ sub run {
         require POSIX;
         say "Locale: " . POSIX::setlocale( POSIX::LC_CTYPE );
         return 0;
+    }
+
+    if ( $opt{include} ) {
+        unshift @INC, @{ $opt{include} };
     }
 
     my $method = shift @argv;
