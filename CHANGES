@@ -2,6 +2,8 @@ Changelog for Statocles
 
 {{ $NEXT }}
 
+0.097     2020-03-31 21:51:03-05:00 America/Chicago
+
     [Added]
 
     - Added `-l` and `-I <path>` options to add include directories to

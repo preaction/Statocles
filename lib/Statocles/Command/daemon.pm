@@ -1,5 +1,5 @@
 package Statocles::Command::daemon;
-our $VERSION = '0.097';
+our $VERSION = '0.098';
 # ABSTRACT: Run a daemon to navigate the site
 
 use Statocles::Base 'Command';

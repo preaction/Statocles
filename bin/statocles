@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 # ABSTRACT: Run Statocles commands
 package statocles;
-our $VERSION = '0.097';
+our $VERSION = '0.098';
 
 use Statocles::Base;
 use Encode qw( decode );
