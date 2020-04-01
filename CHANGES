@@ -2,6 +2,11 @@ Changelog for Statocles
 
 {{ $NEXT }}
 
+    [Added]
+
+    - Added `-l` and `-I <path>` options to add include directories to
+      the `statocles` command. Thanks @ferki! [Github #597]
+
 0.096     2019-12-05 10:24:21-06:00 America/Chicago
 
     [Added]
