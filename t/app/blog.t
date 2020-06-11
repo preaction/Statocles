@@ -16,6 +16,7 @@ my $t = Test::Mojo->new( Statocles => {
     apps => {
         blog => {
             route => '/',
+            order_by => { -desc => 'date'},
             limit => 3,
         },
     },

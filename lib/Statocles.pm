@@ -92,6 +92,7 @@ use YAML qw( );
 use Text::Markdown;
 use Time::Piece;
 use Mojo::Loader qw(load_class);
+use Statocles::App;
 
 has moniker => 'statocles';
 has deploy => sub { die q{"deploy" is required} };
@@ -115,6 +116,14 @@ sub startup {
             apps => {
                 blog => {
                     route => '/blog',
+                    filter => { date => { '!=' => undef }, status => { '!=' => 'draft'}},
+                    order_by => { -desc => 'date' },
+                },
+                other => {
+                    route => '/other',
+                    filter => { -not_bool => 'date' },
+                    order_by => 'title',
+                    categories => [],
                 },
             },
             theme => '+Statocles/theme/default',
@@ -131,8 +140,15 @@ sub startup {
                         href => '/blog',
                         text => 'Blog',
                     },
+                    {
+                        href => '/other',
+                        text => 'Other',
+                    },
                 ],
             },
+            disqus => {
+               shortname => '',
+            }
         },
     } );
 
@@ -155,8 +171,8 @@ sub startup {
     $app->plugin( Export => );
     push @{$app->export->pages}, '/sitemap.xml', '/robots.txt';
     $app->plugin( AutoReload => );
-
-    if ( my $theme = $app->config->{theme} ) {
+    do {
+        my $theme = $app->config->{theme} //= '+Statocles/theme/default';
         my @theme_dirs = ref $theme eq 'ARRAY' ? @{ $theme } : $theme;
         for my $theme_dir ( @theme_dirs ) {
             # Theme may be a module and path instead
@@ -173,7 +189,7 @@ sub startup {
             push @{$app->renderer->paths}, $theme_dir;
             push @{$app->static->paths}, $theme_dir;
         }
-    }
+    };
 
     # Always fall back to the home dir for templates and static files to
     # allow for extra content
@@ -271,11 +287,7 @@ sub startup {
     my %apps;
     for my $moniker ( sort keys %{ $app->config->{apps} } ) {
         my $conf = $app->config->{apps}{ $moniker };
-        my $class = 'Statocles::App::' . ucfirst( $conf->{app} || $moniker );
-        if ( my $e = load_class( $class ) ) {
-            die "Could not load class $class for app $moniker: $e";
-        }
-        my $site_app = $class->new( moniker => $moniker, %$conf );
+        my $site_app = Statocles::App->new( moniker => $moniker, %$conf );
         $site_app->register( $app, $conf );
         $apps{ $moniker } = $site_app;
     }
@@ -291,8 +303,8 @@ sub startup {
         if ( my $page = $c->yancy->get( pages => $id ) ) {
             return $c->render(
                 item => $page,
-                ( template => $page->{template} )x!!$page->{template},
                 ( layout => $page->{layout} )x!!$page->{layout},
+                template => $page->{template} // 'page',
                 title => $page->{title},
             );
         }
@@ -369,31 +381,6 @@ __DATA__
         %= content 'footer'
     </footer>
 </body>
-
-@@ default.html.ep
-%= content 'content_before'
-<header>
-    <h1><%= $item->{title} %></h1>
-    % if ( $item->{date} ) {
-    <aside>
-        <time datetime="<%= strftime('%Y-%m-%d', $item->{date} ) %>">
-            Posted on <%= strftime('%Y-%m-%d', $item->{date} ) %>
-        </time>
-    </aside>
-    % }
-    % if ( $item->{author} ) {
-    <aside>
-        %= content author => begin
-        <span class="author">by <%= $item->{author} %></span>
-        % end
-    </aside>
-    % }
-</header>
-% my $sections = sectionize( $item->{html} );
-% for my $i ( 0 .. $#$sections ) {
-    <section id="section-<%= $i + 1 %>"><%== $sections->[ $i ] %></section>
-% }
-%= content 'content_after'
 
 @@ sitemap.xml.ep
 <?xml version="1.0" encoding="UTF-8" ?>

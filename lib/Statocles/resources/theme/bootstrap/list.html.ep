@@ -1,0 +1,21 @@
+% content_for head => begin
+    <link rel="alternate" type="application/rss+xml" href="<%= url_for( page => 1, format => 'rss' ) %>"/>
+    <link rel="alternate" type="application/atom+xml" href="<%= url_for( page => 1, format => 'atom' ) %>"/>
+% end
+% for my $item ( @$items ) {
+<article>
+    <header>
+        <h1><a href="<%= url_for( "/$item->{path}" ) %>"><%= $item->{title} // $item->{path} %></a></h1>
+        %= include '_item-caption', item => $item, disqus => '';
+    </header>
+    % my $sections = sectionize( $item->{html} );
+    <section>
+    %== $sections->[ 0 ]
+    </section>
+    % if ( @$sections > 1 ) {
+    <p><a href="<%= url_for( "/$item->{path}" ) %>#section-2">Continue reading...</a></p>
+    % }
+</article>
+% }
+
+%= include 'pager', label_next => 'Older', label_prev => 'Newer'

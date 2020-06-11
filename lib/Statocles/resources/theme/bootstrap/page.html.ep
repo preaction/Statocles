@@ -1,0 +1,20 @@
+<header>
+    <h1><%== $items->[0]->{title} %></h1>
+    %= include '_item-caption', item => $item, disqus => config->{data}{disqus}{shortname}
+</header>
+% my $sections = sectionize( $items->[0]->{html} );
+% for my $i ( 0 .. $#$sections ) {
+    <section id="section-<%= $i + 1 %>"><%== $sections->[ $i ] %></section>
+% }
+
+% if ( config->{data}{disqus}{shortname} ) {
+<script type="text/javascript">
+    var disqus_shortname = '<%= config->{data}{disqus}{shortname} %>';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+% }

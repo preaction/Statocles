@@ -1,6 +1,5 @@
-package Statocles::App::Blog;
-our $VERSION = '0.094';
-# ABSTRACT: A blog application
+package Statocles::App;
+our $VERSION = '2.000';
 
 =head1 SYNOPSIS
 
@@ -12,33 +11,27 @@ our $VERSION = '0.094';
 
 use Mojo::Base 'Mojolicious::Plugin';
 use Scalar::Util qw( blessed );
-use Statocles::App::List; # Contains default pager template
 
-has moniker => 'blog';
+has moniker => '';
 has categories => sub { [] };
-
-sub _routify {
-    my ( $app, $route ) = @_;
-    return unless $route;
-    return blessed $route ? $route : $app->routes->any( $route );
-}
 
 sub register {
     my ( $self, $app, $conf ) = @_;
-    my $route = _routify( $app, delete $conf->{route} // $conf->{base_url} );
-    my $filter = { %{ delete $conf->{filter} // {} }, date => { '!=' => undef }, status => { '!=' => 'draft'}};
-    push @{$app->renderer->classes}, __PACKAGE__, 'Statocles::App::List';
+    push @{$app->renderer->classes}, __PACKAGE__;
+    my $route = $app->routes->any( $conf->{route} );
+    my $filter = delete $conf->{filter} // {};
+    my $order_by = delete $conf->{order_by} // 'path';
     my $index_route = $route->get( '<page:num>' )->to(
         'yancy#list',
         page => 1,
-        template => 'blog',
+        template => 'list',
         schema => 'pages',
         filter => $filter,
-        order_by => { -desc => 'date' },
+        order_by => $order_by,
         %$conf,
     );
     # Add the index page to the list of pages to export. The index page
-    # has links to all the blog posts and all the other pages, so that
+    # has links to feeds, all the blog posts, and all the other pages, so that
     # should export the entire blog.
     push @{ $app->export->pages }, $index_route->render({ page => 1 });
 
@@ -69,13 +62,13 @@ sub register {
             : $route->get( ( $category->{route} // $category->{title} ) . '/<page:num>' )->to(
                 'yancy#list',
                 page => 1,
-                template => 'blog',
+                template => 'list',
                 schema => 'pages',
                 filter => {
                     %$filter,
                     %{ $category->{filter} },
                 },
-                order_by => { -desc => 'date' },
+                order_by => $order_by,
                 %$conf,
             );
         push @{ $app->export->pages }, $category_route->render({ page => 1 });
@@ -93,58 +86,7 @@ sub category_links {
 
 1;
 __DATA__
-@@ blog.html.ep
-% content_for head => begin
-    <link rel="alternate" type="application/rss+xml" href="<%= url_for( page => 1, format => 'rss' ) %>"/>
-    <link rel="alternate" type="application/atom+xml" href="<%= url_for( page => 1, format => 'atom' ) %>"/>
-% end
-% for my $item ( @$items ) {
-<article>
-    <header>
-        <h1><a href="<%= url_for( "/$item->{path}" ) %>"><%== $item->{title} %></a></h1>
-
-        <aside>
-            <time datetime="<%= strftime('%Y-%m-%d', $item->{date}) %>">
-                Posted on <%= strftime('%Y-%m-%d', $item->{date}) %>
-            </time>
-            % if ( $item->{author} ) {
-                <span class="author">
-                    by <%= $item->{author} %>
-                </span>
-            % }
-            % if ( config->{data}{disqus}{shortname} ) {
-            <a data-disqus-identifier="<%= url_for( $item->{path} ) %>" href="<%= url_for( "/$item->{path}" ) %>#disqus_thread">0 comments</a>
-            % }
-        </aside>
-    </header>
-
-    % my $sections = sectionize( $item->{html} );
-    <section>
-        %== $sections->[ 0 ]
-    </section>
-
-    % if ( @$sections > 1 ) {
-    <p><a href="<%= url_for( "/$item->{path}" ) %>#section-2">Continue reading...</a></p>
-    % }
-
-</article>
-% }
-
-%= include 'pager', label_prev => 'Newer', label_next => 'Older'
-
-% if ( config->{data}{disqus}{shortname} ) {
-<script type="text/javascript">
-    var disqus_shortname = '<%= config->{data}{disqus}{shortname} %>';
-    (function () {
-        var s = document.createElement('script'); s.async = true;
-        s.type = 'text/javascript';
-        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
-        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
-    }());
-</script>
-% }
-
-@@ blog.rss.ep
+@@ list.rss.ep
 %# RSS requires date/time in the 'C' locale as per RFC822. strftime() is one of
 %# the few things that actually cares about locale.
 % use POSIX qw( locale_h );
@@ -179,7 +121,7 @@ __DATA__
 </rss>
 % setlocale( LC_TIME, $current_locale );
 
-@@ blog.atom.ep
+@@ list.atom.ep
 <?xml version="1.0"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id><%= url_for()->to_abs %></id>
@@ -219,3 +161,29 @@ __DATA__
     </entry>
     % }
 </feed>
+
+@@ _item-caption.html.ep
+% if ( $item->{tags} ) {
+<p class="tags">Tags:
+    % for my $tag ( @{$item->{tags}} ) {
+        <a href="<%= url_for( join ("/", $config->{apps}{blog}{route}, "tag/$tag") =~ s{//}{/}r) %>" rel="tag"><%== $tag %></a>
+    % }
+</p>
+% }
+% if ( $item->{date} ) {
+<aside>
+    <time datetime="<%= strftime('%Y-%m-%d', $item->{date} ) %>">
+        Posted on <%= strftime('%Y-%m-%d', $item->{date} ) %>
+    </time>
+</aside>
+% }
+% if ( $item->{author} ) {
+<aside>
+    %= content author => begin
+    <span class="author">by <%= $item->{author} %></span>
+    % end
+</aside>
+% }
+% if ( $disqus ) {
+    <a data-disqus-identifier="<%= url_for( "/$item->{path}" ) %>" href="<%= url_for( "/$item->{path}" ) %>#disqus_thread">0 comments</a>
+% }
