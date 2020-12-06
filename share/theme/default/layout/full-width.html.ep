@@ -39,6 +39,7 @@
         <header>
             <nav class="navbar">
                 <div class="container">
+                    %= include 'site/navbar_top_extra.html.ep'
                     <a class="brand" href="/"><%= $site->title %></a>
                     % if ( my @nav_links = $site->nav( 'main' ) ) {
                     <ul>
