@@ -384,11 +384,11 @@ sub test_layout_content {
     };
 
     subtest 'site stylesheet and script links get added' => sub {
-        if ( ok $elem = $dom->at( 'link[href=/theme/css/site-style.css]', 'site stylesheet exists' ) ) {
+        if ( ok $elem = $dom->at( 'link[href=/theme/css/site-style.css]' ), 'site stylesheet exists' ) {
             is $elem->attr( 'rel' ), 'stylesheet';
             is $elem->attr( 'type' ), 'text/css';
         }
-        if ( ok $elem = $dom->at( 'script[src=/theme/js/site-script.js]', 'site script exists' ) ) {
+        if ( ok $elem = $dom->at( 'script[src=/theme/js/site-script.js]' ), 'site script exists' ) {
             ok !$elem->text, 'no text inside';
         }
         if ( ok my $elems = $dom->find( 'head script' )->grep( 'text' ) ) {
@@ -399,20 +399,20 @@ sub test_layout_content {
     };
 
     subtest 'document stylesheet links get added in the layout' => sub {
-        if ( ok $elem = $dom->at( 'link[href=/theme/css/special.css]', 'document stylesheet exists' ) ) {
+        if ( ok $elem = $dom->at( 'link[href=/theme/css/special.css]' ), 'document stylesheet exists' ) {
             is $elem->attr( 'rel' ), 'stylesheet';
             is $elem->attr( 'type' ), 'text/css';
         }
     };
 
     subtest 'document script links get added in the layout' => sub {
-        if ( ok $elem = $dom->at( 'script[src=/theme/js/special.js]', 'document script exists' ) ) {
+        if ( ok $elem = $dom->at( 'script[src=/theme/js/special.js]' ), 'document script exists' ) {
             ok !$elem->text, 'no text inside';
         }
     };
 
     subtest 'shortcut icon' => sub {
-        if ( ok $elem = $dom->at( 'link[rel="shortcut icon"]', 'shortcut icon link exists' ) ) {
+        if ( ok $elem = $dom->at( 'link[rel="shortcut icon"]' ), 'shortcut icon link exists' ) {
             is $elem->attr( 'href' ), '/favicon.ico';
         }
     };
