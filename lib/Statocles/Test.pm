@@ -328,6 +328,7 @@ sub build_temp_site {
     };
 
     my $config_fn = $tmp->child( 'site.yml' );
+    $YAML::Stringify = 1;
     YAML::DumpFile( $config_fn, $config );
     return ( $tmp, $config_fn, $config );
 }
