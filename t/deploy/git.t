@@ -390,7 +390,7 @@ done_testing;
 sub make_git {
     my ( $dir, %args ) = @_;
 
-    Git::Repository->run( "init", ( $args{bare} ? ( '--bare' ) : () ), "$dir" );
+    Git::Repository->run( "init", ( $args{bare} ? ( '--bare' ) : () ), '-b', 'master', "$dir" );
 
     my $git = Git::Repository->new( work_tree => "$dir" );
 
