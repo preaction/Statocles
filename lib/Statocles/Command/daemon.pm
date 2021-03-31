@@ -166,7 +166,7 @@ sub run {
 
         my $serve_static = sub {
             my ( $c ) = @_;
-            my $path = Mojo::Path->new( $c->stash->{path} );
+            my $path = Mojo::Path->new( $c->stash->{path_to_serve} );
 
             # Taint check the path, just in case someone uses this "dev" tool to
             # serve real content
@@ -177,7 +177,7 @@ sub run {
             if ( !$asset ) {
                 if ( $path =~ m{/$} ) {
                     # Check for index.html
-                    $path = Mojo::Path->new( $c->stash->{path} . "/index.html" );
+                    $path = Mojo::Path->new( $c->stash->{path_to_serve} . "/index.html" );
                     $asset = $c->app->static->file( $path );
                 }
                 elsif ( $store->path->child( $path )->is_dir ) {
@@ -198,10 +198,10 @@ sub run {
                 my ( $c ) = @_;
                 $c->redirect_to( $base );
             } );
-            $self->routes->get( $base . '/*path' )->to( path => 'index.html', cb => $serve_static );
+            $self->routes->get( $base . '/*path_to_serve' )->to( path_to_serve => 'index.html', cb => $serve_static );
         }
         else {
-            $self->routes->get( '/*path' )->to( path => 'index.html', cb => $serve_static );
+            $self->routes->get( '/*path_to_serve' )->to( path_to_serve => 'index.html', cb => $serve_static );
         }
 
     }
