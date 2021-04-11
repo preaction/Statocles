@@ -1,5 +1,5 @@
 package Statocles::Command;
-our $VERSION = '0.098';
+our $VERSION = '0.099';
 # ABSTRACT: The base class for command modules
 
 =head1 SYNOPSIS

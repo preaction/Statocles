@@ -1,5 +1,5 @@
 package Statocles::Command::build;
-our $VERSION = '0.098';
+our $VERSION = '0.099';
 # ABSTRACT: Build the site in a directory
 
 use Statocles::Base 'Command';

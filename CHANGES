@@ -2,6 +2,8 @@ Changelog for Statocles
 
 {{ $NEXT }}
 
+0.098     2021-04-11 15:05:42-04:00 America/Detroit
+
     [Fixed]
 
     - Fixed compatibility with Mojolicious 9. Thanks @ferki, @eserte,
