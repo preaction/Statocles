@@ -2,6 +2,15 @@ Changelog for Statocles
 
 {{ $NEXT }}
 
+    [Fixed]
+
+    - Fixed compatibility with Mojolicious 9. Thanks @ferki, @eserte,
+      and @voegelas! [Github #602, #604, #605]
+    - Fixed test failure due to YAML stringification changes. Thanks
+      @voegelas! [Github #599, #602]
+    - Fixed warning appearing from newer versions of Git about the
+      default branch name. Thanks @voegelas! [Github #603]
+
 0.097     2020-03-31 21:51:03-05:00 America/Chicago
 
     [Added]

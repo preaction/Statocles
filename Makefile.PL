@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-use 5.014;
+use 5.016;
 
 use ExtUtils::MakeMaker;
 
@@ -24,7 +24,7 @@ my %WriteMakefileArgs = (
     "bin/statocles"
   ],
   "LICENSE" => "perl",
-  "MIN_PERL_VERSION" => "5.014",
+  "MIN_PERL_VERSION" => "5.016",
   "NAME" => "Statocles",
   "PREREQ_PM" => {
     "Beam::Emitter" => "0.007",
@@ -39,7 +39,7 @@ my %WriteMakefileArgs = (
     "Import::Base" => "0.012",
     "JSON::PP" => 0,
     "List::UtilsBy" => "0.09",
-    "Mojolicious" => "6.54",
+    "Mojolicious" => 9,
     "Moo" => "2.000001",
     "Path::Tiny" => "0.084",
     "Pod::Simple" => "3.31",
@@ -92,7 +92,7 @@ my %FallbackPrereqs = (
   "Import::Base" => "0.012",
   "JSON::PP" => 0,
   "List::UtilsBy" => "0.09",
-  "Mojolicious" => "6.54",
+  "Mojolicious" => 9,
   "Moo" => "2.000001",
   "Path::Tiny" => "0.084",
   "Pod::Simple" => "3.31",

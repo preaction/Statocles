@@ -4,7 +4,7 @@ Statocles - A static site generator
 
 # VERSION
 
-version 0.097
+version 0.098
 
 # STATUS
 
@@ -85,6 +85,7 @@ Doug Bell <preaction@cpan.org>
 
 # CONTRIBUTORS
 
+- Andreas Voegele <andreas@andreasvoegele.com>
 - Cthulhux <git@tuxproject.de>
 - David Farrell <davidnmfarrell@gmail.com>
 - djerius <djerius@cfa.harvard.edu>
