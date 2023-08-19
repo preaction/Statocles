@@ -166,7 +166,8 @@ subtest 'deploy with submodules and ignored files' => sub {
 
     # Git::Repository sets the "GIT_WORK_TREE" envvar, which makes most
     # submodule commands fail, so we have to unset it.
-    _git_run( $git, submodule => add => "file://$submoduledir",
+    _git_run( $git, qw( -c protocol.file.allow=always ),
+        submodule => add => "file://$submoduledir",
         { env => { GIT_WORK_TREE => undef } }
     );
     _git_run( $git, commit => '-m' => 'add submodule' );
