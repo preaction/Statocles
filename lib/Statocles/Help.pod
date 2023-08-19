@@ -232,6 +232,6 @@ Be patient, it's a slow channel.
 
 =head1 SEE ALSO
 
-For news and documentation, L<visit the Statocles website at
-http:E<sol>E<sol>preaction.me<sol>statocles|http://preaction.me/statocles>.
+For news and documentation, L<visit the Statocles
+website|http://preaction.me/statocles>.
 
