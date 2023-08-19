@@ -391,7 +391,16 @@ done_testing;
 sub make_git {
     my ( $dir, %args ) = @_;
 
-    Git::Repository->run( "init", ( $args{bare} ? ( '--bare' ) : () ), '-b', 'master', "$dir" );
+    my $git_version = Statocles::Deploy::Git->_git_version;
+
+    my @options;
+    if ($args{bare}) {
+        push @options, '--bare';
+    }
+    if ($git_version >= 2.028000) {
+        push @options, '-b', 'master';
+    }
+    Git::Repository->run( "init", @options, "$dir" );
 
     my $git = Git::Repository->new( work_tree => "$dir" );
 
