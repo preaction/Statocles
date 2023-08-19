@@ -87,7 +87,7 @@ To highlight a block of code, use C<begin>/C<end>:
 
 To highlight an included file, use the L<include helper|Statocles::Template/include>:
 
-    %= highlight Perl => include 'test.pl'
+    %= highlight Perl => include -raw => 'test.pl'
 
 The highlight function adds both C<pre> and C<code> tags.
 
