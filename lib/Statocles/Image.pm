@@ -1,5 +1,5 @@
 package Statocles::Image;
-our $VERSION = '0.099';
+our $VERSION = '0.100';
 # ABSTRACT: A reference to an image
 
 =head1 SYNOPSIS

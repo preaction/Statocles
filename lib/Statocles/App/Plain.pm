@@ -1,5 +1,5 @@
 package Statocles::App::Plain;
-our $VERSION = '0.099';
+our $VERSION = '0.100';
 # ABSTRACT: (DEPRECATED) Plain documents made into pages with no extras
 
 use Statocles::Base 'Class';

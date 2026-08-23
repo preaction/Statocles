@@ -1,5 +1,5 @@
 package Statocles::Event;
-our $VERSION = '0.099';
+our $VERSION = '0.100';
 # ABSTRACT: Events objects for Statocles
 
 =head1 EVENTS

@@ -1,5 +1,5 @@
 package Statocles::Person;
-our $VERSION = '0.099';
+our $VERSION = '0.100';
 # ABSTRACT: Information about a person, including name and e-mail
 
 =head1 SYNOPSIS

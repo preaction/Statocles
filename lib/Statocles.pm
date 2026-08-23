@@ -1,5 +1,5 @@
 package Statocles;
-our $VERSION = '0.099';
+our $VERSION = '0.100';
 # ABSTRACT: A static site generator
 
 use Statocles::Base 'Class';
