@@ -278,7 +278,7 @@ subtest 'git deploy' => sub {
 
         $expect_config->{site}{base_url} = "http://www.example.com";
         $expect_config->{deploy}{'$class'} = 'Statocles::Deploy::Git';
-        $expect_config->{deploy}{branch} = 'master';
+        $expect_config->{deploy}{branch} = 'main';
         $expect_config->{theme}{store} = 'theme';
 
         my $config = $tmp->child( 'www.example.com', 'site.yml' )->slurp_utf8;
@@ -332,7 +332,7 @@ subtest 'git deploy' => sub {
 
         $expect_config->{site}{base_url} = "http://example.com";
         $expect_config->{deploy}{'$class'} = 'Statocles::Deploy::Git';
-        $expect_config->{deploy}{branch} = 'master';
+        $expect_config->{deploy}{branch} = 'main';
         $expect_config->{theme}{store} = 'theme';
 
         my $config = $tmp->child( 'site.yml' )->slurp_utf8;

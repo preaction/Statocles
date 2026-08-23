@@ -55,14 +55,14 @@ How would you like to deploy? ([1], 2, 0)
 Since you're making a Git deploy, what branch would you like to deploy
 to?
 
-If you're making a Github Pages User site, this should be "master".
+If you're making a Github Pages User site, this should be "main".
 
 If you're making a Github Pages Project site, this should be "gh-pages".
 
 Otherwise, the default is probably best, and you can always change it
 later.
 
-What branch? [master] 
+What branch? [main] 
 
 Alright! Your "site.yml" configuration file has been created and you're
 ready to go!

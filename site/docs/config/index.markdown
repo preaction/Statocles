@@ -1018,16 +1018,16 @@ the site to be fully deployed live.
 
 For an account/user site, we create a Github repository named
 "<username>.github.io". Unlike the project site, user sites should be
-deployed to the `master` branch. This means that you want to write your
+deployed to the `main` branch. This means that you want to write your
 site's content on the `develop` branch, or some other branch that isn't
-`master`, and then configure your deploy like so:
+`main`, and then configure your deploy like so:
 
     deploy:
         $class: Statocles::Deploy::Git
-        branch: master
+        branch: main
 
 You can configure the default branch in Github so that users are given
-the `develop` branch instead of `master` by default. See your
+the `develop` branch instead of `main` by default. See your
 repository's Settings tab for information.
 
 ### Custom Git Hosting

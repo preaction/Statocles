@@ -14,7 +14,7 @@ inside of the Git repository.
 
 =attr branch
 
-The Git branch to deploy to. Defaults to "master". If you're building a Github Pages
+The Git branch to deploy to. Defaults to "main". If you're building a Github Pages
 site for a project, you probably want to use the "gh-pages" branch.
 
 =cut
@@ -22,7 +22,7 @@ site for a project, you probably want to use the "gh-pages" branch.
 has branch => (
     is => 'ro',
     isa => Str,
-    default => sub { 'master' },
+    default => sub { 'main' },
 );
 
 =attr remote

@@ -38,7 +38,7 @@ sub create_site {
         bundle_theme => 'Do you want to bundle the theme? ([Y]/n)',
         base_url => 'What is the URL where the site will be deployed?',
         deploy_class => 'How would you like to deploy? ([1], 2, 0)',
-        git_branch => 'What branch? [master]',
+        git_branch => 'What branch? [main]',
         deploy_path => 'Where to deploy the site? (default: current directory)',
     );
 
@@ -83,7 +83,7 @@ sub create_site {
         print "\n", "\n", $question->{git_branch};
         print "\n", "\n", $prompt{git_branch}, " ";
         chomp( $answer{git_branch} = <STDIN> );
-        $answer{git_branch} ||= "master";
+        $answer{git_branch} ||= "main";
     }
     elsif ( $answer{deploy_class} == 2 ) {
         # File deploy questions
