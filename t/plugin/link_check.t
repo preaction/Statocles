@@ -25,6 +25,14 @@ subtest 'check links' => sub {
                     path => '/foo.markdown',
                     content => '<a href="/">Index</a>',
                 ),
+                Statocles::Document->new(
+                    path => '/deep/nested/post.markdown',
+                    content => '<a href="../..">Index</a>',
+                ),
+                Statocles::Document->new(
+                    path => '/other/nested/post.markdown',
+                    content => '<a href="../../deep/nested/post.html">Deep</a>',
+                ),
             ],
         ),
         deploy => '.',

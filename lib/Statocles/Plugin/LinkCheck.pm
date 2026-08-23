@@ -65,7 +65,8 @@ sub check_pages {
                     # Fix ".." and ".". Path::Tiny->canonpath can't do
                     # this for us because these paths do not exist on
                     # the filesystem
-                    $url =~ s{/[^/]+/[.][.]/}{/}g; # Fix ".." to refer to parent
+                    # Fix path/foo/../ into path/
+                    1 while $url =~ s{(/(?![.][.])[^/]+/[.][.](/|\z))}{$2}g; # Fix ".." to refer to parent
                     $url =~ s{/[.]/}{/}g; # Fix "." to refer to self
 
                     $links{ url_unescape $url }{ url_unescape $page->path }++;
