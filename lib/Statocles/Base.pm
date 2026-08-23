@@ -5,6 +5,8 @@ our $VERSION = '0.094';
 use strict;
 use warnings;
 use base 'Import::Base';
+use YAML;
+$YAML::Stringify = 1;
 
 our @IMPORT_MODULES = (
     sub {
