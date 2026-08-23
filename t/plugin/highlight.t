@@ -26,7 +26,7 @@ my $expect_perl = <<'ENDHTML';
     <span class="hljs-keyword">return</span> <span class="hljs-function">grep</span> { <span class="hljs-variable">$_</span> &lt; <span class="hljs-number">1</span> &amp;&amp; <span class="hljs-variable">$_</span> &gt; <span class="hljs-number">-1</span> } <span class="hljs-type">@args</span>;
 }
 
-<span class="hljs-function">print</span> foo( <span class="hljs-number">1</span> + <span class="hljs-number">2</span>, 4 . <span class="hljs-number">5</span> );
+<span class="hljs-function">print</span> foo( <span class="hljs-number">1</span> + <span class="hljs-number">2</span>, <span class="hljs-number">4</span> . <span class="hljs-number">5</span> );
 </code></pre>
 ENDHTML
 chomp $expect_perl;
