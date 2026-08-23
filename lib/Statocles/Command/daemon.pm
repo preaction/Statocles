@@ -1,5 +1,5 @@
 package Statocles::Command::daemon;
-our $VERSION = '0.094';
+our $VERSION = '0.099';
 # ABSTRACT: Run a daemon to navigate the site
 
 use Statocles::Base 'Command';
@@ -166,7 +166,7 @@ sub run {
 
         my $serve_static = sub {
             my ( $c ) = @_;
-            my $path = Mojo::Path->new( $c->stash->{static_path} );
+            my $path = Mojo::Path->new( $c->stash->{slug} );
 
             # Taint check the path, just in case someone uses this "dev" tool to
             # serve real content
@@ -177,7 +177,7 @@ sub run {
             if ( !$asset ) {
                 if ( $path =~ m{/$} ) {
                     # Check for index.html
-                    $path = Mojo::Path->new( $c->stash->{static_path} . "/index.html" );
+                    $path = Mojo::Path->new( $c->stash->{slug} . "/index.html" );
                     $asset = $c->app->static->file( $path );
                 }
                 elsif ( $store->path->child( $path )->is_dir ) {
@@ -198,10 +198,10 @@ sub run {
                 my ( $c ) = @_;
                 $c->redirect_to( $base );
             } );
-            $self->routes->get( $base . '/*static_path' )->to( static_path => 'index.html', cb => $serve_static );
+            $self->routes->get( $base . '/*slug' )->to( slug => 'index.html', cb => $serve_static );
         }
         else {
-            $self->routes->get( '/*static_path' )->to( static_path => 'index.html', cb => $serve_static );
+            $self->routes->get( '/*slug' )->to( slug => 'index.html', cb => $serve_static );
         }
 
     }

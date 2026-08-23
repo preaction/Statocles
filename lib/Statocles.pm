@@ -1,5 +1,5 @@
 package Statocles;
-our $VERSION = '0.094';
+our $VERSION = '0.099';
 # ABSTRACT: A static site generator
 
 use Statocles::Base 'Class';
@@ -20,20 +20,6 @@ The L<site|Statocles::Site> we're working with.
 has site => (
     is => 'ro',
     isa => InstanceOf['Statocles::Site'],
-);
-
-=attr log
-
-A L<Mojo::Log> object for logging. Defaults to the current site's C<log> attribute.
-
-=cut
-
-has log => (
-    is => 'rw',
-    lazy => 1,
-    default => sub {
-        $_[0]->site->log;
-    },
 );
 
 =method run
@@ -59,6 +45,8 @@ sub run {
         'help|h',
         'version',
         'verbose|v+',
+        'include|I:s@',
+        'lib|l',
     );
     return pod2usage(0) if $opt{help};
 
@@ -67,6 +55,14 @@ sub run {
         require POSIX;
         say "Locale: " . POSIX::setlocale( POSIX::LC_CTYPE );
         return 0;
+    }
+
+    if ( $opt{lib} ) {
+        unshift @{ $opt{include} }, 'lib';
+    }
+
+    if ( $opt{include} ) {
+        unshift @INC, @{ $opt{include} };
     }
 
     my $method = shift @argv;
@@ -161,16 +157,14 @@ sub _load_site {
     return ( 0, $site );
 }
 
-# The currently-running site.
-# I hate this, but I know of no better way to ensure that we always have access
-# to a Mojo::Log object, while still being relatively useful, without having to
-# wire up every single object with a log object.
-our $SITE;
-
-BEGIN {
-    package # Hide from PAUSE
-        site;
-    sub log { return $SITE->log }
+sub log {
+    my ( $invocant, $level, @args ) = @_;
+    use Mojo::Log;
+    state $log = Mojo::Log->new( level => $ENV{MOJO_LOG_LEVEL} // 'info' );
+    if ( $level && @args ) {
+        return $log->$level( @args );
+    }
+    return $log;
 }
 
 1;

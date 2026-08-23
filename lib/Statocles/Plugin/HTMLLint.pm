@@ -1,5 +1,5 @@
 package Statocles::Plugin::HTMLLint;
-our $VERSION = '0.094';
+our $VERSION = '0.099';
 # ABSTRACT: Check HTML for common errors and issues
 
 use Statocles::Base 'Class';
@@ -8,6 +8,19 @@ BEGIN {
     eval { require HTML::Lint::Pluggable; HTML::Lint::Pluggable->VERSION( 0.06 ); 1 }
         or die "Error loading Statocles::Plugin::HTMLLint. To use this plugin, install HTML::Lint::Pluggable";
 };
+
+=attr fatal
+
+If set to true, and there are any linting errors, the plugin will also call
+C<die()> after printing the problems. Defaults to false.
+
+=cut
+
+has fatal => (
+    is => 'ro',
+    isa => Bool,
+    default => 0,
+);
 
 =attr plugins
 
@@ -53,6 +66,8 @@ sub check_pages {
         for my $error ( @errors ) {
             $event->emitter->log->warn( "-" . $error->as_string );
         }
+
+        die 'Linting failed!' if $self->fatal;
     }
 }
 
@@ -82,5 +97,6 @@ sub register {
 =head1 DESCRIPTION
 
 This plugin checks all of the HTML to ensure it's correct and complete. If something
-is missing, this plugin will write a warning to the screen.
+is missing, this plugin will write a warning to the screen. If fatal is set to true,
+it will also call C<die()> afterwards.
 

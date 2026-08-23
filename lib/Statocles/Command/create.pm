@@ -1,5 +1,5 @@
 package Statocles::Command::create;
-our $VERSION = '0.094';
+our $VERSION = '0.099';
 # ABSTRACT: The command to create new Statocles site
 
 use Statocles::Base 'Command';
@@ -147,7 +147,7 @@ sub create_site {
         # Running init more than once is apparently completely safe, so we don't
         # even have to check before we run it
         chdir $root;
-        Git::Repository->run( 'init' );
+        Git::Repository->run( 'init', '-q' );
         chdir $cwd;
         $root->child( '.gitignore' )->append( "\n.statocles\n" );
     }

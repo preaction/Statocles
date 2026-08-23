@@ -1,5 +1,5 @@
 package Statocles::Command::bundle;
-our $VERSION = '0.094';
+our $VERSION = '0.099';
 # ABSTRACT: Copy a default theme to this site to make changes
 
 use Statocles::Base 'Command';
@@ -45,7 +45,7 @@ sub bundle_theme {
         my $dest = $theme_dest->child( $path );
         # Don't overwrite site-customized hooks
         next if ( $abs_path->stat->size == 0 && $dest->exists );
-        site->log->debug( sprintf 'Copying theme file "%s" to "%s"', $path, $dest );
+        Statocles->log( debug => sprintf 'Copying theme file "%s" to "%s"', $path, $dest );
         $dest->remove if $dest->exists;
         $dest->parent->mkpath;
         $abs_path->copy( $dest );

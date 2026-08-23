@@ -314,7 +314,7 @@ subtest 'git deploy' => sub {
         my $tmp = tempdir;
         chdir $tmp;
 
-        Git::Repository->run( 'init' );
+        Git::Repository->run( 'init', '-q' );
         $tmp->child( '.gitignore' )->spew( "some\n\nexisting\npaths\n" );
 
         my $in = $SHARE_DIR->child( qw( create basic_blog_in.txt ) )->openr_utf8;

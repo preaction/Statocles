@@ -22,7 +22,7 @@ subtest 'get the app list' => sub {
 subtest 'delegate to app command' => sub {
     my ( $tmp, $config_fn, $config ) = build_temp_site( $SHARE_DIR );
 
-    local $ENV{MOJO_LOG_LEVEL} = '';
+    local $ENV{MOJO_LOG_LEVEL} = undef;
     local $ENV{EDITOR} = '';
     no warnings qw( redefine once );
     # must redefine the imported version

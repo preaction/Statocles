@@ -2,6 +2,49 @@ Changelog for Statocles
 
 {{ $NEXT }}
 
+0.098     2021-04-11 15:05:42-04:00 America/Detroit
+
+    [Fixed]
+
+    - Fixed compatibility with Mojolicious 9. Thanks @ferki, @eserte,
+      and @voegelas! [Github #602, #604, #605]
+    - Fixed test failure due to YAML stringification changes. Thanks
+      @voegelas! [Github #599, #602]
+    - Fixed warning appearing from newer versions of Git about the
+      default branch name. Thanks @voegelas! [Github #603]
+
+0.097     2020-03-31 21:51:03-05:00 America/Chicago
+
+    [Added]
+
+    - Added `-l` and `-I <path>` options to add include directories to
+      the `statocles` command. Thanks @ferki! [Github #597]
+
+0.096     2019-12-05 10:24:21-06:00 America/Chicago
+
+    [Added]
+
+    - Added option to stop deployment if the link check fails. Thanks
+      @ferki! [Github #594]
+
+0.095     2019-10-11 22:15:19-05:00 America/Chicago
+
+    [Added]
+
+    - Added prev/next <link> tags to blog posts. Thanks
+      @dertuxmalwieder! [Github #588]
+    - Added option for the Lint plugin to stop the build upon error.
+      Thanks @ferki! [Github #591]
+
+0.094     2019-08-13 22:28:29-05:00 America/Chicago
+
+    [Fixes]
+
+    - Fixed 'log' method exception. Thanks @dnmfarrell and @wbazant!
+      (Github #563)
+    - Fixed Role::Tiny 2.000007 bug (by upgrading to 2.000008). Thanks
+      @andk! (Github #579)
+
 0.093     2018-03-30 17:29:15-05:00 America/Chicago
 
     [BREAKING CHANGES]
