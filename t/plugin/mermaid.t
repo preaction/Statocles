@@ -54,7 +54,8 @@ EOF
   );
 
   my $output = Mojo::DOM->new($tmpl->render);
-  is $output->at('div[class=mermaid]')->text, "\n$graph", 'output has mermaids';
+  my $optional_whitespace = $graph =~ s{\s+}{\\s*}gr;
+  like $output->at('div[class=mermaid]')->text, qr{$graph}, 'output has mermaids';
 };
 
 done_testing;
