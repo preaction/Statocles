@@ -2,6 +2,13 @@ Changelog for Statocles
 
 {{ $NEXT }}
 
+  [Fixed]
+
+  - Fixed compatibility with Git fixing a security vulnerability with the "file" protocol
+    Thanks @eserte for the report! [Github #611]
+  - Fix YAML serializing Path::Tiny objects
+  - Fix URL resolution in LinkChecker. Thanks @Corion for the patch! [Github #612]
+
 0.098     2021-04-11 15:05:42-04:00 America/Detroit
 
     [Fixed]

@@ -4,11 +4,7 @@ Statocles - A static site generator
 
 # VERSION
 
-version 0.098
-
-# STATUS
-
-<a href="https://travis-ci.org/preaction/Statocles"><img src="https://travis-ci.org/preaction/Statocles.svg?branch=master"></a><a href="https://coveralls.io/r/preaction/Statocles"><img src="https://coveralls.io/repos/preaction/Statocles/badge.png" alt="Coverage Status" /></a>
+version 0.099
 
 # SYNOPSIS
 
@@ -41,25 +37,25 @@ develop rich web content using basic text-based tools.
 content.
 - A command-line application for building, deploying, and editing the site.
 - A simple daemon to display a test site before it goes live.
-- A [blogging application](https://metacpan.org/pod/Statocles::App::Blog#FEATURES) with
+- A [blogging application](https://metacpan.org/pod/Statocles%3A%3AApp%3A%3ABlog%23FEATURES) with
     - RSS and Atom syndication feeds.
     - Tags to organize blog posts. Tags have their own custom feeds.
     - Crosspost links to direct users to a syndicated blog.
     - Post-dated blog posts to appear automatically when the date is passed.
-- Customizable [themes](https://metacpan.org/pod/Statocles::Theme) using [the Mojolicious template
-language](https://metacpan.org/pod/Mojo::Template#SYNTAX).
+- Customizable [themes](https://metacpan.org/pod/Statocles%3A%3ATheme) using [the Mojolicious template
+language](https://metacpan.org/pod/Mojo%3A%3ATemplate%23SYNTAX).
 - A clean default theme using [the Skeleton CSS library](http://getskeleton.com).
 - SEO-friendly features such as [sitemaps (sitemap.xml)](http://www.sitemaps.org).
-- [Automatic checking for broken links](https://metacpan.org/pod/Statocles::Plugin::LinkCheck).
-- [Syntax highlighting](https://metacpan.org/pod/Statocles::Plugin::Highlight) for code and configuration blocks.
-- Hooks to add [your own plugins](https://metacpan.org/pod/Statocles::Plugin) and [your own custom
-applications](https://metacpan.org/pod/Statocles::App).
+- [Automatic checking for broken links](https://metacpan.org/pod/Statocles%3A%3APlugin%3A%3ALinkCheck).
+- [Syntax highlighting](https://metacpan.org/pod/Statocles%3A%3APlugin%3A%3AHighlight) for code and configuration blocks.
+- Hooks to add [your own plugins](https://metacpan.org/pod/Statocles%3A%3APlugin) and [your own custom
+applications](https://metacpan.org/pod/Statocles%3A%3AApp).
 
 # ATTRIBUTES
 
 ## site
 
-The [site](https://metacpan.org/pod/Statocles::Site) we're working with.
+The [site](https://metacpan.org/pod/Statocles%3A%3ASite) we're working with.
 
 # METHODS
 
@@ -72,7 +68,7 @@ options.
 
 # GETTING STARTED
 
-To get started with Statocles, [consult the Statocles::Help guides](https://metacpan.org/pod/Statocles::Help).
+To get started with Statocles, [consult the Statocles::Help guides](https://metacpan.org/pod/Statocles%3A%3AHelp).
 
 # SEE ALSO
 
@@ -94,6 +90,7 @@ Doug Bell <preaction@cpan.org>
 - Joel Berger <joel.a.berger@gmail.com>
 - Kent Fredric <kentnl@cpan.org>
 - Konrad Bucheli <kb@open.ch>
+- Max Maischein <corion@corion.net>
 - Mohammad S Anwar <mohammad.anwar@yahoo.com>
 - perlancar (@netbook-zenbook-ux305) <perlancar@gmail.com>
 - Roy Storey <kiwiroy@users.noreply.github.com>
