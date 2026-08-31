@@ -147,7 +147,7 @@ your site config:
             templates:
                 layout.html: site/layout.html
 
-Deprecated in v0.75. Will be removed in v2.000.
+Deprecated in v0.075. Will be removed in v2.000.
 
 =back
 
